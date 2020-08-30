@@ -10,7 +10,7 @@ MESSAGES:
   HELPOP: '&7Your request has been sent to all online staff.'
   HELPOP-STAFF: '&6<user>&7: &f<msg>'
   REPORT: '&7Your report has been sent to all online staff.'
-  REPORT-STAFF: '&6<reporter> &7reported &6<user> &7for &6<reason>&7.'
+  REPORT-STAFF: '&6<sender> &7reported &6<cheater> &7for &6<reason>&7.'
   GAMEMODE: '&7Your gamemode has been changed to &6<gamemode>&7.'
   HEAL: '&7You have been &6Healed&7.'
   CLEAR: '&7Your inventory has been &6Cleared&7!'

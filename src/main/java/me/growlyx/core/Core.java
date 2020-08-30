@@ -116,14 +116,14 @@ public final class Core extends JavaPlugin {
         cmd("feed").setExecutor(new FeedCommand());
         cmd("heal").setExecutor(new HealCommand());
         cmd("ping").setExecutor(new PingCommand());
-        cmd("hide").setExecutor(new MoreCommand());
+        cmd("hide").setExecutor(new HideCommand());
         cmd("more").setExecutor(new MoreCommand());
         cmd("time").setExecutor(new TimeCommand());
         cmd("clear").setExecutor(new ClearCommand());
-        cmd("unhide").setExecutor(new MoreCommand());
+        cmd("unhide").setExecutor(new UnHideCommand());
         cmd("helpop").setExecutor(new HelpOPCommand());
         cmd("report").setExecutor(new ReportCommand());
-        cmd("sudoall").setExecutor(new ReportCommand());
+        cmd("sudoall").setExecutor(new SudoAllCommand());
         cmd("gamemode").setExecutor(new GamemodeCommand());
         cmd("broadcast").setExecutor(new BroadcastCommand());
         cmd("clearchat").setExecutor(new ClearChatCommand());
