@@ -6,11 +6,12 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.CreateCollectionOptions;
-import me.growlyx.core.commands.ClearChatCommand;
+import me.growlyx.core.chat.commands.ClearChatCommand;
 import me.growlyx.core.commands.CoreCommand;
 import me.growlyx.core.commands.ServerInfoCommand;
 import me.growlyx.core.essentials.commands.*;
 import me.growlyx.core.essentials.commands.gamemodes.*;
+import me.growlyx.core.essentials.commands.info.*;
 import me.growlyx.core.listeners.JoinListener;
 import me.growlyx.core.listeners.LeaveListener;
 import me.growlyx.core.utils.CC;
@@ -120,14 +121,21 @@ public final class Core extends JavaPlugin {
         cmd("more").setExecutor(new MoreCommand());
         cmd("time").setExecutor(new TimeCommand());
         cmd("clear").setExecutor(new ClearCommand());
+        cmd("store").setExecutor(new StoreCommand());
         cmd("unhide").setExecutor(new UnHideCommand());
         cmd("helpop").setExecutor(new HelpOPCommand());
+        cmd("forums").setExecutor(new ForumsCommand());
         cmd("report").setExecutor(new ReportCommand());
+        cmd("website").setExecutor(new WebsiteCommand());
         cmd("sudoall").setExecutor(new SudoAllCommand());
+        cmd("discord").setExecutor(new DiscordCommand());
         cmd("gamemode").setExecutor(new GamemodeCommand());
         cmd("broadcast").setExecutor(new BroadcastCommand());
         cmd("clearchat").setExecutor(new ClearChatCommand());
+        cmd("gamemodes").setExecutor(new GamemodesCommand());
+        cmd("teamspeak").setExecutor(new TeamSpeakCommand());
         cmd("serverinfo").setExecutor(new ServerInfoCommand());
+
 
 
 

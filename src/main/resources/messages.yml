@@ -2,7 +2,7 @@
 #   Core - Messages   #
 #                     #
 FORMAT:
-  PREFIX: '&7[&6&lMatrix&7] '
+  PREFIX: '&7[&6&lCore&7] '
   BROADCAST: '&7[&4&lBroadcast&7] &f'
   HELPOP: '&7[&6&lHelpOP&7] '
   REPORT: '&7[&6&lReport&7] '
@@ -15,6 +15,56 @@ MESSAGES:
   HEAL: '&7You have been &6Healed&7.'
   CLEAR: '&7Your inventory has been &6Cleared&7!'
   FEED: '&7You have been &6Fed&7!'
+  INFO:
+    WEBSITE:
+      ENABLED: true
+      MESSAGE:
+        - '&7&m--------------------------------------'
+        - '&6&lWebsite &7- &fhttps://core.net/'
+        - '&7&m--------------------------------------'
+    DISCORD:
+      ENABLED: true
+      MESSAGE:
+        - '&7&m--------------------------------------'
+        - '&6&lDiscord &7- &fhttps://discord.gg/growlyx/'
+        - '&7&m--------------------------------------'
+    FORUMS:
+      ENABLED: true
+      MESSAGE:
+        - '&7&m--------------------------------------'
+        - '&6&lForums &7- &fhttps://core.net/forums/'
+        - '&7&m--------------------------------------'
+    STORE:
+      ENABLED: true
+      MESSAGE:
+        - '&7&m--------------------------------------'
+        - '&6&lStore &7- &fhttps://core.net/store/'
+        - '&7&m--------------------------------------'
+    TEAMSPEAK:
+      ENABLED: true
+      MESSAGE:
+        - '&7&m--------------------------------------'
+        - '&6&lTeamSpeak &7- &fts.core.net'
+        - '&7&m--------------------------------------'
+    GAMEMODES:
+      ENABLED: true
+      MESSAGE:
+        - '&7&m--------------------------------------'
+        - '&6&lGamemodes'
+        - '&7&m--------------------------------------'
+        - '&6Practice &7- &fPractice your PVP!'
+        - '&6KitPvP &7- &fJump down and fight!'
+        - '&6KitMap &7- &fChoose a Kit and fight!'
+        - '&7&m--------------------------------------'
+  SERVER-INFO:
+    - '&7&m--------------------------------------'
+    - '&6&lCore &7- &fServer Info'
+    - '&7&m--------------------------------------'
+    - '&fName&7: &6<name>'
+    - '&fVersion&7: &6<version>'
+    - '&fPlayers&7: &6<players>'
+    - '&fMax Players&7: &6<max-players>'
+    - '&7&m--------------------------------------'
 CHAT:
   MUTE: '&7Global Chat was toggled by &6<user>&7.'
   CLEAR: '&7Global Chat was cleared by &6<user>&7.'

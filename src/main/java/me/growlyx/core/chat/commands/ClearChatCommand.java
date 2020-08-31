@@ -1,6 +1,5 @@
-package me.growlyx.core.commands;
+package me.growlyx.core.chat.commands;
 
-import me.growlyx.core.Core;
 import me.growlyx.core.utils.CC;
 import me.growlyx.core.utils.configurations.Messages;
 import org.bukkit.Bukkit;
@@ -11,7 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.annotation.command.Commands;
 
-@Commands(@org.bukkit.plugin.java.annotation.command.Command(name = "clearchat", aliases = "cc", permission = "core.moderation.clearchat"))
+@Commands(@org.bukkit.plugin.java.annotation.command.Command(name = "clearchat", aliases = "cc", permission = "core.chat.clear"))
 public class ClearChatCommand implements CommandExecutor {
 
     @Override
