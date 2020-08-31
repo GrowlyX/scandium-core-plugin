@@ -33,7 +33,7 @@ public class HideCommand implements CommandExecutor {
                 Player target = Bukkit.getPlayer(args[0]);
 
                 player.hidePlayer(target);
-                player.sendMessage(Messages.string("FORMAT.PREFIX") + "&6" + target.getName() + "&7is now invisible to you.");
+                player.sendMessage(CC.translate(Messages.string("FORMAT.PREFIX") + "&6" + target.getName() + "&7is now invisible to you."));
 
                 return true;
             }

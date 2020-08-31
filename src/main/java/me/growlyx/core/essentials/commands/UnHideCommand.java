@@ -32,7 +32,7 @@ public class UnHideCommand implements CommandExecutor {
                 Player target = Bukkit.getPlayer(args[0]);
 
                 player.showPlayer(target);
-                player.sendMessage(Messages.string("FORMAT.PREFIX") + "&6" + target.getName() + "&7is now visible to you.");
+                player.sendMessage(CC.translate(Messages.string("FORMAT.PREFIX") + "&6" + target.getName() + "&7is now visible to you."));
 
                 return true;
             }

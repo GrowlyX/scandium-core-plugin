@@ -19,6 +19,7 @@ import me.growlyx.core.utils.Config;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.annotation.plugin.LogPrefix;
 import org.bukkit.plugin.java.annotation.plugin.Plugin;
@@ -126,6 +127,7 @@ public final class Core extends JavaPlugin {
         cmd("helpop").setExecutor(new HelpOPCommand());
         cmd("forums").setExecutor(new ForumsCommand());
         cmd("report").setExecutor(new ReportCommand());
+        cmd("freeze").setExecutor(new FreezeCommand());
         cmd("website").setExecutor(new WebsiteCommand());
         cmd("sudoall").setExecutor(new SudoAllCommand());
         cmd("discord").setExecutor(new DiscordCommand());
@@ -145,6 +147,7 @@ public final class Core extends JavaPlugin {
     public void intializeListeners() {
 
         Bukkit.getPluginManager().registerEvents(new JoinListener(), this);
+        Bukkit.getPluginManager().registerEvents((Listener) new FreezeCommand(), this);
         Bukkit.getPluginManager().registerEvents(new LeaveListener(), this);
 
     }
