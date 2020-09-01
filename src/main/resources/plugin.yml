@@ -1,1 +1,2 @@
 main: me.growlyx.core.Core
+depends: [Vault]

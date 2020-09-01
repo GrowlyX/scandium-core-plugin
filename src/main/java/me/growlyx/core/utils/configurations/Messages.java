@@ -15,7 +15,6 @@ public class Messages {
 
     }
 
-
     public static boolean aboolean(String text) {
 
         String output = text;

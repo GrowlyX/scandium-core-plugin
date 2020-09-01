@@ -43,6 +43,8 @@ MESSAGES:
       - core
       - growlyx
       - moose
+  SHUTDOWN:
+    MESSAGE: '&7[&4&l!&7] &7The server will shutdown in &4<seconds>&7 seconds!'
   INFO:
     WEBSITE:
       ENABLED: true

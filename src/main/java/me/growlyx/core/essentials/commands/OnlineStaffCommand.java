@@ -1,5 +1,6 @@
 package me.growlyx.core.essentials.commands;
 
+import me.growlyx.core.Core;
 import me.growlyx.core.utils.CC;
 import me.growlyx.core.utils.configurations.Messages;
 import org.bukkit.Bukkit;
@@ -25,6 +26,7 @@ public class OnlineStaffCommand implements CommandExecutor {
 
                 player.sendMessage(CC.translate("&7&m-------------------------------------------"));
                 player.sendMessage(CC.translate(Messages.string("MESSAGES.ONLINE-STAFF")));
+                player.sendMessage(CC.translate("&7&m-------------------------------------------"));
 
                 Iterator var8 = Bukkit.getOnlinePlayers().iterator();
 
@@ -41,8 +43,8 @@ public class OnlineStaffCommand implements CommandExecutor {
                 player.sendMessage(CC.translate("&7&m-------------------------------------------"));
             }
 
-
         return false;
+
     }
 
     return true;

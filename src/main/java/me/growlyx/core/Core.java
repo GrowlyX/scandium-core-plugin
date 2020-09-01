@@ -6,11 +6,11 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.CreateCollectionOptions;
-import me.growlyx.core.chat.Chat;
 import me.growlyx.core.chat.ChatListener;
 import me.growlyx.core.chat.commands.ChatCommand;
 import me.growlyx.core.commands.CoreCommand;
 import me.growlyx.core.commands.ServerInfoCommand;
+import me.growlyx.core.commands.ShutdownCommand;
 import me.growlyx.core.essentials.commands.*;
 import me.growlyx.core.essentials.commands.gamemodes.*;
 import me.growlyx.core.essentials.commands.info.*;
@@ -18,6 +18,7 @@ import me.growlyx.core.listeners.JoinListener;
 import me.growlyx.core.listeners.LeaveListener;
 import me.growlyx.core.utils.CC;
 import me.growlyx.core.utils.Config;
+import net.milkbowl.vault.chat.Chat;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
@@ -34,13 +35,15 @@ import org.bukkit.plugin.java.annotation.plugin.author.Author;
 
 public final class Core extends JavaPlugin implements Listener {
 
+    public static Core instance;
+
+    private static Chat chat = null;
 
     Config msg = new Config("plugins/Core", "messages.yml", this);
     Config tags = new Config("plugins/Core", "tags.yml", this);
     Config db = new Config("plugins/Core", "database.yml", this);
     Config license = new Config("plugins/Core", "license.yml", this);
 
-    public static Core instance;
     public Config t;
     public Config m;
     public Config d;
@@ -134,17 +137,19 @@ public final class Core extends JavaPlugin implements Listener {
         getCommand("helpop").setExecutor(new HelpOPCommand());
         getCommand("forums").setExecutor(new ForumsCommand());
         getCommand("report").setExecutor(new ReportCommand());
-        // getCommand("freeze").setExecutor(new FreezeCommand());
-        // getCommand("give").setExecutor(new FreezeCommand());
         getCommand("website").setExecutor(new WebsiteCommand());
         getCommand("sudoall").setExecutor(new SudoAllCommand());
         getCommand("discord").setExecutor(new DiscordCommand());
         getCommand("gamemode").setExecutor(new GamemodeCommand());
+        getCommand("shutdown").setExecutor(new ShutdownCommand());
         getCommand("broadcast").setExecutor(new BroadcastCommand());
         getCommand("gamemodes").setExecutor(new GamemodesCommand());
         getCommand("teamspeak").setExecutor(new TeamSpeakCommand());
         getCommand("serverinfo").setExecutor(new ServerInfoCommand());
         getCommand("onlinestaff").setExecutor(new OnlineStaffCommand());
+
+        // getCommand("freeze").setExecutor(new FreezeCommand());
+        // getCommand("give").setExecutor(new FreezeCommand());
 
 
     }
@@ -204,7 +209,8 @@ public final class Core extends JavaPlugin implements Listener {
 
     }
 
-
-
+    public static Chat getChat() {
+        return chat;
+    }
 
 }
