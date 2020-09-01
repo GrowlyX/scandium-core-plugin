@@ -92,3 +92,5 @@ JOIN:
     - '&fForums&7: &6forums.core.net'
     - '&fDiscord&7: &6discord.core.net'
     - '&7&m----------------------------------------'
+BOOLEAN:
+  CHAT-MUTED: true

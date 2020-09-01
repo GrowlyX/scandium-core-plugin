@@ -19,7 +19,7 @@ public class ChatListener implements Listener {
 
     @EventHandler
     public void GlobalMute(AsyncPlayerChatEvent gm) {
-        if (chatEnabled) {
+        if (Messages.aboolean("BOOLEAN.CHAT-MUTED")) {
             if (!gm.getPlayer().hasPermission("core.chat.mute.bypass")) {
                 gm.setCancelled(true);
                 gm.getPlayer().sendMessage(CC.translate(Messages.string("FORMAT.PREFIX") + Messages.string("MESSAGES.CHAT.MUTED")));
