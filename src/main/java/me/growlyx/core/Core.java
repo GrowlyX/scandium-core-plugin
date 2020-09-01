@@ -6,7 +6,9 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.CreateCollectionOptions;
-import me.growlyx.core.chat.commands.ClearChatCommand;
+import me.growlyx.core.chat.Chat;
+import me.growlyx.core.chat.ChatListener;
+import me.growlyx.core.chat.commands.ChatCommand;
 import me.growlyx.core.commands.CoreCommand;
 import me.growlyx.core.commands.ServerInfoCommand;
 import me.growlyx.core.essentials.commands.*;
@@ -18,7 +20,6 @@ import me.growlyx.core.utils.CC;
 import me.growlyx.core.utils.Config;
 import org.bson.Document;
 import org.bukkit.Bukkit;
-import org.bukkit.command.PluginCommand;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.annotation.plugin.LogPrefix;
@@ -30,7 +31,9 @@ import org.bukkit.plugin.java.annotation.plugin.author.Author;
 @Author(value = "GrowlyX")
 @LogPrefix(value = "Core")
 @Website(value = "growlyx.me")
-public final class Core extends JavaPlugin {
+
+public final class Core extends JavaPlugin implements Listener {
+
 
     Config msg = new Config("plugins/Core", "messages.yml", this);
     Config tags = new Config("plugins/Core", "tags.yml", this);
@@ -109,36 +112,39 @@ public final class Core extends JavaPlugin {
 
     public void initializeCommandManager() {
 
-        cmd("gma").setExecutor(new GMA());
-        cmd("gms").setExecutor(new GMS());
-        cmd("gmc").setExecutor(new GMC());
-        cmd("gmsp").setExecutor(new GMSP());
-        cmd("sudo").setExecutor(new SudoCommand());
-        cmd("core").setExecutor(new CoreCommand());
-        cmd("feed").setExecutor(new FeedCommand());
-        cmd("heal").setExecutor(new HealCommand());
-        cmd("ping").setExecutor(new PingCommand());
-        cmd("hide").setExecutor(new HideCommand());
-        cmd("more").setExecutor(new MoreCommand());
-        cmd("time").setExecutor(new TimeCommand());
-        cmd("clear").setExecutor(new ClearCommand());
-        cmd("store").setExecutor(new StoreCommand());
-        cmd("unhide").setExecutor(new UnHideCommand());
-        cmd("helpop").setExecutor(new HelpOPCommand());
-        cmd("forums").setExecutor(new ForumsCommand());
-        cmd("report").setExecutor(new ReportCommand());
-        cmd("freeze").setExecutor(new FreezeCommand());
-        cmd("website").setExecutor(new WebsiteCommand());
-        cmd("sudoall").setExecutor(new SudoAllCommand());
-        cmd("discord").setExecutor(new DiscordCommand());
-        cmd("gamemode").setExecutor(new GamemodeCommand());
-        cmd("broadcast").setExecutor(new BroadcastCommand());
-        cmd("clearchat").setExecutor(new ClearChatCommand());
-        cmd("gamemodes").setExecutor(new GamemodesCommand());
-        cmd("teamspeak").setExecutor(new TeamSpeakCommand());
-        cmd("serverinfo").setExecutor(new ServerInfoCommand());
-
-
+        getCommand("gma").setExecutor(new GMA());
+        getCommand("gms").setExecutor(new GMS());
+        getCommand("gmc").setExecutor(new GMC());
+        getCommand("gmsp").setExecutor(new GMSP());
+        getCommand("fly").setExecutor(new FlyCommand());
+        getCommand("sudo").setExecutor(new SudoCommand());
+        getCommand("core").setExecutor(new CoreCommand());
+        getCommand("kill").setExecutor(new KillCommand());
+        getCommand("feed").setExecutor(new FeedCommand());
+        getCommand("heal").setExecutor(new HealCommand());
+        getCommand("list").setExecutor(new ListCommand());
+        getCommand("ping").setExecutor(new PingCommand());
+        getCommand("hide").setExecutor(new HideCommand());
+        getCommand("more").setExecutor(new MoreCommand());
+        getCommand("chat").setExecutor(new ChatCommand());
+        getCommand("time").setExecutor(new TimeCommand());
+        getCommand("clear").setExecutor(new ClearCommand());
+        getCommand("store").setExecutor(new StoreCommand());
+        getCommand("unhide").setExecutor(new UnHideCommand());
+        getCommand("helpop").setExecutor(new HelpOPCommand());
+        getCommand("forums").setExecutor(new ForumsCommand());
+        getCommand("report").setExecutor(new ReportCommand());
+        // getCommand("freeze").setExecutor(new FreezeCommand());
+        // getCommand("give").setExecutor(new FreezeCommand());
+        getCommand("website").setExecutor(new WebsiteCommand());
+        getCommand("sudoall").setExecutor(new SudoAllCommand());
+        getCommand("discord").setExecutor(new DiscordCommand());
+        getCommand("gamemode").setExecutor(new GamemodeCommand());
+        getCommand("broadcast").setExecutor(new BroadcastCommand());
+        getCommand("gamemodes").setExecutor(new GamemodesCommand());
+        getCommand("teamspeak").setExecutor(new TeamSpeakCommand());
+        getCommand("serverinfo").setExecutor(new ServerInfoCommand());
+        getCommand("onlinestaff").setExecutor(new OnlineStaffCommand());
 
 
     }
@@ -147,8 +153,9 @@ public final class Core extends JavaPlugin {
     public void intializeListeners() {
 
         Bukkit.getPluginManager().registerEvents(new JoinListener(), this);
-        Bukkit.getPluginManager().registerEvents((Listener) new FreezeCommand(), this);
         Bukkit.getPluginManager().registerEvents(new LeaveListener(), this);
+
+        Bukkit.getPluginManager().registerEvents(new ChatListener(), this);
 
     }
 
@@ -197,12 +204,6 @@ public final class Core extends JavaPlugin {
 
     }
 
-    public PluginCommand cmd(String text) {
-
-        String output = text;
-        return this.getCommand(output);
-
-    }
 
 
 

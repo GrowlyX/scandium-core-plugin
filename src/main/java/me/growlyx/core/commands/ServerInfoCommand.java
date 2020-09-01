@@ -2,6 +2,7 @@ package me.growlyx.core.commands;
 
 import me.growlyx.core.Core;
 import me.growlyx.core.utils.CC;
+import me.growlyx.core.utils.configurations.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -20,21 +21,14 @@ public class ServerInfoCommand implements CommandExecutor {
 
                 Player player = (Player) sender;
 
-                int players1 = Bukkit.getServer().getOnlinePlayers().size();
-                int maxPlayers1 = Bukkit.getServer().getMaxPlayers();
-
-                String players = Integer.toString(players1);
-                String maxPlayers = Integer.toString(players1);
-
-                for (String string: Core.instance.m.getConfig().getStringList("MESSAGES.SERVER-INFO")) {
-
-                    string.replace("<name>", player.getDisplayName());
-                    string.replace("<version>", Bukkit.getServer().getVersion());
-                    string.replace("<players>", players);
-                    string.replace("<max-players>", maxPlayers);
-
-                    player.sendMessage(CC.translate(string));
-                }
+                player.sendMessage(CC.translate("&7&m--------------------------------------"));
+                player.sendMessage(CC.translate(Messages.string("FORMAT.MAIN-COLOR") + "&l" + Messages.string("SERVER-NAME") + " &7- &fServer Info"));
+                player.sendMessage(CC.translate("&7&m--------------------------------------"));
+                player.sendMessage(CC.translate("&fName&7: " + Messages.string("FORMAT.MAIN-COLOR") + player.getDisplayName()));
+                player.sendMessage(CC.translate("&fVersion&7: " + Messages.string("FORMAT.MAIN-COLOR") + Bukkit.getServer().getVersion()));
+                player.sendMessage(CC.translate("&fPlayers&7: " + Messages.string("FORMAT.MAIN-COLOR") + Bukkit.getOnlinePlayers().size()));
+                player.sendMessage(CC.translate("&fMax Players&7: " + Messages.string("FORMAT.MAIN-COLOR") + Bukkit.getMaxPlayers()));
+                player.sendMessage(CC.translate("&7&m--------------------------------------"));
 
             } else {
 

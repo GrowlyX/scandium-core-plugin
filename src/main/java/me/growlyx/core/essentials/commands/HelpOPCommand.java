@@ -29,8 +29,6 @@ public class HelpOPCommand implements CommandExecutor {
 
         if (args.length == 1) {
 
-            String moose = args[0];
-
             String msg = "";
 
             for (int i = 0; i< args.length;i++) {
@@ -51,7 +49,6 @@ public class HelpOPCommand implements CommandExecutor {
             return true;
 
         }
-
 
         return false;
     }

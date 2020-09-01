@@ -1,12 +1,17 @@
 #                     #
 #   Core - Messages   #
 #                     #
+SERVER-NAME: '&6&lMatrix'
 FORMAT:
+  MAIN-COLOR: '&6'
   PREFIX: '&7[&6&lCore&7] '
   BROADCAST: '&7[&4&lBroadcast&7] &f'
   HELPOP: '&7[&6&lHelpOP&7] '
   REPORT: '&7[&6&lReport&7] '
 MESSAGES:
+  KILL: '&7You were &6Killed&7!'
+  FLY: '&7Your flight was &6<boolean>&7!'
+  ONLINE-STAFF: '&6&lCore &7- &fOnline Staff'
   HELPOP: '&7Your request has been sent to all online staff.'
   HELPOP-STAFF: '&6<user>&7: &f<msg>'
   REPORT: '&7Your report has been sent to all online staff.'
@@ -25,6 +30,19 @@ MESSAGES:
   HEAL: '&7You have been &6Healed&7.'
   CLEAR: '&7Your inventory has been &6Cleared&7!'
   FEED: '&7You have been &6Fed&7!'
+  CHAT:
+    ANTI-SPAM-TIME: 2
+    SPAM-MSG: '&cPlease wait before typing again. &7If you want to bypass this timer, please buy a rank at &6store.core.net&7.'
+    MUTE: '&7Global Chat was muted by &6<user>&7.'
+    MUTED: '&cGlobal Chat is currently muted!'
+    UNMUTE: '&7Global Chat was unmuted by &6<user>&7.'
+    CLEAR: '&7Global Chat was cleared by &6<user>&7.'
+    BYPASS: '&7You have bypassed &6<bypass>&7.'
+    BANNED-WORDS-MSG: '&cYou cannot use this word here!'
+    BANNED-WORDS:
+      - core
+      - growlyx
+      - moose
   INFO:
     WEBSITE:
       ENABLED: true
@@ -66,18 +84,6 @@ MESSAGES:
         - '&6KitPvP &7- &fJump down and fight!'
         - '&6KitMap &7- &fChoose a Kit and fight!'
         - '&7&m--------------------------------------'
-  SERVER-INFO:
-    - '&7&m--------------------------------------'
-    - '&6&lCore &7- &fServer Info'
-    - '&7&m--------------------------------------'
-    - '&fName&7: &6<name>'
-    - '&fVersion&7: &6<version>'
-    - '&fPlayers&7: &6<players>'
-    - '&fMax Players&7: &6<max-players>'
-    - '&7&m--------------------------------------'
-CHAT:
-  MUTE: '&7Global Chat was toggled by &6<user>&7.'
-  CLEAR: '&7Global Chat was cleared by &6<user>&7.'
 JOIN:
   JOIN-MESSAGE:
     - '&7&m----------------------------------------'

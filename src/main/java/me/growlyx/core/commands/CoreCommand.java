@@ -25,6 +25,8 @@ public class CoreCommand implements CommandExecutor {
                 player.sendMessage(CC.translate("&7&m--------------------------------------"));
                 player.sendMessage(CC.translate("&7Use &6/core help &7for more information."));
                 player.sendMessage(CC.translate("&7&m--------------------------------------"));
+                player.sendMessage(CC.translate("&7[&4&l!&7] Developed by &6GrowlyX"));
+                player.sendMessage(CC.translate("&7&m--------------------------------------"));
 
             } else if (args[0].equals("help")) {
 
@@ -34,7 +36,6 @@ public class CoreCommand implements CommandExecutor {
                 player.sendMessage(CC.translate("&6/core &7- &fCore Command"));
                 player.sendMessage(CC.translate("&6/player &7- &fPlayer Command Info"));
                 player.sendMessage(CC.translate("&6/serverinfo &7- &fServer Information"));
-                player.sendMessage(CC.translate("&6/clearchat &7- &fClear Server Chat"));
                 player.sendMessage(CC.translate("&7&m--------------------------------------"));
 
             } else if (args[0].equals("reload")) {
@@ -52,7 +53,7 @@ public class CoreCommand implements CommandExecutor {
             } else if (args[0].equals("moose")) {
 
                 player.sendMessage(CC.translate("&7&m--------------------------------------"));
-                player.sendMessage(CC.translate("&6&lCore &7- &fMOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOSE!"));
+                player.sendMessage(CC.translate("&6&lCore &7- &fMoose!"));
                 player.sendMessage(CC.translate("&7&m--------------------------------------"));
 
             } else {
