@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import me.growlyx.core.Core;
 import me.growlyx.core.utils.CC;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Arrays;
@@ -21,10 +23,16 @@ public class ShutdownTask extends BukkitRunnable
 
     public void run() {
         if (this.BROADCAST_TIMES.contains(this.secondsUntilShutdown)) {
-            this.plugin.getServer().broadcastMessage(CC.translate(""));
+            this.plugin.getServer().broadcastMessage(CC.translate("&7[&4&l!&7] &7The server will shutdown in &4" + getSecondsUntilShutdown() + "&7 seconds! &7[&4&l!&7]"));
         }
         if (this.secondsUntilShutdown <= 0) {
-            this.plugin.getServer().getOnlinePlayers().forEach(player -> player.sendMessage(CC.translate("&cThe server has shut down.")));
+
+            for (Player players : Bukkit.getOnlinePlayers()) {
+
+                players.sendMessage(CC.translate("&cThe server has shut down."));
+
+            }
+
             this.plugin.getServer().shutdown();
         }
         --this.secondsUntilShutdown;

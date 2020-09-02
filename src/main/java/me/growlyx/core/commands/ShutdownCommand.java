@@ -3,6 +3,8 @@ package me.growlyx.core.commands;
 import me.growlyx.core.Core;
 import me.growlyx.core.tasks.ShutdownTask;
 import me.growlyx.core.utils.CC;
+import me.growlyx.core.utils.configurations.Messages;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -34,11 +36,11 @@ public class ShutdownCommand implements CommandExecutor {
 
             if (this.shutdownTask == null) {
 
-                sender.sendMessage(CC.translate("&cThe server is not shutting down."));
+                sender.sendMessage(CC.translate("&cError: The server is not shutting down."));
 
             } else {
 
-                sender.sendMessage(CC.translate("&7[&4&l!&7] &7The server will shutdown in &4" + this.shutdownTask.getSecondsUntilShutdown() + "&7 seconds!"));
+                sender.sendMessage(CC.translate("&7[&4&l!&7] &7The server will shutdown in &4" + this.shutdownTask.getSecondsUntilShutdown() + "&7 seconds! &7[&4&l!&7]"));
             }
 
             return true;
@@ -52,36 +54,21 @@ public class ShutdownCommand implements CommandExecutor {
             else {
                 this.shutdownTask.cancel();
                 this.shutdownTask = null;
-                sender.sendMessage(CC.translate("&aThe server shutdown has been canceled."));
+                sender.sendMessage(CC.translate(Messages.string("FORMAT.PREFIX") + "&aSucessfully stopped the shutdown."));
+                Bukkit.broadcastMessage(CC.translate(Messages.string("FORMAT.BROADCAST") + "&aThe server shutdown has been canceled."));
             }
 
         } if (args[0].equalsIgnoreCase("start")) {
 
-            int seconds;
+            if (this.shutdownTask == null) {
 
-            try {
-
-                seconds = Integer.parseInt(args[1]);
-
-            } catch (NumberFormatException e) {
-
-                sender.sendMessage(CC.translate("&cError: You must input a valid number!"));
-                return true;
-
-            } if (seconds <= 0) {
-
-                sender.sendMessage(CC.translate("&cError: You must input a number greater than 0!"));
-                return true;
-
-            } if (this.shutdownTask == null) {
-
-                (this.shutdownTask = new ShutdownTask(Core.getPlugin(Core.class), seconds)).runTaskTimer((Plugin) Core.getPlugin(Core.class), 20L, 20L);
+                (this.shutdownTask = new ShutdownTask(Core.getPlugin(Core.class), 20)).runTaskTimer((Plugin) Core.getPlugin(Core.class), 20L, 20L);
 
             } else {
-                this.shutdownTask.setSecondsUntilShutdown(seconds);
+                this.shutdownTask.setSecondsUntilShutdown(20);
             }
 
-            sender.sendMessage(CC.translate("&7[&4&l!&7] &7The server will shutdown in &4" + seconds + "&7 seconds!"));
+            sender.sendMessage(CC.translate("&7[&4&l!&7] &7The server will shutdown in &4" + this.shutdownTask.getSecondsUntilShutdown() + "&7 seconds! &7[&4&l!&7]"));
 
         }
 

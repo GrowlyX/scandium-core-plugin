@@ -14,7 +14,6 @@ public class JoinListener implements Listener {
 
         for (String string: Core.instance.m.getConfig().getStringList("JOIN.JOIN-MESSAGE")) {
             join.getPlayer().sendMessage(CC.translate(string));
-            CC.translate("dh");
         }
 
     }

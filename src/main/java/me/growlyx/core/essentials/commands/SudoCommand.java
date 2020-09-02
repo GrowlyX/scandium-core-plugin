@@ -20,29 +20,34 @@ public class SudoCommand implements CommandExecutor {
 
         if (args.length == 0) {
 
-            sender.sendMessage(CC.translate("&CUsage: /sudo <player> <message>"));
+            sender.sendMessage(CC.translate("&cUsage: /sudo <player> <message>"));
             return false;
 
         }
 
         if (args.length == 1) {
 
-            sender.sendMessage(CC.translate("&CUsage: /sudo <player> <message>"));
+            sender.sendMessage(CC.translate("&cUsage: /sudo <player> <message>"));
             return false;
 
         }
 
         if (args.length == 2) {
 
-            String message = args[1];
+            String moose = "";
+
+            for (int i = 0; i< args.length;i++) {
+                moose = moose + args[0] + " ";
+            }
+
             Player target = Bukkit.getPlayer(args[0]);
 
             if (target == null) {
                 sender.sendMessage(CC.translate("&cPlayer Not Found!"));
             }
 
-            target.chat(label);
-            sender.sendMessage(Messages.string("FORMAT.PREFIX") + ChatColor.GREEN + "Forced target to chat!");
+            target.chat(moose);
+            sender.sendMessage(CC.translate(Messages.string("FORMAT.PREFIX") + "&7Forced the player to say &6: " + moose));
 
             return true;
 

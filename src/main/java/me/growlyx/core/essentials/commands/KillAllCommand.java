@@ -1,7 +1,6 @@
-package me.growlyx.core.essentials.commands.info;
+package me.growlyx.core.essentials.commands;
 
 import me.growlyx.core.Core;
-import me.growlyx.core.essentials.Essentials;
 import me.growlyx.core.utils.CC;
 import me.growlyx.core.utils.configurations.Messages;
 import org.bukkit.Bukkit;
@@ -11,8 +10,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.annotation.command.Commands;
 
-@Commands(@org.bukkit.plugin.java.annotation.command.Command(name = "discord", aliases = {"dsc", "disc"}))
-public class DiscordCommand implements CommandExecutor {
+@Commands(@org.bukkit.plugin.java.annotation.command.Command(name = "killall", aliases = {"ka"}, permission = "core.command.killall"))
+public class KillAllCommand implements CommandExecutor {
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
@@ -20,21 +20,20 @@ public class DiscordCommand implements CommandExecutor {
 
             if (args.length == 0) {
 
-                if (Messages.aboolean("MESSAGES.INFO.DISCORD.ENABLED")) {
+                Player player = (Player) sender;
 
-                    for (String string: Core.instance.m.getConfig().getStringList("MESSAGES.INFO.DISCORD.MESSAGE")) {
-                        sender.sendMessage(CC.translate(string));
-                    }
-
+                for (Player players: Bukkit.getOnlinePlayers()) {
+                    player.setHealth(0);
+                    players.sendMessage(CC.translate(Messages.string("FORMAT.PREFIX") + "&cYou were killed!"));
                 }
-
-            } else {
-
-                System.out.println("Only players can execute this command.");
 
             }
 
             return false;
+        } else {
+
+            System.out.println("Only players can execute this command.");
+
         }
 
         return false;

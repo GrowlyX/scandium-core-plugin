@@ -16,6 +16,8 @@ import me.growlyx.core.essentials.commands.gamemodes.*;
 import me.growlyx.core.essentials.commands.info.*;
 import me.growlyx.core.listeners.JoinListener;
 import me.growlyx.core.listeners.LeaveListener;
+import me.growlyx.core.profile.punishments.KickAllCommand;
+import me.growlyx.core.profile.punishments.KickCommand;
 import me.growlyx.core.utils.CC;
 import me.growlyx.core.utils.Config;
 import net.milkbowl.vault.chat.Chat;
@@ -124,6 +126,7 @@ public final class Core extends JavaPlugin implements Listener {
         getCommand("core").setExecutor(new CoreCommand());
         getCommand("kill").setExecutor(new KillCommand());
         getCommand("feed").setExecutor(new FeedCommand());
+        getCommand("kick").setExecutor(new KickCommand());
         getCommand("heal").setExecutor(new HealCommand());
         getCommand("list").setExecutor(new ListCommand());
         getCommand("ping").setExecutor(new PingCommand());
@@ -139,6 +142,8 @@ public final class Core extends JavaPlugin implements Listener {
         getCommand("report").setExecutor(new ReportCommand());
         getCommand("website").setExecutor(new WebsiteCommand());
         getCommand("sudoall").setExecutor(new SudoAllCommand());
+        getCommand("killall").setExecutor(new KillAllCommand());
+        getCommand("kickall").setExecutor(new KickAllCommand());
         getCommand("discord").setExecutor(new DiscordCommand());
         getCommand("gamemode").setExecutor(new GamemodeCommand());
         getCommand("shutdown").setExecutor(new ShutdownCommand());

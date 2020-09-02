@@ -1,6 +1,7 @@
 package me.growlyx.core.essentials.commands.info;
 
 import me.growlyx.core.Core;
+import me.growlyx.core.essentials.Essentials;
 import me.growlyx.core.utils.CC;
 import me.growlyx.core.utils.configurations.Messages;
 import org.bukkit.command.Command;
