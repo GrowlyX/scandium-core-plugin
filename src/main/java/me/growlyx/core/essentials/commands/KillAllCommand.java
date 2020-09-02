@@ -23,7 +23,7 @@ public class KillAllCommand implements CommandExecutor {
                 Player player = (Player) sender;
 
                 for (Player players: Bukkit.getOnlinePlayers()) {
-                    player.setHealth(0);
+                    players.setHealth(0);
                     players.sendMessage(CC.translate(Messages.string("FORMAT.PREFIX") + "&cYou were killed!"));
                 }
 

@@ -6,6 +6,8 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.CreateCollectionOptions;
+import lombok.Getter;
+import lombok.Setter;
 import me.growlyx.core.chat.ChatListener;
 import me.growlyx.core.chat.commands.ChatCommand;
 import me.growlyx.core.commands.CoreCommand;
@@ -18,6 +20,9 @@ import me.growlyx.core.listeners.JoinListener;
 import me.growlyx.core.listeners.LeaveListener;
 import me.growlyx.core.profile.punishments.KickAllCommand;
 import me.growlyx.core.profile.punishments.KickCommand;
+import me.growlyx.core.profile.punishments.freeze.handlers.ManagerHandler;
+import me.growlyx.core.profile.punishments.freeze.managers.PlayerManager;
+import me.growlyx.core.tasks.ShutdownTask;
 import me.growlyx.core.utils.CC;
 import me.growlyx.core.utils.Config;
 import net.milkbowl.vault.chat.Chat;
@@ -50,6 +55,11 @@ public final class Core extends JavaPlugin implements Listener {
     public Config m;
     public Config d;
     public Config l;
+
+    @Getter
+    private ManagerHandler managerHandler;
+    @Getter
+    private PlayerManager playerManager;
 
     @Override
     public void onEnable() {
@@ -94,6 +104,8 @@ public final class Core extends JavaPlugin implements Listener {
         t = tags;
         d = db;
 
+        this.managerHandler = new ManagerHandler(this);
+
     }
 
     private void initializeMongo() {
@@ -121,7 +133,6 @@ public final class Core extends JavaPlugin implements Listener {
         getCommand("gms").setExecutor(new GMS());
         getCommand("gmc").setExecutor(new GMC());
         getCommand("gmsp").setExecutor(new GMSP());
-        getCommand("fly").setExecutor(new FlyCommand());
         getCommand("sudo").setExecutor(new SudoCommand());
         getCommand("core").setExecutor(new CoreCommand());
         getCommand("kill").setExecutor(new KillCommand());
@@ -153,6 +164,7 @@ public final class Core extends JavaPlugin implements Listener {
         getCommand("serverinfo").setExecutor(new ServerInfoCommand());
         getCommand("onlinestaff").setExecutor(new OnlineStaffCommand());
 
+        // getCommand("fly").setExecutor(new FlyCommand());
         // getCommand("freeze").setExecutor(new FreezeCommand());
         // getCommand("give").setExecutor(new FreezeCommand());
 
@@ -216,6 +228,14 @@ public final class Core extends JavaPlugin implements Listener {
 
     public static Chat getChat() {
         return chat;
+    }
+
+    public PlayerManager getPlayerManager() {
+        return this.playerManager;
+    }
+
+    public ManagerHandler getManagerHandler() {
+        return this.managerHandler;
     }
 
 }

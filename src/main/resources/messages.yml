@@ -94,5 +94,11 @@ JOIN:
     - '&fForums&7: &6forums.core.net'
     - '&fDiscord&7: &6discord.core.net'
     - '&7&m----------------------------------------'
+FROZEN:
+  TITLE: '&4&lYou Were Frozen!'
+  TS-DISCORD: '&6TS: ts.core.net'
+  LINES:
+    LINE-1: '&fPlease Join Our Teamspeak!'
+    LINE-2: '&fIf you log out, you will be banned!'
 BOOLEAN:
   CHAT-MUTED: true
