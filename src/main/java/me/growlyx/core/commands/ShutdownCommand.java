@@ -19,6 +19,7 @@ public class ShutdownCommand implements CommandExecutor {
         Player player = (Player) sender;
 
         if (args.length != 1) {
+
             sender.sendMessage(CC.translate("&7&m--------------------------------------"));
             sender.sendMessage(CC.translate("&6&lShutdown Manager"));
             sender.sendMessage(CC.translate("&7&m--------------------------------------"));
@@ -32,22 +33,26 @@ public class ShutdownCommand implements CommandExecutor {
         if (args[0].equalsIgnoreCase("time")) {
 
             if (this.shutdownTask == null) {
+
                 sender.sendMessage(CC.translate("&cThe server is not shutting down."));
+
             } else {
+
                 sender.sendMessage(CC.translate("&7[&4&l!&7] &7The server will shutdown in &4" + this.shutdownTask.getSecondsUntilShutdown() + "&7 seconds!"));
             }
+
             return true;
 
         }
         if (args[0].equalsIgnoreCase("cancel")) {
 
             if (this.shutdownTask == null) {
-                sender.sendMessage(CC.translate("The server is not scheduled to shut down."));
+                sender.sendMessage(CC.translate("&cError: The server is not scheduled to shut down."));
             }
             else {
                 this.shutdownTask.cancel();
                 this.shutdownTask = null;
-                sender.sendMessage(CC.translate("The server shutdown has been canceled."));
+                sender.sendMessage(CC.translate("&aThe server shutdown has been canceled."));
             }
 
         } if (args[0].equalsIgnoreCase("start")) {
@@ -55,21 +60,27 @@ public class ShutdownCommand implements CommandExecutor {
             int seconds;
 
             try {
-                seconds = Integer.parseInt(args[0]);
+
+                seconds = Integer.parseInt(args[1]);
+
             } catch (NumberFormatException e) {
-                sender.sendMessage(CC.translate("You must input a valid number!"));
+
+                sender.sendMessage(CC.translate("&cError: You must input a valid number!"));
                 return true;
-            }
-            if (seconds <= 0) {
-                sender.sendMessage(CC.translate("You must input a number greater than 0!"));
+
+            } if (seconds <= 0) {
+
+                sender.sendMessage(CC.translate("&cError: You must input a number greater than 0!"));
                 return true;
-            }
-            if (this.shutdownTask == null) {
+
+            } if (this.shutdownTask == null) {
+
                 (this.shutdownTask = new ShutdownTask(Core.getPlugin(Core.class), seconds)).runTaskTimer((Plugin) Core.getPlugin(Core.class), 20L, 20L);
-            }
-            else {
+
+            } else {
                 this.shutdownTask.setSecondsUntilShutdown(seconds);
             }
+
             sender.sendMessage(CC.translate("&7[&4&l!&7] &7The server will shutdown in &4" + seconds + "&7 seconds!"));
 
         }

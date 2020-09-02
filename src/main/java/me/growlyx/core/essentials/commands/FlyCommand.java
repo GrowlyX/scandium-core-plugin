@@ -2,7 +2,6 @@ package me.growlyx.core.essentials.commands;
 
 import me.growlyx.core.utils.CC;
 import me.growlyx.core.utils.configurations.Messages;
-import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

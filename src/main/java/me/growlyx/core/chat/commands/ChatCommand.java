@@ -96,8 +96,12 @@ public class ChatCommand implements CommandExecutor {
             }
 
 
+        } else if (args[0].equals("mute") && sender.hasPermission("core.chat.delay")) {
+
+
         }
 
-        return false;
+
+            return false;
     }
 }
