@@ -1,4 +1,10 @@
-#                   #
-#   Core - Config   #
-#                   #
-
+#
+#  pCore - by GrowlyX
+#
+redis:
+  host: ""
+  port: ""
+  password: ""
+  authentication: true
+mongodb:
+  url: ""

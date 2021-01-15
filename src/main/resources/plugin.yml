@@ -1,2 +1,4 @@
-main: me.growlyx.core.Core
-depends: [Vault]
+
+name: pCore
+main: vip.potclub.core.CorePlugin
+version: 1.0
