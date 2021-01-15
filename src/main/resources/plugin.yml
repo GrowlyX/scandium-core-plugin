@@ -9,3 +9,8 @@ commands:
     aliases: [ac]
   helpop:
     aliases: [request]
+  broadcast:
+    aliases: [alert, bc]
+  heal:
+  kill:
+  feed:

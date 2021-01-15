@@ -3,9 +3,9 @@
 #
 server-name: eu-practice
 redis:
-  host: ""
-  port: ""
-  password: ""
+  host: "redis-17008.c8.us-east-1-2.ec2.cloud.redislabs.com"
+  port: 17008
+  password: "WAFEkJpejtb96EtBWmahGWC1ElIRpjv7"
   authentication: true
 mongodb:
-  url: ""
+  url: "mongodb+srv://uhczone:xWjwLmPvCg2wjcAY@cluster0.0fdtt.mongodb.net/potprac?retryWrites=true&w=majority"

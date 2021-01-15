@@ -1,13 +1,15 @@
 package vip.potclub.core.command.extend.essential;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import vip.potclub.core.CorePlugin;
 import vip.potclub.core.command.BaseCommand;
 import vip.potclub.core.util.Color;
+import vip.potclub.core.util.RedisUtil;
+import vip.potclub.core.util.StringUtil;
 
-public class HealCommand extends BaseCommand {
+public class BroadcastCommand extends BaseCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -17,17 +19,14 @@ public class HealCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
-        if (player.hasPermission("core.command.heal")) {
+        if (player.hasPermission("core.command.broadcast")) {
             if (args.length == 0) {
-                player.setHealth(20);
-                player.sendMessage(Color.translate("&aSet your health level to 20."));
+                player.sendMessage(Color.translate("&cUsage: /" + label + " <message>."));
             }
+
             if (args.length > 0) {
-                Player target = Bukkit.getPlayerExact(args[0]);
-                if (target != null) {
-                    target.setHealth(20);
-                    player.sendMessage(Color.translate("&aSet " + target.getDisplayName() + "&a's health level to 20."));
-                }
+                String message = StringUtil.buildMessage(args, 0);
+                CorePlugin.getInstance().getRedisThread().execute(() -> client.write(RedisUtil.onBroadcast(message)));
             }
         } else {
             player.sendMessage(Color.translate("&cNo permission."));

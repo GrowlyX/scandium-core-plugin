@@ -4,9 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
-import vip.potclub.core.command.extend.essential.AdminChatCommand;
-import vip.potclub.core.command.extend.essential.HelpOpCommand;
-import vip.potclub.core.command.extend.essential.StaffChatCommand;
+import vip.potclub.core.command.extend.essential.*;
 import vip.potclub.core.database.Database;
 import vip.potclub.core.manager.PlayerManager;
 import vip.potclub.core.redis.RedisClient;
@@ -54,9 +52,7 @@ public final class CorePlugin extends JavaPlugin implements Listener {
     public void setupCommands() {
         /*
         this.getCommand("sudo").setExecutor(new SudoCommand());
-        this.getCommand("kill").setExecutor(new KillCommand());
-        this.getCommand("feed").setExecutor(new FeedCommand());
-        this.getCommand("heal").setExecutor(new HealCommand());
+
         this.getCommand("list").setExecutor(new ListCommand());
         this.getCommand("ping").setExecutor(new PingCommand());
         this.getCommand("more").setExecutor(new MoreCommand());
@@ -71,6 +67,10 @@ public final class CorePlugin extends JavaPlugin implements Listener {
         this.getCommand("staffchat").setExecutor(new StaffChatCommand());
         this.getCommand("adminchat").setExecutor(new AdminChatCommand());
         this.getCommand("helpop").setExecutor(new HelpOpCommand());
+        this.getCommand("broadcast").setExecutor(new BroadcastCommand());
+        this.getCommand("kill").setExecutor(new KillCommand());
+        this.getCommand("feed").setExecutor(new FeedCommand());
+        this.getCommand("heal").setExecutor(new HealCommand());
     }
 
     @Override

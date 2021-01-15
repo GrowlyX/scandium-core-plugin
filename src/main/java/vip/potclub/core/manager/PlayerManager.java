@@ -13,8 +13,4 @@ public class PlayerManager {
     public String formatBroadcast(String message) {
         return Color.translate("&8[&4Alert&8] &f" + message);
     }
-
-    public String formatFrozen(String message) {
-        return Color.translate("&8[&4Alert&8] &f" + message);
-    }
 }
