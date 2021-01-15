@@ -15,14 +15,11 @@ public class RedisListener extends JedisPubSub {
             public void run() {
                 RedisMessage redisMessage = new Gson().fromJson(message, RedisMessage.class);
                 switch (redisMessage.getPacket()) {
-                    case CLAN_CHAT_UPDATE:
-                        // TODO
+                    case CHAT_CHANNEL_UPDATE:
                         break;
-                    case CLAN_BROADCAST_UPDATE:
-                        // TODO
+                    case PLAYER_SERVER_UPDATE:
                         break;
-                    case CLAN_DATA_UPDATE:
-                        // TODO
+                    case NETWORK_BROADCAST_UPDATE:
                         break;
                     default:
                         CorePlugin.getInstance().getLogger().info("[Redis] We received a message, but no params were registered.");

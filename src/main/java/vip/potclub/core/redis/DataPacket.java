@@ -8,12 +8,7 @@ import java.beans.ConstructorProperties;
 public enum DataPacket {
 
     CHAT_CHANNEL_UPDATE("ChatChannelUpdate"),
-
-    PLAYER_FREEZE_UPDATE("PlayerFreezeUpdate"),
-    PLAYER_REPORT_UPDATE("PlayerReportUpdate"),
-    PLAYER_HELPOP_UPDATE("PlayerHelpopUpdate"),
-    PLAYER_ONCOMMAND_UPDATE("PlayerOnCommandUpdate"),
-
+    PLAYER_SERVER_UPDATE("PlayerServerUpdate"),
     NETWORK_BROADCAST_UPDATE("NetworkBroadcastUpdate"),
     ;
 
