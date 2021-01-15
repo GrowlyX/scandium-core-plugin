@@ -4,6 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+import vip.potclub.core.command.extend.essential.AdminChatCommand;
+import vip.potclub.core.command.extend.essential.HelpOpCommand;
+import vip.potclub.core.command.extend.essential.StaffChatCommand;
 import vip.potclub.core.database.Database;
 import vip.potclub.core.manager.PlayerManager;
 import vip.potclub.core.redis.RedisClient;
@@ -64,8 +67,10 @@ public final class CorePlugin extends JavaPlugin implements Listener {
         this.getCommand("sudoall").setExecutor(new SudoAllCommand());
         this.getCommand("killall").setExecutor(new KillAllCommand());
         this.getCommand("onlinestaff").setExecutor(new OnlineStaffCommand());
-
          */
+        this.getCommand("staffchat").setExecutor(new StaffChatCommand());
+        this.getCommand("adminchat").setExecutor(new AdminChatCommand());
+        this.getCommand("helpop").setExecutor(new HelpOpCommand());
     }
 
     @Override

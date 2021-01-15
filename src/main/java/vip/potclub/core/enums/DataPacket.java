@@ -1,4 +1,4 @@
-package vip.potclub.core.redis;
+package vip.potclub.core.enums;
 
 import lombok.Getter;
 
@@ -9,8 +9,7 @@ public enum DataPacket {
 
     CHAT_CHANNEL_UPDATE("ChatChannelUpdate"),
     PLAYER_SERVER_UPDATE("PlayerServerUpdate"),
-    NETWORK_BROADCAST_UPDATE("NetworkBroadcastUpdate"),
-    ;
+    NETWORK_BROADCAST_UPDATE("NetworkBroadcastUpdate");
 
     public String packetDataName;
 

@@ -1,6 +1,7 @@
 #
 #  pCore - by GrowlyX
 #
+server-name: eu-practice
 redis:
   host: ""
   port: ""

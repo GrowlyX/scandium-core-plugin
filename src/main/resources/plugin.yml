@@ -2,3 +2,10 @@
 name: pCore
 main: vip.potclub.core.CorePlugin
 version: 1.0
+commands:
+  staffchat:
+    aliases: [sc]
+  adminchat:
+    aliases: [ac]
+  helpop:
+    aliases: [request]
