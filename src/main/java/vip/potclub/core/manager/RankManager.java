@@ -1,7 +1,7 @@
 package vip.potclub.core.manager;
 
-import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.ReplaceOptions;
 import lombok.Getter;
 import org.bson.Document;
 import vip.potclub.core.CorePlugin;
@@ -9,67 +9,81 @@ import vip.potclub.core.rank.Rank;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @Getter
 public class RankManager {
 
-    private final List<Rank> ranks = new ArrayList<>();
-
     public RankManager() {
-        this.createDefaultRank();
+        this.createDefaultRanks();
 
         CorePlugin.getInstance().getServer().getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> {
-            for (Document rankDocument : CorePlugin.getInstance().getCoreMongoDatabase().getRanksCollection().find()) {
-                this.ranks.add(CorePlugin.GSON.fromJson(rankDocument.toJson(), Rank.class));
+            for (Document document : CorePlugin.getInstance().getCoreMongoDatabase().getRanksCollection().find()) {
+                Rank.getRegisteredRanks().add(CorePlugin.GSON.fromJson(document.toJson(), Rank.class));
             }
         });
     }
 
-    private void createDefaultRank() {
+    public void saveAllRanks() {
+        Rank.getRegisteredRanks().forEach(Rank::serializeRank);
+    }
+
+    private void createDefaultRanks() {
         if (CorePlugin.getInstance().getCoreMongoDatabase().getRanksCollection().countDocuments() <= 0L) {
-            if (CorePlugin.getInstance().getCoreMongoDatabase().getRanksCollection().find(Filters.eq("id", "default")).first() == null) {
+            if (CorePlugin.getInstance().getCoreMongoDatabase().getRanksCollection().find(Filters.eq("_id", "default")).first() == null) {
                 List<String> permissions = Arrays.asList("practice.default", "core.default", "test.default");
-                Document defaultRank = new Document("id", "default");
+                Document document = new Document("_id", "default");
 
-                defaultRank.append("weight", 1);
-                defaultRank.append("permissions", permissions);
-                defaultRank.append("name", "Default");
-                defaultRank.append("prefix", "§7");
-                defaultRank.append("color", "§7");
-                CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreMongoDatabase().getRanksCollection().insertOne(defaultRank));
+                document.put("name", "Default");
+                document.put("prefix", "§7");
+                document.put("color", "§7");
+                document.put("weight", 1);
+
+                document.put("isStaff", false);
+                document.put("isNormal", true);
+                document.put("isDonator", false);
+                document.put("isDeveloper", false);
+
+                document.put("permissions", permissions);
+
+                CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreMongoDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", "default"), document, new ReplaceOptions().upsert(true)));
             }
-            if (CorePlugin.getInstance().getCoreMongoDatabase().getRanksCollection().find(Filters.eq("id", "owner")).first() == null) {
-                List<String> permissions = Arrays.asList("practice.staff", "core.staff", "test.staff");
-                Document defaultRank = new Document("id", "owner");
+            if (CorePlugin.getInstance().getCoreMongoDatabase().getRanksCollection().find(Filters.eq("_id", "owner")).first() == null) {
+                List<String> permissions = Arrays.asList("practice.owner", "core.owner", "test.owner");
+                Document document = new Document("_id", "owner");
 
-                defaultRank.append("weight", 1000);
-                defaultRank.append("permissions", permissions);
-                defaultRank.append("name", "Owner");
-                defaultRank.append("prefix", "§4[Owner] §4");
-                defaultRank.append("color", "§4");
-                CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreMongoDatabase().getRanksCollection().insertOne(defaultRank));
+                document.put("name", "Owner");
+                document.put("prefix", "§4[Owner] ");
+                document.put("color", "§4");
+                document.put("weight", 1000);
+
+                document.put("isStaff", true);
+                document.put("isNormal", false);
+                document.put("isDonator", true);
+                document.put("isDeveloper", true);
+
+                document.put("permissions", permissions);
+
+                CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreMongoDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", "owner"), document, new ReplaceOptions().upsert(true)));
             }
-            if (CorePlugin.getInstance().getCoreMongoDatabase().getRanksCollection().find(Filters.eq("id", "manager")).first() == null) {
-                List<String> permissions = Arrays.asList("practice.staff", "core.staff", "test.staff");
-                Document defaultRank = new Document("id", "manager");
+            if (CorePlugin.getInstance().getCoreMongoDatabase().getRanksCollection().find(Filters.eq("_id", "manager")).first() == null) {
+                List<String> permissions = Arrays.asList("practice.manager", "core.manager", "test.manager");
+                Document document = new Document("_id", "manager");
 
-                defaultRank.append("weight", 900);
-                defaultRank.append("permissions", permissions);
-                defaultRank.append("name", "Manager");
-                defaultRank.append("prefix", "§c[Manager] §c");
-                defaultRank.append("color", "§c");
-                CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreMongoDatabase().getRanksCollection().insertOne(defaultRank));
+                document.put("name", "Manager");
+                document.put("prefix", "§c[Manager] ");
+                document.put("color", "§c");
+                document.put("weight", 900);
+
+                document.put("isStaff", true);
+                document.put("isNormal", false);
+                document.put("isDonator", true);
+                document.put("isDeveloper", true);
+
+                document.put("permissions", permissions);
+
+                CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreMongoDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", "manager"), document, new ReplaceOptions().upsert(true)));
             }
         }
-    }
-
-    public static Rank getById(String id) {
-        return CorePlugin.getInstance().getRankManager().getRanks().stream().filter(rank -> rank.getId().equalsIgnoreCase(id)).findFirst().orElse(null);
-    }
-
-    public static Rank getDefaultRank() {
-        return getById("default");
     }
 }

@@ -39,7 +39,7 @@ public class RankCommand extends BaseCommand {
                 }
                 if (args.length == 2) {
                     Player target = Bukkit.getPlayerExact(args[0]);
-                    Rank rank = RankManager.getById(args[1]);
+                    Rank rank = Rank.getById(args[1]);
                     if (!sender.hasPermission("core.rank.setabove") && Bukkit.getPlayer(sender.getName()) != null) {
                         PotPlayer potPlayer = PotPlayer.getPlayer(target.getUniqueId());
                         if (rank != null) {
@@ -49,7 +49,7 @@ public class RankCommand extends BaseCommand {
                                 CorePlugin.getInstance().getServer().getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> {
                                     OfflinePlayer offlinePlayer = CorePlugin.getInstance().getServer().getOfflinePlayer(target.getName());
 
-                                    CorePlugin.getInstance().getCoreMongoDatabase().getPlayerCollection().updateOne(offlinePlayer.hasPlayedBefore() ? Filters.eq("uuid", offlinePlayer.getUniqueId().toString()) : Filters.eq("name", offlinePlayer.getName()), Updates.set("rank", rank.getId()));
+                                    CorePlugin.getInstance().getCoreMongoDatabase().getPlayerCollection().updateOne(offlinePlayer.hasPlayedBefore() ? Filters.eq("_id", offlinePlayer.getUniqueId()) : Filters.eq("name", offlinePlayer.getName()), Updates.set("rank", rank.getId()));
                                     CorePlugin.getInstance().getServer().getLogger().info(sender.getName() + " updated " + offlinePlayer.getName() + "'s permissive rank to " + rank.getName());
 
                                     sender.sendMessage(Color.translate("&dYou have granted &5" + offlinePlayer + "&d the &5" + rank.getColor() + rank.getName() + "&d rank."));

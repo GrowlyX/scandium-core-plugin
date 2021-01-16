@@ -24,8 +24,6 @@ public class PotPlayer {
 
     private static Map<UUID, PotPlayer> profilePlayers = new HashMap<>();
 
-    private List<String> ownedPermissions = new ArrayList<>();
-
     private UUID uuid;
     private Player player;
     private String name;
@@ -33,7 +31,7 @@ public class PotPlayer {
     public boolean canSeeStaffMessages;
 
     private PermissionAttachment permissions;
-    private Rank rank = RankManager.getDefaultRank();
+    private Rank rank = Rank.getDefaultRank();
 
     @ConstructorProperties({"uuid"})
     public PotPlayer(UUID uuid) {
@@ -63,13 +61,10 @@ public class PotPlayer {
         if (document == null) return;
 
         this.name = document.getString("name");
-        this.rank = RankManager.getById(document.getString("rank")) != null ? RankManager.getById(document.getString("rank")) : RankManager.getDefaultRank();
+        this.rank = Rank.getById(document.getString("rank")) != null ? Rank.getById(document.getString("rank")) : Rank.getDefaultRank();
 
-        if (!this.getPlayer().getDisplayName().equals(this.getRank().getColor() + this.getPlayer().getName())) {
-            this.getPlayer().setDisplayName(this.getRank().getColor() + this.getPlayer().getName());
-        }
-
-        this.rank.getPermissions().forEach((permission) -> this.permissions.setPermission(permission, true));
+        this.rank.getAllPermissions().forEach(permission -> this.permissions.setPermission(permission, true));
+        this.getPlayer().setDisplayName(this.getRank().getColor() + this.getPlayer().getName());
         this.getPlayer().setPlayerListName(Color.translate(rank.getColor() + this.getPlayer().getDisplayName() + ChatColor.RESET));
 
         CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onConnect(player)));
@@ -79,8 +74,7 @@ public class PotPlayer {
         if (!this.getPlayer().getDisplayName().equals(this.getRank().getColor() + this.getPlayer().getName())) {
             this.getPlayer().setDisplayName(this.getRank().getColor() + this.getPlayer().getName());
         }
-
-        this.rank.getPermissions().forEach((permission) -> this.permissions.setPermission(permission, true));
+        this.rank.getAllPermissions().forEach(permission -> this.permissions.setPermission(permission, true));
         this.getPlayer().setPlayerListName(Color.translate(rank.getColor() + this.getPlayer().getDisplayName() + ChatColor.RESET));
     }
 

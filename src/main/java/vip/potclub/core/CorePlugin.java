@@ -85,12 +85,15 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("feed").setExecutor(new FeedCommand());
         this.getCommand("heal").setExecutor(new HealCommand());
         this.getCommand("rank").setExecutor(new RankCommand());
+        this.getCommand("who").setExecutor(new ListCommand());
 
         Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
     }
 
     @Override
     public void onDisable() {
+        this.getServer().getScheduler().cancelAllTasks();
+        this.rankManager.saveAllRanks();
         if (redisClient.isClientActive()) {
             redisClient.destroyClient();
         }

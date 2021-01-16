@@ -18,4 +18,6 @@ commands:
     aliases: [alert, bc]
   heal:
   kill:
+  who:
+    aliases: [list, glist, online]
   feed:
