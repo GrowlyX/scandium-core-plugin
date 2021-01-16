@@ -14,7 +14,7 @@ public abstract class BaseCommand implements CommandExecutor {
 
     public BaseCommand() {
         this.playerManager = CorePlugin.getInstance().getPlayerManager();
-        this.database = CorePlugin.getInstance().getDatabase();
+        this.database = CorePlugin.getInstance().getCoreMongoDatabase();
         this.client = CorePlugin.getInstance().getRedisClient();
     }
 }

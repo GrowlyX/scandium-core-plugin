@@ -1,12 +1,16 @@
 
 name: pCore
 main: vip.potclub.core.CorePlugin
-version: 1.0
+version: 1.1
 commands:
   staffchat:
     aliases: [sc]
   adminchat:
     aliases: [ac]
+  hostchat:
+    aliases: [hc]
+  devchat:
+    aliases: [dc]
   helpop:
     aliases: [request]
   broadcast:

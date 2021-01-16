@@ -1,26 +1,35 @@
 package vip.potclub.core;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import vip.potclub.core.command.extend.essential.*;
 import vip.potclub.core.database.Database;
 import vip.potclub.core.manager.PlayerManager;
+import vip.potclub.core.manager.RankManager;
 import vip.potclub.core.redis.RedisClient;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-@Getter @Setter
-public final class CorePlugin extends JavaPlugin implements Listener {
+@Getter
+@Setter
+public final class CorePlugin extends JavaPlugin {
+
+    public static Gson GSON;
+    public static GsonBuilder GSONBUILDER;
 
     @Getter
     public static CorePlugin instance;
 
     public PlayerManager playerManager;
+    public RankManager rankManager;
 
-    public Database database;
+    public String serverName;
+
+    public Database coreMongoDatabase;
     public RedisClient redisClient;
 
     public Executor redisThread;
@@ -30,18 +39,17 @@ public final class CorePlugin extends JavaPlugin implements Listener {
     public void onEnable() {
         instance = this;
 
+        GSONBUILDER = (new GsonBuilder());
+        GSON = GSONBUILDER.create();
+
         this.saveDefaultConfig();
         this.getConfig().options().copyDefaults();
 
-        if (!CorePlugin.getInstance().getServer().getPluginManager().isPluginEnabled("Argon")) {
-            this.getLogger().severe("Could not find Argon Data Manager.");
-            this.getServer().getScheduler().cancelAllTasks();
-            this.getServer().shutdown();
-        }
-
-        this.database = new Database();
+        this.coreMongoDatabase = new Database();
         this.redisClient = new RedisClient();
         this.playerManager = new PlayerManager();
+        this.rankManager = new RankManager();
+        this.serverName = this.getConfig().getString("server-name");
 
         this.setupCommands();
 
@@ -66,6 +74,8 @@ public final class CorePlugin extends JavaPlugin implements Listener {
          */
         this.getCommand("staffchat").setExecutor(new StaffChatCommand());
         this.getCommand("adminchat").setExecutor(new AdminChatCommand());
+        this.getCommand("devchat").setExecutor(new DevChatCommand());
+        this.getCommand("hostchat").setExecutor(new HostChatCommand());
         this.getCommand("helpop").setExecutor(new HelpOpCommand());
         this.getCommand("broadcast").setExecutor(new BroadcastCommand());
         this.getCommand("kill").setExecutor(new KillCommand());
@@ -75,5 +85,8 @@ public final class CorePlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
+        if (redisClient.isClientActive()) {
+            redisClient.destroyClient();
+        }
     }
 }

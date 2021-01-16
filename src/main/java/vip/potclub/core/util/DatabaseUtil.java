@@ -14,6 +14,6 @@ public final class DatabaseUtil {
 
     public static void saveDocument(Document document, UUID uuid) {
         Bson filter = Filters.eq("_id", uuid);
-        CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getDatabase().getPlayerCollection().replaceOne(filter, document, new ReplaceOptions().upsert(true)));
+        CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreMongoDatabase().getPlayerCollection().replaceOne(filter, document, new ReplaceOptions().upsert(true)));
     }
 }
