@@ -85,7 +85,7 @@ public class RedisListener extends JedisPubSub {
 
                                 Bukkit.getOnlinePlayers().forEach(player -> {
                                     if (player.hasPermission(updateType.getPermission())) {
-                                        player.sendMessage(Color.translate(updateType.getPrefix() + "&7[" + fromUnFreezeServer + "] " + "&3" + helpopPlayer + " &bhas requested assistance: &e" + helpopMessage + "&b."));
+                                        player.sendMessage(Color.translate(updateType.getPrefix() + "&7[" + fromHelpOpServer + "] " + "&3" + helpopPlayer + " &bhas requested assistance: &e" + helpopMessage + "&b."));
                                     }
                                 });
                                 break;

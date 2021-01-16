@@ -1,7 +1,7 @@
 package vip.potclub.core.player;
 
 import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.Updates;
+import com.mongodb.client.model.ReplaceOptions;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.Document;
@@ -10,61 +10,52 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
 import vip.potclub.core.CorePlugin;
-import vip.potclub.core.enums.ChatChannel;
 import vip.potclub.core.manager.RankManager;
 import vip.potclub.core.rank.Rank;
 import vip.potclub.core.util.Color;
-import vip.potclub.core.util.DatabaseUtil;
-import vip.potclub.core.util.HashingUtil;
 import vip.potclub.core.util.RedisUtil;
 
 import java.beans.ConstructorProperties;
-import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Stream;
+import java.util.*;
 
 @Getter
 @Setter
 public class PotPlayer {
 
-    private List<String> ownedPermissions = new ArrayList<>();
-    private final InetAddress ipAddress;
+    private static Map<UUID, PotPlayer> profilePlayers = new HashMap<>();
 
-    public UUID uuid;
-    public String dbIpAddress;
-    public String name;
-    public Player player;
+    private List<String> ownedPermissions = new ArrayList<>();
+
+    private UUID uuid;
+    private Player player;
+    private String name;
 
     public boolean canSeeStaffMessages;
 
     private PermissionAttachment permissions;
     private Rank rank = RankManager.getDefaultRank();
 
-    @ConstructorProperties({"uuid", "inetAddress"})
-    public PotPlayer(UUID uuid, InetAddress inetAddress) {
+    @ConstructorProperties({"uuid"})
+    public PotPlayer(UUID uuid) {
         this.uuid = uuid;
         this.player = Bukkit.getPlayer(uuid);
         this.name = player.getName();
-        this.ipAddress = inetAddress;
 
         loadPlayerData();
+
+        profilePlayers.put(uuid, this);
     }
 
     public void savePlayerData() {
         Document document = new Document("_id", this.uuid);
 
-        document.put("name", this.name);
-        document.put("rank", this.rank.getId());
-        document.put("ipAddress", this.dbIpAddress);
-        document.put("permissions", this.ownedPermissions);
-        document.put("canSeeStaffMessages", this.canSeeStaffMessages);
+        document.put("name", name);
+        document.put("rank", rank.getId());
 
-        DatabaseUtil.saveDocument(document, this.uuid);
+        CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreMongoDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true)));
         CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onDisconnect(player)));
-        CorePlugin.getInstance().getPlayerManager().removePlayer(uuid);
+
+        profilePlayers.remove(uuid);
     }
 
     public void loadPlayerData() {
@@ -73,54 +64,35 @@ public class PotPlayer {
 
         this.name = document.getString("name");
         this.rank = RankManager.getById(document.getString("rank")) != null ? RankManager.getById(document.getString("rank")) : RankManager.getDefaultRank();
-        this.dbIpAddress = document.getString("ipAddress");
 
-        if (document.get("permissions") != null) {
-            this.ownedPermissions.addAll((Collection<? extends String>) document.get("permissions"));
+        if (!this.getPlayer().getDisplayName().equals(this.getRank().getColor() + this.getPlayer().getName())) {
+            this.getPlayer().setDisplayName(this.getRank().getColor() + this.getPlayer().getName());
         }
 
-        this.canSeeStaffMessages = document.getBoolean("canSeeStaffMessages");
-        this.permissions = player.addAttachment(CorePlugin.getInstance());
-
-        onConnect();
-        CorePlugin.getInstance().getPlayerManager().addPlayer(uuid, ipAddress);
-    }
-
-    public void onConnect() {
-        this.updateDisplayName();
-        this.updatePermissions();
-        this.updateTabList(this.rank);
-
-        Bukkit.getScheduler().runTaskLaterAsynchronously(CorePlugin.getInstance(), () -> {
-            if (player.getAddress() != null) {
-                this.dbIpAddress = HashingUtil.getSaltedMD5(player.getAddress().getAddress().getHostAddress());
-                CorePlugin.getInstance().getCoreMongoDatabase().getPlayerCollection().updateOne(
-                        Filters.eq("uuid", player.getUniqueId().toString()),
-                        Filters.and(Updates.set("ipAddress", this.dbIpAddress)));
-            }
-        }, 1L);
+        this.rank.getPermissions().forEach((permission) -> this.permissions.setPermission(permission, true));
+        this.getPlayer().setPlayerListName(Color.translate(rank.getColor() + this.getPlayer().getDisplayName() + ChatColor.RESET));
 
         CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onConnect(player)));
     }
 
-    public void updateDisplayName() {
-        Player player = this.getPlayer();
-        String color = this.getRank().getColor();
-        if (!player.getDisplayName().equals(color + player.getName())) {
-            player.setDisplayName(color + player.getName());
+    public void updateServerPlayer() {
+        if (!this.getPlayer().getDisplayName().equals(this.getRank().getColor() + this.getPlayer().getName())) {
+            this.getPlayer().setDisplayName(this.getRank().getColor() + this.getPlayer().getName());
         }
-    }
 
-    public void updatePermissions() {
-        this.permissions.getPermissions().forEach((permission, permissionBoolean) -> {
-            this.permissions.unsetPermission(permission);
-        });
-        Stream.concat(this.ownedPermissions.stream(), this.rank.getPermissions().stream()).distinct().sorted().forEach((permission) -> {
-            this.permissions.setPermission(permission, true);
-        });
-    }
-
-    public void updateTabList(Rank rank) {
+        this.rank.getPermissions().forEach((permission) -> this.permissions.setPermission(permission, true));
         this.getPlayer().setPlayerListName(Color.translate(rank.getColor() + this.getPlayer().getDisplayName() + ChatColor.RESET));
+    }
+
+    public static PotPlayer getPlayer(Player player) {
+        return profilePlayers.get(player.getUniqueId());
+    }
+
+    public static PotPlayer getPlayer(UUID uuid) {
+        return profilePlayers.get(uuid);
+    }
+
+    public static PotPlayer getPlayer(String name) {
+        return profilePlayers.get(Bukkit.getPlayer(name).getUniqueId());
     }
 }

@@ -21,8 +21,7 @@ public class RankManager {
         this.createDefaultRank();
 
         CorePlugin.getInstance().getServer().getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> {
-            for (Object o : CorePlugin.getInstance().getCoreMongoDatabase().getRanksCollection().find()) {
-                Document rankDocument = (Document) o;
+            for (Document rankDocument : CorePlugin.getInstance().getCoreMongoDatabase().getRanksCollection().find()) {
                 this.ranks.add(CorePlugin.GSON.fromJson(rankDocument.toJson(), Rank.class));
             }
         });
@@ -31,7 +30,7 @@ public class RankManager {
     private void createDefaultRank() {
         if (CorePlugin.getInstance().getCoreMongoDatabase().getRanksCollection().countDocuments() <= 0L) {
             if (CorePlugin.getInstance().getCoreMongoDatabase().getRanksCollection().find(Filters.eq("id", "default")).first() == null) {
-                List<String> permissions = Collections.singletonList("practice.default");
+                List<String> permissions = Arrays.asList("practice.default", "core.default", "test.default");
                 Document defaultRank = new Document("id", "default");
 
                 defaultRank.append("weight", 1);
@@ -42,7 +41,7 @@ public class RankManager {
                 CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreMongoDatabase().getRanksCollection().insertOne(defaultRank));
             }
             if (CorePlugin.getInstance().getCoreMongoDatabase().getRanksCollection().find(Filters.eq("id", "owner")).first() == null) {
-                List<String> permissions = Collections.singletonList("practice.staff");
+                List<String> permissions = Arrays.asList("practice.staff", "core.staff", "test.staff");
                 Document defaultRank = new Document("id", "owner");
 
                 defaultRank.append("weight", 1000);
@@ -53,13 +52,13 @@ public class RankManager {
                 CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreMongoDatabase().getRanksCollection().insertOne(defaultRank));
             }
             if (CorePlugin.getInstance().getCoreMongoDatabase().getRanksCollection().find(Filters.eq("id", "manager")).first() == null) {
-                List<String> permissions = Collections.singletonList("practice.staff");
+                List<String> permissions = Arrays.asList("practice.staff", "core.staff", "test.staff");
                 Document defaultRank = new Document("id", "manager");
 
                 defaultRank.append("weight", 900);
                 defaultRank.append("permissions", permissions);
                 defaultRank.append("name", "Manager");
-                defaultRank.append("prefix", "§4[Manager] §c");
+                defaultRank.append("prefix", "§c[Manager] §c");
                 defaultRank.append("color", "§c");
                 CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreMongoDatabase().getRanksCollection().insertOne(defaultRank));
             }

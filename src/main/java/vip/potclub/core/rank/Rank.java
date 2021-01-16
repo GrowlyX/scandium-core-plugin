@@ -32,14 +32,6 @@ public class Rank implements Comparable<Rank> {
     private boolean donator = false;
     private boolean normal = true;
 
-    public List<String> getPermissions() {
-        ArrayList<String> permissionsWithInheritances = new ArrayList<>(this.permissions);
-        this.inherits.forEach((inheritedRankId) -> {
-            permissionsWithInheritances.addAll(RankManager.getById(inheritedRankId).getPermissions());
-        });
-        return permissionsWithInheritances;
-    }
-
     public List<String> getInheritances() {
         List<String> inheritances = new ArrayList<>(this.inherits);
         this.inherits.forEach((inheritedRankId) -> {

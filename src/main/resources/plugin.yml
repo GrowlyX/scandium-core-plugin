@@ -7,6 +7,7 @@ commands:
     aliases: [sc]
   adminchat:
     aliases: [ac]
+  rank:
   hostchat:
     aliases: [hc]
   devchat:
