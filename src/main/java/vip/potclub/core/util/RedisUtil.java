@@ -33,7 +33,7 @@ public final class RedisUtil {
     }
 
     public static String onConnect(Player player) {
-        return new RedisMessage(DataPacket.PLAYER_DISCONNECT_UPDATE)
+        return new RedisMessage(DataPacket.PLAYER_CONNECT_UPDATE)
                 .setParam("PLAYER", player.getDisplayName())
                 .setParam("SERVER", CorePlugin.getInstance().getServerName())
                 .toJson();
@@ -48,9 +48,9 @@ public final class RedisUtil {
                 .toJson();
     }
 
-    public static String onReport(Player player, Player target, ReportType reportType) {
+    public static String onReport(Player player, Player target, String message) {
         return new RedisMessage(DataPacket.PLAYER_SERVER_UPDATE)
-                .setParam("MESSAGE", reportType.toString())
+                .setParam("MESSAGE", message)
                 .setParam("PLAYER", player.getDisplayName())
                 .setParam("TARGET", target.getDisplayName())
                 .setParam("SERVER", CorePlugin.getInstance().getServerName())

@@ -7,12 +7,11 @@ import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import vip.potclub.core.command.extend.essential.*;
-import vip.potclub.core.command.extend.rank.RankCommand;
 import vip.potclub.core.database.Database;
 import vip.potclub.core.listener.PlayerListener;
 import vip.potclub.core.manager.PlayerManager;
-import vip.potclub.core.manager.RankManager;
 import vip.potclub.core.redis.RedisClient;
+import vip.potclub.core.util.Color;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -28,7 +27,6 @@ public final class CorePlugin extends JavaPlugin {
     public static CorePlugin instance;
 
     public PlayerManager playerManager;
-    public RankManager rankManager;
 
     public String serverName;
 
@@ -55,26 +53,11 @@ public final class CorePlugin extends JavaPlugin {
         this.coreMongoDatabase = new Database();
         this.redisClient = new RedisClient();
         this.playerManager = new PlayerManager();
-        this.rankManager = new RankManager();
 
         this.setupCommands();
     }
 
     public void setupCommands() {
-        /*
-        this.getCommand("sudo").setExecutor(new SudoCommand());
-
-        this.getCommand("list").setExecutor(new ListCommand());
-        this.getCommand("ping").setExecutor(new PingCommand());
-        this.getCommand("more").setExecutor(new MoreCommand());
-        this.getCommand("time").setExecutor(new TimeCommand());
-        this.getCommand("clear").setExecutor(new ClearCommand());
-        this.getCommand("helpop").setExecutor(new HelpOPCommand());
-        this.getCommand("report").setExecutor(new ReportCommand());
-        this.getCommand("sudoall").setExecutor(new SudoAllCommand());
-        this.getCommand("killall").setExecutor(new KillAllCommand());
-        this.getCommand("onlinestaff").setExecutor(new OnlineStaffCommand());
-         */
         this.getCommand("staffchat").setExecutor(new StaffChatCommand());
         this.getCommand("adminchat").setExecutor(new AdminChatCommand());
         this.getCommand("devchat").setExecutor(new DevChatCommand());
@@ -84,16 +67,17 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("kill").setExecutor(new KillCommand());
         this.getCommand("feed").setExecutor(new FeedCommand());
         this.getCommand("heal").setExecutor(new HealCommand());
-        this.getCommand("rank").setExecutor(new RankCommand());
-        this.getCommand("who").setExecutor(new ListCommand());
+
+        this.getCommand("toggletips").setExecutor(new ToggleTipsCommand());
+        this.getCommand("togglestaffmessages").setExecutor(new ToggleStaffMessagesCommand());
 
         Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
     }
 
     @Override
     public void onDisable() {
+        Bukkit.getOnlinePlayers().forEach(player -> player.kickPlayer(Color.translate("&cThe server is currently rebooting.\n&cPlease reconnect in a few minutes.")));
         this.getServer().getScheduler().cancelAllTasks();
-        this.rankManager.saveAllRanks();
         if (redisClient.isClientActive()) {
             redisClient.destroyClient();
         }

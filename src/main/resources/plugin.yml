@@ -1,13 +1,13 @@
 
-name: pCore
+name: uSuite
 main: vip.potclub.core.CorePlugin
-version: 1.1
+version: 1.3.3.7
+
 commands:
   staffchat:
     aliases: [sc]
   adminchat:
     aliases: [ac]
-  rank:
   hostchat:
     aliases: [hc]
   devchat:
@@ -16,8 +16,10 @@ commands:
     aliases: [request]
   broadcast:
     aliases: [alert, bc]
+  toggletips:
+    aliases: [ttips]
+  togglestaffmessages:
+    aliases: [tsm]
   heal:
   kill:
-  who:
-    aliases: [list, glist, online]
   feed:

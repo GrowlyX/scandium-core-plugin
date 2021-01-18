@@ -6,17 +6,15 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bson.Document;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
 import vip.potclub.core.CorePlugin;
-import vip.potclub.core.manager.RankManager;
-import vip.potclub.core.rank.Rank;
-import vip.potclub.core.util.Color;
 import vip.potclub.core.util.RedisUtil;
 
 import java.beans.ConstructorProperties;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -28,10 +26,10 @@ public class PotPlayer {
     private Player player;
     private String name;
 
-    public boolean canSeeStaffMessages;
-
-    private PermissionAttachment permissions;
-    private Rank rank = Rank.getDefaultRank();
+    public boolean canSeeStaffMessages = true;
+    public boolean canSeeTips = true;
+    public boolean canReport = true;
+    public boolean canRequest = true;
 
     @ConstructorProperties({"uuid"})
     public PotPlayer(UUID uuid) {
@@ -48,10 +46,10 @@ public class PotPlayer {
         Document document = new Document("_id", this.uuid);
 
         document.put("name", name);
-        document.put("rank", rank.getId());
+        document.put("canSeeStaffMessages", canSeeStaffMessages);
+        document.put("canSeeTips", canSeeTips);
 
         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreMongoDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true)));
-        CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onDisconnect(player)));
 
         profilePlayers.remove(uuid);
     }
@@ -61,21 +59,14 @@ public class PotPlayer {
         if (document == null) return;
 
         this.name = document.getString("name");
-        this.rank = Rank.getById(document.getString("rank")) != null ? Rank.getById(document.getString("rank")) : Rank.getDefaultRank();
-
-        this.rank.getAllPermissions().forEach(permission -> this.permissions.setPermission(permission, true));
-        this.getPlayer().setDisplayName(this.getRank().getColor() + this.getPlayer().getName());
-        this.getPlayer().setPlayerListName(Color.translate(rank.getColor() + this.getPlayer().getDisplayName() + ChatColor.RESET));
+        if (document.getBoolean("canSeeStaffMessages") != null) {
+            this.canSeeStaffMessages = document.getBoolean("canSeeStaffMessages");
+        }
+        if (document.getBoolean("canSeeTips") != null) {
+            this.canSeeTips = document.getBoolean("canSeeTips");
+        }
 
         CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onConnect(player)));
-    }
-
-    public void updateServerPlayer() {
-        if (!this.getPlayer().getDisplayName().equals(this.getRank().getColor() + this.getPlayer().getName())) {
-            this.getPlayer().setDisplayName(this.getRank().getColor() + this.getPlayer().getName());
-        }
-        this.rank.getAllPermissions().forEach(permission -> this.permissions.setPermission(permission, true));
-        this.getPlayer().setPlayerListName(Color.translate(rank.getColor() + this.getPlayer().getDisplayName() + ChatColor.RESET));
     }
 
     public static PotPlayer getPlayer(Player player) {

@@ -9,6 +9,7 @@ import vip.potclub.core.CorePlugin;
 import vip.potclub.core.enums.ChatChannel;
 import vip.potclub.core.enums.ReportType;
 import vip.potclub.core.enums.StaffUpdateType;
+import vip.potclub.core.player.PotPlayer;
 import vip.potclub.core.redis.RedisMessage;
 import vip.potclub.core.util.Color;
 
@@ -26,8 +27,11 @@ public class RedisListener extends JedisPubSub {
                         String connectingPlayer = redisMessage.getParam("PLAYER");
 
                         Bukkit.getOnlinePlayers().forEach(player -> {
+                            PotPlayer potPlayer = PotPlayer.getPlayer(player);
                             if (player.hasPermission("core.staff")) {
-                                player.sendMessage(Color.translate("&3[S] " + connectingPlayer + " &bconnected to &3" + fromConnectServer + "&b."));
+                                if (potPlayer.isCanSeeStaffMessages()) {
+                                    player.sendMessage(Color.translate("&3[S] " + connectingPlayer + " &bconnected to &3" + fromConnectServer + "&b."));
+                                }
                             }
                         });
                         break;
@@ -36,8 +40,11 @@ public class RedisListener extends JedisPubSub {
                         String disconnectingPlayer = redisMessage.getParam("PLAYER");
 
                         Bukkit.getOnlinePlayers().forEach(player -> {
+                            PotPlayer potPlayer = PotPlayer.getPlayer(player);
                             if (player.hasPermission("core.staff")) {
-                                player.sendMessage(Color.translate("&3[S] " + disconnectingPlayer + " &bdisconnected from &3" + fromDisconnectServer + "&b."));
+                                if (potPlayer.isCanSeeStaffMessages()) {
+                                    player.sendMessage(Color.translate("&3[S] " + disconnectingPlayer + " &bdisconnected from &3" + fromDisconnectServer + "&b."));
+                                }
                             }
                         });
                         break;
@@ -48,8 +55,11 @@ public class RedisListener extends JedisPubSub {
                         String fromServer = redisMessage.getParam("SERVER");
 
                         Bukkit.getOnlinePlayers().forEach(player -> {
+                            PotPlayer potPlayer = PotPlayer.getPlayer(player);
                             if (player.hasPermission(chatChannel.getPermission())) {
-                                player.sendMessage(CorePlugin.getInstance().getPlayerManager().formatChatChannel(chatChannel, sender, message, fromServer));
+                                if (potPlayer.isCanSeeStaffMessages()) {
+                                    player.sendMessage(CorePlugin.getInstance().getPlayerManager().formatChatChannel(chatChannel, sender, message, fromServer));
+                                }
                             }
                         });
                         break;
@@ -62,8 +72,11 @@ public class RedisListener extends JedisPubSub {
                                 String freezeTarget = redisMessage.getParam("TARGET");
 
                                 Bukkit.getOnlinePlayers().forEach(player -> {
+                                    PotPlayer potPlayer = PotPlayer.getPlayer(player);
                                     if (player.hasPermission(updateType.getPermission())) {
-                                        player.sendMessage(Color.translate(updateType.getPrefix() + "&7[" + fromFreezeServer + "] " + "&3" + freezeExecutor + " &bhas frozen &3" + freezeTarget + "&b."));
+                                        if (potPlayer.isCanSeeStaffMessages()) {
+                                            player.sendMessage(Color.translate(updateType.getPrefix() + "&7[" + fromFreezeServer + "] " + "&3" + freezeExecutor + " &bhas frozen &3" + freezeTarget + "&b."));
+                                        }
                                     }
                                 });
                                 break;
@@ -73,8 +86,11 @@ public class RedisListener extends JedisPubSub {
                                 String fromUnFreezeServer = redisMessage.getParam("SERVER");
 
                                 Bukkit.getOnlinePlayers().forEach(player -> {
+                                    PotPlayer potPlayer = PotPlayer.getPlayer(player);
                                     if (player.hasPermission(updateType.getPermission())) {
-                                        player.sendMessage(Color.translate(updateType.getPrefix() + "&7[" + fromUnFreezeServer + "] " + "&3" + unfreezeExecutor + " &bhas unfrozen &3" + unfreezeTarget + "&b."));
+                                        if (potPlayer.isCanSeeStaffMessages()) {
+                                            player.sendMessage(Color.translate(updateType.getPrefix() + "&7[" + fromUnFreezeServer + "] " + "&3" + unfreezeExecutor + " &bhas unfrozen &3" + unfreezeTarget + "&b."));
+                                        }
                                     }
                                 });
                                 break;
@@ -84,20 +100,26 @@ public class RedisListener extends JedisPubSub {
                                 String fromHelpOpServer = redisMessage.getParam("SERVER");
 
                                 Bukkit.getOnlinePlayers().forEach(player -> {
+                                    PotPlayer potPlayer = PotPlayer.getPlayer(player);
                                     if (player.hasPermission(updateType.getPermission())) {
-                                        player.sendMessage(Color.translate(updateType.getPrefix() + "&7[" + fromHelpOpServer + "] " + "&3" + helpopPlayer + " &bhas requested assistance: &e" + helpopMessage + "&b."));
+                                        if (potPlayer.isCanSeeStaffMessages()) {
+                                            player.sendMessage(Color.translate(updateType.getPrefix() + "&7[" + fromHelpOpServer + "] " + "&3" + helpopPlayer + " &bhas requested assistance: &e" + helpopMessage + "&b."));
+                                        }
                                     }
                                 });
                                 break;
                             case REPORT:
-                                ReportType reportType = ReportType.valueOf(redisMessage.getParam("MESSAGE"));
+                                String reportMessage = redisMessage.getParam("MESSAGE");
                                 String reportPlayer = redisMessage.getParam("PLAYER");
                                 String reportTarget = redisMessage.getParam("TARGET");
                                 String fromReportServer = redisMessage.getParam("SERVER");
 
                                 Bukkit.getOnlinePlayers().forEach(player -> {
+                                    PotPlayer potPlayer = PotPlayer.getPlayer(player);
                                     if (player.hasPermission(updateType.getPermission())) {
-                                        player.sendMessage(Color.translate(updateType.getPrefix() + "&7[" + fromReportServer + "] " + "&3" + reportPlayer + " &bhas reported &3" + reportTarget + "&b for &e" + reportType.getName() + "&b."));
+                                        if (potPlayer.isCanSeeStaffMessages()) {
+                                            player.sendMessage(Color.translate(updateType.getPrefix() + "&7[" + fromReportServer + "] " + "&3" + reportPlayer + " &bhas reported &3" + reportTarget + "&b for &e" + reportMessage + "&b."));
+                                        }
                                     }
                                 });
                                 break;
