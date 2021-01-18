@@ -6,8 +6,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import vip.potclub.core.command.BaseCommand;
 import vip.potclub.core.util.Color;
+import vip.potclub.core.util.StringUtil;
 
-public class KillCommand extends BaseCommand {
+public class SudoAllCommand extends BaseCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -17,17 +18,15 @@ public class KillCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
-        if (player.hasPermission("core.command.kill")) {
+        if (player.hasPermission("core.command.sudoall")) {
             if (args.length == 0) {
-                player.setHealth(0);
-                player.sendMessage(Color.translate("&aKilled you."));
+                player.sendMessage(Color.translate("&cUsage: /" + label + " <message>."));
             }
+
             if (args.length > 0) {
-                Player target = Bukkit.getPlayerExact(args[0]);
-                if (target != null) {
-                    target.setHealth(0);
-                    player.sendMessage(Color.translate("&aKilled " + target.getDisplayName() + "&a."));
-                }
+                String message = StringUtil.buildMessage(args, 0);
+                Bukkit.getOnlinePlayers().forEach(player1 -> player1.chat(message));
+                player.sendMessage(Color.translate("&aMade all online players chat '" + message + "&a'."));
             }
         } else {
             player.sendMessage(Color.translate("&cNo permission."));

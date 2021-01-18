@@ -1,13 +1,14 @@
 package vip.potclub.core.command.extend.essential;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import vip.potclub.core.command.BaseCommand;
 import vip.potclub.core.util.Color;
 
-public class KillCommand extends BaseCommand {
+public class GmcCommand extends BaseCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -17,16 +18,16 @@ public class KillCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
-        if (player.hasPermission("core.command.kill")) {
+        if (player.hasPermission("core.command.gmc")) {
             if (args.length == 0) {
-                player.setHealth(0);
-                player.sendMessage(Color.translate("&aKilled you."));
+                player.setGameMode(GameMode.CREATIVE);
+                player.sendMessage(Color.translate("&aSet your gamemode to Creative."));
             }
             if (args.length > 0) {
                 Player target = Bukkit.getPlayerExact(args[0]);
                 if (target != null) {
-                    target.setHealth(0);
-                    player.sendMessage(Color.translate("&aKilled " + target.getDisplayName() + "&a."));
+                    target.setGameMode(GameMode.CREATIVE);
+                    player.sendMessage(Color.translate("&aSet " + target.getDisplayName() + "'s&a gamemode to Creative."));
                 }
             }
         } else {

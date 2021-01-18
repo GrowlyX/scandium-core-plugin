@@ -11,6 +11,7 @@ import vip.potclub.core.database.Database;
 import vip.potclub.core.listener.PlayerListener;
 import vip.potclub.core.manager.PlayerManager;
 import vip.potclub.core.redis.RedisClient;
+import vip.potclub.core.task.AutoMessageTask;
 import vip.potclub.core.util.Color;
 
 import java.util.concurrent.Executor;
@@ -40,7 +41,7 @@ public final class CorePlugin extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
-        GSONBUILDER = (new GsonBuilder());
+        GSONBUILDER = new GsonBuilder();
         GSON = GSONBUILDER.create();
 
         this.mongoThread = Executors.newFixedThreadPool(1);
@@ -54,10 +55,10 @@ public final class CorePlugin extends JavaPlugin {
         this.redisClient = new RedisClient();
         this.playerManager = new PlayerManager();
 
-        this.setupCommands();
+        this.setupExtra();
     }
 
-    public void setupCommands() {
+    public void setupExtra() {
         this.getCommand("staffchat").setExecutor(new StaffChatCommand());
         this.getCommand("adminchat").setExecutor(new AdminChatCommand());
         this.getCommand("devchat").setExecutor(new DevChatCommand());
@@ -67,11 +68,22 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("kill").setExecutor(new KillCommand());
         this.getCommand("feed").setExecutor(new FeedCommand());
         this.getCommand("heal").setExecutor(new HealCommand());
+        this.getCommand("ping").setExecutor(new PingCommand());
+        this.getCommand("tppos").setExecutor(new TpPosCommand());
+        this.getCommand("sudo").setExecutor(new SudoCommand());
+        this.getCommand("sudoall").setExecutor(new SudoAllCommand());
+        this.getCommand("tphere").setExecutor(new TpHereCommand());
+        this.getCommand("gmc").setExecutor(new GmcCommand());
+        this.getCommand("gms").setExecutor(new GmsCommand());
+        this.getCommand("tp").setExecutor(new TpCommand());
+        this.getCommand("report").setExecutor(new ReportCommand());
 
         this.getCommand("toggletips").setExecutor(new ToggleTipsCommand());
         this.getCommand("togglestaffmessages").setExecutor(new ToggleStaffMessagesCommand());
 
         Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
+
+        new AutoMessageTask();
     }
 
     @Override

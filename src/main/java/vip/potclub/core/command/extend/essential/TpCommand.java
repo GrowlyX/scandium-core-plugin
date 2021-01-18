@@ -1,13 +1,15 @@
 package vip.potclub.core.command.extend.essential;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import vip.potclub.core.command.BaseCommand;
 import vip.potclub.core.util.Color;
 
-public class KillCommand extends BaseCommand {
+public class TpCommand extends BaseCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -17,16 +19,19 @@ public class KillCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
-        if (player.hasPermission("core.command.kill")) {
+        if (player.hasPermission("core.command.tp")) {
             if (args.length == 0) {
-                player.setHealth(0);
-                player.sendMessage(Color.translate("&aKilled you."));
+                player.sendMessage(Color.translate("&cUsage: /" + label + " <player>."));
             }
             if (args.length > 0) {
-                Player target = Bukkit.getPlayerExact(args[0]);
-                if (target != null) {
-                    target.setHealth(0);
-                    player.sendMessage(Color.translate("&aKilled " + target.getDisplayName() + "&a."));
+                if (args.length == 1) {
+                    Player target = Bukkit.getPlayerExact(args[0]);
+                    if (target != null) {
+                        player.teleport(target.getLocation());
+                        player.sendMessage(Color.translate("&aTeleported you to " + target.getDisplayName() + "&a."));
+                    } else {
+                        player.sendMessage(Color.translate("&cThat player is not online."));
+                    }
                 }
             }
         } else {

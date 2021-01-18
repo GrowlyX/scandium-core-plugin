@@ -1,4 +1,4 @@
 package vip.potclub.core.command.extend.essential;
 
-public class GamemodeCommand {
+public class RankCheckCommand {
 }

@@ -28,7 +28,7 @@ public class AutoMessageTask extends BukkitRunnable { // Credits: https://github
     }
 
     private void setupMessages() {
-        String prefix = ChatColor.LIGHT_PURPLE + "[TIP] " + ChatColor.GRAY;
+        String prefix = ChatColor.LIGHT_PURPLE + "[TIP] " + ChatColor.YELLOW;
 
         defaultMessages.add(prefix + "Follow our Twitter account for news and giveaways - www.twitter.com/PotClubVIP");
         defaultMessages.add(prefix + "Join our Discord server to chat with players, get support, and see sneak peeks - https://discord.gg/D5svAj23R4");
