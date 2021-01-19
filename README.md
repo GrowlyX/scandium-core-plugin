@@ -1,0 +1,2 @@
+# Core
+Growly's Core
