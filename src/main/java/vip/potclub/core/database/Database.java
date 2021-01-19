@@ -14,12 +14,12 @@ public class Database {
     private final MongoClient client;
     private final MongoDatabase database;
     private final MongoCollection<Document> playerCollection;
-    private final MongoCollection<Document> ranksCollection;
+    private final MongoCollection<Document> punishmentCollection;
 
     public Database() {
         this.client = new MongoClient(new MongoClientURI(CorePlugin.getInstance().getConfig().getString("mongodb.url")));
         this.database = client.getDatabase("clubbingcore");
         this.playerCollection = this.database.getCollection("profiles");
-        this.ranksCollection = this.database.getCollection("ranks");
+        this.punishmentCollection = this.database.getCollection("punishments");
     }
 }

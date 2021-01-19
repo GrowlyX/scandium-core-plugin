@@ -10,6 +10,7 @@ import vip.potclub.core.command.extend.essential.*;
 import vip.potclub.core.database.Database;
 import vip.potclub.core.listener.PlayerListener;
 import vip.potclub.core.manager.PlayerManager;
+import vip.potclub.core.manager.PunishmentManager;
 import vip.potclub.core.redis.RedisClient;
 import vip.potclub.core.task.AutoMessageTask;
 import vip.potclub.core.util.Color;
@@ -28,6 +29,7 @@ public final class CorePlugin extends JavaPlugin {
     public static CorePlugin instance;
 
     public PlayerManager playerManager;
+    public PunishmentManager punishmentManager;
 
     public String serverName;
 
@@ -35,6 +37,7 @@ public final class CorePlugin extends JavaPlugin {
     public RedisClient redisClient;
 
     public Executor redisThread;
+    public Executor redisSubThread;
     public Executor mongoThread;
 
     @Override
@@ -46,14 +49,18 @@ public final class CorePlugin extends JavaPlugin {
 
         this.mongoThread = Executors.newFixedThreadPool(1);
         this.redisThread = Executors.newFixedThreadPool(1);
+        this.redisSubThread = Executors.newFixedThreadPool(1);
 
         this.saveDefaultConfig();
         this.getConfig().options().copyDefaults();
 
         this.serverName = this.getConfig().getString("server-name");
+
         this.coreMongoDatabase = new Database();
         this.redisClient = new RedisClient();
+
         this.playerManager = new PlayerManager();
+        this.punishmentManager = new PunishmentManager();
 
         this.setupExtra();
     }

@@ -28,7 +28,7 @@ public class SudoCommand extends BaseCommand {
                 }
                 if (args.length > 1) {
                     Player target = Bukkit.getPlayerExact(args[0]);
-                    String message = StringUtil.buildMessage(args, 0);
+                    String message = StringUtil.buildMessage(args, 1);
                     if (target != null) {
                         target.chat(message);
                         player.sendMessage(Color.translate("&aMade " + target.getDisplayName() + "&a chat '" + message + "&a'."));

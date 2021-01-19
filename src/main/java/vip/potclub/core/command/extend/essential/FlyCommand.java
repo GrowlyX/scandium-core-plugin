@@ -22,8 +22,7 @@ public class FlyCommand extends BaseCommand {
                 if (player.isFlying()) {
                     player.setFlying(false);
                     player.sendMessage(Color.translate("&cDisabled your flight."));
-                }
-                if (!player.isFlying()) {
+                } else {
                     player.setFlying(true);
                     player.sendMessage(Color.translate("&aEnabled your flight."));
                 }
@@ -33,8 +32,7 @@ public class FlyCommand extends BaseCommand {
                 if (target.isFlying()) {
                     target.setFlying(false);
                     target.sendMessage(Color.translate("&cDisabled " + target.getDisplayName() + "&c's flight."));
-                }
-                if (!target.isFlying()) {
+                } else {
                     target.setFlying(true);
                     target.sendMessage(Color.translate("&aEnabled " + target.getDisplayName() + "&a's flight."));
                 }

@@ -75,6 +75,13 @@
             <systemPath>${basedir}/lib/Lantern.jar</systemPath>
         </dependency>
         <dependency>
+            <groupId>vip.potclub</groupId>
+            <artifactId>uPerms</artifactId>
+            <version>1.0-DEV</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/uPerms-1.0-DEV.jar</systemPath>
+        </dependency>
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.16</version>

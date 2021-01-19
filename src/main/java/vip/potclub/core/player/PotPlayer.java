@@ -7,20 +7,19 @@ import lombok.Setter;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.PermissionAttachment;
 import vip.potclub.core.CorePlugin;
-import vip.potclub.core.util.RedisUtil;
+import vip.potclub.core.player.punishment.Punishment;
 
 import java.beans.ConstructorProperties;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Getter
 @Setter
 public class PotPlayer {
 
     private static Map<UUID, PotPlayer> profilePlayers = new HashMap<>();
+
+    private List<UUID> punishments = new ArrayList<>();
 
     private UUID uuid;
     private Player player;
@@ -65,8 +64,6 @@ public class PotPlayer {
         if (document.getBoolean("canSeeTips") != null) {
             this.canSeeTips = document.getBoolean("canSeeTips");
         }
-
-        CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onConnect(player)));
     }
 
     public static PotPlayer getPlayer(Player player) {
