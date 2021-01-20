@@ -7,7 +7,9 @@ import lombok.Setter;
 import org.bson.Document;
 import vip.potclub.core.CorePlugin;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -47,9 +49,6 @@ public class Punishment {
         return CorePlugin.GSON.toJson(this);
     }
 
-    public static Punishment getById(String id) {
-        return CorePlugin.GSON.fromJson(Objects.requireNonNull(CorePlugin.getInstance().getCoreMongoDatabase().getPunishmentCollection().find().filter(Filters.eq("_id", id)).first()).toJson(), Punishment.class);
-    }
 
     public static ArrayList<Punishment> getAllPunishments() {
         return CorePlugin.getInstance().getPunishmentManager().getPunishments();

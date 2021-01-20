@@ -5,13 +5,13 @@ import java.beans.ConstructorProperties;
 public enum PunishmentDuration {
 
     SECOND(1000L, "s"),
-    MINUTE(60L * SECOND.duration, "m"),
-    HOUR(60L * MINUTE.duration, "h"),
-    DAY(24L * HOUR.duration, "d"),
-    WEEK(7L * DAY.duration, "w"),
-    MONTH(30L * DAY.duration, "M"),
-    YEAR(365L * DAY.duration, "y"),
-    PERMANENT(Long.MAX_VALUE, "Permanent");
+    MINUTE(60L * SECOND.getDuration(), "m"),
+    HOUR(60L * MINUTE.getDuration(), "h"),
+    DAY(24L * HOUR.getDuration(), "d"),
+    WEEK(7L * DAY.getDuration(), "w"),
+    MONTH(30L * DAY.getDuration(), "M"),
+    YEAR(365L * DAY.getDuration(), "y"),
+    PERMANENT(Long.MAX_VALUE * YEAR.getDuration(), "Permanent");
 
     private final long duration;
     private final String name;

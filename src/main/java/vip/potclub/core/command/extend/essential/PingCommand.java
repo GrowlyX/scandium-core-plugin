@@ -25,8 +25,12 @@ public class PingCommand extends BaseCommand {
         }
         if (args.length > 0) {
             Player target = Bukkit.getPlayerExact(args[0]);
-            EntityPlayer entityPlayer = ((CraftPlayer) target).getHandle();
-            player.sendMessage(Color.translate(target.getDisplayName() + "'s &dping is: &5" + entityPlayer.ping));
+            if (target != null) {
+                EntityPlayer entityPlayer = ((CraftPlayer) target).getHandle();
+                player.sendMessage(Color.translate(target.getDisplayName() + "'s &dping is: &5" + entityPlayer.ping));
+            } else {
+                player.sendMessage(Color.translate("&cThat player does not exist."));
+            }
         }
         return false;
     }

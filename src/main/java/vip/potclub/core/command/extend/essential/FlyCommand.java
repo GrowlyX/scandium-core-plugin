@@ -29,12 +29,16 @@ public class FlyCommand extends BaseCommand {
             }
             if (args.length > 0) {
                 Player target = Bukkit.getPlayerExact(args[0]);
-                if (target.isFlying()) {
-                    target.setFlying(false);
-                    target.sendMessage(Color.translate("&cDisabled " + target.getDisplayName() + "&c's flight."));
+                if (target != null) {
+                    if (target.isFlying()) {
+                        target.setFlying(false);
+                        target.sendMessage(Color.translate("&cDisabled " + target.getDisplayName() + "&c's flight."));
+                    } else {
+                        target.setFlying(true);
+                        target.sendMessage(Color.translate("&aEnabled " + target.getDisplayName() + "&a's flight."));
+                    }
                 } else {
-                    target.setFlying(true);
-                    target.sendMessage(Color.translate("&aEnabled " + target.getDisplayName() + "&a's flight."));
+                    player.sendMessage(Color.translate("&cThat player does not exist."));
                 }
             }
         } else {

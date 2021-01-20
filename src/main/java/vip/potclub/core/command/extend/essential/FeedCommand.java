@@ -27,6 +27,8 @@ public class FeedCommand extends BaseCommand {
                 if (target != null) {
                     target.setFoodLevel(20);
                     player.sendMessage(Color.translate("&aSet " + target.getDisplayName() + "&a's food level to 20."));
+                } else {
+                    player.sendMessage(Color.translate("&cThat player does not exist."));
                 }
             }
         } else {
