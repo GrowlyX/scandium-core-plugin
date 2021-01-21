@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import org.bukkit.Bukkit;
 import redis.clients.jedis.JedisPubSub;
 import vip.potclub.core.CorePlugin;
-import vip.potclub.core.enums.ChatChannel;
+import vip.potclub.core.enums.ChatChannelType;
 import vip.potclub.core.enums.StaffUpdateType;
 import vip.potclub.core.player.PotPlayer;
 import vip.potclub.core.redis.RedisMessage;
@@ -44,7 +44,7 @@ public class RedisListener extends JedisPubSub {
                     });
                     break;
                 case CHAT_CHANNEL_UPDATE:
-                    ChatChannel chatChannel = ChatChannel.valueOf(redisMessage.getParam("CHANNEL"));
+                    ChatChannelType chatChannel = ChatChannelType.valueOf(redisMessage.getParam("CHANNEL"));
                     String sender = redisMessage.getParam("PLAYER");
                     String chatMessage = redisMessage.getParam("MESSAGE");
                     String fromServer = redisMessage.getParam("SERVER");

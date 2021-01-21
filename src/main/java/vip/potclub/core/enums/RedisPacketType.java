@@ -5,7 +5,7 @@ import lombok.Getter;
 import java.beans.ConstructorProperties;
 
 @Getter
-public enum DataPacket {
+public enum RedisPacketType {
 
     CHAT_CHANNEL_UPDATE("ChatChannelUpdate"),
     PLAYER_SERVER_UPDATE("PlayerServerUpdate"),
@@ -16,7 +16,7 @@ public enum DataPacket {
     public String packetDataName;
 
     @ConstructorProperties("packetDataName")
-    DataPacket(String packetDataName) {
+    RedisPacketType(String packetDataName) {
         this.packetDataName = packetDataName;
     }
 }

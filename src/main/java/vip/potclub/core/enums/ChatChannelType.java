@@ -3,7 +3,7 @@ package vip.potclub.core.enums;
 import lombok.Getter;
 
 @Getter
-public enum ChatChannel {
+public enum ChatChannelType {
 
     STAFF("&3[S] ", "STAFF", "core.staff"),
     ADMIN("&c[A] ", "ADMIN", "core.admin"),
@@ -14,7 +14,7 @@ public enum ChatChannel {
     public final String name;
     public final String permission;
 
-    ChatChannel(String prefix, String name, String permission) {
+    ChatChannelType(String prefix, String name, String permission) {
         this.prefix = prefix;
         this.permission = permission;
         this.name = name;

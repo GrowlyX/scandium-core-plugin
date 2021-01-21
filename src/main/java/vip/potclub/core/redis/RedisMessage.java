@@ -2,7 +2,7 @@ package vip.potclub.core.redis;
 
 import com.google.gson.Gson;
 import lombok.Getter;
-import vip.potclub.core.enums.DataPacket;
+import vip.potclub.core.enums.RedisPacketType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,10 +10,10 @@ import java.util.Map;
 @Getter
 public class RedisMessage {
 
-    private final DataPacket packet;
+    private final RedisPacketType packet;
     private final Map<String, String> params;
 
-    public RedisMessage(DataPacket packet) {
+    public RedisMessage(RedisPacketType packet) {
         this.packet = packet;
         this.params = new HashMap<>();
     }

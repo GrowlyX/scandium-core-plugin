@@ -9,7 +9,7 @@ import java.util.Date;
 public class PunishExpireTask extends BukkitRunnable {
 
     public PunishExpireTask() {
-        runTaskTimerAsynchronously(CorePlugin.getInstance(), 20L, 120 * 20L);
+        runTaskTimerAsynchronously(CorePlugin.getInstance(), 20L, 30 * 20L);
     }
 
     @Override

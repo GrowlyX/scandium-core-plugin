@@ -12,6 +12,7 @@ import vip.potclub.core.database.Database;
 import vip.potclub.core.listener.PlayerListener;
 import vip.potclub.core.manager.PlayerManager;
 import vip.potclub.core.manager.PunishmentManager;
+import vip.potclub.core.manager.ServerManager;
 import vip.potclub.core.player.punishment.Punishment;
 import vip.potclub.core.redis.RedisClient;
 import vip.potclub.core.task.AutoMessageTask;
@@ -31,6 +32,7 @@ public final class CorePlugin extends JavaPlugin {
     @Getter
     public static CorePlugin instance;
 
+    public ServerManager serverManager;
     public PlayerManager playerManager;
     public PunishmentManager punishmentManager;
 
@@ -67,6 +69,7 @@ public final class CorePlugin extends JavaPlugin {
         this.coreMongoDatabase = new Database();
         this.redisClient = new RedisClient();
 
+        this.serverManager = new ServerManager();
         this.playerManager = new PlayerManager();
         this.punishmentManager = new PunishmentManager();
 
