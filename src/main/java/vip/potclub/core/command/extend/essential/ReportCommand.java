@@ -35,19 +35,23 @@ public class ReportCommand extends BaseCommand {
                 Player target = Bukkit.getPlayerExact(args[0]);
                 String message = StringUtil.buildMessage(args, 1);
 
-                if (potPlayer.isCanReport()) {
-                    CorePlugin.getInstance().getRedisThread().execute(() -> client.write(RedisUtil.onReport(player, target, message)));
-                    player.sendMessage(Color.translate("&aYour request has been sent to all online staff!"));
+                if (target != null) {
+                    if (potPlayer.isCanReport()) {
+                        CorePlugin.getInstance().getRedisThread().execute(() -> client.write(RedisUtil.onReport(player, target, message)));
+                        player.sendMessage(Color.translate("&aYour request has been sent to all online staff!"));
 
-                    potPlayer.setCanReport(false);
-                    Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> {
-                        // redundant, but checking if player is online or not.
-                        if (potPlayer != null) {
-                            potPlayer.setCanReport(true);
-                        }
-                    }, 60 * 20L);
+                        potPlayer.setCanReport(false);
+                        Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> {
+                            // redundant, but checking if player is online or not.
+                            if (potPlayer != null) {
+                                potPlayer.setCanReport(true);
+                            }
+                        }, 60 * 20L);
+                    } else {
+                        player.sendMessage(Color.translate("&cYou cannot do that right now."));
+                    }
                 } else {
-                    player.sendMessage(Color.translate("&cYou cannot do that right now."));
+                    player.sendMessage(Color.translate("&cThat player does not exist."));
                 }
             }
         }

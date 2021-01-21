@@ -31,12 +31,16 @@ public class TpPosCommand extends BaseCommand {
                     player.sendMessage(Color.translate("&cUsage: /" + label + " <x> <y> <z>."));
                 }
                 if (args.length == 3) {
-                    int x1 = Integer.parseInt(args[0]);
-                    int y1 = Integer.parseInt(args[1]);
-                    int z1 = Integer.parseInt(args[2]);
+                    try {
+                        int x1 = Integer.parseInt(args[0]);
+                        int y1 = Integer.parseInt(args[1]);
+                        int z1 = Integer.parseInt(args[2]);
 
-                    player.teleport(new Location(player.getWorld(), x1, y1, z1, 0.0F, 0.0F));
-                    player.sendMessage(ChatColor.GREEN + "Teleported you to " + x1 + ", " + y1 + ", " + z1 + ".");
+                        player.teleport(new Location(player.getWorld(), x1, y1, z1, 0.0F, 0.0F));
+                        player.sendMessage(ChatColor.GREEN + "Teleported you to " + x1 + ", " + y1 + ", " + z1 + ".");
+                    } catch (Exception e) {
+                        player.sendMessage(Color.translate("&cTry again!"));
+                    }
                 }
             }
         } else {

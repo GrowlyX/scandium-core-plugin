@@ -27,6 +27,8 @@ public class HealCommand extends BaseCommand {
                 if (target != null) {
                     target.setHealth(20);
                     player.sendMessage(Color.translate("&aSet " + target.getDisplayName() + "&a's health level to 20."));
+                } else {
+                    player.sendMessage(Color.translate("&cThat player does not exist."));
                 }
             }
         } else {

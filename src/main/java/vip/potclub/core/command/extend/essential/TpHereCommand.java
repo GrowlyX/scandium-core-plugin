@@ -31,7 +31,7 @@ public class TpHereCommand extends BaseCommand {
                         player.sendMessage(Color.translate("&aTeleported " + target.getDisplayName() + "&a to your location."));
                         target.sendMessage(Color.translate("&aYou have been teleported to " + target.getDisplayName() + "&a."));
                     } else {
-                        player.sendMessage(Color.translate("&cThat player is not online."));
+                        player.sendMessage(Color.translate("&cThat player does not exist."));
                     }
                 }
             }

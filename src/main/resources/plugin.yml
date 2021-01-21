@@ -1,8 +1,7 @@
 
-name: uSuite
+name: Scandium
+version: SD-1.3.3.7
 main: vip.potclub.core.CorePlugin
-version: 1.3.3.7
-load: STARTUP
 
 commands:
   staffchat:
@@ -19,9 +18,17 @@ commands:
   broadcast:
     aliases: [alert, bc]
   toggletips:
-    aliases: [ttips]
+    aliases: [ttps]
   togglestaffmessages:
     aliases: [tsm]
+  punish:
+    aliases: [punishment, ban, kick, mute, warn, ipban, blacklist]
+  tphere:
+    aliases: [s]
+  tppos:
+    aliases: [tpposition]
+  tp:
+    aliases: [teleport, moveto]
   heal:
   kill:
   feed:
@@ -30,10 +37,4 @@ commands:
   gms:
   sudo:
   sudoall:
-  tphere:
-    aliases: [s]
-  tppos:
-    aliases: [tpposition]
-  tp:
-    aliases: [teleport, moveto]
-
+  scandium:

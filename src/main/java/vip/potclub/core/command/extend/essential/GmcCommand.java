@@ -28,6 +28,8 @@ public class GmcCommand extends BaseCommand {
                 if (target != null) {
                     target.setGameMode(GameMode.CREATIVE);
                     player.sendMessage(Color.translate("&aSet " + target.getDisplayName() + "'s&a gamemode to Creative."));
+                } else {
+                    player.sendMessage(Color.translate("&cThat player does not exist."));
                 }
             }
         } else {

@@ -24,7 +24,6 @@ public class HostChatCommand extends BaseCommand {
             if (args.length == 0) {
                 player.sendMessage(Color.translate("&cUsage: /" + label + " <message>."));
             }
-
             if (args.length > 0) {
                 String message = StringUtil.buildMessage(args, 0);
                 CorePlugin.getInstance().getRedisThread().execute(() -> client.write(RedisUtil.onChatChannel(ChatChannel.HOST, message, player)));

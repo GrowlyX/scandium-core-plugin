@@ -27,6 +27,8 @@ public class KillCommand extends BaseCommand {
                 if (target != null) {
                     target.setHealth(0);
                     player.sendMessage(Color.translate("&aKilled " + target.getDisplayName() + "&a."));
+                } else {
+                    player.sendMessage(Color.translate("&cThat player does not exist."));
                 }
             }
         } else {

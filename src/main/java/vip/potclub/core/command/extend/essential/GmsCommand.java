@@ -28,6 +28,8 @@ public class GmsCommand extends BaseCommand {
                 if (target != null) {
                     target.setGameMode(GameMode.SURVIVAL);
                     player.sendMessage(Color.translate("&aSet " + target.getDisplayName() + "'s&a gamemode to Survival."));
+                } else {
+                    player.sendMessage(Color.translate("&cThat player does not exist."));
                 }
             }
         } else {

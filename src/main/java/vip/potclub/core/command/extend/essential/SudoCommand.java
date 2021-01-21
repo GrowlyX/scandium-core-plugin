@@ -33,7 +33,7 @@ public class SudoCommand extends BaseCommand {
                         target.chat(message);
                         player.sendMessage(Color.translate("&aMade " + target.getDisplayName() + "&a chat '" + message + "&a'."));
                     } else {
-                        player.sendMessage(Color.translate("&cThat player is not online."));
+                        player.sendMessage(Color.translate("&cThat player does not exist."));
                     }
                 }
             }

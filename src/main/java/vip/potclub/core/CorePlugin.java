@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+import vip.potclub.core.command.extend.CoreCommand;
 import vip.potclub.core.command.extend.essential.*;
 import vip.potclub.core.database.Database;
 import vip.potclub.core.listener.PlayerListener;
@@ -40,6 +41,9 @@ public final class CorePlugin extends JavaPlugin {
     public Executor redisSubThread;
     public Executor mongoThread;
 
+    public boolean debugging;
+    public boolean disallow;
+
     @Override
     public void onEnable() {
         instance = this;
@@ -55,6 +59,8 @@ public final class CorePlugin extends JavaPlugin {
         this.getConfig().options().copyDefaults();
 
         this.serverName = this.getConfig().getString("server-name");
+        this.debugging = false;
+        this.disallow = false;
 
         this.coreMongoDatabase = new Database();
         this.redisClient = new RedisClient();
@@ -84,6 +90,8 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("gms").setExecutor(new GmsCommand());
         this.getCommand("tp").setExecutor(new TpCommand());
         this.getCommand("report").setExecutor(new ReportCommand());
+        this.getCommand("punish").setExecutor(new PunishCommand());
+        this.getCommand("scandium").setExecutor(new CoreCommand());
 
         this.getCommand("toggletips").setExecutor(new ToggleTipsCommand());
         this.getCommand("togglestaffmessages").setExecutor(new ToggleStaffMessagesCommand());

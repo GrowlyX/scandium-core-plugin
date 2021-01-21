@@ -30,7 +30,7 @@ public class TpCommand extends BaseCommand {
                         player.teleport(target.getLocation());
                         player.sendMessage(Color.translate("&aTeleported you to " + target.getDisplayName() + "&a."));
                     } else {
-                        player.sendMessage(Color.translate("&cThat player is not online."));
+                        player.sendMessage(Color.translate("&cThat player does not exist."));
                     }
                 }
             }
