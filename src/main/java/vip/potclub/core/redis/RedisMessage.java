@@ -23,10 +23,6 @@ public class RedisMessage {
         return this;
     }
 
-    public String getPacketString() {
-        return this.packet.packetDataName;
-    }
-
     public String getParam(String key) {
         if (containsParam(key)) {
             return this.params.get(key);

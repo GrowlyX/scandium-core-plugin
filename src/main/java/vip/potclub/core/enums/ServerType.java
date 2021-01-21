@@ -1,7 +1,6 @@
 package vip.potclub.core.enums;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.bukkit.ChatColor;
 
 import java.beans.ConstructorProperties;
