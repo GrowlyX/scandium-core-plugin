@@ -90,7 +90,7 @@ public class Punishment {
 
     public void savePunishment() {
         Document document = Document.parse(toJson());
-        CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreMongoDatabase().getPunishmentCollection().replaceOne(Filters.eq("_id", this.id), document, new ReplaceOptions().upsert(true)));
+        CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().replaceOne(Filters.eq("_id", this.id), document, new ReplaceOptions().upsert(true)));
         CorePlugin.getInstance().getPunishmentManager().getPunishments().add(this);
     }
 

@@ -41,11 +41,9 @@ public class PunishMainMenu extends AbstractInventoryMenu<CorePlugin> {
                 Color.translate("&7  "),
                 Color.translate("&7Welcome to the punishment"),
                 Color.translate("&7menu of " + target.getName() + "!"),
-                Color.translate("&7  "),
-                Color.translate("&3&lCLICK THE AQUA DYE TO PUNISH!"),
-                Color.translate("&6&lCLICK THE GOLD DYE TO UNPUNISH!")
+                Color.translate("&7  ")
         ));
-        playerheadmeta.setDisplayName(Color.translate("&auSuite Punishments"));
+        playerheadmeta.setDisplayName(Color.translate("&aPunishments"));
         playerhead.setItemMeta(playerheadmeta);
 
         this.inventory.setItem(12, new AbstractMenuItem(Material.INK_SACK, 6)

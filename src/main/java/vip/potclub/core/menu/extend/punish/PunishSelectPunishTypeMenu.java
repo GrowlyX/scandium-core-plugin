@@ -12,6 +12,7 @@ import vip.potclub.core.menu.AbstractInventoryMenu;
 import vip.potclub.core.menu.AbstractMenuItem;
 import vip.potclub.core.player.punishment.PunishmentDuration;
 import vip.potclub.core.player.punishment.PunishmentType;
+import vip.potclub.core.util.Color;
 
 @Getter
 @Setter
@@ -53,19 +54,44 @@ public class PunishSelectPunishTypeMenu extends AbstractInventoryMenu<CorePlugin
             if (item == null || item.getType() == Material.AIR) return;
             switch (event.getRawSlot()) {
                 case 10:
-                    new PunishSelectReasonMenu(this.player, this.target, PunishmentType.BAN).open(player);
+                    if (this.player.hasPermission("scandium.punishments.ban")) {
+                        new PunishSelectReasonMenu(this.player, this.target, PunishmentType.BAN).open(player);
+                    } else {
+                        this.player.closeInventory();
+                        player.sendMessage(Color.translate("&cNo permission."));
+                    }
                     break;
                 case 11:
-                    new PunishSelectReasonMenu(this.player, this.target, PunishmentType.KICK).open(player);
+                    if (this.player.hasPermission("scandium.punishments.kick")) {
+                        new PunishSelectReasonMenu(this.player, this.target, PunishmentType.KICK).open(player);
+                    } else {
+                        this.player.closeInventory();
+                        player.sendMessage(Color.translate("&cNo permission."));
+                    }
                     break;
                 case 12:
-                    new PunishSelectReasonMenu(this.player, this.target, PunishmentType.MUTE).open(player);
+                    if (this.player.hasPermission("scandium.punishments.mute")) {
+                        new PunishSelectReasonMenu(this.player, this.target, PunishmentType.MUTE).open(player);
+                    } else {
+                        this.player.closeInventory();
+                        player.sendMessage(Color.translate("&cNo permission."));
+                    }
                     break;
                 case 13:
-                    new PunishSelectReasonMenu(this.player, this.target, PunishmentType.WARN).open(player);
+                    if (this.player.hasPermission("scandium.punishments.warn")) {
+                        new PunishSelectReasonMenu(this.player, this.target, PunishmentType.WARN).open(player);
+                    } else {
+                        this.player.closeInventory();
+                        player.sendMessage(Color.translate("&cNo permission."));
+                    }
                     break;
                 case 14:
-                    new PunishSelectReasonMenu(this.player, this.target, PunishmentType.BLACKLIST).open(player);
+                    if (this.player.hasPermission("scandium.punishments.blacklist")) {
+                        new PunishSelectReasonMenu(this.player, this.target, PunishmentType.BLACKLIST).open(player);
+                    } else {
+                        this.player.closeInventory();
+                        player.sendMessage(Color.translate("&cNo permission."));
+                    }
                     break;
             }
         }

@@ -9,6 +9,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import vip.potclub.core.CorePlugin;
+import vip.potclub.core.enums.ServerType;
 import vip.potclub.core.menu.AbstractInventoryMenu;
 import vip.potclub.core.menu.AbstractMenuItem;
 import vip.potclub.core.player.punishment.PunishmentType;
@@ -36,11 +37,11 @@ public class PunishSelectReasonMenu extends AbstractInventoryMenu<CorePlugin> {
         while (this.inventory.firstEmpty() != -1) {
             this.inventory.setItem(this.inventory.firstEmpty(), new AbstractMenuItem(Material.STAINED_GLASS_PANE, 7).setDisplayname(" ").create());
         }
-
-        this.inventory.setItem(10, new AbstractMenuItem(Material.DIAMOND_SWORD).setDisplayname("&3Combat Hacks").create());
-        this.inventory.setItem(11, new AbstractMenuItem(Material.PAPER).setDisplayname("&3Chat Abuse").create());
-        this.inventory.setItem(12, new AbstractMenuItem(Material.BED).setDisplayname("&3Camping").create());
-        this.inventory.setItem(13, new AbstractMenuItem(Material.BARRIER).setDisplayname("&3Threats").create());
+        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
+        this.inventory.setItem(10, new AbstractMenuItem(Material.DIAMOND_SWORD).setDisplayname(network.getSecondaryColor() + "Combat Hacks").create());
+        this.inventory.setItem(11, new AbstractMenuItem(Material.PAPER).setDisplayname(network.getSecondaryColor() + "Chat Abuse").create());
+        this.inventory.setItem(12, new AbstractMenuItem(Material.BED).setDisplayname(network.getSecondaryColor() + "Camping").create());
+        this.inventory.setItem(13, new AbstractMenuItem(Material.BARRIER).setDisplayname(network.getSecondaryColor() + "Threats").create());
     }
 
     @Override

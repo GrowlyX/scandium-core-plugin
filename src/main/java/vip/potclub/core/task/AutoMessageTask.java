@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.scheduler.BukkitRunnable;
 import vip.potclub.core.CorePlugin;
+import vip.potclub.core.enums.ServerType;
 import vip.potclub.core.player.PotPlayer;
 import vip.potclub.core.util.Color;
 
@@ -28,16 +29,17 @@ public class AutoMessageTask extends BukkitRunnable { // Credits: https://github
     }
 
     private void setupMessages() {
-        String prefix = ChatColor.LIGHT_PURPLE + "[TIP] " + ChatColor.YELLOW;
+        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+        String prefix = serverType.getMainColor() + "[TIP] " + serverType.getSecondaryColor();
 
-        defaultMessages.add(prefix + "Follow our Twitter account for news and giveaways - www.twitter.com/PotClubVIP");
-        defaultMessages.add(prefix + "Join our Discord server to chat with players, get support, and see sneak peeks - https://discord.gg/D5svAj23R4");
-        defaultMessages.add(prefix + "Purchase ranks, perks, and more on our shop - store.potclub.vip");
+        defaultMessages.add(prefix + "Follow our Twitter account for news and giveaways - www.twitter.com/" + serverType.getTwitterLink());
+        defaultMessages.add(prefix + "Join our Discord server to chat with players, get support, and see sneak peeks - " + serverType.getDiscordLink());
+        defaultMessages.add(prefix + "Purchase ranks, perks, and more on our shop - " + serverType.getStoreLink());
         defaultMessages.add(prefix + "Configure our systems to your liking by using /settings.");
         defaultMessages.add(prefix + "Punished? Appeal on our Discord server or purchase to remove your punishment.");
         defaultMessages.add(prefix + "Donators can host events using /event.");
         defaultMessages.add(prefix + "Butterfly clicking may result in a punishment! Use at your own risk.");
-        defaultMessages.add(prefix + "View the leaderboards on our website - www.potclub.vip/leaderboards");
+        defaultMessages.add(prefix + "View the leaderboards on our website - " + serverType.getWebsiteLink());
     }
 
     private void sendMessage(List<String> input) {

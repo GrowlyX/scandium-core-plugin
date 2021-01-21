@@ -16,10 +16,6 @@ public enum PunishmentType  {
 
     private final String name;
 
-    public String getName() {
-        return this.name;
-    }
-
     @ConstructorProperties({"name"})
     PunishmentType(String name) {
         this.name = name;

@@ -32,6 +32,10 @@ commands:
   heal:
   kill:
   feed:
+  twitter:
+  website:
+  store:
+  discord:
   ping:
   gmc:
   gms:

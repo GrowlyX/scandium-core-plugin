@@ -13,7 +13,6 @@ import vip.potclub.core.listener.PlayerListener;
 import vip.potclub.core.manager.PlayerManager;
 import vip.potclub.core.manager.PunishmentManager;
 import vip.potclub.core.manager.ServerManager;
-import vip.potclub.core.player.punishment.Punishment;
 import vip.potclub.core.redis.RedisClient;
 import vip.potclub.core.task.AutoMessageTask;
 import vip.potclub.core.task.PunishExpireTask;
@@ -38,7 +37,7 @@ public final class CorePlugin extends JavaPlugin {
 
     public String serverName;
 
-    public Database coreMongoDatabase;
+    public Database coreDatabase;
     public RedisClient redisClient;
 
     public Executor redisThread;
@@ -66,7 +65,7 @@ public final class CorePlugin extends JavaPlugin {
         this.debugging = false;
         this.disallow = false;
 
-        this.coreMongoDatabase = new Database();
+        this.coreDatabase = new Database();
         this.redisClient = new RedisClient();
 
         this.serverManager = new ServerManager();
@@ -97,6 +96,10 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("report").setExecutor(new ReportCommand());
         this.getCommand("punish").setExecutor(new PunishCommand());
         this.getCommand("scandium").setExecutor(new CoreCommand());
+        this.getCommand("discord").setExecutor(new DiscordCommand());
+        this.getCommand("twitter").setExecutor(new TwitterCommand());
+        this.getCommand("website").setExecutor(new WebsiteCommand());
+        this.getCommand("store").setExecutor(new StoreCommand());
 
         this.getCommand("toggletips").setExecutor(new ToggleTipsCommand());
         this.getCommand("togglestaffmessages").setExecutor(new ToggleStaffMessagesCommand());

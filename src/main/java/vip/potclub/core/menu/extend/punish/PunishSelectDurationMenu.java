@@ -8,6 +8,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import vip.potclub.core.CorePlugin;
+import vip.potclub.core.enums.ServerType;
 import vip.potclub.core.menu.AbstractInventoryMenu;
 import vip.potclub.core.menu.AbstractMenuItem;
 import vip.potclub.core.player.punishment.PunishmentDuration;
@@ -35,14 +36,14 @@ public class PunishSelectDurationMenu extends AbstractInventoryMenu<CorePlugin> 
         while (this.inventory.firstEmpty() != -1) {
             this.inventory.setItem(this.inventory.firstEmpty(), new AbstractMenuItem(Material.STAINED_GLASS_PANE, 7).setDisplayname(" ").create());
         }
-
-        this.inventory.setItem(10, new AbstractMenuItem(Material.INK_SACK, 1).setDisplayname("&31 Day").create());
-        this.inventory.setItem(11, new AbstractMenuItem(Material.INK_SACK, 2).setDisplayname("&31 Week").create());
-        this.inventory.setItem(12, new AbstractMenuItem(Material.INK_SACK, 3).setDisplayname("&31 Month").create());
-        this.inventory.setItem(13, new AbstractMenuItem(Material.INK_SACK, 4).setDisplayname("&33 Months").create());
-        this.inventory.setItem(14, new AbstractMenuItem(Material.INK_SACK, 5).setDisplayname("&36 Months").create());
-        this.inventory.setItem(15, new AbstractMenuItem(Material.INK_SACK, 6).setDisplayname("&31 Year").create());
-        this.inventory.setItem(16, new AbstractMenuItem(Material.INK_SACK, 14).setDisplayname("&4Permanent").create());
+        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
+        this.inventory.setItem(10, new AbstractMenuItem(Material.INK_SACK, 1).setDisplayname(network.getSecondaryColor() + "1 Day").create());
+        this.inventory.setItem(11, new AbstractMenuItem(Material.INK_SACK, 2).setDisplayname(network.getSecondaryColor() + "1 Week").create());
+        this.inventory.setItem(12, new AbstractMenuItem(Material.INK_SACK, 3).setDisplayname(network.getSecondaryColor() + "1 Month").create());
+        this.inventory.setItem(13, new AbstractMenuItem(Material.INK_SACK, 4).setDisplayname(network.getSecondaryColor() + "3 Months").create());
+        this.inventory.setItem(14, new AbstractMenuItem(Material.INK_SACK, 5).setDisplayname(network.getSecondaryColor() + "6 Months").create());
+        this.inventory.setItem(15, new AbstractMenuItem(Material.INK_SACK, 6).setDisplayname(network.getSecondaryColor() + "1 Year").create());
+        this.inventory.setItem(16, new AbstractMenuItem(Material.INK_SACK, 14).setDisplayname(network.getSecondaryColor() + "&4Permanent").create());
     }
 
     @Override

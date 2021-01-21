@@ -25,11 +25,11 @@ public class CoreCommand extends BaseCommand {
             if (args.length > 0) {
                 switch (args[0]) {
                     case "debug":
-                        player.sendMessage(Color.translate((CorePlugin.getInstance().isDebugging() ? "&8[&4Scandium&8] &cDisabled debugging." : "&8[&4Scandium&8] &aEnabled debugging.")));
+                        player.sendMessage(Color.translate((CorePlugin.getInstance().isDebugging() ? "&c[SCANDIUM] &cDisabled debugging." : "&c[SCANDIUM] &aEnabled debugging.")));
                         CorePlugin.getInstance().setDebugging(!CorePlugin.getInstance().isDebugging());
                         break;
                     case "disallow":
-                        player.sendMessage(Color.translate((CorePlugin.getInstance().isDebugging() ? "&8[&4Scandium&8] &cDisabled disallow." : "&8[&4Scandium&8] &aEnabled disallow.")));
+                        player.sendMessage(Color.translate((CorePlugin.getInstance().isDisallow() ? "&c[SCANDIUM] &cDisabled disallow." : "&c[SCANDIUM] &aEnabled disallow.")));
                         CorePlugin.getInstance().setDisallow(!CorePlugin.getInstance().isDisallow());
                         break;
                     case "destroy":

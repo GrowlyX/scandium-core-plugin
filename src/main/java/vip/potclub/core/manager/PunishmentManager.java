@@ -16,7 +16,7 @@ public class PunishmentManager {
 
     public PunishmentManager() {
         CorePlugin.getInstance().getMongoThread().execute(() -> {
-            for (Document punishmentDocument : CorePlugin.getInstance().getCoreMongoDatabase().getPunishmentCollection().find()) {
+            for (Document punishmentDocument : CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().find()) {
                 this.punishments.add(CorePlugin.GSON.fromJson(punishmentDocument.toJson(), Punishment.class));
             }
         });
@@ -25,7 +25,11 @@ public class PunishmentManager {
     }
 
     public void savePunishments() {
-        for (Document document : CorePlugin.getInstance().getCoreMongoDatabase().getPunishmentCollection().find()) CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreMongoDatabase().getPunishmentCollection().deleteOne(document));
+        for (Document document : CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().find()) CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().deleteOne(document));
         this.punishments.forEach(Punishment::savePunishment);
+    }
+
+    public void handlePunishment(Punishment punishment) {
+
     }
 }

@@ -48,13 +48,13 @@ public class PotPlayer {
         document.put("canSeeStaffMessages", canSeeStaffMessages);
         document.put("canSeeTips", canSeeTips);
 
-        CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreMongoDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true)));
+        CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true)));
 
         profilePlayers.remove(uuid);
     }
 
     public void loadPlayerData() {
-        Document document = CorePlugin.getInstance().getCoreMongoDatabase().getPlayerCollection().find(Filters.eq("_id", this.uuid)).first();
+        Document document = CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("_id", this.uuid)).first();
         if (document == null) return;
 
         this.name = document.getString("name");

@@ -3,12 +3,14 @@ package vip.potclub.core.menu.extend.punish;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.time.DurationFormatUtils;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import vip.potclub.core.CorePlugin;
+import vip.potclub.core.enums.ServerType;
 import vip.potclub.core.menu.AbstractInventoryMenu;
 import vip.potclub.core.menu.AbstractMenuItem;
 import vip.potclub.core.player.punishment.Punishment;
@@ -48,15 +50,17 @@ public class PunishSelectConfirmMenu extends AbstractInventoryMenu<CorePlugin> {
             this.inventory.setItem(this.inventory.firstEmpty(), new AbstractMenuItem(Material.STAINED_GLASS_PANE, 7).setDisplayname(" ").create());
         }
 
+        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
+
         this.inventory.setItem(13, new AbstractMenuItem(Material.INK_SACK, 14)
-                .setDisplayname("&3&lConfirm")
+                .setDisplayname(network.getMainColor() + ChatColor.BOLD.toString() + "Confirm")
                 .addLore(
                         "",
-                        "&7Punisher: &b" + this.player.getName(),
-                        "&7Target: &b" + this.target.getName(),
-                        "&7Reason: &b" + this.reason,
-                        "&7Type: &b" + punishmentType.getName(),
-                        "&7Duration: &b" + (permanent ? "Permanent" : DurationFormatUtils.formatDurationWords(this.getPunishmentDuration(), true, true))
+                        "&7Punisher: &b" + network.getSecondaryColor() + this.player.getName(),
+                        "&7Target: &b" + network.getSecondaryColor() + this.target.getName(),
+                        "&7Reason: &b" + network.getSecondaryColor() + this.reason,
+                        "&7Type: &b" + network.getSecondaryColor() + punishmentType.getName(),
+                        "&7Duration: &b" + network.getSecondaryColor() + (permanent ? "Permanent" : DurationFormatUtils.formatDurationWords(this.getPunishmentDuration(), true, true))
                 )
                 .create());
     }
@@ -71,6 +75,8 @@ public class PunishSelectConfirmMenu extends AbstractInventoryMenu<CorePlugin> {
                 Punishment punishment = new Punishment(this.punishmentType, this.player.getUniqueId(), target.getUniqueId(), this.player.getName(), this.reason, new Date(System.currentTimeMillis()), this.punishmentDuration, this.permanent);
                 punishment.savePunishment();
                 this.player.sendMessage(Color.translate("&aPunished the player '" + target.getName() + "' with the ID '" + punishment.getId() + "'."));
+                this.player.closeInventory();
+                CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment);
             }
         }
     }

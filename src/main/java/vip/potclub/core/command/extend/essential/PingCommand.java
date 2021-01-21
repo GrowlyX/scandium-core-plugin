@@ -6,7 +6,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+import vip.potclub.core.CorePlugin;
 import vip.potclub.core.command.BaseCommand;
+import vip.potclub.core.enums.ServerType;
 import vip.potclub.core.util.Color;
 
 public class PingCommand extends BaseCommand {
@@ -17,17 +19,17 @@ public class PingCommand extends BaseCommand {
             sender.sendMessage("die");
             return false;
         }
-
+        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
         Player player = (Player) sender;
         if (args.length == 0) {
             EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
-            player.sendMessage(Color.translate("&dYour ping is: &5" + entityPlayer.ping));
+            player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Your ping is: " + serverType.getMainColor() + entityPlayer.ping));
         }
         if (args.length > 0) {
             Player target = Bukkit.getPlayerExact(args[0]);
             if (target != null) {
                 EntityPlayer entityPlayer = ((CraftPlayer) target).getHandle();
-                player.sendMessage(Color.translate(target.getDisplayName() + "'s &dping is: &5" + entityPlayer.ping));
+                player.sendMessage(Color.translate(serverType.getSecondaryColor() + target.getName() + "'s ping is: " + serverType.getMainColor() + entityPlayer.ping));
             } else {
                 player.sendMessage(Color.translate("&cThat player does not exist."));
             }

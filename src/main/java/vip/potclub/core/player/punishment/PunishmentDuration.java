@@ -1,7 +1,11 @@
 package vip.potclub.core.player.punishment;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.beans.ConstructorProperties;
 
+@Getter
 public enum PunishmentDuration {
 
     SECOND(1000L, "s"),
@@ -13,28 +17,8 @@ public enum PunishmentDuration {
     YEAR(365L * DAY.getDuration(), "y"),
     PERMANENT(Long.MAX_VALUE * YEAR.getDuration(), "Permanent");
 
-
-
     private final long duration;
     private final String name;
-
-    public static PunishmentDuration getByName(String name) {
-        for (PunishmentDuration duration : values()) {
-            if (duration.getName().equals(name)) {
-                return duration;
-            }
-
-        }
-        return null;
-    }
-
-    public long getDuration() {
-        return this.duration;
-    }
-
-    public String getName() {
-        return this.name;
-    }
 
     @ConstructorProperties({"duration", "name"})
     PunishmentDuration(long duration, String name) {
