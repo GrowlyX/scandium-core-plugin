@@ -51,7 +51,12 @@ public class PlayerListener implements Listener {
         if (!profile.isLoaded()) profile.asyncLoad();
         profile.setupAtatchment();
 
-        PotPlayer potPlayer = new PotPlayer(event.getPlayer().getUniqueId());
+        PotPlayer potPlayer;
+        if (PotPlayer.getPlayer(event.getPlayer()) == null) {
+            potPlayer = new PotPlayer(event.getPlayer().getUniqueId());
+        } else {
+            potPlayer = PotPlayer.getPlayer(event.getPlayer());
+        }
         potPlayer.getPunishments().forEach(punishment -> {
             if ((punishment.getPunishmentType().equals(PunishmentType.BAN)) || (punishment.getPunishmentType().equals(PunishmentType.BLACKLIST)) || (punishment.getPunishmentType().equals(PunishmentType.IPBAN))) {
                 if (punishment.isActive() || !punishment.isRemoved()) {
@@ -76,13 +81,19 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
+
+
         if (event.getMessage().startsWith("!")) {
+            event.setCancelled(true);
             CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.STAFF, event.getMessage().replace("!", ""), event.getPlayer())));
         } else if (event.getMessage().startsWith("#")) {
+            event.setCancelled(true);
             CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.ADMIN, event.getMessage().replace("#", ""), event.getPlayer())));
         } else if (event.getMessage().startsWith("$")) {
+            event.setCancelled(true);
             CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.DEV, event.getMessage().replace("$", ""), event.getPlayer())));
         } else if (event.getMessage().startsWith("@")) {
+            event.setCancelled(true);
             CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.HOST, event.getMessage().replace("@", ""), event.getPlayer())));
         }
     }

@@ -42,6 +42,7 @@ public class PunishSelectReasonMenu extends AbstractInventoryMenu<CorePlugin> {
         this.inventory.setItem(11, new AbstractMenuItem(Material.PAPER).setDisplayname(network.getSecondaryColor() + "Chat Abuse").create());
         this.inventory.setItem(12, new AbstractMenuItem(Material.BED).setDisplayname(network.getSecondaryColor() + "Camping").create());
         this.inventory.setItem(13, new AbstractMenuItem(Material.BARRIER).setDisplayname(network.getSecondaryColor() + "Threats").create());
+        this.inventory.setItem(14, new AbstractMenuItem(Material.PAPER).setDisplayname(network.getSecondaryColor() + "Appealed").create());
     }
 
     @Override
@@ -68,6 +69,9 @@ public class PunishSelectReasonMenu extends AbstractInventoryMenu<CorePlugin> {
                     break;
                 case 13:
                     new PunishSelectDurationMenu(this.player, this.target, "Threats", this.punishmentType).open(player);
+                    break;
+                case 14:
+                    new PunishSelectDurationMenu(this.player, this.target, "Appealed", this.punishmentType).open(player);
                     break;
             }
         }

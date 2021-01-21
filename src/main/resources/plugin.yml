@@ -17,6 +17,9 @@ commands:
   report:
   broadcast:
     aliases: [alert, bc]
+  unban:
+    aliases: [pardon]
+  unmute:
   toggletips:
     aliases: [ttps]
   togglestaffmessages:
@@ -36,6 +39,8 @@ commands:
   website:
   store:
   discord:
+  history:
+    aliases: [punishhistory, c]
   ping:
   gmc:
   gms:
