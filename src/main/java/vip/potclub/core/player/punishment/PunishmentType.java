@@ -10,10 +10,7 @@ public enum PunishmentType  {
     IPBAN("IPBan"),
     BAN("Ban"),
     BLACKLIST("Blacklist"),
-    UNBLACKLIST("Unblacklist"),
-    UNBAN("Unban"),
     MUTE("Mute"),
-    UNMUTE("Unmute"),
     KICK("Kick"),
     WARN("Warn");
 

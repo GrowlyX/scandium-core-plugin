@@ -11,9 +11,11 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import vip.potclub.core.CorePlugin;
 import vip.potclub.core.menu.IMenu;
 import vip.potclub.core.player.PotPlayer;
+import vip.potclub.core.player.punishment.PunishmentType;
 import vip.potclub.core.util.RedisUtil;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class PlayerListener implements Listener {
 
@@ -40,15 +42,28 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onConnect(PlayerJoinEvent event) {
-        // Loading in the Core Listener for the displayname setup.
         Profile profile = new Profile(event.getPlayer().getUniqueId(), new ArrayList<>(), new ArrayList<>());
         if (!profile.isLoaded()) {
             profile.asyncLoad();
         }
         profile.setupAtatchment();
 
-        new PotPlayer(event.getPlayer().getUniqueId());
-        CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onConnect(event.getPlayer())));
+        PotPlayer potPlayer = new PotPlayer(event.getPlayer().getUniqueId());
+        potPlayer.getPunishments().forEach(punishment -> {
+            if ((punishment.getPunishmentType().equals(PunishmentType.BAN)) || (punishment.getPunishmentType().equals(PunishmentType.BLACKLIST)) || (punishment.getPunishmentType().equals(PunishmentType.IPBAN))) {
+                if (punishment.isActive()) {
+                    if (punishment.getTarget().equals(event.getPlayer().getUniqueId())) {
+                        if (!new Date(punishment.getCreatedAt() + punishment.getPunishmentDuration()).equals(new Date())) {
+
+                        }
+                    }
+                }
+            }
+        });
+
+        if (event.getPlayer().hasPermission("core.staff")) {
+            CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onConnect(event.getPlayer())));
+        }
     }
 
     @EventHandler

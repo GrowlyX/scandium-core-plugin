@@ -19,7 +19,7 @@ public class PotPlayer {
 
     private static Map<UUID, PotPlayer> profilePlayers = new HashMap<>();
 
-    private List<UUID> punishments = new ArrayList<>();
+    private List<Punishment> punishments = new ArrayList<>();
 
     private UUID uuid;
     private Player player;
@@ -64,6 +64,12 @@ public class PotPlayer {
         if (document.getBoolean("canSeeTips") != null) {
             this.canSeeTips = document.getBoolean("canSeeTips");
         }
+
+        CorePlugin.getInstance().getPunishmentManager().getPunishments().forEach(punishment -> {
+            if (punishment.getTarget().equals(this.uuid)) {
+                this.punishments.add(punishment);
+            }
+        });
     }
 
     public static PotPlayer getPlayer(Player player) {

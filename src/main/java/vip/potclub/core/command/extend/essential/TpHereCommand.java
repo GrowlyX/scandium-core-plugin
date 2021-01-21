@@ -1,9 +1,11 @@
 package vip.potclub.core.command.extend.essential;
 
+import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import vip.potclub.core.clickable.Clickable;
 import vip.potclub.core.command.BaseCommand;
 import vip.potclub.core.util.Color;
 

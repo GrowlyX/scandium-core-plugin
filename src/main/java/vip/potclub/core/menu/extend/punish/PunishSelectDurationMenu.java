@@ -5,6 +5,8 @@ import lombok.Setter;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import vip.potclub.core.CorePlugin;
 import vip.potclub.core.menu.AbstractInventoryMenu;
 import vip.potclub.core.menu.AbstractMenuItem;
@@ -33,10 +35,51 @@ public class PunishSelectDurationMenu extends AbstractInventoryMenu<CorePlugin> 
         while (this.inventory.firstEmpty() != -1) {
             this.inventory.setItem(this.inventory.firstEmpty(), new AbstractMenuItem(Material.STAINED_GLASS_PANE, 7).setDisplayname(" ").create());
         }
+
+        this.inventory.setItem(10, new AbstractMenuItem(Material.INK_SACK, 1).setDisplayname("&31 Day").create());
+        this.inventory.setItem(11, new AbstractMenuItem(Material.INK_SACK, 2).setDisplayname("&31 Week").create());
+        this.inventory.setItem(12, new AbstractMenuItem(Material.INK_SACK, 3).setDisplayname("&31 Month").create());
+        this.inventory.setItem(13, new AbstractMenuItem(Material.INK_SACK, 4).setDisplayname("&33 Months").create());
+        this.inventory.setItem(14, new AbstractMenuItem(Material.INK_SACK, 5).setDisplayname("&36 Months").create());
+        this.inventory.setItem(15, new AbstractMenuItem(Material.INK_SACK, 6).setDisplayname("&31 Year").create());
+        this.inventory.setItem(16, new AbstractMenuItem(Material.INK_SACK, 14).setDisplayname("&4Permanent").create());
     }
 
     @Override
     public void onInventoryClick(InventoryClickEvent event) {
+        Inventory clickedInventory = event.getClickedInventory();
+        Inventory topInventory = event.getView().getTopInventory();
+        if (!topInventory.equals(this.inventory)) return;
+        if (topInventory.equals(clickedInventory)) {
+            event.setCancelled(true);
 
+            ItemStack item = event.getCurrentItem();
+            Player player = (Player) event.getWhoClicked();
+
+            if (item == null || item.getType() == Material.AIR) return;
+            switch (event.getRawSlot()) {
+                case 10:
+                    new PunishSelectConfirmMenu(this.player, this.target, this.reason, this.punishmentType, PunishmentDuration.DAY.getDuration(), false).open(player);
+                    break;
+                case 11:
+                    new PunishSelectConfirmMenu(this.player, this.target, this.reason, this.punishmentType, PunishmentDuration.WEEK.getDuration(), false).open(player);
+                    break;
+                case 12:
+                    new PunishSelectConfirmMenu(this.player, this.target, this.reason, this.punishmentType, PunishmentDuration.MONTH.getDuration(), false).open(player);
+                    break;
+                case 13:
+                    new PunishSelectConfirmMenu(this.player, this.target, this.reason, this.punishmentType, PunishmentDuration.MONTH.getDuration() * 3L, false).open(player);
+                    break;
+                case 14:
+                    new PunishSelectConfirmMenu(this.player, this.target, this.reason, this.punishmentType, PunishmentDuration.MONTH.getDuration() * 6L, false).open(player);
+                    break;
+                case 15:
+                    new PunishSelectConfirmMenu(this.player, this.target, this.reason, this.punishmentType, PunishmentDuration.YEAR.getDuration(), false).open(player);
+                    break;
+                case 16:
+                    new PunishSelectConfirmMenu(this.player, this.target, this.reason, this.punishmentType, PunishmentDuration.PERMANENT.getDuration(), true).open(player);
+                    break;
+            }
+        }
     }
 }

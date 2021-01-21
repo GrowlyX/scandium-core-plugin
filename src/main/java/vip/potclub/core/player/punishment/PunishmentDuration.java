@@ -13,6 +13,8 @@ public enum PunishmentDuration {
     YEAR(365L * DAY.getDuration(), "y"),
     PERMANENT(Long.MAX_VALUE * YEAR.getDuration(), "Permanent");
 
+
+
     private final long duration;
     private final String name;
 
