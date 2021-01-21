@@ -1,5 +1,7 @@
 package vip.potclub.core.manager;
 
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.Document;
@@ -27,17 +29,11 @@ public class PunishmentManager {
         CorePlugin.getInstance().getLogger().info("[Punishments] Loaded all punishments.");
     }
 
-    public void broadcastPunishment(Punishment punishment) {
-        if (punishment != null) {
-            switch (punishment.getPunishmentType()) {
-                case BAN:
-                    Bukkit.broadcastMessage(Color.translate(""));
-                    break;
-                case BLACKLIST:
-                    Bukkit.broadcastMessage(Color.translate(""));
-//
-                    break;
-            }
+    public void savePunishments() {
+        MongoCollection<Document> mongoCollection = CorePlugin.getInstance().getCoreMongoDatabase().getPunishmentCollection();
+        for (Document document : mongoCollection.find()) {
+            mongoCollection.deleteOne(document);
         }
+        this.punishments.forEach(Punishment::savePunishment);
     }
 }

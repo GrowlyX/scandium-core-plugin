@@ -1,6 +1,7 @@
 package vip.potclub.core.listener;
 
 import com.solexgames.perms.profile.Profile;
+import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -11,7 +12,9 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import vip.potclub.core.CorePlugin;
 import vip.potclub.core.menu.IMenu;
 import vip.potclub.core.player.PotPlayer;
+import vip.potclub.core.player.punishment.PunishmentStrings;
 import vip.potclub.core.player.punishment.PunishmentType;
+import vip.potclub.core.util.Color;
 import vip.potclub.core.util.RedisUtil;
 
 import java.util.ArrayList;
@@ -51,10 +54,15 @@ public class PlayerListener implements Listener {
         PotPlayer potPlayer = new PotPlayer(event.getPlayer().getUniqueId());
         potPlayer.getPunishments().forEach(punishment -> {
             if ((punishment.getPunishmentType().equals(PunishmentType.BAN)) || (punishment.getPunishmentType().equals(PunishmentType.BLACKLIST)) || (punishment.getPunishmentType().equals(PunishmentType.IPBAN))) {
-                if (punishment.isActive()) {
+                if (punishment.isActive() || !punishment.isRemoved()) {
                     if (punishment.getTarget().equals(event.getPlayer().getUniqueId())) {
-                        if (!new Date(punishment.getCreatedAt() + punishment.getPunishmentDuration()).equals(new Date())) {
-
+                        switch (punishment.getPunishmentType()) {
+                            case BLACKLIST:
+                                event.getPlayer().kickPlayer(Color.translate(PunishmentStrings.BLCK_MESSAGE.replace("<reason>", punishment.getReason())));
+                                break;
+                            case BAN:
+                                event.getPlayer().kickPlayer((punishment.isPermanent() ? Color.translate(PunishmentStrings.BAN_MESSAGE_PERM.replace("<reason>", punishment.getReason())) : Color.translate(PunishmentStrings.BAN_MESSAGE_TEMP.replace("<reason>", punishment.getReason()).replace("<time>", punishment.getDurationString()))));
+                                break;
                         }
                     }
                 }
@@ -68,7 +76,9 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onDisconnect(PlayerQuitEvent event) {
-        CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onDisconnect(event.getPlayer())));
+        if (event.getPlayer().hasPermission("core.staff")) {
+            CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onDisconnect(event.getPlayer())));
+        }
         PotPlayer potPlayer = PotPlayer.getPlayer(event.getPlayer().getUniqueId());
         potPlayer.savePlayerData();
 

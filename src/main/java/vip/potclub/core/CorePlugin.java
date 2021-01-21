@@ -12,8 +12,10 @@ import vip.potclub.core.database.Database;
 import vip.potclub.core.listener.PlayerListener;
 import vip.potclub.core.manager.PlayerManager;
 import vip.potclub.core.manager.PunishmentManager;
+import vip.potclub.core.player.punishment.Punishment;
 import vip.potclub.core.redis.RedisClient;
 import vip.potclub.core.task.AutoMessageTask;
+import vip.potclub.core.task.PunishExpireTask;
 import vip.potclub.core.util.Color;
 
 import java.util.concurrent.Executor;
@@ -99,14 +101,16 @@ public final class CorePlugin extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
 
         new AutoMessageTask();
+        new PunishExpireTask();
     }
 
     @Override
     public void onDisable() {
-        Bukkit.getOnlinePlayers().forEach(player -> player.kickPlayer(Color.translate("&cThe server is currently rebooting.\n&cPlease reconnect in a few minutes.")));
+        this.punishmentManager.savePunishments();
+        this.getServer().getOnlinePlayers().forEach(player -> player.kickPlayer(Color.translate("&cThe server is currently rebooting.\n&cPlease reconnect in a few minutes, or check discord for more information.")));
         this.getServer().getScheduler().cancelAllTasks();
-        if (redisClient.isClientActive()) {
-            redisClient.destroyClient();
+        if (this.redisClient.isClientActive()) {
+            this.redisClient.destroyClient();
         }
     }
 }
