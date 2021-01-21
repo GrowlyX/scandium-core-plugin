@@ -18,7 +18,7 @@ public class PunishCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
-        if (player.hasPermission("core.command.punish")) {
+        if (player.hasPermission("scandium.command.punish")) {
             if (args.length == 0) {
                 player.sendMessage(Color.translate("&cUsage: /" + label + " <player>."));
             }

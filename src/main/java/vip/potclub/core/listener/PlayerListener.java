@@ -67,14 +67,14 @@ public class PlayerListener implements Listener {
             }
         });
 
-        if (event.getPlayer().hasPermission("core.staff")) {
+        if (event.getPlayer().hasPermission("scandium.staff")) {
             CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onConnect(event.getPlayer())));
         }
     }
 
     @EventHandler
     public void onDisconnect(PlayerQuitEvent event) {
-        if (event.getPlayer().hasPermission("core.staff")) {
+        if (event.getPlayer().hasPermission("scandium.staff")) {
             CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onDisconnect(event.getPlayer())));
         }
         PotPlayer potPlayer = PotPlayer.getPlayer(event.getPlayer().getUniqueId());

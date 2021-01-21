@@ -36,7 +36,7 @@ public class RedisClient {
             }
 
             this.redisListener = new RedisListener();
-            (new Thread(() -> jedis.subscribe(this.redisListener, "PCORE"))).start();
+            (new Thread(() -> jedis.subscribe(this.redisListener, "SCANDIUM"))).start();
             jedis.connect();
             this.setClientActive(true);
             CorePlugin.getInstance().getLogger().info("[Redis] Connected to Redis backend.");
@@ -58,7 +58,7 @@ public class RedisClient {
     public void write(String json){
         try (Jedis jedis = this.jedisPool.getResource()) {
             jedis.auth(this.redisPassword);
-            jedis.publish("PCORE", json);
+            jedis.publish("SCANDIUM", json);
         }
     }
 }

@@ -5,10 +5,10 @@ import lombok.Getter;
 @Getter
 public enum ChatChannelType {
 
-    STAFF("&3[S] ", "STAFF", "core.staff"),
-    ADMIN("&c[A] ", "ADMIN", "core.admin"),
-    HOST("&2[H] ", "HOST", "core.host"),
-    DEV("&c[D] ", "DEV", "core.dev");
+    STAFF("&3[S] ", "STAFF", "scandium.channels.staff"),
+    ADMIN("&c[A] ", "ADMIN", "scandium.channels.admin"),
+    HOST("&2[H] ", "HOST", "scandium.channels.host"),
+    DEV("&c[D] ", "DEV", "scandium.channels.dev");
 
     public final String prefix;
     public final String name;

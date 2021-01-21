@@ -17,7 +17,7 @@ public class KillCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
-        if (player.hasPermission("core.command.kill")) {
+        if (player.hasPermission("scandium.command.kill")) {
             if (args.length == 0) {
                 player.setHealth(0);
                 player.sendMessage(Color.translate("&aKilled you."));

@@ -17,7 +17,7 @@ public class FeedCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
-        if (player.hasPermission("core.command.feed")) {
+        if (player.hasPermission("scandium.command.feed")) {
             if (args.length == 0) {
                 player.setFoodLevel(20);
                 player.sendMessage(Color.translate("&aSet your food level to 20."));

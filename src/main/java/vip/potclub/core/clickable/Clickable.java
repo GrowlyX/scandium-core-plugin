@@ -23,13 +23,9 @@ public class Clickable {
 
     public TextComponent add(String msg, String hoverMsg, String clickString, net.md_5.bungee.api.chat.ClickEvent.Action action) {
         TextComponent message = new TextComponent(msg);
-        if (hoverMsg != null) {
-            message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, (new ComponentBuilder(hoverMsg)).create()));
-        }
 
-        if (clickString != null) {
-            message.setClickEvent(new ClickEvent(action, clickString));
-        }
+        if (hoverMsg != null) message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, (new ComponentBuilder(hoverMsg)).create()));
+        if (clickString != null) message.setClickEvent(new ClickEvent(action, clickString));
 
         this.components.add(message);
         return message;

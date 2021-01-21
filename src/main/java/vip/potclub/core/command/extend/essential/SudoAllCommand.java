@@ -18,7 +18,7 @@ public class SudoAllCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
-        if (player.hasPermission("core.command.sudoall")) {
+        if (player.hasPermission("scandium.command.sudoall")) {
             if (args.length == 0) {
                 player.sendMessage(Color.translate("&cUsage: /" + label + " <message>."));
             }

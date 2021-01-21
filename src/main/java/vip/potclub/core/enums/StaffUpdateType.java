@@ -5,10 +5,10 @@ import lombok.Getter;
 @Getter
 public enum StaffUpdateType {
 
-    HELPOP("&2[H] ", "HELPOP", "core.staff"),
-    REPORT("&c[R] ", "REPORT", "core.staff"),
-    FREEZE("&4[F] ", "FREEZE", "core.staff"),
-    UNFREEZE("&4[F] ", "UNFREEZE", "core.staff");
+    HELPOP("&2[H] ", "HELPOP", "scandium.staff"),
+    REPORT("&c[R] ", "REPORT", "scandium.staff"),
+    FREEZE("&4[F] ", "FREEZE", "scandium.staff"),
+    UNFREEZE("&4[F] ", "UNFREEZE", "scandium.staff");
 
     public final String prefix;
     public final String name;

@@ -18,7 +18,7 @@ public class GmsCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
-        if (player.hasPermission("core.command.gms")) {
+        if (player.hasPermission("scandium.command.gms")) {
             if (args.length == 0) {
                 player.setGameMode(GameMode.SURVIVAL);
                 player.sendMessage(Color.translate("&aSet your gamemode to Survival."));

@@ -18,7 +18,7 @@ public class SudoCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
-        if (player.hasPermission("core.command.sudo")) {
+        if (player.hasPermission("scandium.command.sudo")) {
             if (args.length == 0) {
                 player.sendMessage(Color.translate("&cUsage: /" + label + " <player> <message>."));
             }

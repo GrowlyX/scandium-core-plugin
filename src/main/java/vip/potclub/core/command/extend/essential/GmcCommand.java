@@ -18,7 +18,7 @@ public class GmcCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
-        if (player.hasPermission("core.command.gmc")) {
+        if (player.hasPermission("scandium.command.gmc")) {
             if (args.length == 0) {
                 player.setGameMode(GameMode.CREATIVE);
                 player.sendMessage(Color.translate("&aSet your gamemode to Creative."));

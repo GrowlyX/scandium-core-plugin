@@ -23,7 +23,7 @@ public class RedisListener extends JedisPubSub {
 
                     Bukkit.getOnlinePlayers().forEach(player -> {
                         PotPlayer potPlayer = PotPlayer.getPlayer(player);
-                        if (player.hasPermission("core.staff")) {
+                        if (player.hasPermission("scandium.staff")) {
                             if (potPlayer.isCanSeeStaffMessages()) {
                                 player.sendMessage(Color.translate("&3[S] " + connectingPlayer + " &bconnected to &3" + fromConnectServer + "&b."));
                             }
@@ -36,7 +36,7 @@ public class RedisListener extends JedisPubSub {
 
                     Bukkit.getOnlinePlayers().forEach(player -> {
                         PotPlayer potPlayer = PotPlayer.getPlayer(player);
-                        if (player.hasPermission("core.staff")) {
+                        if (player.hasPermission("scandium.staff")) {
                             if (potPlayer.isCanSeeStaffMessages()) {
                                 player.sendMessage(Color.translate("&3[S] " + disconnectingPlayer + " &bdisconnected from &3" + fromDisconnectServer + "&b."));
                             }

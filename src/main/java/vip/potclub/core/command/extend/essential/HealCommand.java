@@ -17,7 +17,7 @@ public class HealCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
-        if (player.hasPermission("core.command.heal")) {
+        if (player.hasPermission("scandium.command.heal")) {
             if (args.length == 0) {
                 player.setHealth(20);
                 player.sendMessage(Color.translate("&aSet your health level to 20."));

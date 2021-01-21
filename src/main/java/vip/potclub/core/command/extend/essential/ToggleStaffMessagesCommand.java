@@ -19,7 +19,7 @@ public class ToggleStaffMessagesCommand extends BaseCommand {
         Player player = (Player) sender;
         PotPlayer potPlayer = PotPlayer.getPlayer(player);
 
-        if (player.hasPermission("core.staff")) {
+        if (player.hasPermission("scandium.staff")) {
             if (potPlayer.isCanSeeStaffMessages()) {
                 player.sendMessage(Color.translate("&cYou have disabled staff messages."));
                 potPlayer.setCanSeeStaffMessages(false);

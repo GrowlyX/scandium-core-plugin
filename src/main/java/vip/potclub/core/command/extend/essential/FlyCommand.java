@@ -17,7 +17,7 @@ public class FlyCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
-        if (player.hasPermission("core.command.fly")) {
+        if (player.hasPermission("scandium.command.fly")) {
             if (args.length == 0) {
                 if (player.isFlying()) {
                     player.setFlying(false);
