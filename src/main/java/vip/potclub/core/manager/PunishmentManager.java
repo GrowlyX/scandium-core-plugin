@@ -3,10 +3,18 @@ package vip.potclub.core.manager;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.Document;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import vip.potclub.core.CorePlugin;
+import vip.potclub.core.clickable.Clickable;
+import vip.potclub.core.player.PotPlayer;
 import vip.potclub.core.player.punishment.Punishment;
+import vip.potclub.core.player.punishment.PunishmentStrings;
+import vip.potclub.core.util.CC;
+import vip.potclub.core.util.Color;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 @Getter
 @Setter
@@ -29,7 +37,37 @@ public class PunishmentManager {
         this.punishments.forEach(Punishment::savePunishment);
     }
 
-    public void handlePunishment(Punishment punishment) {
-
+    public void handlePunishment(Punishment punishment, Player player, Player target, boolean silent) {
+        if (silent) {
+            Bukkit.getOnlinePlayers().forEach(player1 -> {
+                if (player1.hasPermission("scandium.staff")) {
+                    player1.sendMessage(target.getDisplayName() + " &awas " + (punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName() + " by &4" + (player != null ? player.getDisplayName() : "&4CONSOLE") + "&a.");
+                }
+            });
+        } else {
+            Bukkit.broadcastMessage(Color.translate(
+                    target.getDisplayName() + " &awas " + (punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName() + " by &4" + (player != null ? player.getDisplayName() : "&4CONSOLE") + "&a."
+            ));
+        }
+        switch (punishment.getPunishmentType()) {
+            case BLACKLIST:
+                if (target != null) {
+                    PotPlayer potPlayer = PotPlayer.getPlayer(target);
+                    if (potPlayer != null) {
+                        potPlayer.setBanned(true);
+                        target.kickPlayer(Color.translate(PunishmentStrings.BLCK_MESSAGE.replace("<reason>", punishment.getReason())));
+                    }
+                }
+            case IPBAN:
+            case BAN:
+                if (target != null) {
+                    PotPlayer potPlayer = PotPlayer.getPlayer(target);
+                    if (potPlayer != null) {
+                        potPlayer.setBanned(true);
+                        target.kickPlayer((punishment.isPermanent() ? Color.translate(PunishmentStrings.BAN_MESSAGE_PERM.replace("<reason>", punishment.getReason())) : Color.translate(PunishmentStrings.BAN_MESSAGE_TEMP.replace("<reason>", punishment.getReason()).replace("<time>", punishment.getDurationString()))));
+                    }
+                }
+                break;
+        }
     }
 }

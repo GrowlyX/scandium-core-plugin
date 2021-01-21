@@ -13,6 +13,7 @@ import vip.potclub.core.listener.PlayerListener;
 import vip.potclub.core.manager.PlayerManager;
 import vip.potclub.core.manager.PunishmentManager;
 import vip.potclub.core.manager.ServerManager;
+import vip.potclub.core.player.PotPlayer;
 import vip.potclub.core.redis.RedisClient;
 import vip.potclub.core.task.AutoMessageTask;
 import vip.potclub.core.task.PunishExpireTask;

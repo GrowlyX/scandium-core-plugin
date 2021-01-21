@@ -13,6 +13,7 @@ import vip.potclub.core.CorePlugin;
 import vip.potclub.core.enums.ServerType;
 import vip.potclub.core.menu.AbstractInventoryMenu;
 import vip.potclub.core.menu.AbstractMenuItem;
+import vip.potclub.core.player.PotPlayer;
 import vip.potclub.core.player.punishment.Punishment;
 import vip.potclub.core.player.punishment.PunishmentDuration;
 import vip.potclub.core.player.punishment.PunishmentType;
@@ -33,6 +34,7 @@ public class PunishSelectConfirmMenu extends AbstractInventoryMenu<CorePlugin> {
     private boolean permanent;
     private PunishmentType punishmentType;
     private long punishmentDuration;
+    private boolean isSilent;
 
     public PunishSelectConfirmMenu(Player player, Player target, String reason, PunishmentType punishmentType, long punishmentDuration, boolean permanent) {
         super("Punishment - Confirm", 9*3);
@@ -52,7 +54,15 @@ public class PunishSelectConfirmMenu extends AbstractInventoryMenu<CorePlugin> {
 
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
-        this.inventory.setItem(13, new AbstractMenuItem(Material.INK_SACK, 14)
+        this.inventory.setItem(12, new AbstractMenuItem(Material.INK_SACK, 14)
+                .setDisplayname(network.getMainColor() + ChatColor.BOLD.toString() + "Silent?")
+                .addLore(
+                        "",
+                        "&7Current: " + network.getSecondaryColor() + (isSilent ? "Enabled" : "Disabled")
+                )
+                .create());
+
+        this.inventory.setItem(14, new AbstractMenuItem(Material.INK_SACK, 14)
                 .setDisplayname(network.getMainColor() + ChatColor.BOLD.toString() + "Confirm")
                 .addLore(
                         "",
@@ -71,12 +81,18 @@ public class PunishSelectConfirmMenu extends AbstractInventoryMenu<CorePlugin> {
         if (event.getView().getTopInventory().equals(event.getClickedInventory())) {
             event.setCancelled(true);
             if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR) return;
-            if (event.getRawSlot() == 13) {
-                Punishment punishment = new Punishment(this.punishmentType, this.player.getUniqueId(), target.getUniqueId(), this.player.getName(), this.reason, new Date(System.currentTimeMillis()), this.punishmentDuration, this.permanent);
+            if (event.getRawSlot() == 14) {
+                Punishment punishment = new Punishment(this.punishmentType, this.player.getUniqueId(), this.target.getUniqueId(), this.player.getName(), this.reason, new Date(System.currentTimeMillis()), this.punishmentDuration, this.permanent);
                 punishment.savePunishment();
-                this.player.sendMessage(Color.translate("&aPunished the player '" + target.getName() + "' with the ID '" + punishment.getId() + "'."));
+                this.player.sendMessage(Color.translate("&aPunished the player '" + this.target.getName() + "' with the ID '" + punishment.getId() + "'."));
                 this.player.closeInventory();
-                CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment);
+                PotPlayer potPlayer = PotPlayer.getPlayer(this.target);
+                potPlayer.getPunishments().add(punishment);
+                CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, this.player, this.target, this.isSilent);
+            }
+            if (event.getRawSlot() == 12) {
+                this.isSilent = !this.isSilent;
+                this.update();
             }
         }
     }
