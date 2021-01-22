@@ -38,10 +38,13 @@ public class PunishmentManager {
     }
 
     public void handlePunishment(Punishment punishment, Player player, Player target, boolean silent) {
+        this.punishments.add(punishment);
         if (silent) {
             Bukkit.getOnlinePlayers().forEach(player1 -> {
                 if (player1.hasPermission("scandium.staff")) {
-                    player1.sendMessage(target.getDisplayName() + " &awas " + (punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName() + " by &4" + (player != null ? player.getDisplayName() : "&4CONSOLE") + "&a.");
+                    player1.sendMessage(Color.translate(
+                            "&7[S] " + target.getDisplayName() + " &awas " + (punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName() + " by &4" + (player != null ? player.getDisplayName() : "&4CONSOLE") + "&a."
+                    ));
                 }
             });
         } else {
@@ -65,6 +68,14 @@ public class PunishmentManager {
                     if (potPlayer != null) {
                         potPlayer.setBanned(true);
                         target.kickPlayer((punishment.isPermanent() ? Color.translate(PunishmentStrings.BAN_MESSAGE_PERM.replace("<reason>", punishment.getReason())) : Color.translate(PunishmentStrings.BAN_MESSAGE_TEMP.replace("<reason>", punishment.getReason()).replace("<time>", punishment.getDurationString()))));
+                    }
+                }
+                break;
+            case KICK:
+                if (target != null) {
+                    PotPlayer potPlayer = PotPlayer.getPlayer(target);
+                    if (potPlayer != null) {
+                        target.kickPlayer(Color.translate(PunishmentStrings.KICK_MESSAGE.replace("<reason>", punishment.getReason())));
                     }
                 }
                 break;

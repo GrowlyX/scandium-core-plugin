@@ -33,6 +33,8 @@ public class PotPlayer {
     public boolean canReport = true;
     public boolean canRequest = true;
 
+    public Punishment mutePunishment = null;
+
     public boolean muted;
     public boolean banned;
 
@@ -45,6 +47,16 @@ public class PotPlayer {
         loadPlayerData();
 
         profilePlayers.put(uuid, this);
+    }
+
+    public void saveWithoutRemove() {
+        Document document = new Document("_id", this.uuid);
+
+        document.put("name", name);
+        document.put("canSeeStaffMessages", canSeeStaffMessages);
+        document.put("canSeeTips", canSeeTips);
+
+        CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true)));
     }
 
     public void savePlayerData() {

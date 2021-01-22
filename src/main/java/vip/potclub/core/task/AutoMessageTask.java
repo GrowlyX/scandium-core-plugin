@@ -47,9 +47,9 @@ public class AutoMessageTask extends BukkitRunnable { // Credits: https://github
             PotPlayer potPlayer = PotPlayer.getPlayer(player);
             if (potPlayer.isCanSeeTips()) {
                 player.sendMessage("  ");
-                int count = ThreadLocalRandom.current().nextInt(defaultMessages.size());
-                player.sendMessage(Color.translate(input.get(lastCount == count ? ThreadLocalRandom.current().nextInt(input.size()) : count)));
-                lastCount = count;
+                int count = CorePlugin.RANDOM.nextInt(defaultMessages.size());
+                player.sendMessage(Color.translate(input.get(this.lastCount == count ? CorePlugin.RANDOM.nextInt(input.size()) : count)));
+                this.lastCount = count;
                 player.sendMessage("  ");
             }
         });

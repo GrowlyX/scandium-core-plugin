@@ -32,12 +32,12 @@ public class Punishment {
 
     private String issuerName;
     private String reason;
-    private String removalReason;
-    private String removerName;
+    private String removalReason = "N/A";
+    private String removerName = "N/A";
 
-    private boolean active;
+    private boolean active = true;
     private boolean permanent;
-    private boolean removed;
+    private boolean removed = false;
 
     private long punishmentDuration;
     private long createdAt = System.currentTimeMillis();
@@ -91,7 +91,6 @@ public class Punishment {
     public void savePunishment() {
         Document document = Document.parse(toJson());
         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().replaceOne(Filters.eq("_id", this.id), document, new ReplaceOptions().upsert(true)));
-        CorePlugin.getInstance().getPunishmentManager().getPunishments().add(this);
     }
 
     public String toJson() {

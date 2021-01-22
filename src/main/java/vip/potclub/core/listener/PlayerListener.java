@@ -14,6 +14,7 @@ import vip.potclub.core.CorePlugin;
 import vip.potclub.core.enums.ChatChannelType;
 import vip.potclub.core.menu.IMenu;
 import vip.potclub.core.player.PotPlayer;
+import vip.potclub.core.player.punishment.Punishment;
 import vip.potclub.core.player.punishment.PunishmentStrings;
 import vip.potclub.core.player.punishment.PunishmentType;
 import vip.potclub.core.util.Color;
@@ -51,16 +52,12 @@ public class PlayerListener implements Listener {
         if (!profile.isLoaded()) profile.asyncLoad();
         profile.setupAtatchment();
 
-        PotPlayer potPlayer;
-        if (PotPlayer.getPlayer(event.getPlayer()) == null) {
-            potPlayer = new PotPlayer(event.getPlayer().getUniqueId());
-        } else {
-            potPlayer = PotPlayer.getPlayer(event.getPlayer());
-        }
-        potPlayer.getPunishments().forEach(punishment -> {
-            if ((punishment.getPunishmentType().equals(PunishmentType.BAN)) || (punishment.getPunishmentType().equals(PunishmentType.BLACKLIST)) || (punishment.getPunishmentType().equals(PunishmentType.IPBAN))) {
-                if (punishment.isActive() || !punishment.isRemoved()) {
-                    if (punishment.getTarget().equals(event.getPlayer().getUniqueId())) {
+        new PotPlayer(event.getPlayer().getUniqueId());
+
+        Punishment.getAllPunishments().forEach(punishment -> {
+            if (punishment.getTarget().equals(event.getPlayer().getUniqueId())) {
+                if ((punishment.getPunishmentType().equals(PunishmentType.BAN)) || (punishment.getPunishmentType().equals(PunishmentType.BLACKLIST)) || (punishment.getPunishmentType().equals(PunishmentType.IPBAN))) {
+                    if (punishment.isActive() || !punishment.isRemoved()) {
                         switch (punishment.getPunishmentType()) {
                             case BLACKLIST:
                                 event.getPlayer().kickPlayer(Color.translate(PunishmentStrings.BLCK_MESSAGE.replace("<reason>", punishment.getReason())));
@@ -81,20 +78,25 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
+        PotPlayer potPlayer = PotPlayer.getPlayer(event.getPlayer());
 
-
-        if (event.getMessage().startsWith("!")) {
+        if (!potPlayer.isMuted()) {
+            if (event.getMessage().startsWith("!")) {
+                event.setCancelled(true);
+                CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.STAFF, event.getMessage().replace("!", ""), event.getPlayer())));
+            } else if (event.getMessage().startsWith("#")) {
+                event.setCancelled(true);
+                CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.ADMIN, event.getMessage().replace("#", ""), event.getPlayer())));
+            } else if (event.getMessage().startsWith("$")) {
+                event.setCancelled(true);
+                CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.DEV, event.getMessage().replace("$", ""), event.getPlayer())));
+            } else if (event.getMessage().startsWith("@")) {
+                event.setCancelled(true);
+                CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.HOST, event.getMessage().replace("@", ""), event.getPlayer())));
+            }
+        } else {
+            event.getPlayer().sendMessage(Color.translate(PunishmentStrings.MUTE_MESSAGE));
             event.setCancelled(true);
-            CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.STAFF, event.getMessage().replace("!", ""), event.getPlayer())));
-        } else if (event.getMessage().startsWith("#")) {
-            event.setCancelled(true);
-            CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.ADMIN, event.getMessage().replace("#", ""), event.getPlayer())));
-        } else if (event.getMessage().startsWith("$")) {
-            event.setCancelled(true);
-            CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.DEV, event.getMessage().replace("$", ""), event.getPlayer())));
-        } else if (event.getMessage().startsWith("@")) {
-            event.setCancelled(true);
-            CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.HOST, event.getMessage().replace("@", ""), event.getPlayer())));
         }
     }
 
@@ -103,11 +105,11 @@ public class PlayerListener implements Listener {
         if (event.getPlayer().hasPermission("scandium.staff")) {
             CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onDisconnect(event.getPlayer())));
         }
-        PotPlayer potPlayer = PotPlayer.getPlayer(event.getPlayer().getUniqueId());
-        potPlayer.savePlayerData();
 
         Profile profile = Profile.getByUuid(event.getPlayer().getUniqueId());
         Profile.getProfiles().remove(profile);
         profile.save();
+
+        PotPlayer.getPlayer(event.getPlayer().getUniqueId()).savePlayerData();
     }
 }

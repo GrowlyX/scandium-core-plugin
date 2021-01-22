@@ -19,6 +19,7 @@ import vip.potclub.core.task.AutoMessageTask;
 import vip.potclub.core.task.PunishExpireTask;
 import vip.potclub.core.util.Color;
 
+import java.util.Random;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -26,6 +27,7 @@ import java.util.concurrent.Executors;
 @Setter
 public final class CorePlugin extends JavaPlugin {
 
+    public static Random RANDOM;
     public static Gson GSON;
     public static GsonBuilder GSONBUILDER;
 
@@ -52,6 +54,7 @@ public final class CorePlugin extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
+        RANDOM  = new Random();
         GSONBUILDER = new GsonBuilder();
         GSON = GSONBUILDER.create();
 

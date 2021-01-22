@@ -55,10 +55,10 @@ public class PunishSelectConfirmMenu extends AbstractInventoryMenu<CorePlugin> {
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
         this.inventory.setItem(12, new AbstractMenuItem(Material.INK_SACK, 14)
-                .setDisplayname(network.getMainColor() + ChatColor.BOLD.toString() + "Silent?")
+                .setDisplayname(network.getMainColor() + ChatColor.BOLD.toString() + "Silent Punishment")
                 .addLore(
                         "",
-                        "&7Current: " + network.getSecondaryColor() + (isSilent ? "Enabled" : "Disabled")
+                        "&7Current: " + network.getSecondaryColor() + (isSilent ? "&aEnabled" : "&cDisabled")
                 )
                 .create());
 
@@ -89,6 +89,7 @@ public class PunishSelectConfirmMenu extends AbstractInventoryMenu<CorePlugin> {
                 PotPlayer potPlayer = PotPlayer.getPlayer(this.target);
                 potPlayer.getPunishments().add(punishment);
                 CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, this.player, this.target, this.isSilent);
+                potPlayer.saveWithoutRemove();
             }
             if (event.getRawSlot() == 12) {
                 this.isSilent = !this.isSilent;

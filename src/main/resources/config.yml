@@ -6,6 +6,7 @@ server:
   settings:
     server-id: "POTCLUBVIP"
     neon: true
+    nitrogen: true
     krypton: true
     hash-db-ip: true
 redis:

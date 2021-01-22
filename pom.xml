@@ -76,10 +76,10 @@
         </dependency>
         <dependency>
             <groupId>vip.potclub</groupId>
-            <artifactId>uPerms</artifactId>
+            <artifactId>Neon</artifactId>
             <version>1.0-DEV</version>
             <scope>system</scope>
-            <systemPath>${basedir}/lib/uPerms-1.0-DEV.jar</systemPath>
+            <systemPath>${basedir}/lib/Neon-1.0-DEV.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
