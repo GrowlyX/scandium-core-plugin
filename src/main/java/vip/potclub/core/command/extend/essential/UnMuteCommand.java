@@ -29,7 +29,7 @@ public class UnMuteCommand extends BaseCommand {
                     PotPlayer potPlayer = PotPlayer.getPlayer(offlinePlayer.getPlayer());
                     if (potPlayer == null) {
                         PotPlayer newPotPlayer = new PotPlayer(offlinePlayer.getUniqueId());
-                        if (newPotPlayer.isMuted()) {
+                        if (!newPotPlayer.isCurrentlyMuted()) {
                             newPotPlayer.unMutePlayer();
                             player.sendMessage(Color.translate("&aUnmuted that player."));
                         } else {

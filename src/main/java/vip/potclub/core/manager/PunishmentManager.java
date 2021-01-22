@@ -57,7 +57,7 @@ public class PunishmentManager {
                 if (target != null) {
                     PotPlayer potPlayer = PotPlayer.getPlayer(target);
                     if (potPlayer != null) {
-                        potPlayer.setBanned(true);
+                        potPlayer.setCurrentlyBanned(true);
                         target.kickPlayer(Color.translate(PunishmentStrings.BLCK_MESSAGE.replace("<reason>", punishment.getReason())));
                     }
                 }
@@ -66,7 +66,7 @@ public class PunishmentManager {
                 if (target != null) {
                     PotPlayer potPlayer = PotPlayer.getPlayer(target);
                     if (potPlayer != null) {
-                        potPlayer.setBanned(true);
+                        potPlayer.setCurrentlyBanned(true);
                         target.kickPlayer((punishment.isPermanent() ? Color.translate(PunishmentStrings.BAN_MESSAGE_PERM.replace("<reason>", punishment.getReason())) : Color.translate(PunishmentStrings.BAN_MESSAGE_TEMP.replace("<reason>", punishment.getReason()).replace("<time>", punishment.getDurationString()))));
                     }
                 }

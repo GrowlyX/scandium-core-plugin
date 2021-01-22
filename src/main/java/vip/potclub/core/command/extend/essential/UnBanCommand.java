@@ -29,7 +29,7 @@ public class UnBanCommand extends BaseCommand {
                     PotPlayer potPlayer = PotPlayer.getPlayer(offlinePlayer.getPlayer());
                     if (potPlayer == null) {
                         PotPlayer newPotPlayer = new PotPlayer(offlinePlayer.getUniqueId());
-                        if (newPotPlayer.isBanned()) {
+                        if (!newPotPlayer.isCurrentlyBanned()) {
                             newPotPlayer.unBanPlayer();
                             player.sendMessage(Color.translate("&aUnbanned that player."));
                         } else {

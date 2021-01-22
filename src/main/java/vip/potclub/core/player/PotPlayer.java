@@ -35,8 +35,8 @@ public class PotPlayer {
 
     public Punishment mutePunishment = null;
 
-    public boolean muted;
-    public boolean banned;
+    public boolean currentlyMuted;
+    public boolean currentlyBanned;
 
     @ConstructorProperties({"uuid"})
     public PotPlayer(UUID uuid) {
@@ -90,13 +90,8 @@ public class PotPlayer {
             }
         });
 
-        this.punishments.forEach(punishment -> {
-            if (punishment.getPunishmentType().equals(PunishmentType.MUTE)) {
-                if (punishment.isActive() || !punishment.isRemoved()) {
-                    this.muted = true;
-                }
-            }
-        });
+        this.currentlyMuted = this.isMuted();
+        this.currentlyBanned = this.isBanned();
     }
 
     public boolean isMuted() {
@@ -138,7 +133,7 @@ public class PotPlayer {
                 if (document.get("punishmentType").equals("MUTE")) {
                     if (document.get("target").equals(this.uuid.toString())) {
                         if (!document.get("active").equals(false)) {
-                            this.muted = false;
+                            this.currentlyMuted = false;
                             Punishment punishment = CorePlugin.GSON.fromJson(document.toJson(), Punishment.class);
                             punishment.setActive(false);
                             punishment.setRemoved(true);
@@ -157,7 +152,7 @@ public class PotPlayer {
                 if (document.get("punishmentType").equals("BAN")) {
                     if (document.get("target").equals(this.uuid.toString())) {
                         if (!document.get("active").equals(false)) {
-                            this.banned = false;
+                            this.currentlyBanned = false;
                             Punishment punishment = CorePlugin.GSON.fromJson(document.toJson(), Punishment.class);
                             punishment.setActive(false);
                             punishment.setRemoved(true);

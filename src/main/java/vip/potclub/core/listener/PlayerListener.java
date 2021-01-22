@@ -1,7 +1,6 @@
 package vip.potclub.core.listener;
 
 import com.solexgames.perms.profile.Profile;
-import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -21,7 +20,6 @@ import vip.potclub.core.util.Color;
 import vip.potclub.core.util.RedisUtil;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class PlayerListener implements Listener {
 
@@ -80,7 +78,7 @@ public class PlayerListener implements Listener {
     public void onChat(AsyncPlayerChatEvent event) {
         PotPlayer potPlayer = PotPlayer.getPlayer(event.getPlayer());
 
-        if (!potPlayer.isMuted()) {
+        if (!potPlayer.isCurrentlyMuted()) {
             if (event.getMessage().startsWith("!")) {
                 event.setCancelled(true);
                 CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.STAFF, event.getMessage().replace("!", ""), event.getPlayer())));
@@ -109,7 +107,6 @@ public class PlayerListener implements Listener {
         Profile profile = Profile.getByUuid(event.getPlayer().getUniqueId());
         Profile.getProfiles().remove(profile);
         profile.save();
-
         PotPlayer.getPlayer(event.getPlayer().getUniqueId()).savePlayerData();
     }
 }
