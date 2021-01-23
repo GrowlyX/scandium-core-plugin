@@ -18,7 +18,7 @@ public class CoreCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
-        if (player.getUniqueId().toString().equals("bbaa8e1d-af94-4aa8-980d-36d69b9de436")) {
+        if (player.getUniqueId().equals(CorePlugin.getInstance().getServerManager().getNetwork().getMainOwner()) || player.getUniqueId().equals(CorePlugin.getInstance().getServerManager().getNetwork().getMainDeveloper())) {
             if (args.length == 0) {
                 player.sendMessage(Color.translate("&cUsage: /" + label + " <debug|disallow|destroy>"));
             }

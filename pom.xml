@@ -79,7 +79,7 @@
             <artifactId>Neon</artifactId>
             <version>1.0-DEV</version>
             <scope>system</scope>
-            <systemPath>${basedir}/lib/Neon-1.0-DEV.jar</systemPath>
+            <systemPath>${basedir}/lib/Neon.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>

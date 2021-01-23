@@ -48,7 +48,7 @@ public class PlayerListener implements Listener {
     public void onConnect(PlayerJoinEvent event) {
         Profile profile = new Profile(event.getPlayer().getUniqueId(), new ArrayList<>(), new ArrayList<>());
         if (!profile.isLoaded()) profile.asyncLoad();
-        profile.setupAtatchment();
+        profile.setupAttachment();
 
         new PotPlayer(event.getPlayer().getUniqueId());
 

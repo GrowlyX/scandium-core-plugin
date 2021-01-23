@@ -5,10 +5,6 @@ server-name: eu-practice
 server:
   settings:
     server-id: "POTCLUBVIP"
-    neon: true
-    nitrogen: true
-    krypton: true
-    hash-db-ip: true
 redis:
   host: "redis-17008.c8.us-east-1-2.ec2.cloud.redislabs.com"
   port: 17008
