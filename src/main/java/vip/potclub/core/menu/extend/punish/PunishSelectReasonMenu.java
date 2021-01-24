@@ -7,15 +7,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
 import vip.potclub.core.CorePlugin;
 import vip.potclub.core.enums.ServerType;
 import vip.potclub.core.menu.AbstractInventoryMenu;
-import vip.potclub.core.menu.AbstractMenuItem;
+import vip.potclub.core.menu.InventoryMenuItem;
 import vip.potclub.core.player.punishment.PunishmentType;
-import vip.potclub.core.util.Color;
-
-import java.util.Arrays;
 
 @Getter
 @Setter
@@ -35,14 +31,14 @@ public class PunishSelectReasonMenu extends AbstractInventoryMenu<CorePlugin> {
 
     private void update() {
         while (this.inventory.firstEmpty() != -1) {
-            this.inventory.setItem(this.inventory.firstEmpty(), new AbstractMenuItem(Material.STAINED_GLASS_PANE, 7).setDisplayname(" ").create());
+            this.inventory.setItem(this.inventory.firstEmpty(), new InventoryMenuItem(Material.STAINED_GLASS_PANE, 7).setDisplayName(" ").create());
         }
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
-        this.inventory.setItem(10, new AbstractMenuItem(Material.DIAMOND_SWORD).setDisplayname(network.getSecondaryColor() + "Combat Hacks").create());
-        this.inventory.setItem(11, new AbstractMenuItem(Material.PAPER).setDisplayname(network.getSecondaryColor() + "Chat Abuse").create());
-        this.inventory.setItem(12, new AbstractMenuItem(Material.BED).setDisplayname(network.getSecondaryColor() + "Camping").create());
-        this.inventory.setItem(13, new AbstractMenuItem(Material.BARRIER).setDisplayname(network.getSecondaryColor() + "Threats").create());
-        this.inventory.setItem(14, new AbstractMenuItem(Material.PAPER).setDisplayname(network.getSecondaryColor() + "Appealed").create());
+        this.inventory.setItem(10, new InventoryMenuItem(Material.DIAMOND_SWORD).setDisplayName(network.getSecondaryColor() + "Combat Hacks").create());
+        this.inventory.setItem(11, new InventoryMenuItem(Material.PAPER).setDisplayName(network.getSecondaryColor() + "Chat Abuse").create());
+        this.inventory.setItem(12, new InventoryMenuItem(Material.BED).setDisplayName(network.getSecondaryColor() + "Camping").create());
+        this.inventory.setItem(13, new InventoryMenuItem(Material.BARRIER).setDisplayName(network.getSecondaryColor() + "Threats").create());
+        this.inventory.setItem(14, new InventoryMenuItem(Material.PAPER).setDisplayName(network.getSecondaryColor() + "Appealed").create());
     }
 
     @Override

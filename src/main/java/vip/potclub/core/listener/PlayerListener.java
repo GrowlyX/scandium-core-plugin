@@ -1,7 +1,12 @@
 package vip.potclub.core.listener;
 
+import com.solexgames.perms.grant.Grant;
 import com.solexgames.perms.profile.Profile;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -74,27 +79,44 @@ public class PlayerListener implements Listener {
         }
     }
 
-    @EventHandler
-    public void onChat(AsyncPlayerChatEvent event) {
-        PotPlayer potPlayer = PotPlayer.getPlayer(event.getPlayer());
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onAsyncPlayerChatEvent(AsyncPlayerChatEvent event) {
+        Player player = event.getPlayer();
+        Profile profile = Profile.getByUuid(player.getUniqueId());
 
-        if (!potPlayer.isCurrentlyMuted()) {
-            if (event.getMessage().startsWith("!")) {
+        if (!PotPlayer.getPlayer(player).isCurrentlyMuted()) {
+            event.setCancelled(true);
+            if (event.getMessage().startsWith("!") && event.getPlayer().hasPermission(ChatChannelType.STAFF.getPermission())) {
                 event.setCancelled(true);
                 CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.STAFF, event.getMessage().replace("!", ""), event.getPlayer())));
-            } else if (event.getMessage().startsWith("#")) {
+            } else if (event.getMessage().startsWith("#") && event.getPlayer().hasPermission(ChatChannelType.ADMIN.getPermission())) {
                 event.setCancelled(true);
                 CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.ADMIN, event.getMessage().replace("#", ""), event.getPlayer())));
-            } else if (event.getMessage().startsWith("$")) {
+            } else if (event.getMessage().startsWith("$") && event.getPlayer().hasPermission(ChatChannelType.DEV.getPermission())) {
                 event.setCancelled(true);
                 CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.DEV, event.getMessage().replace("$", ""), event.getPlayer())));
-            } else if (event.getMessage().startsWith("@")) {
+            } else if (event.getMessage().startsWith("@") && event.getPlayer().hasPermission(ChatChannelType.HOST.getPermission())) {
                 event.setCancelled(true);
                 CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.HOST, event.getMessage().replace("@", ""), event.getPlayer())));
+            } else {
+                Bukkit.getOnlinePlayers().forEach(player1 -> {
+                    PotPlayer potPlayer = PotPlayer.getPlayer(player1);
+                    if (potPlayer.isCanSeeGlobalChat()) {
+                        player1.sendMessage(Color.translate(profile.getActiveGrant().getRank().getData().getPrefix() + player.getName() + " &7" + '»' + " " + (profile.getActiveGrant().getRank().getData().getName().contains("Default") ? "&7" : "&f") + event.getMessage()));
+                    }
+                });
             }
         } else {
-            event.getPlayer().sendMessage(Color.translate(PunishmentStrings.MUTE_MESSAGE));
             event.setCancelled(true);
+            event.getPlayer().sendMessage(Color.translate(PunishmentStrings.MUTE_MESSAGE));
+        }
+
+        player.setDisplayName(player.getName());
+        if (profile != null) {
+            Grant grant = profile.getActiveGrant();
+            if (!player.getDisplayName().equals(Color.translate(grant.getRank().getData().getColorPrefix() + player.getName()))) {
+                player.setDisplayName(Color.translate(grant.getRank().getData().getColorPrefix() + player.getName()));
+            }
         }
     }
 

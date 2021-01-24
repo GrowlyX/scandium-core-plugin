@@ -9,9 +9,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import vip.potclub.core.CorePlugin;
-import vip.potclub.core.enums.ServerType;
 import vip.potclub.core.menu.AbstractInventoryMenu;
-import vip.potclub.core.menu.AbstractMenuItem;
+import vip.potclub.core.menu.InventoryMenuItem;
 import vip.potclub.core.player.PotPlayer;
 import vip.potclub.core.util.Color;
 import vip.potclub.core.util.RedisUtil;
@@ -31,56 +30,56 @@ public class ReportMenu extends AbstractInventoryMenu<CorePlugin> {
     }
 
     private void update() {
-        this.inventory.setItem(2, new AbstractMenuItem(Material.DIAMOND_SWORD)
-                .setDisplayname("&3Combat Hacks")
+        this.inventory.setItem(2, new InventoryMenuItem(Material.DIAMOND_SWORD)
+                .setDisplayName("&3Combat Hacks")
                 .addLore(
                         "",
-                        " &f■ &bKillAura",
-                        " &f■ &bReach",
-                        " &f■ &bAim Assist"
+                        "&8&l■ &fKillAura",
+                        "&8&l■ &fReach",
+                        "&8&l■ &fAim Assist"
                 )
                 .create()
         );
-        this.inventory.setItem(3, new AbstractMenuItem(Material.DIAMOND_BOOTS)
-                .setDisplayname("&3Movement Hacks")
+        this.inventory.setItem(3, new InventoryMenuItem(Material.DIAMOND_BOOTS)
+                .setDisplayName("&3Movement Hacks")
                 .addLore(
                         "",
-                        " &f■ &bSpeed",
-                        " &f■ &bBunny Hop",
-                        " &f■ &bFly",
+                        "&8&l■ &fSpeed",
+                        "&8&l■ &fBunny Hop",
+                        "&8&l■ &fFly",
                         ""
                 )
                 .create()
         );
-        this.inventory.setItem(4, new AbstractMenuItem(Material.SLIME_BALL)
-                .setDisplayname("&3Velocity Hacks")
+        this.inventory.setItem(4, new InventoryMenuItem(Material.SLIME_BALL)
+                .setDisplayName("&3Velocity Hacks")
                 .addLore(
                         "",
-                        " &f■ &bVelocity",
-                        " &f■ &bReduced KB",
-                        " &f■ &bAnti KB",
+                        "&8&l■ &fVelocity",
+                        "&8&l■ &fReduced KB",
+                        "&8&l■ &fAnti KB",
                         ""
                 )
                 .create()
         );
-        this.inventory.setItem(5, new AbstractMenuItem(Material.BED)
-                .setDisplayname("&3Gameplay Sabotage")
+        this.inventory.setItem(5, new InventoryMenuItem(Material.BED)
+                .setDisplayName("&3Gameplay Sabotage")
                 .addLore(
                         "",
-                        " &f■ &bCamping",
-                        " &f■ &bRunning",
-                        " &f■ &bStalling",
+                        "&8&l■ &fCamping",
+                        "&8&l■ &fRunning",
+                        "&8&l■ &fStalling",
                         ""
                 )
                 .create()
         );
-        this.inventory.setItem(6, new AbstractMenuItem(Material.NAME_TAG)
-                .setDisplayname("&3Chat Violation")
+        this.inventory.setItem(6, new InventoryMenuItem(Material.NAME_TAG)
+                .setDisplayName("&3Chat Violation")
                 .addLore(
                         "",
-                        " &f■ &bToxicity",
-                        " &f■ &bSpam",
-                        " &f■ &bAbuse (Blocked)",
+                        "&8&l■ &fToxicity",
+                        "&8&l■ &fSpam",
+                        "&8&l■ &fAbuse",
                         ""
                 )
                 .create()

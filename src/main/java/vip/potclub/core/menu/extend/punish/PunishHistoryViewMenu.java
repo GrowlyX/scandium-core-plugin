@@ -10,11 +10,10 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 import vip.potclub.core.CorePlugin;
 import vip.potclub.core.enums.ServerType;
 import vip.potclub.core.menu.AbstractInventoryMenu;
-import vip.potclub.core.menu.AbstractMenuItem;
+import vip.potclub.core.menu.InventoryMenuItem;
 import vip.potclub.core.player.PotPlayer;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -35,7 +34,7 @@ public class PunishHistoryViewMenu extends AbstractInventoryMenu<CorePlugin> {
 
     private void update() {
         while (this.inventory.firstEmpty() != -1) {
-            this.inventory.setItem(this.inventory.firstEmpty(), new AbstractMenuItem(Material.STAINED_GLASS_PANE, 7).setDisplayname(" ").create());
+            this.inventory.setItem(this.inventory.firstEmpty(), new InventoryMenuItem(Material.STAINED_GLASS_PANE, 7).setDisplayName(" ").create());
         }
         PotPlayer potPlayer = PotPlayer.getPlayer(target);
 
@@ -46,8 +45,8 @@ public class PunishHistoryViewMenu extends AbstractInventoryMenu<CorePlugin> {
                 OfflinePlayer targetOfflinePlayer = Bukkit.getOfflinePlayer(punishment.getTarget());
                 ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
-                this.inventory.setItem(i.get(), new AbstractMenuItem(Material.INK_SACK, (punishment.isActive() ? 2 : 1))
-                        .setDisplayname(network.getSecondaryColor() + ChatColor.BOLD.toString() + punishment.getId().toString())
+                this.inventory.setItem(i.get(), new InventoryMenuItem(Material.INK_SACK, (punishment.isActive() ? 2 : 1))
+                        .setDisplayName(network.getSecondaryColor() + ChatColor.BOLD.toString() + punishment.getId().toString())
                         .addLore(
                                 "",
                                 "&7Punisher: &b" + network.getMainColor() +  issuerOfflinePlayer.getName(),

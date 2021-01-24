@@ -9,8 +9,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import vip.potclub.core.CorePlugin;
 import vip.potclub.core.menu.AbstractInventoryMenu;
-import vip.potclub.core.menu.AbstractMenuItem;
-import vip.potclub.core.player.punishment.PunishmentDuration;
+import vip.potclub.core.menu.InventoryMenuItem;
 import vip.potclub.core.player.punishment.PunishmentType;
 import vip.potclub.core.util.Color;
 
@@ -30,14 +29,14 @@ public class PunishSelectPunishTypeMenu extends AbstractInventoryMenu<CorePlugin
 
     private void update() {
         while (this.inventory.firstEmpty() != -1) {
-            this.inventory.setItem(this.inventory.firstEmpty(), new AbstractMenuItem(Material.STAINED_GLASS_PANE, 7).setDisplayname(" ").create());
+            this.inventory.setItem(this.inventory.firstEmpty(), new InventoryMenuItem(Material.STAINED_GLASS_PANE, 7).setDisplayName(" ").create());
         }
 
-        this.inventory.setItem(10, new AbstractMenuItem(Material.BARRIER).setDisplayname("&aBan").create());
-        this.inventory.setItem(11, new AbstractMenuItem(Material.WOOD_AXE).setDisplayname("&eKick").create());
-        this.inventory.setItem(12, new AbstractMenuItem(Material.SLIME_BALL).setDisplayname("&6Mute").create());
-        this.inventory.setItem(13, new AbstractMenuItem(Material.PAPER).setDisplayname("&3Warn").create());
-        this.inventory.setItem(14, new AbstractMenuItem(Material.BARRIER).setDisplayname("&4Blacklist").create());
+        this.inventory.setItem(10, new InventoryMenuItem(Material.BARRIER).setDisplayName("&aBan").create());
+        this.inventory.setItem(11, new InventoryMenuItem(Material.WOOD_AXE).setDisplayName("&eKick").create());
+        this.inventory.setItem(12, new InventoryMenuItem(Material.SLIME_BALL).setDisplayName("&6Mute").create());
+        this.inventory.setItem(13, new InventoryMenuItem(Material.PAPER).setDisplayName("&3Warn").create());
+        this.inventory.setItem(14, new InventoryMenuItem(Material.BARRIER).setDisplayName("&4Blacklist").create());
     }
 
     @Override

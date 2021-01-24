@@ -9,7 +9,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import vip.potclub.core.CorePlugin;
 import vip.potclub.core.menu.AbstractInventoryMenu;
-import vip.potclub.core.menu.AbstractMenuItem;
+import vip.potclub.core.menu.InventoryMenuItem;
 import vip.potclub.core.player.PotPlayer;
 
 @Getter
@@ -26,82 +26,69 @@ public class SettingsMenu extends AbstractInventoryMenu<CorePlugin> {
 
     private void update() {
         PotPlayer potPlayer = PotPlayer.getPlayer(this.player);
-        this.inventory.setItem(0, new AbstractMenuItem(Material.PAPER)
-                .setDisplayname("&3Global Chat")
+        this.inventory.setItem(2, new InventoryMenuItem(Material.PAPER)
+                .setDisplayName("&3Global Chat")
                 .addLore(
                         "",
                         "&7Would you like to be",
                         "&7able to view global",
                         "&7chat?",
                         " ",
-                        " " + (potPlayer.isCanSeeGlobalChat() ? "&8&l" : "&7&l") + "■ &bEnabled",
-                        " " + (!potPlayer.isCanSeeGlobalChat() ? "&8&l" : "&7&l") + "■ &bDisabled"
+                        " " + (potPlayer.isCanSeeGlobalChat() ? "&8&l■ " : "  ") + "&fEnabled",
+                        " " + (!potPlayer.isCanSeeGlobalChat() ? "&8&l■ " : "  ") + "&fDisabled"
                 )
                 .create()
         );
-        this.inventory.setItem(1, new AbstractMenuItem(Material.LEVER)
-                .setDisplayname("&3Server Tips")
+        this.inventory.setItem(3, new InventoryMenuItem(Material.EXP_BOTTLE)
+                .setDisplayName("&3Server Tips")
                 .addLore(
                         "",
                         "&7Would you like to be",
                         "&7able to view server",
                         "&7tips?",
                         " ",
-                        " " + (potPlayer.isCanSeeTips() ? "&8&l" : "&7&l") + "■ &bEnabled",
-                        " " + (!potPlayer.isCanSeeTips() ? "&8&l" : "&7&l") + "■ &bDisabled"
+                        " " + (potPlayer.isCanSeeTips() ? "&8&l■ " : "  ") + "&fEnabled",
+                        " " + (!potPlayer.isCanSeeTips() ? "&8&l■ " : "  ") + "&fDisabled"
                 )
                 .create()
         );
-        this.inventory.setItem(2, new AbstractMenuItem(Material.PAINTING)
-                .setDisplayname("&3Receive DMs")
+        this.inventory.setItem(4, new InventoryMenuItem(Material.EMERALD)
+                .setDisplayName("&3Receive DMs")
                 .addLore(
                         "",
                         "&7Would you like to be",
                         "&7able to receive player",
                         "&7dms?",
                         " ",
-                        " " + (potPlayer.isCanReceiveDms() ? "&8&l" : "&7&l") + "■ &bEnabled",
-                        " " + (!potPlayer.isCanReceiveDms() ? "&8&l" : "&7&l") + "■ &bDisabled"
+                        " " + (potPlayer.isCanReceiveDms() ? "&8&l■ " : "  ") + "&fEnabled",
+                        " " + (!potPlayer.isCanReceiveDms() ? "&8&l■ " : "  ") + "&fDisabled"
                 )
                 .create()
         );
-        this.inventory.setItem(3, new AbstractMenuItem(Material.EXP_BOTTLE)
-                .setDisplayname("&3DMs Sounds")
+        this.inventory.setItem(5, new InventoryMenuItem(Material.JUKEBOX)
+                .setDisplayName("&3DMs Sounds")
                 .addLore(
                         "",
                         "&7Would you like to be",
                         "&7able to receive dm",
                         "&7sounds?",
                         " ",
-                        " " + (potPlayer.isCanReceiveDmsSounds() ? "&8&l" : "&7&l") + "■ &bEnabled",
-                        " " + (!potPlayer.isCanReceiveDmsSounds() ? "&8&l" : "&7&l") + "■ &bDisabled"
+                        " " + (potPlayer.isCanReceiveDmsSounds() ? "&8&l■ " : "  ") + "&fEnabled",
+                        " " + (!potPlayer.isCanReceiveDmsSounds() ? "&8&l■ " : "  ") + "&fDisabled"
                 )
                 .create()
         );
-        /*this.inventory.setItem(3, new AbstractMenuItem(Material.EXP_BOTTLE)
-                .setDisplayname("&3Event Alerts")
-                .addLore(
-                        "",
-                        "&7Would you like to be",
-                        "&7able to receive event",
-                        "&7alerts?",
-                        " ",
-                        " " + (potPlayer.isCanReceiveDmsSounds() ? "&8&l" : "&7&l") + "■ &bEnabled",
-                        " " + (!potPlayer.isCanReceiveDmsSounds() ? "&8&l" : "&7&l") + "■ &bDisabled"
-                )
-                .create()
-        );*/
         if (player.hasPermission("scandium.staff")) {
-            this.inventory.setItem(4, new AbstractMenuItem(Material.INK_SACK, 9)
-                    .setDisplayname("&3Staff Messages")
+            this.inventory.setItem(6, new InventoryMenuItem(Material.BLAZE_POWDER)
+                    .setDisplayName("&3Staff Messages")
                     .addLore(
                             "",
                             "&7Would you like to be",
                             "&7able to receive staff",
                             "&7messages?",
                             " ",
-                            " " + (potPlayer.isCanSeeStaffMessages() ? "&8&l" : "&7&l") + "■ &bEnabled",
-                            " " + (!potPlayer.isCanSeeStaffMessages() ? "&8&l" : "&7&l") + "■ &bDisabled"
+                            " " + (potPlayer.isCanSeeStaffMessages() ? "&8&l■ " : "  ") + "&fEnabled",
+                            " " + (!potPlayer.isCanSeeStaffMessages() ? "&8&l■ " : "  ") + "&fDisabled"
                     )
                     .create()
             );
@@ -122,23 +109,23 @@ public class SettingsMenu extends AbstractInventoryMenu<CorePlugin> {
 
             if (item == null || item.getType() == Material.AIR) return;
             switch (event.getRawSlot()) {
-                case 0:
+                case 2:
                     potPlayer.setCanSeeGlobalChat(!potPlayer.isCanSeeGlobalChat());
                     this.update();
                     break;
-                case 1:
+                case 3:
                     potPlayer.setCanSeeTips(!potPlayer.isCanSeeTips());
                     this.update();
                     break;
-                case 2:
+                case 4:
                     potPlayer.setCanReceiveDms(!potPlayer.isCanReceiveDms());
                     this.update();
                     break;
-                case 3:
+                case 5:
                     potPlayer.setCanReceiveDmsSounds(!potPlayer.isCanReceiveDmsSounds());
                     this.update();
                     break;
-                case 4:
+                case 6:
                     if (potPlayer.getPlayer().hasPermission("scandium.staff")) {
                         potPlayer.setCanSeeStaffMessages(!potPlayer.isCanSeeStaffMessages());
                         this.update();

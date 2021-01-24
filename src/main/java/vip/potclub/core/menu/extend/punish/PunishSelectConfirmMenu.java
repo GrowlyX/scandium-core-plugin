@@ -7,22 +7,16 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 import vip.potclub.core.CorePlugin;
 import vip.potclub.core.enums.ServerType;
 import vip.potclub.core.menu.AbstractInventoryMenu;
-import vip.potclub.core.menu.AbstractMenuItem;
+import vip.potclub.core.menu.InventoryMenuItem;
 import vip.potclub.core.player.PotPlayer;
 import vip.potclub.core.player.punishment.Punishment;
-import vip.potclub.core.player.punishment.PunishmentDuration;
 import vip.potclub.core.player.punishment.PunishmentType;
 import vip.potclub.core.util.Color;
 
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.TimeZone;
 
 @Getter
 @Setter
@@ -49,21 +43,21 @@ public class PunishSelectConfirmMenu extends AbstractInventoryMenu<CorePlugin> {
 
     private void update() {
         while (this.inventory.firstEmpty() != -1) {
-            this.inventory.setItem(this.inventory.firstEmpty(), new AbstractMenuItem(Material.STAINED_GLASS_PANE, 7).setDisplayname(" ").create());
+            this.inventory.setItem(this.inventory.firstEmpty(), new InventoryMenuItem(Material.STAINED_GLASS_PANE, 7).setDisplayName(" ").create());
         }
 
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
-        this.inventory.setItem(12, new AbstractMenuItem(Material.INK_SACK, 14)
-                .setDisplayname(network.getMainColor() + ChatColor.BOLD.toString() + "Silent Punishment")
+        this.inventory.setItem(12, new InventoryMenuItem(Material.INK_SACK, 14)
+                .setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + "Silent Punishment")
                 .addLore(
                         "",
                         "&7Current: " + network.getSecondaryColor() + (isSilent ? "&aEnabled" : "&cDisabled")
                 )
                 .create());
 
-        this.inventory.setItem(14, new AbstractMenuItem(Material.INK_SACK, 14)
-                .setDisplayname(network.getMainColor() + ChatColor.BOLD.toString() + "Confirm")
+        this.inventory.setItem(14, new InventoryMenuItem(Material.INK_SACK, 14)
+                .setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + "Confirm")
                 .addLore(
                         "",
                         "&7Punisher: &b" + network.getSecondaryColor() + this.player.getName(),

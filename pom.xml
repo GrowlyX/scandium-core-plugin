@@ -82,6 +82,13 @@
             <systemPath>${basedir}/lib/Neon.jar</systemPath>
         </dependency>
         <dependency>
+            <groupId>vip.potclub</groupId>
+            <artifactId>Practice</artifactId>
+            <version>1.0-DEV</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/pPractice.jar</systemPath>
+        </dependency>
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.16</version>

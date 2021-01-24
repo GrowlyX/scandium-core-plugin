@@ -30,6 +30,10 @@ commands:
     aliases: [punishment, ban, kick, mute, warn, ipban, blacklist]
   tphere:
     aliases: [s]
+  message:
+    aliases: [msg, m]
+  reply:
+    aliases: [r]
   tppos:
     aliases: [tpposition]
   tp:

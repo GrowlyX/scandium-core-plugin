@@ -2,6 +2,7 @@ package vip.potclub.core.menu;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -12,44 +13,51 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AbstractMenuItem {
+public class InventoryMenuItem {
 
-    private ItemStack itemStack;
-    private ItemMeta itemMeta;
+    private final ItemStack itemStack;
+    private final ItemMeta itemMeta;
 
-    private Map<Enchantment, Integer> enchantments = new HashMap<>();
+    private final Map<Enchantment, Integer> enchantments = new HashMap<>();
 
-    public AbstractMenuItem(Material material) {
+    public InventoryMenuItem(Material material) {
         this.itemStack = new ItemStack(material);
         this.itemMeta = itemStack.getItemMeta();
     }
 
-    public AbstractMenuItem(Material material, int data) {
+    public InventoryMenuItem(Material material, int data) {
         this.itemStack = new ItemStack(material, 1, (short) data);
         this.itemMeta = itemStack.getItemMeta();
     }
 
-    public AbstractMenuItem(ItemStack itemStack) {
+    public InventoryMenuItem(ItemStack itemStack) {
         this.itemStack = itemStack;
         this.itemMeta = itemStack.getItemMeta();
     }
 
-    public AbstractMenuItem setAmount(int amount) {
+    public InventoryMenuItem setAmount(int amount) {
         itemStack.setAmount(amount);
         return this;
     }
 
-    public AbstractMenuItem setDisplayname(String name) {
+    public InventoryMenuItem setDisplayName(String name) {
         itemMeta.setDisplayName(Color.translate(name));
         return this;
     }
 
-    public AbstractMenuItem setDurability(int durability) {
+    public InventoryMenuItem addItemFlags(ItemFlag... itemFlags) {
+        for (ItemFlag itemFlag : itemFlags) {
+            this.itemMeta.addItemFlags(itemFlag);
+        }
+        return this;
+    }
+
+    public InventoryMenuItem setDurability(int durability) {
         itemStack.setDurability((short) durability);
         return this;
     }
 
-    public AbstractMenuItem addLore(String lore) {
+    public InventoryMenuItem addLore(String lore) {
         Object object = itemMeta.getLore();
         if (object == null) object = new ArrayList<>();
 
@@ -58,12 +66,12 @@ public class AbstractMenuItem {
         return this;
     }
 
-    public AbstractMenuItem addLore(List<String> lore) {
+    public InventoryMenuItem addLore(List<String> lore) {
         itemMeta.setLore(Color.translate(lore));
         return this;
     }
 
-    public AbstractMenuItem addLore(String... lore) {
+    public InventoryMenuItem addLore(String... lore) {
         List<String> strings = new ArrayList<>();
         for (String string : lore) {
             strings.add(Color.translate(string));
@@ -72,17 +80,17 @@ public class AbstractMenuItem {
         return this;
     }
 
-    public AbstractMenuItem setEnchant(Enchantment enchantment, int level) {
+    public InventoryMenuItem setEnchant(Enchantment enchantment, int level) {
         enchantments.put(enchantment, level);
         return this;
     }
 
-    public AbstractMenuItem setUnbreakable(boolean unbreakable) {
+    public InventoryMenuItem setUnbreakable(boolean unbreakable) {
         itemMeta.spigot().setUnbreakable(unbreakable);
         return this;
     }
 
-    public AbstractMenuItem setColor(org.bukkit.Color color) {
+    public InventoryMenuItem setColor(org.bukkit.Color color) {
         if (itemStack.getType() != null && itemStack.getType().name().contains("LEATHER")) {
             LeatherArmorMeta armorMeta = (LeatherArmorMeta) itemMeta;
             armorMeta.setColor(color);

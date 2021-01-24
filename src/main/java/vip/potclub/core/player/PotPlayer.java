@@ -3,6 +3,7 @@ package vip.potclub.core.player;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
+import com.solexgames.perms.profile.Profile;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.Document;
@@ -13,6 +14,7 @@ import vip.potclub.core.player.punishment.Punishment;
 import vip.potclub.core.player.punishment.PunishmentType;
 
 import java.beans.ConstructorProperties;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -26,19 +28,28 @@ public class PotPlayer {
 
     private UUID uuid;
     private Player player;
+
+    private Player lastRecipient;
+
+    private String rankName;
     private String name;
 
-    public boolean canSeeStaffMessages = true;
-    public boolean canSeeGlobalChat = true;
-    public boolean canReceiveDms = true;
-    public boolean canReceiveDmsSounds = true;
-    public boolean canSeeTips = true;
+    private boolean canSeeStaffMessages = true;
+    private boolean canSeeGlobalChat = true;
+    private boolean canReceiveDms = true;
+    private boolean canReceiveDmsSounds = true;
+    private boolean canSeeTips = true;
 
-    public boolean canReport = true;
-    public boolean canRequest = true;
+    private boolean canReport = true;
+    private boolean canRequest = true;
 
-    public boolean currentlyMuted;
-    public boolean currentlyBanned;
+    private boolean currentlyMuted;
+    private boolean currentlyBanned;
+
+    private final Date lastJoined = new Date();
+    private String lastJoin;
+
+    private final SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy HH:mma");
 
     @ConstructorProperties({"uuid"})
     public PotPlayer(UUID uuid) {
@@ -60,6 +71,8 @@ public class PotPlayer {
         document.put("canReceiveDms", canReceiveDms);
         document.put("canSeeGlobalChat", canSeeGlobalChat);
         document.put("canReceiveDmsSounds", canReceiveDmsSounds);
+        document.put("lastJoined", format.format(new Date()));
+        document.put("rankName", this.rankName);
 
         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true)));
     }
@@ -73,6 +86,8 @@ public class PotPlayer {
         document.put("canReceiveDms", canReceiveDms);
         document.put("canSeeGlobalChat", canSeeGlobalChat);
         document.put("canReceiveDmsSounds", canReceiveDmsSounds);
+        document.put("lastJoined", format.format(new Date()));
+        document.put("rankName", this.rankName);
 
         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true)));
 
@@ -99,6 +114,9 @@ public class PotPlayer {
         }
         if (document.getBoolean("canReceiveDmsSounds") != null) {
             this.canReceiveDmsSounds = document.getBoolean("canReceiveDmsSounds");
+        }
+        if (document.getBoolean("rankName") != null) {
+            this.rankName = Profile.getByUuid(this.uuid).getActiveGrant().getRank().getData().getName().toLowerCase();
         }
 
         CorePlugin.getInstance().getPunishmentManager().getPunishments().forEach(punishment -> {

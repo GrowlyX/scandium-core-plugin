@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import vip.potclub.core.CorePlugin;
 import vip.potclub.core.menu.AbstractInventoryMenu;
-import vip.potclub.core.menu.AbstractMenuItem;
+import vip.potclub.core.menu.InventoryMenuItem;
 import vip.potclub.core.util.Color;
 
 import java.util.Arrays;
@@ -31,7 +31,7 @@ public class PunishMainMenu extends AbstractInventoryMenu<CorePlugin> {
 
     private void update() {
         while (this.inventory.firstEmpty() != -1) {
-            this.inventory.setItem(this.inventory.firstEmpty(), new AbstractMenuItem(Material.STAINED_GLASS_PANE, 7).setDisplayname(" ").create());
+            this.inventory.setItem(this.inventory.firstEmpty(), new InventoryMenuItem(Material.STAINED_GLASS_PANE, 7).setDisplayName(" ").create());
         }
 
         ItemStack playerhead = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
@@ -46,8 +46,8 @@ public class PunishMainMenu extends AbstractInventoryMenu<CorePlugin> {
         playerheadmeta.setDisplayName(Color.translate("&aPunishments"));
         playerhead.setItemMeta(playerheadmeta);
 
-        this.inventory.setItem(12, new AbstractMenuItem(Material.INK_SACK, 6)
-                .setDisplayname("&3&lPunish")
+        this.inventory.setItem(12, new InventoryMenuItem(Material.INK_SACK, 6)
+                .setDisplayName("&3&lPunish")
                 .addLore(
                         "",
                         "&7Click to punish this player."
@@ -56,8 +56,8 @@ public class PunishMainMenu extends AbstractInventoryMenu<CorePlugin> {
         );
 
         this.inventory.setItem(13, playerhead);
-        this.inventory.setItem(14, new AbstractMenuItem(Material.INK_SACK, 14)
-                .setDisplayname("&6&lUnpunish")
+        this.inventory.setItem(14, new InventoryMenuItem(Material.INK_SACK, 14)
+                .setDisplayName("&6&lUnpunish")
                 .addLore(
                         "",
                         "&7Click to unpunish this player."
