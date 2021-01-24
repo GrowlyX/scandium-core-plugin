@@ -100,6 +100,7 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("punish").setExecutor(new PunishCommand());
         this.getCommand("scandium").setExecutor(new CoreCommand());
         this.getCommand("discord").setExecutor(new DiscordCommand());
+        this.getCommand("options").setExecutor(new OptionsCommand());
         this.getCommand("history").setExecutor(new HistoryCommand());
         this.getCommand("twitter").setExecutor(new TwitterCommand());
         this.getCommand("website").setExecutor(new WebsiteCommand());

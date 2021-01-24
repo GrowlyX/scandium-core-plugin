@@ -25,7 +25,11 @@ public class PunishCommand extends BaseCommand {
             if (args.length > 0) {
                 Player target = Bukkit.getPlayerExact(args[0]);
                 if (target != null) {
-                    new PunishMainMenu(player, target).open(player);
+                    if (target.getUniqueId() != player.getUniqueId()) {
+                        new PunishMainMenu(player, target).open(player);
+                    } else {
+                        player.sendMessage(Color.translate("&cYou cannot punish yourself!"));
+                    }
                 } else {
                     player.sendMessage(Color.translate("&cThat player does not exist."));
                 }

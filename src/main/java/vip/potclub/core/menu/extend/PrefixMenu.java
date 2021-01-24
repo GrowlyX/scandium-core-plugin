@@ -1,4 +1,4 @@
 package vip.potclub.core.menu.extend;
 
-public class SettingsInventoryMenu {
+public class PrefixMenu {
 }

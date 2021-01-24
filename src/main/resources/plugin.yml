@@ -6,6 +6,8 @@ main: vip.potclub.core.CorePlugin
 commands:
   staffchat:
     aliases: [sc]
+  options:
+    aliases: [globalsettings, gsettings, goptions, coreoptions]
   adminchat:
     aliases: [ac]
   hostchat:

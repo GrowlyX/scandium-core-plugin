@@ -1,6 +1,10 @@
 #
 #  Scandium - by SolexGames (GrowlyX)
 #
+motd:
+  l1: "&d&lPotClub"
+  l2: "&7Practice"
+  center: false
 server-name: eu-practice
 server:
   settings:

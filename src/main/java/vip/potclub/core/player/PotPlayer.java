@@ -29,11 +29,13 @@ public class PotPlayer {
     private String name;
 
     public boolean canSeeStaffMessages = true;
+    public boolean canSeeGlobalChat = true;
+    public boolean canReceiveDms = true;
+    public boolean canReceiveDmsSounds = true;
     public boolean canSeeTips = true;
+
     public boolean canReport = true;
     public boolean canRequest = true;
-
-    public Punishment mutePunishment = null;
 
     public boolean currentlyMuted;
     public boolean currentlyBanned;
@@ -55,6 +57,9 @@ public class PotPlayer {
         document.put("name", name);
         document.put("canSeeStaffMessages", canSeeStaffMessages);
         document.put("canSeeTips", canSeeTips);
+        document.put("canReceiveDms", canReceiveDms);
+        document.put("canSeeGlobalChat", canSeeGlobalChat);
+        document.put("canReceiveDmsSounds", canReceiveDmsSounds);
 
         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true)));
     }
@@ -65,6 +70,9 @@ public class PotPlayer {
         document.put("name", name);
         document.put("canSeeStaffMessages", canSeeStaffMessages);
         document.put("canSeeTips", canSeeTips);
+        document.put("canReceiveDms", canReceiveDms);
+        document.put("canSeeGlobalChat", canSeeGlobalChat);
+        document.put("canReceiveDmsSounds", canReceiveDmsSounds);
 
         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true)));
 
@@ -76,12 +84,21 @@ public class PotPlayer {
         if (document == null) return;
 
         this.name = document.getString("name");
+
         if (document.getBoolean("canSeeStaffMessages") != null) {
             this.canSeeStaffMessages = document.getBoolean("canSeeStaffMessages");
         }
-
         if (document.getBoolean("canSeeTips") != null) {
             this.canSeeTips = document.getBoolean("canSeeTips");
+        }
+        if (document.getBoolean("canReceiveDms") != null) {
+            this.canReceiveDms = document.getBoolean("canReceiveDms");
+        }
+        if (document.getBoolean("canSeeGlobalChat") != null) {
+            this.canSeeGlobalChat = document.getBoolean("canSeeGlobalChat");
+        }
+        if (document.getBoolean("canReceiveDmsSounds") != null) {
+            this.canReceiveDmsSounds = document.getBoolean("canReceiveDmsSounds");
         }
 
         CorePlugin.getInstance().getPunishmentManager().getPunishments().forEach(punishment -> {
