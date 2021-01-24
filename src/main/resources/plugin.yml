@@ -34,6 +34,10 @@ commands:
     aliases: [msg, m]
   reply:
     aliases: [r]
+  clearchat:
+    aliases: [cc]
+  mutechat:
+    aliases: [mc]
   tppos:
     aliases: [tpposition]
   tp:

@@ -84,31 +84,60 @@ public class PlayerListener implements Listener {
         Player player = event.getPlayer();
         Profile profile = Profile.getByUuid(player.getUniqueId());
 
-        if (!PotPlayer.getPlayer(player).isCurrentlyMuted()) {
-            event.setCancelled(true);
-            if (event.getMessage().startsWith("!") && event.getPlayer().hasPermission(ChatChannelType.STAFF.getPermission())) {
+        if (CorePlugin.getInstance().getServerManager().isChatEnabled()) {
+            if (!PotPlayer.getPlayer(player).isCurrentlyMuted()) {
                 event.setCancelled(true);
-                CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.STAFF, event.getMessage().replace("!", ""), event.getPlayer())));
-            } else if (event.getMessage().startsWith("#") && event.getPlayer().hasPermission(ChatChannelType.ADMIN.getPermission())) {
-                event.setCancelled(true);
-                CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.ADMIN, event.getMessage().replace("#", ""), event.getPlayer())));
-            } else if (event.getMessage().startsWith("$") && event.getPlayer().hasPermission(ChatChannelType.DEV.getPermission())) {
-                event.setCancelled(true);
-                CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.DEV, event.getMessage().replace("$", ""), event.getPlayer())));
-            } else if (event.getMessage().startsWith("@") && event.getPlayer().hasPermission(ChatChannelType.HOST.getPermission())) {
-                event.setCancelled(true);
-                CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.HOST, event.getMessage().replace("@", ""), event.getPlayer())));
+                if (event.getMessage().startsWith("!") && event.getPlayer().hasPermission(ChatChannelType.STAFF.getPermission())) {
+                    event.setCancelled(true);
+                    CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.STAFF, event.getMessage().replace("!", ""), event.getPlayer())));
+                } else if (event.getMessage().startsWith("#") && event.getPlayer().hasPermission(ChatChannelType.ADMIN.getPermission())) {
+                    event.setCancelled(true);
+                    CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.ADMIN, event.getMessage().replace("#", ""), event.getPlayer())));
+                } else if (event.getMessage().startsWith("$") && event.getPlayer().hasPermission(ChatChannelType.DEV.getPermission())) {
+                    event.setCancelled(true);
+                    CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.DEV, event.getMessage().replace("$", ""), event.getPlayer())));
+                } else if (event.getMessage().startsWith("@") && event.getPlayer().hasPermission(ChatChannelType.HOST.getPermission())) {
+                    event.setCancelled(true);
+                    CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.HOST, event.getMessage().replace("@", ""), event.getPlayer())));
+                } else {
+                    Bukkit.getOnlinePlayers().forEach(player1 -> {
+                        PotPlayer potPlayer = PotPlayer.getPlayer(player1);
+                        if (potPlayer.isCanSeeGlobalChat()) {
+                            player1.sendMessage(Color.translate(profile.getActiveGrant().getRank().getData().getPrefix() + player.getName() + " &7" + '»' + " " + (profile.getActiveGrant().getRank().getData().getName().contains("Default") ? "&7" : "&f") + event.getMessage()));
+                        }
+                    });
+                }
             } else {
-                Bukkit.getOnlinePlayers().forEach(player1 -> {
-                    PotPlayer potPlayer = PotPlayer.getPlayer(player1);
-                    if (potPlayer.isCanSeeGlobalChat()) {
-                        player1.sendMessage(Color.translate(profile.getActiveGrant().getRank().getData().getPrefix() + player.getName() + " &7" + '»' + " " + (profile.getActiveGrant().getRank().getData().getName().contains("Default") ? "&7" : "&f") + event.getMessage()));
+                if (player.hasPermission("scandium.chat.bypass")) {
+                    event.setCancelled(true);
+                    if (event.getMessage().startsWith("!") && event.getPlayer().hasPermission(ChatChannelType.STAFF.getPermission())) {
+                        event.setCancelled(true);
+                        CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.STAFF, event.getMessage().replace("!", ""), event.getPlayer())));
+                    } else if (event.getMessage().startsWith("#") && event.getPlayer().hasPermission(ChatChannelType.ADMIN.getPermission())) {
+                        event.setCancelled(true);
+                        CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.ADMIN, event.getMessage().replace("#", ""), event.getPlayer())));
+                    } else if (event.getMessage().startsWith("$") && event.getPlayer().hasPermission(ChatChannelType.DEV.getPermission())) {
+                        event.setCancelled(true);
+                        CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.DEV, event.getMessage().replace("$", ""), event.getPlayer())));
+                    } else if (event.getMessage().startsWith("@") && event.getPlayer().hasPermission(ChatChannelType.HOST.getPermission())) {
+                        event.setCancelled(true);
+                        CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.HOST, event.getMessage().replace("@", ""), event.getPlayer())));
+                    } else {
+                        Bukkit.getOnlinePlayers().forEach(player1 -> {
+                            PotPlayer potPlayer = PotPlayer.getPlayer(player1);
+                            if (potPlayer.isCanSeeGlobalChat()) {
+                                player1.sendMessage(Color.translate(profile.getActiveGrant().getRank().getData().getPrefix() + player.getName() + " &7" + '»' + " " + (profile.getActiveGrant().getRank().getData().getName().contains("Default") ? "&7" : "&f") + event.getMessage()));
+                            }
+                        });
                     }
-                });
+                } else {
+                    event.setCancelled(true);
+                    event.getPlayer().sendMessage(Color.translate(PunishmentStrings.MUTE_MESSAGE));
+                }
             }
         } else {
             event.setCancelled(true);
-            event.getPlayer().sendMessage(Color.translate(PunishmentStrings.MUTE_MESSAGE));
+            player.sendMessage(Color.translate("&cThe chat is currently muted. Please try chatting again later."));
         }
 
         player.setDisplayName(player.getName());

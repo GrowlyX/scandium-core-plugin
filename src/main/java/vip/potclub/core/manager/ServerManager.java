@@ -9,7 +9,9 @@ import vip.potclub.core.enums.ServerType;
 @Setter
 public class ServerManager {
 
-    public ServerType network;
+    private ServerType network;
+
+    private boolean chatEnabled = true;
 
     public ServerManager() {
         setupServerType();

@@ -109,6 +109,8 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("store").setExecutor(new StoreCommand());
         this.getCommand("message").setExecutor(new MessageCommand());
         this.getCommand("reply").setExecutor(new ReplyCommand());
+        this.getCommand("clearchat").setExecutor(new ClearChatCommand());
+        this.getCommand("mutechat").setExecutor(new MuteChatCommand());
 
         this.getCommand("toggletips").setExecutor(new ToggleTipsCommand());
         this.getCommand("togglestaffmessages").setExecutor(new ToggleStaffMessagesCommand());
