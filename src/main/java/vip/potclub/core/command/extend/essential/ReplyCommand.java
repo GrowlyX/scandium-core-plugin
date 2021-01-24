@@ -3,12 +3,9 @@ package vip.potclub.core.command.extend.essential;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import vip.potclub.core.CorePlugin;
 import vip.potclub.core.command.BaseCommand;
-import vip.potclub.core.enums.ChatChannelType;
 import vip.potclub.core.player.PotPlayer;
 import vip.potclub.core.util.Color;
-import vip.potclub.core.util.RedisUtil;
 import vip.potclub.core.util.StringUtil;
 
 public class ReplyCommand extends BaseCommand {
@@ -22,20 +19,16 @@ public class ReplyCommand extends BaseCommand {
 
         Player player = (Player) sender;
         PotPlayer potPlayer = PotPlayer.getPlayer(player);
-        if (player.hasPermission(ChatChannelType.STAFF.getPermission())) {
-            if (args.length == 0) {
-                player.sendMessage(Color.translate("&cUsage: /" + label + " <message>."));
+        if (args.length == 0) {
+            player.sendMessage(Color.translate("&cUsage: /" + label + " <message>."));
+        }
+        if (args.length > 0) {
+            String message = StringUtil.buildMessage(args, 0);
+            if (potPlayer.getLastRecipient() != null) {
+                StringUtil.sendPrivateMessage(player, potPlayer.getLastRecipient(), message);
+            } else {
+                player.sendMessage(Color.translate("&cYou don't have an ongoing conversation with anyone."));
             }
-            if (args.length > 0) {
-                String message = StringUtil.buildMessage(args, 0);
-                if (potPlayer.getLastRecipient() != null) {
-                    StringUtil.sendPrivateMessage(player, potPlayer.getLastRecipient(), message);
-                } else {
-                    player.sendMessage(Color.translate("&cYou don't have an ongoing conversation with anyone."));
-                }
-            }
-        } else {
-            player.sendMessage(Color.translate("&cNo permission."));
         }
         return false;
     }
