@@ -39,6 +39,7 @@ public class PotPlayer {
     private boolean canSeeGlobalChat = true;
     private boolean canReceiveDms = true;
     private boolean canReceiveDmsSounds = true;
+    private boolean canSeeBroadcasts = true;
     private boolean canSeeTips = true;
 
     private boolean canReport = true;
@@ -47,10 +48,13 @@ public class PotPlayer {
     private boolean currentlyMuted;
     private boolean currentlyBanned;
 
+    private boolean currentlyOnline;
+
     private LanguageType language;
 
     private final Date lastJoined = new Date();
     private String lastJoin;
+    private String firstJoin;
 
     private final SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy HH:mma");
 
@@ -68,15 +72,18 @@ public class PotPlayer {
     public void saveWithoutRemove() {
         Document document = new Document("_id", this.uuid);
 
-        document.put("name", name);
-        document.put("canSeeStaffMessages", canSeeStaffMessages);
-        document.put("canSeeTips", canSeeTips);
-        document.put("canReceiveDms", canReceiveDms);
-        document.put("canSeeGlobalChat", canSeeGlobalChat);
-        document.put("canReceiveDmsSounds", canReceiveDmsSounds);
-        document.put("lastJoined", format.format(new Date()));
-        document.put("rankName", this.rankName);
+        document.put("name", this.name);
+        document.put("uuid", this.uuid);
+        document.put("canSeeStaffMessages", this.canSeeStaffMessages);
+        document.put("canSeeTips", this.canSeeTips);
+        document.put("canReceiveDms", this.canReceiveDms);
+        document.put("canSeeGlobalChat", this.canSeeGlobalChat);
+        document.put("canReceiveDmsSounds", this.canReceiveDmsSounds);
+        document.put("lastJoined", this.format.format(new Date()));
+        document.put("firstJoined", this.firstJoin);
+        document.put("rankName", Profile.getByUuid(this.uuid).getActiveGrant().getRank().getData().getName().toLowerCase());
         document.put("language", this.language.getLanguageName());
+        document.put("currentlyOnline", this.currentlyOnline);
 
         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true)));
     }
@@ -84,15 +91,18 @@ public class PotPlayer {
     public void savePlayerData() {
         Document document = new Document("_id", this.uuid);
 
-        document.put("name", name);
-        document.put("canSeeStaffMessages", canSeeStaffMessages);
-        document.put("canSeeTips", canSeeTips);
-        document.put("canReceiveDms", canReceiveDms);
-        document.put("canSeeGlobalChat", canSeeGlobalChat);
-        document.put("canReceiveDmsSounds", canReceiveDmsSounds);
-        document.put("lastJoined", format.format(new Date()));
-        document.put("rankName", this.rankName);
+        document.put("name", this.name);
+        document.put("uuid", this.uuid);
+        document.put("canSeeStaffMessages", this.canSeeStaffMessages);
+        document.put("canSeeTips", this.canSeeTips);
+        document.put("canReceiveDms", this.canReceiveDms);
+        document.put("canSeeGlobalChat", this.canSeeGlobalChat);
+        document.put("canReceiveDmsSounds", this.canReceiveDmsSounds);
+        document.put("lastJoined", this.format.format(new Date()));
+        document.put("firstJoined", this.firstJoin);
+        document.put("rankName", Profile.getByUuid(this.uuid).getActiveGrant().getRank().getData().getName().toLowerCase());
         document.put("language", this.language.getLanguageName());
+        document.put("currentlyOnline", this.currentlyOnline);
 
         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true)));
 
@@ -114,14 +124,20 @@ public class PotPlayer {
         if (document.getBoolean("canReceiveDms") != null) {
             this.canReceiveDms = document.getBoolean("canReceiveDms");
         }
+        if (document.getBoolean("canSeeBroadcasts") != null) {
+            this.canSeeBroadcasts = document.getBoolean("canSeeBroadcasts");
+        }
         if (document.getBoolean("canSeeGlobalChat") != null) {
             this.canSeeGlobalChat = document.getBoolean("canSeeGlobalChat");
         }
         if (document.getBoolean("canReceiveDmsSounds") != null) {
             this.canReceiveDmsSounds = document.getBoolean("canReceiveDmsSounds");
         }
-        this.rankName = Profile.getByUuid(this.uuid).getActiveGrant().getRank().getData().getName().toLowerCase();
-
+        if (document.getString("firstJoin") != null) {
+            this.firstJoin = document.getString("firstJoin");
+        } else {
+            this.firstJoin = this.format.format(new Date());
+        }
         if (document.getString("language") != null) {
             this.language = LanguageType.getByName(document.getString("language"));
         } else {
@@ -136,6 +152,9 @@ public class PotPlayer {
 
         this.currentlyMuted = this.isMuted();
         this.currentlyBanned = this.isBanned();
+
+        this.currentlyOnline = true;
+        this.saveWithoutRemove();
     }
 
     public boolean isMuted() {

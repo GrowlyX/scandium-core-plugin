@@ -34,8 +34,8 @@ public class SettingsMenu extends AbstractInventoryMenu<CorePlugin> {
                         "&7able to view global",
                         "&7chat?",
                         " ",
-                        " " + (potPlayer.isCanSeeGlobalChat() ? "&8&l■ " : "  ") + "&fEnabled",
-                        " " + (!potPlayer.isCanSeeGlobalChat() ? "&8&l■ " : "  ") + "&fDisabled"
+                        " " + (potPlayer.isCanSeeGlobalChat() ? "&a&l● " : "&8&l● ") + "&fEnabled",
+                        " " + (!potPlayer.isCanSeeGlobalChat() ? "&a&l● " : "&8&l● ") + "&fDisabled"
                 )
                 .create()
         );
@@ -47,8 +47,8 @@ public class SettingsMenu extends AbstractInventoryMenu<CorePlugin> {
                         "&7able to view server",
                         "&7tips?",
                         " ",
-                        " " + (potPlayer.isCanSeeTips() ? "&8&l■ " : "  ") + "&fEnabled",
-                        " " + (!potPlayer.isCanSeeTips() ? "&8&l■ " : "  ") + "&fDisabled"
+                        " " + (potPlayer.isCanSeeTips() ? "&a&l● " : "&8&l● ") + "&fEnabled",
+                        " " + (!potPlayer.isCanSeeTips() ? "&a&l● " : "&8&l● ") + "&fDisabled"
                 )
                 .create()
         );
@@ -60,8 +60,8 @@ public class SettingsMenu extends AbstractInventoryMenu<CorePlugin> {
                         "&7able to receive player",
                         "&7dms?",
                         " ",
-                        " " + (potPlayer.isCanReceiveDms() ? "&8&l■ " : "  ") + "&fEnabled",
-                        " " + (!potPlayer.isCanReceiveDms() ? "&8&l■ " : "  ") + "&fDisabled"
+                        " " + (potPlayer.isCanReceiveDms() ? "&a&l● " : "&8&l● ") + "&fEnabled",
+                        " " + (!potPlayer.isCanReceiveDms() ? "&a&l● " : "&8&l● ") + "&fDisabled"
                 )
                 .create()
         );
@@ -73,8 +73,8 @@ public class SettingsMenu extends AbstractInventoryMenu<CorePlugin> {
                         "&7able to receive dm",
                         "&7sounds?",
                         " ",
-                        " " + (potPlayer.isCanReceiveDmsSounds() ? "&8&l■ " : "  ") + "&fEnabled",
-                        " " + (!potPlayer.isCanReceiveDmsSounds() ? "&8&l■ " : "  ") + "&fDisabled"
+                        " " + (potPlayer.isCanReceiveDmsSounds() ? "&a&l● " : "&8&l● ") + "&fEnabled",
+                        " " + (!potPlayer.isCanReceiveDmsSounds() ? "&a&l● " : "&8&l● ") + "&fDisabled"
                 )
                 .create()
         );
@@ -87,8 +87,22 @@ public class SettingsMenu extends AbstractInventoryMenu<CorePlugin> {
                             "&7able to receive staff",
                             "&7messages?",
                             " ",
-                            " " + (potPlayer.isCanSeeStaffMessages() ? "&8&l■ " : "  ") + "&fEnabled",
-                            " " + (!potPlayer.isCanSeeStaffMessages() ? "&8&l■ " : "  ") + "&fDisabled"
+                            " " + (potPlayer.isCanSeeStaffMessages() ? "&a&l● " : "&8&l● ") + "&fEnabled",
+                            " " + (!potPlayer.isCanSeeStaffMessages() ? "&a&l● " : "&8&l● ") + "&fDisabled"
+                    )
+                    .create()
+            );
+        } else {
+            this.inventory.setItem(6, new InventoryMenuItem(Material.BLAZE_POWDER)
+                    .setDisplayName("&3Global Broadcasts")
+                    .addLore(
+                            "",
+                            "&7Would you like to be",
+                            "&7able to receive global",
+                            "&7broadcasts?",
+                            " ",
+                            " " + (potPlayer.isCanSeeBroadcasts() ? "&a&l● " : "&8&l● ") + "&fEnabled",
+                            " " + (!potPlayer.isCanSeeBroadcasts() ? "&a&l● " : "&8&l● ") + "&fDisabled"
                     )
                     .create()
             );
@@ -128,6 +142,9 @@ public class SettingsMenu extends AbstractInventoryMenu<CorePlugin> {
                 case 6:
                     if (potPlayer.getPlayer().hasPermission("scandium.staff")) {
                         potPlayer.setCanSeeStaffMessages(!potPlayer.isCanSeeStaffMessages());
+                        this.update();
+                    } else {
+                        potPlayer.setCanSeeBroadcasts(!potPlayer.isCanSeeBroadcasts());
                         this.update();
                     }
                     break;

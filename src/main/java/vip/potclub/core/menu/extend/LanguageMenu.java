@@ -21,7 +21,7 @@ public class LanguageMenu extends AbstractInventoryMenu<CorePlugin> {
     private Player player;
 
     public LanguageMenu(Player player) {
-        super("Settings", 9);
+        super("Language", 9);
         this.player = player;
         this.update();
     }
