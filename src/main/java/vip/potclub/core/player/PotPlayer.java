@@ -73,7 +73,7 @@ public class PotPlayer {
         Document document = new Document("_id", this.uuid);
 
         document.put("name", this.name);
-        document.put("uuid", this.uuid);
+        document.put("uuid", this.uuid.toString());
         document.put("canSeeStaffMessages", this.canSeeStaffMessages);
         document.put("canSeeTips", this.canSeeTips);
         document.put("canReceiveDms", this.canReceiveDms);
@@ -92,7 +92,7 @@ public class PotPlayer {
         Document document = new Document("_id", this.uuid);
 
         document.put("name", this.name);
-        document.put("uuid", this.uuid);
+        document.put("uuid", this.uuid.toString());
         document.put("canSeeStaffMessages", this.canSeeStaffMessages);
         document.put("canSeeTips", this.canSeeTips);
         document.put("canReceiveDms", this.canReceiveDms);
@@ -102,7 +102,7 @@ public class PotPlayer {
         document.put("firstJoined", this.firstJoin);
         document.put("rankName", Profile.getByUuid(this.uuid).getActiveGrant().getRank().getData().getName().toLowerCase());
         document.put("language", this.language.getLanguageName());
-        document.put("currentlyOnline", this.currentlyOnline);
+        document.put("currentlyOnline", false);
 
         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true)));
 
