@@ -36,6 +36,7 @@ public class AutoMessageTask extends BukkitRunnable { // Credits: https://github
         defaultMessages.add(prefix + "Join our Discord server to chat with players, get support, and see sneak peeks - " + serverType.getDiscordLink());
         defaultMessages.add(prefix + "Purchase ranks, perks, and more on our shop - " + serverType.getStoreLink());
         defaultMessages.add(prefix + "Configure our systems to your liking by using /settings.");
+        defaultMessages.add(prefix + "Change your network language type using /language.");
         defaultMessages.add(prefix + "Punished? Appeal on our Discord server or purchase to remove your punishment.");
         defaultMessages.add(prefix + "Donators can host events using /event.");
         defaultMessages.add(prefix + "Butterfly clicking may result in a punishment! Use at your own risk.");

@@ -22,6 +22,8 @@ commands:
   unban:
     aliases: [pardon]
   unmute:
+  language:
+    aliases: [lang, setlang, deutsche, italiano, français, english, espanol]
   toggletips:
     aliases: [ttps]
   togglestaffmessages:

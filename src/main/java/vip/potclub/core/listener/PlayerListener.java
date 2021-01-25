@@ -100,12 +100,12 @@ public class PlayerListener implements Listener {
                     event.setCancelled(true);
                     CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.HOST, event.getMessage().replace("@", ""), event.getPlayer())));
                 } else {
-                    Bukkit.getOnlinePlayers().forEach(player1 -> {
+                    Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> Bukkit.getOnlinePlayers().forEach(player1 -> {
                         PotPlayer potPlayer = PotPlayer.getPlayer(player1);
                         if (potPlayer.isCanSeeGlobalChat()) {
                             player1.sendMessage(Color.translate(profile.getActiveGrant().getRank().getData().getPrefix() + player.getName() + " &7" + '»' + " " + (profile.getActiveGrant().getRank().getData().getName().contains("Default") ? "&7" : "&f") + event.getMessage()));
                         }
-                    });
+                    }));
                 }
             } else {
                 if (player.hasPermission("scandium.chat.bypass")) {
@@ -123,12 +123,12 @@ public class PlayerListener implements Listener {
                         event.setCancelled(true);
                         CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.HOST, event.getMessage().replace("@", ""), event.getPlayer())));
                     } else {
-                        Bukkit.getOnlinePlayers().forEach(player1 -> {
+                        Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> Bukkit.getOnlinePlayers().forEach(player1 -> {
                             PotPlayer potPlayer = PotPlayer.getPlayer(player1);
                             if (potPlayer.isCanSeeGlobalChat()) {
                                 player1.sendMessage(Color.translate(profile.getActiveGrant().getRank().getData().getPrefix() + player.getName() + " &7" + '»' + " " + (profile.getActiveGrant().getRank().getData().getName().contains("Default") ? "&7" : "&f") + event.getMessage()));
                             }
-                        });
+                        }));
                     }
                 } else {
                     event.setCancelled(true);
@@ -137,7 +137,23 @@ public class PlayerListener implements Listener {
             }
         } else {
             event.setCancelled(true);
-            player.sendMessage(Color.translate("&cThe chat is currently muted. Please try chatting again later."));
+            switch (PotPlayer.getPlayer(player).getLanguage()) {
+                case ENGLISH:
+                    player.sendMessage(Color.translate("&cThe chat is currently muted. Please try chatting again later."));
+                    break;
+                case FRENCH:
+                    player.sendMessage(Color.translate("&cLe chat est actuellement désactivé. Veuillez réessayer plus tard."));
+                    break;
+                case ITALIAN:
+                    player.sendMessage(Color.translate("&cLa chat è attualmente disattivata. Prova a chattare di nuovo più tardi."));
+                    break;
+                case GERMAN:
+                    player.sendMessage(Color.translate("&cDer Chat ist derzeit stummgeschaltet. Bitte versuchen Sie es später noch einmal."));
+                    break;
+                case SPANISH:
+                    player.sendMessage(Color.translate("&cEl chat está silenciado actualmente. Intenta chatear de nuevo más tarde."));
+                    break;
+            }
         }
 
         player.setDisplayName(player.getName());

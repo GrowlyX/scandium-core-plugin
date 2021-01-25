@@ -10,9 +10,9 @@ public enum ChatChannelType {
     HOST("&2[H] ", "HOST", "scandium.channels.host"),
     DEV("&c[D] ", "DEV", "scandium.channels.dev");
 
-    public final String prefix;
-    public final String name;
-    public final String permission;
+    private final String prefix;
+    private final String name;
+    private final String permission;
 
     ChatChannelType(String prefix, String name, String permission) {
         this.prefix = prefix;

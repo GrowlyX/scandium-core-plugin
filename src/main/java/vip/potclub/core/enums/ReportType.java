@@ -10,7 +10,7 @@ public enum ReportType {
     GAME_SABOTAGE("Game Sabotage"),
     OTHER("Other");
 
-    public final String name;
+    private final String name;
 
     ReportType(String name) {
         this.name = name;

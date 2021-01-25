@@ -10,6 +10,7 @@ import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import vip.potclub.core.CorePlugin;
+import vip.potclub.core.enums.LanguageType;
 import vip.potclub.core.player.punishment.Punishment;
 import vip.potclub.core.player.punishment.PunishmentType;
 
@@ -46,6 +47,8 @@ public class PotPlayer {
     private boolean currentlyMuted;
     private boolean currentlyBanned;
 
+    private LanguageType language;
+
     private final Date lastJoined = new Date();
     private String lastJoin;
 
@@ -73,6 +76,7 @@ public class PotPlayer {
         document.put("canReceiveDmsSounds", canReceiveDmsSounds);
         document.put("lastJoined", format.format(new Date()));
         document.put("rankName", this.rankName);
+        document.put("language", this.language.getLanguageName());
 
         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true)));
     }
@@ -88,6 +92,7 @@ public class PotPlayer {
         document.put("canReceiveDmsSounds", canReceiveDmsSounds);
         document.put("lastJoined", format.format(new Date()));
         document.put("rankName", this.rankName);
+        document.put("language", this.language.getLanguageName());
 
         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true)));
 
@@ -115,8 +120,12 @@ public class PotPlayer {
         if (document.getBoolean("canReceiveDmsSounds") != null) {
             this.canReceiveDmsSounds = document.getBoolean("canReceiveDmsSounds");
         }
-        if (document.getBoolean("rankName") != null) {
-            this.rankName = Profile.getByUuid(this.uuid).getActiveGrant().getRank().getData().getName().toLowerCase();
+        this.rankName = Profile.getByUuid(this.uuid).getActiveGrant().getRank().getData().getName().toLowerCase();
+
+        if (document.getString("language") != null) {
+            this.language = LanguageType.getByName(document.getString("language"));
+        } else {
+            this.language = LanguageType.ENGLISH;
         }
 
         CorePlugin.getInstance().getPunishmentManager().getPunishments().forEach(punishment -> {

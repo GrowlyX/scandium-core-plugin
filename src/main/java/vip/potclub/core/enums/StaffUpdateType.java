@@ -10,7 +10,7 @@ public enum StaffUpdateType {
     FREEZE("&4[F] ", "FREEZE", "scandium.staff"),
     UNFREEZE("&4[F] ", "UNFREEZE", "scandium.staff");
 
-    public final String prefix;
+    private final String prefix;
     public final String name;
     public final String permission;
 

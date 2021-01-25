@@ -14,7 +14,7 @@ public enum RedisPacketType {
     PLAYER_DISCORD_SYNC("PlayerDiscordSync"),
     NETWORK_BROADCAST_UPDATE("NetworkBroadcastUpdate");
 
-    public String packetDataName;
+    private final String packetDataName;
 
     @ConstructorProperties("packetDataName")
     RedisPacketType(String packetDataName) {

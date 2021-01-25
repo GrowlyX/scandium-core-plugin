@@ -21,7 +21,7 @@ public class ClearChatCommand extends BaseCommand {
         if (player.hasPermission("scandium.command.mutechat")) {
             if (args.length == 0) {
                 Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> {
-                    for (int lines = 0; lines < 100; lines++) {
+                    for (int lines = 0; lines < 250; lines++) {
                         Bukkit.broadcastMessage(Color.translate("  "));
                     }
                 });
