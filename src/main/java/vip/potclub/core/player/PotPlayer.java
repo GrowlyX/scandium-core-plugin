@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Setter
 public class PotPlayer {
 
-    private static Map<UUID, PotPlayer> profilePlayers = new HashMap<>();
+    public static Map<UUID, PotPlayer> profilePlayers = new HashMap<>();
 
     private List<Punishment> punishments = new ArrayList<>();
 
@@ -56,8 +56,6 @@ public class PotPlayer {
     private String lastJoin;
     private String firstJoin;
 
-    private final SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy HH:mma");
-
     @ConstructorProperties({"uuid"})
     public PotPlayer(UUID uuid) {
         this.uuid = uuid;
@@ -79,9 +77,9 @@ public class PotPlayer {
         document.put("canReceiveDms", this.canReceiveDms);
         document.put("canSeeGlobalChat", this.canSeeGlobalChat);
         document.put("canReceiveDmsSounds", this.canReceiveDmsSounds);
-        document.put("lastJoined", this.format.format(new Date()));
+        document.put("canSeeBroadcasts", this.canSeeBroadcasts);
+        document.put("lastJoined", CorePlugin.FORMAT.format(new Date()));
         document.put("firstJoined", this.firstJoin);
-        document.put("rankName", Profile.getByUuid(this.uuid).getActiveGrant().getRank().getData().getName().toLowerCase());
         document.put("language", this.language.getLanguageName());
         document.put("currentlyOnline", this.currentlyOnline);
 
@@ -98,7 +96,8 @@ public class PotPlayer {
         document.put("canReceiveDms", this.canReceiveDms);
         document.put("canSeeGlobalChat", this.canSeeGlobalChat);
         document.put("canReceiveDmsSounds", this.canReceiveDmsSounds);
-        document.put("lastJoined", this.format.format(new Date()));
+        document.put("canSeeBroadcasts", this.canSeeBroadcasts);
+        document.put("lastJoined", CorePlugin.FORMAT.format(new Date()));
         document.put("firstJoined", this.firstJoin);
         document.put("rankName", Profile.getByUuid(this.uuid).getActiveGrant().getRank().getData().getName().toLowerCase());
         document.put("language", this.language.getLanguageName());
@@ -133,10 +132,10 @@ public class PotPlayer {
         if (document.getBoolean("canReceiveDmsSounds") != null) {
             this.canReceiveDmsSounds = document.getBoolean("canReceiveDmsSounds");
         }
-        if (document.getString("firstJoin") != null) {
-            this.firstJoin = document.getString("firstJoin");
+        if (document.getString("firstJoin") == null) {
+            this.firstJoin = CorePlugin.FORMAT.format(new Date());
         } else {
-            this.firstJoin = this.format.format(new Date());
+            this.firstJoin = document.getString("firstJoin");
         }
         if (document.getString("language") != null) {
             this.language = LanguageType.getByName(document.getString("language"));

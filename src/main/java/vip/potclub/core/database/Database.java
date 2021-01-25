@@ -18,8 +18,8 @@ public class Database {
 
     public Database() {
         this.client = new MongoClient(new MongoClientURI(CorePlugin.getInstance().getConfig().getString("mongodb.url")));
-        this.database = client.getDatabase("Scandium");
-        this.playerCollection = this.database.getCollection("profiles");
+        this.database = client.getDatabase("PotClub_DB");
+        this.playerCollection = this.database.getCollection("core_profiles");
         this.punishmentCollection = this.database.getCollection("punishments");
     }
 }

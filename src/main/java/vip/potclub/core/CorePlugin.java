@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
+import vip.potclub.Practice;
 import vip.potclub.core.command.extend.CoreCommand;
 import vip.potclub.core.command.extend.essential.*;
 import vip.potclub.core.database.Database;
@@ -13,12 +15,16 @@ import vip.potclub.core.listener.PlayerListener;
 import vip.potclub.core.manager.PlayerManager;
 import vip.potclub.core.manager.PunishmentManager;
 import vip.potclub.core.manager.ServerManager;
+import vip.potclub.core.player.PotPlayer;
 import vip.potclub.core.redis.RedisClient;
 import vip.potclub.core.task.AutoMessageTask;
 import vip.potclub.core.task.PunishExpireTask;
 import vip.potclub.core.util.Color;
+import vip.potclub.profile.Profile;
 
+import java.text.SimpleDateFormat;
 import java.util.Random;
+import java.util.TimeZone;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -26,6 +32,7 @@ import java.util.concurrent.Executors;
 @Setter
 public final class CorePlugin extends JavaPlugin {
 
+    public static SimpleDateFormat FORMAT;
     public static Random RANDOM;
     public static Gson GSON;
     public static GsonBuilder GSONBUILDER;
@@ -52,6 +59,9 @@ public final class CorePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+
+        FORMAT = new SimpleDateFormat("MM/dd/yyyy HH:mma");
+        FORMAT.setTimeZone(TimeZone.getTimeZone("EST"));
 
         RANDOM  = new Random();
         GSONBUILDER = new GsonBuilder();
@@ -120,6 +130,12 @@ public final class CorePlugin extends JavaPlugin {
 
         new AutoMessageTask();
         new PunishExpireTask();
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                PotPlayer.profilePlayers.forEach((uuid, potPlayer) -> potPlayer.saveWithoutRemove());
+            }
+        }.runTaskTimerAsynchronously(Practice.getInstance(), 36000L, 36000L);
     }
 
     @Override
