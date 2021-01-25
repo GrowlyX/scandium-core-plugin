@@ -1,2 +1,2 @@
-# Core
-Growly's Core
+# Scandium
+A Network Core.
