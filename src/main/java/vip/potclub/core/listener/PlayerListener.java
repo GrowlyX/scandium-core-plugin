@@ -32,8 +32,6 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onServerListPing(ServerListPingEvent event) {
-
-
         if (CorePlugin.getInstance().getConfig().getBoolean("whitelist")) {
             event.setMotd(Color.translate("&d&lPotClub &7&l\u239c &fEU\n&cThe server is currently in maintenance."));
         } else {
