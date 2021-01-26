@@ -44,13 +44,15 @@ public class PotPlayer {
 
     private boolean canReport = true;
     private boolean canRequest = true;
+    private boolean isVanished = false;
 
     private boolean currentlyMuted;
     private boolean currentlyBanned;
-
     private boolean currentlyOnline;
 
     private LanguageType language;
+
+    private long chatCooldown;
 
     private final Date lastJoined = new Date();
     private String lastJoin;

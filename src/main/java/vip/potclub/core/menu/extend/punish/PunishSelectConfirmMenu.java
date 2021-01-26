@@ -76,7 +76,7 @@ public class PunishSelectConfirmMenu extends AbstractInventoryMenu<CorePlugin> {
             event.setCancelled(true);
             if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR) return;
             if (event.getRawSlot() == 14) {
-                Punishment punishment = new Punishment(this.punishmentType, this.player.getUniqueId(), this.target.getUniqueId(), this.player.getName(), this.reason, new Date(System.currentTimeMillis()), this.punishmentDuration, this.permanent);
+                Punishment punishment = new Punishment(this.punishmentType, this.player.getUniqueId(), this.target.getUniqueId(), this.player.getName(), this.reason, new Date(System.currentTimeMillis()), this.punishmentDuration, this.permanent, new Date());
                 punishment.savePunishment();
                 this.player.sendMessage(Color.translate("&aPunished the player '" + this.target.getName() + "' with the ID '" + punishment.getId() + "'."));
                 this.player.closeInventory();

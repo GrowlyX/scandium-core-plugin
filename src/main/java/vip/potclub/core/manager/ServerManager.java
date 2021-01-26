@@ -12,6 +12,7 @@ public class ServerManager {
     private ServerType network;
 
     private boolean chatEnabled = true;
+    private long chatSlow;
 
     public ServerManager() {
         setupServerType();

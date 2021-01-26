@@ -1,7 +1,9 @@
 package vip.potclub.core.listener;
 
 import com.solexgames.perms.grant.Grant;
+import com.solexgames.perms.grant.procedure.GrantProcedure;
 import com.solexgames.perms.profile.Profile;
+import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -140,7 +142,6 @@ public class PlayerListener implements Listener {
         Player player = event.getPlayer();
         Profile profile = Profile.getByUuid(player.getUniqueId());
 
-
         if (CorePlugin.getInstance().getServerManager().isChatEnabled()) {
             if (!PotPlayer.getPlayer(player).isCurrentlyMuted()) {
                 event.setCancelled(true);
@@ -157,15 +158,37 @@ public class PlayerListener implements Listener {
                     event.setCancelled(true);
                     CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.HOST, event.getMessage().replace("@", ""), event.getPlayer())));
                 } else {
-                    Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> Bukkit.getOnlinePlayers().forEach(player1 -> {
-                        PotPlayer potPlayer = PotPlayer.getPlayer(player1);
-                        if (potPlayer.isCanSeeGlobalChat()) {
-                            player1.sendMessage(Color.translate(profile.getActiveGrant().getRank().getData().getPrefix() + player.getName() + " &7" + '»' + " " + (profile.getActiveGrant().getRank().getData().getName().contains("Default") ? "&7" : "&f") + event.getMessage()));
+                    long slowChat = CorePlugin.getInstance().getServerManager().getChatSlow();
+                    if ((System.currentTimeMillis() < PotPlayer.getPlayer(player).getChatCooldown())) {
+                        if (player.hasPermission("scandium.chat.cooldown.bypass")) {
+                            Bukkit.getOnlinePlayers().forEach(player1 -> {
+                                PotPlayer potPlayer = PotPlayer.getPlayer(player1);
+                                if (potPlayer.isCanSeeGlobalChat()) {
+                                    player1.sendMessage(Color.translate(profile.getActiveGrant().getRank().getData().getPrefix() + player.getName() + " &7" + '»' + " " + (profile.getActiveGrant().getRank().getData().getName().contains("Default") ? "&7" : "&f") + event.getMessage()));
+                                }
+                            });
+                            PotPlayer.getPlayer(player).setChatCooldown(System.currentTimeMillis() + (slowChat > 0L ? slowChat : 3000L));
+                        } else {
+                            player.sendMessage(slowChat > 0L ? Color.translate(PunishmentStrings.SLOW_CHAT.replace("<amount>", DurationFormatUtils.formatDurationWords(slowChat, true, true))) : Color.translate(PunishmentStrings.COOLDOWN));
+                            event.setCancelled(true);
                         }
-                    }));
+                    } else {
+                        Bukkit.getOnlinePlayers().forEach(player1 -> {
+                            PotPlayer potPlayer = PotPlayer.getPlayer(player1);
+                            if (potPlayer.isCanSeeGlobalChat()) {
+                                player1.sendMessage(Color.translate(profile.getActiveGrant().getRank().getData().getPrefix() + player.getName() + " &7" + '»' + " " + (profile.getActiveGrant().getRank().getData().getName().contains("Default") ? "&7" : "&f") + event.getMessage()));
+                            }
+                        });
+                        PotPlayer.getPlayer(player).setChatCooldown(System.currentTimeMillis() + (slowChat > 0L ? slowChat : 3000L));
+                    }
                 }
             } else {
-                if (player.hasPermission("scandium.chat.bypass")) {
+                event.setCancelled(true);
+                event.getPlayer().sendMessage(Color.translate(PunishmentStrings.MUTE_MESSAGE));
+            }
+        } else {
+            if (player.hasPermission("scandium.chat.bypass")) {
+                if (!PotPlayer.getPlayer(player).isCurrentlyMuted()) {
                     event.setCancelled(true);
                     if (event.getMessage().startsWith("!") && event.getPlayer().hasPermission(ChatChannelType.STAFF.getPermission())) {
                         event.setCancelled(true);
@@ -180,36 +203,53 @@ public class PlayerListener implements Listener {
                         event.setCancelled(true);
                         CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.HOST, event.getMessage().replace("@", ""), event.getPlayer())));
                     } else {
-                        Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> Bukkit.getOnlinePlayers().forEach(player1 -> {
-                            PotPlayer potPlayer = PotPlayer.getPlayer(player1);
-                            if (potPlayer.isCanSeeGlobalChat()) {
-                                player1.sendMessage(Color.translate(profile.getActiveGrant().getRank().getData().getPrefix() + player.getName() + " &7" + '»' + " " + (profile.getActiveGrant().getRank().getData().getName().contains("Default") ? "&7" : "&f") + event.getMessage()));
+                        long slowChat = CorePlugin.getInstance().getServerManager().getChatSlow();
+                        if ((System.currentTimeMillis() < PotPlayer.getPlayer(player).getChatCooldown())) {
+                            if (player.hasPermission("scandium.chat.cooldown.bypass")) {
+                                Bukkit.getOnlinePlayers().forEach(player1 -> {
+                                    PotPlayer potPlayer = PotPlayer.getPlayer(player1);
+                                    if (potPlayer.isCanSeeGlobalChat()) {
+                                        player1.sendMessage(Color.translate(profile.getActiveGrant().getRank().getData().getPrefix() + player.getName() + " &7" + '»' + " " + (profile.getActiveGrant().getRank().getData().getName().contains("Default") ? "&7" : "&f") + event.getMessage()));
+                                    }
+                                });
+                                PotPlayer.getPlayer(player).setChatCooldown(System.currentTimeMillis() + (slowChat > 0L ? slowChat : 3000L));
+                            } else {
+                                player.sendMessage(slowChat > 0L ? Color.translate(PunishmentStrings.SLOW_CHAT.replace("<amount>", DurationFormatUtils.formatDurationWords(slowChat, true, true))) : Color.translate(PunishmentStrings.COOLDOWN));
+                                event.setCancelled(true);
                             }
-                        }));
+                        } else {
+                            Bukkit.getOnlinePlayers().forEach(player1 -> {
+                                PotPlayer potPlayer = PotPlayer.getPlayer(player1);
+                                if (potPlayer.isCanSeeGlobalChat()) {
+                                    player1.sendMessage(Color.translate(profile.getActiveGrant().getRank().getData().getPrefix() + player.getName() + " &7" + '»' + " " + (profile.getActiveGrant().getRank().getData().getName().contains("Default") ? "&7" : "&f") + event.getMessage()));
+                                }
+                            });
+                            PotPlayer.getPlayer(player).setChatCooldown(System.currentTimeMillis() + (slowChat > 0L ? slowChat : 3000L));
+                        }
                     }
                 } else {
                     event.setCancelled(true);
                     event.getPlayer().sendMessage(Color.translate(PunishmentStrings.MUTE_MESSAGE));
                 }
-            }
-        } else {
-            event.setCancelled(true);
-            switch (PotPlayer.getPlayer(player).getLanguage()) {
-                case ENGLISH:
-                    player.sendMessage(Color.translate("&cThe chat is currently muted. Please try chatting again later."));
-                    break;
-                case FRENCH:
-                    player.sendMessage(Color.translate("&cLe chat est actuellement désactivé. Veuillez réessayer plus tard."));
-                    break;
-                case ITALIAN:
-                    player.sendMessage(Color.translate("&cLa chat è attualmente disattivata. Prova a chattare di nuovo più tardi."));
-                    break;
-                case GERMAN:
-                    player.sendMessage(Color.translate("&cDer Chat ist derzeit stummgeschaltet. Bitte versuchen Sie es später noch einmal."));
-                    break;
-                case SPANISH:
-                    player.sendMessage(Color.translate("&cEl chat está silenciado actualmente. Intenta chatear de nuevo más tarde."));
-                    break;
+            } else {
+                event.setCancelled(true);
+                switch (PotPlayer.getPlayer(player).getLanguage()) {
+                    case ENGLISH:
+                        player.sendMessage(Color.translate("&cThe chat is currently muted. Please try chatting again later."));
+                        break;
+                    case FRENCH:
+                        player.sendMessage(Color.translate("&cLe chat est actuellement désactivé. Veuillez réessayer plus tard."));
+                        break;
+                    case ITALIAN:
+                        player.sendMessage(Color.translate("&cLa chat è attualmente disattivata. Prova a chattare di nuovo più tardi."));
+                        break;
+                    case GERMAN:
+                        player.sendMessage(Color.translate("&cDer Chat ist derzeit stummgeschaltet. Bitte versuchen Sie es später noch einmal."));
+                        break;
+                    case SPANISH:
+                        player.sendMessage(Color.translate("&cEl chat está silenciado actualmente. Intenta chatear de nuevo más tarde."));
+                        break;
+                }
             }
         }
 
@@ -231,6 +271,7 @@ public class PlayerListener implements Listener {
         Profile profile = Profile.getByUuid(event.getPlayer().getUniqueId());
         Profile.getProfiles().remove(profile);
         profile.save();
+
         PotPlayer.getPlayer(event.getPlayer().getUniqueId()).savePlayerData();
     }
 }

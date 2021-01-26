@@ -7,7 +7,6 @@ import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import vip.potclub.Practice;
 import vip.potclub.core.command.extend.CoreCommand;
 import vip.potclub.core.command.extend.essential.*;
 import vip.potclub.core.command.extend.essential.web.WebAnnouncementCommand;
@@ -83,8 +82,9 @@ public final class CorePlugin extends JavaPlugin {
         this.redisClient = new RedisClient();
 
         this.serverManager = new ServerManager();
-        this.playerManager = new PlayerManager();
         this.punishmentManager = new PunishmentManager();
+        this.playerManager = new PlayerManager();
+
 
         this.setupExtra();
     }
@@ -122,6 +122,7 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("message").setExecutor(new MessageCommand());
         this.getCommand("reply").setExecutor(new ReplyCommand());
         this.getCommand("clearchat").setExecutor(new ClearChatCommand());
+        this.getCommand("slowchat").setExecutor(new SlowChatCommand());
         this.getCommand("mutechat").setExecutor(new MuteChatCommand());
         this.getCommand("language").setExecutor(new LanguageCommand());
         this.getCommand("whitelist").setExecutor(new WhitelistCommand());
@@ -142,7 +143,7 @@ public final class CorePlugin extends JavaPlugin {
             public void run() {
                 PotPlayer.profilePlayers.forEach((uuid, potPlayer) -> potPlayer.saveWithoutRemove());
             }
-        }.runTaskTimerAsynchronously(Practice.getInstance(), 36000L, 36000L);
+        }.runTaskTimerAsynchronously(CorePlugin.getInstance(), 36000L, 36000L);
     }
 
     @Override

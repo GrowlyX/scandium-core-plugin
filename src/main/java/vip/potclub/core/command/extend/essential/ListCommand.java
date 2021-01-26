@@ -1,45 +1,56 @@
 package vip.potclub.core.command.extend.essential;
 
+import com.solexgames.perms.profile.Profile;
 import com.solexgames.perms.rank.Rank;
-import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import vip.potclub.core.CorePlugin;
+import org.bukkit.entity.Player;
 import vip.potclub.core.command.BaseCommand;
-import vip.potclub.core.list.PlayerList;
 import vip.potclub.core.player.PotPlayer;
 import vip.potclub.core.util.Color;
+import vip.potclub.util.external.chat.ChatComponentBuilder;
 
-import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class ListCommand extends BaseCommand {
 
+    private final Comparator<Rank> RANK_COMPARATOR = Comparator.comparingInt(Rank::getWeight).reversed();
+    private final Comparator<Profile> PLAYER_DATA_COMPARATOR = Comparator.comparingInt(profile -> profile.getActiveGrant().getRank().getData().getWeight());
+
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String s, String[] strings) {
+    public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
+        Player player = (Player) sender;
 
-        StringBuilder builder = new StringBuilder();
-        Rank[] ranks = Arrays.copyOf(Rank.getRanks().toArray(new Rank[0]), Rank.getRanks().size());
-        ArrayUtils.reverse(ranks);
-        Arrays.stream(ranks).forEach(rank
-                -> builder.append(Color.translate(rank.getData().getColorPrefix())).append(rank.getData().getName()).append(ChatColor.WHITE).append(", "));
+        if (args.length == 0) {
+            List<Rank> ranks = Rank.getRanks().stream().sorted(RANK_COMPARATOR).collect(Collectors.toList());
 
-        builder.setCharAt(builder.length() - 2, '.');
-        builder.append("\n");
+            StringBuilder rankBuilder = new StringBuilder();
+            StringBuilder playerBuilder = new StringBuilder();
 
-        List<String> players = new PlayerList(PotPlayer.profilePlayers
-                .keySet().stream().filter(uuid -> Bukkit.getPlayer(uuid) != null)
-                .map(Bukkit::getPlayer).collect(Collectors.toList()))
-                .visibleRankSorted().asColoredNames();
+            ranks.forEach(rankData -> {
+                rankBuilder.append(Color.translate(rankData.getData().getColorPrefix()));
+                rankBuilder.append(rankData.getData().getName());
+                rankBuilder.append(Color.translate("&7, "));
+            });
+            if (rankBuilder.length() > 0) {
+                rankBuilder.setLength(rankBuilder.length() - 2);
+                rankBuilder.append(Color.translate("&7."));
+            }
 
-        builder.append(ChatColor.RESET).append("(").append(Bukkit.getOnlinePlayers().size()).append("/")
-                .append(CorePlugin.getInstance().getServer().getMaxPlayers()).append("): ")
-                .append(players.toString().replace("[", "").replace("]", ""));
+            Bukkit.getOnlinePlayers().stream().map(online ->
+                    Profile.getByUuid(online.getUniqueId()))
+                    .filter(profile -> !PotPlayer.getPlayer(profile.getUuid()).isVanished())
+                    .sorted(PLAYER_DATA_COMPARATOR.reversed()).limit(100)
+                    .forEach(playerData -> playerBuilder.append(Color.translate(
+                            playerData.getActiveGrant().getRank().getData().getColorPrefix() + playerData.getPlayer().getName() + "&7, ")
+                    ));
 
-        sender.sendMessage(builder.toString());
+            player.sendMessage(rankBuilder.toString());
+            player.sendMessage(Color.translate("&f(" + Bukkit.getOnlinePlayers().size() + "/" + Bukkit.getMaxPlayers() + ") " + playerBuilder.toString()));
+        }
         return false;
     }
 }

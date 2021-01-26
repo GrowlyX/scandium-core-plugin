@@ -23,11 +23,15 @@ public class PunishmentManager {
     private final ArrayList<Punishment> punishments = new ArrayList<>();
 
     public PunishmentManager() {
-        CorePlugin.getInstance().getMongoThread().execute(() -> {
+        for (Document punishmentDocument : CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().find()) {
+            this.punishments.add(CorePlugin.GSON.fromJson(punishmentDocument.toJson(), Punishment.class));
+        }
+
+        /*CorePlugin.getInstance().getMongoThread().execute(() -> {
             for (Document punishmentDocument : CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().find()) {
                 this.punishments.add(CorePlugin.GSON.fromJson(punishmentDocument.toJson(), Punishment.class));
             }
-        });
+        });*/
 
         CorePlugin.getInstance().getLogger().info("[Punishments] Loaded all punishments.");
     }

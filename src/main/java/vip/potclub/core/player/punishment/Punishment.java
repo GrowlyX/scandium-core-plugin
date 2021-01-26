@@ -30,6 +30,7 @@ public class Punishment {
 
     private Date expirationDate;
     private Date issuingDate;
+    private Date createdAt;
 
     private String issuerName;
     private String reason;
@@ -41,9 +42,9 @@ public class Punishment {
     private boolean removed = false;
 
     private long punishmentDuration;
-    private long createdAt = System.currentTimeMillis();
 
-    public Punishment(PunishmentType punishmentType, UUID issuer, UUID target, String issuerName, String reason, Date issuingDate, long punishmentDuration, boolean permanent) {
+
+    public Punishment(PunishmentType punishmentType, UUID issuer, UUID target, String issuerName, String reason, Date issuingDate, long punishmentDuration, boolean permanent, Date createdAt) {
         this.punishmentType = punishmentType;
         this.issuer = issuer;
         this.issuerName = issuerName;
@@ -52,6 +53,7 @@ public class Punishment {
         this.issuingDate = issuingDate;
         this.punishmentDuration = punishmentDuration;
         this.permanent = permanent;
+        this.createdAt = createdAt;
 
         this.id = UUID.randomUUID();
 
@@ -71,7 +73,7 @@ public class Punishment {
     }
 
     public String getExpirationString() {
-        return this.isPermanent() ? "Never" : DATE_FORMAT.format(new Date(this.createdAt + this.punishmentDuration));
+        return this.isPermanent() ? "Never" : DATE_FORMAT.format(new Date(this.createdAt.getTime() + this.punishmentDuration));
     }
 
     public boolean isActive() {
@@ -80,24 +82,17 @@ public class Punishment {
         } else if (this.isPermanent()) {
             return true;
         } else {
-            return System.currentTimeMillis() < this.createdAt + this.punishmentDuration;
+            return System.currentTimeMillis() < this.createdAt.getTime() + this.punishmentDuration;
         }
     }
 
     public void savePunishment() {
-        Document document = Document.parse(this.toJson());
-        CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().replaceOne(Filters.eq("_id", this.id), document, new ReplaceOptions().upsert(true)));
+        CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().replaceOne(Filters.eq("_id", this.id), Document.parse(CorePlugin.GSON.toJson(this)), new ReplaceOptions().upsert(true)));
     }
 
     public void saveMainThread() {
-        Document document = Document.parse(this.toJson());
-        CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().replaceOne(Filters.eq("_id", this.id), document, new ReplaceOptions().upsert(true));
+        CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().replaceOne(Filters.eq("_id", this.id), Document.parse(CorePlugin.GSON.toJson(this)), new ReplaceOptions().upsert(true));
     }
-
-    public String toJson() {
-        return CorePlugin.GSON.toJson(this);
-    }
-
 
     public static ArrayList<Punishment> getAllPunishments() {
         return CorePlugin.getInstance().getPunishmentManager().getPunishments();
