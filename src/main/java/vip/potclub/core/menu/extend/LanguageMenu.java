@@ -27,7 +27,7 @@ public class LanguageMenu extends AbstractInventoryMenu<CorePlugin> {
     }
 
     private void update() {
-        this.inventory.setItem(2, new InventoryMenuItem(Material.WOOL, 4)
+        this.inventory.setItem(2, new InventoryMenuItem(Material.INK_SACK, 11)
                 .setDisplayName("&eEnglish")
                 .addLore(
                         "",
@@ -36,7 +36,7 @@ public class LanguageMenu extends AbstractInventoryMenu<CorePlugin> {
                 )
                 .create()
         );
-        this.inventory.setItem(3, new InventoryMenuItem(Material.WOOL, 1)
+        this.inventory.setItem(3, new InventoryMenuItem(Material.INK_SACK, 14)
                 .setDisplayName("&6Español")
                 .addLore(
                         "",
@@ -45,7 +45,7 @@ public class LanguageMenu extends AbstractInventoryMenu<CorePlugin> {
                 )
                 .create()
         );
-        this.inventory.setItem(4, new InventoryMenuItem(Material.WOOL, 3)
+        this.inventory.setItem(4, new InventoryMenuItem(Material.INK_SACK, 12)
                 .setDisplayName("&bFrançais")
                 .addLore(
                         "",
@@ -54,7 +54,7 @@ public class LanguageMenu extends AbstractInventoryMenu<CorePlugin> {
                 )
                 .create()
         );
-        this.inventory.setItem(5, new InventoryMenuItem(Material.WOOL, 5)
+        this.inventory.setItem(5, new InventoryMenuItem(Material.INK_SACK, 10)
                 .setDisplayName("&aItaliano")
                 .addLore(
                         "",
@@ -63,7 +63,7 @@ public class LanguageMenu extends AbstractInventoryMenu<CorePlugin> {
                 )
                 .create()
         );
-        this.inventory.setItem(6, new InventoryMenuItem(Material.WOOL, 14)
+        this.inventory.setItem(6, new InventoryMenuItem(Material.INK_SACK, 1)
                 .setDisplayName("&cDeutsch")
                 .addLore(
                         "",

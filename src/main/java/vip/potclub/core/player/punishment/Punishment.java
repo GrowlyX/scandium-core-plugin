@@ -32,8 +32,8 @@ public class Punishment {
 
     private String issuerName;
     private String reason;
-    private String removalReason = "N/A";
-    private String removerName = "N/A";
+    private String removalReason = null;
+    private String removerName = null;
 
     private boolean active = true;
     private boolean permanent;
@@ -41,7 +41,6 @@ public class Punishment {
 
     private long punishmentDuration;
     private long createdAt = System.currentTimeMillis();
-    private long removedAt;
 
     public Punishment(PunishmentType punishmentType, UUID issuer, UUID target, String issuerName, String reason, Date issuingDate, long punishmentDuration, boolean permanent) {
         this.punishmentType = punishmentType;
@@ -72,10 +71,6 @@ public class Punishment {
 
     public String getExpirationString() {
         return this.isPermanent() ? "Never" : DATE_FORMAT.format(new Date(this.createdAt + this.punishmentDuration));
-    }
-
-    public String getRemovalTimeString() {
-        return DATE_FORMAT.format(new Date(this.removedAt));
     }
 
     public boolean isActive() {
