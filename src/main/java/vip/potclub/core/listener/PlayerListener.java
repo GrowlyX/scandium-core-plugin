@@ -12,8 +12,10 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.server.ServerListPingEvent;
 import vip.potclub.core.CorePlugin;
 import vip.potclub.core.enums.ChatChannelType;
 import vip.potclub.core.menu.IMenu;
@@ -27,6 +29,35 @@ import vip.potclub.core.util.RedisUtil;
 import java.util.ArrayList;
 
 public class PlayerListener implements Listener {
+
+    @EventHandler
+    public void onServerListPing(ServerListPingEvent event) {
+        if (CorePlugin.getInstance().getConfig().getBoolean("whitelist")) {
+            event.setMotd(Color.translate("&d&lPotClub &7&l\u239c &fEU\n&cThe server is currently in maintenance."));
+        } else {
+            int boundOfThree = CorePlugin.RANDOM.nextInt(3);
+            if (boundOfThree == 1) {
+                event.setMotd(Color.translate("&d&lPotClub &7&l\u239c &fEU\n&7Join our discord via https://discord.gg/D5svAj23R4/!"));
+            } else if (boundOfThree == 2) {
+                event.setMotd(Color.translate("&d&lPotClub &7&l\u239c &fEU\n&7Follow our twitter for giveaways and more! @PotClubVIP"));
+            } else {
+                event.setMotd(Color.translate("&d&lPotClub &7&l\u239c &fEU\n&7We have a new website! Check it out at https://potclub.vip/!"));
+            }
+        }
+    }
+
+    @EventHandler
+    public void onConnect(AsyncPlayerPreLoginEvent event) {
+        if (CorePlugin.getInstance().getConfig().getBoolean("whitelist")) {
+            if (!CorePlugin.getInstance().getConfig().getStringList("whitelisted").contains(event.getName())) {
+                event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.translateAlternateColorCodes('&', CorePlugin.getInstance().getConfig().getString("whitelisted-msg").replace("%NL%", "\n")));
+            } else {
+                event.allow();
+            }
+        } else {
+            event.allow();
+        }
+    }
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {

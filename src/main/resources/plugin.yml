@@ -38,6 +38,8 @@ commands:
     aliases: [r]
   clearchat:
     aliases: [cc]
+  whitelist:
+    aliases: [wl, maintenance]
   mutechat:
     aliases: [mc]
   tppos:

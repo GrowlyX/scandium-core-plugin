@@ -99,7 +99,7 @@ public class PotPlayer {
         document.put("canSeeBroadcasts", this.canSeeBroadcasts);
         document.put("lastJoined", CorePlugin.FORMAT.format(new Date()));
         document.put("firstJoined", this.firstJoin);
-        document.put("rankName", Profile.getByUuid(this.uuid).getActiveGrant().getRank().getData().getName().toLowerCase());
+        document.put("rankName", Profile.getByUuid(this.uuid).getActiveGrant().getRank().getData().getName());
         document.put("language", this.language.getLanguageName());
         document.put("currentlyOnline", false);
 
@@ -132,10 +132,10 @@ public class PotPlayer {
         if (document.getBoolean("canReceiveDmsSounds") != null) {
             this.canReceiveDmsSounds = document.getBoolean("canReceiveDmsSounds");
         }
-        if (document.getString("firstJoin") == null) {
+        if (document.getString("firstJoined") == null) {
             this.firstJoin = CorePlugin.FORMAT.format(new Date());
         } else {
-            this.firstJoin = document.getString("firstJoin");
+            this.firstJoin = document.getString("firstJoined");
         }
         if (document.getString("language") != null) {
             this.language = LanguageType.getByName(document.getString("language"));
