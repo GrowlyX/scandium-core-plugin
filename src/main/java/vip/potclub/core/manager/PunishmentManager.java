@@ -33,7 +33,6 @@ public class PunishmentManager {
     }
 
     public void savePunishments() {
-        for (Document document : CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().find()) CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().deleteOne(document));
         this.punishments.forEach(Punishment::savePunishment);
     }
 
@@ -43,7 +42,7 @@ public class PunishmentManager {
             Bukkit.getOnlinePlayers().forEach(player1 -> {
                 if (player1.hasPermission("scandium.staff")) {
                     player1.sendMessage(Color.translate(
-                            "&7[S] " + target.getDisplayName() + " &awas " + (punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName() + " by &4" + (player != null ? player.getDisplayName() : "&4CONSOLE") + "&a."
+                            "&7[Silent] " + target.getDisplayName() + " &awas " + (punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName() + " by &4" + (player != null ? player.getDisplayName() : "&4CONSOLE") + "&a."
                     ));
                 }
             });

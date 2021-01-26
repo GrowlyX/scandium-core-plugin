@@ -15,11 +15,13 @@ public class Database {
     private final MongoDatabase database;
     private final MongoCollection<Document> playerCollection;
     private final MongoCollection<Document> punishmentCollection;
+    private final MongoCollection<Document> webCollection;
 
     public Database() {
         this.client = new MongoClient(new MongoClientURI(CorePlugin.getInstance().getConfig().getString("mongodb.url")));
         this.database = client.getDatabase("SGSoftware");
         this.playerCollection = this.database.getCollection("coreprofiles");
         this.punishmentCollection = this.database.getCollection("punishments");
+        this.webCollection = this.database.getCollection("website");
     }
 }

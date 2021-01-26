@@ -53,6 +53,7 @@ public class PunishHistoryViewMenu extends AbstractInventoryMenu<CorePlugin> {
                                 "&7Target: &b" + network.getMainColor() +  targetOfflinePlayer.getName(),
                                 "&7Reason: &b" + network.getMainColor() +  punishment.getReason(),
                                 "&7Type: &b" + network.getMainColor() +  punishment.getPunishmentType().getName(),
+                                "&7Active: &b" + network.getMainColor() +  (punishment.isActive() ? "Yes" : "No"),
                                 "&7Duration: &b" + network.getMainColor() +  (punishment.isPermanent() ? "Permanent" : DurationFormatUtils.formatDurationWords(punishment.getPunishmentDuration(), true, true))
                         )
                         .create());

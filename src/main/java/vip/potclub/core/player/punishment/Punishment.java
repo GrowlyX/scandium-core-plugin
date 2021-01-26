@@ -18,6 +18,7 @@ import java.util.UUID;
 @Setter
 public class Punishment {
 
+    @Getter
     public static final DateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
     private PunishmentType punishmentType;
@@ -84,7 +85,7 @@ public class Punishment {
     }
 
     public void savePunishment() {
-        Document document = Document.parse(toJson());
+        Document document = Document.parse(this.toJson());
         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().replaceOne(Filters.eq("_id", this.id), document, new ReplaceOptions().upsert(true)));
     }
 

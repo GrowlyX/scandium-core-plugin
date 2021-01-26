@@ -10,6 +10,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import vip.potclub.Practice;
 import vip.potclub.core.command.extend.CoreCommand;
 import vip.potclub.core.command.extend.essential.*;
+import vip.potclub.core.command.extend.essential.web.WebAnnouncementCommand;
+import vip.potclub.core.command.extend.essential.web.WebAnnouncementDeleteCommand;
 import vip.potclub.core.database.Database;
 import vip.potclub.core.listener.PlayerListener;
 import vip.potclub.core.manager.PlayerManager;
@@ -20,7 +22,6 @@ import vip.potclub.core.redis.RedisClient;
 import vip.potclub.core.task.AutoMessageTask;
 import vip.potclub.core.task.PunishExpireTask;
 import vip.potclub.core.util.Color;
-import vip.potclub.profile.Profile;
 
 import java.text.SimpleDateFormat;
 import java.util.Random;
@@ -123,6 +124,10 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("mutechat").setExecutor(new MuteChatCommand());
         this.getCommand("language").setExecutor(new LanguageCommand());
         this.getCommand("whitelist").setExecutor(new WhitelistCommand());
+
+        // Website Related Commands
+        this.getCommand("webannouncementdelete").setExecutor(new WebAnnouncementDeleteCommand());
+        this.getCommand("webannouncement").setExecutor(new WebAnnouncementCommand());
 
         this.getCommand("toggletips").setExecutor(new ToggleTipsCommand());
         this.getCommand("togglestaffmessages").setExecutor(new ToggleStaffMessagesCommand());

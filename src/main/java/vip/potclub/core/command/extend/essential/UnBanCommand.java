@@ -7,6 +7,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import vip.potclub.core.command.BaseCommand;
 import vip.potclub.core.player.PotPlayer;
+import vip.potclub.core.player.punishment.Punishment;
+import vip.potclub.core.player.punishment.PunishmentType;
 import vip.potclub.core.util.Color;
 
 public class UnBanCommand extends BaseCommand {
@@ -21,23 +23,31 @@ public class UnBanCommand extends BaseCommand {
         Player player = (Player) sender;
         if (player.hasPermission("scandium.command.unban")) {
             if (args.length == 0) {
-                player.sendMessage(Color.translate("&cUsage: /" + label + " <player>."));
+                player.sendMessage(Color.translate("&cUsage: /" + label + " <player> <reason>."));
             }
             if (args.length > 0) {
-                OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[0]);
-                if (offlinePlayer != null) {
-                    PotPlayer potPlayer = PotPlayer.getPlayer(offlinePlayer.getPlayer());
-                    if (potPlayer == null) {
-                        PotPlayer newPotPlayer = new PotPlayer(offlinePlayer.getUniqueId());
-                        if (!newPotPlayer.isCurrentlyBanned()) {
-                            newPotPlayer.unBanPlayer();
-                            player.sendMessage(Color.translate("&aUnbanned that player."));
-                        } else {
-                            player.sendMessage(Color.translate("&cThat player is not banned."));
-                        }
+                if (args.length == 1) {
+                    player.sendMessage(Color.translate("&cUsage: /" + label + " <player> <reason>."));
+                }
+                if (args.length == 2) {
+                    OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[0]);
+                    String message = args[1];
+                    if (offlinePlayer != null) {
+                        Punishment.getAllPunishments().forEach(punishment -> {
+                            if (punishment.getTarget().equals(offlinePlayer.getUniqueId())) {
+                                if (punishment.isActive() && !punishment.isRemoved()) {
+                                    if (punishment.getPunishmentType().equals(PunishmentType.BAN)) {
+                                        punishment.setRemoved(true);
+                                        punishment.setRemovalReason(message);
+                                        punishment.setRemover(player.getUniqueId());
+                                    }
+                                }
+                            }
+                        });
+                        player.sendMessage(Color.translate("&aUnbanned " + args[0] + "!"));
+                    } else {
+                        player.sendMessage(Color.translate("&cThat player does not exist."));
                     }
-                } else {
-                    player.sendMessage(Color.translate("&cThat player does not exist."));
                 }
             }
         } else {

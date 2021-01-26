@@ -37,11 +37,11 @@ public class PlayerListener implements Listener {
         } else {
             int boundOfThree = CorePlugin.RANDOM.nextInt(3);
             if (boundOfThree == 1) {
-                event.setMotd(Color.translate("&d&lPotClub &7&l\u239c &fEU\n&7Join our discord via https://discord.gg/D5svAj23R4/!"));
+                event.setMotd(Color.translate("&d&lPotClub &7&l\u239c &fEU\n&7Join our discord via &bdiscord.gg/D5svAj23R4&7!"));
             } else if (boundOfThree == 2) {
-                event.setMotd(Color.translate("&d&lPotClub &7&l\u239c &fEU\n&7Follow our twitter for giveaways and more! @PotClubVIP"));
+                event.setMotd(Color.translate("&d&lPotClub &7&l\u239c &fEU\n&7Follow our twitter for giveaways and more! &b@PotClubVIP&7"));
             } else {
-                event.setMotd(Color.translate("&d&lPotClub &7&l\u239c &fEU\n&7We have a new website! Check it out at https://potclub.vip/!"));
+                event.setMotd(Color.translate("&d&lPotClub &7&l\u239c &fEU\n&7We have a new website! Check it out at &bwww.potclub.vip&7!"));
             }
         }
     }
@@ -52,10 +52,52 @@ public class PlayerListener implements Listener {
             if (!CorePlugin.getInstance().getConfig().getStringList("whitelisted").contains(event.getName())) {
                 event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.translateAlternateColorCodes('&', CorePlugin.getInstance().getConfig().getString("whitelisted-msg").replace("%NL%", "\n")));
             } else {
-                event.allow();
+                Punishment.getAllPunishments().forEach(punishment -> {
+                    if (punishment.getTarget().equals(event.getUniqueId())) {
+                        if ((punishment.getPunishmentType().equals(PunishmentType.BAN)) || (punishment.getPunishmentType().equals(PunishmentType.BLACKLIST)) || (punishment.getPunishmentType().equals(PunishmentType.IPBAN))) {
+                            if (punishment.isActive() || !punishment.isRemoved()) {
+                                switch (punishment.getPunishmentType()) {
+                                    case BLACKLIST:
+                                        event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Color.translate(PunishmentStrings.BLCK_MESSAGE.replace("<reason>", punishment.getReason())));
+                                        break;
+                                    case BAN:
+                                        event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, (punishment.isPermanent() ? Color.translate(PunishmentStrings.BAN_MESSAGE_PERM.replace("<reason>", punishment.getReason())) : Color.translate(PunishmentStrings.BAN_MESSAGE_TEMP.replace("<reason>", punishment.getReason()).replace("<time>", punishment.getDurationString()))));
+                                        break;
+                                }
+                            } else {
+                                event.allow();
+                            }
+                        } else {
+                            event.allow();
+                        }
+                    } else {
+                        event.allow();
+                    }
+                });
             }
         } else {
-            event.allow();
+            Punishment.getAllPunishments().forEach(punishment -> {
+                if (punishment.getTarget().equals(event.getUniqueId())) {
+                    if ((punishment.getPunishmentType().equals(PunishmentType.BAN)) || (punishment.getPunishmentType().equals(PunishmentType.BLACKLIST)) || (punishment.getPunishmentType().equals(PunishmentType.IPBAN))) {
+                        if (punishment.isActive() || !punishment.isRemoved()) {
+                            switch (punishment.getPunishmentType()) {
+                                case BLACKLIST:
+                                    event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Color.translate(PunishmentStrings.BLCK_MESSAGE.replace("<reason>", punishment.getReason())));
+                                    break;
+                                case BAN:
+                                    event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, (punishment.isPermanent() ? Color.translate(PunishmentStrings.BAN_MESSAGE_PERM.replace("<reason>", punishment.getReason())) : Color.translate(PunishmentStrings.BAN_MESSAGE_TEMP.replace("<reason>", punishment.getReason()).replace("<time>", punishment.getDurationString()))));
+                                    break;
+                            }
+                        } else {
+                            event.allow();
+                        }
+                    } else {
+                        event.allow();
+                    }
+                } else {
+                    event.allow();
+                }
+            });
         }
     }
 
@@ -88,23 +130,6 @@ public class PlayerListener implements Listener {
 
         new PotPlayer(event.getPlayer().getUniqueId());
 
-        Punishment.getAllPunishments().forEach(punishment -> {
-            if (punishment.getTarget().equals(event.getPlayer().getUniqueId())) {
-                if ((punishment.getPunishmentType().equals(PunishmentType.BAN)) || (punishment.getPunishmentType().equals(PunishmentType.BLACKLIST)) || (punishment.getPunishmentType().equals(PunishmentType.IPBAN))) {
-                    if (punishment.isActive() || !punishment.isRemoved()) {
-                        switch (punishment.getPunishmentType()) {
-                            case BLACKLIST:
-                                event.getPlayer().kickPlayer(Color.translate(PunishmentStrings.BLCK_MESSAGE.replace("<reason>", punishment.getReason())));
-                                break;
-                            case BAN:
-                                event.getPlayer().kickPlayer((punishment.isPermanent() ? Color.translate(PunishmentStrings.BAN_MESSAGE_PERM.replace("<reason>", punishment.getReason())) : Color.translate(PunishmentStrings.BAN_MESSAGE_TEMP.replace("<reason>", punishment.getReason()).replace("<time>", punishment.getDurationString()))));
-                                break;
-                        }
-                    }
-                }
-            }
-        });
-
         if (event.getPlayer().hasPermission("scandium.staff")) {
             Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onConnect(event.getPlayer()))), 10L);
         }
@@ -114,6 +139,7 @@ public class PlayerListener implements Listener {
     public void onAsyncPlayerChatEvent(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
         Profile profile = Profile.getByUuid(player.getUniqueId());
+
 
         if (CorePlugin.getInstance().getServerManager().isChatEnabled()) {
             if (!PotPlayer.getPlayer(player).isCurrentlyMuted()) {
