@@ -57,12 +57,12 @@ public class WebAnnouncementCommand extends BaseCommand {
                 if (args.length == 1) {
                     player.sendMessage(Color.translate("&cUsage: /" + label + " <title|split with _> <content>."));
                 }
-                if (args.length == 2) {
+                if (args.length > 1) {
                     String title = args[0].replace("_", " ");
                     String message = StringUtil.buildMessage(args, 1).replace("<nl>", "\n");
 
                     Document document = new Document();
-                    document.put("uuid", UUID.randomUUID());
+                    document.put("uuid", UUID.randomUUID().toString());
                     document.put("playerName", player.getName());
                     document.put("playerUuid", player.getUniqueId().toString());
                     document.put("announcementName", title);
@@ -71,6 +71,7 @@ public class WebAnnouncementCommand extends BaseCommand {
                     document.put("rawDate", new Date().getTime());
 
                     CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getWebCollection().insertOne(document));
+                    player.sendMessage(Color.translate("&aCreated the web announcement."));
                 }
             }
         } else {

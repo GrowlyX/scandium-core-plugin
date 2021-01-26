@@ -89,6 +89,11 @@ public class Punishment {
         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().replaceOne(Filters.eq("_id", this.id), document, new ReplaceOptions().upsert(true)));
     }
 
+    public void saveMainThread() {
+        Document document = Document.parse(this.toJson());
+        CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().replaceOne(Filters.eq("_id", this.id), document, new ReplaceOptions().upsert(true));
+    }
+
     public String toJson() {
         return CorePlugin.GSON.toJson(this);
     }

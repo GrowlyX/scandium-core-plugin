@@ -27,6 +27,7 @@ public class WebAnnouncementDeleteCommand extends BaseCommand {
                 try {
                     Document document = new Document("announcementName", args[0].replace("_", " "));
                     CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getWebCollection().deleteOne(document));
+                    player.sendMessage(Color.translate("&aDeleted that announcement."));
                 } catch (Exception e) {
                     player.sendMessage(Color.translate("&cSomething went wrong."));
                 }

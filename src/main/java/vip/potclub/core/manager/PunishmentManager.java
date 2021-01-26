@@ -33,7 +33,7 @@ public class PunishmentManager {
     }
 
     public void savePunishments() {
-        this.punishments.forEach(Punishment::savePunishment);
+        this.punishments.forEach(Punishment::saveMainThread);
     }
 
     public void handlePunishment(Punishment punishment, Player player, Player target, boolean silent) {

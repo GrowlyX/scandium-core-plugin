@@ -102,6 +102,7 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("ping").setExecutor(new PingCommand());
         this.getCommand("tppos").setExecutor(new TpPosCommand());
         this.getCommand("sudo").setExecutor(new SudoCommand());
+        this.getCommand("list").setExecutor(new ListCommand());
         this.getCommand("sudoall").setExecutor(new SudoAllCommand());
         this.getCommand("tphere").setExecutor(new TpHereCommand());
         this.getCommand("gmc").setExecutor(new GmcCommand());
