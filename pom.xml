@@ -42,6 +42,7 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- Allatori plugin start -->
         </plugins>
         <resources>
             <resource>

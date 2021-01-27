@@ -84,6 +84,7 @@ public class PotPlayer {
         document.put("canSeeBroadcasts", this.canSeeBroadcasts);
         document.put("lastJoined", CorePlugin.FORMAT.format(new Date()));
         document.put("firstJoined", this.firstJoin);
+        document.put("rankName", Profile.getByUuid(this.uuid).getActiveGrant().getRank().getData().getName());
         document.put("language", (this.language != null ? this.language.getLanguageName() : LanguageType.ENGLISH.getLanguageName()));
         document.put("currentlyOnline", this.currentlyOnline);
 
@@ -157,7 +158,7 @@ public class PotPlayer {
         this.currentlyBanned = this.isBanned();
 
         this.currentlyOnline = true;
-        this.saveWithoutRemove();
+        Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), this::saveWithoutRemove, 10 * 20L);
     }
 
     public boolean isMuted() {
