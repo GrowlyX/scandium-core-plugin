@@ -43,7 +43,6 @@ public class Punishment {
 
     private long punishmentDuration;
 
-
     public Punishment(PunishmentType punishmentType, UUID issuer, UUID target, String issuerName, String reason, Date issuingDate, long punishmentDuration, boolean permanent, Date createdAt) {
         this.punishmentType = punishmentType;
         this.issuer = issuer;
@@ -69,7 +68,7 @@ public class Punishment {
     }
 
     public String getDurationString() {
-        return this.isPermanent() ? "Permanent" : DurationFormatUtils.formatDurationWords(this.punishmentDuration, true, true);
+        return this.isPermanent() ? "Permanent" : DurationFormatUtils.formatDurationWords(punishmentDuration, true, true);
     }
 
     public String getExpirationString() {
@@ -82,7 +81,7 @@ public class Punishment {
         } else if (this.isPermanent()) {
             return true;
         } else {
-            return System.currentTimeMillis() < this.createdAt.getTime() + this.punishmentDuration;
+            return System.currentTimeMillis() < this.createdAt.getTime() + punishmentDuration;
         }
     }
 

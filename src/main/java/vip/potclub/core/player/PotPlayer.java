@@ -11,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import vip.potclub.core.CorePlugin;
 import vip.potclub.core.enums.LanguageType;
+import vip.potclub.core.player.media.Media;
 import vip.potclub.core.player.punishment.Punishment;
 import vip.potclub.core.player.punishment.PunishmentType;
 
@@ -29,6 +30,7 @@ public class PotPlayer {
 
     private UUID uuid;
     private Player player;
+    public Media media;
 
     private Player lastRecipient;
 

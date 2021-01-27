@@ -85,7 +85,6 @@ public final class CorePlugin extends JavaPlugin {
         this.punishmentManager = new PunishmentManager();
         this.playerManager = new PlayerManager();
 
-
         this.setupExtra();
     }
 

@@ -26,26 +26,21 @@ public class ListCommand extends BaseCommand {
 
         if (args.length == 0) {
             List<Rank> ranks = Rank.getRanks().stream().sorted(RANK_COMPARATOR).collect(Collectors.toList());
-
             StringBuilder rankBuilder = new StringBuilder();
             StringBuilder playerBuilder = new StringBuilder();
 
             ranks.forEach(rankData -> {
                 rankBuilder.append(Color.translate(rankData.getData().getColorPrefix()));
                 rankBuilder.append(rankData.getData().getName());
-                rankBuilder.append(Color.translate("&7, "));
+                rankBuilder.append(Color.translate("&f, "));
             });
-            if (rankBuilder.length() > 0) {
-                rankBuilder.setLength(rankBuilder.length() - 2);
-                rankBuilder.append(Color.translate("&7."));
-            }
 
             Bukkit.getOnlinePlayers().stream().map(online ->
                     Profile.getByUuid(online.getUniqueId()))
                     .filter(profile -> !PotPlayer.getPlayer(profile.getUuid()).isVanished())
                     .sorted(PLAYER_DATA_COMPARATOR.reversed()).limit(100)
                     .forEach(playerData -> playerBuilder.append(Color.translate(
-                            playerData.getActiveGrant().getRank().getData().getColorPrefix() + playerData.getPlayer().getName() + "&7, ")
+                            playerData.getActiveGrant().getRank().getData().getColorPrefix() + playerData.getPlayer().getName() + "&f, ")
                     ));
 
             player.sendMessage(rankBuilder.toString());

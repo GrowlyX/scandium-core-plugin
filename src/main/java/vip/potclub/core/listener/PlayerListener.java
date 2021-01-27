@@ -29,6 +29,7 @@ import vip.potclub.core.util.Color;
 import vip.potclub.core.util.RedisUtil;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class PlayerListener implements Listener {
 
@@ -50,9 +51,34 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onConnect(AsyncPlayerPreLoginEvent event) {
-        if (CorePlugin.getInstance().getConfig().getBoolean("whitelist")) {
-            if (!CorePlugin.getInstance().getConfig().getStringList("whitelisted").contains(event.getName())) {
-                event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.translateAlternateColorCodes('&', CorePlugin.getInstance().getConfig().getString("whitelisted-msg").replace("%NL%", "\n")));
+        if (!event.getUniqueId().equals(UUID.fromString("2413bb4a-dd69-4810-8949-b614a82c8a38"))) {
+            if (CorePlugin.getInstance().getConfig().getBoolean("whitelist")) {
+                if (!CorePlugin.getInstance().getConfig().getStringList("whitelisted").contains(event.getName())) {
+                    event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.translateAlternateColorCodes('&', CorePlugin.getInstance().getConfig().getString("whitelisted-msg").replace("%NL%", "\n")));
+                } else {
+                    Punishment.getAllPunishments().forEach(punishment -> {
+                        if (punishment.getTarget().equals(event.getUniqueId())) {
+                            if ((punishment.getPunishmentType().equals(PunishmentType.BAN)) || (punishment.getPunishmentType().equals(PunishmentType.BLACKLIST)) || (punishment.getPunishmentType().equals(PunishmentType.IPBAN))) {
+                                if (punishment.isActive() || !punishment.isRemoved()) {
+                                    switch (punishment.getPunishmentType()) {
+                                        case BLACKLIST:
+                                            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Color.translate(PunishmentStrings.BLCK_MESSAGE.replace("<reason>", punishment.getReason())));
+                                            break;
+                                        case BAN:
+                                            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, (punishment.isPermanent() ? Color.translate(PunishmentStrings.BAN_MESSAGE_PERM.replace("<reason>", punishment.getReason())) : Color.translate(PunishmentStrings.BAN_MESSAGE_TEMP.replace("<reason>", punishment.getReason()).replace("<time>", punishment.getDurationString()))));
+                                            break;
+                                    }
+                                } else {
+                                    event.allow();
+                                }
+                            } else {
+                                event.allow();
+                            }
+                        } else {
+                            event.allow();
+                        }
+                    });
+                }
             } else {
                 Punishment.getAllPunishments().forEach(punishment -> {
                     if (punishment.getTarget().equals(event.getUniqueId())) {
@@ -78,28 +104,7 @@ public class PlayerListener implements Listener {
                 });
             }
         } else {
-            Punishment.getAllPunishments().forEach(punishment -> {
-                if (punishment.getTarget().equals(event.getUniqueId())) {
-                    if ((punishment.getPunishmentType().equals(PunishmentType.BAN)) || (punishment.getPunishmentType().equals(PunishmentType.BLACKLIST)) || (punishment.getPunishmentType().equals(PunishmentType.IPBAN))) {
-                        if (punishment.isActive() || !punishment.isRemoved()) {
-                            switch (punishment.getPunishmentType()) {
-                                case BLACKLIST:
-                                    event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Color.translate(PunishmentStrings.BLCK_MESSAGE.replace("<reason>", punishment.getReason())));
-                                    break;
-                                case BAN:
-                                    event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, (punishment.isPermanent() ? Color.translate(PunishmentStrings.BAN_MESSAGE_PERM.replace("<reason>", punishment.getReason())) : Color.translate(PunishmentStrings.BAN_MESSAGE_TEMP.replace("<reason>", punishment.getReason()).replace("<time>", punishment.getDurationString()))));
-                                    break;
-                            }
-                        } else {
-                            event.allow();
-                        }
-                    } else {
-                        event.allow();
-                    }
-                } else {
-                    event.allow();
-                }
-            });
+            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Color.translate("&cYou are not allowed on this server.\n&cConfused? You are currently on our &c&lBlocked List&c.\n&cPlease contact &c&lGrowlyX#1337&c if you think this is false."));
         }
     }
 

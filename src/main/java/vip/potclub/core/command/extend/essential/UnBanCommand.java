@@ -35,7 +35,7 @@ public class UnBanCommand extends BaseCommand {
                     if (offlinePlayer != null) {
                         Punishment.getAllPunishments().forEach(punishment -> {
                             if (punishment.getTarget().equals(offlinePlayer.getUniqueId())) {
-                                if (punishment.isActive() && !punishment.isRemoved()) {
+                                if (punishment.isActive()) {
                                     if (punishment.getPunishmentType().equals(PunishmentType.BAN)) {
                                         punishment.setRemoved(true);
                                         punishment.setRemovalReason(message);

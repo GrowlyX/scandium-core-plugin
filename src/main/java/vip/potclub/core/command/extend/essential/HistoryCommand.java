@@ -25,7 +25,7 @@ public class HistoryCommand extends BaseCommand {
             if (args.length > 0) {
                 Player target = Bukkit.getPlayerExact(args[0]);
                 if (target != null) {
-                    new PunishHistoryViewMenu(player, target).open(player);
+                    new PunishHistoryViewMenu(player, target.getName()).open(player);
                 } else {
                     player.sendMessage(Color.translate("&cThat player does not exist."));
                 }
