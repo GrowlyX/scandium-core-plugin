@@ -3,6 +3,7 @@ package vip.potclub.core.listener;
 import com.solexgames.perms.grant.Grant;
 import com.solexgames.perms.grant.procedure.GrantProcedure;
 import com.solexgames.perms.profile.Profile;
+import jdk.nashorn.internal.runtime.regexp.joni.Regex;
 import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -22,6 +23,7 @@ import vip.potclub.core.CorePlugin;
 import vip.potclub.core.enums.ChatChannelType;
 import vip.potclub.core.menu.IMenu;
 import vip.potclub.core.player.PotPlayer;
+import vip.potclub.core.player.media.MediaConstants;
 import vip.potclub.core.player.punishment.Punishment;
 import vip.potclub.core.player.punishment.PunishmentStrings;
 import vip.potclub.core.player.punishment.PunishmentType;
@@ -30,6 +32,8 @@ import vip.potclub.core.util.RedisUtil;
 
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PlayerListener implements Listener {
 
@@ -146,6 +150,28 @@ public class PlayerListener implements Listener {
     public void onAsyncPlayerChatEvent(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
         Profile profile = Profile.getByUuid(player.getUniqueId());
+
+        Matcher discordMatcher = MediaConstants.DISCORD_USERNAME_REGEX.matcher(event.getMessage());
+        Matcher twitterMatcher = MediaConstants.TWITTER_USERNAME_REGEX.matcher(event.getMessage());
+        Matcher instaMatcher = MediaConstants.INSTAGRAM_USERNAME_REGEX.matcher(event.getMessage());
+        Matcher youtubeMatcher = MediaConstants.YOUTUBE_PROFILELINK_REGEX.matcher(event.getMessage());
+
+        if (PotPlayer.getPlayer(player).getMedia().getMediaData().isModifyingDiscordData()) {
+            if ()
+            return;
+        }
+
+        if (PotPlayer.getPlayer(player).getMedia().getMediaData().isModifyingInstaData()) {
+            return;
+        }
+
+        if (PotPlayer.getPlayer(player).getMedia().getMediaData().isModifyingYoutubeData()) {
+            return;
+        }
+
+        if (PotPlayer.getPlayer(player).getMedia().getMediaData().isModifyingTwitterData()) {
+            return;
+        }
 
         if (CorePlugin.getInstance().getServerManager().isChatEnabled()) {
             if (!PotPlayer.getPlayer(player).isCurrentlyMuted()) {

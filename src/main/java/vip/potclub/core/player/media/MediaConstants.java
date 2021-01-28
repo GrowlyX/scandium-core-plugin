@@ -1,10 +1,12 @@
 package vip.potclub.core.player.media;
 
+import java.util.regex.Pattern;
+
 public class MediaConstants {
 
-    public static String DISCORD_USERNAME_REGEX = "^((.{2,32})#\\d{4})";
-    public static String TWITTER_USERNAME_REGEX = "(?<=^|(?<=[^a-zA-Z0-9-_\\.]))@([A-Za-z]+[A-Za-z0-9-_]+)";
-    public static String INSTAGRAM_USERNAME_REGEX = "(?<=^|(?<=[^a-zA-Z0-9-_\\.]))@([A-Za-z]+[A-Za-z0-9-_]+)";
-    public static String YOUTUBE_PROFILELINK_REGEX = "((http|https):\\/\\/|)(www\\.|)youtube\\.com\\/(channel\\/|user\\/|c\\/|u\\/)[a-zA-Z0-9\\-]{1,}";
+    public static Pattern DISCORD_USERNAME_REGEX = Pattern.compile("^((.{2,32})#\\d{4})");
+    public static Pattern TWITTER_USERNAME_REGEX = Pattern.compile("(?<=^|(?<=[^a-zA-Z0-9-_]))@([A-Za-z]+[A-Za-z0-9-_]+)");
+    public static Pattern INSTAGRAM_USERNAME_REGEX = Pattern.compile("(?<=^|(?<=[^a-zA-Z0-9-_]))@([A-Za-z]+[A-Za-z0-9-_]+)");
+    public static Pattern YOUTUBE_PROFILELINK_REGEX = Pattern.compile("((http|https):\\/\\/|)(www\\.|)youtube\\.com\\/(channel\\/|user\\/|c\\/|u\\/)[a-zA-Z0-9\\-]+");
 
 }

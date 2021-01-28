@@ -27,6 +27,7 @@ public class Media {
     public boolean hasDiscord() {
         return (this.discord != null);
     }
+
     public boolean hasInstagram() {
         return (this.instagram != null);
     }
