@@ -70,3 +70,5 @@ commands:
   sudo:
   sudoall:
   scandium:
+  media:
+  famous:

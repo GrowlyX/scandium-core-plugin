@@ -31,7 +31,8 @@ public class MediaMenu extends AbstractInventoryMenu<CorePlugin> {
                 .addLore(
                         "",
                         "&7Your discord:",
-                        "&f" + potPlayer.getMedia().getDiscord()
+                        "&f" + potPlayer.getMedia().getDiscord(),
+                        ""
                 )
                 .create()
         );
@@ -40,7 +41,8 @@ public class MediaMenu extends AbstractInventoryMenu<CorePlugin> {
                 .addLore(
                         "",
                         "&7Your youtube:",
-                        "&f" + potPlayer.getMedia().getYoutubeLink()
+                        "&f" + potPlayer.getMedia().getYoutubeLink(),
+                        ""
                 )
                 .create()
         );
@@ -49,7 +51,8 @@ public class MediaMenu extends AbstractInventoryMenu<CorePlugin> {
                 .addLore(
                         "",
                         "&7Your twitter:",
-                        "&f" + potPlayer.getMedia().getTwitter()
+                        "&f" + potPlayer.getMedia().getTwitter(),
+                        ""
                 )
                 .create()
         );
@@ -58,7 +61,8 @@ public class MediaMenu extends AbstractInventoryMenu<CorePlugin> {
                 .addLore(
                         "",
                         "&7Your instagram:",
-                        "&f" + potPlayer.getMedia().getInstagram()
+                        "&f" + potPlayer.getMedia().getInstagram(),
+                        ""
                 )
                 .create()
         );
@@ -67,7 +71,8 @@ public class MediaMenu extends AbstractInventoryMenu<CorePlugin> {
                 .addLore(
                         "",
                         "&7Click to modify your",
-                        "&7social media!"
+                        "&7social media!",
+                        ""
                 )
                 .create()
         );

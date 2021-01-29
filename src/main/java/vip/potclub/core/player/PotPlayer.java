@@ -65,6 +65,7 @@ public class PotPlayer {
         this.uuid = uuid;
         this.player = Bukkit.getPlayer(uuid);
         this.name = player.getName();
+        this.media = new Media();
 
         loadPlayerData();
 
@@ -156,15 +157,23 @@ public class PotPlayer {
 
         if (document.getString("discord") != null) {
             this.media.setDiscord(document.getString("discord"));
+        } else {
+            this.media.setDiscord("N/A");
         }
         if (document.getString("twitter") != null) {
             this.media.setTwitter(document.getString("twitter"));
+        } else {
+            this.media.setTwitter("N/A");
         }
         if (document.getString("youtube") != null) {
             this.media.setYoutubeLink(document.getString("youtube"));
+        } else {
+            this.media.setYoutubeLink("N/A");
         }
         if (document.getString("instagram") != null) {
             this.media.setInstagram(document.getString("instagram"));
+        } else {
+            this.media.setInstagram("N/A");
         }
 
         CorePlugin.getInstance().getPunishmentManager().getPunishments().forEach(punishment -> {

@@ -10,11 +10,14 @@ import vip.potclub.core.clickable.Clickable;
 import vip.potclub.core.player.PotPlayer;
 import vip.potclub.core.player.punishment.Punishment;
 import vip.potclub.core.player.punishment.PunishmentStrings;
+import vip.potclub.core.player.punishment.PunishmentType;
 import vip.potclub.core.util.CC;
 import vip.potclub.core.util.Color;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -23,15 +26,42 @@ public class PunishmentManager {
     private final ArrayList<Punishment> punishments = new ArrayList<>();
 
     public PunishmentManager() {
-        for (Document punishmentDocument : CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().find()) {
-            this.punishments.add(CorePlugin.GSON.fromJson(punishmentDocument.toJson(), Punishment.class));
-        }
-
-        /*CorePlugin.getInstance().getMongoThread().execute(() -> {
+        CorePlugin.getInstance().getMongoThread().execute(() -> {
             for (Document punishmentDocument : CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().find()) {
-                this.punishments.add(CorePlugin.GSON.fromJson(punishmentDocument.toJson(), Punishment.class));
+                Punishment punishment = new Punishment(
+                        PunishmentType.valueOf(punishmentDocument.getString("punishmentType")),
+                        UUID.fromString(punishmentDocument.getString("issuer")),
+                        UUID.fromString(punishmentDocument.getString("target")),
+                        punishmentDocument.getString("issuerName"),
+                        punishmentDocument.getString("reason"),
+                        punishmentDocument.getDate("issuingDate"),
+                        punishmentDocument.getLong("punishmentDuration"),
+                        punishmentDocument.getBoolean("permanent"),
+                        punishmentDocument.getDate("createdAt")
+                );
+
+                if (punishmentDocument.getBoolean("active")) {
+                    punishment.setActive(true);
+                }
+                if (punishmentDocument.getBoolean("permanent")) {
+                    punishment.setPermanent(true);
+                }
+                if (punishmentDocument.getBoolean("removed")) {
+                    punishment.setRemoved(true);
+                }
+                if (punishmentDocument.getString("removerName") != null) {
+                    punishment.setRemoverName(punishmentDocument.getString("removerName"));
+                }
+                if (punishmentDocument.getString("removalReason") != null) {
+                    punishment.setRemovalReason(punishmentDocument.getString("removalReason"));
+                }
+                if (punishmentDocument.getString("remover") != null) {
+                    punishment.setRemover(UUID.fromString(punishmentDocument.getString("remover")));
+                }
+
+                this.punishments.add(punishment);
             }
-        });*/
+        });
 
         CorePlugin.getInstance().getLogger().info("[Punishments] Loaded all punishments.");
     }
@@ -46,13 +76,13 @@ public class PunishmentManager {
             Bukkit.getOnlinePlayers().forEach(player1 -> {
                 if (player1.hasPermission("scandium.staff")) {
                     player1.sendMessage(Color.translate(
-                            "&7[Silent] " + target.getDisplayName() + " &awas " + (punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName() + " by &4" + (player != null ? player.getDisplayName() : "&4CONSOLE") + "&a."
+                            "&7[Silent] " + target.getDisplayName() + " &awas " + (punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (player != null ? player.getDisplayName() : "&4CONSOLE") + "&a."
                     ));
                 }
             });
         } else {
             Bukkit.broadcastMessage(Color.translate(
-                    target.getDisplayName() + " &awas " + (punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName() + " by &4" + (player != null ? player.getDisplayName() : "&4CONSOLE") + "&a."
+                    target.getDisplayName() + " &awas " + (punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (player != null ? player.getDisplayName() : "&4CONSOLE") + "&a."
             ));
         }
         switch (punishment.getPunishmentType()) {

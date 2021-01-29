@@ -78,7 +78,6 @@ public class PunishSelectConfirmMenu extends AbstractInventoryMenu<CorePlugin> {
             if (event.getRawSlot() == 14) {
                 Punishment punishment = new Punishment(this.punishmentType, this.player.getUniqueId(), this.target.getUniqueId(), this.player.getName(), this.reason, new Date(System.currentTimeMillis()), this.punishmentDuration, this.permanent, new Date());
                 punishment.savePunishment();
-                this.player.sendMessage(Color.translate("&aPunished the player '" + this.target.getName() + "' with the ID '" + punishment.getId() + "'."));
                 this.player.closeInventory();
                 PotPlayer potPlayer = PotPlayer.getPlayer(this.target);
                 potPlayer.getPunishments().add(punishment);

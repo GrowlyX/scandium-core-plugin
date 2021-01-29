@@ -6,7 +6,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 public class Media {
 
     private String twitter = "N/A";
@@ -15,6 +14,10 @@ public class Media {
     private String discord = "N/A";
 
     private MediaData mediaData;
+
+    public Media() {
+        this.mediaData = new MediaData();
+    }
 
     public boolean hasTwitter() {
         return (this.twitter != null);

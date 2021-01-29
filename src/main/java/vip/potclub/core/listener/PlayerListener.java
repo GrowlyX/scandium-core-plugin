@@ -166,6 +166,7 @@ public class PlayerListener implements Listener {
                 player.sendMessage(Color.translate("&cThat's an invalid discord username!"));
                 player.sendMessage(Color.translate("&cExample: Wumpus#1234"));
             }
+            event.setCancelled(true);
             return;
         }
 
@@ -178,6 +179,7 @@ public class PlayerListener implements Listener {
                 player.sendMessage(Color.translate("&cThat's an invalid instagram username!"));
                 player.sendMessage(Color.translate("&cExample: @SolexGames"));
             }
+            event.setCancelled(true);
             return;
         }
 
@@ -190,6 +192,7 @@ public class PlayerListener implements Listener {
                 player.sendMessage(Color.translate("&cThat's an invalid youtube link!"));
                 player.sendMessage(Color.translate("&cExample: https://youtube.com/c/SolexGames/"));
             }
+            event.setCancelled(true);
             return;
         }
 
@@ -202,6 +205,7 @@ public class PlayerListener implements Listener {
                 player.sendMessage(Color.translate("&cThat's an invalid twitter link!"));
                 player.sendMessage(Color.translate("&cExample: @SolexGames"));
             }
+            event.setCancelled(true);
             return;
         }
 

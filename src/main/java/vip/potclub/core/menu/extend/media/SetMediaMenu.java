@@ -32,7 +32,8 @@ public class SetMediaMenu extends AbstractInventoryMenu<CorePlugin> {
                 .addLore(
                         "",
                         "&7Click here to setup",
-                        "&7your discord account!"
+                        "&7your discord account!",
+                        ""
                 )
                 .create()
         );
@@ -41,7 +42,8 @@ public class SetMediaMenu extends AbstractInventoryMenu<CorePlugin> {
                 .addLore(
                         "",
                         "&7Click here to setup",
-                        "&7your youtube account!"
+                        "&7your youtube account!",
+                        ""
                 )
                 .create()
         );
@@ -50,7 +52,8 @@ public class SetMediaMenu extends AbstractInventoryMenu<CorePlugin> {
                 .addLore(
                         "",
                         "&7Click here to setup",
-                        "&7your twitter account!"
+                        "&7your twitter account!",
+                        ""
                 )
                 .create()
         );
@@ -59,7 +62,8 @@ public class SetMediaMenu extends AbstractInventoryMenu<CorePlugin> {
                 .addLore(
                         "",
                         "&7Click here to setup",
-                        "&7your insta account!"
+                        "&7your insta account!",
+                        ""
                 )
                 .create()
         );
@@ -68,7 +72,8 @@ public class SetMediaMenu extends AbstractInventoryMenu<CorePlugin> {
                 .addLore(
                         "",
                         "&7Click here to setup",
-                        "&7your ??? account!"
+                        "&7your ??? account!",
+                        ""
                 )
                 .create()
         );
