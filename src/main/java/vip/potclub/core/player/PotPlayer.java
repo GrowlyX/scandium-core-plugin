@@ -88,6 +88,11 @@ public class PotPlayer {
         document.put("language", (this.language != null ? this.language.getLanguageName() : LanguageType.ENGLISH.getLanguageName()));
         document.put("currentlyOnline", this.currentlyOnline);
 
+        document.put("discord", this.media.getDiscord());
+        document.put("twitter", this.media.getTwitter());
+        document.put("instagram", this.media.getInstagram());
+        document.put("youtube", this.media.getYoutubeLink());
+
         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true)));
     }
 
@@ -107,6 +112,11 @@ public class PotPlayer {
         document.put("rankName", Profile.getByUuid(this.uuid).getActiveGrant().getRank().getData().getName());
         document.put("language", (this.language != null ? this.language.getLanguageName() : LanguageType.ENGLISH.getLanguageName()));
         document.put("currentlyOnline", false);
+
+        document.put("discord", this.media.getDiscord());
+        document.put("twitter", this.media.getTwitter());
+        document.put("instagram", this.media.getInstagram());
+        document.put("youtube", this.media.getYoutubeLink());
 
         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true)));
 
@@ -137,15 +147,24 @@ public class PotPlayer {
         if (document.getBoolean("canReceiveDmsSounds") != null) {
             this.canReceiveDmsSounds = document.getBoolean("canReceiveDmsSounds");
         }
-        if (document.getString("firstJoined") == null) {
-            this.firstJoin = CorePlugin.FORMAT.format(new Date());
-        } else {
-            this.firstJoin = document.getString("firstJoined");
-        }
+        this.firstJoin = ((document.getString("firstJoined") != null) ? document.getString("firstJoined") : CorePlugin.FORMAT.format(new Date()));
         if (document.getString("language") != null) {
             this.language = LanguageType.getByName(document.getString("language"));
         } else {
             this.language = LanguageType.ENGLISH;
+        }
+
+        if (document.getString("discord") != null) {
+            this.media.setDiscord(document.getString("discord"));
+        }
+        if (document.getString("twitter") != null) {
+            this.media.setTwitter(document.getString("twitter"));
+        }
+        if (document.getString("youtube") != null) {
+            this.media.setYoutubeLink(document.getString("youtube"));
+        }
+        if (document.getString("instagram") != null) {
+            this.media.setInstagram(document.getString("instagram"));
         }
 
         CorePlugin.getInstance().getPunishmentManager().getPunishments().forEach(punishment -> {

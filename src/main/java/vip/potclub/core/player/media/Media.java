@@ -9,10 +9,10 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Media {
 
-    private String twitter;
-    private String youtubeLink;
-    private String instagram;
-    private String discord;
+    private String twitter = "N/A";
+    private String youtubeLink = "N/A";
+    private String instagram = "N/A";
+    private String discord = "N/A";
 
     private MediaData mediaData;
 

@@ -150,26 +150,58 @@ public class PlayerListener implements Listener {
     public void onAsyncPlayerChatEvent(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
         Profile profile = Profile.getByUuid(player.getUniqueId());
+        PotPlayer potPlayer = PotPlayer.getPlayer(player);
 
         Matcher discordMatcher = MediaConstants.DISCORD_USERNAME_REGEX.matcher(event.getMessage());
         Matcher twitterMatcher = MediaConstants.TWITTER_USERNAME_REGEX.matcher(event.getMessage());
         Matcher instaMatcher = MediaConstants.INSTAGRAM_USERNAME_REGEX.matcher(event.getMessage());
         Matcher youtubeMatcher = MediaConstants.YOUTUBE_PROFILELINK_REGEX.matcher(event.getMessage());
 
-        if (PotPlayer.getPlayer(player).getMedia().getMediaData().isModifyingDiscordData()) {
-            if ()
+        if (potPlayer.getMedia().getMediaData().isModifyingDiscordData()) {
+            if (discordMatcher.matches()) {
+                potPlayer.getMedia().setDiscord(event.getMessage());
+                player.sendMessage(Color.translate("&aUpdated your discord to &e" + event.getMessage() + "&a!"));
+                potPlayer.getMedia().getMediaData().setModifyingDiscordData(false);
+            } else {
+                player.sendMessage(Color.translate("&cThat's an invalid discord username!"));
+                player.sendMessage(Color.translate("&cExample: Wumpus#1234"));
+            }
             return;
         }
 
         if (PotPlayer.getPlayer(player).getMedia().getMediaData().isModifyingInstaData()) {
+            if (instaMatcher.matches()) {
+                potPlayer.getMedia().setInstagram(event.getMessage());
+                player.sendMessage(Color.translate("&aUpdated your instagram to &6" + event.getMessage() + "&a!"));
+                potPlayer.getMedia().getMediaData().setModifyingInstaData(false);
+            } else {
+                player.sendMessage(Color.translate("&cThat's an invalid instagram username!"));
+                player.sendMessage(Color.translate("&cExample: @SolexGames"));
+            }
             return;
         }
 
         if (PotPlayer.getPlayer(player).getMedia().getMediaData().isModifyingYoutubeData()) {
+            if (youtubeMatcher.matches()) {
+                potPlayer.getMedia().setYoutubeLink(event.getMessage());
+                player.sendMessage(Color.translate("&aUpdated your youtube to &6" + event.getMessage() + "&a!"));
+                potPlayer.getMedia().getMediaData().setModifyingYoutubeData(false);
+            } else {
+                player.sendMessage(Color.translate("&cThat's an invalid youtube link!"));
+                player.sendMessage(Color.translate("&cExample: https://youtube.com/c/SolexGames/"));
+            }
             return;
         }
 
         if (PotPlayer.getPlayer(player).getMedia().getMediaData().isModifyingTwitterData()) {
+            if (twitterMatcher.matches()) {
+                potPlayer.getMedia().setTwitter(event.getMessage());
+                player.sendMessage(Color.translate("&aUpdated your twitter to &6" + event.getMessage() + "&a!"));
+                potPlayer.getMedia().getMediaData().setModifyingTwitterData(false);
+            } else {
+                player.sendMessage(Color.translate("&cThat's an invalid twitter link!"));
+                player.sendMessage(Color.translate("&cExample: @SolexGames"));
+            }
             return;
         }
 
@@ -193,8 +225,8 @@ public class PlayerListener implements Listener {
                     if ((System.currentTimeMillis() < PotPlayer.getPlayer(player).getChatCooldown())) {
                         if (player.hasPermission("scandium.chat.cooldown.bypass")) {
                             Bukkit.getOnlinePlayers().forEach(player1 -> {
-                                PotPlayer potPlayer = PotPlayer.getPlayer(player1);
-                                if (potPlayer.isCanSeeGlobalChat()) {
+                                PotPlayer potPlayer1 = PotPlayer.getPlayer(player1);
+                                if (potPlayer1.isCanSeeGlobalChat()) {
                                     player1.sendMessage(Color.translate(profile.getActiveGrant().getRank().getData().getPrefix() + player.getName() + " &7" + '»' + " " + (profile.getActiveGrant().getRank().getData().getName().contains("Default") ? "&7" : "&f") + event.getMessage()));
                                 }
                             });
@@ -205,8 +237,8 @@ public class PlayerListener implements Listener {
                         }
                     } else {
                         Bukkit.getOnlinePlayers().forEach(player1 -> {
-                            PotPlayer potPlayer = PotPlayer.getPlayer(player1);
-                            if (potPlayer.isCanSeeGlobalChat()) {
+                            PotPlayer potPlayer1 = PotPlayer.getPlayer(player1);
+                            if (potPlayer1.isCanSeeGlobalChat()) {
                                 player1.sendMessage(Color.translate(profile.getActiveGrant().getRank().getData().getPrefix() + player.getName() + " &7" + '»' + " " + (profile.getActiveGrant().getRank().getData().getName().contains("Default") ? "&7" : "&f") + event.getMessage()));
                             }
                         });
@@ -238,8 +270,8 @@ public class PlayerListener implements Listener {
                         if ((System.currentTimeMillis() < PotPlayer.getPlayer(player).getChatCooldown())) {
                             if (player.hasPermission("scandium.chat.cooldown.bypass")) {
                                 Bukkit.getOnlinePlayers().forEach(player1 -> {
-                                    PotPlayer potPlayer = PotPlayer.getPlayer(player1);
-                                    if (potPlayer.isCanSeeGlobalChat()) {
+                                    PotPlayer potPlayer1 = PotPlayer.getPlayer(player1);
+                                    if (potPlayer1.isCanSeeGlobalChat()) {
                                         player1.sendMessage(Color.translate(profile.getActiveGrant().getRank().getData().getPrefix() + player.getName() + " &7" + '»' + " " + (profile.getActiveGrant().getRank().getData().getName().contains("Default") ? "&7" : "&f") + event.getMessage()));
                                     }
                                 });
@@ -250,8 +282,8 @@ public class PlayerListener implements Listener {
                             }
                         } else {
                             Bukkit.getOnlinePlayers().forEach(player1 -> {
-                                PotPlayer potPlayer = PotPlayer.getPlayer(player1);
-                                if (potPlayer.isCanSeeGlobalChat()) {
+                                PotPlayer potPlayer1 = PotPlayer.getPlayer(player1);
+                                if (potPlayer1.isCanSeeGlobalChat()) {
                                     player1.sendMessage(Color.translate(profile.getActiveGrant().getRank().getData().getPrefix() + player.getName() + " &7" + '»' + " " + (profile.getActiveGrant().getRank().getData().getName().contains("Default") ? "&7" : "&f") + event.getMessage()));
                                 }
                             });

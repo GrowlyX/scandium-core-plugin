@@ -12,6 +12,7 @@ commands:
     aliases: [wad]
   webannouncement:
     aliases: [walert]
+  profile:
   staffchat:
     aliases: [sc]
   options:
