@@ -72,3 +72,5 @@ commands:
   scandium:
   media:
   famous:
+  sync:
+    aliases: [link, discordsync, discordlink]

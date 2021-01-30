@@ -38,6 +38,7 @@ public class PotPlayer {
 
     private String rankName;
     private String syncCode;
+    private String syncDiscord;
     private String name;
 
     private boolean canSeeStaffMessages = true;
@@ -92,6 +93,7 @@ public class PotPlayer {
         document.put("firstJoined", this.firstJoin);
         document.put("rankName", Profile.getByUuid(this.uuid).getActiveGrant().getRank().getData().getName());
         document.put("syncCode", this.syncCode);
+        document.put("syncDiscord", this.syncDiscord);
         document.put("isSynced", this.isSynced);
         document.put("language", (this.language != null ? this.language.getLanguageName() : LanguageType.ENGLISH.getLanguageName()));
         document.put("currentlyOnline", this.currentlyOnline);
@@ -119,6 +121,7 @@ public class PotPlayer {
         document.put("firstJoined", this.firstJoin);
         document.put("rankName", Profile.getByUuid(this.uuid).getActiveGrant().getRank().getData().getName());
         document.put("syncCode", this.syncCode);
+        document.put("syncDiscord", this.syncDiscord);
         document.put("isSynced", this.isSynced);
         document.put("language", (this.language != null ? this.language.getLanguageName() : LanguageType.ENGLISH.getLanguageName()));
         document.put("currentlyOnline", false);
@@ -170,6 +173,7 @@ public class PotPlayer {
         } else {
             this.media.setDiscord("N/A");
         }
+
         if (document.getString("twitter") != null) {
             this.media.setTwitter(document.getString("twitter"));
         } else {
@@ -189,7 +193,9 @@ public class PotPlayer {
         if (document.getBoolean("isSynced") != null) {
             this.setSynced(document.getBoolean("isSynced"));
         }
-
+        if (document.getString("syncDiscord") != null) {
+            this.setSyncDiscord(document.getString("syncDiscord"));
+        }
         if (document.getString("syncCode") != null) {
             this.setSyncCode(document.getString("syncCode"));
         } else {
