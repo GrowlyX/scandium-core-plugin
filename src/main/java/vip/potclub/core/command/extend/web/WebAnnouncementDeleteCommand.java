@@ -1,4 +1,4 @@
-package vip.potclub.core.command.extend.essential.web;
+package vip.potclub.core.command.extend.web;
 
 import org.bson.Document;
 import org.bukkit.command.Command;

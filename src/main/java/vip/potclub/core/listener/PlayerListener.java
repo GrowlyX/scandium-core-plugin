@@ -203,7 +203,7 @@ public class PlayerListener implements Listener {
         }
 
         if (CorePlugin.getInstance().getServerManager().isChatEnabled()) {
-            if (!PotPlayer.getPlayer(player).isCurrentlyMuted()) {
+            if (!PotPlayer.getPlayer(player).isMuted()) {
                 event.setCancelled(true);
                 if (event.getMessage().startsWith("!") && event.getPlayer().hasPermission(ChatChannelType.STAFF.getPermission())) {
                     event.setCancelled(true);

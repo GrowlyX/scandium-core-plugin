@@ -37,6 +37,8 @@ public class MessageCommand extends BaseCommand {
 
                         PotPlayer potPerson = PotPlayer.getPlayer(player);
                         potPerson.setLastRecipient(target);
+
+                        potPlayer.setLastRecipient(player);
                     } else {
                         player.sendMessage(Color.translate("&cThat player has their dms disabled."));
                     }

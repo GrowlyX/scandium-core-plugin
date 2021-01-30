@@ -14,6 +14,7 @@ import vip.potclub.core.enums.LanguageType;
 import vip.potclub.core.player.media.Media;
 import vip.potclub.core.player.punishment.Punishment;
 import vip.potclub.core.player.punishment.PunishmentType;
+import vip.potclub.core.util.SaltUtil;
 
 import java.beans.ConstructorProperties;
 import java.text.SimpleDateFormat;
@@ -25,6 +26,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class PotPlayer {
 
     public static Map<UUID, PotPlayer> profilePlayers = new HashMap<>();
+    public static Map<String, String> syncCodes = new HashMap<>();
 
     private List<Punishment> punishments = new ArrayList<>();
 
@@ -35,6 +37,7 @@ public class PotPlayer {
     private Player lastRecipient;
 
     private String rankName;
+    private String syncCode;
     private String name;
 
     private boolean canSeeStaffMessages = true;
@@ -57,6 +60,7 @@ public class PotPlayer {
     private long chatCooldown;
 
     private final Date lastJoined = new Date();
+
     private String lastJoin;
     private String firstJoin;
 
@@ -86,6 +90,7 @@ public class PotPlayer {
         document.put("lastJoined", CorePlugin.FORMAT.format(new Date()));
         document.put("firstJoined", this.firstJoin);
         document.put("rankName", Profile.getByUuid(this.uuid).getActiveGrant().getRank().getData().getName());
+        document.put("syncCode", this.syncCode);
         document.put("language", (this.language != null ? this.language.getLanguageName() : LanguageType.ENGLISH.getLanguageName()));
         document.put("currentlyOnline", this.currentlyOnline);
 
@@ -111,6 +116,7 @@ public class PotPlayer {
         document.put("lastJoined", CorePlugin.FORMAT.format(new Date()));
         document.put("firstJoined", this.firstJoin);
         document.put("rankName", Profile.getByUuid(this.uuid).getActiveGrant().getRank().getData().getName());
+        document.put("syncCode", this.syncCode);
         document.put("language", (this.language != null ? this.language.getLanguageName() : LanguageType.ENGLISH.getLanguageName()));
         document.put("currentlyOnline", false);
 
@@ -121,6 +127,7 @@ public class PotPlayer {
 
         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true)));
 
+        syncCodes.remove(this.syncCode);
         profilePlayers.remove(uuid);
     }
 
@@ -176,11 +183,19 @@ public class PotPlayer {
             this.media.setInstagram("N/A");
         }
 
+        if (document.getString("syncCode") != null) {
+            this.setSyncCode(document.getString("syncCode"));
+        } else {
+            this.setSyncCode(SaltUtil.getRandomSaltedString());
+        }
+
         CorePlugin.getInstance().getPunishmentManager().getPunishments().forEach(punishment -> {
             if (punishment.getTarget().equals(this.uuid)) {
                 this.punishments.add(punishment);
             }
         });
+
+        syncCodes.put(this.syncCode, this.player.getName());
 
         this.currentlyMuted = this.isMuted();
         this.currentlyBanned = this.isBanned();
@@ -190,13 +205,12 @@ public class PotPlayer {
     }
 
     public boolean isMuted() {
-        MongoCollection<Document> mongoCollection = CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection();
         AtomicBoolean yes = new AtomicBoolean(false);
-        CorePlugin.getInstance().getMongoThread().execute(() -> {
-            for (Document document : mongoCollection.find()) {
-                if (document.get("punishmentType").equals("MUTE")) {
-                    if (document.get("target").equals(this.uuid.toString())) {
-                        yes.set(document.get("active").equals(true));
+        Punishment.getAllPunishments().forEach(punishment -> {
+            if (punishment.getTarget() == this.uuid) {
+                if (!punishment.isRemoved() && punishment.isActive()) {
+                    if (punishment.getPunishmentType().equals(PunishmentType.MUTE)) {
+                        yes.set(true);
                     }
                 }
             }
@@ -206,13 +220,12 @@ public class PotPlayer {
     }
 
     public boolean isBanned() {
-        MongoCollection<Document> mongoCollection = CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection();
         AtomicBoolean yes = new AtomicBoolean(false);
-        CorePlugin.getInstance().getMongoThread().execute(() -> {
-            for (Document document : mongoCollection.find()) {
-                if (document.get("punishmentType").equals("BAN")) {
-                    if (document.get("target").equals(this.uuid.toString())) {
-                        yes.set(document.get("active").equals(true));
+        Punishment.getAllPunishments().forEach(punishment -> {
+            if (punishment.getTarget() == this.uuid) {
+                if (!punishment.isRemoved() && punishment.isActive()) {
+                    if (punishment.getPunishmentType().equals(PunishmentType.BAN)) {
+                        yes.set(true);
                     }
                 }
             }
