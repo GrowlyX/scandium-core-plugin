@@ -50,6 +50,7 @@ public class PotPlayer {
     private boolean canReport = true;
     private boolean canRequest = true;
     private boolean isVanished = false;
+    private boolean isSynced = false;
 
     private boolean currentlyMuted;
     private boolean currentlyBanned;
@@ -91,6 +92,7 @@ public class PotPlayer {
         document.put("firstJoined", this.firstJoin);
         document.put("rankName", Profile.getByUuid(this.uuid).getActiveGrant().getRank().getData().getName());
         document.put("syncCode", this.syncCode);
+        document.put("isSynced", this.isSynced);
         document.put("language", (this.language != null ? this.language.getLanguageName() : LanguageType.ENGLISH.getLanguageName()));
         document.put("currentlyOnline", this.currentlyOnline);
 
@@ -117,6 +119,7 @@ public class PotPlayer {
         document.put("firstJoined", this.firstJoin);
         document.put("rankName", Profile.getByUuid(this.uuid).getActiveGrant().getRank().getData().getName());
         document.put("syncCode", this.syncCode);
+        document.put("isSynced", this.isSynced);
         document.put("language", (this.language != null ? this.language.getLanguageName() : LanguageType.ENGLISH.getLanguageName()));
         document.put("currentlyOnline", false);
 
@@ -181,6 +184,10 @@ public class PotPlayer {
             this.media.setInstagram(document.getString("instagram"));
         } else {
             this.media.setInstagram("N/A");
+        }
+
+        if (document.getBoolean("isSynced") != null) {
+            this.setSynced(document.getBoolean("isSynced"));
         }
 
         if (document.getString("syncCode") != null) {
