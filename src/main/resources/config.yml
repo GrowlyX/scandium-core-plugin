@@ -2,49 +2,18 @@
 #  Scandium - by SolexGames (GrowlyX)
 #
 communism: true
-motd:
-  l1: "&d&lPotClub"
-  l2: "&7Practice"
-  center: false
-server-name: eu-practice
+server-name: "eu-practice"
 server:
   settings:
     server-id: "POTCLUBVIP"
 redis:
-  host: "redis-17008.c8.us-east-1-2.ec2.cloud.redislabs.com"
-  port: 17008
-  password: "WAFEkJpejtb96EtBWmahGWC1ElIRpjv7"
+  host: "na1.solexgames.com"
+  port: 1234
+  password: "testlolhors"
   authentication: true
 mongodb:
-  url: "mongodb+srv://solexgames:7SybXL3CHkv73wYu@cluster0.opd9e.mongodb.net/SGSoftware?retryWrites=true&w=majority"
+  url: "mongodb+srv://solexgames:password@na1.solexgames.com/SolexGames?retryWrites=true&w=majority"
 whitelisted:
-  - Zowpy
-  - Emotionalism
-  - veltus5184
-  - OTP2x
-  - iPacks
-  - EddehPvP
   - GrowlyX
-  - Divense
-  - SquareWings928
-  - Rith
-  - wactt
-  - Eddie
-  - Seans
-  - GameGlitz
-  - ItsYahoo
-  - beyya
-  - bobamango
-  - Alying
-  - plzMercy
-  - SimplyMerlin
-  - _Jot
-  - nuckerr
-  - Nuckerr
-  - KaboomB52
-  - ignDevelop
-  - killock
-  - qpredz
-  - BigHmm
 whitelist: true
 whitelisted-msg: "&cThis server is currently whitelisted.%NL%&cPlease check our discord for more information."
