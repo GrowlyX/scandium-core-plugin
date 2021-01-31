@@ -1,6 +1,7 @@
 package vip.potclub.core.command.extend.essential;
 
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -23,11 +24,11 @@ public class HistoryCommand extends BaseCommand {
                 player.sendMessage(Color.translate("&cUsage: /" + label + " <player>."));
             }
             if (args.length > 0) {
-                Player target = Bukkit.getPlayerExact(args[0]);
-                if (target != null) {
-                    new PunishHistoryViewMenu(player, target.getName()).open(player);
+                OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[0]);
+                if (offlinePlayer != null) {
+                    new PunishHistoryViewMenu(player, offlinePlayer.getName()).open(player);
                 } else {
-                    player.sendMessage(Color.translate("&cThat player does not exist."));
+                    player.sendMessage(Color.translate("&cThat player does not exist in our databases."));
                 }
             }
         } else {

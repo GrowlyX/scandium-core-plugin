@@ -37,7 +37,7 @@ public class PunishHistoryViewMenu extends AbstractInventoryMenu<CorePlugin> {
         while (this.inventory.firstEmpty() != -1) {
             this.inventory.setItem(this.inventory.firstEmpty(), new InventoryMenuItem(Material.STAINED_GLASS_PANE, 7).setDisplayName(" ").create());
         }
-        /*PotPlayer potPlayer = PotPlayer.getPlayer(target);
+
         AtomicInteger i = new AtomicInteger(10);
         Punishment.getAllPunishments().forEach(punishment -> {
             if (punishment.getTarget().equals(Bukkit.getOfflinePlayer(target))) {
@@ -47,22 +47,22 @@ public class PunishHistoryViewMenu extends AbstractInventoryMenu<CorePlugin> {
                     ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
                     this.inventory.setItem(i.get(), new InventoryMenuItem(Material.INK_SACK, (punishment.isActive() ? 2 : 1))
-                            .setDisplayName(network.getSecondaryColor() + ChatColor.BOLD.toString() + punishment.getId().toString())
+                            .setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + punishment.getId().toString())
                             .addLore(
                                     "",
-                                    "&7Punisher: &b" + network.getMainColor() +  issuerOfflinePlayer.getName(),
-                                    "&7Target: &b" + network.getMainColor() +  targetOfflinePlayer.getName(),
-                                    "&7Reason: &b" + network.getMainColor() +  punishment.getReason(),
-                                    "&7Type: &b" + network.getMainColor() +  punishment.getPunishmentType().getName(),
-                                    "&7Active: &b" + network.getMainColor() +  (punishment.isActive() ? "Yes" : "No"),
-                                    "&7Duration: &b" + network.getMainColor() +  (punishment.isPermanent() ? "Permanent" : DurationFormatUtils.formatDurationWords(Long.parseLong(punishment.getPunishmentDuration()), true, true))
+                                    "&7Punisher: &b" + network.getSecondaryColor() +  issuerOfflinePlayer.getName(),
+                                    "&7Target: &b" + network.getSecondaryColor() +  targetOfflinePlayer.getName(),
+                                    "&7Reason: &b" + network.getSecondaryColor() +  punishment.getReason(),
+                                    "&7Type: &b" + network.getSecondaryColor() +  punishment.getPunishmentType().getName(),
+                                    "&7Active: &b" + network.getSecondaryColor() +  (punishment.isActive() ? "Yes" : "No"),
+                                    "&7Duration: &b" + network.getSecondaryColor() +  (punishment.isPermanent() ? "Permanent" : DurationFormatUtils.formatDurationWords(punishment.getPunishmentDuration(), true, true))
                             )
                             .create());
 
                     i.getAndIncrement();
                 }
             }
-        });*/
+        });
     }
 
     @Override
