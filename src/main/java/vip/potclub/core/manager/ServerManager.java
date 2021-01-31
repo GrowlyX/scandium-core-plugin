@@ -2,12 +2,17 @@ package vip.potclub.core.manager;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.entity.Player;
 import vip.potclub.core.CorePlugin;
 import vip.potclub.core.enums.ServerType;
+
+import java.util.ArrayList;
 
 @Getter
 @Setter
 public class ServerManager {
+
+    private ArrayList<Player> vanishedPlayers;
 
     private ServerType network;
 
@@ -15,6 +20,8 @@ public class ServerManager {
     private long chatSlow;
 
     public ServerManager() {
+        this.vanishedPlayers = new ArrayList<>();
+
         setupServerType();
     }
 
@@ -22,7 +29,7 @@ public class ServerManager {
         try {
             this.network = ServerType.valueOf(CorePlugin.getInstance().getConfig().getString("server.settings.server-id"));
         } catch (IllegalArgumentException e) {
-            CorePlugin.getInstance().getLogger().info("Could not find a valid server.");
+            CorePlugin.getInstance().getLogger().info("Config the plugin correctly dumbass.");
             CorePlugin.getInstance().getServer().shutdown();
         }
     }
