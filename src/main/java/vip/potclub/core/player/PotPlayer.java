@@ -92,7 +92,7 @@ public class PotPlayer {
         document.put("lastJoined", CorePlugin.FORMAT.format(new Date()));
         document.put("firstJoined", this.firstJoin);
         document.put("rankName", Profile.getByUuid(this.uuid).getActiveGrant().getRank().getData().getName());
-        document.put("syncCode", this.syncCode);
+        document.put("discordSyncCode", this.syncCode);
         document.put("syncDiscord", this.syncDiscord);
         document.put("isSynced", this.isSynced);
         document.put("language", (this.language != null ? this.language.getLanguageName() : LanguageType.ENGLISH.getLanguageName()));
@@ -120,7 +120,7 @@ public class PotPlayer {
         document.put("lastJoined", CorePlugin.FORMAT.format(new Date()));
         document.put("firstJoined", this.firstJoin);
         document.put("rankName", Profile.getByUuid(this.uuid).getActiveGrant().getRank().getData().getName());
-        document.put("syncCode", this.syncCode);
+        document.put("discordSyncCode", this.syncCode);
         document.put("syncDiscord", this.syncDiscord);
         document.put("isSynced", this.isSynced);
         document.put("language", (this.language != null ? this.language.getLanguageName() : LanguageType.ENGLISH.getLanguageName()));
@@ -196,8 +196,8 @@ public class PotPlayer {
         if (document.getString("syncDiscord") != null) {
             this.setSyncDiscord(document.getString("syncDiscord"));
         }
-        if (document.getString("syncCode") != null) {
-            this.setSyncCode(document.getString("syncCode"));
+        if (document.getString("discordSyncCode") != null) {
+            this.setSyncCode(document.getString("discordSyncCode"));
         } else {
             this.setSyncCode(SaltUtil.getRandomSaltedString());
         }

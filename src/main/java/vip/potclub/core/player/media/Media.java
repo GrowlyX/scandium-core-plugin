@@ -1,7 +1,6 @@
 package vip.potclub.core.player.media;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter

@@ -17,3 +17,7 @@ whitelisted:
   - GrowlyX
 whitelist: true
 whitelisted-msg: "&cThis server is currently whitelisted.%NL%&cPlease check our discord for more information."
+tips:
+  prefix: "&d[TIP] &e"
+  messages:
+    - ""

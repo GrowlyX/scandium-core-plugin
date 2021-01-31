@@ -6,7 +6,7 @@ import java.util.Random;
 
 public final class SaltUtil {
 
-    private final static String SALT_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toLowerCase();
+    private final static String SALT_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
 
     public static String getRandomSaltedString() {
         StringBuilder salt = new StringBuilder();
