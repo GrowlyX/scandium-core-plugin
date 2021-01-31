@@ -24,10 +24,12 @@ public class SyncCommand extends BaseCommand {
         ChatColor SC = CorePlugin.getInstance().getServerManager().getNetwork().getSecondaryColor();
 
         player.sendMessage(Color.translate("  "));
-        player.sendMessage(Color.translate(MCB + "Discord Sync:"));
+        player.sendMessage(Color.translate(MCB + "DISCORD SYNC:"));
+        player.sendMessage(Color.translate("  "));
         player.sendMessage(Color.translate(SC + "To sync your account with your discord account and receive"));
-        player.sendMessage(Color.translate(SC + "the " + ChatColor.GREEN + "Verified " + SC + " role, copy this code '" + MC + PotPlayer.getPlayer(player).getSyncCode() + SC + "' and"));
-        player.sendMessage(Color.translate(SC + "paste it into the " + MC + "#sync" + SC + " channel with '-sync' on our discord server!"));
+        player.sendMessage(Color.translate(SC + "the " + ChatColor.GREEN + "Verified" + SC + " role, copy this code '" + MC + PotPlayer.getPlayer(player).getSyncCode() + SC + "' and"));
+        player.sendMessage(Color.translate(SC + "paste it into the " + MC + "#sync" + SC + " channel with " + MC + "'-sync'" + SC + " on our discord"));
+        player.sendMessage(Color.translate(SC + "server!"));
         player.sendMessage(Color.translate("  "));
         return false;
     }

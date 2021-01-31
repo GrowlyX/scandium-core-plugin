@@ -9,6 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import vip.potclub.core.command.extend.CoreCommand;
 import vip.potclub.core.command.extend.discord.SyncCommand;
+import vip.potclub.core.command.extend.discord.UnsyncCommand;
 import vip.potclub.core.command.extend.essential.*;
 import vip.potclub.core.command.extend.web.WebAnnouncementCommand;
 import vip.potclub.core.command.extend.web.WebAnnouncementDeleteCommand;
@@ -123,6 +124,7 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("unban").setExecutor(new UnBanCommand());
         this.getCommand("store").setExecutor(new StoreCommand());
         this.getCommand("sync").setExecutor(new SyncCommand());
+        this.getCommand("unsync").setExecutor(new UnsyncCommand());
         this.getCommand("message").setExecutor(new MessageCommand());
         this.getCommand("reply").setExecutor(new ReplyCommand());
         this.getCommand("clearchat").setExecutor(new ClearChatCommand());

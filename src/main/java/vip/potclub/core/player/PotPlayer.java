@@ -32,7 +32,7 @@ public class PotPlayer {
 
     private UUID uuid;
     private Player player;
-    public Media media;
+    private Media media;
 
     private Player lastRecipient;
 
