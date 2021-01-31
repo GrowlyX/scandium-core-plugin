@@ -18,7 +18,15 @@ public class AutoMessageTask extends BukkitRunnable { // Credits: https://github
 
     private int lastCount;
 
+    private final String tipPrefix;
+    private final boolean padding;
+    private final boolean prefix;
+
     public AutoMessageTask() {
+        this.tipPrefix = Color.translate(CorePlugin.getInstance().getConfig().getString("tips.prefix"));
+        this.padding = CorePlugin.getInstance().getConfig().getBoolean("tips.padding");
+        this.prefix = CorePlugin.getInstance().getConfig().getBoolean("tips.useprefix");
+
         setupMessages();
         runTaskTimerAsynchronously(CorePlugin.getInstance(), 20L, 120 * 20L);
     }
@@ -29,31 +37,18 @@ public class AutoMessageTask extends BukkitRunnable { // Credits: https://github
     }
 
     private void setupMessages() {
-        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
-        String prefix = serverType.getMainColor() + "[TIP] " + serverType.getSecondaryColor();
-
-        defaultMessages.add(prefix + "Follow our Twitter account for news and giveaways - www.twitter.com/" + serverType.getTwitterLink());
-        defaultMessages.add(prefix + "Join our Discord server to chat with players, get support, and see sneak peeks - " + serverType.getDiscordLink());
-        defaultMessages.add(prefix + "Purchase ranks, perks, and more on our shop - " + serverType.getStoreLink());
-        defaultMessages.add(prefix + "Configure our systems to your liking by using /settings.");
-        defaultMessages.add(prefix + "Change your network language type by using /language.");
-        defaultMessages.add(prefix + "Modify your social media by using /media.");
-        defaultMessages.add(prefix + "Sync your account to our discord server by using /sync.");
-        defaultMessages.add(prefix + "Punished? Appeal on our Discord server or purchase to remove your punishment.");
-        defaultMessages.add(prefix + "Donators can host events using /event.");
-        defaultMessages.add(prefix + "Butterfly clicking may result in a punishment! Use at your own risk.");
-        defaultMessages.add(prefix + "View the leaderboards on our website - " + serverType.getWebsiteLink());
+        defaultMessages.addAll(CorePlugin.getInstance().getConfig().getStringList("tips.messages"));
     }
 
     private void sendMessage(List<String> input) {
         Bukkit.getOnlinePlayers().forEach(player -> {
             PotPlayer potPlayer = PotPlayer.getPlayer(player);
             if (potPlayer.isCanSeeTips()) {
-                player.sendMessage("  ");
+                if (padding) player.sendMessage("  ");
                 int count = CorePlugin.RANDOM.nextInt(defaultMessages.size());
-                player.sendMessage(Color.translate(input.get(this.lastCount == count ? CorePlugin.RANDOM.nextInt(input.size()) : count)));
+                player.sendMessage(Color.translate((this.prefix ? this.tipPrefix : "") + input.get(this.lastCount == count ? CorePlugin.RANDOM.nextInt(input.size()) : count)));
                 this.lastCount = count;
-                player.sendMessage("  ");
+                if (padding) player.sendMessage("  ");
             }
         });
     }

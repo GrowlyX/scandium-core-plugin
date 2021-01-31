@@ -18,6 +18,18 @@ whitelisted:
 whitelist: true
 whitelisted-msg: "&cThis server is currently whitelisted.%NL%&cPlease check our discord for more information."
 tips:
+  padding: true
+  use-prefix: true
   prefix: "&d[TIP] &e"
   messages:
-    - ""
+    - "Follow our Twitter account for news and giveaways - www.twitter.com/PotClubVIP"
+    - "Join our Discord server to chat with players, get support, and see sneak peeks - https://dsc.gg/pot"
+    - "Purchase ranks, perks, and more on our shop - store.potclub.vip"
+    - "Configure our systems to your liking by using /settings."
+    - "Change your network language type by using /language."
+    - "Modify your social media by using /media."
+    - "Sync your account to our discord server by using /sync."
+    - "Punished? Appeal on our Discord server or purchase to remove your punishment."
+    - "Donators can host events using /event."
+    - "Butterfly clicking may result in a punishment! Use at your own risk."
+    - "View the leaderboards on our website - https://potclub.vip/"

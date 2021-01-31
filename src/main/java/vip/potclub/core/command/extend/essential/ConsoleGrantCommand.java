@@ -13,7 +13,7 @@ public class ConsoleGrantCommand extends BaseCommand {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            player.sendMessage(Color.translate(""));
+            player.sendMessage(Color.translate("die"));
             return false;
         }
 
