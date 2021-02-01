@@ -15,8 +15,10 @@ import vip.potclub.core.player.PotPlayer;
 import vip.potclub.core.player.punishment.Punishment;
 import vip.potclub.core.player.punishment.PunishmentType;
 import vip.potclub.core.util.Color;
+import vip.potclub.core.util.SaltUtil;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -76,7 +78,7 @@ public class PunishSelectConfirmMenu extends AbstractInventoryMenu<CorePlugin> {
             event.setCancelled(true);
             if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR) return;
             if (event.getRawSlot() == 14) {
-                Punishment punishment = new Punishment(this.punishmentType, this.player.getUniqueId(), this.target.getUniqueId(), this.player.getName(), this.reason, new Date(System.currentTimeMillis()), this.punishmentDuration, this.permanent, new Date());
+                Punishment punishment = new Punishment(this.punishmentType, this.player.getUniqueId(), this.target.getUniqueId(), this.player.getName(), this.reason, new Date(System.currentTimeMillis()), this.punishmentDuration, this.permanent, new Date(), UUID.randomUUID(), SaltUtil.getRandomSaltedString(7));
                 punishment.savePunishment();
                 this.player.closeInventory();
                 PotPlayer potPlayer = PotPlayer.getPlayer(this.target);

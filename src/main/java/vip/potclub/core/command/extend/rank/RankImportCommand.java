@@ -16,6 +16,8 @@ import java.util.UUID;
 
 public class RankImportCommand extends BaseCommand {
 
+    public Clickable confirmClickable = new Clickable(Color.translate("&4&l[CONFIRM]"), Color.translate("&cClick to import all ranks."), "/import confirm");
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
@@ -26,14 +28,13 @@ public class RankImportCommand extends BaseCommand {
         Player player = (Player) sender;
         if (player.getUniqueId().equals(CorePlugin.getInstance().getServerManager().getNetwork().getMainOwner()) || player.getUniqueId().equals(CorePlugin.getInstance().getServerManager().getNetwork().getMainDeveloper())) {
             if (args.length == 0) {
-                Clickable clickable = new Clickable(Color.translate("&4&l[CONFIRM]"), Color.translate("&cClick to import all ranks."), "/import confirm");
                 player.sendMessage(Color.translate("  "));
                 player.sendMessage(Color.translate("&aWould you like to import the ranks from the ranks.yml?"));
                 player.sendMessage(Color.translate("&aIf you proceed, make sure to understand all the current"));
                 player.sendMessage(Color.translate("&aranks will be deleted and replaced with the new ones."));
                 player.sendMessage(Color.translate("&aThis also includes player profiles & grants."));
                 player.sendMessage(Color.translate("  "));
-                player.spigot().sendMessage(clickable.asComponents());
+                player.spigot().sendMessage(confirmClickable.asComponents());
                 player.sendMessage(Color.translate("  "));
             }
             if (args.length == 1) {

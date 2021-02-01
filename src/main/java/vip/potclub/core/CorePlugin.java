@@ -24,6 +24,7 @@ import vip.potclub.core.player.PotPlayer;
 import vip.potclub.core.redis.RedisClient;
 import vip.potclub.core.task.AutoMessageTask;
 import vip.potclub.core.task.GrantExpireTask;
+import vip.potclub.core.task.PlayerSaveTask;
 import vip.potclub.core.task.PunishExpireTask;
 import vip.potclub.core.util.Color;
 import vip.potclub.core.util.external.ConfigExternal;
@@ -155,12 +156,7 @@ public final class CorePlugin extends JavaPlugin {
         new AutoMessageTask();
         new PunishExpireTask();
         new GrantExpireTask();
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                PotPlayer.profilePlayers.forEach((uuid, potPlayer) -> potPlayer.saveWithoutRemove());
-            }
-        }.runTaskTimerAsynchronously(CorePlugin.getInstance(), 36000L, 36000L);
+        new PlayerSaveTask();
     }
 
     @Override

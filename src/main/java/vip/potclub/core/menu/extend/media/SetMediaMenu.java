@@ -94,8 +94,7 @@ public class SetMediaMenu extends AbstractInventoryMenu<CorePlugin> {
             if (item == null || item.getType() == Material.AIR) return;
             switch (event.getRawSlot()) {
                 case 2:
-                    potPlayer.getMedia().getMediaData().setModifyingDiscordData(true);
-                    player.sendMessage(Color.translate("&aType your &9Discord &ausername in chat!"));
+                    player.sendMessage(Color.translate("&cPlease sync your account to our discord server to use this feature."));
                     player.closeInventory();
                     break;
                 case 3:

@@ -37,7 +37,9 @@ public class PunishmentManager {
                         punishmentDocument.getDate("issuingDate"),
                         punishmentDocument.getLong("punishmentDuration"),
                         punishmentDocument.getBoolean("permanent"),
-                        punishmentDocument.getDate("createdAt")
+                        punishmentDocument.getDate("createdAt"),
+                        UUID.fromString(punishmentDocument.getString("id")),
+                        punishmentDocument.getString("identification")
                 );
 
                 if (punishmentDocument.getBoolean("active")) {

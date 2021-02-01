@@ -25,7 +25,7 @@ public class AutoMessageTask extends BukkitRunnable {
     public AutoMessageTask() {
         this.tipPrefix = Color.translate(CorePlugin.getInstance().getConfig().getString("tips.prefix"));
         this.padding = CorePlugin.getInstance().getConfig().getBoolean("tips.padding");
-        this.prefix = CorePlugin.getInstance().getConfig().getBoolean("tips.useprefix");
+        this.prefix = CorePlugin.getInstance().getConfig().getBoolean("tips.use-prefix");
 
         setupMessages();
         runTaskTimerAsynchronously(CorePlugin.getInstance(), 20L, 120 * 20L);

@@ -18,4 +18,15 @@ public final class SaltUtil {
 
         return salt.toString();
     }
+
+    public static String getRandomSaltedString(int size) {
+        StringBuilder salt = new StringBuilder();
+
+        while (salt.length() < size) {
+            int index = (int) (CorePlugin.RANDOM.nextFloat() * SALT_CHARS.length());
+            salt.append(SALT_CHARS.charAt(index));
+        }
+
+        return salt.toString();
+    }
 }

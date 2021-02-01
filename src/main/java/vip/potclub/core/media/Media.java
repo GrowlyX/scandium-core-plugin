@@ -17,11 +17,4 @@ public class Media {
     public Media() {
         this.mediaData = new MediaData();
     }
-
-    public boolean hasDiscord() {
-        return (this.discord != null);
-    }
-    public String getTwitterLink() {
-        return "https://twitter.com/" + twitter;
-    }
 }

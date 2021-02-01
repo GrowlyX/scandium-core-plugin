@@ -39,9 +39,11 @@ public class RedisClient {
             (new Thread(() -> jedis.subscribe(this.redisListener, "SCANDIUM"))).start();
             jedis.connect();
             this.setClientActive(true);
+
             CorePlugin.getInstance().getLogger().info("[Redis] Connected to Redis backend.");
         } catch (Exception e) {
             CorePlugin.getInstance().getLogger().severe("[Redis] Could not connect to Redis backend.");
+
             this.setClientActive(false);
         }
     }

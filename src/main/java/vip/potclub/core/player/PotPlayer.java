@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bson.Document;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
 import vip.potclub.core.CorePlugin;
@@ -70,7 +69,7 @@ public class PotPlayer {
 
     private long chatCooldown;
 
-    private final Date lastJoined = new Date();
+    private Date lastJoined;
 
     private String lastJoin;
     private String firstJoin;
@@ -81,6 +80,10 @@ public class PotPlayer {
         this.player = Bukkit.getPlayer(uuid);
         this.name = player.getName();
         this.media = new Media();
+        this.lastJoined = new Date();
+        this.syncCode = SaltUtil.getRandomSaltedString(6);
+
+        this.attachment = this.player.addAttachment(CorePlugin.getInstance());
 
         loadPlayerData();
 
@@ -100,7 +103,12 @@ public class PotPlayer {
         document.put("canSeeBroadcasts", this.canSeeBroadcasts);
         document.put("lastJoined", CorePlugin.FORMAT.format(new Date()));
         document.put("firstJoined", this.firstJoin);
-        document.put("rankName", this.getActiveGrant().getRank());
+
+        List<String> grantStrings = new ArrayList<>();
+        this.getAllGrants().forEach(grant -> grantStrings.add(grant.toJson()));
+
+        document.put("allGrants", grantStrings);
+        document.put("rankName", this.getActiveGrant().getRank().getName());
         document.put("discordSyncCode", this.syncCode);
         document.put("syncDiscord", this.syncDiscord);
         document.put("isSynced", this.isSynced);
@@ -128,12 +136,17 @@ public class PotPlayer {
         document.put("canSeeBroadcasts", this.canSeeBroadcasts);
         document.put("lastJoined", CorePlugin.FORMAT.format(new Date()));
         document.put("firstJoined", this.firstJoin);
-        document.put("rankName", this.getActiveGrant().getRank());
+
+        List<String> grantStrings = new ArrayList<>();
+        this.getAllGrants().forEach(grant -> grantStrings.add(grant.toJson()));
+
+        document.put("allGrants", grantStrings);
+        document.put("rankName", this.getActiveGrant().getRank().getName());
         document.put("discordSyncCode", this.syncCode);
         document.put("syncDiscord", this.syncDiscord);
         document.put("isSynced", this.isSynced);
         document.put("language", (this.language != null ? this.language.getLanguageName() : LanguageType.ENGLISH.getLanguageName()));
-        document.put("currentlyOnline", false);
+        document.put("currentlyOnline", this.currentlyOnline);
 
         document.put("discord", this.media.getDiscord());
         document.put("twitter", this.media.getTwitter());
@@ -199,6 +212,15 @@ public class PotPlayer {
             this.media.setInstagram(document.getString("instagram"));
         } else {
             this.media.setInstagram("N/A");
+        }
+
+        if (document.getList("allGrants", String.class) != null) {
+            if (document.getList("allGrants", String.class).isEmpty()) {
+                this.allGrants.add(new Grant(null, Rank.getDefaultRank(), new Date().getTime(), Long.MAX_VALUE, "Automatic Grant (Default)", true));
+            } else {
+                List<String> allGrants = document.getList("allGrants", String.class);
+                allGrants.forEach(s -> this.allGrants.add(CorePlugin.GSON.fromJson(s, Grant.class)));
+            }
         }
 
         if (document.getBoolean("isSynced") != null) {
@@ -277,7 +299,9 @@ public class PotPlayer {
             this.player.setDisplayName(Color.translate(grant.getRank().getColor() + player.getName()));
         }
 
-        this.attachment.getPermissions().keySet().forEach(s -> this.attachment.unsetPermission(s));
+        if (!this.attachment.getPermissions().isEmpty()) {
+            this.attachment.getPermissions().keySet().forEach(s -> this.attachment.unsetPermission(s));
+        }
 
         for (Grant grants : this.getAllGrants()) {
             if (grants == null) continue;
@@ -306,25 +330,6 @@ public class PotPlayer {
                     if (document.get("target").equals(this.uuid.toString())) {
                         if (!document.get("active").equals(false)) {
                             this.currentlyMuted = false;
-                            Punishment punishment = CorePlugin.GSON.fromJson(document.toJson(), Punishment.class);
-                            punishment.setActive(false);
-                            punishment.setRemoved(true);
-                            punishment.savePunishment();
-                        }
-                    }
-                }
-            }
-        });
-    }
-
-    public void unBanPlayer() {
-        MongoCollection<Document> mongoCollection = CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection();
-        CorePlugin.getInstance().getMongoThread().execute(() -> {
-            for (Document document : mongoCollection.find()) {
-                if (document.get("punishmentType").equals("BAN")) {
-                    if (document.get("target").equals(this.uuid.toString())) {
-                        if (!document.get("active").equals(false)) {
-                            this.currentlyBanned = false;
                             Punishment punishment = CorePlugin.GSON.fromJson(document.toJson(), Punishment.class);
                             punishment.setActive(false);
                             punishment.setRemoved(true);

@@ -34,6 +34,7 @@ public class Punishment {
 
     private String issuerName;
     private String reason;
+    private String punishIdentification;
     private String removalReason = null;
     private String removerName = null;
 
@@ -43,7 +44,7 @@ public class Punishment {
 
     private long punishmentDuration;
 
-    public Punishment(PunishmentType punishmentType, UUID issuer, UUID target, String issuerName, String reason, Date issuingDate, long punishmentDuration, boolean permanent, Date createdAt) {
+    public Punishment(PunishmentType punishmentType, UUID issuer, UUID target, String issuerName, String reason, Date issuingDate, long punishmentDuration, boolean permanent, Date createdAt, UUID uuid, String punishIdentification) {
         this.punishmentType = punishmentType;
         this.issuer = issuer;
         this.issuerName = issuerName;
@@ -56,7 +57,8 @@ public class Punishment {
 
         this.expirationDate = new Date(this.createdAt.getTime() + this.punishmentDuration);
 
-        this.id = UUID.randomUUID();
+        this.id = uuid;
+        this.punishIdentification = punishIdentification;
 
         savePunishment();
     }
@@ -80,6 +82,7 @@ public class Punishment {
         document.put("permanent", this.permanent);
         document.put("removed", this.removed);
         document.put("punishmentDuration", this.punishmentDuration);
+        document.put("identification", this.punishIdentification);
 
         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().replaceOne(Filters.eq("_id", this.id), document, new ReplaceOptions().upsert(true)));
     }
@@ -103,6 +106,7 @@ public class Punishment {
         document.put("permanent", this.permanent);
         document.put("removed", this.removed);
         document.put("punishmentDuration", this.punishmentDuration);
+        document.put("identification", this.punishIdentification);
 
         CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().replaceOne(Filters.eq("_id", this.id), document, new ReplaceOptions().upsert(true));
     }

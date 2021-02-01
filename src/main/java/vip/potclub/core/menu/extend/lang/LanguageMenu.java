@@ -109,6 +109,7 @@ public class LanguageMenu extends AbstractInventoryMenu<CorePlugin> {
                     player.sendMessage(Color.translate("&aYour language has been set to &cGerman&a."));
                     break;
             }
+            player.closeInventory();
         }
     }
 }
