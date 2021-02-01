@@ -3,21 +3,25 @@ package vip.potclub.core.player;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
-import com.solexgames.perms.profile.Profile;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.Document;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionAttachment;
 import vip.potclub.core.CorePlugin;
 import vip.potclub.core.enums.LanguageType;
-import vip.potclub.core.player.media.Media;
+import vip.potclub.core.media.Media;
+import vip.potclub.core.player.grant.Grant;
+import vip.potclub.core.player.prefixes.Prefix;
 import vip.potclub.core.player.punishment.Punishment;
 import vip.potclub.core.player.punishment.PunishmentType;
+import vip.potclub.core.player.ranks.Rank;
+import vip.potclub.core.util.Color;
 import vip.potclub.core.util.SaltUtil;
 
 import java.beans.ConstructorProperties;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -25,14 +29,18 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Setter
 public class PotPlayer {
 
-    public static Map<UUID, PotPlayer> profilePlayers = new HashMap<>();
-    public static Map<String, String> syncCodes = new HashMap<>();
+    @Getter public static Map<UUID, PotPlayer> profilePlayers = new HashMap<>();
+    @Getter public static Map<String, String> syncCodes = new HashMap<>();
 
     private List<Punishment> punishments = new ArrayList<>();
+    private List<String> friends = new ArrayList<>();
+    private List<String> ownedPrefixes = new ArrayList<>();
+    private List<Grant> allGrants = new ArrayList<>();
 
     private UUID uuid;
     private Player player;
     private Media media;
+    private Prefix appliedPrefix;
 
     private Player lastRecipient;
 
@@ -58,6 +66,7 @@ public class PotPlayer {
     private boolean currentlyOnline;
 
     private LanguageType language;
+    private PermissionAttachment attachment;
 
     private long chatCooldown;
 
@@ -91,7 +100,7 @@ public class PotPlayer {
         document.put("canSeeBroadcasts", this.canSeeBroadcasts);
         document.put("lastJoined", CorePlugin.FORMAT.format(new Date()));
         document.put("firstJoined", this.firstJoin);
-        document.put("rankName", Profile.getByUuid(this.uuid).getActiveGrant().getRank().getData().getName());
+        document.put("rankName", this.getActiveGrant().getRank());
         document.put("discordSyncCode", this.syncCode);
         document.put("syncDiscord", this.syncDiscord);
         document.put("isSynced", this.isSynced);
@@ -119,7 +128,7 @@ public class PotPlayer {
         document.put("canSeeBroadcasts", this.canSeeBroadcasts);
         document.put("lastJoined", CorePlugin.FORMAT.format(new Date()));
         document.put("firstJoined", this.firstJoin);
-        document.put("rankName", Profile.getByUuid(this.uuid).getActiveGrant().getRank().getData().getName());
+        document.put("rankName", this.getActiveGrant().getRank());
         document.put("discordSyncCode", this.syncCode);
         document.put("syncDiscord", this.syncDiscord);
         document.put("isSynced", this.isSynced);
@@ -161,7 +170,9 @@ public class PotPlayer {
         if (document.getBoolean("canReceiveDmsSounds") != null) {
             this.canReceiveDmsSounds = document.getBoolean("canReceiveDmsSounds");
         }
+
         this.firstJoin = ((document.getString("firstJoined") != null) ? document.getString("firstJoined") : CorePlugin.FORMAT.format(new Date()));
+
         if (document.getString("language") != null) {
             this.language = LanguageType.getByName(document.getString("language"));
         } else {
@@ -210,10 +221,12 @@ public class PotPlayer {
 
         syncCodes.put(this.syncCode, this.player.getName());
 
+        this.setupAttachment();
+
         this.currentlyMuted = this.isMuted();
         this.currentlyBanned = this.isBanned();
-
         this.currentlyOnline = true;
+
         Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), this::saveWithoutRemove, 10 * 20L);
     }
 
@@ -245,6 +258,44 @@ public class PotPlayer {
         });
 
         return yes.get();
+    }
+
+    public Grant getActiveGrant() {
+        Grant toReturn = null;
+        for (Grant grant : this.getAllGrants()) {
+            if (grant.isActive() && !grant.getRank().defaultRank) {
+                toReturn = grant;
+            }
+        }
+        if (toReturn == null) toReturn = new Grant(null, Objects.requireNonNull(Rank.getDefaultRank()), System.currentTimeMillis(), 2147483647L, "Automatic Grant (Default)", true);
+        return toReturn;
+    }
+
+    public void setupAttachment() {
+        if (this.player != null) {
+            Grant grant = this.getActiveGrant();
+            this.player.setDisplayName(Color.translate(grant.getRank().getColor() + player.getName()));
+        }
+
+        this.attachment.getPermissions().keySet().forEach(s -> this.attachment.unsetPermission(s));
+
+        for (Grant grants : this.getAllGrants()) {
+            if (grants == null) continue;
+            if (grants.isExpired()) continue;
+            for (String rankPermissions : grants.getRank().getPermissions()) {
+                this.attachment.setPermission(rankPermissions.replace("-", ""), !rankPermissions.startsWith("-"));
+            }
+            for (UUID rankUuid : grants.getRank().getInheritance()) {
+                Rank rank = Rank.getByUuid(rankUuid);
+                if (rank != null) {
+                    for (String permission3 : rank.getPermissions()) {
+                        this.attachment.setPermission(permission3.replace("-", ""), !permission3.startsWith("-"));
+                    }
+                }
+            }
+        }
+
+        if (player != null) player.recalculatePermissions();
     }
 
     public void unMutePlayer() {

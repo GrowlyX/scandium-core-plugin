@@ -1,4 +1,4 @@
-package vip.potclub.core.menu.extend;
+package vip.potclub.core.menu.extend.lang;
 
 import lombok.Getter;
 import lombok.Setter;

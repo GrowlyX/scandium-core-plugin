@@ -1,4 +1,4 @@
-package vip.potclub.core.player.media;
+package vip.potclub.core.media;
 
 import java.util.regex.Pattern;
 

@@ -1,7 +1,5 @@
 package vip.potclub.core.listener;
 
-import com.solexgames.perms.grant.Grant;
-import com.solexgames.perms.profile.Profile;
 import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -19,17 +17,15 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 import vip.potclub.core.CorePlugin;
 import vip.potclub.core.enums.ChatChannelType;
+import vip.potclub.core.media.MediaConstants;
 import vip.potclub.core.menu.IMenu;
 import vip.potclub.core.player.PotPlayer;
-import vip.potclub.core.player.media.MediaConstants;
 import vip.potclub.core.player.punishment.Punishment;
 import vip.potclub.core.player.punishment.PunishmentStrings;
 import vip.potclub.core.player.punishment.PunishmentType;
 import vip.potclub.core.util.Color;
 import vip.potclub.core.util.RedisUtil;
 
-import java.util.ArrayList;
-import java.util.UUID;
 import java.util.regex.Matcher;
 
 public class PlayerListener implements Listener {
@@ -128,12 +124,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onConnect(PlayerJoinEvent event) {
-        Profile profile = new Profile(event.getPlayer().getUniqueId(), new ArrayList<>(), new ArrayList<>());
-        if (!profile.isLoaded()) profile.asyncLoad();
-        profile.setupAttachment();
-
         new PotPlayer(event.getPlayer().getUniqueId());
-
         if (event.getPlayer().hasPermission("scandium.staff")) {
             Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onConnect(event.getPlayer()))), 10L);
         }
@@ -142,7 +133,6 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onAsyncPlayerChatEvent(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
-        Profile profile = Profile.getByUuid(player.getUniqueId());
         PotPlayer potPlayer = PotPlayer.getPlayer(player);
 
         Matcher discordMatcher = MediaConstants.DISCORD_USERNAME_REGEX.matcher(event.getMessage());
@@ -224,7 +214,7 @@ public class PlayerListener implements Listener {
                             Bukkit.getOnlinePlayers().forEach(player1 -> {
                                 PotPlayer potPlayer1 = PotPlayer.getPlayer(player1);
                                 if (potPlayer1.isCanSeeGlobalChat()) {
-                                    player1.sendMessage(Color.translate(profile.getActiveGrant().getRank().getData().getPrefix() + player.getName() + " &7" + '»' + " " + (profile.getActiveGrant().getRank().getData().getName().contains("Default") ? "&7" : "&f") + event.getMessage()));
+                                    player1.sendMessage(Color.translate(potPlayer.getActiveGrant().getRank().getPrefix() + player.getName() + " &7" + '»' + " " + (potPlayer.getActiveGrant().getRank().getName().contains("Default") ? "&7" : "&f") + event.getMessage()));
                                 }
                             });
                             PotPlayer.getPlayer(player).setChatCooldown(System.currentTimeMillis() + (slowChat > 0L ? slowChat : 3000L));
@@ -236,7 +226,7 @@ public class PlayerListener implements Listener {
                         Bukkit.getOnlinePlayers().forEach(player1 -> {
                             PotPlayer potPlayer1 = PotPlayer.getPlayer(player1);
                             if (potPlayer1.isCanSeeGlobalChat()) {
-                                player1.sendMessage(Color.translate(profile.getActiveGrant().getRank().getData().getPrefix() + player.getName() + " &7" + '»' + " " + (profile.getActiveGrant().getRank().getData().getName().contains("Default") ? "&7" : "&f") + event.getMessage()));
+                                player1.sendMessage(Color.translate(potPlayer.getActiveGrant().getRank().getPrefix() + player.getName() + " &7" + '»' + " " + (potPlayer.getActiveGrant().getRank().getName().contains("Default") ? "&7" : "&f") + event.getMessage()));
                             }
                         });
                         PotPlayer.getPlayer(player).setChatCooldown(System.currentTimeMillis() + (slowChat > 0L ? slowChat : 3000L));
@@ -269,7 +259,7 @@ public class PlayerListener implements Listener {
                                 Bukkit.getOnlinePlayers().forEach(player1 -> {
                                     PotPlayer potPlayer1 = PotPlayer.getPlayer(player1);
                                     if (potPlayer1.isCanSeeGlobalChat()) {
-                                        player1.sendMessage(Color.translate(profile.getActiveGrant().getRank().getData().getPrefix() + player.getName() + " &7" + '»' + " " + (profile.getActiveGrant().getRank().getData().getName().contains("Default") ? "&7" : "&f") + event.getMessage()));
+                                        player1.sendMessage(Color.translate(potPlayer.getActiveGrant().getRank().getPrefix() + player.getName() + " &7" + '»' + " " + (potPlayer.getActiveGrant().getRank().getName().contains("Default") ? "&7" : "&f") + event.getMessage()));
                                     }
                                 });
                                 PotPlayer.getPlayer(player).setChatCooldown(System.currentTimeMillis() + (slowChat > 0L ? slowChat : 3000L));
@@ -281,7 +271,7 @@ public class PlayerListener implements Listener {
                             Bukkit.getOnlinePlayers().forEach(player1 -> {
                                 PotPlayer potPlayer1 = PotPlayer.getPlayer(player1);
                                 if (potPlayer1.isCanSeeGlobalChat()) {
-                                    player1.sendMessage(Color.translate(profile.getActiveGrant().getRank().getData().getPrefix() + player.getName() + " &7" + '»' + " " + (profile.getActiveGrant().getRank().getData().getName().contains("Default") ? "&7" : "&f") + event.getMessage()));
+                                    player1.sendMessage(Color.translate(potPlayer.getActiveGrant().getRank().getPrefix() + player.getName() + " &7" + '»' + " " + (potPlayer.getActiveGrant().getRank().getName().contains("Default") ? "&7" : "&f") + event.getMessage()));
                                 }
                             });
                             PotPlayer.getPlayer(player).setChatCooldown(System.currentTimeMillis() + (slowChat > 0L ? slowChat : 3000L));
@@ -312,14 +302,6 @@ public class PlayerListener implements Listener {
                 }
             }
         }
-
-        player.setDisplayName(player.getName());
-        if (profile != null) {
-            Grant grant = profile.getActiveGrant();
-            if (!player.getDisplayName().equals(Color.translate(grant.getRank().getData().getColorPrefix() + player.getName()))) {
-                player.setDisplayName(Color.translate(grant.getRank().getData().getColorPrefix() + player.getName()));
-            }
-        }
     }
 
     @EventHandler
@@ -327,10 +309,6 @@ public class PlayerListener implements Listener {
         if (event.getPlayer().hasPermission("scandium.staff")) {
             CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onDisconnect(event.getPlayer())));
         }
-
-        Profile profile = Profile.getByUuid(event.getPlayer().getUniqueId());
-        Profile.getProfiles().remove(profile);
-        profile.save();
 
         PotPlayer.getPlayer(event.getPlayer().getUniqueId()).savePlayerData();
     }

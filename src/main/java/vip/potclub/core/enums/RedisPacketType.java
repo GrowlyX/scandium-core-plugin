@@ -11,6 +11,7 @@ public enum RedisPacketType {
     PLAYER_SERVER_UPDATE("PlayerServerUpdate"),
     PLAYER_CONNECT_UPDATE("PlayerConnectUpdate"),
     PLAYER_DISCONNECT_UPDATE("PlayerDisconnectUpdate"),
+    PLAYER_MESSAGE_UPDATE("PlayerMessageUpdate"),
     PLAYER_DISCORD_SYNC("PlayerDiscordSync"),
     NETWORK_BROADCAST_UPDATE("NetworkBroadcastUpdate");
 

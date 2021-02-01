@@ -42,7 +42,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- Allatori plugin start -->
         </plugins>
         <resources>
             <resource>
@@ -74,13 +73,6 @@
             <version>1.8.8-R0.1-SNAPSHOT</version>
             <scope>system</scope>
             <systemPath>${basedir}/lib/Lantern.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>vip.potclub</groupId>
-            <artifactId>Neon</artifactId>
-            <version>1.0-DEV</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/lib/Neon.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>vip.potclub</groupId>

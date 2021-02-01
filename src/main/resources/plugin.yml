@@ -16,13 +16,14 @@ commands:
   staffchat:
     aliases: [sc]
   options:
-    aliases: [globalsettings, gsettings, goptions, coreoptions]
+    aliases: [globalsettings, gsettings, goptions, coreoptions, settings]
   adminchat:
     aliases: [ac]
   hostchat:
     aliases: [hc]
   devchat:
     aliases: [dc]
+  import:
   helpop:
     aliases: [request]
   report:

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class AutoMessageTask extends BukkitRunnable { // Credits: https://github.com/ConaxGames/cSuite/tree/main/plugin/src/main/java/com/conaxgames/task/AutoMessageTask.java
+public class AutoMessageTask extends BukkitRunnable {
 
     private final List<String> defaultMessages = new ArrayList<>();
 

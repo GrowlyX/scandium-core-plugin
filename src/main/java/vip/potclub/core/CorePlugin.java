@@ -11,18 +11,22 @@ import vip.potclub.core.command.extend.CoreCommand;
 import vip.potclub.core.command.extend.discord.SyncCommand;
 import vip.potclub.core.command.extend.discord.UnsyncCommand;
 import vip.potclub.core.command.extend.essential.*;
+import vip.potclub.core.command.extend.rank.RankImportCommand;
 import vip.potclub.core.command.extend.web.WebAnnouncementCommand;
 import vip.potclub.core.command.extend.web.WebAnnouncementDeleteCommand;
 import vip.potclub.core.database.Database;
 import vip.potclub.core.listener.PlayerListener;
 import vip.potclub.core.manager.PlayerManager;
 import vip.potclub.core.manager.PunishmentManager;
+import vip.potclub.core.manager.RankManager;
 import vip.potclub.core.manager.ServerManager;
 import vip.potclub.core.player.PotPlayer;
 import vip.potclub.core.redis.RedisClient;
 import vip.potclub.core.task.AutoMessageTask;
+import vip.potclub.core.task.GrantExpireTask;
 import vip.potclub.core.task.PunishExpireTask;
 import vip.potclub.core.util.Color;
+import vip.potclub.core.util.external.ConfigExternal;
 
 import java.text.SimpleDateFormat;
 import java.util.Random;
@@ -36,27 +40,30 @@ public final class CorePlugin extends JavaPlugin {
 
     public static SimpleDateFormat FORMAT;
     public static Random RANDOM;
+
     public static Gson GSON;
     public static GsonBuilder GSONBUILDER;
 
     @Getter
-    public static CorePlugin instance;
+    private static CorePlugin instance;
 
-    public ServerManager serverManager;
-    public PlayerManager playerManager;
-    public PunishmentManager punishmentManager;
+    private ServerManager serverManager;
+    private PlayerManager playerManager;
+    private RankManager rankManager;
+    private PunishmentManager punishmentManager;
 
-    public String serverName;
+    private String serverName;
 
-    public Database coreDatabase;
-    public RedisClient redisClient;
+    private Database coreDatabase;
+    private RedisClient redisClient;
+    private ConfigExternal ranksConfig;
 
-    public Executor redisThread;
-    public Executor redisSubThread;
-    public Executor mongoThread;
+    private Executor redisThread;
+    private Executor redisSubThread;
+    private Executor mongoThread;
 
-    public boolean debugging;
-    public boolean disallow;
+    private boolean debugging;
+    private boolean disallow;
 
     @Override
     public void onEnable() {
@@ -75,6 +82,7 @@ public final class CorePlugin extends JavaPlugin {
 
         this.saveDefaultConfig();
         this.getConfig().options().copyDefaults();
+        this.ranksConfig = new ConfigExternal("ranks");
 
         this.serverName = this.getConfig().getString("server-name");
         this.debugging = false;
@@ -84,6 +92,7 @@ public final class CorePlugin extends JavaPlugin {
         this.redisClient = new RedisClient();
 
         this.serverManager = new ServerManager();
+        this.rankManager = new RankManager();
         this.punishmentManager = new PunishmentManager();
         this.playerManager = new PlayerManager();
 
@@ -116,6 +125,7 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("profile").setExecutor(new ProfileCommand());
         this.getCommand("media").setExecutor(new MediaCommand());
         this.getCommand("discord").setExecutor(new DiscordCommand());
+        this.getCommand("import").setExecutor(new RankImportCommand());
         this.getCommand("options").setExecutor(new OptionsCommand());
         this.getCommand("history").setExecutor(new HistoryCommand());
         this.getCommand("twitter").setExecutor(new TwitterCommand());
@@ -144,6 +154,7 @@ public final class CorePlugin extends JavaPlugin {
 
         new AutoMessageTask();
         new PunishExpireTask();
+        new GrantExpireTask();
         new BukkitRunnable() {
             @Override
             public void run() {

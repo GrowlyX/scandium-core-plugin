@@ -4,7 +4,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import vip.potclub.core.command.BaseCommand;
-import vip.potclub.core.menu.extend.LanguageMenu;
+import vip.potclub.core.menu.extend.lang.LanguageMenu;
 
 public class LanguageCommand extends BaseCommand {
 

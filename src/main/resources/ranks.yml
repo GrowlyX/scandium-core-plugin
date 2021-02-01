@@ -1,0 +1,28 @@
+DEFAULT:
+  NAME: "Default"
+  PREFIX: "&7"
+  DEFAULT: TRUE
+  WEIGHT: 0
+  COLOR: "&7"
+  PERMISSIONS:
+    - practice.normal
+POTION:
+  NAME: "Potion"
+  PREFIX: "&e[Potion] "
+  DEFAULT: FALSE
+  WEIGHT: 1
+  COLOR: "&e"
+  INHERITANCE:
+    - Default
+  PERMISSIONS:
+    - practice.potion
+POTION+:
+  NAME: "Potion+"
+  PREFIX: "&3[Potion+] "
+  DEFAULT: FALSE
+  WEIGHT: 2
+  COLOR: "&3"
+  INHERITANCE:
+    - Potion
+  PERMISSIONS:
+    - practice.potionplus
