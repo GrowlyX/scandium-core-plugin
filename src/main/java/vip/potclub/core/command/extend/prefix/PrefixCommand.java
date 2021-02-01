@@ -62,8 +62,31 @@ public class PrefixCommand extends BaseCommand {
                                 Prefix prefix = Prefix.getByName(args[2]);
                                 if (prefix != null) {
                                     PotPlayer potPlayer = PotPlayer.getPlayer(target);
-                                    potPlayer.getAllPrefixes().add(prefix);
-
+                                    potPlayer.getAllPrefixes().add(prefix.getName());
+                                    player.sendMessage(Color.translate("&aAdded the prefix " + prefix.getName() + " to " + target.getDisplayName()));
+                                } else {
+                                    player.sendMessage(Color.translate("&cThat prefix does not exist."));
+                                }
+                            } else {
+                                player.sendMessage(Color.translate("&cThat player does not exist."));
+                            }
+                        }
+                        break;
+                    case "remove":
+                        if (args.length == 1) {
+                            this.sendHelp(player);
+                        }
+                        if (args.length == 2) {
+                            this.sendHelp(player);
+                        }
+                        if (args.length >= 3) {
+                            Player target = Bukkit.getPlayerExact(args[1]);
+                            if (target != null) {
+                                Prefix prefix = Prefix.getByName(args[2]);
+                                if (prefix != null) {
+                                    PotPlayer potPlayer = PotPlayer.getPlayer(target);
+                                    potPlayer.getAllPrefixes().remove(prefix.getName());
+                                    player.sendMessage(Color.translate("&aRemoved the prefix " + prefix.getName() + " from " + target.getDisplayName()));
                                 } else {
                                     player.sendMessage(Color.translate("&cThat prefix does not exist."));
                                 }
@@ -90,6 +113,13 @@ public class PrefixCommand extends BaseCommand {
                             }
                         }
                         break;
+                    case "list":
+                        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+                        player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
+                        player.sendMessage(Color.translate(serverType.getMainColor() + ChatColor.BOLD.toString() + "Prefixes:"));
+                        Prefix.getPrefixes().forEach(prefix -> player.sendMessage(Color.translate(" &7- &e" + prefix.getName() + " &7(&d#" + prefix.getId() + "&7) &7(" + prefix.getPrefix() + "&7)")));
+                        player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
+                        break;
                     default:
                         this.sendHelp(player);
                 }
@@ -106,7 +136,9 @@ public class PrefixCommand extends BaseCommand {
         player.sendMessage(Color.translate(serverType.getMainColor() + ChatColor.BOLD.toString() + "Prefix Management:"));
         player.sendMessage(Color.translate("&f/prefix create <name> <prefix> &7- Create a new prefix."));
         player.sendMessage(Color.translate("&f/prefix delete <name> &7- Delete a prefix."));
-        player.sendMessage(Color.translate("&f/prefix add <player> <prefix> &7- Create a new prefix."));
+        player.sendMessage(Color.translate("&f/prefix add <player> <prefix> &7- Add a prefix to a player."));
+        player.sendMessage(Color.translate("&f/prefix remove <player> <prefix> &7- Remove a prefix from a player."));
+        player.sendMessage(Color.translate("&f/prefix list &7- List all prefixes."));
         player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
     }
 }

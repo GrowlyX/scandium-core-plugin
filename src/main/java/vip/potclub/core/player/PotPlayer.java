@@ -1,6 +1,5 @@
 package vip.potclub.core.player;
 
-import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import lombok.Getter;
@@ -20,7 +19,6 @@ import vip.potclub.core.player.ranks.Rank;
 import vip.potclub.core.util.Color;
 import vip.potclub.core.util.SaltUtil;
 
-import java.beans.ConstructorProperties;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -33,7 +31,7 @@ public class PotPlayer {
 
     private List<Punishment> punishments = new ArrayList<>();
     private List<Grant> allGrants = new ArrayList<>();
-    private List<Prefix> allPrefixes = new ArrayList<>();
+    private List<String> allPrefixes = new ArrayList<>();
 
     private UUID uuid;
     private Player player;
@@ -105,12 +103,15 @@ public class PotPlayer {
         List<String> grantStrings = new ArrayList<>();
         this.getAllGrants().forEach(grant -> grantStrings.add(grant.toJson()));
 
-        List<String> prefixStrings = new ArrayList<>();
-        this.getAllPrefixes().forEach(prefix -> prefixStrings.add(prefix.toJson()));
+        List<String> prefixStrings = new ArrayList<>(this.getAllPrefixes());
 
         document.put("allGrants", grantStrings);
         document.put("allPrefixes", prefixStrings);
-        document.put("appliedPrefix", this.appliedPrefix.toJson());
+        if (this.appliedPrefix != null) {
+            document.put("appliedPrefix", this.appliedPrefix.getName());
+        } else {
+            document.put("appliedPrefix", "Default");
+        }
         document.put("rankName", this.getActiveGrant().getRank().getName());
         document.put("discordSyncCode", this.syncCode);
         document.put("syncDiscord", this.syncDiscord);
@@ -143,18 +144,21 @@ public class PotPlayer {
         List<String> grantStrings = new ArrayList<>();
         this.getAllGrants().forEach(grant -> grantStrings.add(grant.toJson()));
 
-        List<String> prefixStrings = new ArrayList<>();
-        this.getAllPrefixes().forEach(prefix -> prefixStrings.add(prefix.toJson()));
+        List<String> prefixStrings = new ArrayList<>(this.getAllPrefixes());
 
         document.put("allGrants", grantStrings);
         document.put("allPrefixes", prefixStrings);
-        document.put("appliedPrefix", this.appliedPrefix.toJson());
+        if (this.appliedPrefix != null) {
+            document.put("appliedPrefix", this.appliedPrefix.getName());
+        } else {
+            document.put("appliedPrefix", "Default");
+        }
         document.put("rankName", this.getActiveGrant().getRank().getName());
         document.put("discordSyncCode", this.syncCode);
         document.put("syncDiscord", this.syncDiscord);
         document.put("isSynced", this.isSynced);
         document.put("language", (this.language != null ? this.language.getLanguageName() : LanguageType.ENGLISH.getLanguageName()));
-        document.put("currentlyOnline", this.currentlyOnline);
+        document.put("currentlyOnline", false);
 
         document.put("discord", this.media.getDiscord());
         document.put("twitter", this.media.getTwitter());
@@ -231,12 +235,15 @@ public class PotPlayer {
             allGrants.forEach(s -> this.allGrants.add(CorePlugin.GSON.fromJson(s, Grant.class)));
         }
 
-        if (document.getString("appliedPrefix") != null) {
-            this.appliedPrefix = CorePlugin.GSON.fromJson(document.getString("appliedPrefix"), Prefix.class);
+        if ((document.getString("appliedPrefix") != null) && !document.getString("appliedPrefix").equals("Default")) {
+            this.appliedPrefix = Prefix.getByName(document.getString("appliedPrefix"));
+        } else {
+            this.appliedPrefix = null;
         }
-        if (!((document.getList("allPrefixes", String.class).isEmpty()) || (document.getList("allPrefixes", String.class) == null))) {
-            List<String> allPrefixes = document.getList("allPrefixes", String.class);
-            allPrefixes.forEach(s -> this.allPrefixes.add(CorePlugin.GSON.fromJson(s, Prefix.class)));
+
+        if ((document.getList("allPrefixes", String.class) != null)) {
+            List<String> prefixes = document.getList("allPrefixes", String.class);
+            this.allPrefixes.addAll(prefixes);
         }
 
         if (document.getBoolean("isSynced") != null) {

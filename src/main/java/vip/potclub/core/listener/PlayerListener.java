@@ -52,44 +52,25 @@ public class PlayerListener implements Listener {
             if (!CorePlugin.getInstance().getConfig().getStringList("whitelisted").contains(event.getName())) {
                 event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.translateAlternateColorCodes('&', CorePlugin.getInstance().getConfig().getString("whitelisted-msg").replace("%NL%", "\n")));
             } else {
-                Punishment.getAllPunishments().forEach(punishment -> {
-                    if (punishment.getTarget().equals(event.getUniqueId())) {
-                        if ((punishment.getPunishmentType().equals(PunishmentType.BAN)) || (punishment.getPunishmentType().equals(PunishmentType.BLACKLIST)) || (punishment.getPunishmentType().equals(PunishmentType.IPBAN))) {
-                            if (punishment.isActive() || !punishment.isRemoved()) {
-                                switch (punishment.getPunishmentType()) {
-                                    case BLACKLIST:
-                                        event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Color.translate(PunishmentStrings.BLCK_MESSAGE.replace("<reason>", punishment.getReason())));
-                                        break;
-                                    case BAN:
-                                        event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, (punishment.isPermanent() ? Color.translate(PunishmentStrings.BAN_MESSAGE_PERM.replace("<reason>", punishment.getReason())) : Color.translate(PunishmentStrings.BAN_MESSAGE_TEMP.replace("<reason>", punishment.getReason()).replace("<time>", punishment.getDurationString()))));
-                                        break;
-                                }
-                            } else {
-                                event.allow();
-                            }
-                        } else {
-                            event.allow();
-                        }
-                    } else {
-                        event.allow();
-                    }
-                });
+                checkDisallow(event);
             }
         } else {
-            Punishment.getAllPunishments().forEach(punishment -> {
-                if (punishment.getTarget().equals(event.getUniqueId())) {
-                    if ((punishment.getPunishmentType().equals(PunishmentType.BAN)) || (punishment.getPunishmentType().equals(PunishmentType.BLACKLIST)) || (punishment.getPunishmentType().equals(PunishmentType.IPBAN))) {
-                        if (punishment.isActive() || !punishment.isRemoved()) {
-                            switch (punishment.getPunishmentType()) {
-                                case BLACKLIST:
-                                    event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Color.translate(PunishmentStrings.BLCK_MESSAGE.replace("<reason>", punishment.getReason())));
-                                    break;
-                                case BAN:
-                                    event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, (punishment.isPermanent() ? Color.translate(PunishmentStrings.BAN_MESSAGE_PERM.replace("<reason>", punishment.getReason())) : Color.translate(PunishmentStrings.BAN_MESSAGE_TEMP.replace("<reason>", punishment.getReason()).replace("<time>", punishment.getDurationString()))));
-                                    break;
-                            }
-                        } else {
-                            event.allow();
+            checkDisallow(event);
+        }
+    }
+
+    private void checkDisallow(AsyncPlayerPreLoginEvent event) {
+        Punishment.getAllPunishments().forEach(punishment -> {
+            if (punishment.getTarget().equals(event.getUniqueId())) {
+                if ((punishment.getPunishmentType().equals(PunishmentType.BAN)) || (punishment.getPunishmentType().equals(PunishmentType.BLACKLIST)) || (punishment.getPunishmentType().equals(PunishmentType.IPBAN))) {
+                    if (punishment.isActive() || !punishment.isRemoved()) {
+                        switch (punishment.getPunishmentType()) {
+                            case BLACKLIST:
+                                event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Color.translate(PunishmentStrings.BLCK_MESSAGE.replace("<reason>", punishment.getReason())));
+                                break;
+                            case BAN:
+                                event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, (punishment.isPermanent() ? Color.translate(PunishmentStrings.BAN_MESSAGE_PERM.replace("<reason>", punishment.getReason())) : Color.translate(PunishmentStrings.BAN_MESSAGE_TEMP.replace("<reason>", punishment.getReason()).replace("<time>", punishment.getDurationString()))));
+                                break;
                         }
                     } else {
                         event.allow();
@@ -97,8 +78,10 @@ public class PlayerListener implements Listener {
                 } else {
                     event.allow();
                 }
-            });
-        }
+            } else {
+                event.allow();
+            }
+        });
     }
 
     @EventHandler
@@ -194,44 +177,7 @@ public class PlayerListener implements Listener {
 
         if (CorePlugin.getInstance().getServerManager().isChatEnabled()) {
             if (!PotPlayer.getPlayer(player).isMuted()) {
-                event.setCancelled(true);
-                if (event.getMessage().startsWith("!") && event.getPlayer().hasPermission(ChatChannelType.STAFF.getPermission())) {
-                    event.setCancelled(true);
-                    CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.STAFF, event.getMessage().replace("!", ""), event.getPlayer())));
-                } else if (event.getMessage().startsWith("#") && event.getPlayer().hasPermission(ChatChannelType.ADMIN.getPermission())) {
-                    event.setCancelled(true);
-                    CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.ADMIN, event.getMessage().replace("#", ""), event.getPlayer())));
-                } else if (event.getMessage().startsWith("$") && event.getPlayer().hasPermission(ChatChannelType.DEV.getPermission())) {
-                    event.setCancelled(true);
-                    CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.DEV, event.getMessage().replace("$", ""), event.getPlayer())));
-                } else if (event.getMessage().startsWith("@") && event.getPlayer().hasPermission(ChatChannelType.HOST.getPermission())) {
-                    event.setCancelled(true);
-                    CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.HOST, event.getMessage().replace("@", ""), event.getPlayer())));
-                } else {
-                    long slowChat = CorePlugin.getInstance().getServerManager().getChatSlow();
-                    if ((System.currentTimeMillis() < PotPlayer.getPlayer(player).getChatCooldown())) {
-                        if (player.hasPermission("scandium.chat.cooldown.bypass")) {
-                            Bukkit.getOnlinePlayers().forEach(player1 -> {
-                                PotPlayer potPlayer1 = PotPlayer.getPlayer(player1);
-                                if (potPlayer1.isCanSeeGlobalChat()) {
-                                    player1.sendMessage(Color.translate(potPlayer.getActiveGrant().getRank().getPrefix() + player.getName() + " &7" + '»' + " " + (potPlayer.getActiveGrant().getRank().getName().contains("Default") ? "&7" : "&f") + event.getMessage()));
-                                }
-                            });
-                            PotPlayer.getPlayer(player).setChatCooldown(System.currentTimeMillis() + (slowChat > 0L ? slowChat : 3000L));
-                        } else {
-                            player.sendMessage(slowChat > 0L ? Color.translate(PunishmentStrings.SLOW_CHAT.replace("<amount>", DurationFormatUtils.formatDurationWords(slowChat, true, true))) : Color.translate(PunishmentStrings.COOLDOWN));
-                            event.setCancelled(true);
-                        }
-                    } else {
-                        Bukkit.getOnlinePlayers().forEach(player1 -> {
-                            PotPlayer potPlayer1 = PotPlayer.getPlayer(player1);
-                            if (potPlayer1.isCanSeeGlobalChat()) {
-                                player1.sendMessage(Color.translate(potPlayer.getActiveGrant().getRank().getPrefix() + player.getName() + " &7" + '»' + " " + (potPlayer.getActiveGrant().getRank().getName().contains("Default") ? "&7" : "&f") + event.getMessage()));
-                            }
-                        });
-                        PotPlayer.getPlayer(player).setChatCooldown(System.currentTimeMillis() + (slowChat > 0L ? slowChat : 3000L));
-                    }
-                }
+                checkChannel(event, player, potPlayer);
             } else {
                 event.setCancelled(true);
                 event.getPlayer().sendMessage(Color.translate(PunishmentStrings.MUTE_MESSAGE));
@@ -239,44 +185,7 @@ public class PlayerListener implements Listener {
         } else {
             if (player.hasPermission("scandium.chat.bypass")) {
                 if (!PotPlayer.getPlayer(player).isCurrentlyMuted()) {
-                    event.setCancelled(true);
-                    if (event.getMessage().startsWith("!") && event.getPlayer().hasPermission(ChatChannelType.STAFF.getPermission())) {
-                        event.setCancelled(true);
-                        CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.STAFF, event.getMessage().replace("!", ""), event.getPlayer())));
-                    } else if (event.getMessage().startsWith("#") && event.getPlayer().hasPermission(ChatChannelType.ADMIN.getPermission())) {
-                        event.setCancelled(true);
-                        CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.ADMIN, event.getMessage().replace("#", ""), event.getPlayer())));
-                    } else if (event.getMessage().startsWith("$") && event.getPlayer().hasPermission(ChatChannelType.DEV.getPermission())) {
-                        event.setCancelled(true);
-                        CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.DEV, event.getMessage().replace("$", ""), event.getPlayer())));
-                    } else if (event.getMessage().startsWith("@") && event.getPlayer().hasPermission(ChatChannelType.HOST.getPermission())) {
-                        event.setCancelled(true);
-                        CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.HOST, event.getMessage().replace("@", ""), event.getPlayer())));
-                    } else {
-                        long slowChat = CorePlugin.getInstance().getServerManager().getChatSlow();
-                        if ((System.currentTimeMillis() < PotPlayer.getPlayer(player).getChatCooldown())) {
-                            if (player.hasPermission("scandium.chat.cooldown.bypass")) {
-                                Bukkit.getOnlinePlayers().forEach(player1 -> {
-                                    PotPlayer potPlayer1 = PotPlayer.getPlayer(player1);
-                                    if (potPlayer1.isCanSeeGlobalChat()) {
-                                        player1.sendMessage(Color.translate(potPlayer.getActiveGrant().getRank().getPrefix() + player.getName() + " &7" + '»' + " " + (potPlayer.getActiveGrant().getRank().getName().contains("Default") ? "&7" : "&f") + event.getMessage()));
-                                    }
-                                });
-                                PotPlayer.getPlayer(player).setChatCooldown(System.currentTimeMillis() + (slowChat > 0L ? slowChat : 3000L));
-                            } else {
-                                player.sendMessage(slowChat > 0L ? Color.translate(PunishmentStrings.SLOW_CHAT.replace("<amount>", DurationFormatUtils.formatDurationWords(slowChat, true, true))) : Color.translate(PunishmentStrings.COOLDOWN));
-                                event.setCancelled(true);
-                            }
-                        } else {
-                            Bukkit.getOnlinePlayers().forEach(player1 -> {
-                                PotPlayer potPlayer1 = PotPlayer.getPlayer(player1);
-                                if (potPlayer1.isCanSeeGlobalChat()) {
-                                    player1.sendMessage(Color.translate(potPlayer.getActiveGrant().getRank().getPrefix() + player.getName() + " &7" + '»' + " " + (potPlayer.getActiveGrant().getRank().getName().contains("Default") ? "&7" : "&f") + event.getMessage()));
-                                }
-                            });
-                            PotPlayer.getPlayer(player).setChatCooldown(System.currentTimeMillis() + (slowChat > 0L ? slowChat : 3000L));
-                        }
-                    }
+                    checkChannel(event, player, potPlayer);
                 } else {
                     event.setCancelled(true);
                     event.getPlayer().sendMessage(Color.translate(PunishmentStrings.MUTE_MESSAGE));
@@ -302,6 +211,45 @@ public class PlayerListener implements Listener {
                 }
             }
         }
+    }
+
+    private void checkChannel(AsyncPlayerChatEvent event, Player player, PotPlayer potPlayer) {
+        event.setCancelled(true);
+        if (event.getMessage().startsWith("!") && event.getPlayer().hasPermission(ChatChannelType.STAFF.getPermission())) {
+            event.setCancelled(true);
+            CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.STAFF, event.getMessage().replace("!", ""), event.getPlayer())));
+        } else if (event.getMessage().startsWith("#") && event.getPlayer().hasPermission(ChatChannelType.ADMIN.getPermission())) {
+            event.setCancelled(true);
+            CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.ADMIN, event.getMessage().replace("#", ""), event.getPlayer())));
+        } else if (event.getMessage().startsWith("$") && event.getPlayer().hasPermission(ChatChannelType.DEV.getPermission())) {
+            event.setCancelled(true);
+            CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.DEV, event.getMessage().replace("$", ""), event.getPlayer())));
+        } else if (event.getMessage().startsWith("@") && event.getPlayer().hasPermission(ChatChannelType.HOST.getPermission())) {
+            event.setCancelled(true);
+            CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.HOST, event.getMessage().replace("@", ""), event.getPlayer())));
+        } else {
+            long slowChat = CorePlugin.getInstance().getServerManager().getChatSlow();
+            if ((System.currentTimeMillis() < PotPlayer.getPlayer(player).getChatCooldown())) {
+                if (player.hasPermission("scandium.chat.cooldown.bypass")) {
+                    checkThenSend(event, player, potPlayer, slowChat);
+                } else {
+                    player.sendMessage(slowChat > 0L ? Color.translate(PunishmentStrings.SLOW_CHAT.replace("<amount>", DurationFormatUtils.formatDurationWords(slowChat, true, true))) : Color.translate(PunishmentStrings.COOLDOWN));
+                    event.setCancelled(true);
+                }
+            } else {
+                checkThenSend(event, player, potPlayer, slowChat);
+            }
+        }
+    }
+
+    private void checkThenSend(AsyncPlayerChatEvent event, Player player, PotPlayer potPlayer, long slowChat) {
+        Bukkit.getOnlinePlayers().forEach(player1 -> {
+            PotPlayer potPlayer1 = PotPlayer.getPlayer(player1);
+            if (potPlayer1.isCanSeeGlobalChat()) {
+                player1.sendMessage(Color.translate((potPlayer.getAppliedPrefix() != null ? potPlayer.getAppliedPrefix().getPrefix() + " " : "") + potPlayer.getActiveGrant().getRank().getPrefix() + player.getName() + " &7" + '»' + " " + (potPlayer.getActiveGrant().getRank().getName().contains("Default") ? "&7" : "&f") + event.getMessage()));
+            }
+        });
+        PotPlayer.getPlayer(player).setChatCooldown(System.currentTimeMillis() + (slowChat > 0L ? slowChat : 3000L));
     }
 
     @EventHandler
