@@ -71,6 +71,8 @@ commands:
   sudo:
   sudoall:
   scandium:
+  prefix:
+    aliases: [tags, prefixes]
   media:
   famous:
   unban:

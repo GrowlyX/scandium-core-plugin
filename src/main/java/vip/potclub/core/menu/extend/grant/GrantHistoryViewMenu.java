@@ -33,9 +33,6 @@ public class GrantHistoryViewMenu extends AbstractInventoryMenu<CorePlugin> {
     }
 
     private void update() {
-        while (this.inventory.firstEmpty() != -1) {
-            this.inventory.setItem(this.inventory.firstEmpty(), new InventoryMenuItem(Material.STAINED_GLASS_PANE, 7).setDisplayName(" ").create());
-        }
 
         AtomicInteger i = new AtomicInteger(10);
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();

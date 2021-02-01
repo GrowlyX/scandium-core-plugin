@@ -23,14 +23,12 @@ public class Prefix {
     private String name;
     private String displayName;
     private String prefix;
-    private String color;
 
-    public Prefix(String id, String name, String displayName, String prefix, String color) {
+    public Prefix(String id, String name, String displayName, String prefix) {
         this.id = id;
         this.name = name;
         this.displayName = displayName;
         this.prefix = prefix;
-        this.color = color;
 
         prefixes.add(this);
     }
@@ -42,7 +40,6 @@ public class Prefix {
         document.put("name", this.name);
         document.put("displayName", this.displayName);
         document.put("prefix", this.prefix);
-        document.put("color", this.color);
 
         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPrefixCollection().replaceOne(Filters.eq("_id", this.id), document, new ReplaceOptions().upsert(true)));
     }
@@ -54,12 +51,19 @@ public class Prefix {
         document.put("name", this.name);
         document.put("displayName", this.displayName);
         document.put("prefix", this.prefix);
-        document.put("color", this.color);
 
         CorePlugin.getInstance().getCoreDatabase().getPrefixCollection().replaceOne(Filters.eq("_id", this.id), document, new ReplaceOptions().upsert(true));
     }
 
     public String toJson() {
         return CorePlugin.GSON.toJson(this);
+    }
+
+    public static Prefix getByName(String name) {
+        return prefixes.stream().filter(prefix -> prefix.getName().equals(name)).findFirst().orElse(null);
+    }
+
+    public static Prefix getById(String id) {
+        return prefixes.stream().filter(prefix -> prefix.getId().equals(id)).findFirst().orElse(null);
     }
 }

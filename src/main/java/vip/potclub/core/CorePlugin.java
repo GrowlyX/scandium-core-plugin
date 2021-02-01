@@ -13,6 +13,7 @@ import vip.potclub.core.command.extend.essential.*;
 import vip.potclub.core.command.extend.grant.CGrantCommand;
 import vip.potclub.core.command.extend.grant.GrantCommand;
 import vip.potclub.core.command.extend.grant.GrantsCommand;
+import vip.potclub.core.command.extend.prefix.PrefixCommand;
 import vip.potclub.core.command.extend.punish.UnBlacklistCommand;
 import vip.potclub.core.command.extend.punish.UnMuteCommand;
 import vip.potclub.core.command.extend.punish.PunishCommand;
@@ -146,6 +147,7 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("reply").setExecutor(new ReplyCommand());
         this.getCommand("grant").setExecutor(new GrantCommand());
         this.getCommand("cgrant").setExecutor(new CGrantCommand());
+        this.getCommand("prefix").setExecutor(new PrefixCommand());
         this.getCommand("grants").setExecutor(new GrantsCommand());
         this.getCommand("clearchat").setExecutor(new ClearChatCommand());
         this.getCommand("slowchat").setExecutor(new SlowChatCommand());

@@ -18,7 +18,7 @@ public class PrefixManager {
     public void loadPrefixes() {
         CorePlugin.getInstance().getMongoThread().execute(() -> {
             for (Document document : CorePlugin.getInstance().getCoreDatabase().getPrefixCollection().find()) {
-                new Prefix(document.getString("id"),document.getString("name"), document.getString("displayName"), document.getString("prefix"), document.getString("color"));
+                new Prefix(document.getString("id"),document.getString("name"), document.getString("displayName"), document.getString("prefix"));
             }
         });
     }
