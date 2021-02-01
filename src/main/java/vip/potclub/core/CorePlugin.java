@@ -11,6 +11,7 @@ import vip.potclub.core.command.extend.CoreCommand;
 import vip.potclub.core.command.extend.discord.SyncCommand;
 import vip.potclub.core.command.extend.discord.UnsyncCommand;
 import vip.potclub.core.command.extend.essential.*;
+import vip.potclub.core.command.extend.grant.GrantCommand;
 import vip.potclub.core.command.extend.rank.RankImportCommand;
 import vip.potclub.core.command.extend.web.WebAnnouncementCommand;
 import vip.potclub.core.command.extend.web.WebAnnouncementDeleteCommand;
@@ -138,6 +139,7 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("unsync").setExecutor(new UnsyncCommand());
         this.getCommand("message").setExecutor(new MessageCommand());
         this.getCommand("reply").setExecutor(new ReplyCommand());
+        this.getCommand("grant").setExecutor(new GrantCommand());
         this.getCommand("clearchat").setExecutor(new ClearChatCommand());
         this.getCommand("slowchat").setExecutor(new SlowChatCommand());
         this.getCommand("mutechat").setExecutor(new MuteChatCommand());

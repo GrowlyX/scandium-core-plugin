@@ -55,6 +55,7 @@ public class Rank {
         document.put("permissions", this.permissions);
         document.put("name", this.name);
         document.put("prefix", this.prefix);
+        document.put("color", this.color);
         document.put("suffix", this.suffix);
         document.put("defaultRank", this.defaultRank);
         document.put("weight", this.weight);

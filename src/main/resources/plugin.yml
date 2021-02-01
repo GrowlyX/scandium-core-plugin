@@ -32,6 +32,8 @@ commands:
   unban:
     aliases: [pardon]
   unmute:
+  grant:
+    aliases: [rank]
   language:
     aliases: [lang, setlang, deutsche, italiano, français, english, espanol]
   toggletips:
