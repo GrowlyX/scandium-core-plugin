@@ -41,6 +41,7 @@ public class UnMuteCommand extends BaseCommand {
                                         punishment.setRemoved(true);
                                         punishment.setRemovalReason(message);
                                         punishment.setRemover(player.getUniqueId());
+                                        punishment.setActive(false);
 
                                         if (message.endsWith("-s")) {
                                             Bukkit.getOnlinePlayers().forEach(player1 -> {
@@ -59,7 +60,7 @@ public class UnMuteCommand extends BaseCommand {
                                 }
                             }
                         });
-                        player.sendMessage(Color.translate("&aUnblacklisted " + args[0] + "."));
+                        player.sendMessage(Color.translate("&aUnmutes " + args[0] + "."));
                     } else {
                         player.sendMessage(Color.translate("&cThat player does not exist."));
                     }

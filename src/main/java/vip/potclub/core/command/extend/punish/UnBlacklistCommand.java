@@ -40,6 +40,7 @@ public class UnBlacklistCommand extends BaseCommand {
                                         punishment.setRemoved(true);
                                         punishment.setRemovalReason(message);
                                         punishment.setRemover(player.getUniqueId());
+                                        punishment.setActive(false);
 
                                         if (message.endsWith("-s")) {
                                             Bukkit.getOnlinePlayers().forEach(player1 -> {
