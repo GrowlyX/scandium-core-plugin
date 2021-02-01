@@ -14,9 +14,11 @@ import vip.potclub.core.CorePlugin;
 import vip.potclub.core.enums.ServerType;
 import vip.potclub.core.menu.AbstractInventoryMenu;
 import vip.potclub.core.menu.InventoryMenuItem;
-import vip.potclub.core.player.PotPlayer;
 import vip.potclub.core.player.punishment.Punishment;
+import vip.potclub.core.util.Color;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Getter
@@ -27,7 +29,7 @@ public class PunishHistoryViewMenu extends AbstractInventoryMenu<CorePlugin> {
     private String target;
 
     public PunishHistoryViewMenu(Player player, String target) {
-        super("Punishment - History", 9*3);
+        super("Punishment - History", 9*5);
         this.player = player;
         this.target = target;
         this.update();
@@ -40,26 +42,41 @@ public class PunishHistoryViewMenu extends AbstractInventoryMenu<CorePlugin> {
 
         AtomicInteger i = new AtomicInteger(10);
         Punishment.getAllPunishments().forEach(punishment -> {
-            if (punishment.getTarget().equals(Bukkit.getOfflinePlayer(target))) {
-                if (i.get() < 16) {
+            if (i.get() <= 34) {
+                if (punishment.getTarget().equals(Bukkit.getOfflinePlayer(target).getUniqueId())) {
                     OfflinePlayer issuerOfflinePlayer = Bukkit.getOfflinePlayer(punishment.getIssuer());
                     OfflinePlayer targetOfflinePlayer = Bukkit.getOfflinePlayer(punishment.getTarget());
                     ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
+                    List<String> lore = new ArrayList<>();
 
-                    this.inventory.setItem(i.get(), new InventoryMenuItem(Material.INK_SACK, (punishment.isActive() ? 2 : 1))
-                            .setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + punishment.getId().toString())
-                            .addLore(
-                                    "",
-                                    "&7Punisher: &b" + network.getSecondaryColor() +  issuerOfflinePlayer.getName(),
-                                    "&7Target: &b" + network.getSecondaryColor() +  targetOfflinePlayer.getName(),
-                                    "&7Reason: &b" + network.getSecondaryColor() +  punishment.getReason(),
-                                    "&7Type: &b" + network.getSecondaryColor() +  punishment.getPunishmentType().getName(),
-                                    "&7Active: &b" + network.getSecondaryColor() +  (punishment.isActive() ? "Yes" : "No"),
-                                    "&7Duration: &b" + network.getSecondaryColor() +  (punishment.isPermanent() ? "Permanent" : DurationFormatUtils.formatDurationWords(punishment.getPunishmentDuration(), true, true))
-                            )
+                    lore.add("&b&m------------------------------------");
+                    lore.add("&7Punisher: &b" + network.getSecondaryColor() + issuerOfflinePlayer.getName());
+                    lore.add("&7Target: &b" + network.getSecondaryColor() + targetOfflinePlayer.getName());
+                    lore.add("&7Reason: &b" + network.getSecondaryColor() + punishment.getReason());
+                    lore.add("&7Type: &b" + network.getSecondaryColor() + punishment.getPunishmentType().getName());
+                    lore.add("&7Active: &b" + network.getSecondaryColor() + (punishment.isActive() ? "Yes" : "No"));
+                    lore.add("&7Duration: &b" + network.getSecondaryColor() + (punishment.isPermanent() ? "Permanent" : DurationFormatUtils.formatDurationWords(punishment.getPunishmentDuration(), true, true)));
+                    lore.add("&b&m------------------------------------");
+
+                    if (punishment.isRemoved()) {
+                        lore.add("&7Removed: &b" + network.getSecondaryColor() + "Yes");
+                        lore.add("&7Removed By: &b" + network.getSecondaryColor() + Bukkit.getOfflinePlayer(punishment.getRemover()).getName());
+                        lore.add("&7Removed For: &b" + network.getSecondaryColor() + punishment.getRemovalReason());
+                        lore.add("&b&m------------------------------------");
+                    }
+
+                    this.inventory.setItem(i.get(), new InventoryMenuItem(Material.WOOL, (punishment.isActive() ? 5 : 14))
+                            .setDisplayName(ChatColor.RED + "#" + punishment.getPunishIdentification())
+                            .addLore(Color.translate(lore))
                             .create());
 
-                    i.getAndIncrement();
+                    if ((i.get() == 16) || (i.get() == 16) || (i.get() == 25)) {
+                        i.getAndIncrement();
+                        i.getAndIncrement();
+                        i.getAndIncrement();
+                    } else {
+                        i.getAndIncrement();
+                    }
                 }
             }
         });

@@ -29,11 +29,8 @@ commands:
   report:
   broadcast:
     aliases: [alert, bc]
-  unban:
-    aliases: [pardon]
-  unmute:
+  cgrant:
   grant:
-    aliases: [rank]
   language:
     aliases: [lang, setlang, deutsche, italiano, français, english, espanol]
   toggletips:
@@ -46,6 +43,7 @@ commands:
     aliases: [s]
   message:
     aliases: [msg, m]
+  grants:
   reply:
     aliases: [r]
   clearchat:
@@ -75,6 +73,9 @@ commands:
   scandium:
   media:
   famous:
+  unban:
+  unblacklist:
+  unmute:
   unsync:
     aliases: [unlink]
   sync:

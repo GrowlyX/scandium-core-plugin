@@ -14,6 +14,4 @@ public class Prefix {
     private String displayName;
     private String prefix;
 
-
-
 }

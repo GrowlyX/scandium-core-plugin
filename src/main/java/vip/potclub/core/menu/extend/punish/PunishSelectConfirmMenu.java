@@ -51,7 +51,7 @@ public class PunishSelectConfirmMenu extends AbstractInventoryMenu<CorePlugin> {
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
         this.inventory.setItem(12, new InventoryMenuItem(Material.INK_SACK, 14)
-                .setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + "Silent Punishment")
+                .setDisplayName(ChatColor.RED + "Silent Punishment?")
                 .addLore(
                         "",
                         "&7Current: " + network.getSecondaryColor() + (isSilent ? "&aEnabled" : "&cDisabled")

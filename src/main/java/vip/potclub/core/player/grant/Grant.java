@@ -1,6 +1,5 @@
 package vip.potclub.core.player.grant;
 
-import com.google.gson.JsonObject;
 import lombok.Getter;
 import lombok.Setter;
 import vip.potclub.core.CorePlugin;

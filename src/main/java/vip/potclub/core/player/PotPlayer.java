@@ -183,9 +183,11 @@ public class PotPlayer {
         if (document.getBoolean("canReceiveDmsSounds") != null) {
             this.canReceiveDmsSounds = document.getBoolean("canReceiveDmsSounds");
         }
-
-        this.firstJoin = ((document.getString("firstJoined") != null) ? document.getString("firstJoined") : CorePlugin.FORMAT.format(new Date()));
-
+        if (document.getString("firstJoined") != null) {
+            this.firstJoin = document.getString("firstJoined");
+        } else {
+            this.firstJoin = CorePlugin.FORMAT.format(new Date());
+        }
         if (document.getString("language") != null) {
             this.language = LanguageType.getByName(document.getString("language"));
         } else {
@@ -214,13 +216,11 @@ public class PotPlayer {
             this.media.setInstagram("N/A");
         }
 
-        if (document.getList("allGrants", String.class) != null) {
-            if (document.getList("allGrants", String.class).isEmpty()) {
-                this.allGrants.add(new Grant(null, Rank.getDefaultRank(), new Date().getTime(), Long.MAX_VALUE, "Automatic Grant (Default)", true));
-            } else {
-                List<String> allGrants = document.getList("allGrants", String.class);
-                allGrants.forEach(s -> this.allGrants.add(CorePlugin.GSON.fromJson(s, Grant.class)));
-            }
+        if ((document.getList("allGrants", String.class).isEmpty()) || (document.getList("allGrants", String.class) == null)) {
+            this.allGrants.add(new Grant(null, Rank.getDefaultRank(), new Date().getTime(), Long.MAX_VALUE, "Automatic Grant (Default)", true));
+        } else {
+            List<String> allGrants = document.getList("allGrants", String.class);
+            allGrants.forEach(s -> this.allGrants.add(CorePlugin.GSON.fromJson(s, Grant.class)));
         }
 
         if (document.getBoolean("isSynced") != null) {

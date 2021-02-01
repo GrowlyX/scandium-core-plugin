@@ -1,4 +1,4 @@
-package vip.potclub.core.command.extend.essential;
+package vip.potclub.core.command.extend.punish;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
