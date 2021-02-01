@@ -23,6 +23,7 @@ public class ServerManager {
         this.vanishedPlayers = new ArrayList<>();
 
         setupServerType();
+        CorePlugin.getInstance().getLogger().info("[Server] Loaded server type: " + this.network.getServerName() + ".");
     }
 
     public void setupServerType() {

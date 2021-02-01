@@ -21,7 +21,7 @@ public class UnBlacklistCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
-        if (player.hasPermission("scandium.command.unban")) {
+        if (player.hasPermission("scandium.command.unblacklist")) {
             if (args.length == 0) {
                 player.sendMessage(Color.translate("&cUsage: /" + label + " <player> <reason> [-s]."));
             }
@@ -36,9 +36,9 @@ public class UnBlacklistCommand extends BaseCommand {
                         Punishment.getAllPunishments().forEach(punishment -> {
                             if (punishment.getTarget().equals(offlinePlayer.getUniqueId())) {
                                 if (punishment.isActive()) {
-                                    if (punishment.getPunishmentType().equals(PunishmentType.BLACKLIST)) {
+                                    if (punishment.getPunishmentType() == PunishmentType.BLACKLIST) {
                                         punishment.setRemoved(true);
-                                        punishment.setRemovalReason(message);
+                                        punishment.setRemovalReason(message.replace("-s", ""));
                                         punishment.setRemover(player.getUniqueId());
                                         punishment.setActive(false);
 
@@ -55,11 +55,14 @@ public class UnBlacklistCommand extends BaseCommand {
                                                     offlinePlayer.getName() + " &awas " + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (player != null ? player.getDisplayName() : "&4CONSOLE") + "&a."
                                             ));
                                         }
+
+                                        punishment.savePunishment();
+                                        Punishment.getAllPunishments().remove(punishment);
+                                        Punishment.getAllPunishments().add(punishment);
                                     }
                                 }
                             }
                         });
-                        player.sendMessage(Color.translate("&aUnblacklisted " + args[0] + "."));
                     } else {
                         player.sendMessage(Color.translate("&cThat player does not exist."));
                     }

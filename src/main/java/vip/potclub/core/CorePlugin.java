@@ -22,10 +22,7 @@ import vip.potclub.core.command.extend.web.WebAnnouncementCommand;
 import vip.potclub.core.command.extend.web.WebAnnouncementDeleteCommand;
 import vip.potclub.core.database.Database;
 import vip.potclub.core.listener.PlayerListener;
-import vip.potclub.core.manager.PlayerManager;
-import vip.potclub.core.manager.PunishmentManager;
-import vip.potclub.core.manager.RankManager;
-import vip.potclub.core.manager.ServerManager;
+import vip.potclub.core.manager.*;
 import vip.potclub.core.redis.RedisClient;
 import vip.potclub.core.task.AutoMessageTask;
 import vip.potclub.core.task.GrantExpireTask;
@@ -56,6 +53,7 @@ public final class CorePlugin extends JavaPlugin {
     private ServerManager serverManager;
     private PlayerManager playerManager;
     private RankManager rankManager;
+    private PrefixManager prefixManager;
     private PunishmentManager punishmentManager;
 
     private String serverName;
@@ -99,6 +97,7 @@ public final class CorePlugin extends JavaPlugin {
 
         this.serverManager = new ServerManager();
         this.rankManager = new RankManager();
+        this.prefixManager = new PrefixManager();
         this.punishmentManager = new PunishmentManager();
         this.playerManager = new PlayerManager();
 
@@ -172,8 +171,12 @@ public final class CorePlugin extends JavaPlugin {
     @Override
     public void onDisable() {
         this.punishmentManager.savePunishments();
+        this.rankManager.saveRanks();
+        this.prefixManager.savePrefixes();
+
         this.getServer().getOnlinePlayers().forEach(player -> player.kickPlayer(Color.translate("&cThe server is currently rebooting.\n&cPlease reconnect in a few minutes, or check discord for more information.")));
         this.getServer().getScheduler().cancelAllTasks();
+
         if (this.redisClient.isClientActive()) {
             this.redisClient.destroyClient();
         }

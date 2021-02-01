@@ -15,6 +15,7 @@ public class RankManager {
 
     public RankManager() {
         this.loadRanks();
+        CorePlugin.getInstance().getLogger().info("[Ranks] Loaded all ranks.");
     }
 
     public void loadRanks() {

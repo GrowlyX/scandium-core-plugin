@@ -32,9 +32,8 @@ public class PotPlayer {
     @Getter public static Map<String, String> syncCodes = new HashMap<>();
 
     private List<Punishment> punishments = new ArrayList<>();
-    private List<String> friends = new ArrayList<>();
-    private List<String> ownedPrefixes = new ArrayList<>();
     private List<Grant> allGrants = new ArrayList<>();
+    private List<Prefix> allPrefixes = new ArrayList<>();
 
     private UUID uuid;
     private Player player;
@@ -74,7 +73,6 @@ public class PotPlayer {
     private String lastJoin;
     private String firstJoin;
 
-    @ConstructorProperties({"uuid"})
     public PotPlayer(UUID uuid) {
         this.uuid = uuid;
         this.player = Bukkit.getPlayer(uuid);
@@ -107,7 +105,12 @@ public class PotPlayer {
         List<String> grantStrings = new ArrayList<>();
         this.getAllGrants().forEach(grant -> grantStrings.add(grant.toJson()));
 
+        List<String> prefixStrings = new ArrayList<>();
+        this.getAllPrefixes().forEach(prefix -> prefixStrings.add(prefix.toJson()));
+
         document.put("allGrants", grantStrings);
+        document.put("allPrefixes", prefixStrings);
+        document.put("appliedPrefix", this.appliedPrefix.toJson());
         document.put("rankName", this.getActiveGrant().getRank().getName());
         document.put("discordSyncCode", this.syncCode);
         document.put("syncDiscord", this.syncDiscord);
@@ -140,7 +143,12 @@ public class PotPlayer {
         List<String> grantStrings = new ArrayList<>();
         this.getAllGrants().forEach(grant -> grantStrings.add(grant.toJson()));
 
+        List<String> prefixStrings = new ArrayList<>();
+        this.getAllPrefixes().forEach(prefix -> prefixStrings.add(prefix.toJson()));
+
         document.put("allGrants", grantStrings);
+        document.put("allPrefixes", prefixStrings);
+        document.put("appliedPrefix", this.appliedPrefix.toJson());
         document.put("rankName", this.getActiveGrant().getRank().getName());
         document.put("discordSyncCode", this.syncCode);
         document.put("syncDiscord", this.syncDiscord);
@@ -217,10 +225,18 @@ public class PotPlayer {
         }
 
         if ((document.getList("allGrants", String.class).isEmpty()) || (document.getList("allGrants", String.class) == null)) {
-            this.allGrants.add(new Grant(null, Rank.getDefaultRank(), new Date().getTime(), Long.MAX_VALUE, "Automatic Grant (Default)", true));
+            this.allGrants.add(new Grant(null, Objects.requireNonNull(Rank.getDefaultRank()), new Date().getTime(), Long.MAX_VALUE, "Automatic Grant (Default)", true));
         } else {
             List<String> allGrants = document.getList("allGrants", String.class);
             allGrants.forEach(s -> this.allGrants.add(CorePlugin.GSON.fromJson(s, Grant.class)));
+        }
+
+        if (document.getString("appliedPrefix") != null) {
+            this.appliedPrefix = CorePlugin.GSON.fromJson(document.getString("appliedPrefix"), Prefix.class);
+        }
+        if (!((document.getList("allPrefixes", String.class).isEmpty()) || (document.getList("allPrefixes", String.class) == null))) {
+            List<String> allPrefixes = document.getList("allPrefixes", String.class);
+            allPrefixes.forEach(s -> this.allPrefixes.add(CorePlugin.GSON.fromJson(s, Prefix.class)));
         }
 
         if (document.getBoolean("isSynced") != null) {
@@ -320,25 +336,6 @@ public class PotPlayer {
         }
 
         if (player != null) player.recalculatePermissions();
-    }
-
-    public void unMutePlayer() {
-        MongoCollection<Document> mongoCollection = CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection();
-        CorePlugin.getInstance().getMongoThread().execute(() -> {
-            for (Document document : mongoCollection.find()) {
-                if (document.get("punishmentType").equals("MUTE")) {
-                    if (document.get("target").equals(this.uuid.toString())) {
-                        if (!document.get("active").equals(false)) {
-                            this.currentlyMuted = false;
-                            Punishment punishment = CorePlugin.GSON.fromJson(document.toJson(), Punishment.class);
-                            punishment.setActive(false);
-                            punishment.setRemoved(true);
-                            punishment.savePunishment();
-                        }
-                    }
-                }
-            }
-        });
     }
 
     public static PotPlayer getPlayer(Player player) {
