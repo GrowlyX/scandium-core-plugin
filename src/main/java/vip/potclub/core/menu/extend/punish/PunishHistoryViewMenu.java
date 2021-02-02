@@ -46,18 +46,18 @@ public class PunishHistoryViewMenu extends AbstractInventoryMenu<CorePlugin> {
                     List<String> lore = new ArrayList<>();
 
                     lore.add("&b&m------------------------------------");
-                    lore.add("&7Punisher: &b" + network.getSecondaryColor() + issuerOfflinePlayer.getName());
-                    lore.add("&7Target: &b" + network.getSecondaryColor() + targetOfflinePlayer.getName());
-                    lore.add("&7Reason: &b" + network.getSecondaryColor() + punishment.getReason());
-                    lore.add("&7Type: &b" + network.getSecondaryColor() + punishment.getPunishmentType().getName());
-                    lore.add("&7Active: &b" + network.getSecondaryColor() + (punishment.isActive() ? "Yes" : "No"));
-                    lore.add("&7Duration: &b" + network.getSecondaryColor() + (punishment.isPermanent() ? "Permanent" : DurationFormatUtils.formatDurationWords(punishment.getPunishmentDuration(), true, true)));
+                    lore.add("&ePunish By: &b" + network.getMainColor() + issuerOfflinePlayer.getName());
+                    lore.add("&ePunish To: &b" + network.getMainColor() + targetOfflinePlayer.getName());
+                    lore.add("&ePunish Reason: &b" + network.getMainColor() + punishment.getReason());
+                    lore.add("&b&m------------------------------------");
+                    lore.add("&ePunish Type: &b" + network.getMainColor() + punishment.getPunishmentType().getName());
+                    lore.add("&ePunish Status: &b" + network.getMainColor() + (punishment.isActive() ? "&aActive" : "&4Expired"));
+                    lore.add("&ePunish Duration: &b" + network.getMainColor() + (punishment.isPermanent() ? "&4Permanent" : DurationFormatUtils.formatDurationWords(punishment.getPunishmentDuration(), true, true)));
                     lore.add("&b&m------------------------------------");
 
                     if (punishment.isRemoved()) {
-                        lore.add("&7Removed: &b" + network.getSecondaryColor() + "Yes");
-                        lore.add("&7Removed By: &b" + network.getSecondaryColor() + Bukkit.getOfflinePlayer(punishment.getRemover()).getName());
-                        lore.add("&7Removed For: &b" + network.getSecondaryColor() + punishment.getRemovalReason());
+                        lore.add("&eRemoved By: &b" + network.getMainColor() + Bukkit.getOfflinePlayer(punishment.getRemover()).getName());
+                        lore.add("&eRemoved Reason: &b" + network.getMainColor() + punishment.getRemovalReason());
                         lore.add("&b&m------------------------------------");
                     }
 

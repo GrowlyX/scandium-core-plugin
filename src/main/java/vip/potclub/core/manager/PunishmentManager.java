@@ -6,17 +6,13 @@ import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import vip.potclub.core.CorePlugin;
-import vip.potclub.core.clickable.Clickable;
 import vip.potclub.core.player.PotPlayer;
 import vip.potclub.core.player.punishment.Punishment;
 import vip.potclub.core.player.punishment.PunishmentStrings;
 import vip.potclub.core.player.punishment.PunishmentType;
-import vip.potclub.core.util.CC;
 import vip.potclub.core.util.Color;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.UUID;
 
 @Getter

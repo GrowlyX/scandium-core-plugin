@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public class InventoryUtil {
+public final class InventoryUtil {
 
     public static ItemStack[] deepClone(ItemStack[] origin) {
         Preconditions.checkNotNull( origin, "Origin cannot be null");

@@ -37,7 +37,7 @@ public class UnMuteCommand extends BaseCommand {
                         Punishment.getAllPunishments().forEach(punishment -> {
                             if (punishment.getTarget().equals(offlinePlayer.getUniqueId())) {
                                 if (punishment.isActive()) {
-                                    if (punishment.getPunishmentType() == PunishmentType.BLACKLIST) {
+                                    if (punishment.getPunishmentType() == PunishmentType.MUTE) {
                                         punishment.setRemoved(true);
                                         punishment.setRemovalReason(message.replace("-s", ""));
                                         punishment.setRemover(player.getUniqueId());

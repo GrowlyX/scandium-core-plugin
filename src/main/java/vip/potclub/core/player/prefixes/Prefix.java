@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.bson.Document;
 import vip.potclub.core.CorePlugin;
 import vip.potclub.core.player.ranks.Rank;
+import vip.potclub.core.util.SaltUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,10 +34,18 @@ public class Prefix {
         prefixes.add(this);
     }
 
+    public Prefix(String name, String prefix) {
+        this.id = SaltUtil.getRandomSaltedString();
+        this.name = name;
+        this.displayName = name;
+        this.prefix = prefix;
+
+        prefixes.add(this);
+    }
+
     public void savePrefix() {
         Document document = new Document("_id", this.id);
 
-        document.put("id", this.id);
         document.put("name", this.name);
         document.put("displayName", this.displayName);
         document.put("prefix", this.prefix);
@@ -47,7 +56,6 @@ public class Prefix {
     public void savePrefixMainThread() {
         Document document = new Document("_id", this.id);
 
-        document.put("id", this.id);
         document.put("name", this.name);
         document.put("displayName", this.displayName);
         document.put("prefix", this.prefix);

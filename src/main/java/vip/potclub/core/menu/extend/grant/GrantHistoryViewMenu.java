@@ -1,6 +1,7 @@
 package vip.potclub.core.menu.extend.grant;
 
 import lombok.Getter;
+import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -42,11 +43,13 @@ public class GrantHistoryViewMenu extends AbstractInventoryMenu<CorePlugin> {
             if (i.get() <= 34) {
                 List<String> lore = new ArrayList<>();
                 lore.add("&b&m------------------------------------");
-                lore.add("&7Rank: " + network.getSecondaryColor() + grant.getRank().getColor() + grant.getRank().getName());
-                lore.add("&7Reason: " + network.getSecondaryColor()  + grant.getReason());
-                lore.add("&7Issuer: " + network.getSecondaryColor()  + Bukkit.getOfflinePlayer(grant.getIssuer()).getName());
-                lore.add("&7Addition: " + network.getSecondaryColor()  + CorePlugin.FORMAT.format(new Date(grant.getDateAdded())));
-                lore.add("&7Expiration: " + network.getSecondaryColor()  + CorePlugin.FORMAT.format(new Date(grant.getDateAdded() + grant.getDuration())));
+                lore.add("&eTarget&7: " + network.getMainColor() + target.getDisplayName());
+                lore.add("&eRank&7: " + network.getMainColor() + grant.getRank().getColor() + grant.getRank().getName());
+                lore.add("&eDuration&7: " + network.getMainColor() + (grant.getDuration() != 2147483647L ? DurationFormatUtils.formatDurationWords(grant.getDuration(), true, true) : "Forever"));
+                lore.add("&b&m------------------------------------");
+                lore.add("&eIssued By&7: " + network.getMainColor()  + Bukkit.getOfflinePlayer(grant.getIssuer()).getName());
+                lore.add("&eIssued On&7: " + network.getMainColor()  + CorePlugin.FORMAT.format(new Date(grant.getDateAdded())));
+                lore.add("&eIssued Reason&7: " + network.getMainColor()  + grant.getReason());
                 lore.add("&b&m------------------------------------");
 
                 this.inventory.setItem(i.get(), new InventoryMenuItem(Material.WOOL, (grant.isActive() ? 5 : 14))

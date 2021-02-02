@@ -37,7 +37,7 @@ public class PlayerListener implements Listener {
         } else {
             int boundOfThree = CorePlugin.RANDOM.nextInt(3);
             if (boundOfThree == 1) {
-                event.setMotd(Color.translate("&d&lPotClub &7&l\u239c &fEU\n&7Join our discord via &bdiscord.gg/D5svAj23R4&7!"));
+                event.setMotd(Color.translate("&d&lPotClub &7&l\u239c &fEU\n&7Join our discord via &bhttps://dsc.gg/pot&7!"));
             } else if (boundOfThree == 2) {
                 event.setMotd(Color.translate("&d&lPotClub &7&l\u239c &fEU\n&7Follow our twitter for giveaways and more! &b@PotClubVIP&7"));
             } else {

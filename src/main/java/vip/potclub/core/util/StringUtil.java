@@ -7,7 +7,7 @@ import vip.potclub.core.player.PotPlayer;
 
 import java.util.Arrays;
 
-public class StringUtil {
+public final class StringUtil {
 
     public static String buildMessage(String[] args, int start) {
         return start >= args.length ? "" : ChatColor.stripColor(String.join(" ", Arrays.copyOfRange(args, start, args.length)));

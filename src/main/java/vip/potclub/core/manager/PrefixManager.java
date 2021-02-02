@@ -18,9 +18,19 @@ public class PrefixManager {
     public void loadPrefixes() {
         CorePlugin.getInstance().getMongoThread().execute(() -> {
             for (Document document : CorePlugin.getInstance().getCoreDatabase().getPrefixCollection().find()) {
-                new Prefix(document.getString("id"),document.getString("name"), document.getString("displayName"), document.getString("prefix"));
+                new Prefix(document.getString("_id"),document.getString("name"), document.getString("displayName"), document.getString("prefix"));
             }
         });
+
+        /*if (Prefix.getPrefixes().isEmpty()) {
+            CorePlugin.getInstance().getMongoThread().execute(() -> {
+                new Prefix("Verified", "&2✔");
+                new Prefix("Liked", "&b✔");
+                new Prefix("Love", "&c❤");
+                new Prefix("Star", "&6✫");
+            });
+            CorePlugin.getInstance().getLogger().info("[Prefixes] Created four new prefixes. (Verified, Liked, Love, Star)");
+        }*/
     }
 
     public void savePrefixes() {

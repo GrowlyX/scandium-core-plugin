@@ -45,8 +45,8 @@ public class PrefixCommand extends BaseCommand {
                             String name = args[1];
                             String prefix = StringUtil.buildMessage(args, 2);
 
-                            new Prefix(SaltUtil.getRandomSaltedString(), name, name, prefix);
-                            player.sendMessage(Color.translate("&aCreated a new prefix with the name &6" + name + "&a and the design &b" + prefix + "."));
+                            new Prefix(name, prefix);
+                            player.sendMessage(Color.translate("&aCreated a new prefix with the name &6" + name + "&a and the design &b" + prefix + "&a."));
                         }
                         break;
                     case "add":
