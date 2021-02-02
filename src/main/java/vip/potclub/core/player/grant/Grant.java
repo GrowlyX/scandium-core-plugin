@@ -4,12 +4,15 @@ import lombok.Getter;
 import lombok.Setter;
 import vip.potclub.core.CorePlugin;
 import vip.potclub.core.player.ranks.Rank;
+import vip.potclub.core.util.SaltUtil;
 
 import java.util.UUID;
 
 @Getter
 @Setter
 public class Grant {
+
+    private String id;
 
     private UUID issuer;
     private UUID rankId;
@@ -19,14 +22,18 @@ public class Grant {
 
     private String reason;
     private boolean active;
+    private boolean permanent;
 
-    public Grant(UUID issuer, Rank rank, long dateAdded, long duration, String reason, boolean active) {
+    public Grant(UUID issuer, Rank rank, long dateAdded, long duration, String reason, boolean active, boolean permanent) {
         this.issuer = issuer;
         this.rankId = rank.getUuid();
         this.dateAdded = dateAdded;
         this.duration = duration;
         this.reason = reason;
         this.active = active;
+        this.permanent = permanent;
+
+        this.id = SaltUtil.getRandomSaltedString();
     }
 
     public Rank getRank() {

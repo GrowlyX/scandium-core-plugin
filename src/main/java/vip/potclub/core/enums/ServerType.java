@@ -10,8 +10,8 @@ import java.util.UUID;
 public enum ServerType {
 
     POTCLUBVIP("PotClub", "01", ChatColor.LIGHT_PURPLE, ChatColor.YELLOW, "", "https://dsc.gg/pot", "PotClubVIP", "store.potclub.vip", "www.potclub.vip", UUID.fromString("bbaa8e1d-af94-4aa8-980d-36d69b9de436"), UUID.fromString("bbaa8e1d-af94-4aa8-980d-36d69b9de436")),
-    EVENTIS("Eventis", "03", ChatColor.DARK_AQUA, ChatColor.AQUA, "", "https://discord.eventis.club", "EventisClubMC", "store.eventis.club", "eventis.club", UUID.fromString("0a786830-2691-4eb2-8a0e-6e2c36a545a1"), UUID.fromString("4ec1957e-1635-4234-ad17-a3de963dacde")),
-    EYTRILORG("Eytril", "04", ChatColor.GOLD, ChatColor.WHITE, "", "https://discord.eytril.org/", "Eytril Network", "store.eytril.org", "eytril.org", UUID.fromString("bbaa8e1d-af94-4aa8-980d-36d69b9de436"), UUID.fromString("4ec1957e-1635-4234-ad17-a3de963dacde"));
+    EVENTIS("Eventis", "03", ChatColor.DARK_AQUA, ChatColor.AQUA, "", "https://discord.eventis.club", "EventisClubMC", "store.eventis.club", "eventis.club", UUID.fromString("c9647f7a-abfb-41c4-a8ce-a07d74434ca6"), UUID.fromString("bbaa8e1d-af94-4aa8-980d-36d69b9de436")),
+    EYTRILORG("Eytril", "04", ChatColor.GOLD, ChatColor.WHITE, "", "https://discord.eytril.org/", "Eytril Network", "store.eytril.org", "eytril.org", UUID.fromString("c3a45b41-f69b-4bf1-8a0e-d63ae5135782"), UUID.fromString("bbaa8e1d-af94-4aa8-980d-36d69b9de436"));
 
     private final String serverName;
     private final String serverId;

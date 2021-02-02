@@ -39,7 +39,7 @@ public class CGrantCommand extends BaseCommand {
                             if (args[2].equalsIgnoreCase("perm") || args[2].equalsIgnoreCase("permanent")) {
                                 String reason = StringUtil.buildMessage(args, 3);
                                 PotPlayer targetPotPlayer = PotPlayer.getPlayer(target);
-                                Grant newGrant = new Grant(null, rank, System.currentTimeMillis(), 2147483647L, reason, true);
+                                Grant newGrant = new Grant(null, rank, System.currentTimeMillis(), 2147483647L, reason, true, true);
 
                                 targetPotPlayer.getAllGrants().add(newGrant);
                                 targetPotPlayer.setupAttachment();
@@ -51,7 +51,7 @@ public class CGrantCommand extends BaseCommand {
                                 try {
                                     String reason = StringUtil.buildMessage(args, 3);
                                     PotPlayer targetPotPlayer = PotPlayer.getPlayer(target);
-                                    Grant newGrant = new Grant(null, rank, System.currentTimeMillis(), System.currentTimeMillis() - DateUtil.parseDateDiff(args[2], false), reason, true);
+                                    Grant newGrant = new Grant(null, rank, System.currentTimeMillis(), System.currentTimeMillis() - DateUtil.parseDateDiff(args[2], false), reason, true, false);
 
                                     targetPotPlayer.getAllGrants().add(newGrant);
                                     targetPotPlayer.setupAttachment();

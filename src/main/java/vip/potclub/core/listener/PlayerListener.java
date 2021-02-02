@@ -63,23 +63,18 @@ public class PlayerListener implements Listener {
         Punishment.getAllPunishments().forEach(punishment -> {
             if (punishment.getTarget().equals(event.getUniqueId())) {
                 if ((punishment.getPunishmentType().equals(PunishmentType.BAN)) || (punishment.getPunishmentType().equals(PunishmentType.BLACKLIST)) || (punishment.getPunishmentType().equals(PunishmentType.IPBAN))) {
-                    if (punishment.isActive() || !punishment.isRemoved()) {
+                    if (punishment.isActive()) {
                         switch (punishment.getPunishmentType()) {
                             case BLACKLIST:
                                 event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Color.translate(PunishmentStrings.BLCK_MESSAGE.replace("<reason>", punishment.getReason())));
                                 break;
+                            case IPBAN:
                             case BAN:
                                 event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, (punishment.isPermanent() ? Color.translate(PunishmentStrings.BAN_MESSAGE_PERM.replace("<reason>", punishment.getReason())) : Color.translate(PunishmentStrings.BAN_MESSAGE_TEMP.replace("<reason>", punishment.getReason()).replace("<time>", punishment.getDurationString()))));
                                 break;
                         }
-                    } else {
-                        event.allow();
                     }
-                } else {
-                    event.allow();
                 }
-            } else {
-                event.allow();
             }
         });
     }

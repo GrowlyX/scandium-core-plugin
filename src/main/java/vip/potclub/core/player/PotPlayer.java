@@ -229,7 +229,7 @@ public class PotPlayer {
         }
 
         if ((document.getList("allGrants", String.class).isEmpty()) || (document.getList("allGrants", String.class) == null)) {
-            this.allGrants.add(new Grant(null, Objects.requireNonNull(Rank.getDefaultRank()), new Date().getTime(), Long.MAX_VALUE, "Automatic Grant (Default)", true));
+            this.allGrants.add(new Grant(null, Objects.requireNonNull(Rank.getDefaultRank()), new Date().getTime(), 2147483647L, "Automatic Grant (Default)", true, true));
         } else {
             List<String> allGrants = document.getList("allGrants", String.class);
             allGrants.forEach(s -> this.allGrants.add(CorePlugin.GSON.fromJson(s, Grant.class)));
@@ -312,7 +312,7 @@ public class PotPlayer {
                 toReturn = grant;
             }
         }
-        if (toReturn == null) toReturn = new Grant(null, Objects.requireNonNull(Rank.getDefaultRank()), System.currentTimeMillis(), 2147483647L, "Automatic Grant (Default)", true);
+        if (toReturn == null) toReturn = new Grant(null, Objects.requireNonNull(Rank.getDefaultRank()), System.currentTimeMillis(), 2147483647L, "Automatic Grant (Default)", true, true);
         return toReturn;
     }
 
@@ -343,6 +343,14 @@ public class PotPlayer {
         }
 
         if (player != null) player.recalculatePermissions();
+    }
+
+    public Grant getByDate(long date) {
+        return this.getAllGrants().stream().filter(grant -> grant.getDateAdded() == date).findFirst().orElse(null);
+    }
+
+    public Grant getById(String id) {
+        return this.getAllGrants().stream().filter(grant -> grant.getId().equals(id)).findFirst().orElse(null);
     }
 
     public static PotPlayer getPlayer(Player player) {
