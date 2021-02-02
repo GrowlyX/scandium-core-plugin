@@ -119,7 +119,7 @@ public class PotPlayer {
         }
         document.put("rankName", this.getActiveGrant().getRank().getName());
         if (this.customColor != null) {
-            document.put("customColor", this.customColor.toString());
+            document.put("customColor", this.customColor.name());
         } else {
             document.put("customColor", null);
         }
@@ -166,7 +166,7 @@ public class PotPlayer {
         }
         document.put("rankName", this.getActiveGrant().getRank().getName());
         if (this.customColor != null) {
-            document.put("customColor", this.customColor.toString());
+            document.put("customColor", this.customColor.name());
         } else {
             document.put("customColor", null);
         }

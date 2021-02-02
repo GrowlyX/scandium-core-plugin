@@ -138,6 +138,7 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("website").setExecutor(new WebsiteCommand());
         this.getCommand("unmute").setExecutor(new UnMuteCommand());
         this.getCommand("unban").setExecutor(new UnBanCommand());
+        this.getCommand("color").setExecutor(new ColorCommand());
         this.getCommand("unblacklist").setExecutor(new UnBlacklistCommand());
         this.getCommand("unmute").setExecutor(new UnMuteCommand());
         this.getCommand("store").setExecutor(new StoreCommand());
