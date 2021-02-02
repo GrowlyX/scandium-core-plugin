@@ -12,7 +12,7 @@ public class WoolUtil {
             ChatColor.GRAY, ChatColor.DARK_AQUA, ChatColor.DARK_PURPLE, ChatColor.BLUE, ChatColor.RESET,
             ChatColor.DARK_GREEN, ChatColor.RED, ChatColor.BLACK));
 
-    public static int convertChatColorToWoolData(ChatColor color) {
+    public static int getByColor(ChatColor color) {
         if(color == ChatColor.DARK_RED) color = ChatColor.RED;
         if (color == ChatColor.DARK_BLUE) color = ChatColor.BLUE;
 

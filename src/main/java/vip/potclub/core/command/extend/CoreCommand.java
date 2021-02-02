@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import vip.potclub.core.CorePlugin;
 import vip.potclub.core.command.BaseCommand;
+import vip.potclub.core.menu.extend.ScandiumMenu;
 import vip.potclub.core.util.Color;
 
 public class CoreCommand extends BaseCommand {
@@ -20,7 +21,7 @@ public class CoreCommand extends BaseCommand {
         Player player = (Player) sender;
         if (player.getUniqueId().equals(CorePlugin.getInstance().getServerManager().getNetwork().getMainOwner()) || player.getUniqueId().equals(CorePlugin.getInstance().getServerManager().getNetwork().getMainDeveloper())) {
             if (args.length == 0) {
-                player.sendMessage(Color.translate("&cUsage: /" + label + " <debug|disallow|destroy>"));
+                player.sendMessage(Color.translate("&cUsage: /" + label + " <debug|disallow|destroy|panel>"));
             }
             if (args.length > 0) {
                 switch (args[0]) {
@@ -32,6 +33,9 @@ public class CoreCommand extends BaseCommand {
                         player.sendMessage(Color.translate((CorePlugin.getInstance().isDisallow() ? "&b[C] &cDisabled disallow." : "&b[C] &aEnabled disallow.")));
                         CorePlugin.getInstance().setDisallow(!CorePlugin.getInstance().isDisallow());
                         break;
+                    case "panel":
+                        new ScandiumMenu(player).open(player);
+                        break;
                     case "destroy":
                         player.sendMessage(Color.translate("&cBoom! Destroyed!"));
                         Bukkit.getServer().shutdown();
@@ -39,7 +43,8 @@ public class CoreCommand extends BaseCommand {
                 }
             }
         } else {
-            player.sendMessage(Color.translate("&cThis command is restricted."));
+            player.sendMessage(Color.translate("&aThis server is running &6Scandium v1.3.3.7&a!"));
+            player.sendMessage(Color.translate("&fDeveloped by &7GrowlyX#1337&f."));
         }
         return false;
     }

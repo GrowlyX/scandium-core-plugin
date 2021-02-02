@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bson.Document;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
 import vip.potclub.core.CorePlugin;
@@ -18,6 +19,7 @@ import vip.potclub.core.player.punishment.PunishmentType;
 import vip.potclub.core.player.ranks.Rank;
 import vip.potclub.core.util.Color;
 import vip.potclub.core.util.SaltUtil;
+import vip.potclub.core.util.external.NameMCExternal;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -40,6 +42,8 @@ public class PotPlayer {
 
     private Player lastRecipient;
 
+    private ChatColor customColor;
+
     private String rankName;
     private String syncCode;
     private String syncDiscord;
@@ -54,6 +58,7 @@ public class PotPlayer {
 
     private boolean canReport = true;
     private boolean canRequest = true;
+    private boolean hasVoted = false;
     private boolean isVanished = false;
     private boolean isSynced = false;
 
@@ -113,9 +118,15 @@ public class PotPlayer {
             document.put("appliedPrefix", "Default");
         }
         document.put("rankName", this.getActiveGrant().getRank().getName());
+        if (this.customColor != null) {
+            document.put("customColor", this.customColor.toString());
+        } else {
+            document.put("customColor", null);
+        }
         document.put("discordSyncCode", this.syncCode);
         document.put("syncDiscord", this.syncDiscord);
         document.put("isSynced", this.isSynced);
+        document.put("hasVoted", this.hasVoted);
         document.put("language", (this.language != null ? this.language.getLanguageName() : LanguageType.ENGLISH.getLanguageName()));
         document.put("currentlyOnline", this.currentlyOnline);
 
@@ -154,9 +165,15 @@ public class PotPlayer {
             document.put("appliedPrefix", "Default");
         }
         document.put("rankName", this.getActiveGrant().getRank().getName());
+        if (this.customColor != null) {
+            document.put("customColor", this.customColor.toString());
+        } else {
+            document.put("customColor", null);
+        }
         document.put("discordSyncCode", this.syncCode);
         document.put("syncDiscord", this.syncDiscord);
         document.put("isSynced", this.isSynced);
+        document.put("hasVoted", this.hasVoted);
         document.put("language", (this.language != null ? this.language.getLanguageName() : LanguageType.ENGLISH.getLanguageName()));
         document.put("currentlyOnline", false);
 
@@ -192,6 +209,9 @@ public class PotPlayer {
         if (document.getBoolean("canSeeGlobalChat") != null) {
             this.canSeeGlobalChat = document.getBoolean("canSeeGlobalChat");
         }
+        if (document.getBoolean("hasVoted") != null) {
+            this.hasVoted = document.getBoolean("hasVoted");
+        }
         if (document.getBoolean("canReceiveDmsSounds") != null) {
             this.canReceiveDmsSounds = document.getBoolean("canReceiveDmsSounds");
         }
@@ -206,12 +226,15 @@ public class PotPlayer {
             this.language = LanguageType.ENGLISH;
         }
 
+        if (document.getString("customColor") != null) {
+            this.customColor = ChatColor.valueOf(document.getString("customColor"));
+        }
+
         if (document.getString("discord") != null) {
             this.media.setDiscord(document.getString("discord"));
         } else {
             this.media.setDiscord("N/A");
         }
-
         if (document.getString("twitter") != null) {
             this.media.setTwitter(document.getString("twitter"));
         } else {
@@ -267,6 +290,7 @@ public class PotPlayer {
         syncCodes.put(this.syncCode, this.player.getName());
 
         this.setupAttachment();
+        this.checkVoting();
 
         this.currentlyMuted = this.isMuted();
         this.currentlyBanned = this.isBanned();
@@ -363,5 +387,24 @@ public class PotPlayer {
 
     public static PotPlayer getPlayer(String name) {
         return profilePlayers.get(Bukkit.getPlayer(name).getUniqueId());
+    }
+
+    public void checkVoting() {
+        if (!hasVoted) {
+            try {
+                if (NameMCExternal.hasVoted(this.uuid.toString())) {
+                    this.hasVoted = true;
+                    this.getAllPrefixes().add("Liked");
+
+                    if (player != null) {
+                        player.sendMessage(Color.translate("&aThanks for voting for us on &6NameMC&a!"));
+                        player.sendMessage(Color.translate("&aYou have received the &b✔ &7(Liked) &aprefix!"));
+                    }
+                }
+            } catch (Exception exception) {
+                CorePlugin.getInstance().getLogger().warning("[NameMC] Could not check " + player.getName() + "'s voting status!");
+                CorePlugin.getInstance().getLogger().warning("[NameMC] Is your server on NameMC? Exception: " + exception.getMessage());
+            }
+        }
     }
 }
