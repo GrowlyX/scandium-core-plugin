@@ -111,10 +111,6 @@ public class Punishment {
         CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().replaceOne(Filters.eq("_id", this.id), document, new ReplaceOptions().upsert(true));
     }
 
-    public boolean isPermanent() {
-        return this.punishmentDuration == -1L;
-    }
-
     public boolean isRemoved() {
         return this.removalReason != null;
     }
@@ -127,7 +123,7 @@ public class Punishment {
         return this.isPermanent() ? "Never" : DATE_FORMAT.format(new Date(this.createdAt.getTime() + this.punishmentDuration));
     }
 
-    public boolean isActive() {
+    public boolean checkIfActive() {
         if (this.isRemoved()) {
             return false;
         } else if (this.isPermanent()) {

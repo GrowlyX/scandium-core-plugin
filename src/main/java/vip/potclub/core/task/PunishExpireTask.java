@@ -15,7 +15,7 @@ public class PunishExpireTask extends BukkitRunnable {
     @Override
     public void run() {
         Punishment.getAllPunishments().forEach(punishment -> {
-            if (punishment.isActive() || !punishment.isPermanent() || !punishment.isRemoved()) {
+            if (punishment.isActive() && !punishment.isPermanent() && !punishment.isRemoved()) {
                 if (new Date(punishment.getCreatedAt().getTime() + punishment.getPunishmentDuration()).compareTo(new Date()) >= 0) {
                     punishment.setActive(false);
                 }

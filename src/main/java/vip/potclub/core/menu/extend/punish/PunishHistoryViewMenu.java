@@ -52,7 +52,7 @@ public class PunishHistoryViewMenu extends AbstractInventoryMenu<CorePlugin> {
                     lore.add("&b&m------------------------------------");
                     lore.add("&ePunish Type: &b" + network.getMainColor() + punishment.getPunishmentType().getName());
                     lore.add("&ePunish Status: &b" + network.getMainColor() + (punishment.isActive() ? "&aActive" : "&4Expired"));
-                    lore.add("&ePunish Duration: &b" + network.getMainColor() + (punishment.isPermanent() ? "&4Permanent" : DurationFormatUtils.formatDurationWords(punishment.getPunishmentDuration(), true, true)));
+                    lore.add("&ePunish Expiring: &b" + network.getMainColor() + punishment.getExpirationString());
                     lore.add("&b&m------------------------------------");
 
                     if (punishment.isRemoved()) {

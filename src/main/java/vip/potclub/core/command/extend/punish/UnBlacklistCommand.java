@@ -11,13 +11,56 @@ import vip.potclub.core.player.punishment.PunishmentType;
 import vip.potclub.core.util.Color;
 import vip.potclub.core.util.StringUtil;
 
+import java.util.UUID;
+
 public class UnBlacklistCommand extends BaseCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage("die");
-            return false;
+            if (args.length == 0) {
+                sender.sendMessage(Color.translate("&cUsage: /" + label + " <player> <reason> [-s]."));
+            }
+            if (args.length > 0) {
+                if (args.length == 1) {
+                    sender.sendMessage(Color.translate("&cUsage: /" + label + " <player> <reason> [-s]."));
+                }
+                if (args.length > 1) {
+                    OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[0]);
+                    String message = StringUtil.buildMessage(args, 1);
+                    if (offlinePlayer != null) {
+                        Punishment.getAllPunishments().forEach(punishment -> {
+                            if (punishment.getTarget().equals(offlinePlayer.getUniqueId())) {
+                                if (punishment.isActive()) {
+                                    if (punishment.getPunishmentType() == PunishmentType.BAN) {
+                                        punishment.setRemoved(true);
+                                        punishment.setRemovalReason(message.replace("-s", ""));
+                                        punishment.setRemover(UUID.fromString("f78a4d8d-d51b-4b39-98a3-230f2de0c670"));
+                                        punishment.setActive(false);
+
+                                        if (message.endsWith("-s")) {
+                                            Bukkit.getOnlinePlayers().forEach(player1 -> {
+                                                if (player1.hasPermission("scandium.staff")) {
+                                                    player1.sendMessage(Color.translate(
+                                                            "&7[Silent] " + offlinePlayer.getName() + " &awas " + "un" + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4Console&a."
+                                                    ));
+                                                }
+                                            });
+                                        } else {
+                                            Bukkit.broadcastMessage(Color.translate(
+                                                    offlinePlayer.getName() + " &awas " + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4Console&a."
+                                            ));
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    } else {
+                        sender.sendMessage(Color.translate("&cThat player does not exist."));
+                    }
+                }
+                return false;
+            }
         }
 
         Player player = (Player) sender;
@@ -46,19 +89,15 @@ public class UnBlacklistCommand extends BaseCommand {
                                             Bukkit.getOnlinePlayers().forEach(player1 -> {
                                                 if (player1.hasPermission("scandium.staff")) {
                                                     player1.sendMessage(Color.translate(
-                                                            "&7[Silent] " + offlinePlayer.getName() + " &awas " + "un" + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (player != null ? player.getDisplayName() : "&4CONSOLE") + "&a."
+                                                            "&7[Silent] " + offlinePlayer.getName() + " &awas " + "un" + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + player.getDisplayName() + "&a."
                                                     ));
                                                 }
                                             });
                                         } else {
                                             Bukkit.broadcastMessage(Color.translate(
-                                                    offlinePlayer.getName() + " &awas " + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (player != null ? player.getDisplayName() : "&4CONSOLE") + "&a."
+                                                    offlinePlayer.getName() + " &awas " + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + player.getDisplayName() + "&a."
                                             ));
                                         }
-
-                                        punishment.savePunishment();
-                                        Punishment.getAllPunishments().remove(punishment);
-                                        Punishment.getAllPunishments().add(punishment);
                                     }
                                 }
                             }
@@ -71,6 +110,7 @@ public class UnBlacklistCommand extends BaseCommand {
         } else {
             player.sendMessage(Color.translate("&cNo permission."));
         }
+
         return false;
     }
 }
