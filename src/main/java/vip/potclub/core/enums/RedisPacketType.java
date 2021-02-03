@@ -13,6 +13,11 @@ public enum RedisPacketType {
     PLAYER_DISCONNECT_UPDATE("PlayerDisconnectUpdate"),
     PLAYER_MESSAGE_UPDATE("PlayerMessageUpdate"),
     PLAYER_DISCORD_SYNC("PlayerDiscordSync"),
+    SERVER_DATA_COMMAND("ServerDataCommand"),
+    SERVER_DATA_ONLINE("ServerDataOnline"),
+    SERVER_DATA_UPDATE("ServerDataUpdate"),
+    SERVER_DATA_OFFLINE("ServerDataOffline"),
+    NETWORK_BROADCAST_PERMISSION_UPDATE("NetworkBroadcastPermissionUpdate"),
     NETWORK_BROADCAST_UPDATE("NetworkBroadcastUpdate");
 
     private final String packetDataName;

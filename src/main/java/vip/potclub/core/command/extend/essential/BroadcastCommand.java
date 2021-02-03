@@ -26,7 +26,7 @@ public class BroadcastCommand extends BaseCommand {
 
             if (args.length > 0) {
                 String message = StringUtil.buildMessage(args, 0);
-                CorePlugin.getInstance().getRedisThread().execute(() -> client.write(RedisUtil.onBroadcast(message)));
+                CorePlugin.getInstance().getRedisThread().execute(() -> client.write(RedisUtil.onGlobalBroadcast(message)));
             }
         } else {
             player.sendMessage(Color.translate("&cNo permission."));

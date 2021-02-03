@@ -5,9 +5,12 @@ import org.bukkit.Bukkit;
 import redis.clients.jedis.JedisPubSub;
 import vip.potclub.core.CorePlugin;
 import vip.potclub.core.enums.ChatChannelType;
+import vip.potclub.core.enums.NetworkServerStatusType;
+import vip.potclub.core.enums.NetworkServerType;
 import vip.potclub.core.enums.StaffUpdateType;
 import vip.potclub.core.player.PotPlayer;
 import vip.potclub.core.redis.RedisMessage;
+import vip.potclub.core.server.NetworkServer;
 import vip.potclub.core.util.Color;
 
 public class RedisListener extends JedisPubSub {
@@ -17,6 +20,65 @@ public class RedisListener extends JedisPubSub {
         CorePlugin.getInstance().getRedisSubThread().execute(() -> {
             RedisMessage redisMessage = new Gson().fromJson(message, RedisMessage.class);
             switch (redisMessage.getPacket()) {
+                case SERVER_DATA_ONLINE:
+                    String bootingServerName = redisMessage.getParam("SERVER");
+
+                    if (!CorePlugin.getInstance().getServerManager().existServer(bootingServerName)){
+                        NetworkServer server = new NetworkServer(bootingServerName, NetworkServerType.NOT_DEFINED);
+
+                        server.setServerStatus(NetworkServerStatusType.BOOTING);
+                        server.setWhitelistEnabled(false);
+                        server.setOnlinePlayers(0);
+                        server.setMaxPlayerLimit(0);
+                        server.setTicksPerSecond("&a0.0&7, &a0.0&7, &a0.0");
+                        server.setServerType(NetworkServerType.NOT_DEFINED);
+                    }
+
+                    Bukkit.getOnlinePlayers().forEach(player -> {
+                        if (player.hasPermission("scandium.network.alerts")) {
+                            player.sendMessage(Color.translate("&3[S] &e" + bootingServerName + " &bhas just booted and will be joinable in &65 seconds&b."));
+                        }
+                    });
+                    break;
+                case SERVER_DATA_UPDATE:
+                    String serverName = redisMessage.getParam("SERVER");
+                    String serverType = redisMessage.getParam("SERVER_TYPE");
+                    String ticksPerSecond = redisMessage.getParam("TPS");
+                    String ticksPerSecondSimple = redisMessage.getParam("TPSSIMPLE");
+
+                    int maxPlayerLimit = Integer.parseInt(redisMessage.getParam("MAXPLAYERS"));
+                    int onlinePlayers = Integer.parseInt(redisMessage.getParam("ONLINEPLAYERS"));
+
+                    boolean whitelistEnabled = Boolean.parseBoolean(redisMessage.getParam("WHITELIST"));
+
+                    if (!CorePlugin.getInstance().getServerManager().existServer(serverName)){
+                        NetworkServer server = new NetworkServer(serverName, NetworkServerType.valueOf(serverType));
+
+                        server.setTicksPerSecond(ticksPerSecond);
+                        server.setMaxPlayerLimit(maxPlayerLimit);
+                        server.setOnlinePlayers(onlinePlayers);
+                        server.setWhitelistEnabled(whitelistEnabled);
+                        server.setTicksPerSecondSimplified(ticksPerSecondSimple);
+
+                    }
+                    NetworkServer.getByName(serverName).update(onlinePlayers, ticksPerSecond, maxPlayerLimit, whitelistEnabled, ticksPerSecondSimple, true);
+                    NetworkServer.getByName(serverName).setServerType(NetworkServerType.valueOf(serverType));
+
+                    break;
+                case SERVER_DATA_OFFLINE:
+                    String offlineServerName = redisMessage.getParam("SERVER");
+
+                    if (NetworkServer.getByName(offlineServerName) != null) {
+                        NetworkServer.getByName(offlineServerName).update(0, "0.0", 100, false, "0.0", false);
+                        CorePlugin.getInstance().getServerManager().removeNetworkServer(NetworkServer.getByName(offlineServerName));
+                    }
+
+                    Bukkit.getOnlinePlayers().forEach(player -> {
+                        if (player.hasPermission("scandium.network.alerts")) {
+                            player.sendMessage(Color.translate("&3[S] &e" + offlineServerName + " &bjust went &coffline&b."));
+                        }
+                    });
+                    break;
                 case PLAYER_CONNECT_UPDATE:
                     String fromConnectServer = redisMessage.getParam("SERVER");
                     String connectingPlayer = redisMessage.getParam("PLAYER");
@@ -123,6 +185,17 @@ public class RedisListener extends JedisPubSub {
                 case NETWORK_BROADCAST_UPDATE:
                     String broadcastMessage = redisMessage.getParam("MESSAGE");
                     Bukkit.broadcastMessage(CorePlugin.getInstance().getPlayerManager().formatBroadcast(broadcastMessage));
+                    break;
+                case NETWORK_BROADCAST_PERMISSION_UPDATE:
+                    String broadcast = redisMessage.getParam("MESSAGE");
+                    String permission = redisMessage.getParam("PERMISSION");
+
+                    Bukkit.getOnlinePlayers().forEach(player -> {
+                        if (player.hasPermission(permission)) {
+                            player.sendMessage(Color.translate(broadcast));
+                        }
+                    });
+
                     break;
                 default:
                     CorePlugin.getInstance().getLogger().info("[Redis] We received a message, but no params were registered.");

@@ -25,11 +25,9 @@ import vip.potclub.core.database.Database;
 import vip.potclub.core.listener.PlayerListener;
 import vip.potclub.core.manager.*;
 import vip.potclub.core.redis.RedisClient;
-import vip.potclub.core.task.AutoMessageTask;
-import vip.potclub.core.task.GrantExpireTask;
-import vip.potclub.core.task.PlayerSaveTask;
-import vip.potclub.core.task.PunishExpireTask;
+import vip.potclub.core.task.*;
 import vip.potclub.core.util.Color;
+import vip.potclub.core.util.RedisUtil;
 import vip.potclub.core.util.external.ConfigExternal;
 
 import java.text.SimpleDateFormat;
@@ -63,6 +61,7 @@ public final class CorePlugin extends JavaPlugin {
     private RedisClient redisClient;
     private ConfigExternal ranksConfig;
 
+    private Executor taskThread;
     private Executor redisThread;
     private Executor redisSubThread;
     private Executor mongoThread;
@@ -78,10 +77,11 @@ public final class CorePlugin extends JavaPlugin {
         FORMAT.setTimeZone(TimeZone.getTimeZone("EST"));
 
         RANDOM  = new Random();
-        GSONBUILDER = new GsonBuilder();
+        GSONBUILDER = new GsonBuilder().setPrettyPrinting();
         GSON = GSONBUILDER.create();
 
         this.mongoThread = Executors.newFixedThreadPool(1);
+        this.taskThread = Executors.newFixedThreadPool(1);
         this.redisThread = Executors.newFixedThreadPool(1);
         this.redisSubThread = Executors.newFixedThreadPool(1);
 
@@ -103,6 +103,8 @@ public final class CorePlugin extends JavaPlugin {
         this.playerManager = new PlayerManager();
 
         this.setupExtra();
+
+        this.getRedisThread().execute(() -> this.getRedisClient().write(RedisUtil.onServerOnline()));
     }
 
     public void setupExtra() {
@@ -156,7 +158,6 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("language").setExecutor(new LanguageCommand());
         this.getCommand("whitelist").setExecutor(new WhitelistCommand());
 
-        // Website Related Commands
         this.getCommand("webannouncementdelete").setExecutor(new WebAnnouncementDeleteCommand());
         this.getCommand("webannouncement").setExecutor(new WebAnnouncementCommand());
 
@@ -169,10 +170,13 @@ public final class CorePlugin extends JavaPlugin {
         new PunishExpireTask();
         new GrantExpireTask();
         new PlayerSaveTask();
+        new ServerUpdateTask();
     }
 
     @Override
     public void onDisable() {
+        this.getRedisThread().execute(() -> this.getRedisClient().write(RedisUtil.onServerOffline()));
+
         this.punishmentManager.savePunishments();
         this.rankManager.saveRanks();
         this.prefixManager.savePrefixes();

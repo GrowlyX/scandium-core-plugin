@@ -1,8 +1,22 @@
 #
 #  Scandium - by SolexGames (GrowlyX)
 #
+#    PRACTICE("Practice"),
+#    KITPVP("KitPvP"),
+#    HARDCORE_FACTIONS("HCF"),
+#    KITMAP("KitMap"),
+#    SKYWARS("SkyWars"),
+#    BEDWARS("BedWars"),
+#    MEETUP("UHC Meetup"),
+#    UHC_GAMES("UHC Games"),
+#    UHC("UHC"),
+#    HORSE_RACE("Horse Racing"),
+#    POTSG("PotSG");
+#
 communism: true
-server-name: "eu-practice"
+server-type: "PRACTICE"
+server-id: "eu-practice"
+refresh-time: 5
 server:
   settings:
     server-id: "POTCLUBVIP"
