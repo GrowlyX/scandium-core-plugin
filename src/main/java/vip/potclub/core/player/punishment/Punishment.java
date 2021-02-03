@@ -70,12 +70,12 @@ public class Punishment {
         document.put("id", this.id.toString());
         document.put("issuer", this.issuer.toString());
         document.put("target", this.target.toString());
-        document.put("remover", (this.remover != null ? this.remover.toString() : null));
         document.put("expirationDate", this.expirationDate);
         document.put("issuingDate", this.issuingDate);
         document.put("createdAt", this.createdAt);
         document.put("issuerName", this.issuerName);
         document.put("reason", this.reason);
+        document.put("remover", (this.remover != null ? this.remover.toString() : null));
         document.put("removalReason", (this.removalReason != null ? this.removalReason : null));
         document.put("removerName", (this.removerName != null ? this.removerName : null));
         document.put("active", this.active);
@@ -94,12 +94,12 @@ public class Punishment {
         document.put("id", this.id.toString());
         document.put("issuer", this.issuer.toString());
         document.put("target", this.target.toString());
-        document.put("remover", (this.remover != null ? this.remover.toString() : null));
         document.put("expirationDate", this.expirationDate);
         document.put("issuingDate", this.issuingDate);
         document.put("createdAt", this.createdAt);
         document.put("issuerName", this.issuerName);
         document.put("reason", this.reason);
+        document.put("remover", (this.remover != null ? this.remover.toString() : null));
         document.put("removalReason", (this.removalReason != null ? this.removalReason : null));
         document.put("removerName", (this.removerName != null ? this.removerName : null));
         document.put("active", this.active);
@@ -109,10 +109,6 @@ public class Punishment {
         document.put("identification", this.punishIdentification);
 
         CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().replaceOne(Filters.eq("_id", this.id), document, new ReplaceOptions().upsert(true));
-    }
-
-    public boolean isRemoved() {
-        return this.removalReason != null;
     }
 
     public String getDurationString() {

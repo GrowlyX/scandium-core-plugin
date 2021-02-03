@@ -292,8 +292,24 @@ public class PotPlayer {
         this.setupAttachment();
         this.checkVoting();
 
-        this.currentlyMuted = this.isMuted();
-        this.currentlyBanned = this.isBanned();
+        this.getPunishments().forEach(punishment -> {
+            if (punishment.getPunishmentType().equals(PunishmentType.MUTE)) {
+                if (punishment.isActive()) {
+                    if (!punishment.isRemoved()) {
+                        this.currentlyMuted = true;
+                    }
+                }
+            }
+        });
+        this.getPunishments().forEach(punishment -> {
+            if (punishment.getPunishmentType().equals(PunishmentType.BAN)) {
+                if (punishment.isActive()) {
+                    if (!punishment.isRemoved()) {
+                        this.currentlyBanned = true;
+                    }
+                }
+            }
+        });
         this.currentlyOnline = true;
 
         Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), this::saveWithoutRemove, 10 * 20L);
@@ -303,7 +319,7 @@ public class PotPlayer {
         AtomicBoolean yes = new AtomicBoolean(false);
         Punishment.getAllPunishments().forEach(punishment -> {
             if (punishment.getTarget() == this.uuid) {
-                if (!punishment.isRemoved() && punishment.isActive()) {
+                if (punishment.isActive()) {
                     if (punishment.getPunishmentType().equals(PunishmentType.MUTE)) {
                         yes.set(true);
                     }
@@ -318,7 +334,7 @@ public class PotPlayer {
         AtomicBoolean yes = new AtomicBoolean(false);
         Punishment.getAllPunishments().forEach(punishment -> {
             if (punishment.getTarget() == this.uuid) {
-                if (!punishment.isRemoved() && punishment.isActive()) {
+                if (punishment.isActive()) {
                     if (punishment.getPunishmentType().equals(PunishmentType.BAN)) {
                         yes.set(true);
                     }

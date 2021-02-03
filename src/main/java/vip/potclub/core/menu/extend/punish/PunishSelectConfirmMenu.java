@@ -50,7 +50,7 @@ public class PunishSelectConfirmMenu extends AbstractInventoryMenu<CorePlugin> {
 
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
-        this.inventory.setItem(12, new InventoryMenuItem(Material.INK_SACK, 14)
+        this.inventory.setItem(12, new InventoryMenuItem(Material.INK_SACK, 3)
                 .setDisplayName(ChatColor.RED + "Silent Punishment?")
                 .addLore(
                         "",
@@ -80,9 +80,12 @@ public class PunishSelectConfirmMenu extends AbstractInventoryMenu<CorePlugin> {
             if (event.getRawSlot() == 14) {
                 Punishment punishment = new Punishment(this.punishmentType, this.player.getUniqueId(), this.target.getUniqueId(), this.player.getName(), this.reason, new Date(System.currentTimeMillis()), this.punishmentDuration, this.permanent, new Date(), UUID.randomUUID(), SaltUtil.getRandomSaltedString(7));
                 punishment.savePunishment();
+
                 this.player.closeInventory();
+
                 PotPlayer potPlayer = PotPlayer.getPlayer(this.target);
                 potPlayer.getPunishments().add(punishment);
+
                 CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, this.player, this.target, this.isSilent);
                 potPlayer.saveWithoutRemove();
             }

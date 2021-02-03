@@ -38,15 +38,10 @@ public class PunishmentManager {
                         punishmentDocument.getString("identification")
                 );
 
-                if (punishmentDocument.getBoolean("active")) {
-                    punishment.setActive(true);
-                }
-                if (punishmentDocument.getBoolean("permanent")) {
-                    punishment.setPermanent(true);
-                }
-                if (punishmentDocument.getBoolean("removed")) {
-                    punishment.setRemoved(true);
-                }
+                punishment.setActive(punishmentDocument.getBoolean("active"));
+                punishment.setPermanent(punishmentDocument.getBoolean("permanent"));
+                punishment.setRemoved(punishmentDocument.getBoolean("removed"));
+
                 if (punishmentDocument.getString("removerName") != null) {
                     punishment.setRemoverName(punishmentDocument.getString("removerName"));
                 }

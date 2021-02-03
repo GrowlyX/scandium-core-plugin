@@ -37,6 +37,7 @@ public class UnBlacklistCommand extends BaseCommand {
                                         punishment.setRemovalReason(message.replace("-s", ""));
                                         punishment.setRemover(UUID.fromString("f78a4d8d-d51b-4b39-98a3-230f2de0c670"));
                                         punishment.setActive(false);
+                                        punishment.setRemoverName("Console");
 
                                         if (message.endsWith("-s")) {
                                             Bukkit.getOnlinePlayers().forEach(player1 -> {
@@ -84,6 +85,7 @@ public class UnBlacklistCommand extends BaseCommand {
                                         punishment.setRemovalReason(message.replace("-s", ""));
                                         punishment.setRemover(player.getUniqueId());
                                         punishment.setActive(false);
+                                        punishment.setRemoverName(player.getName());
 
                                         if (message.endsWith("-s")) {
                                             Bukkit.getOnlinePlayers().forEach(player1 -> {

@@ -37,6 +37,7 @@ public class UnBanCommand extends BaseCommand {
                                         punishment.setRemoved(true);
                                         punishment.setRemovalReason(message.replace("-s", ""));
                                         punishment.setRemover(UUID.fromString("f78a4d8d-d51b-4b39-98a3-230f2de0c670"));
+                                        punishment.setRemoverName("Console");
                                         punishment.setActive(false);
 
                                         if (message.endsWith("-s")) {
@@ -52,6 +53,8 @@ public class UnBanCommand extends BaseCommand {
                                                     offlinePlayer.getName() + " &awas " + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4Console&a."
                                             ));
                                         }
+
+                                        punishment.savePunishment();
                                     }
                                 }
                             }
@@ -85,6 +88,7 @@ public class UnBanCommand extends BaseCommand {
                                         punishment.setRemovalReason(message.replace("-s", ""));
                                         punishment.setRemover(player.getUniqueId());
                                         punishment.setActive(false);
+                                        punishment.setRemoverName(player.getName());
 
                                         if (message.endsWith("-s")) {
                                             Bukkit.getOnlinePlayers().forEach(player1 -> {
