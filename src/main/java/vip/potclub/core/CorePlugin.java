@@ -179,6 +179,7 @@ public final class CorePlugin extends JavaPlugin {
         new GrantExpireTask();
         new PlayerSaveTask();
         new ServerUpdateTask();
+        new PunishSaveTask();
     }
 
     @Override

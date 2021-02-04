@@ -421,6 +421,19 @@ public class PotPlayer {
                 CorePlugin.getInstance().getLogger().warning("[NameMC] Could not check " + player.getName() + "'s voting status!");
                 CorePlugin.getInstance().getLogger().warning("[NameMC] Is your server on NameMC? Exception: " + exception.getMessage());
             }
+        } else {
+            try {
+                if (!NameMCExternal.hasVoted(this.uuid.toString())) {
+                    this.hasVoted = false;
+                    this.getAllPrefixes().remove("Liked");
+
+                    player.sendMessage(Color.translate("&cYour &b✔ &7(Liked) &ctag has been revoked as you have unliked our server on NameMC!"));
+                    player.sendMessage(Color.translate("&cTo gain your tag back, like us on namemc again!"));
+                }
+            } catch (Exception exception) {
+                CorePlugin.getInstance().getLogger().warning("[NameMC] Could not check " + player.getName() + "'s voting status!");
+                CorePlugin.getInstance().getLogger().warning("[NameMC] Is your server on NameMC? Exception: " + exception.getMessage());
+            }
         }
     }
 }
