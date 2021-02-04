@@ -27,7 +27,7 @@ public class PunishmentManager {
             for (Document punishmentDocument : CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().find()) {
                 Punishment punishment = new Punishment(
                         PunishmentType.valueOf(punishmentDocument.getString("punishmentType")),
-                        UUID.fromString(punishmentDocument.getString("issuer")),
+                        (punishmentDocument.getString("issuer") != null ? UUID.fromString(punishmentDocument.getString("issuer")) : null),
                         UUID.fromString(punishmentDocument.getString("target")),
                         punishmentDocument.getString("issuerName"),
                         punishmentDocument.getString("reason"),

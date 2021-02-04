@@ -54,9 +54,7 @@ public class Punishment {
         this.punishmentDuration = punishmentDuration;
         this.permanent = permanent;
         this.createdAt = createdAt;
-
         this.expirationDate = new Date(this.createdAt.getTime() + this.punishmentDuration);
-
         this.id = uuid;
         this.punishIdentification = punishIdentification;
 
@@ -68,7 +66,11 @@ public class Punishment {
 
         document.put("punishmentType", this.punishmentType.toString());
         document.put("id", this.id.toString());
-        document.put("issuer", this.issuer.toString());
+        if (issuer != null) {
+            document.put("issuer", this.issuer.toString());
+        } else {
+            document.put("issuer", null);
+        }
         document.put("target", this.target.toString());
         document.put("expirationDate", this.expirationDate);
         document.put("issuingDate", this.issuingDate);
@@ -92,7 +94,11 @@ public class Punishment {
 
         document.put("punishmentType", this.punishmentType.toString());
         document.put("id", this.id.toString());
-        document.put("issuer", this.issuer.toString());
+        if (issuer != null) {
+            document.put("issuer", this.issuer.toString());
+        } else {
+            document.put("issuer", null);
+        }
         document.put("target", this.target.toString());
         document.put("expirationDate", this.expirationDate);
         document.put("issuingDate", this.issuingDate);
@@ -129,6 +135,9 @@ public class Punishment {
         }
     }
 
+    public long getCreatedAtLong() {
+        return this.getCreatedAt().getTime();
+    }
 
     public static ArrayList<Punishment> getAllPunishments() {
         return CorePlugin.getInstance().getPunishmentManager().getPunishments();

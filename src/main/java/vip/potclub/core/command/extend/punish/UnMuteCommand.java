@@ -63,57 +63,57 @@ public class UnMuteCommand extends BaseCommand {
                 }
                 return false;
             }
-        }
-
-        Player player = (Player) sender;
-        if (player.hasPermission("scandium.command.unmute")) {
-            if (args.length == 0) {
-                player.sendMessage(Color.translate("&cUsage: /" + label + " <player> <reason> [-s]."));
-            }
-            if (args.length > 0) {
-                if (args.length == 1) {
+        } else {
+            Player player = (Player) sender;
+            if (player.hasPermission("scandium.command.unmute")) {
+                if (args.length == 0) {
                     player.sendMessage(Color.translate("&cUsage: /" + label + " <player> <reason> [-s]."));
                 }
-                if (args.length > 1) {
-                    OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[0]);
-                    String message = StringUtil.buildMessage(args, 1);
-                    if (offlinePlayer != null) {
-                        Punishment.getAllPunishments().forEach(punishment -> {
-                            if (punishment.getTarget().equals(offlinePlayer.getUniqueId())) {
-                                if (punishment.isActive()) {
-                                    if (punishment.getPunishmentType() == PunishmentType.MUTE) {
-                                        punishment.setRemoved(true);
-                                        punishment.setRemovalReason(message.replace("-s", ""));
-                                        punishment.setRemover(player.getUniqueId());
-                                        punishment.setActive(false);
-                                        punishment.setRemoverName(player.getName());
+                if (args.length > 0) {
+                    if (args.length == 1) {
+                        player.sendMessage(Color.translate("&cUsage: /" + label + " <player> <reason> [-s]."));
+                    }
+                    if (args.length > 1) {
+                        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[0]);
+                        String message = StringUtil.buildMessage(args, 1);
+                        if (offlinePlayer != null) {
+                            Punishment.getAllPunishments().forEach(punishment -> {
+                                if (punishment.getTarget().equals(offlinePlayer.getUniqueId())) {
+                                    if (punishment.isActive()) {
+                                        if (punishment.getPunishmentType() == PunishmentType.MUTE) {
+                                            punishment.setRemoved(true);
+                                            punishment.setRemovalReason(message.replace("-s", ""));
+                                            punishment.setRemover(player.getUniqueId());
+                                            punishment.setActive(false);
+                                            punishment.setRemoverName(player.getName());
 
-                                        if (message.endsWith("-s")) {
-                                            Bukkit.getOnlinePlayers().forEach(player1 -> {
-                                                if (player1.hasPermission("scandium.staff")) {
-                                                    player1.sendMessage(Color.translate(
-                                                            "&7[Silent] " + offlinePlayer.getName() + " &awas " + "un" + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + player.getDisplayName() + "&a."
-                                                    ));
-                                                }
-                                            });
-                                        } else {
-                                            Bukkit.broadcastMessage(Color.translate(
-                                                    offlinePlayer.getName() + " &awas " + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + player.getDisplayName() + "&a."
-                                            ));
+                                            if (message.endsWith("-s")) {
+                                                Bukkit.getOnlinePlayers().forEach(player1 -> {
+                                                    if (player1.hasPermission("scandium.staff")) {
+                                                        player1.sendMessage(Color.translate(
+                                                                "&7[Silent] " + offlinePlayer.getName() + " &awas " + "un" + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + player.getDisplayName() + "&a."
+                                                        ));
+                                                    }
+                                                });
+                                            } else {
+                                                Bukkit.broadcastMessage(Color.translate(
+                                                        offlinePlayer.getName() + " &awas " + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + player.getDisplayName() + "&a."
+                                                ));
+                                            }
+
+                                            punishment.savePunishment();
                                         }
-
-                                        punishment.savePunishment();
                                     }
                                 }
-                            }
-                        });
-                    } else {
-                        player.sendMessage(Color.translate("&cThat player does not exist."));
+                            });
+                        } else {
+                            player.sendMessage(Color.translate("&cThat player does not exist."));
+                        }
                     }
                 }
+            } else {
+                player.sendMessage(Color.translate("&cNo permission."));
             }
-        } else {
-            player.sendMessage(Color.translate("&cNo permission."));
         }
 
         return false;

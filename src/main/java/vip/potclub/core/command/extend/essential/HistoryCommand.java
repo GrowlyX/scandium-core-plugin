@@ -6,7 +6,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import vip.potclub.core.command.BaseCommand;
-import vip.potclub.core.menu.extend.punish.PunishHistoryViewMenu;
+import vip.potclub.core.menu.extend.punish.history.PunishHistoryViewMainMenu;
+import vip.potclub.core.menu.extend.punish.history.PunishHistoryViewSubMenu;
 import vip.potclub.core.util.Color;
 
 public class HistoryCommand extends BaseCommand {
@@ -26,7 +27,7 @@ public class HistoryCommand extends BaseCommand {
             if (args.length > 0) {
                 OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[0]);
                 if (offlinePlayer != null) {
-                    new PunishHistoryViewMenu(player, offlinePlayer.getName()).open(player);
+                    new PunishHistoryViewMainMenu(player, offlinePlayer.getName()).open(player);
                 } else {
                     player.sendMessage(Color.translate("&cThat player does not exist in our databases."));
                 }

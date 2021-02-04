@@ -1,13 +1,11 @@
 package vip.potclub.core.command.extend.grant;
 
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import vip.potclub.core.command.BaseCommand;
 import vip.potclub.core.menu.extend.grant.GrantHistoryViewMenu;
-import vip.potclub.core.menu.extend.punish.PunishHistoryViewMenu;
 import vip.potclub.core.util.Color;
 
 public class GrantsCommand extends BaseCommand {

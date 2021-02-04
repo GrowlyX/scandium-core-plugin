@@ -1,13 +1,11 @@
-package vip.potclub.core.menu.extend.punish;
+package vip.potclub.core.menu.extend.punish.history;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import vip.potclub.core.CorePlugin;
@@ -15,52 +13,58 @@ import vip.potclub.core.enums.ServerType;
 import vip.potclub.core.menu.AbstractInventoryMenu;
 import vip.potclub.core.menu.InventoryMenuItem;
 import vip.potclub.core.player.punishment.Punishment;
+import vip.potclub.core.player.punishment.PunishmentType;
 import vip.potclub.core.util.Color;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
-public class PunishHistoryViewMenu extends AbstractInventoryMenu<CorePlugin> {
+public class PunishHistoryViewSubMenu extends AbstractInventoryMenu<CorePlugin> {
 
-    private Player player;
     private String target;
+    private PunishmentType punishmentType;
 
-    public PunishHistoryViewMenu(Player player, String target) {
-        super("Punishment - History", 9*5);
-        this.player = player;
+    public PunishHistoryViewSubMenu(String target, PunishmentType punishmentType) {
+        super("Punishment - " + punishmentType.getName(), 9*5);
         this.target = target;
+        this.punishmentType = punishmentType;
         this.update();
     }
 
     private void update() {
         AtomicInteger i = new AtomicInteger(10);
-        Punishment.getAllPunishments().forEach(punishment -> {
+        getSortedPunishmentsByType().forEach(punishment -> {
             if (i.get() <= 34) {
                 if (punishment.getTarget().equals(Bukkit.getOfflinePlayer(target).getUniqueId())) {
-                    OfflinePlayer issuerOfflinePlayer = Bukkit.getOfflinePlayer(punishment.getIssuer());
+                    OfflinePlayer issuerOfflinePlayer;
+
+                    if (punishment.getIssuer() != null) {
+                        issuerOfflinePlayer = Bukkit.getOfflinePlayer(punishment.getIssuer());
+                    } else {
+                        issuerOfflinePlayer = null;
+                    }
                     OfflinePlayer targetOfflinePlayer = Bukkit.getOfflinePlayer(punishment.getTarget());
                     ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
                     List<String> lore = new ArrayList<>();
+                    String statusLore = punishment.isRemoved() ? ChatColor.RED + "Removed" : (punishment.isActive() ? ChatColor.GREEN + "Active" : ChatColor.GOLD + "Expired");
 
                     lore.add("&b&m------------------------------------");
-                    if (issuerOfflinePlayer != null) {
-                        lore.add("&ePunish By: &b" + network.getMainColor() + issuerOfflinePlayer.getName());
-                    } else {
-                        lore.add("&ePunish By: &b" + network.getMainColor() + "&4Console");
-                    }
+                    lore.add("&ePunish By: &b" + network.getMainColor() + (issuerOfflinePlayer != null ? issuerOfflinePlayer.getName() : "&4Console"));
                     lore.add("&ePunish To: &b" + network.getMainColor() + targetOfflinePlayer.getName());
                     lore.add("&ePunish Reason: &b" + network.getMainColor() + punishment.getReason());
                     lore.add("&b&m------------------------------------");
                     lore.add("&ePunish Type: &b" + network.getMainColor() + punishment.getPunishmentType().getName());
-                    lore.add("&ePunish Status: &b" + network.getMainColor() + (punishment.isActive() ? (punishment.isRemoved() ? "&4Removed" : "&aActive") : "&4Expired"));
+                    lore.add("&ePunish Status: &b" + network.getMainColor() + statusLore);
                     lore.add("&ePunish Expiring: &b" + network.getMainColor() + punishment.getExpirationString());
                     lore.add("&b&m------------------------------------");
 
                     if (punishment.isRemoved()) {
-                        lore.add("&eRemoved By: &b" + network.getMainColor() + Bukkit.getOfflinePlayer(punishment.getRemover()).getName());
+                        lore.add("&eRemoved By: &b" + network.getMainColor() + (punishment.getRemoverName().equals("Console") ? "&4Console" : Bukkit.getOfflinePlayer(punishment.getRemover()).getName()));
                         lore.add("&eRemoved Reason: &b" + network.getMainColor() + punishment.getRemovalReason());
                         lore.add("&b&m------------------------------------");
                     }
@@ -88,5 +92,9 @@ public class PunishHistoryViewMenu extends AbstractInventoryMenu<CorePlugin> {
         if (topInventory.equals(clickedInventory)) {
             event.setCancelled(true);
         }
+    }
+
+    private List<Punishment> getSortedPunishmentsByType() {
+        return Punishment.getAllPunishments().stream().filter(punishment -> punishment.getPunishmentType() == this.punishmentType).sorted(Comparator.comparingLong(Punishment::getCreatedAtLong).reversed()).collect(Collectors.toList());
     }
 }
