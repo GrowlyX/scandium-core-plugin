@@ -13,6 +13,8 @@ import vip.potclub.core.command.extend.essential.*;
 import vip.potclub.core.command.extend.grant.CGrantCommand;
 import vip.potclub.core.command.extend.grant.GrantCommand;
 import vip.potclub.core.command.extend.grant.GrantsCommand;
+import vip.potclub.core.command.extend.network.ForceUpdateCommand;
+import vip.potclub.core.command.extend.network.NetworkCommand;
 import vip.potclub.core.command.extend.prefix.PrefixCommand;
 import vip.potclub.core.command.extend.punish.UnBlacklistCommand;
 import vip.potclub.core.command.extend.punish.UnMuteCommand;
@@ -140,6 +142,8 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("website").setExecutor(new WebsiteCommand());
         this.getCommand("unmute").setExecutor(new UnMuteCommand());
         this.getCommand("unban").setExecutor(new UnBanCommand());
+        this.getCommand("forceupdate").setExecutor(new ForceUpdateCommand());
+        this.getCommand("network").setExecutor(new NetworkCommand());
         this.getCommand("color").setExecutor(new ColorCommand());
         this.getCommand("unblacklist").setExecutor(new UnBlacklistCommand());
         this.getCommand("unmute").setExecutor(new UnMuteCommand());

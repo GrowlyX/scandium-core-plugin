@@ -8,11 +8,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import vip.potclub.core.CorePlugin;
+import vip.potclub.core.command.BaseCommand;
 import vip.potclub.core.enums.ServerType;
 import vip.potclub.core.server.NetworkServer;
 import vip.potclub.core.util.Color;
 
-public class NetworkCommand implements CommandExecutor {
+public class NetworkCommand extends BaseCommand {
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {

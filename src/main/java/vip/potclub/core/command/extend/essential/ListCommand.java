@@ -8,7 +8,6 @@ import vip.potclub.core.command.BaseCommand;
 import vip.potclub.core.player.PotPlayer;
 import vip.potclub.core.player.ranks.Rank;
 import vip.potclub.core.util.Color;
-import vip.potclub.util.external.chat.ChatComponentBuilder;
 
 import java.util.Comparator;
 import java.util.List;

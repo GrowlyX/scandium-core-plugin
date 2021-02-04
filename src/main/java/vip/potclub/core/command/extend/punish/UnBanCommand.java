@@ -103,6 +103,8 @@ public class UnBanCommand extends BaseCommand {
                                                     offlinePlayer.getName() + " &awas " + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + player.getDisplayName() + "&a."
                                             ));
                                         }
+
+                                        punishment.savePunishment();
                                     }
                                 }
                             }

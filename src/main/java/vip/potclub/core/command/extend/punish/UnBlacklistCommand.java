@@ -52,6 +52,8 @@ public class UnBlacklistCommand extends BaseCommand {
                                                     offlinePlayer.getName() + " &awas " + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4Console&a."
                                             ));
                                         }
+
+                                        punishment.savePunishment();
                                     }
                                 }
                             }
