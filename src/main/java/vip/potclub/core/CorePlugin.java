@@ -14,6 +14,7 @@ import vip.potclub.core.command.extend.essential.*;
 import vip.potclub.core.command.extend.grant.CGrantCommand;
 import vip.potclub.core.command.extend.grant.GrantCommand;
 import vip.potclub.core.command.extend.grant.GrantsCommand;
+import vip.potclub.core.command.extend.modsuite.VanishCommand;
 import vip.potclub.core.command.extend.network.ForceUpdateCommand;
 import vip.potclub.core.command.extend.network.NetworkCommand;
 import vip.potclub.core.command.extend.prefix.PrefixCommand;
@@ -160,6 +161,7 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("setslots").setExecutor(new SetSlotsCommand());
         this.getCommand("clear").setExecutor(new ClearCommand());
         this.getCommand("grants").setExecutor(new GrantsCommand());
+        this.getCommand("vanish").setExecutor(new VanishCommand());
         this.getCommand("clearchat").setExecutor(new ClearChatCommand());
         this.getCommand("slowchat").setExecutor(new SlowChatCommand());
         this.getCommand("mutechat").setExecutor(new MuteChatCommand());

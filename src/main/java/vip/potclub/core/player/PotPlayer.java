@@ -60,6 +60,7 @@ public class PotPlayer {
     private boolean canRequest = true;
     private boolean hasVoted = false;
     private boolean isVanished = false;
+    private boolean isStaffMode = false;
     private boolean isSynced = false;
 
     private boolean currentlyMuted;
@@ -369,6 +370,7 @@ public class PotPlayer {
         for (Grant grants : this.getAllGrants()) {
             if (grants == null) continue;
             if (grants.isExpired()) continue;
+
             for (String rankPermissions : grants.getRank().getPermissions()) {
                 this.attachment.setPermission(rankPermissions.replace("-", ""), !rankPermissions.startsWith("-"));
             }
@@ -382,7 +384,8 @@ public class PotPlayer {
             }
         }
 
-        if (player != null) player.recalculatePermissions();
+        player.setPlayerListName(Color.translate(this.getActiveGrant().getRank().getColor() + (this.customColor != null ? this.customColor : "") + this.player.getName()));
+        player.recalculatePermissions();
     }
 
     public Grant getByDate(long date) {

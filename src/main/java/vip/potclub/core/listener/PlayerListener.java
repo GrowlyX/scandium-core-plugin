@@ -105,9 +105,12 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onConnect(PlayerJoinEvent event) {
         new PotPlayer(event.getPlayer().getUniqueId());
-        if (event.getPlayer().hasPermission("scandium.staff")) {
-            Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onConnect(event.getPlayer()))), 10L);
-        }
+        CorePlugin.getInstance().getServerManager().getVanishedPlayers().forEach(player -> {
+            if (!event.getPlayer().hasPermission("scandium.vanished.see")) {
+                event.getPlayer().hidePlayer(player);
+            }
+        });
+        if (event.getPlayer().hasPermission("scandium.staff")) Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onConnect(event.getPlayer()))), 10L);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -251,10 +254,8 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onDisconnect(PlayerQuitEvent event) {
-        if (event.getPlayer().hasPermission("scandium.staff")) {
-            CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onDisconnect(event.getPlayer())));
-        }
-
+        if (event.getPlayer().hasPermission("scandium.staff")) CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onDisconnect(event.getPlayer())));
+        CorePlugin.getInstance().getServerManager().getVanishedPlayers().remove(event.getPlayer());
         PotPlayer.getPlayer(event.getPlayer().getUniqueId()).savePlayerData();
     }
 }

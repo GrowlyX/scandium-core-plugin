@@ -14,9 +14,9 @@ import java.util.List;
 @Setter
 public class ServerManager {
 
-    private final List<NetworkServer> networkServers = new ArrayList<>();
-
-    private ArrayList<Player> vanishedPlayers;
+    private ArrayList<NetworkServer> networkServers = new ArrayList<>();
+    private ArrayList<Player> vanishedPlayers = new ArrayList<>();
+    private ArrayList<Player> staffModePlayers = new ArrayList<>();
 
     private ServerType network;
 
@@ -24,21 +24,19 @@ public class ServerManager {
     private long chatSlow;
 
     public ServerManager() {
-        this.vanishedPlayers = new ArrayList<>();
-
         setupServerType();
         CorePlugin.getInstance().getLogger().info("[Server] Loaded server type: " + this.network.getServerName() + ".");
     }
 
-    public void removeNetworkServer(NetworkServer networkServer){
+    public void removeNetworkServer(NetworkServer networkServer) {
         networkServers.remove(networkServer);
     }
 
-    public void addNetworkServer(NetworkServer networkServer){
+    public void addNetworkServer(NetworkServer networkServer) {
         networkServers.add(networkServer);
     }
 
-    public boolean existServer(String networkServer){
+    public boolean existServer(String networkServer) {
         return networkServers.contains(NetworkServer.getByName(networkServer));
     }
 
