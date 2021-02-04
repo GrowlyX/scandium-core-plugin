@@ -46,7 +46,11 @@ public class PunishHistoryViewMenu extends AbstractInventoryMenu<CorePlugin> {
                     List<String> lore = new ArrayList<>();
 
                     lore.add("&b&m------------------------------------");
-                    lore.add("&ePunish By: &b" + network.getMainColor() + issuerOfflinePlayer.getName());
+                    if (issuerOfflinePlayer != null) {
+                        lore.add("&ePunish By: &b" + network.getMainColor() + issuerOfflinePlayer.getName());
+                    } else {
+                        lore.add("&ePunish By: &b" + network.getMainColor() + "&4Console");
+                    }
                     lore.add("&ePunish To: &b" + network.getMainColor() + targetOfflinePlayer.getName());
                     lore.add("&ePunish Reason: &b" + network.getMainColor() + punishment.getReason());
                     lore.add("&b&m------------------------------------");
@@ -70,9 +74,7 @@ public class PunishHistoryViewMenu extends AbstractInventoryMenu<CorePlugin> {
                         i.getAndIncrement();
                         i.getAndIncrement();
                         i.getAndIncrement();
-                    } else {
-                        i.getAndIncrement();
-                    }
+                    } else i.getAndIncrement();
                 }
             }
         });

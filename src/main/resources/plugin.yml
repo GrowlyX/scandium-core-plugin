@@ -4,6 +4,9 @@ version: SD-1.3.3.7
 main: vip.potclub.core.CorePlugin
 
 commands:
+  kickall:
+  acban:
+    aliases: [anticheatban, acpunish]
   setslots:
     aliases: [setmaxplayers, maxplayers]
   clear:
