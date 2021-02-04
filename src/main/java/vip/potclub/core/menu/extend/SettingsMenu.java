@@ -142,11 +142,10 @@ public class SettingsMenu extends AbstractInventoryMenu<CorePlugin> {
                 case 6:
                     if (potPlayer.getPlayer().hasPermission("scandium.staff")) {
                         potPlayer.setCanSeeStaffMessages(!potPlayer.isCanSeeStaffMessages());
-                        this.update();
                     } else {
                         potPlayer.setCanSeeBroadcasts(!potPlayer.isCanSeeBroadcasts());
-                        this.update();
                     }
+                    this.update();
                     break;
             }
         }

@@ -21,6 +21,7 @@ import vip.potclub.core.command.extend.punish.UnMuteCommand;
 import vip.potclub.core.command.extend.punish.PunishCommand;
 import vip.potclub.core.command.extend.punish.UnBanCommand;
 import vip.potclub.core.command.extend.rank.RankImportCommand;
+import vip.potclub.core.command.extend.server.SetSlotsCommand;
 import vip.potclub.core.command.extend.web.WebAnnouncementCommand;
 import vip.potclub.core.command.extend.web.WebAnnouncementDeleteCommand;
 import vip.potclub.core.database.Database;
@@ -91,7 +92,7 @@ public final class CorePlugin extends JavaPlugin {
         this.getConfig().options().copyDefaults();
         this.ranksConfig = new ConfigExternal("ranks");
 
-        this.serverName = this.getConfig().getString("server-name");
+        this.serverName = this.getConfig().getString("server-id");
         this.debugging = false;
         this.disallow = false;
 
@@ -155,6 +156,9 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("grant").setExecutor(new GrantCommand());
         this.getCommand("cgrant").setExecutor(new CGrantCommand());
         this.getCommand("prefix").setExecutor(new PrefixCommand());
+        this.getCommand("grants").setExecutor(new GrantsCommand());
+        this.getCommand("setslots").setExecutor(new SetSlotsCommand());
+        this.getCommand("clear").setExecutor(new ClearCommand());
         this.getCommand("grants").setExecutor(new GrantsCommand());
         this.getCommand("clearchat").setExecutor(new ClearChatCommand());
         this.getCommand("slowchat").setExecutor(new SlowChatCommand());

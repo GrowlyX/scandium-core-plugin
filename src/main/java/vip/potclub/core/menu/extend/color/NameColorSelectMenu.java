@@ -49,9 +49,7 @@ public class NameColorSelectMenu extends AbstractInventoryMenu<CorePlugin> {
                                 i++;
                                 i++;
                                 i++;
-                            } else {
-                                i++;
-                            }
+                            } else i++;
                         }
                     }
                 }
@@ -83,15 +81,13 @@ public class NameColorSelectMenu extends AbstractInventoryMenu<CorePlugin> {
                     String display = ChatColor.stripColor(item.getItemMeta().getDisplayName());
                     ChatColor chatColor = ChatColor.valueOf(display.replace(" ", "_"));
 
-                    if (chatColor != null) {
-                        if (potPlayer.isHasVoted()) {
-                            potPlayer.setCustomColor(chatColor);
-                            player.sendMessage(Color.translate("&aChanged your chat color to " + chatColor + chatColor.name() + "&a!"));
-                        } else {
-                            player.sendMessage(Color.translate("&cYou cannot change chat colors!"));
-                            player.sendMessage(Color.translate("&cTo be able to chat chat colors, vote for us on NameMC!"));
-                            player.sendMessage(Color.translate("&chttps://namemc.com/" + CorePlugin.getInstance().getServerManager().getNetwork().getWebsiteLink() + "/"));
-                        }
+                    if (potPlayer.isHasVoted()) {
+                        potPlayer.setCustomColor(chatColor);
+                        player.sendMessage(Color.translate("&aChanged your chat color to " + chatColor + chatColor.name() + "&a!"));
+                    } else {
+                        player.sendMessage(Color.translate("&cYou cannot change chat colors!"));
+                        player.sendMessage(Color.translate("&cTo be able to chat chat colors, vote for us on NameMC!"));
+                        player.sendMessage(Color.translate("&chttps://namemc.com/" + CorePlugin.getInstance().getServerManager().getNetwork().getWebsiteLink() + "/"));
                     }
                 }
             }

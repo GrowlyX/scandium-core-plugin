@@ -50,10 +50,10 @@ public class NetworkCommand extends BaseCommand {
                     player.sendMessage(Color.translate(network.getMainColor() + ChatColor.BOLD.toString() + StringUtils.capitalize(networkServer.getServerName()).toLowerCase() + " Data:"));
                     player.sendMessage(Color.translate("  "));
                     player.sendMessage(Color.translate(network.getSecondaryColor() + "Server Type: &3" + network.getMainColor() + networkServer.getServerType().getServerTypeString()));
-                    player.sendMessage(Color.translate(network.getSecondaryColor() +"Server Status: &3" + network.getMainColor() + networkServer.getServerStatus().getServerStatusFancyString()));
-                    player.sendMessage(Color.translate(network.getSecondaryColor() +"Max Players: &3" + network.getMainColor() + networkServer.getMaxPlayerLimit()));
-                    player.sendMessage(Color.translate(network.getSecondaryColor() +"Online Players: &3" +network.getMainColor() +  networkServer.getOnlinePlayers()));
-                    player.sendMessage(Color.translate(network.getSecondaryColor() +"Ticks Per Second: &3" + network.getMainColor() + networkServer.getTicksPerSecond()));
+                    player.sendMessage(Color.translate(network.getSecondaryColor() + "Server Status: &3" + network.getMainColor() + networkServer.getServerStatus().getServerStatusFancyString()));
+                    player.sendMessage(Color.translate(network.getSecondaryColor() + "Max Players: &3" + network.getMainColor() + networkServer.getMaxPlayerLimit()));
+                    player.sendMessage(Color.translate(network.getSecondaryColor() + "Online Players: &3" +network.getMainColor() +  networkServer.getOnlinePlayers()));
+                    player.sendMessage(Color.translate(network.getSecondaryColor() + "Ticks Per Second: &3" + network.getMainColor() + networkServer.getTicksPerSecond()));
                     player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
                 } else {
                     player.sendMessage(Color.translate("&cThat server is not online or does not exist."));
