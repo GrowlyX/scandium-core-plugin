@@ -35,17 +35,25 @@ public class MessageCommand extends BaseCommand {
                     PotPlayer potPlayer = PotPlayer.getPlayer(target);
                     PotPlayer potPerson = PotPlayer.getPlayer(player);
 
-                    if (potPerson.isCanReceiveDms()) {
-                        if (potPlayer.isCanReceiveDms()) {
-                            StringUtil.sendPrivateMessage(player, target, message);
+                    if (!potPlayer.isIgnoring(potPerson.getPlayer())) {
+                        if (!potPerson.isIgnoring(potPlayer.getPlayer())) {
+                            if (potPerson.isCanReceiveDms()) {
+                                if (potPlayer.isCanReceiveDms()) {
+                                    StringUtil.sendPrivateMessage(player, target, message);
 
-                            potPerson.setLastRecipient(target);
-                            potPlayer.setLastRecipient(player);
+                                    potPerson.setLastRecipient(target);
+                                    potPlayer.setLastRecipient(player);
+                                } else {
+                                    player.sendMessage(Color.translate("&cThat player has their dms disabled."));
+                                }
+                            } else {
+                                player.sendMessage(Color.translate("&cYou have your dms disabled."));
+                            }
                         } else {
-                            player.sendMessage(Color.translate("&cThat player has their dms disabled."));
+                            player.sendMessage(Color.translate("&cYou are currently ignoring that player."));
                         }
                     } else {
-                        player.sendMessage(Color.translate("&cYou have your dms disabled."));
+                        player.sendMessage(Color.translate("&cThat player is currently ignoring you."));
                     }
                 } else {
                     player.sendMessage(Color.translate("&cThat player does not exist."));

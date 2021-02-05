@@ -5,6 +5,8 @@ main: vip.potclub.core.CorePlugin
 depend: [ProtocolLib]
 
 commands:
+  ignore:
+    aliases: [unignore]
   rank:
     aliases: [ranks]
   vanish:

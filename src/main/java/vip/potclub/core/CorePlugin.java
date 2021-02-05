@@ -145,6 +145,7 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("scandium").setExecutor(new CoreCommand());
         this.getCommand("famous").setExecutor(new FamousCommand());
         this.getCommand("profile").setExecutor(new ProfileCommand());
+        this.getCommand("ignore").setExecutor(new IgnoreCommand());
         this.getCommand("rank").setExecutor(new RankCommand());
         this.getCommand("media").setExecutor(new MediaCommand());
         this.getCommand("discord").setExecutor(new DiscordCommand());

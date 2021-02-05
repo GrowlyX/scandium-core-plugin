@@ -30,7 +30,7 @@ public class NetworkServer {
     }
 
     public static NetworkServer getByName(String name){
-        return CorePlugin.getInstance().getServerManager().getNetworkServers().stream().filter(masters -> masters.getServerName().equalsIgnoreCase(name)).findFirst().orElse(null);
+        return CorePlugin.getInstance().getServerManager().getNetworkServers().stream().filter(server -> server.getServerName().equalsIgnoreCase(name)).findFirst().orElse(null);
     }
 
     public void update(int onlinePlayers, String ticksPerSecond, int maxPlayerLimit, boolean whitelistEnabled, String ticksPerSecondSimplified, boolean online) {

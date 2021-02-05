@@ -34,6 +34,7 @@ public class PotPlayer {
     private List<Punishment> punishments = new ArrayList<>();
     private List<Grant> allGrants = new ArrayList<>();
     private List<String> allPrefixes = new ArrayList<>();
+    private List<String> allIgnoring = new ArrayList<>();
 
     private UUID uuid;
     private Player player;
@@ -113,6 +114,7 @@ public class PotPlayer {
 
         document.put("allGrants", grantStrings);
         document.put("allPrefixes", prefixStrings);
+        document.put("allIgnored", this.allIgnoring);
         if (this.appliedPrefix != null) {
             document.put("appliedPrefix", this.appliedPrefix.getName());
         } else {
@@ -160,6 +162,7 @@ public class PotPlayer {
 
         document.put("allGrants", grantStrings);
         document.put("allPrefixes", prefixStrings);
+        document.put("allIgnored", this.allIgnoring);
         if (this.appliedPrefix != null) {
             document.put("appliedPrefix", this.appliedPrefix.getName());
         } else {
@@ -268,6 +271,12 @@ public class PotPlayer {
         if ((document.getList("allPrefixes", String.class) != null)) {
             List<String> prefixes = document.getList("allPrefixes", String.class);
             this.allPrefixes.addAll(prefixes);
+        }
+        if ((document.getList("allIgnored", String.class) != null)) {
+            List<String> ignoring = document.getList("allIgnored", String.class);
+            if (!ignoring.isEmpty()) {
+                this.allIgnoring.addAll(ignoring);
+            }
         }
 
         if (document.getBoolean("isSynced") != null) {
@@ -406,6 +415,10 @@ public class PotPlayer {
 
     public static PotPlayer getPlayer(String name) {
         return profilePlayers.get(Bukkit.getPlayer(name).getUniqueId());
+    }
+
+    public boolean isIgnoring(Player player) {
+        return this.getAllIgnoring().contains(player.getName());
     }
 
     public void checkVoting() {
