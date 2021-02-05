@@ -30,17 +30,22 @@ public class MessageCommand extends BaseCommand {
             if (args.length > 1) {
                 Player target = Bukkit.getPlayerExact(args[0]);
                 String message = StringUtil.buildMessage(args, 1);
+
                 if (target != null) {
                     PotPlayer potPlayer = PotPlayer.getPlayer(target);
-                    if (potPlayer.isCanReceiveDms()) {
-                        StringUtil.sendPrivateMessage(player, target, message);
+                    PotPlayer potPerson = PotPlayer.getPlayer(player);
 
-                        PotPlayer potPerson = PotPlayer.getPlayer(player);
-                        potPerson.setLastRecipient(target);
+                    if (potPerson.isCanReceiveDms()) {
+                        if (potPlayer.isCanReceiveDms()) {
+                            StringUtil.sendPrivateMessage(player, target, message);
 
-                        potPlayer.setLastRecipient(player);
+                            potPerson.setLastRecipient(target);
+                            potPlayer.setLastRecipient(player);
+                        } else {
+                            player.sendMessage(Color.translate("&cThat player has their dms disabled."));
+                        }
                     } else {
-                        player.sendMessage(Color.translate("&cThat player has their dms disabled."));
+                        player.sendMessage(Color.translate("&cYou have your dms disabled."));
                     }
                 } else {
                     player.sendMessage(Color.translate("&cThat player does not exist."));

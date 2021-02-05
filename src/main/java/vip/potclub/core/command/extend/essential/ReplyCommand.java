@@ -24,10 +24,14 @@ public class ReplyCommand extends BaseCommand {
         }
         if (args.length > 0) {
             String message = StringUtil.buildMessage(args, 0);
-            if (potPlayer.getLastRecipient() != null) {
-                StringUtil.sendPrivateMessage(player, potPlayer.getLastRecipient(), message);
+            if (potPlayer.isCanReceiveDms()) {
+                if (potPlayer.getLastRecipient() != null) {
+                    StringUtil.sendPrivateMessage(player, potPlayer.getLastRecipient(), message);
+                } else {
+                    player.sendMessage(Color.translate("&cYou don't have an ongoing conversation with anyone."));
+                }
             } else {
-                player.sendMessage(Color.translate("&cYou don't have an ongoing conversation with anyone."));
+                player.sendMessage(Color.translate("&cYou have your dms disabled."));
             }
         }
         return false;
