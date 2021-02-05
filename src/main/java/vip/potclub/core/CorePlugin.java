@@ -1,18 +1,10 @@
 package vip.potclub.core;
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.events.ListenerPriority;
-import com.comphenix.protocol.events.PacketAdapter;
-import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.events.PacketEvent;
-import com.comphenix.protocol.reflect.FieldAccessException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import vip.potclub.core.command.extend.CoreCommand;
 import vip.potclub.core.command.extend.anticheat.AnticheatBanCommand;
@@ -36,6 +28,8 @@ import vip.potclub.core.command.extend.web.WebAnnouncementDeleteCommand;
 import vip.potclub.core.database.Database;
 import vip.potclub.core.listener.PlayerListener;
 import vip.potclub.core.manager.*;
+import vip.potclub.core.protocol.AbstractChatInterceptor;
+import vip.potclub.core.protocol.extend.ProtocolChatInterceptor;
 import vip.potclub.core.redis.RedisClient;
 import vip.potclub.core.task.*;
 import vip.potclub.core.util.Color;
@@ -73,6 +67,7 @@ public final class CorePlugin extends JavaPlugin {
     private Database coreDatabase;
     private RedisClient redisClient;
     private ConfigExternal ranksConfig;
+    private AbstractChatInterceptor chatInterceptor;
 
     private Executor taskThread;
     private Executor redisThread;
@@ -101,6 +96,8 @@ public final class CorePlugin extends JavaPlugin {
         this.saveDefaultConfig();
         this.getConfig().options().copyDefaults();
         this.ranksConfig = new ConfigExternal("ranks");
+
+        if (this.getServer().getPluginManager().isPluginEnabled("ProtocolLib")) chatInterceptor = new ProtocolChatInterceptor(); else this.getLogger().info("[Protocol] Could not find ProtocolLib! Chat tab block will not work without it!");
 
         this.serverName = this.getConfig().getString("server-id");
         this.debugging = false;
@@ -197,32 +194,6 @@ public final class CorePlugin extends JavaPlugin {
         new PlayerSaveTask();
         new ServerUpdateTask();
         new PunishSaveTask();
-
-        this.setupProtocol();
-    }
-
-    public void setupProtocol() {
-        if (this.getConfig().getBoolean("tab-block.enabled")) {
-            ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(this, ListenerPriority.HIGHEST, new PacketType[]{ PacketType.Play.Client.TAB_COMPLETE }) {
-                public void onPacketReceiving(PacketEvent event) {
-                    if (event.getPacketType() == PacketType.Play.Client.TAB_COMPLETE) {
-                        try {
-                            if (event.getPlayer().hasPermission("scandium.tabcomplete.bypass")) return;
-
-                            PacketContainer packet = event.getPacket();
-                            String message = packet.getSpecificModifier(String.class).read(0).toLowerCase();
-
-                            if (((message.startsWith("/")) && (!message.contains(" "))) || ((message.startsWith("/ver")) && (!message.contains("  "))) || ((message.startsWith("/version")) && (!message.contains("  "))) || ((message.startsWith("/?")) && (!message.contains("  "))) || ((message.startsWith("/about")) && (!message.contains("  "))) || ((message.startsWith("/help")) && (!message.contains("  ")))) {
-                                event.setCancelled(true);
-                                if (getConfig().getBoolean("tab-block.message.enabled")) {
-                                    event.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getConfig().getString("tab-block.message.string")));
-                                }
-                            }
-                        } catch (FieldAccessException ignored) { }
-                    }
-                }
-            });
-        }
     }
 
     @Override
