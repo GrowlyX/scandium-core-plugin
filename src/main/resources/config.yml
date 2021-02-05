@@ -17,13 +17,34 @@ communism: true
 server-type: "PRACTICE"
 server-id: "eu-practice"
 refresh-time: 5
+tab-block:
+  enabled: true
+  message:
+    enabled: false
+    string: "&f/scandium:settings, &f/scandium:media"
 block-commands:
   enabled: true
+  message: "&cThat command is blocked."
   list:
-    - "ver"
-    - "version"
+    - "bukkit:plugins"
+    - "bukkit:?"
+    - "bukkit:help"
+    - "bukkit:ver"
+    - "bukkit:version"
+    - "bukkit:about"
+    - "bukkit:pl"
+    - "bukkit:msg"
+    - "bukkit:kill"
+    - "bukkit:tell"
+    - "bukkit:me"
+    - "minecraft:me"
     - "pl"
     - "plugins"
+    - "me"
+    - "about"
+    - "version"
+    - "ver"
+    - "icanhasbukkit"
 server:
   settings:
     server-id: "POTCLUBVIP"

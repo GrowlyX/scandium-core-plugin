@@ -15,7 +15,7 @@ public class ProtocolTabInterceptor extends TabInterceptor {
 
     public ProtocolTabInterceptor(CorePlugin plugin) {
         ProtocolLibrary.getProtocolManager().addPacketListener(
-                listener = new PacketAdapter(plugin, ConnectionSide.SERVER_SIDE, Packets.Server.TAB_COMPLETE) {
+                listener = new PacketAdapter(plugin, ConnectionSide.CLIENT_SIDE, Packets.Client.TAB_COMPLETE) {
                     @Override
                     public void onPacketSending(PacketEvent event) {
                         event.setCancelled(isCompletionCancelled(

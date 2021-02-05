@@ -245,7 +245,7 @@ public class PlayerListener implements Listener {
             if (event.getPlayer().hasPermission("scandium.protocol.bypass")) return;
             for (String blockedCommand : CorePlugin.getInstance().getConfig().getStringList("block-commands.list")) {
                 if (event.getMessage().contains("/" + blockedCommand)) {
-                    event.getPlayer().sendMessage(Color.translate("&cThat command is blocked."));
+                    event.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getConfig().getString("block-commands.message")));
                     event.setCancelled(true);
                 }
             }
