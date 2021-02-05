@@ -46,7 +46,7 @@ public class Warp {
         document.put("name", this.name);
         document.put("location", LocationUtil.getStringFromLocation(this.location));
 
-        CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getRankCollection().replaceOne(Filters.eq("_id", this.id), document, new ReplaceOptions().upsert(true)));
+        CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getWarpCollection().replaceOne(Filters.eq("_id", this.id), document, new ReplaceOptions().upsert(true)));
     }
 
     public void saveMainThread() {
@@ -55,7 +55,7 @@ public class Warp {
         document.put("name", this.name);
         document.put("location", LocationUtil.getStringFromLocation(this.location));
 
-        CorePlugin.getInstance().getCoreDatabase().getRankCollection().replaceOne(Filters.eq("_id", this.id), document, new ReplaceOptions().upsert(true));
+        CorePlugin.getInstance().getCoreDatabase().getWarpCollection().replaceOne(Filters.eq("_id", this.id), document, new ReplaceOptions().upsert(true));
     }
 
     public static Warp getById(String id) {

@@ -93,6 +93,48 @@ public class RankCommand extends BaseCommand {
                         });
                         player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
                         break;
+                    case "delinher":
+                        if (args.length == 1) player.sendMessage(Color.translate("&cUsage: /rank delinher <name> <inheritance>."));
+                        if (args.length == 2) player.sendMessage(Color.translate("&cUsage: /rank delinher <name> <inheritance>."));
+                        if (args.length == 3) {
+                            String name = args[1];
+                            String value = args[2];
+                            Rank rank = Rank.getByName(name);
+                            Rank delRank = Rank.getByName(value);
+
+                            if (rank != null) {
+                                String displayName = Color.translate(rank.getColor() + rank.getName());
+
+                                rank.getInheritance().remove(delRank.getUuid());
+                                player.sendMessage(Color.translate("&aRemoved the inheritance '" + delRank.getName() + "&a' from the rank " + displayName + "&a."));
+                            } else {
+                                player.sendMessage(Color.translate("&cThat rank does not exist!"));
+                            }
+                        }
+                        break;
+                    case "addinher":
+                        if (args.length == 1) player.sendMessage(Color.translate("&cUsage: /rank addinher <name> <inheritance>."));
+                        if (args.length == 2) player.sendMessage(Color.translate("&cUsage: /rank adddelinher <name> <inheritance>."));
+                        if (args.length == 3) {
+                            String name = args[1];
+                            String value = args[2];
+                            Rank rank = Rank.getByName(name);
+                            Rank delRank = Rank.getByName(value);
+
+                            if (rank != null) {
+                                String displayName = Color.translate(rank.getColor() + rank.getName());
+
+                                if (!rank.getInheritance().contains(delRank.getUuid())) {
+                                    rank.getInheritance().add(delRank.getUuid());
+                                    player.sendMessage(Color.translate("&aAdded the inheritance '" + delRank.getName() + "&a' to the rank " + displayName + "&a."));
+                                } else {
+                                    player.sendMessage(Color.translate("&c" + rank.getName() + " is already inheriting that rank!"));
+                                }
+                            } else {
+                                player.sendMessage(Color.translate("&cThat rank does not exist!"));
+                            }
+                        }
+                        break;
                     case "delperm":
                         if (args.length == 1) player.sendMessage(Color.translate("&cUsage: /rank delperm <name> <permission>."));
                         if (args.length == 2) player.sendMessage(Color.translate("&cUsage: /rank delperm <name> <permission>."));

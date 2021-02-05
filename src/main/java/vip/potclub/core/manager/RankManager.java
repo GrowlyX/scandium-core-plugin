@@ -7,10 +7,8 @@ import vip.potclub.core.CorePlugin;
 import vip.potclub.core.player.ranks.Rank;
 
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class RankManager {
 
@@ -58,6 +56,10 @@ public class RankManager {
     }
 
     public void saveRanks() {
-        Rank.getRanks().forEach(Rank::saveRank);
+        this.getSortedRanks().forEach(Rank::saveRank);
+    }
+
+    public List<Rank> getSortedRanks() {
+        return Rank.getRanks().stream().sorted(Comparator.comparingInt(Rank::getWeight)).collect(Collectors.toList());
     }
 }
