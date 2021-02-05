@@ -1,7 +1,6 @@
 package vip.potclub.core.manager;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -15,10 +14,9 @@ import vip.potclub.core.util.Color;
 import java.util.ArrayList;
 import java.util.UUID;
 
-@Getter
-@Setter
 public class PunishmentManager {
 
+    @Getter
     private final ArrayList<Punishment> punishments = new ArrayList<>();
 
     public PunishmentManager() {

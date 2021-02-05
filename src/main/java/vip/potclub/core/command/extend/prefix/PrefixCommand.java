@@ -45,7 +45,9 @@ public class PrefixCommand extends BaseCommand {
                             String name = args[1];
                             String prefix = StringUtil.buildMessage(args, 2);
 
-                            new Prefix(name, prefix);
+                            Prefix newPrefix = new Prefix(name, prefix);
+                            newPrefix.savePrefix();
+
                             player.sendMessage(Color.translate("&aCreated a new prefix with the name &6" + name + "&a and the design &b" + prefix + "&a."));
                         }
                         break;
@@ -86,6 +88,8 @@ public class PrefixCommand extends BaseCommand {
                                 if (prefix != null) {
                                     PotPlayer potPlayer = PotPlayer.getPlayer(target);
                                     potPlayer.getAllPrefixes().remove(prefix.getName());
+                                    CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPrefixCollection().deleteOne(Filters.eq("_id", prefix.getId())));
+
                                     player.sendMessage(Color.translate("&aRemoved the prefix " + prefix.getName() + " from " + target.getDisplayName()));
                                 } else {
                                     player.sendMessage(Color.translate("&cThat prefix does not exist."));

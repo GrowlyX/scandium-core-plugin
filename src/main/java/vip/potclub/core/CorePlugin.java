@@ -12,9 +12,6 @@ import com.google.gson.GsonBuilder;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import vip.potclub.core.command.extend.CoreCommand;
@@ -33,14 +30,12 @@ import vip.potclub.core.command.extend.punish.*;
 import vip.potclub.core.command.extend.rank.RankCommand;
 import vip.potclub.core.command.extend.rank.RankImportCommand;
 import vip.potclub.core.command.extend.server.SetSlotsCommand;
+import vip.potclub.core.command.extend.warps.WarpCommand;
 import vip.potclub.core.command.extend.web.WebAnnouncementCommand;
 import vip.potclub.core.command.extend.web.WebAnnouncementDeleteCommand;
 import vip.potclub.core.database.Database;
 import vip.potclub.core.listener.PlayerListener;
 import vip.potclub.core.manager.*;
-import vip.potclub.core.protocol.TabInterceptor;
-import vip.potclub.core.protocol.extend.PacketTabInterceptor;
-import vip.potclub.core.protocol.extend.ProtocolTabInterceptor;
 import vip.potclub.core.redis.RedisClient;
 import vip.potclub.core.task.*;
 import vip.potclub.core.util.Color;
@@ -48,7 +43,6 @@ import vip.potclub.core.util.RedisUtil;
 import vip.potclub.core.util.external.ConfigExternal;
 
 import java.text.SimpleDateFormat;
-import java.util.List;
 import java.util.Random;
 import java.util.TimeZone;
 import java.util.concurrent.Executor;
@@ -56,7 +50,7 @@ import java.util.concurrent.Executors;
 
 @Getter
 @Setter
-public final class CorePlugin extends JavaPlugin implements Listener {
+public final class CorePlugin extends JavaPlugin {
 
     public static SimpleDateFormat FORMAT;
     public static Random RANDOM;
@@ -68,6 +62,7 @@ public final class CorePlugin extends JavaPlugin implements Listener {
     private static CorePlugin instance;
 
     private ServerManager serverManager;
+    private WarpManager warpManager;
     private PlayerManager playerManager;
     private RankManager rankManager;
     private PrefixManager prefixManager;
@@ -78,7 +73,6 @@ public final class CorePlugin extends JavaPlugin implements Listener {
     private Database coreDatabase;
     private RedisClient redisClient;
     private ConfigExternal ranksConfig;
-//    private TabInterceptor interceptor;
 
     private Executor taskThread;
     private Executor redisThread;
@@ -120,6 +114,7 @@ public final class CorePlugin extends JavaPlugin implements Listener {
         this.prefixManager = new PrefixManager();
         this.punishmentManager = new PunishmentManager();
         this.playerManager = new PlayerManager();
+        this.warpManager = new WarpManager();
 
         this.setupExtra();
 
@@ -155,6 +150,7 @@ public final class CorePlugin extends JavaPlugin implements Listener {
         this.getCommand("discord").setExecutor(new DiscordCommand());
         this.getCommand("import").setExecutor(new RankImportCommand());
         this.getCommand("options").setExecutor(new OptionsCommand());
+        this.getCommand("warp").setExecutor(new WarpCommand());
         this.getCommand("history").setExecutor(new HistoryCommand());
         this.getCommand("twitter").setExecutor(new TwitterCommand());
         this.getCommand("website").setExecutor(new WebsiteCommand());
@@ -206,7 +202,7 @@ public final class CorePlugin extends JavaPlugin implements Listener {
 
     public void setupProtocol() {
         if (this.getConfig().getBoolean("tab-block.enabled")) {
-            ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(this, ListenerPriority.HIGHEST, new PacketType[]{PacketType.Play.Client.TAB_COMPLETE}) {
+            ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(this, ListenerPriority.HIGHEST, new PacketType[]{ PacketType.Play.Client.TAB_COMPLETE }) {
                 public void onPacketReceiving(PacketEvent event) {
                     if (event.getPacketType() == PacketType.Play.Client.TAB_COMPLETE) {
                         try {
@@ -221,8 +217,7 @@ public final class CorePlugin extends JavaPlugin implements Listener {
                                     event.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getConfig().getString("tab-block.message.string")));
                                 }
                             }
-                        } catch (FieldAccessException ignored) {
-                        }
+                        } catch (FieldAccessException ignored) { }
                     }
                 }
             });
@@ -236,6 +231,7 @@ public final class CorePlugin extends JavaPlugin implements Listener {
         this.punishmentManager.savePunishments();
         this.rankManager.saveRanks();
         this.prefixManager.savePrefixes();
+        this.warpManager.saveWarps();
 
         this.getServer().getOnlinePlayers().forEach(player -> player.kickPlayer(Color.translate("&cThe server is currently rebooting.\n&cPlease reconnect in a few minutes, or check discord for more information.")));
         this.getServer().getScheduler().cancelAllTasks();
@@ -243,10 +239,5 @@ public final class CorePlugin extends JavaPlugin implements Listener {
         if (this.redisClient.isClientActive()) {
             this.redisClient.destroyClient();
         }
-    }
-
-    @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args, Location location) {
-        return null;
     }
 }

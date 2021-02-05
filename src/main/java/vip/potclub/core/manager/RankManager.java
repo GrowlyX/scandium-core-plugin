@@ -12,10 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-@Getter
 public class RankManager {
-
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
 
     public RankManager() {
         this.createDefaultRanks();

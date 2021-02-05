@@ -1,38 +1,31 @@
 package vip.potclub.core.manager;
 
+import com.mongodb.client.model.Filters;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.Document;
 import vip.potclub.core.CorePlugin;
 import vip.potclub.core.player.prefixes.Prefix;
 
-@Getter
-@Setter
 public class PrefixManager {
 
     public PrefixManager() {
+        this.createDefaultPrefixes();
         this.loadPrefixes();
         CorePlugin.getInstance().getLogger().info("[Prefixes] Loaded all prefixes.");
+    }
+
+    private void createDefaultPrefixes() {
+        if (CorePlugin.getInstance().getCoreDatabase().getPrefixCollection().find(Filters.eq("name", "Verified")).first() == null) new Prefix("Verified", "&2✔");
+        if (CorePlugin.getInstance().getCoreDatabase().getPrefixCollection().find(Filters.eq("name", "Liked")).first() == null) new Prefix("Liked", "&b✔");
     }
 
     public void loadPrefixes() {
         CorePlugin.getInstance().getMongoThread().execute(() -> {
             for (Document document : CorePlugin.getInstance().getCoreDatabase().getPrefixCollection().find()) {
-                new Prefix(document.getString("_id"),document.getString("name"), document.getString("displayName"), document.getString("prefix"));
+                new Prefix(document.getString("_id"), document.getString("name"), document.getString("displayName"), document.getString("prefix"));
             }
         });
-
-        /*
-        if (Prefix.getPrefixes().isEmpty()) {
-            CorePlugin.getInstance().getMongoThread().execute(() -> {
-                new Prefix("Verified", "&2✔");
-                new Prefix("Liked", "&b✔");
-                new Prefix("Love", "&c❤");
-                new Prefix("Star", "&6✫");
-            });
-            CorePlugin.getInstance().getLogger().info("[Prefixes] Created four new prefixes. (Verified, Liked, Love, Star)");
-        }
-        */
     }
 
     public void savePrefixes() {
