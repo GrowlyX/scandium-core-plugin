@@ -10,10 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.event.server.ServerListPingEvent;
 import vip.potclub.core.CorePlugin;
 import vip.potclub.core.enums.ChatChannelType;
@@ -238,6 +235,19 @@ public class PlayerListener implements Listener {
                 }
             } else {
                 checkThenSend(event, player, potPlayer, slowChat);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onBlockedCommand(PlayerCommandPreprocessEvent event) {
+        if (CorePlugin.getInstance().getConfig().getBoolean("block-commands.enabled")) {
+            if (event.getPlayer().hasPermission("scandium.protocol.bypass")) return;
+            for (String blockedCommand : CorePlugin.getInstance().getConfig().getStringList("block-commands.list")) {
+                if (event.getMessage().contains("/" + blockedCommand)) {
+                    event.getPlayer().sendMessage(Color.translate("&cThat command is blocked."));
+                    event.setCancelled(true);
+                }
             }
         }
     }

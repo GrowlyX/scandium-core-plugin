@@ -11,10 +11,12 @@ import vip.potclub.core.CorePlugin;
 import vip.potclub.core.command.BaseCommand;
 import vip.potclub.core.enums.ServerType;
 import vip.potclub.core.player.PotPlayer;
+import vip.potclub.core.player.punishment.Punishment;
 import vip.potclub.core.player.ranks.Rank;
 import vip.potclub.core.util.Color;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class RankCommand extends BaseCommand {
 
@@ -85,7 +87,7 @@ public class RankCommand extends BaseCommand {
                     case "list":
                         player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
                         player.sendMessage(Color.translate(NETWORK.getMainColor() + ChatColor.BOLD.toString() + "Rank Management:"));
-                        Rank.getRanks().forEach(rank -> {
+                        this.getSortedRanks().forEach(rank -> {
                             String displayName = Color.translate(rank.getColor() + rank.getName());
                             player.sendMessage(Color.translate(" &7* " + displayName + " &7(" + rank.getWeight() + ") (" + rank.getPrefix() + "&7)" + " (" + rank.getColor() + "C&7)"));
                         });
@@ -102,8 +104,8 @@ public class RankCommand extends BaseCommand {
                             if (rank != null) {
                                 String displayName = Color.translate(rank.getColor() + rank.getName());
 
-                                rank.getPermissions().remove(value.toLowerCase());
-                                player.sendMessage(Color.translate("&aRemoved the permission '" + value.toLowerCase() + "&a' from the rank " + displayName + "&a."));
+                                rank.getPermissions().remove(value);
+                                player.sendMessage(Color.translate("&aRemoved the permission '" + value + "&a' from the rank " + displayName + "&a."));
                             } else {
                                 player.sendMessage(Color.translate("&cThat rank does not exist!"));
                             }
@@ -118,11 +120,11 @@ public class RankCommand extends BaseCommand {
                             Rank rank = Rank.getByName(name);
 
                             if (rank != null) {
-                                if (!rank.getPermissions().contains(value.toLowerCase())) {
+                                if (!rank.getPermissions().contains(value)) {
                                     String displayName = Color.translate(rank.getColor() + rank.getName());
 
-                                    rank.getPermissions().add(value.toLowerCase());
-                                    player.sendMessage(Color.translate("&aAdded the permission '" + value.toLowerCase() + "&a' to the rank " + displayName + "&a."));
+                                    rank.getPermissions().add(value);
+                                    player.sendMessage(Color.translate("&aAdded the permission '" + value + "&a' to the rank " + displayName + "&a."));
                                 } else {
                                     player.sendMessage(Color.translate("&cThat rank already has that permission!"));
                                 }
@@ -247,5 +249,9 @@ public class RankCommand extends BaseCommand {
             player.sendMessage(Color.translate("&cNo permission."));
         }
         return false;
+    }
+
+    private List<Rank> getSortedRanks() {
+        return Rank.getRanks().stream().sorted(Comparator.comparingInt(Rank::getWeight).reversed()).collect(Collectors.toList());
     }
 }

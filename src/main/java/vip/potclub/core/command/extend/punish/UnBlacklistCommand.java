@@ -49,7 +49,7 @@ public class UnBlacklistCommand extends BaseCommand {
                                             });
                                         } else {
                                             Bukkit.broadcastMessage(Color.translate(
-                                                    offlinePlayer.getName() + " &awas " + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4Console&a."
+                                                    "&7" + offlinePlayer.getName() + " &awas " + "un" + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4Console&a."
                                             ));
                                         }
 
@@ -98,7 +98,7 @@ public class UnBlacklistCommand extends BaseCommand {
                                                 });
                                             } else {
                                                 Bukkit.broadcastMessage(Color.translate(
-                                                        offlinePlayer.getName() + " &awas " + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + player.getDisplayName() + "&a."
+                                                        "&7" + offlinePlayer.getName() + " &awas un" + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + player.getDisplayName() + "&a."
                                                 ));
                                             }
                                         }

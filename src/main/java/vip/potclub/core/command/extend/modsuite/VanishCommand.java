@@ -8,6 +8,7 @@ import vip.potclub.core.CorePlugin;
 import vip.potclub.core.command.BaseCommand;
 import vip.potclub.core.manager.PlayerManager;
 import vip.potclub.core.manager.ServerManager;
+import vip.potclub.core.player.PotPlayer;
 import vip.potclub.core.util.Color;
 
 public class VanishCommand extends BaseCommand {
@@ -24,9 +25,12 @@ public class VanishCommand extends BaseCommand {
         ServerManager manager = CorePlugin.getInstance().getServerManager();
         if (player.hasPermission("scandium.command.vanish")) {
             if (args.length == 0) {
+                PotPlayer potPlayer = PotPlayer.getPlayer(player);
                 if (manager.getVanishedPlayers().contains(player)) {
+                    potPlayer.setVanished(false);
                     vanishManager.unVanishPlayer(player);
                 } else {
+                    potPlayer.setVanished(true);
                     vanishManager.vanishPlayer(player);
                 }
             }
@@ -34,11 +38,14 @@ public class VanishCommand extends BaseCommand {
                 if (player.hasPermission("scandium.command.vanish.other")) {
                     Player target = Bukkit.getPlayerExact(args[0]);
                     if (target != null) {
+                        PotPlayer potPlayer = PotPlayer.getPlayer(target);
                         if (manager.getVanishedPlayers().contains(target)) {
                             vanishManager.unVanishPlayer(target);
+                            potPlayer.setVanished(false);
                             player.sendMessage(Color.translate("&aUnvanished " + target.getName() + "."));
                         } else {
                             vanishManager.vanishPlayer(target);
+                            potPlayer.setVanished(true);
                             player.sendMessage(Color.translate("&aVanished " + target.getName() + "."));
                         }
                     } else {

@@ -17,6 +17,13 @@ communism: true
 server-type: "PRACTICE"
 server-id: "eu-practice"
 refresh-time: 5
+block-commands:
+  enabled: true
+  list:
+    - "ver"
+    - "version"
+    - "pl"
+    - "plugins"
 server:
   settings:
     server-id: "POTCLUBVIP"

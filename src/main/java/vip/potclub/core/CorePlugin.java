@@ -5,6 +5,10 @@ import com.google.gson.GsonBuilder;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import vip.potclub.core.command.extend.CoreCommand;
 import vip.potclub.core.command.extend.anticheat.AnticheatBanCommand;
@@ -27,6 +31,9 @@ import vip.potclub.core.command.extend.web.WebAnnouncementDeleteCommand;
 import vip.potclub.core.database.Database;
 import vip.potclub.core.listener.PlayerListener;
 import vip.potclub.core.manager.*;
+import vip.potclub.core.protocol.TabInterceptor;
+import vip.potclub.core.protocol.extend.PacketTabInterceptor;
+import vip.potclub.core.protocol.extend.ProtocolTabInterceptor;
 import vip.potclub.core.redis.RedisClient;
 import vip.potclub.core.task.*;
 import vip.potclub.core.util.Color;
@@ -34,6 +41,7 @@ import vip.potclub.core.util.RedisUtil;
 import vip.potclub.core.util.external.ConfigExternal;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Random;
 import java.util.TimeZone;
 import java.util.concurrent.Executor;
@@ -41,7 +49,7 @@ import java.util.concurrent.Executors;
 
 @Getter
 @Setter
-public final class CorePlugin extends JavaPlugin {
+public final class CorePlugin extends JavaPlugin implements Listener {
 
     public static SimpleDateFormat FORMAT;
     public static Random RANDOM;
@@ -63,6 +71,7 @@ public final class CorePlugin extends JavaPlugin {
     private Database coreDatabase;
     private RedisClient redisClient;
     private ConfigExternal ranksConfig;
+    private TabInterceptor interceptor;
 
     private Executor taskThread;
     private Executor redisThread;
@@ -79,7 +88,7 @@ public final class CorePlugin extends JavaPlugin {
         FORMAT = new SimpleDateFormat("MM/dd/yyyy HH:mma");
         FORMAT.setTimeZone(TimeZone.getTimeZone("EST"));
 
-        RANDOM  = new Random();
+        RANDOM = new Random();
         GSONBUILDER = new GsonBuilder().setPrettyPrinting();
         GSON = GSONBUILDER.create();
 
@@ -184,6 +193,16 @@ public final class CorePlugin extends JavaPlugin {
         new PlayerSaveTask();
         new ServerUpdateTask();
         new PunishSaveTask();
+
+        this.setupProtocol();
+    }
+
+    public void setupProtocol() {
+        if (this.getServer().getPluginManager().getPlugin("ProtocolLib") != null) {
+            interceptor = new ProtocolTabInterceptor(this);
+        } else {
+            interceptor = new PacketTabInterceptor(this);
+        }
     }
 
     @Override
@@ -194,11 +213,21 @@ public final class CorePlugin extends JavaPlugin {
         this.rankManager.saveRanks();
         this.prefixManager.savePrefixes();
 
+        if (interceptor != null) {
+            interceptor.close();
+            interceptor = null;
+        }
+
         this.getServer().getOnlinePlayers().forEach(player -> player.kickPlayer(Color.translate("&cThe server is currently rebooting.\n&cPlease reconnect in a few minutes, or check discord for more information.")));
         this.getServer().getScheduler().cancelAllTasks();
 
         if (this.redisClient.isClientActive()) {
             this.redisClient.destroyClient();
         }
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args, Location location) {
+        return null;
     }
 }
