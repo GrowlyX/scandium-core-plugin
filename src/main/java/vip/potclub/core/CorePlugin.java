@@ -19,6 +19,7 @@ import vip.potclub.core.command.extend.network.ForceUpdateCommand;
 import vip.potclub.core.command.extend.network.NetworkCommand;
 import vip.potclub.core.command.extend.prefix.PrefixCommand;
 import vip.potclub.core.command.extend.punish.*;
+import vip.potclub.core.command.extend.rank.RankCommand;
 import vip.potclub.core.command.extend.rank.RankImportCommand;
 import vip.potclub.core.command.extend.server.SetSlotsCommand;
 import vip.potclub.core.command.extend.web.WebAnnouncementCommand;
@@ -133,6 +134,7 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("scandium").setExecutor(new CoreCommand());
         this.getCommand("famous").setExecutor(new FamousCommand());
         this.getCommand("profile").setExecutor(new ProfileCommand());
+        this.getCommand("rank").setExecutor(new RankCommand());
         this.getCommand("media").setExecutor(new MediaCommand());
         this.getCommand("discord").setExecutor(new DiscordCommand());
         this.getCommand("import").setExecutor(new RankImportCommand());

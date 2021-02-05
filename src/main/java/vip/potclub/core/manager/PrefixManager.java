@@ -22,7 +22,8 @@ public class PrefixManager {
             }
         });
 
-        /*if (Prefix.getPrefixes().isEmpty()) {
+        /*
+        if (Prefix.getPrefixes().isEmpty()) {
             CorePlugin.getInstance().getMongoThread().execute(() -> {
                 new Prefix("Verified", "&2✔");
                 new Prefix("Liked", "&b✔");
@@ -30,7 +31,8 @@ public class PrefixManager {
                 new Prefix("Star", "&6✫");
             });
             CorePlugin.getInstance().getLogger().info("[Prefixes] Created four new prefixes. (Verified, Liked, Love, Star)");
-        }*/
+        }
+        */
     }
 
     public void savePrefixes() {

@@ -18,7 +18,7 @@ public class RedisListener extends JedisPubSub {
     @Override
     public void onMessage(String channel, String message) {
         CorePlugin.getInstance().getRedisSubThread().execute(() -> {
-            RedisMessage redisMessage = new Gson().fromJson(message, RedisMessage.class);
+            RedisMessage redisMessage = CorePlugin.GSON.fromJson(message, RedisMessage.class);
             switch (redisMessage.getPacket()) {
                 case SERVER_DATA_ONLINE:
                     String bootingServerName = redisMessage.getParam("SERVER");

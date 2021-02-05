@@ -246,7 +246,7 @@ public class PlayerListener implements Listener {
         Bukkit.getOnlinePlayers().forEach(player1 -> {
             PotPlayer potPlayer1 = PotPlayer.getPlayer(player1);
             if (potPlayer1.isCanSeeGlobalChat()) {
-                player1.sendMessage(Color.translate((potPlayer.getAppliedPrefix() != null ? potPlayer.getAppliedPrefix().getPrefix() + " " : "") + potPlayer.getActiveGrant().getRank().getPrefix() + (potPlayer.getCustomColor() != null ? potPlayer.getCustomColor() : "") + player.getName() + " &7" + '»' + " " + (potPlayer.getActiveGrant().getRank().getName().contains("Default") ? "&7" : "&f") + event.getMessage()));
+                player1.sendMessage(Color.translate((potPlayer.getAppliedPrefix() != null ? potPlayer.getAppliedPrefix().getPrefix() + " " : "") + potPlayer.getActiveGrant().getRank().getPrefix() + potPlayer.getActiveGrant().getRank().getColor() + (potPlayer.getCustomColor() != null ? potPlayer.getCustomColor() : "") + player.getName() + " &7" + '»' + " " + (potPlayer.getActiveGrant().getRank().getName().contains("Default") ? "&7" : "&f") + event.getMessage()));
             }
         });
         PotPlayer.getPlayer(player).setChatCooldown(System.currentTimeMillis() + (slowChat > 0L ? slowChat : 3000L));

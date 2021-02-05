@@ -73,20 +73,10 @@ public class Rank {
     }
 
     public static Rank getByName(String name) {
-        for (Rank rank : Rank.ranks) {
-            if (rank.getName().replace(" ", "").equalsIgnoreCase(name.replace(" ", ""))) {
-                return rank;
-            }
-        }
-        return null;
+        return getRanks().stream().filter(rank -> rank.getName().equals(name)).findFirst().orElse(null);
     }
 
     public static Rank getByUuid(UUID uuid) {
-        for (Rank rank : Rank.ranks) {
-            if (rank.getUuid().equals(uuid)) {
-                return rank;
-            }
-        }
-        return null;
+        return getRanks().stream().filter(rank -> rank.getUuid().equals(uuid)).findFirst().orElse(null);
     }
 }

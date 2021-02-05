@@ -16,6 +16,7 @@ public enum NetworkServerType {
     MEETUP("UHC Meetup"),
     UHC_GAMES("UHC Games"),
     UHC("UHC"),
+    HUB("Lobby"),
     HORSE_RACE("Horse Racing"),
     NOT_DEFINED("Booting..."),
     POTSG("PotSG");
