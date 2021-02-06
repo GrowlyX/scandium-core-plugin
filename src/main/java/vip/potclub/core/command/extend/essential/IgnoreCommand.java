@@ -39,11 +39,15 @@ public class IgnoreCommand extends BaseCommand {
                 String value = args[0];
                 PotPlayer potPlayer = PotPlayer.getPlayer(player);
 
-                if (potPlayer.getAllIgnoring().contains(value)) {
-                    potPlayer.getAllIgnoring().remove(value);
-                    player.sendMessage(Color.translate("&aRemoved " + value + " from your ignore list."));
+                if (!potPlayer.getName().equalsIgnoreCase(value)) {
+                    if (potPlayer.getAllIgnoring().contains(value)) {
+                        potPlayer.getAllIgnoring().remove(value);
+                        player.sendMessage(Color.translate("&aRemoved " + value + " from your ignore list."));
+                    } else {
+                        player.sendMessage(Color.translate("&cYou don't have that player on your ignore list."));
+                    }
                 } else {
-                    player.sendMessage(Color.translate("&cYou don't have that player on your ignore list."));
+                    player.sendMessage(Color.translate("&cYou cannot remove yourself to your ignore list!"));
                 }
             } else if (label.equalsIgnoreCase("ignore")) {
                 PotPlayer potPlayer = PotPlayer.getPlayer(player);
@@ -55,11 +59,15 @@ public class IgnoreCommand extends BaseCommand {
                 } else {
                     String value = args[0];
 
-                    if (!potPlayer.getAllIgnoring().contains(value)) {
-                        potPlayer.getAllIgnoring().add(value);
-                        player.sendMessage(Color.translate("&aAdded " + value + " to your ignore list."));
+                    if (!potPlayer.getName().equalsIgnoreCase(value)) {
+                        if (!potPlayer.getAllIgnoring().contains(value)) {
+                            potPlayer.getAllIgnoring().add(value);
+                            player.sendMessage(Color.translate("&aAdded " + value + " to your ignore list."));
+                        } else {
+                            player.sendMessage(Color.translate("&cThat player is already on your ignore list."));
+                        }
                     } else {
-                        player.sendMessage(Color.translate("&cThat player is already on your ignore list."));
+                        player.sendMessage(Color.translate("&cYou cannot add yourself to your ignore list!"));
                     }
                 }
             }

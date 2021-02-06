@@ -38,13 +38,17 @@ public class MessageCommand extends BaseCommand {
                     if (!potPlayer.isIgnoring(potPerson.getPlayer())) {
                         if (!potPerson.isIgnoring(potPlayer.getPlayer())) {
                             if (potPerson.isCanReceiveDms()) {
-                                if (potPlayer.isCanReceiveDms()) {
-                                    StringUtil.sendPrivateMessage(player, target, message);
+                                if (potPerson != potPlayer) {
+                                    if (potPlayer.isCanReceiveDms()) {
+                                        StringUtil.sendPrivateMessage(player, target, message);
 
-                                    potPerson.setLastRecipient(target);
-                                    potPlayer.setLastRecipient(player);
+                                        potPerson.setLastRecipient(target);
+                                        potPlayer.setLastRecipient(player);
+                                    } else {
+                                        player.sendMessage(Color.translate("&cThat player has their dms disabled."));
+                                    }
                                 } else {
-                                    player.sendMessage(Color.translate("&cThat player has their dms disabled."));
+                                    player.sendMessage(Color.translate("&cYou cannot message yourself."));
                                 }
                             } else {
                                 player.sendMessage(Color.translate("&cYou have your dms disabled."));

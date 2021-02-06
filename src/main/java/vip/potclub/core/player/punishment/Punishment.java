@@ -38,7 +38,7 @@ public class Punishment {
     private String removalReason = null;
     private String removerName = null;
 
-    private boolean active = true;
+    private boolean active;
     private boolean permanent;
     private boolean removed = false;
 
@@ -57,6 +57,7 @@ public class Punishment {
         this.expirationDate = new Date(this.createdAt.getTime() + this.punishmentDuration);
         this.id = uuid;
         this.punishIdentification = punishIdentification;
+        this.active = true;
 
         savePunishment();
     }

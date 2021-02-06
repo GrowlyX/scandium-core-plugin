@@ -27,18 +27,20 @@ import java.util.regex.Matcher;
 
 public class PlayerListener implements Listener {
 
+    public static String REGION = CorePlugin.getInstance().getConfig().getString("region");
+
     @EventHandler
     public void onServerListPing(ServerListPingEvent event) {
         if (CorePlugin.getInstance().getConfig().getBoolean("whitelist")) {
-            event.setMotd(Color.translate("&d&lPotClub &7&l\u239c &fEU\n&cThe server is currently in maintenance."));
+            event.setMotd(Color.translate("&d&lPotClub &7&l\u239c &f" + REGION + " Region\n&cThe server is currently in maintenance."));
         } else {
             int boundOfThree = CorePlugin.RANDOM.nextInt(3);
             if (boundOfThree == 1) {
-                event.setMotd(Color.translate("&d&lPotClub &7&l\u239c &fEU\n&7Join our discord via &bhttps://dsc.gg/pot&7!"));
+                event.setMotd(Color.translate("&d&lPotClub &7&l\u239c &f" + REGION + " Region\n&7Join our discord via &bhttps://dsc.gg/pot&7!"));
             } else if (boundOfThree == 2) {
-                event.setMotd(Color.translate("&d&lPotClub &7&l\u239c &fEU\n&7Follow our twitter for giveaways and more! &b@PotClubVIP&7"));
+                event.setMotd(Color.translate("&d&lPotClub &7&l\u239c &f" + REGION + " Region\n&7Follow our twitter for giveaways and more! &b@PotClubVIP&7"));
             } else {
-                event.setMotd(Color.translate("&d&lPotClub &7&l\u239c &fEU\n&7We have a new website! Check it out at &bwww.potclub.vip&7!"));
+                event.setMotd(Color.translate("&d&lPotClub &7&l\u239c &f" + REGION + " Region\n&7We have a new website! Check it out at &bwww.potclub.vip&7!"));
             }
         }
     }

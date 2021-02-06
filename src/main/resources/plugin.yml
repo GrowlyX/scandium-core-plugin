@@ -2,9 +2,11 @@
 name: Scandium
 version: SD-1.3.3.7
 main: vip.potclub.core.CorePlugin
-depend: [ProtocolLib]
+softdepend: [ProtocolLib]
 
 commands:
+  lunar:
+    aliases: [lunarclient]
   ignore:
     aliases: [unignore]
   rank:

@@ -13,6 +13,7 @@
 #    HORSE_RACE("Horse Racing"),
 #    POTSG("PotSG");
 #
+region: "EU"
 communism: true
 server-type: "PRACTICE"
 server-id: "eu-practice"

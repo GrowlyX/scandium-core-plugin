@@ -68,17 +68,34 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.solexgames</groupId>
-            <artifactId>spigot-server</artifactId>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.11</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
             <version>1.8.8-R0.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${basedir}/lib/Lantern.jar</systemPath>
+            <systemPath>${basedir}/lib/Banana.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.16</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.lunarclient</groupId>
+            <artifactId>bukkitapi</artifactId>
+            <version>1.0-20200212.020644-1</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/LunarClientAPI.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.mongodb</groupId>
@@ -98,6 +115,11 @@
             <version>3.3.0</version>
             <type>jar</type>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.lunarclient</groupId>
+            <artifactId>bukkitapi</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

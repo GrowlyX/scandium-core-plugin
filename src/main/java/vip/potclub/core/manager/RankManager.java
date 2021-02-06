@@ -1,13 +1,14 @@
 package vip.potclub.core.manager;
 
 import com.mongodb.client.model.Filters;
-import lombok.Getter;
 import org.bson.Document;
 import vip.potclub.core.CorePlugin;
 import vip.potclub.core.player.ranks.Rank;
 
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class RankManager {

@@ -27,6 +27,8 @@ import vip.potclub.core.command.extend.web.WebAnnouncementCommand;
 import vip.potclub.core.command.extend.web.WebAnnouncementDeleteCommand;
 import vip.potclub.core.database.Database;
 import vip.potclub.core.listener.PlayerListener;
+import vip.potclub.core.lunar.AbstractClientInjector;
+import vip.potclub.core.lunar.extend.LunarCommand;
 import vip.potclub.core.manager.*;
 import vip.potclub.core.protocol.AbstractChatInterceptor;
 import vip.potclub.core.protocol.extend.ProtocolChatInterceptor;
@@ -67,7 +69,9 @@ public final class CorePlugin extends JavaPlugin {
     private Database coreDatabase;
     private RedisClient redisClient;
     private ConfigExternal ranksConfig;
+
     private AbstractChatInterceptor chatInterceptor;
+    private AbstractClientInjector lunarCommand;
 
     private Executor taskThread;
     private Executor redisThread;
@@ -98,6 +102,7 @@ public final class CorePlugin extends JavaPlugin {
         this.ranksConfig = new ConfigExternal("ranks");
 
         if (this.getServer().getPluginManager().isPluginEnabled("ProtocolLib")) chatInterceptor = new ProtocolChatInterceptor(); else this.getLogger().info("[Protocol] Could not find ProtocolLib! Chat tab block will not work without it!");
+        if (this.getServer().getPluginManager().isPluginEnabled("LunarClient-API")) lunarCommand = new LunarCommand(); else this.getLogger().info("[Protocol] Could not find LunarClient-API! The /lunar command will not work without it!");
 
         this.serverName = this.getConfig().getString("server-id");
         this.debugging = false;
@@ -185,6 +190,8 @@ public final class CorePlugin extends JavaPlugin {
 
         this.getCommand("toggletips").setExecutor(new ToggleTipsCommand());
         this.getCommand("togglestaffmessages").setExecutor(new ToggleStaffMessagesCommand());
+
+        if (this.lunarCommand != null) this.getCommand("lunar").setExecutor(lunarCommand);
 
         Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
 
