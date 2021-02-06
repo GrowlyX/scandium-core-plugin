@@ -62,6 +62,7 @@ public class PotPlayer {
     private boolean hasVoted = false;
     private boolean isVanished = false;
     private boolean isStaffMode = false;
+    private boolean isFrozen = false;
     private boolean isSynced = false;
 
     private boolean currentlyMuted;

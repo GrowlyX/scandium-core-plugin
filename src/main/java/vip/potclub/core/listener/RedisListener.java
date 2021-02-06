@@ -192,7 +192,9 @@ public class RedisListener extends JedisPubSub {
 
                     Bukkit.getOnlinePlayers().forEach(player -> {
                         if (player.hasPermission(permission)) {
-                            player.sendMessage(Color.translate(broadcast));
+                            if (PotPlayer.getPlayer(player).isCanSeeStaffMessages()) {
+                                player.sendMessage(Color.translate(broadcast));
+                            }
                         }
                     });
 

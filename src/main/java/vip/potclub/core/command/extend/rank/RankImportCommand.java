@@ -2,6 +2,7 @@ package vip.potclub.core.command.extend.rank;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import vip.potclub.core.CorePlugin;
 import vip.potclub.core.clickable.Clickable;
@@ -27,7 +28,8 @@ public class RankImportCommand extends BaseCommand {
 
         Player player = (Player) sender;
         if (player.getUniqueId().equals(CorePlugin.getInstance().getServerManager().getNetwork().getMainOwner()) || player.getUniqueId().equals(CorePlugin.getInstance().getServerManager().getNetwork().getMainDeveloper())) {
-            if (args.length == 0) {
+            player.sendMessage(Color.translate("&aNew version coming soon!"));
+            /*if (args.length == 0) {
                 player.sendMessage(Color.translate("  "));
                 player.sendMessage(Color.translate("&aWould you like to import the ranks from the ranks.yml?"));
                 player.sendMessage(Color.translate("&aIf you proceed, make sure to understand all the current"));
@@ -41,7 +43,7 @@ public class RankImportCommand extends BaseCommand {
                 player.sendMessage(Color.translate("&aImporting ranks..."));
                 this.handleImport();
                 player.sendMessage(Color.translate("&aSuccessfully imported all ranks!"));
-            }
+            }*/
         } else {
             player.sendMessage(Color.translate("&cThis command is restricted."));
         }

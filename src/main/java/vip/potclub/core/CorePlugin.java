@@ -191,7 +191,7 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("toggletips").setExecutor(new ToggleTipsCommand());
         this.getCommand("togglestaffmessages").setExecutor(new ToggleStaffMessagesCommand());
 
-        if (this.lunarCommand != null) this.getCommand("lunar").setExecutor(lunarCommand);
+//        if (this.lunarCommand != null) this.getCommand("lunar").setExecutor(lunarCommand);
 
         Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
 

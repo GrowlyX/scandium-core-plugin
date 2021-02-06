@@ -3,10 +3,12 @@ package vip.potclub.core.listener;
 import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
@@ -81,6 +83,22 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
+    public void onMove(PlayerMoveEvent event) {
+        PotPlayer potPlayer = PotPlayer.getPlayer(event.getPlayer());
+        if (potPlayer.isFrozen()) {
+            event.setCancelled(true);
+            CorePlugin.getInstance().getPlayerManager().sendFreezeMessage(event.getPlayer());
+        }
+    }
+
+    @EventHandler
+    public void onDamaged(EntityDamageEvent event) {
+        if (event.getEntityType().equals(EntityType.PLAYER)) {
+            Player player = (Player) event.getEntity();
+        }
+    }
+
+    @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         if (event.getInventory().getHolder() instanceof IMenu) {
             ((IMenu) event.getInventory().getHolder()).onInventoryClick(event);
@@ -116,6 +134,11 @@ public class PlayerListener implements Listener {
     public void onAsyncPlayerChatEvent(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
         PotPlayer potPlayer = PotPlayer.getPlayer(player);
+
+        if (potPlayer.isFrozen()) {
+            CorePlugin.getInstance().getPlayerManager().sendFreezeMessage(player);
+            return;
+        }
 
         Matcher discordMatcher = MediaConstants.DISCORD_USERNAME_REGEX.matcher(event.getMessage());
         Matcher twitterMatcher = MediaConstants.TWITTER_USERNAME_REGEX.matcher(event.getMessage());
@@ -243,6 +266,11 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onBlockedCommand(PlayerCommandPreprocessEvent event) {
+        PotPlayer potPlayer = PotPlayer.getPlayer(event.getPlayer());
+        if (potPlayer.isFrozen()) {
+            CorePlugin.getInstance().getPlayerManager().sendFreezeMessage(event.getPlayer());
+            return;
+        }
         if (CorePlugin.getInstance().getConfig().getBoolean("block-commands.enabled")) {
             if (event.getPlayer().hasPermission("scandium.protocol.bypass")) return;
             for (String blockedCommand : CorePlugin.getInstance().getConfig().getStringList("block-commands.list")) {
@@ -269,7 +297,11 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onDisconnect(PlayerQuitEvent event) {
         if (event.getPlayer().hasPermission("scandium.staff")) CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onDisconnect(event.getPlayer())));
+
+        PotPlayer potPlayer = PotPlayer.getPlayer(event.getPlayer().getUniqueId());
+        if (potPlayer.isFrozen()) CorePlugin.getInstance().getPlayerManager().sendDisconnectFreezeMessage(event.getPlayer());
+
         CorePlugin.getInstance().getServerManager().getVanishedPlayers().remove(event.getPlayer());
-        PotPlayer.getPlayer(event.getPlayer().getUniqueId()).savePlayerData();
+        potPlayer.savePlayerData();
     }
 }

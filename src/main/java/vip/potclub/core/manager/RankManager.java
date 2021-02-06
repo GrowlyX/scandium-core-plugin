@@ -57,7 +57,7 @@ public class RankManager {
     }
 
     public void saveRanks() {
-        this.getSortedRanks().forEach(Rank::saveRank);
+        this.getSortedRanks().forEach(Rank::saveMainThread);
     }
 
     public List<Rank> getSortedRanks() {

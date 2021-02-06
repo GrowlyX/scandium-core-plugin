@@ -1,5 +1,6 @@
 package vip.potclub.core.command.extend;
 
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -43,8 +44,10 @@ public class CoreCommand extends BaseCommand {
                 }
             }
         } else {
-            player.sendMessage(Color.translate("&aThis server is running &6Scandium v1.3.3.7&a!"));
-            player.sendMessage(Color.translate("&fDeveloped by &7GrowlyX#1337&f."));
+            player.sendMessage(Color.translate("&b&m--------&7&m" + StringUtils.repeat("-", 37) + "&b&m--------"));
+            player.sendMessage(Color.translate("&eThis server is running &bScandium Core&e!"));
+            player.sendMessage(Color.translate("&eDeveloped by &dGrowlyX#1337&e."));
+            player.sendMessage(Color.translate("&b&m--------&7&m" + StringUtils.repeat("-", 37) + "&b&m--------"));
         }
         return false;
     }

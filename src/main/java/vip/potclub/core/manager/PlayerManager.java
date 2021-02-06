@@ -6,9 +6,14 @@ import org.bukkit.entity.Player;
 import vip.potclub.core.CorePlugin;
 import vip.potclub.core.enums.ChatChannelType;
 import vip.potclub.core.util.Color;
+import vip.potclub.core.util.RedisUtil;
+
+import java.util.List;
 
 @NoArgsConstructor
 public class PlayerManager {
+
+    public final List<String> freezeMessage = CorePlugin.getInstance().getConfig().getStringList("freeze-message");
 
     public void vanishPlayer(Player player) {
         Bukkit.getOnlinePlayers().forEach(p -> {
@@ -31,6 +36,18 @@ public class PlayerManager {
 
     public String formatChatChannel(ChatChannelType chatChannel, String player, String message, String fromServer) {
         return Color.translate(chatChannel.getPrefix() + "&7[" + fromServer + "] " + player + "&f: &b" + message);
+    }
+
+    public void sendDisconnectFreezeMessage(Player target) {
+        Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> {
+            CorePlugin.getInstance().getRedisClient().write(RedisUtil.onGlobalBroadcastPermission(Color.translate("  "), "scandium.staff"));
+            CorePlugin.getInstance().getRedisClient().write(RedisUtil.onGlobalBroadcastPermission(Color.translate("&c" + target.getDisplayName() + "&c disconnected while being frozen!"), "scandium.staff"));
+            CorePlugin.getInstance().getRedisClient().write(RedisUtil.onGlobalBroadcastPermission(Color.translate("  "), "scandium.staff"));
+        });
+    }
+
+    public void sendFreezeMessage(Player player) {
+        freezeMessage.forEach(s -> player.sendMessage(Color.translate(s)));
     }
 
     public String formatBroadcast(String message) {

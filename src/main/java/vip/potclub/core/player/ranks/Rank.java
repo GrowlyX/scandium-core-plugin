@@ -63,6 +63,22 @@ public class Rank {
         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getRankCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true)));
     }
 
+    public void saveMainThread() {
+        Document document = new Document("_id", this.uuid);
+
+        document.put("uuid", this.uuid.toString());
+        document.put("inheritance", this.inheritance);
+        document.put("permissions", this.permissions);
+        document.put("name", this.name);
+        document.put("prefix", this.prefix);
+        document.put("color", this.color);
+        document.put("suffix", this.suffix);
+        document.put("defaultRank", this.defaultRank);
+        document.put("weight", this.weight);
+
+        CorePlugin.getInstance().getCoreDatabase().getRankCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true));
+    }
+
     public static Rank getDefaultRank() {
         for (Rank rank : Rank.getRanks()) {
             if (rank.defaultRank) {

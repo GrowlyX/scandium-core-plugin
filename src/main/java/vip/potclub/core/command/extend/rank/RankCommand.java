@@ -38,6 +38,8 @@ public class RankCommand extends BaseCommand {
         player.sendMessage(Color.translate("/rank default &7- Set a rank as a default rank."));
         player.sendMessage(Color.translate("/rank addinher &7- Add an inheritance to a rank."));
         player.sendMessage(Color.translate("/rank delinher &7- Remove an inheritance from a rank."));
+        player.sendMessage(Color.translate("  "));
+        player.sendMessage(Color.translate("&7&oTIP: Make sure to use /rank save, or ranks go poof!"));
         player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
     }
 
@@ -50,9 +52,7 @@ public class RankCommand extends BaseCommand {
 
         Player player = (Player) sender;
         if (player.hasPermission("scandium.command.rank")) {
-            if (args.length == 0) {
-                sendHelp(player);
-            }
+            if (args.length == 0) sendHelp(player);
             if (args.length > 0) {
                 switch (args[0]) {
                     case "info":
@@ -83,6 +83,10 @@ public class RankCommand extends BaseCommand {
                                 player.sendMessage(Color.translate("&cThat rank does not exist!"));
                             }
                         }
+                        break;
+                    case "save":
+                        Rank.getRanks().forEach(Rank::saveRank);
+                        player.sendMessage(Color.translate("&aSuccessfully saved all ranks!"));
                         break;
                     case "list":
                         player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
@@ -217,8 +221,8 @@ public class RankCommand extends BaseCommand {
                         }
                         break;
                     case "suffix":
-                        if (args.length == 1) player.sendMessage(Color.translate("&cUsage: /rank suffix <name> <suffix>."));
-                        if (args.length == 2) player.sendMessage(Color.translate("&cUsage: /rank suffix <name> <suffix>."));
+                        if (args.length == 1) player.sendMessage(Color.translate("&cUsage: /rank suffix <name> <suffix (_ for space)>."));
+                        if (args.length == 2) player.sendMessage(Color.translate("&cUsage: /rank suffix <name> <suffix (_ for space)>."));
                         if (args.length == 3) {
                             String name = args[1];
                             String value = args[2];
@@ -227,7 +231,7 @@ public class RankCommand extends BaseCommand {
                             if (rank != null) {
                                 String displayName = Color.translate(rank.getColor() + rank.getName());
 
-                                rank.setSuffix(Color.translate(value));
+                                rank.setSuffix(Color.translate(value.replace("_", " ")));
                                 player.sendMessage(Color.translate("&aChanged the suffix of " + displayName + "&a to " + rank.getSuffix() + "&a."));
                             } else {
                                 player.sendMessage(Color.translate("&cThat rank does not exist!"));
@@ -235,8 +239,8 @@ public class RankCommand extends BaseCommand {
                         }
                         break;
                     case "prefix":
-                        if (args.length == 1) player.sendMessage(Color.translate("&cUsage: /rank prefix <name> <prefix>."));
-                        if (args.length == 2) player.sendMessage(Color.translate("&cUsage: /rank prefix <name> <prefix>."));
+                        if (args.length == 1) player.sendMessage(Color.translate("&cUsage: /rank prefix <name> <prefix (_ for space)>."));
+                        if (args.length == 2) player.sendMessage(Color.translate("&cUsage: /rank prefix <name> <prefix (_ for space)>."));
                         if (args.length == 3) {
                             String name = args[1];
                             String value = args[2];
@@ -245,7 +249,7 @@ public class RankCommand extends BaseCommand {
                             if (rank != null) {
                                 String displayName = Color.translate(rank.getColor() + rank.getName());
 
-                                rank.setPrefix(Color.translate(value));
+                                rank.setPrefix(Color.translate(value.replace("_", " ")));
                                 player.sendMessage(Color.translate("&aChanged the prefix of " + displayName + "&a to " + rank.getPrefix() + "&a."));
                             } else {
                                 player.sendMessage(Color.translate("&cThat rank does not exist!"));
