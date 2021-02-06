@@ -89,6 +89,7 @@ public class PlayerListener implements Listener {
             event.setCancelled(true);
             CorePlugin.getInstance().getPlayerManager().sendFreezeMessage(event.getPlayer());
         }
+        // TODO - Finish this listener & others
     }
 
     @EventHandler
