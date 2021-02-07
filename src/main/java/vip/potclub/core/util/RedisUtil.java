@@ -12,26 +12,8 @@ import vip.potclub.core.redis.RedisMessage;
 
 public final class RedisUtil {
 
-    private static String format(double tps) {
-        return ( ( tps > 18.0 ) ? ChatColor.GREEN : ( tps > 16.0 ) ? ChatColor.YELLOW : ChatColor.RED ).toString()
-                + ( ( tps > 20.0 ) ? "*" : "" ) + Math.min( Math.round( tps * 100.0 ) / 100.0, 20.0 );
-    }
-
-    public static String getTicksPerSecond() {
-        double[] tps = Bukkit.spigot().getTPS();
-        String[] tpsAvg = new String[tps.length];
-
-        for (int i = 0; i < tps.length; i++) {
-            tpsAvg[i] = format(tps[i]);
-        }
-
-        return StringUtils.join(tpsAvg, ChatColor.GRAY +  ", " + ChatColor.GREEN);
-    }
-
-    public static String getTicksPerSecondSimplified() {
-        double[] tps = Bukkit.spigot().getTPS();
-
-        return ChatColor.GREEN + String.valueOf(Math.min(Math.round(tps[0] * 100.0 ) / 100.0, 20.0));
+    public static String getTicksPerSecondFormatted() {
+        return ChatColor.GREEN + String.format("%.2f", Math.min(CorePlugin.getInstance().getTpsRunnable().getTPS(), 20.0));
     }
 
     public static String onServerUpdate() {
@@ -41,8 +23,8 @@ public final class RedisUtil {
                 .setParam("ONLINEPLAYERS", String.valueOf(Bukkit.getOnlinePlayers().size()))
                 .setParam("MAXPLAYERS", String.valueOf(Bukkit.getMaxPlayers()))
                 .setParam("WHITELIST", String.valueOf(Bukkit.getServer().hasWhitelist()))
-                .setParam("TPS", getTicksPerSecond())
-                .setParam("TPSSIMPLE", getTicksPerSecondSimplified())
+                .setParam("TPS", getTicksPerSecondFormatted())
+                .setParam("TPSSIMPLE", getTicksPerSecondFormatted())
                 .toJson();
     }
 

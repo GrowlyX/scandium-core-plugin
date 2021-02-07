@@ -37,7 +37,7 @@ import vip.potclub.core.task.*;
 import vip.potclub.core.util.Color;
 import vip.potclub.core.util.RedisUtil;
 import vip.potclub.core.util.external.ConfigExternal;
-import vip.potclub.core.version.AbstractBukkitImplementation;
+import vip.potclub.core.version.AbstractBukkitVersionImplementation;
 import vip.potclub.core.version.extend.PingCommand_1_7;
 import vip.potclub.core.version.extend.PingCommand_1_8;
 
@@ -75,7 +75,7 @@ public final class CorePlugin extends JavaPlugin {
 
     private AbstractChatInterceptor chatInterceptor;
     private AbstractClientInjector lunarCommand;
-    private AbstractBukkitImplementation bukkitImplementation;
+    private AbstractBukkitVersionImplementation bukkitImplementation;
 
     private Executor taskThread;
     private Executor redisThread;
@@ -84,6 +84,8 @@ public final class CorePlugin extends JavaPlugin {
 
     private boolean debugging;
     private boolean disallow;
+
+    private final TPSUpdateTask tpsRunnable = new TPSUpdateTask();
 
     @Override
     public void onEnable() {
@@ -216,6 +218,8 @@ public final class CorePlugin extends JavaPlugin {
         new PlayerSaveTask();
         new ServerUpdateTask();
         new PunishSaveTask();
+
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, this.tpsRunnable, 0L, 1L);
     }
 
     @Override

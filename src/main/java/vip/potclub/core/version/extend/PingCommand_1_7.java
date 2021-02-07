@@ -9,9 +9,9 @@ import org.bukkit.entity.Player;
 import vip.potclub.core.CorePlugin;
 import vip.potclub.core.enums.ServerType;
 import vip.potclub.core.util.Color;
-import vip.potclub.core.version.AbstractBukkitImplementation;
+import vip.potclub.core.version.AbstractBukkitVersionImplementation;
 
-public class PingCommand_1_7 extends AbstractBukkitImplementation {
+public class PingCommand_1_7 extends AbstractBukkitVersionImplementation {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
