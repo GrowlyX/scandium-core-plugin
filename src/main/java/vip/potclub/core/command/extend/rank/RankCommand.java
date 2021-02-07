@@ -11,6 +11,7 @@ import vip.potclub.core.command.BaseCommand;
 import vip.potclub.core.enums.ServerType;
 import vip.potclub.core.player.ranks.Rank;
 import vip.potclub.core.util.Color;
+import vip.potclub.core.util.RedisUtil;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -30,13 +31,12 @@ public class RankCommand extends BaseCommand {
         player.sendMessage(Color.translate("/rank suffix &7- Set a rank's suffix."));
         player.sendMessage(Color.translate("/rank color &7- Set a rank's color."));
         player.sendMessage(Color.translate("/rank list &7- List all loaded ranks."));
+        player.sendMessage(Color.translate("/rank save &7- Sync ranks across network & save ranks."));
         player.sendMessage(Color.translate("/rank info &7- Show info of a rank."));
         player.sendMessage(Color.translate("/rank weight &7- Set a rank's weight."));
         player.sendMessage(Color.translate("/rank default &7- Set a rank as a default rank."));
         player.sendMessage(Color.translate("/rank addinher &7- Add an inheritance to a rank."));
         player.sendMessage(Color.translate("/rank delinher &7- Remove an inheritance from a rank."));
-        player.sendMessage(Color.translate("  "));
-        player.sendMessage(Color.translate("&7&oTIP: Make sure to use /rank save, or ranks go poof!"));
         player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
     }
 
@@ -81,9 +81,11 @@ public class RankCommand extends BaseCommand {
                             }
                         }
                         break;
+                    case "update":
                     case "save":
                         Rank.getRanks().forEach(Rank::saveRank);
                         player.sendMessage(Color.translate("&aSuccessfully saved all ranks!"));
+                        RedisUtil.writeAsync(RedisUtil.updateRanks());
                         break;
                     case "list":
                         player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
@@ -260,10 +262,7 @@ public class RankCommand extends BaseCommand {
                             Rank rank = Rank.getByName(name);
 
                             if (rank != null) {
-                                Rank.getRanks().remove(rank);
-                                CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getRankCollection().deleteOne(Filters.eq("_id", rank.getUuid())));
-
-                                player.sendMessage(Color.translate("&cDeleted the rank '" + name + "'."));
+                                RedisUtil.writeAsync(RedisUtil.deleteRank(rank.getName(), player));
                             } else {
                                 player.sendMessage(Color.translate("&cThat rank does not exist!"));
                             }
@@ -277,9 +276,7 @@ public class RankCommand extends BaseCommand {
                             if (Rank.getByName(name) != null) {
                                 player.sendMessage(Color.translate("&cThat rank already exists!"));
                             } else {
-                                Rank rank = new Rank(UUID.randomUUID(), Collections.singletonList(Objects.requireNonNull(Rank.getDefaultRank()).getUuid()), Collections.singletonList("permission.testing"), name, Color.translate("&7"), Color.translate("&7"), Color.translate("&7"), false, 0);
-                                rank.saveRank();
-                                player.sendMessage(Color.translate("&aCreated a new rank with the name '" + rank.getName() + "'."));
+                                RedisUtil.writeAsync(RedisUtil.createRank(name, player));
                             }
                         }
                         break;

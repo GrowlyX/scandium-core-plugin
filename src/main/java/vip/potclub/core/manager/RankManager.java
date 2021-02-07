@@ -5,10 +5,7 @@ import org.bson.Document;
 import vip.potclub.core.CorePlugin;
 import vip.potclub.core.player.ranks.Rank;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class RankManager {
@@ -22,10 +19,10 @@ public class RankManager {
     public void loadRanks() {
         CorePlugin.getInstance().getMongoThread().execute(() -> {
             for (Document document : CorePlugin.getInstance().getCoreDatabase().getRankCollection().find()) {
-                new Rank(
-                        UUID.fromString(document.getString("uuid")),
-                        document.getList("inheritance", UUID.class),
-                        document.getList("permissions", String.class),
+                Rank rank = new Rank(
+                        document.get("_id", UUID.class),
+                        (ArrayList<UUID>) document.get("inheritance"),
+                        (ArrayList<String>) document.get("permissions"),
                         document.getString("name"),
                         document.getString("prefix"),
                         document.getString("color"),
@@ -33,6 +30,8 @@ public class RankManager {
                         document.getBoolean("defaultRank"),
                         document.getInteger("weight")
                 );
+
+                Rank.getRanks().add(rank);
             }
         });
     }
@@ -42,8 +41,8 @@ public class RankManager {
             List<String> permissions = Collections.singletonList("scandium.default");
             Document defaultRank = new Document("_id", UUID.randomUUID());
 
-            defaultRank.put("uuid", UUID.randomUUID());
-            defaultRank.put("inheritance", null);
+            defaultRank.put("uuid", UUID.randomUUID().toString());
+            defaultRank.put("inheritance", new ArrayList<UUID>());
             defaultRank.put("permissions", permissions);
             defaultRank.put("name", "Default");
             defaultRank.put("prefix", "&7");

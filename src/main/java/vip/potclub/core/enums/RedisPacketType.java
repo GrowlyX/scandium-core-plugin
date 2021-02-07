@@ -8,30 +8,24 @@ import java.beans.ConstructorProperties;
 public enum RedisPacketType {
 
     CHAT_CHANNEL_UPDATE("ChatChannelUpdate"),
+
     PLAYER_SERVER_UPDATE("PlayerServerUpdate"),
     PLAYER_CONNECT_UPDATE("PlayerConnectUpdate"),
     PLAYER_DISCONNECT_UPDATE("PlayerDisconnectUpdate"),
-    PLAYER_MESSAGE_UPDATE("PlayerMessageUpdate"),
-    PLAYER_DISCORD_SYNC("PlayerDiscordSync"),
-    SERVER_DATA_COMMAND("ServerDataCommand"),
+
     SERVER_DATA_ONLINE("ServerDataOnline"),
     SERVER_DATA_UPDATE("ServerDataUpdate"),
     SERVER_DATA_OFFLINE("ServerDataOffline"),
+
     NETWORK_BROADCAST_PERMISSION_UPDATE("NetworkBroadcastPermissionUpdate"),
     NETWORK_BROADCAST_UPDATE("NetworkBroadcastUpdate"),
-    PUNISHMENT_EXECUTE_UPDATE(""),
-    PUNISHMENT_REMOVE_UPDATE(""),
-    ADD_RANK_UPDATE(""),
-    DELETE_RANK_UPDATE(""),
-    SET_RANK_PREFIX_UPDATE(""),
-    SET_RANK_SUFFIX_UPDATE(""),
-    ADD_GRANT_UPDATE(""),
-    DELETE_GRANT_UPDATE(""),
-    IMPORT_RANKS_UPDATE(""),
-    ADD_RANK_PERMISSION_UPDATE(""),
-    DELETE_RANK_PERMISSION_UPDATE(""),
-    ADD_PLAYER_PERMISSION_UPDATE(""),
-    DELETE_PLAYER_PERMISSION_UPDATE("");
+
+    PUNISHMENT_EXECUTE_UPDATE("PunishmentExecuteUpdate"),
+    PUNISHMENT_REMOVE_UPDATE("PunishmentRemoveUpdate"),
+
+    RANK_SETTINGS_UPDATE("RankSettingsUpdate"),
+    RANK_CREATE_UPDATE("RankCreateUpdate"),
+    RANK_DELETE_UPDATE("RankDeleteUpdate");
 
     private final String packetDataName;
 

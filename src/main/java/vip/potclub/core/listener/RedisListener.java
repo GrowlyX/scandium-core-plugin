@@ -1,6 +1,6 @@
 package vip.potclub.core.listener;
 
-import com.google.gson.Gson;
+import com.mongodb.client.model.Filters;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -16,6 +16,8 @@ import vip.potclub.core.redis.RedisMessage;
 import vip.potclub.core.server.NetworkServer;
 import vip.potclub.core.util.Color;
 
+import java.util.Collections;
+import java.util.Objects;
 import java.util.UUID;
 
 public class RedisListener extends JedisPubSub {
@@ -187,31 +189,30 @@ public class RedisListener extends JedisPubSub {
                             break;
                     }
                     break;
-                case DELETE_RANK_PERMISSION_UPDATE:
-                    Rank rank;
-                    try {
-                        rank = Rank.getByUuid(UUID.fromString(redisMessage.getParam("RANK")));
-                    } catch (Exception ex) {
-                        rank = Rank.getByName(redisMessage.getParam("RANK"));
-                        if (rank == null) {
-                            throw new IllegalArgumentException("Invalid rank parameter");
-                        }
-                    }
-                    if (rank != null) {
-                        /*
-                        final String permission2 = payload.get("permission").getAsString();
-                        rank.getPermissions().remove(permission2);
-                        final Player player2 = Bukkit.getPlayer(payload.get("player").getAsString());
-                        if (player2 != null) {
-                            player2.sendMessage(ChatColor.GREEN + "Permission '" + permission2 + "' successfully removed from rank named '" + rank.getName() + "'.");
-                        }
-                        for (final Profile profile2 : Profile.getProfiles()) {
-                            if (profile2.getActiveGrant().getRank().getUuid().equals(rank.getUuid())) {
-                                profile2.setupAtatchment();
-                            }
-                        }*/
-                    }
+                case RANK_CREATE_UPDATE:
+                    String newRankName = redisMessage.getParam("NAME");
+                    Rank newRank = new Rank(UUID.randomUUID(), Collections.singletonList(Objects.requireNonNull(Rank.getDefaultRank()).getUuid()), Collections.singletonList("permission.testing"), newRankName, Color.translate("&7"), Color.translate("&7"), Color.translate("&7"), false, 0);
+                    Player newRankPlayer = Bukkit.getPlayer(redisMessage.getParam("PLAYER"));
+                    if (newRankPlayer != null) newRankPlayer.sendMessage(ChatColor.GREEN + "Rank named '" + newRank.getName() + "' successfully created.");
 
+                    newRank.saveRank();
+                    break;
+                case RANK_DELETE_UPDATE:
+                    Rank delRank = Rank.getByName(redisMessage.getParam("RANK"));
+                    if (delRank != null) {
+                        Player delRankPlayer = Bukkit.getPlayer(redisMessage.getParam("PLAYER"));
+                        if (delRankPlayer != null) delRankPlayer.sendMessage(ChatColor.RED + "Rank named '" + delRank.getName() + "' successfully deleted.");
+
+                        Rank.getRanks().remove(delRank);
+                        CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getRankCollection().deleteOne(Filters.eq("_id", delRank.getUuid())));
+                    }
+                    break;
+                case RANK_SETTINGS_UPDATE:
+                    if (!CorePlugin.getInstance().getConfig().getString("server-id").equals(redisMessage.getParam("SERVER"))) {
+                        Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> Rank.getRanks().clear());
+                        CorePlugin.getInstance().getRankManager().loadRanks();
+                        CorePlugin.getInstance().getLogger().info("[Ranks] Synced all ranks.");
+                    }
                     break;
                 case NETWORK_BROADCAST_UPDATE:
                     String broadcastMessage = redisMessage.getParam("MESSAGE");
@@ -231,7 +232,7 @@ public class RedisListener extends JedisPubSub {
 
                     break;
                 default:
-                    CorePlugin.getInstance().getLogger().info("[Redis] We received a message, but no params were registered.");
+                    CorePlugin.getInstance().getLogger().info("[Redis] I received a message, but it was not acknowledged.");
                     break;
             }
         });

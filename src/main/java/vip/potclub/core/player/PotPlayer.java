@@ -256,10 +256,10 @@ public class PotPlayer {
             this.media.setInstagram("N/A");
         }
 
-        if ((document.getList("allGrants", String.class).isEmpty()) || (document.getList("allGrants", String.class) == null)) {
+        if ((((List<String>) document.get("allGrants")).isEmpty()) || (((List<String>) document.get("allGrants")) == null)) {
             this.allGrants.add(new Grant(null, Objects.requireNonNull(Rank.getDefaultRank()), new Date().getTime(), 2147483647L, "Automatic Grant (Default)", true, true));
         } else {
-            List<String> allGrants = document.getList("allGrants", String.class);
+            List<String> allGrants = ((List<String>) document.get("allGrants"));
             allGrants.forEach(s -> this.allGrants.add(CorePlugin.GSON.fromJson(s, Grant.class)));
         }
 
@@ -269,12 +269,12 @@ public class PotPlayer {
             this.appliedPrefix = null;
         }
 
-        if ((document.getList("allPrefixes", String.class) != null)) {
-            List<String> prefixes = document.getList("allPrefixes", String.class);
+        if (((List<String>) document.get("allPrefixes")) != null) {
+            List<String> prefixes = ((List<String>) document.get("allPrefixes"));
             this.allPrefixes.addAll(prefixes);
         }
-        if ((document.getList("allIgnored", String.class) != null)) {
-            List<String> ignoring = document.getList("allIgnored", String.class);
+        if (((List<String>) document.get("allIgnored")) != null) {
+            List<String> ignoring = ((List<String>) document.get("allIgnored"));
             if (!ignoring.isEmpty()) {
                 this.allIgnoring.addAll(ignoring);
             }

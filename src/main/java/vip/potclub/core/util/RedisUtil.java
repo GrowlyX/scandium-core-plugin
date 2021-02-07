@@ -104,11 +104,39 @@ public final class RedisUtil {
                 .toJson();
     }
 
+    public static String updateRanks() {
+        return new RedisMessage(RedisPacketType.RANK_SETTINGS_UPDATE)
+                .setParam("SERVER", CorePlugin.getInstance().getConfig().getString("server-id"))
+                .toJson();
+    }
+
+    public static String createRank(String name, Player player) {
+        return new RedisMessage(RedisPacketType.RANK_CREATE_UPDATE)
+                .setParam("NAME", name)
+                .setParam("PLAYER", player.getName())
+                .toJson();
+    }
+
+    public static String deleteRank(String rank, Player player) {
+        return new RedisMessage(RedisPacketType.RANK_CREATE_UPDATE)
+                .setParam("RANK", rank)
+                .setParam("PLAYER", player.getName())
+                .toJson();
+    }
+
     public static String onUnfreeze(Player player, Player target) {
         return new RedisMessage(RedisPacketType.PLAYER_SERVER_UPDATE)
                 .setParam("PLAYER", player.getDisplayName())
                 .setParam("TARGET", target.getName())
                 .setParam("UPDATETYPE", StaffUpdateType.FREEZE.getName())
                 .toJson();
+    }
+
+    public static void writeAsync(String message) {
+        CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(message));
+    }
+
+    public static void write(String message) {
+        CorePlugin.getInstance().getRedisClient().write(message);
     }
 }

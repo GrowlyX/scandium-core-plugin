@@ -117,7 +117,7 @@ public final class CorePlugin extends JavaPlugin {
             this.bukkitImplementation = new PingCommand_1_8();
             this.getLogger().info("[Bukkit] Hooked into Bukkit version " + this.getServer().getVersion() + "!");
         } else {
-            this.getLogger().info("[Bukkit] I don't support this version yet :( Contact growly to add support!!");
+            this.getLogger().info("[Bukkit] I don't support this version yet :( Contact growly to add support!");
         }
 
         this.serverName = this.getConfig().getString("server-id");
@@ -224,10 +224,11 @@ public final class CorePlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        this.getRedisThread().execute(() -> this.getRedisClient().write(RedisUtil.onServerOffline()));
+        RedisUtil.write(RedisUtil.onServerOffline());
 
         this.punishmentManager.savePunishments();
         this.rankManager.saveRanks();
+        RedisUtil.write(RedisUtil.updateRanks());
         this.prefixManager.savePrefixes();
         this.warpManager.saveWarps();
 
