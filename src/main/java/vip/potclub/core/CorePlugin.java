@@ -37,6 +37,9 @@ import vip.potclub.core.task.*;
 import vip.potclub.core.util.Color;
 import vip.potclub.core.util.RedisUtil;
 import vip.potclub.core.util.external.ConfigExternal;
+import vip.potclub.core.version.AbstractBukkitImplementation;
+import vip.potclub.core.version.extend.PingCommand_1_7;
+import vip.potclub.core.version.extend.PingCommand_1_8;
 
 import java.text.SimpleDateFormat;
 import java.util.Random;
@@ -72,6 +75,7 @@ public final class CorePlugin extends JavaPlugin {
 
     private AbstractChatInterceptor chatInterceptor;
     private AbstractClientInjector lunarCommand;
+    private AbstractBukkitImplementation bukkitImplementation;
 
     private Executor taskThread;
     private Executor redisThread;
@@ -104,6 +108,16 @@ public final class CorePlugin extends JavaPlugin {
         if (this.getServer().getPluginManager().isPluginEnabled("ProtocolLib")) chatInterceptor = new ProtocolChatInterceptor(); else this.getLogger().info("[Protocol] Could not find ProtocolLib! Chat tab block will not work without it!");
         if (this.getServer().getPluginManager().isPluginEnabled("LunarClient-API")) lunarCommand = new LunarCommand(); else this.getLogger().info("[Protocol] Could not find LunarClient-API! The /lunar command will not work without it!");
 
+        if (this.getServer().getVersion().contains("1.7")) {
+            this.bukkitImplementation = new PingCommand_1_7();
+            this.getLogger().info("[Bukkit] Hooked into Bukkit version " + this.getServer().getVersion() + "!");
+        } else if (this.getServer().getVersion().contains("1.8")) {
+            this.bukkitImplementation = new PingCommand_1_8();
+            this.getLogger().info("[Bukkit] Hooked into Bukkit version " + this.getServer().getVersion() + "!");
+        } else {
+            this.getLogger().info("[Bukkit] I don't support this version yet :( Contact growly to add support!!");
+        }
+
         this.serverName = this.getConfig().getString("server-id");
         this.debugging = false;
         this.disallow = false;
@@ -133,7 +147,6 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("kill").setExecutor(new KillCommand());
         this.getCommand("feed").setExecutor(new FeedCommand());
         this.getCommand("heal").setExecutor(new HealCommand());
-        this.getCommand("ping").setExecutor(new PingCommand());
         this.getCommand("tppos").setExecutor(new TpPosCommand());
         this.getCommand("sudo").setExecutor(new SudoCommand());
         this.getCommand("list").setExecutor(new ListCommand());
@@ -191,7 +204,9 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("toggletips").setExecutor(new ToggleTipsCommand());
         this.getCommand("togglestaffmessages").setExecutor(new ToggleStaffMessagesCommand());
 
-//        if (this.lunarCommand != null) this.getCommand("lunar").setExecutor(lunarCommand);
+        if (this.lunarCommand != null) this.getCommand("lunar").setExecutor(lunarCommand);
+        if (this.chatInterceptor != null) this.chatInterceptor.initializePacketInterceptor();
+        if (this.bukkitImplementation != null) this.getCommand("ping").setExecutor(bukkitImplementation);
 
         Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
 

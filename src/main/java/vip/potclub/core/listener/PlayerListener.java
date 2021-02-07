@@ -89,13 +89,18 @@ public class PlayerListener implements Listener {
             event.setCancelled(true);
             CorePlugin.getInstance().getPlayerManager().sendFreezeMessage(event.getPlayer());
         }
-        // TODO - Finish this listener & others
     }
 
     @EventHandler
     public void onDamaged(EntityDamageEvent event) {
         if (event.getEntityType().equals(EntityType.PLAYER)) {
             Player player = (Player) event.getEntity();
+            PotPlayer potPlayer = PotPlayer.getPlayer(player);
+
+            if (potPlayer.isFrozen()) {
+                event.setCancelled(true);
+                CorePlugin.getInstance().getPlayerManager().sendFreezeMessage(player);
+            }
         }
     }
 

@@ -2,7 +2,6 @@ package vip.potclub.core.command.extend.rank;
 
 import com.mongodb.client.model.Filters;
 import org.apache.commons.lang.StringUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -10,8 +9,6 @@ import org.bukkit.entity.Player;
 import vip.potclub.core.CorePlugin;
 import vip.potclub.core.command.BaseCommand;
 import vip.potclub.core.enums.ServerType;
-import vip.potclub.core.player.PotPlayer;
-import vip.potclub.core.player.punishment.Punishment;
 import vip.potclub.core.player.ranks.Rank;
 import vip.potclub.core.util.Color;
 

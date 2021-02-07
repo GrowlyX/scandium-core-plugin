@@ -97,6 +97,7 @@ public class GrantHistoryViewMenu extends AbstractInventoryMenu<CorePlugin> {
                         potPlayer.getAllGrants().remove(grant);
                         player.sendMessage(Color.translate("&aRemoved that grant from &b" + potPlayer.getName() + "'s &ahistory!"));
                         player.closeInventory();
+
                         new GrantHistoryViewMenu(player, target).open(player);
                     }
                 }

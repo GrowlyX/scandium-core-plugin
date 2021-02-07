@@ -18,7 +18,20 @@ public enum RedisPacketType {
     SERVER_DATA_UPDATE("ServerDataUpdate"),
     SERVER_DATA_OFFLINE("ServerDataOffline"),
     NETWORK_BROADCAST_PERMISSION_UPDATE("NetworkBroadcastPermissionUpdate"),
-    NETWORK_BROADCAST_UPDATE("NetworkBroadcastUpdate");
+    NETWORK_BROADCAST_UPDATE("NetworkBroadcastUpdate"),
+    PUNISHMENT_EXECUTE_UPDATE(""),
+    PUNISHMENT_REMOVE_UPDATE(""),
+    ADD_RANK_UPDATE(""),
+    DELETE_RANK_UPDATE(""),
+    SET_RANK_PREFIX_UPDATE(""),
+    SET_RANK_SUFFIX_UPDATE(""),
+    ADD_GRANT_UPDATE(""),
+    DELETE_GRANT_UPDATE(""),
+    IMPORT_RANKS_UPDATE(""),
+    ADD_RANK_PERMISSION_UPDATE(""),
+    DELETE_RANK_PERMISSION_UPDATE(""),
+    ADD_PLAYER_PERMISSION_UPDATE(""),
+    DELETE_PLAYER_PERMISSION_UPDATE("");
 
     private final String packetDataName;
 

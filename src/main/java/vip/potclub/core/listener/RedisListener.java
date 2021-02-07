@@ -2,6 +2,8 @@ package vip.potclub.core.listener;
 
 import com.google.gson.Gson;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import redis.clients.jedis.JedisPubSub;
 import vip.potclub.core.CorePlugin;
 import vip.potclub.core.enums.ChatChannelType;
@@ -9,9 +11,12 @@ import vip.potclub.core.enums.NetworkServerStatusType;
 import vip.potclub.core.enums.NetworkServerType;
 import vip.potclub.core.enums.StaffUpdateType;
 import vip.potclub.core.player.PotPlayer;
+import vip.potclub.core.player.ranks.Rank;
 import vip.potclub.core.redis.RedisMessage;
 import vip.potclub.core.server.NetworkServer;
 import vip.potclub.core.util.Color;
+
+import java.util.UUID;
 
 public class RedisListener extends JedisPubSub {
 
@@ -181,6 +186,32 @@ public class RedisListener extends JedisPubSub {
                             });
                             break;
                     }
+                    break;
+                case DELETE_RANK_PERMISSION_UPDATE:
+                    Rank rank;
+                    try {
+                        rank = Rank.getByUuid(UUID.fromString(redisMessage.getParam("RANK")));
+                    } catch (Exception ex) {
+                        rank = Rank.getByName(redisMessage.getParam("RANK"));
+                        if (rank == null) {
+                            throw new IllegalArgumentException("Invalid rank parameter");
+                        }
+                    }
+                    if (rank != null) {
+                        /*
+                        final String permission2 = payload.get("permission").getAsString();
+                        rank.getPermissions().remove(permission2);
+                        final Player player2 = Bukkit.getPlayer(payload.get("player").getAsString());
+                        if (player2 != null) {
+                            player2.sendMessage(ChatColor.GREEN + "Permission '" + permission2 + "' successfully removed from rank named '" + rank.getName() + "'.");
+                        }
+                        for (final Profile profile2 : Profile.getProfiles()) {
+                            if (profile2.getActiveGrant().getRank().getUuid().equals(rank.getUuid())) {
+                                profile2.setupAtatchment();
+                            }
+                        }*/
+                    }
+
                     break;
                 case NETWORK_BROADCAST_UPDATE:
                     String broadcastMessage = redisMessage.getParam("MESSAGE");
