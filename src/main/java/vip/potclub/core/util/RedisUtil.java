@@ -10,6 +10,8 @@ import vip.potclub.core.enums.RedisPacketType;
 import vip.potclub.core.enums.StaffUpdateType;
 import vip.potclub.core.redis.RedisMessage;
 
+import java.util.UUID;
+
 public final class RedisUtil {
 
     public static String getTicksPerSecondFormatted() {
@@ -110,15 +112,16 @@ public final class RedisUtil {
                 .toJson();
     }
 
-    public static String createRank(String name, Player player) {
+    public static String createRank(String name, Player player, String uuid) {
         return new RedisMessage(RedisPacketType.RANK_CREATE_UPDATE)
                 .setParam("NAME", name)
+                .setParam("UUID", uuid)
                 .setParam("PLAYER", player.getName())
                 .toJson();
     }
 
     public static String deleteRank(String rank, Player player) {
-        return new RedisMessage(RedisPacketType.RANK_CREATE_UPDATE)
+        return new RedisMessage(RedisPacketType.RANK_DELETE_UPDATE)
                 .setParam("RANK", rank)
                 .setParam("PLAYER", player.getName())
                 .toJson();

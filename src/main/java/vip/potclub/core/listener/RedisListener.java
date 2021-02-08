@@ -191,7 +191,8 @@ public class RedisListener extends JedisPubSub {
                     break;
                 case RANK_CREATE_UPDATE:
                     String newRankName = redisMessage.getParam("NAME");
-                    Rank newRank = new Rank(UUID.randomUUID(), Collections.singletonList(Objects.requireNonNull(Rank.getDefaultRank()).getUuid()), Collections.singletonList("permission.testing"), newRankName, Color.translate("&7"), Color.translate("&7"), Color.translate("&7"), false, 0);
+                    String newRankId = redisMessage.getParam("UUID");
+                    Rank newRank = new Rank(UUID.fromString(newRankId), Collections.singletonList(Objects.requireNonNull(Rank.getDefaultRank()).getUuid()), Collections.singletonList("permission.testing"), newRankName, Color.translate("&7"), Color.translate("&7"), Color.translate("&7"), false, 0);
                     Player newRankPlayer = Bukkit.getPlayer(redisMessage.getParam("PLAYER"));
                     if (newRankPlayer != null) newRankPlayer.sendMessage(ChatColor.GREEN + "Rank named '" + newRank.getName() + "' successfully created.");
 

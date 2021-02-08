@@ -19,19 +19,19 @@ public class RankManager {
     public void loadRanks() {
         CorePlugin.getInstance().getMongoThread().execute(() -> {
             for (Document document : CorePlugin.getInstance().getCoreDatabase().getRankCollection().find()) {
-                Rank rank = new Rank(
-                        document.get("_id", UUID.class),
-                        (ArrayList<UUID>) document.get("inheritance"),
-                        (ArrayList<String>) document.get("permissions"),
-                        document.getString("name"),
-                        document.getString("prefix"),
-                        document.getString("color"),
-                        document.getString("suffix"),
-                        document.getBoolean("defaultRank"),
-                        document.getInteger("weight")
-                );
-
-                Rank.getRanks().add(rank);
+                if (Rank.getByName(document.getString("name")) == null) {
+                    new Rank(
+                            UUID.fromString(document.getString("uuid")),
+                            (ArrayList<UUID>) document.get("inheritance"),
+                            (ArrayList<String>) document.get("permissions"),
+                            document.getString("name"),
+                            document.getString("prefix"),
+                            document.getString("color"),
+                            document.getString("suffix"),
+                            document.getBoolean("defaultRank"),
+                            document.getInteger("weight")
+                    );
+                }
             }
         });
     }
@@ -51,7 +51,7 @@ public class RankManager {
             defaultRank.put("defaultRank", true);
             defaultRank.put("weight", 0);
 
-            CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getRankCollection().insertOne(defaultRank));
+            CorePlugin.getInstance().getCoreDatabase().getRankCollection().insertOne(defaultRank);
         }
     }
 

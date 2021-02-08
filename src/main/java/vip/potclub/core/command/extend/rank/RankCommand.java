@@ -276,7 +276,7 @@ public class RankCommand extends BaseCommand {
                             if (Rank.getByName(name) != null) {
                                 player.sendMessage(Color.translate("&cThat rank already exists!"));
                             } else {
-                                RedisUtil.writeAsync(RedisUtil.createRank(name, player));
+                                RedisUtil.writeAsync(RedisUtil.createRank(name, player, UUID.randomUUID().toString()));
                             }
                         }
                         break;

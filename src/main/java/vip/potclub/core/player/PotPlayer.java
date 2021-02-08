@@ -256,7 +256,7 @@ public class PotPlayer {
             this.media.setInstagram("N/A");
         }
 
-        if ((((List<String>) document.get("allGrants")).isEmpty()) || (((List<String>) document.get("allGrants")) == null)) {
+        if ((((List<String>) document.get("allGrants")).isEmpty()) || (document.get("allGrants") == null)) {
             this.allGrants.add(new Grant(null, Objects.requireNonNull(Rank.getDefaultRank()), new Date().getTime(), 2147483647L, "Automatic Grant (Default)", true, true));
         } else {
             List<String> allGrants = ((List<String>) document.get("allGrants"));
@@ -269,11 +269,11 @@ public class PotPlayer {
             this.appliedPrefix = null;
         }
 
-        if (((List<String>) document.get("allPrefixes")) != null) {
+        if (document.get("allPrefixes") != null) {
             List<String> prefixes = ((List<String>) document.get("allPrefixes"));
             this.allPrefixes.addAll(prefixes);
         }
-        if (((List<String>) document.get("allIgnored")) != null) {
+        if (document.get("allIgnored") != null) {
             List<String> ignoring = ((List<String>) document.get("allIgnored"));
             if (!ignoring.isEmpty()) {
                 this.allIgnoring.addAll(ignoring);
@@ -359,17 +359,28 @@ public class PotPlayer {
     public Grant getActiveGrant() {
         Grant toReturn = null;
         for (Grant grant : this.getAllGrants()) {
-            if (grant.isActive() && !grant.getRank().defaultRank) {
-                toReturn = grant;
+            if (grant != null) {
+                if (grant.isActive() && !grant.getRank().defaultRank) {
+                    toReturn = grant;
+                }
             }
         }
-        if (toReturn == null) toReturn = new Grant(null, Objects.requireNonNull(Rank.getDefaultRank()), System.currentTimeMillis(), 2147483647L, "Automatic Grant (Default)", true, true);
+        if (toReturn == null) {
+            toReturn = new Grant(null, Objects.requireNonNull(Rank.getDefaultRank()), System.currentTimeMillis(), 2147483647L, "Automatic Grant (Default)", true, true);
+            this.getAllGrants().add(toReturn);
+        }
         return toReturn;
     }
 
     public void setupAttachment() {
         if (this.player != null) {
-            Grant grant = this.getActiveGrant();
+            Grant grant;
+            try {
+                grant = this.getActiveGrant();
+            } catch (Exception e) {
+                grant = new Grant(null, Objects.requireNonNull(Rank.getDefaultRank()), System.currentTimeMillis(), 2147483647L, "Automatic Grant (Default)", true, true);
+                this.getAllGrants().add(grant);
+            }
             this.player.setDisplayName(Color.translate(grant.getRank().getColor() + player.getName()));
         }
 
