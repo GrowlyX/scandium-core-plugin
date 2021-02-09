@@ -89,9 +89,11 @@ public class PotPlayer {
 
         this.attachment = this.player.addAttachment(CorePlugin.getInstance());
 
-        loadPlayerData();
-
-        profilePlayers.put(uuid, this);
+        if (loadPlayerData()) {
+            profilePlayers.put(uuid, this);
+        } else {
+            player.kickPlayer(Color.translate("&cCould not load your core profile!\n&cPlease try again later, or contact a developer!"));
+        }
     }
 
     public void saveWithoutRemove() {
@@ -193,9 +195,9 @@ public class PotPlayer {
         profilePlayers.remove(uuid);
     }
 
-    public void loadPlayerData() {
+    public boolean loadPlayerData() {
         Document document = CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("_id", this.uuid)).first();
-        if (document == null) return;
+        if (document == null) return false;
 
         this.name = document.getString("name");
 
@@ -257,7 +259,7 @@ public class PotPlayer {
         }
 
         if ((((List<String>) document.get("allGrants")).isEmpty()) || (document.get("allGrants") == null)) {
-            this.allGrants.add(new Grant(null, Objects.requireNonNull(Rank.getDefaultRank()), new Date().getTime(), 2147483647L, "Automatic Grant (Default)", true, true));
+            this.allGrants.add(new Grant(null, Objects.requireNonNull(Rank.getDefault()), new Date().getTime(), 2147483647L, "Automatic Grant (Default)", true, true));
         } else {
             List<String> allGrants = ((List<String>) document.get("allGrants"));
             allGrants.forEach(s -> this.allGrants.add(CorePlugin.GSON.fromJson(s, Grant.class)));
@@ -324,6 +326,8 @@ public class PotPlayer {
         this.currentlyOnline = true;
 
         Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), this::saveWithoutRemove, 10 * 20L);
+
+        return true;
     }
 
     public boolean isMuted() {
@@ -358,15 +362,20 @@ public class PotPlayer {
 
     public Grant getActiveGrant() {
         Grant toReturn = null;
+
         for (Grant grant : this.getAllGrants()) {
             if (grant != null) {
-                if (grant.isActive() && !grant.getRank().defaultRank) {
-                    toReturn = grant;
+                try {
+                    if (grant.isActive() && !grant.getRank().isDefaultRank()) {
+                        toReturn = grant;
+                    }
+                } catch (Exception e) {
+                    toReturn = new Grant(null, Objects.requireNonNull(Rank.getDefault()), System.currentTimeMillis(), 2147483647L, "Automatic Grant (Default)", true, true);
                 }
             }
         }
         if (toReturn == null) {
-            toReturn = new Grant(null, Objects.requireNonNull(Rank.getDefaultRank()), System.currentTimeMillis(), 2147483647L, "Automatic Grant (Default)", true, true);
+            toReturn = new Grant(null, Objects.requireNonNull(Rank.getDefault()), System.currentTimeMillis(), 2147483647L, "Automatic Grant (Default)", true, true);
             this.getAllGrants().add(toReturn);
         }
         return toReturn;
@@ -378,7 +387,7 @@ public class PotPlayer {
             try {
                 grant = this.getActiveGrant();
             } catch (Exception e) {
-                grant = new Grant(null, Objects.requireNonNull(Rank.getDefaultRank()), System.currentTimeMillis(), 2147483647L, "Automatic Grant (Default)", true, true);
+                grant = new Grant(null, Objects.requireNonNull(Rank.getDefault()), System.currentTimeMillis(), 2147483647L, "Automatic Grant (Default)", true, true);
                 this.getAllGrants().add(grant);
             }
             this.player.setDisplayName(Color.translate(grant.getRank().getColor() + player.getName()));

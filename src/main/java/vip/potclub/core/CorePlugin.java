@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import vip.potclub.core.command.extend.CoreCommand;
 import vip.potclub.core.command.extend.anticheat.AnticheatBanCommand;
@@ -210,7 +211,7 @@ public final class CorePlugin extends JavaPlugin {
         if (this.chatInterceptor != null) this.chatInterceptor.initializePacketInterceptor();
         if (this.bukkitImplementation != null) this.getCommand("ping").setExecutor(bukkitImplementation);
 
-        Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
+        this.registerListeners(new PlayerListener());
 
         new AutoMessageTask();
         new PunishExpireTask();
@@ -229,14 +230,20 @@ public final class CorePlugin extends JavaPlugin {
         this.punishmentManager.savePunishments();
         this.rankManager.saveRanks();
         RedisUtil.write(RedisUtil.updateRanks());
-        this.prefixManager.savePrefixes();
         this.warpManager.saveWarps();
 
+        this.prefixManager.savePrefixes();
         this.getServer().getOnlinePlayers().forEach(player -> player.kickPlayer(Color.translate("&cThe server is currently rebooting.\n&cPlease reconnect in a few minutes, or check discord for more information.")));
         this.getServer().getScheduler().cancelAllTasks();
 
         if (this.redisClient.isClientActive()) {
             this.redisClient.destroyClient();
+        }
+    }
+
+    public void registerListeners(Listener... listeners) {
+        for (Listener listener : listeners) {
+            Bukkit.getPluginManager().registerEvents(listener, this);
         }
     }
 }

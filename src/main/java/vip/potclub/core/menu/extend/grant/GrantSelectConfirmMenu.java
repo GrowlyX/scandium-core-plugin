@@ -31,7 +31,7 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu<CorePlugin> {
     private final boolean permanent;
 
     public GrantSelectConfirmMenu(Player player, Player target, Rank rank, long duration, String reason, boolean permanent) {
-        super("Grants - Confirm", 9*3);
+        super("Grants - Confirm", 9*5);
         this.player = player;
         this.target = target;
         this.rank = rank;
@@ -45,16 +45,28 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu<CorePlugin> {
     private void update() {
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
-        this.inventory.setItem(13, new InventoryMenuItem(Material.NETHER_STAR).setDisplayName("&bConfirm Grant").addLore(Arrays.asList(
-                "",
-                network.getSecondaryColor() + "Issuer: " + network.getMainColor() + player.getDisplayName(),
-                network.getSecondaryColor() + "Target: " + network.getMainColor() + target.getDisplayName(),
-                network.getSecondaryColor() + "Rank: " + network.getMainColor() + rank.getColor() + rank.getName(),
-                network.getSecondaryColor() + "Duration: " + network.getMainColor()  + (isPermanent() ? "&4Forever" : DurationFormatUtils.formatDurationWords(duration, true, true)),
-                network.getSecondaryColor() + "Reason: " + network.getMainColor()  + reason,
-                "",
-                "&bClick to confirm grant."
-        )).create());
+        int[] intsConfirm = new int[] { 10,11,12,19,20,21,28,29,30 };
+        int[] intsDecline = new int[] { 14,15,16,23,24,25,32,33,34 };
+
+        for (int i : intsConfirm) {
+            this.inventory.setItem(i, new InventoryMenuItem(Material.STAINED_CLAY, 5).setDisplayName("&aConfirm Grant").addLore(Arrays.asList(
+                    "",
+                    network.getSecondaryColor() + "Issuer: " + network.getMainColor() + player.getDisplayName(),
+                    network.getSecondaryColor() + "Target: " + network.getMainColor() + target.getDisplayName(),
+                    network.getSecondaryColor() + "Rank: " + network.getMainColor() + rank.getColor() + rank.getName(),
+                    network.getSecondaryColor() + "Duration: " + network.getMainColor()  + (isPermanent() ? "&4Forever" : DurationFormatUtils.formatDurationWords(duration, true, true)),
+                    network.getSecondaryColor() + "Reason: " + network.getMainColor()  + reason,
+                    "",
+                    "&eClick to confirm grant."
+            )).create());
+        }
+
+        for (int i : intsDecline) {
+            this.inventory.setItem(i, new InventoryMenuItem(Material.STAINED_CLAY, 14).setDisplayName("&cCancel Grant").addLore(Arrays.asList(
+                    "",
+                    "&eClick to cancel this grant."
+            )).create());
+        }
     }
 
     @Override
@@ -67,7 +79,7 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu<CorePlugin> {
 
             Player player = (Player) event.getWhoClicked();
 
-            if (event.getSlot() == 13) {
+            if (ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()).contains("Confirm")) {
                 Grant newGrant = new Grant(player.getUniqueId(), rank, System.currentTimeMillis(), System.currentTimeMillis() - duration, reason, true, permanent);
                 PotPlayer targetPotPlayer = PotPlayer.getPlayer(target);
 
@@ -78,6 +90,9 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu<CorePlugin> {
                 target.sendMessage(ChatColor.GREEN + Color.translate("Your rank has been set to " + newGrant.getRank().getColor() + newGrant.getRank().getName() + ChatColor.GREEN + "."));
                 player.sendMessage(ChatColor.GREEN + Color.translate("Set " + target.getDisplayName() + ChatColor.GREEN + "'s rank to " + newGrant.getRank().getColor() + newGrant.getRank().getName() + ChatColor.GREEN + "."));
 
+                player.closeInventory();
+            } else if (ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()).contains("Cancel")) {
+                player.sendMessage(Color.translate("&cCancelled the granting process."));
                 player.closeInventory();
             }
         }

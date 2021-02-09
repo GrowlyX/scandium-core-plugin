@@ -29,7 +29,7 @@ public class Rank {
 
     private String color;
 
-    public boolean defaultRank;
+    private boolean defaultRank;
 
     private int weight;
 
@@ -79,9 +79,9 @@ public class Rank {
         CorePlugin.getInstance().getCoreDatabase().getRankCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true));
     }
 
-    public static Rank getDefaultRank() {
+    public static Rank getDefault() {
         for (Rank rank : Rank.getRanks()) {
-            if (rank.defaultRank) {
+            if (rank.isDefaultRank()) {
                 return rank;
             }
         }

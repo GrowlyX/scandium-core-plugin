@@ -17,7 +17,10 @@ import vip.potclub.core.util.Color;
 import vip.potclub.core.util.WoolUtil;
 
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Getter
 public class GrantMainMenu extends AbstractInventoryMenu<CorePlugin> {
@@ -26,7 +29,7 @@ public class GrantMainMenu extends AbstractInventoryMenu<CorePlugin> {
     private final Player target;
 
     public GrantMainMenu(Player player, Player target) {
-        super("Grants - Select", 9*2);
+        super("Grants - Select", 9*3);
         this.player = player;
         this.target = target;
         this.update();
@@ -36,20 +39,18 @@ public class GrantMainMenu extends AbstractInventoryMenu<CorePlugin> {
         AtomicInteger i = new AtomicInteger(0);
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
-        Rank.getRanks().forEach(rank -> {
-            if (i.get() <= 17) {
-                this.inventory.setItem(i.get(), new InventoryMenuItem(Material.NAME_TAG)
-                        .addLore(Arrays.asList(
-                                "&b&m--------------------------------",
-                                network.getSecondaryColor() + "Click to grant the " + rank.getColor() + rank.getName() + network.getSecondaryColor() + " rank!",
-                                "&b&m--------------------------------"
-                        ))
-                        .setDisplayName(rank.getColor() + rank.getName())
-                        .create()
-                );
+        getSortedRanks().forEach(rank -> {
+            this.inventory.setItem(i.get(), new InventoryMenuItem(Material.NAME_TAG)
+                    .addLore(Arrays.asList(
+                            "&b&m--------------------------------",
+                            network.getSecondaryColor() + "Click to grant the " + rank.getColor() + rank.getName() + network.getSecondaryColor() + " rank!",
+                            "&b&m--------------------------------"
+                    ))
+                    .setDisplayName(rank.getColor() + rank.getName())
+                    .create()
+            );
 
-                i.getAndIncrement();
-            }
+            i.getAndIncrement();
         });
     }
 
@@ -63,7 +64,6 @@ public class GrantMainMenu extends AbstractInventoryMenu<CorePlugin> {
 
             ItemStack item = event.getCurrentItem();
             Player player = (Player) event.getWhoClicked();
-            PotPlayer potPlayer = PotPlayer.getPlayer(player);
 
             if (item.hasItemMeta()) {
                 if (item.getItemMeta().getDisplayName() != null) {
@@ -76,5 +76,9 @@ public class GrantMainMenu extends AbstractInventoryMenu<CorePlugin> {
                 }
             }
         }
+    }
+
+    private List<Rank> getSortedRanks() {
+        return Rank.getRanks().stream().sorted(Comparator.comparingInt(Rank::getWeight)).collect(Collectors.toList());
     }
 }

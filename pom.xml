@@ -64,6 +64,10 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
+        <repository>
+            <id>moonsworth</id>
+            <url>https://maven.moonsworth.com/repository/lunarclient-public/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -101,8 +105,6 @@
             <groupId>com.lunarclient</groupId>
             <artifactId>bukkitapi</artifactId>
             <version>1.0-20200212.020644-1</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/lib/LunarClientAPI.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.mongodb</groupId>
