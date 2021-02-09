@@ -62,45 +62,50 @@ public class PunishmentManager {
         this.punishments.forEach(Punishment::saveMainThread);
     }
 
-    public void handlePunishment(Punishment punishment, Player player, Player target, boolean silent) {
+    public void handlePunishment(Punishment punishment, Player player, String target, boolean silent) {
         this.punishments.add(punishment);
+
+        PotPlayer potPlayer = null;
+        try {
+            potPlayer = PotPlayer.getPlayer(target);
+        } catch (Exception ignored) {}
+
+        PotPlayer finalPotPlayer = potPlayer;
+
         if (silent) {
             Bukkit.getOnlinePlayers().forEach(player1 -> {
                 if (player1.hasPermission("scandium.staff")) {
                     player1.sendMessage(Color.translate(
-                            "&7[Silent] " + target.getDisplayName() + " &awas " + (punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (player != null ? player.getDisplayName() : "&4Console") + "&a."
+                            "&7[Silent] " + (finalPotPlayer != null ? finalPotPlayer.getPlayer().getDisplayName() : "&7" + target) + " &awas " + (punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (player != null ? player.getDisplayName() : "&4Console") + "&a."
                     ));
                 }
             });
         } else {
             Bukkit.broadcastMessage(Color.translate(
-                    target.getDisplayName() + " &awas " + (punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (player != null ? player.getDisplayName() : "&Console") + "&a."
+                    (finalPotPlayer != null ? finalPotPlayer.getPlayer().getDisplayName() : "&7" + target) + " &awas " + (punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (player != null ? player.getDisplayName() : "&Console") + "&a."
             ));
         }
         switch (punishment.getPunishmentType()) {
             case BLACKLIST:
                 if (target != null) {
-                    PotPlayer potPlayer = PotPlayer.getPlayer(target);
-                    if (potPlayer != null) {
-                        potPlayer.setCurrentlyBanned(true);
-                        target.kickPlayer(Color.translate(PunishmentStrings.BLCK_MESSAGE.replace("<reason>", punishment.getReason())));
+                    if (finalPotPlayer != null) {
+                        finalPotPlayer.setCurrentlyBanned(true);
+                        finalPotPlayer.getPlayer().kickPlayer(Color.translate(PunishmentStrings.BLCK_MESSAGE.replace("<reason>", punishment.getReason())));
                     }
                 }
             case IPBAN:
             case BAN:
                 if (target != null) {
-                    PotPlayer potPlayer = PotPlayer.getPlayer(target);
-                    if (potPlayer != null) {
-                        potPlayer.setCurrentlyBanned(true);
-                        target.kickPlayer((punishment.isPermanent() ? Color.translate(PunishmentStrings.BAN_MESSAGE_PERM.replace("<reason>", punishment.getReason())) : Color.translate(PunishmentStrings.BAN_MESSAGE_TEMP.replace("<reason>", punishment.getReason()).replace("<time>", punishment.getDurationString()))));
+                    if (finalPotPlayer != null) {
+                        finalPotPlayer.setCurrentlyBanned(true);
+                        finalPotPlayer.getPlayer().kickPlayer((punishment.isPermanent() ? Color.translate(PunishmentStrings.BAN_MESSAGE_PERM.replace("<reason>", punishment.getReason())) : Color.translate(PunishmentStrings.BAN_MESSAGE_TEMP.replace("<reason>", punishment.getReason()).replace("<time>", punishment.getDurationString()))));
                     }
                 }
                 break;
             case KICK:
                 if (target != null) {
-                    PotPlayer potPlayer = PotPlayer.getPlayer(target);
-                    if (potPlayer != null) {
-                        target.kickPlayer(Color.translate(PunishmentStrings.KICK_MESSAGE.replace("<reason>", punishment.getReason())));
+                    if (finalPotPlayer != null) {
+                        finalPotPlayer.getPlayer().kickPlayer(Color.translate(PunishmentStrings.KICK_MESSAGE.replace("<reason>", punishment.getReason())));
                     }
                 }
                 break;

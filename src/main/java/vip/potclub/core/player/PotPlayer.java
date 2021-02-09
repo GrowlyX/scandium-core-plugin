@@ -89,11 +89,8 @@ public class PotPlayer {
 
         this.attachment = this.player.addAttachment(CorePlugin.getInstance());
 
-        if (loadPlayerData()) {
-            profilePlayers.put(uuid, this);
-        } else {
-            player.kickPlayer(Color.translate("&cCould not load your core profile!\n&cPlease try again later, or contact a developer!"));
-        }
+        this.loadPlayerData();
+        profilePlayers.put(uuid, this);
     }
 
     public void saveWithoutRemove() {

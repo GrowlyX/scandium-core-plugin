@@ -18,9 +18,9 @@ import vip.potclub.core.util.Color;
 public class PunishSelectPunishTypeMenu extends AbstractInventoryMenu<CorePlugin> {
 
     private Player player;
-    private Player target;
+    private String target;
 
-    public PunishSelectPunishTypeMenu(Player player, Player target) {
+    public PunishSelectPunishTypeMenu(Player player, String target) {
         super("Punishment - Type", 9*3);
         this.player = player;
         this.target = target;
@@ -28,10 +28,6 @@ public class PunishSelectPunishTypeMenu extends AbstractInventoryMenu<CorePlugin
     }
 
     private void update() {
-        while (this.inventory.firstEmpty() != -1) {
-            this.inventory.setItem(this.inventory.firstEmpty(), new InventoryMenuItem(Material.STAINED_GLASS_PANE, 7).setDisplayName(" ").create());
-        }
-
         this.inventory.setItem(10, new InventoryMenuItem(Material.BARRIER).setDisplayName("&aBan").create());
         this.inventory.setItem(11, new InventoryMenuItem(Material.WOOD_AXE).setDisplayName("&eKick").create());
         this.inventory.setItem(12, new InventoryMenuItem(Material.SLIME_BALL).setDisplayName("&6Mute").create());

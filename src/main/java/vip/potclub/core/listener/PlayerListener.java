@@ -14,6 +14,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.event.server.ServerListPingEvent;
+import org.json.simple.parser.ParseException;
 import vip.potclub.core.CorePlugin;
 import vip.potclub.core.enums.ChatChannelType;
 import vip.potclub.core.media.MediaConstants;
@@ -25,6 +26,7 @@ import vip.potclub.core.player.punishment.PunishmentType;
 import vip.potclub.core.util.Color;
 import vip.potclub.core.util.RedisUtil;
 
+import java.io.IOException;
 import java.util.regex.Matcher;
 
 public class PlayerListener implements Listener {
@@ -105,7 +107,7 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
-    public void onInventoryClick(InventoryClickEvent event) {
+    public void onInventoryClick(InventoryClickEvent event) throws IOException, ParseException {
         if (event.getInventory().getHolder() instanceof IMenu) {
             ((IMenu) event.getInventory().getHolder()).onInventoryClick(event);
         }

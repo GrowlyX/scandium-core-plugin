@@ -5,7 +5,10 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.InventoryHolder;
+import org.json.simple.parser.ParseException;
 import vip.potclub.core.util.InventoryUtil;
+
+import java.io.IOException;
 
 public interface IMenu extends InventoryHolder {
 
@@ -13,7 +16,7 @@ public interface IMenu extends InventoryHolder {
         player.openInventory(this.getInventory());
     }
 
-    void onInventoryClick(InventoryClickEvent event);
+    void onInventoryClick(InventoryClickEvent event) throws IOException, ParseException;
 
     default void onInventoryDrag(InventoryDragEvent event) {
         if (InventoryUtil.clickedTopInventory(event)) event.setCancelled(true);

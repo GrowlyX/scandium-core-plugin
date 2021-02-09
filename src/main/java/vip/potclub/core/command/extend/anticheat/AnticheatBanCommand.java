@@ -33,7 +33,7 @@ public class AnticheatBanCommand extends BaseCommand {
                     PotPlayer potPlayer = PotPlayer.getPlayer(target);
                     potPlayer.getPunishments().add(punishment);
 
-                    CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, null, target, true);
+                    CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, null, target.getName(), true);
                     potPlayer.saveWithoutRemove();
 
                     sender.sendMessage(Color.translate("&aExecuted punishment."));

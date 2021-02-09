@@ -19,11 +19,11 @@ import vip.potclub.core.player.punishment.PunishmentType;
 public class PunishSelectDurationMenu extends AbstractInventoryMenu<CorePlugin> {
 
     private Player player;
-    private Player target;
+    private String target;
     private String reason;
     private PunishmentType punishmentType;
 
-    public PunishSelectDurationMenu(Player player, Player target, String reason, PunishmentType punishmentType) {
+    public PunishSelectDurationMenu(Player player, String target, String reason, PunishmentType punishmentType) {
         super("Punishment - Duration", 9*3);
         this.player = player;
         this.target = target;
@@ -33,9 +33,6 @@ public class PunishSelectDurationMenu extends AbstractInventoryMenu<CorePlugin> 
     }
 
     private void update() {
-        while (this.inventory.firstEmpty() != -1) {
-            this.inventory.setItem(this.inventory.firstEmpty(), new InventoryMenuItem(Material.STAINED_GLASS_PANE, 7).setDisplayName(" ").create());
-        }
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
         this.inventory.setItem(10, new InventoryMenuItem(Material.INK_SACK, 1).setDisplayName(network.getSecondaryColor() + "1 Day").create());
         this.inventory.setItem(11, new InventoryMenuItem(Material.INK_SACK, 2).setDisplayName(network.getSecondaryColor() + "1 Week").create());

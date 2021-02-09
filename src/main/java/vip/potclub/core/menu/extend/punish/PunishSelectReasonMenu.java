@@ -18,10 +18,10 @@ import vip.potclub.core.player.punishment.PunishmentType;
 public class PunishSelectReasonMenu extends AbstractInventoryMenu<CorePlugin> {
 
     private Player player;
-    private Player target;
+    private String target;
     private PunishmentType punishmentType;
 
-    public PunishSelectReasonMenu(Player player, Player target, PunishmentType punishmentType) {
+    public PunishSelectReasonMenu(Player player, String target, PunishmentType punishmentType) {
         super("Punishment - Reason", 9*3);
         this.player = player;
         this.target = target;
@@ -30,9 +30,6 @@ public class PunishSelectReasonMenu extends AbstractInventoryMenu<CorePlugin> {
     }
 
     private void update() {
-        while (this.inventory.firstEmpty() != -1) {
-            this.inventory.setItem(this.inventory.firstEmpty(), new InventoryMenuItem(Material.STAINED_GLASS_PANE, 7).setDisplayName(" ").create());
-        }
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
         this.inventory.setItem(10, new InventoryMenuItem(Material.DIAMOND_SWORD).setDisplayName(network.getSecondaryColor() + "Combat Hacks").create());
         this.inventory.setItem(11, new InventoryMenuItem(Material.PAPER).setDisplayName(network.getSecondaryColor() + "Chat Abuse").create());

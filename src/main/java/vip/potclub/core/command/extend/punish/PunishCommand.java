@@ -1,12 +1,12 @@
 package vip.potclub.core.command.extend.punish;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import vip.potclub.core.command.BaseCommand;
 import vip.potclub.core.menu.extend.punish.PunishMainMenu;
 import vip.potclub.core.util.Color;
+import vip.potclub.core.util.UUIDUtil;
 
 public class PunishCommand extends BaseCommand {
 
@@ -23,12 +23,12 @@ public class PunishCommand extends BaseCommand {
                 player.sendMessage(Color.translate("&cUsage: /" + label + " <player>."));
             }
             if (args.length > 0) {
-                Player target = Bukkit.getPlayerExact(args[0]);
+                String target = args[0];
                 if (target != null) {
-                    if (target.getUniqueId() != player.getUniqueId()) {
+                    if (!target.equals(player.getName())) {
                         new PunishMainMenu(player, target).open(player);
                     } else {
-                        player.sendMessage(Color.translate("&cYou cannot punish yourself!"));
+                        player.sendMessage(Color.translate("&cYou cannot punish yourself."));
                     }
                 } else {
                     player.sendMessage(Color.translate("&cThat player does not exist."));
