@@ -268,10 +268,6 @@ public class PotPlayer {
             this.appliedPrefix = null;
         }
 
-        if (document.get("allPrefixes") != null) {
-            List<String> prefixes = ((List<String>) document.get("allPrefixes"));
-            this.allPrefixes.addAll(prefixes);
-        }
         if (document.get("allIgnored") != null) {
             List<String> ignoring = ((List<String>) document.get("allIgnored"));
             if (!ignoring.isEmpty()) {
@@ -302,6 +298,17 @@ public class PotPlayer {
         this.setupAttachment();
         this.checkVoting();
 
+        if (document.get("allPrefixes") != null) {
+            if (player.hasPermission("scandium.prefixes.all")) {
+                List<String> prefixes = new ArrayList<>();
+                Prefix.getPrefixes().forEach(prefix -> prefixes.add(prefix.getName()));
+                this.getAllPrefixes().addAll(prefixes);
+            } else if (!player.hasPermission("scandium.prefixes.all")) {
+                List<String> prefixes = ((List<String>) document.get("allPrefixes"));
+                this.allPrefixes.addAll(prefixes);
+            }
+        }
+
         this.getPunishments().forEach(punishment -> {
             if (punishment.getPunishmentType().equals(PunishmentType.MUTE)) {
                 if (punishment.isActive()) {
@@ -311,6 +318,7 @@ public class PotPlayer {
                 }
             }
         });
+
         this.getPunishments().forEach(punishment -> {
             if (punishment.getPunishmentType().equals(PunishmentType.BAN)) {
                 if (punishment.isActive()) {

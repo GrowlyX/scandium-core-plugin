@@ -5,13 +5,17 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.json.simple.parser.ParseException;
 import vip.potclub.core.command.BaseCommand;
 import vip.potclub.core.player.PotPlayer;
 import vip.potclub.core.player.punishment.Punishment;
 import vip.potclub.core.player.punishment.PunishmentType;
 import vip.potclub.core.util.Color;
 import vip.potclub.core.util.StringUtil;
+import vip.potclub.core.util.UUIDUtil;
 
+import java.io.IOException;
+import java.util.Map;
 import java.util.UUID;
 
 public class UnBanCommand extends BaseCommand {
@@ -119,5 +123,17 @@ public class UnBanCommand extends BaseCommand {
         }
 
         return false;
+    }
+
+    private int getPunishmentInt(PunishmentType type, String target) throws IOException, ParseException {
+        Map.Entry<UUID, String> uuidStringEntry = UUIDUtil.getUUID(target);
+
+        UUID uuidKey = uuidStringEntry.getKey();
+
+        return (int) Punishment.getAllPunishments().stream()
+                .filter(punishment -> punishment.getTarget().toString().equals(uuidKey.toString()))
+                .filter(Punishment::isActive)
+                .filter(punishment -> !punishment.isRemoved())
+                .count();
     }
 }

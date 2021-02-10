@@ -35,7 +35,7 @@ public class PlayerManager {
     }
 
     public String formatChatChannel(ChatChannelType chatChannel, String player, String message, String fromServer) {
-        return Color.translate(chatChannel.getPrefix() + "&7[" + fromServer + "] " + player + "&f: &b" + message);
+        return Color.translate(chatChannel.getPrefix() + "&7[" + fromServer + "] " + player + "&f: &b") + message;
     }
 
     public void sendDisconnectFreezeMessage(Player target) {

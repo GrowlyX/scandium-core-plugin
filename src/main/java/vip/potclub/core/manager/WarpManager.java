@@ -1,5 +1,6 @@
 package vip.potclub.core.manager;
 
+import com.mongodb.Block;
 import org.bson.Document;
 import vip.potclub.core.CorePlugin;
 import vip.potclub.core.player.warps.Warp;
@@ -14,9 +15,11 @@ public class WarpManager {
 
     public void loadAllWarps() {
         CorePlugin.getInstance().getMongoThread().execute(() -> {
-            for (Document warpDocument : CorePlugin.getInstance().getCoreDatabase().getWarpCollection().find()) {
-                new Warp(warpDocument.getString("name"), LocationUtil.getLocationFromString(warpDocument.getString("location")), warpDocument.getString("_id"));
-            }
+            CorePlugin.getInstance().getCoreDatabase().getWarpCollection().find().forEach((Block<? super Document>) warpDocument -> {
+                if (Warp.getByName(warpDocument.getString("name")) == null) {
+                    new Warp(warpDocument.getString("name"), LocationUtil.getLocationFromString(warpDocument.getString("location")), warpDocument.getString("_id"));
+                }
+            });
         });
     }
 

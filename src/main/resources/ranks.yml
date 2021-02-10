@@ -8,8 +8,8 @@ DEFAULT:
     - practice.normal
 POTION:
   NAME: "Potion"
-  PREFIX: "&e[Potion] "
-  DEFAULT: FALSE
+  PREFIX: "&e[HORS] "
+  DEFAULT: TRUE
   WEIGHT: 1
   COLOR: "&e"
   INHERITANCE:
