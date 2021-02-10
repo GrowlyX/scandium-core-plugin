@@ -8,7 +8,7 @@ import vip.potclub.core.player.punishment.Punishment;
 public class PunishSaveTask extends BukkitRunnable {
 
     public PunishSaveTask() {
-        runTaskTimerAsynchronously(CorePlugin.getInstance(), 36000L, 36000L);
+        runTaskTimerAsynchronously(CorePlugin.getInstance(), 20L, 30 * 20L);
     }
 
     @Override

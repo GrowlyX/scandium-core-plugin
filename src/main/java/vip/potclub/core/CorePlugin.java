@@ -31,6 +31,7 @@ import vip.potclub.core.listener.PlayerListener;
 import vip.potclub.core.lunar.AbstractClientInjector;
 import vip.potclub.core.lunar.extend.LunarCommand;
 import vip.potclub.core.manager.*;
+import vip.potclub.core.player.punishment.PunishmentDuration;
 import vip.potclub.core.protocol.AbstractChatInterceptor;
 import vip.potclub.core.protocol.extend.ProtocolChatInterceptor;
 import vip.potclub.core.redis.RedisClient;
@@ -54,6 +55,7 @@ public final class CorePlugin extends JavaPlugin {
 
     public static SimpleDateFormat FORMAT;
     public static Random RANDOM;
+    public static boolean JOINABLE = false;
 
     public static Gson GSON;
     public static GsonBuilder GSONBUILDER;
@@ -138,6 +140,7 @@ public final class CorePlugin extends JavaPlugin {
         this.setupExtra();
 
         this.getRedisThread().execute(() -> this.getRedisClient().write(RedisUtil.onServerOnline()));
+        Bukkit.getScheduler().runTaskLater(this, () -> JOINABLE = true, 5 * 20L);
     }
 
     public void setupExtra() {

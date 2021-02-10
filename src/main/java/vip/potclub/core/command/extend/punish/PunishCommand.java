@@ -6,7 +6,6 @@ import org.bukkit.entity.Player;
 import vip.potclub.core.command.BaseCommand;
 import vip.potclub.core.menu.extend.punish.PunishMainMenu;
 import vip.potclub.core.util.Color;
-import vip.potclub.core.util.UUIDUtil;
 
 public class PunishCommand extends BaseCommand {
 
@@ -39,4 +38,5 @@ public class PunishCommand extends BaseCommand {
         }
         return false;
     }
+
 }

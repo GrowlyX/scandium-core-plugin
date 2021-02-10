@@ -119,7 +119,7 @@ public final class RedisUtil {
         return new RedisMessage(RedisPacketType.PUNISHMENT_EXECUTE_UPDATE)
                 .setParam("SERVER", CorePlugin.getInstance().getConfig().getString("server-id"))
                 .setParam("TYPE", punishmentType.toString())
-                .setParam("ISSUER", issuer.toString())
+                .setParam("ISSUER", (issuer != null ? issuer.toString() : null))
                 .setParam("TARGET", target.toString())
                 .setParam("ISSUERNAME", issuerName)
                 .setParam("REASON", reason)

@@ -11,6 +11,7 @@ import vip.potclub.core.player.punishment.Punishment;
 import vip.potclub.core.player.punishment.PunishmentDuration;
 import vip.potclub.core.player.punishment.PunishmentType;
 import vip.potclub.core.util.Color;
+import vip.potclub.core.util.RedisUtil;
 import vip.potclub.core.util.SaltUtil;
 
 import java.util.Date;
@@ -36,7 +37,7 @@ public class AnticheatBanCommand extends BaseCommand {
                     CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, null, target.getName(), true);
                     potPlayer.saveWithoutRemove();
 
-                    sender.sendMessage(Color.translate("&aExecuted punishment."));
+                    RedisUtil.writeAsync(RedisUtil.executePunishment(PunishmentType.BAN, null, target.getUniqueId(), "Console", "[AC] Unfair Advantage", new Date(System.currentTimeMillis()), PunishmentDuration.MONTH.getDuration(), true, new Date(), UUID.randomUUID(), SaltUtil.getRandomSaltedString(7), false));
                 } else {
                     sender.sendMessage(Color.translate("&cThat player does not exist."));
                 }

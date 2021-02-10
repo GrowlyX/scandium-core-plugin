@@ -1,5 +1,6 @@
 package vip.potclub.core.listener;
 
+import jdk.nashorn.internal.scripts.JO;
 import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -51,14 +52,18 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onConnect(AsyncPlayerPreLoginEvent event) {
-        if (CorePlugin.getInstance().getConfig().getBoolean("whitelist")) {
-            if (!CorePlugin.getInstance().getConfig().getStringList("whitelisted").contains(event.getName())) {
-                event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.translateAlternateColorCodes('&', CorePlugin.getInstance().getConfig().getString("whitelisted-msg").replace("%NL%", "\n")));
+        if (CorePlugin.JOINABLE) {
+            if (CorePlugin.getInstance().getConfig().getBoolean("whitelist")) {
+                if (!CorePlugin.getInstance().getConfig().getStringList("whitelisted").contains(event.getName())) {
+                    event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.translateAlternateColorCodes('&', CorePlugin.getInstance().getConfig().getString("whitelisted-msg").replace("%NL%", "\n")));
+                } else {
+                    checkDisallow(event);
+                }
             } else {
                 checkDisallow(event);
             }
         } else {
-            checkDisallow(event);
+            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Color.translate("&cThe server is currently booting...\n&cPlease reconnect in a few minutes."));
         }
     }
 
