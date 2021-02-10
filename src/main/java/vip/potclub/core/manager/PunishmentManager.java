@@ -62,8 +62,17 @@ public class PunishmentManager {
         this.punishments.forEach(Punishment::saveMainThread);
     }
 
-    public void handlePunishment(Punishment punishment, Player player, String target, boolean silent) {
+    public void handlePunishment(Punishment punishment, String firstPlayer, String target, boolean silent) {
         this.punishments.add(punishment);
+
+        Player player = null;
+        try {
+            player = Bukkit.getPlayerExact(firstPlayer);
+        } catch (Exception ignored) {
+            try {
+                player = Bukkit.getPlayer(UUID.fromString(firstPlayer));
+            } catch (Exception ignored2) { }
+        }
 
         PotPlayer potPlayer = null;
         try {
@@ -71,18 +80,19 @@ public class PunishmentManager {
         } catch (Exception ignored) {}
 
         PotPlayer finalPotPlayer = potPlayer;
+        Player finalPlayer = player;
 
         if (silent) {
             Bukkit.getOnlinePlayers().forEach(player1 -> {
                 if (player1.hasPermission("scandium.staff")) {
                     player1.sendMessage(Color.translate(
-                            "&7[S] " + (finalPotPlayer != null ? finalPotPlayer.getPlayer().getDisplayName() : "&7" + target) + " &awas " + (!punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (player != null ? player.getDisplayName() : "&4Console") + "&a."
+                            "&7[S] " + (finalPotPlayer != null ? finalPotPlayer.getPlayer().getDisplayName() : "&7" + target) + " &awas " + (!punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (finalPlayer != null ? finalPlayer.getDisplayName() : "&4Console") + "&a."
                     ));
                 }
             });
         } else {
             Bukkit.broadcastMessage(Color.translate(
-                    (finalPotPlayer != null ? finalPotPlayer.getPlayer().getDisplayName() : "&7" + target) + " &awas " + (!punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (player != null ? player.getDisplayName() : "&4Console") + "&a."
+                    (finalPotPlayer != null ? finalPotPlayer.getPlayer().getDisplayName() : "&7" + target) + " &awas " + (!punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (finalPlayer != null ? finalPlayer.getDisplayName() : "&4Console") + "&a."
             ));
         }
         switch (punishment.getPunishmentType()) {

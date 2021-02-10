@@ -8,8 +8,11 @@ import vip.potclub.core.CorePlugin;
 import vip.potclub.core.enums.ChatChannelType;
 import vip.potclub.core.enums.RedisPacketType;
 import vip.potclub.core.enums.StaffUpdateType;
+import vip.potclub.core.player.punishment.Punishment;
+import vip.potclub.core.player.punishment.PunishmentType;
 import vip.potclub.core.redis.RedisMessage;
 
+import java.util.Date;
 import java.util.UUID;
 
 public final class RedisUtil {
@@ -110,6 +113,44 @@ public final class RedisUtil {
         return new RedisMessage(RedisPacketType.RANK_SETTINGS_UPDATE)
                 .setParam("SERVER", CorePlugin.getInstance().getConfig().getString("server-id"))
                 .toJson();
+    }
+
+    public static String executePunishment(PunishmentType punishmentType, UUID issuer, UUID target, String issuerName, String reason, Date issuingDate, long punishmentDuration, boolean permanent, Date createdAt, UUID uuid, String punishIdentification, boolean silent) {
+        return new RedisMessage(RedisPacketType.PUNISHMENT_EXECUTE_UPDATE)
+                .setParam("SERVER", CorePlugin.getInstance().getConfig().getString("server-id"))
+                .setParam("TYPE", punishmentType.toString())
+                .setParam("ISSUER", issuer.toString())
+                .setParam("TARGET", target.toString())
+                .setParam("ISSUERNAME", issuerName)
+                .setParam("REASON", reason)
+                .setParam("DATE", String.valueOf(issuingDate.getTime()))
+                .setParam("DURATION", String.valueOf(punishmentDuration))
+                .setParam("PERMANENT", String.valueOf(permanent))
+                .setParam("CREATED", String.valueOf(createdAt.getTime()))
+                .setParam("UUID", uuid.toString())
+                .setParam("IDENTIFICATION", punishIdentification)
+                .setParam("SILENT", String.valueOf(silent))
+                .toJson();
+    }
+
+    public static String removePunishment(Player remover, Punishment punishment, String message) {
+        if (remover != null) {
+            return new RedisMessage(RedisPacketType.PUNISHMENT_REMOVE_UPDATE)
+                    .setParam("REMOVERUUID", remover.getUniqueId().toString())
+                    .setParam("REMOVERNAME", remover.getName())
+                    .setParam("REMOVERDISPLAYNAME", remover.getDisplayName())
+                    .setParam("REASON", message)
+                    .setParam("ID", punishment.getPunishIdentification())
+                    .toJson();
+        } else {
+            return new RedisMessage(RedisPacketType.PUNISHMENT_REMOVE_UPDATE)
+                    .setParam("REMOVERUUID", null)
+                    .setParam("REMOVERNAME", null)
+                    .setParam("REMOVERDISPLAYNAME", null)
+                    .setParam("REASON", message)
+                    .setParam("ID", punishment.getPunishIdentification())
+                    .toJson();
+        }
     }
 
     public static String createRank(String name, Player player, String uuid) {

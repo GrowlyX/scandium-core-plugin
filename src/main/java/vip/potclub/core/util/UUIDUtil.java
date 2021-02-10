@@ -1,6 +1,9 @@
 package vip.potclub.core.util;
 
+import org.apache.commons.io.IOUtils;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
@@ -30,5 +33,19 @@ public final class UUIDUtil {
         reader.close();
 
         return new AbstractMap.SimpleEntry<>(uuid, name);
+    }
+
+    public static String getName(String uuid) {
+        String url = "https://api.mojang.com/user/profiles/" + uuid.replace("-", "") + "/names";
+        try {
+            String nameJson = IOUtils.toString(new URL(url));
+            JSONArray nameValue = (JSONArray) JSONValue.parseWithException(nameJson);
+            String playerSlot = nameValue.get(nameValue.size()-1).toString();
+            JSONObject nameObject = (JSONObject) JSONValue.parseWithException(playerSlot);
+
+            return nameObject.get("name").toString();
+        } catch (Exception ignored) { }
+
+        return null;
     }
 }

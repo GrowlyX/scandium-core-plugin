@@ -143,4 +143,12 @@ public class Punishment {
     public static ArrayList<Punishment> getAllPunishments() {
         return CorePlugin.getInstance().getPunishmentManager().getPunishments();
     }
+
+    public static Punishment getByIdentification(String id) {
+        return Punishment.getAllPunishments()
+                .stream()
+                .filter(punishment -> punishment.getPunishIdentification().equals(id))
+                .findFirst()
+                .orElse(null);
+    }
 }

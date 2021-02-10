@@ -11,6 +11,7 @@ import vip.potclub.core.player.PotPlayer;
 import vip.potclub.core.player.punishment.Punishment;
 import vip.potclub.core.player.punishment.PunishmentType;
 import vip.potclub.core.util.Color;
+import vip.potclub.core.util.RedisUtil;
 import vip.potclub.core.util.StringUtil;
 import vip.potclub.core.util.UUIDUtil;
 
@@ -48,7 +49,7 @@ public class UnBanCommand extends BaseCommand {
                                             Bukkit.getOnlinePlayers().forEach(player1 -> {
                                                 if (player1.hasPermission("scandium.staff")) {
                                                     player1.sendMessage(Color.translate(
-                                                            "&7[Silent] " + offlinePlayer.getName() + " &awas " + "un" + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4Console&a."
+                                                            "&7[S] " + offlinePlayer.getName() + " &awas " + "un" + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4Console&a."
                                                     ));
                                                 }
                                             });
@@ -59,6 +60,8 @@ public class UnBanCommand extends BaseCommand {
                                         }
 
                                         punishment.savePunishment();
+
+                                        RedisUtil.writeAsync(RedisUtil.removePunishment(null, punishment, message));
                                     }
                                 }
                             }
@@ -97,7 +100,7 @@ public class UnBanCommand extends BaseCommand {
                                                 Bukkit.getOnlinePlayers().forEach(player1 -> {
                                                     if (player1.hasPermission("scandium.staff")) {
                                                         player1.sendMessage(Color.translate(
-                                                                "&7[Silent] " + offlinePlayer.getName() + " &awas " + "un" + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + player.getDisplayName() + "&a."
+                                                                "&7[S] " + offlinePlayer.getName() + " &awas " + "un" + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + player.getDisplayName() + "&a."
                                                         ));
                                                     }
                                                 });
@@ -108,6 +111,8 @@ public class UnBanCommand extends BaseCommand {
                                             }
 
                                             punishment.savePunishment();
+
+                                            RedisUtil.writeAsync(RedisUtil.removePunishment(player, punishment, message));
                                         }
                                     }
                                 }

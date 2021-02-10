@@ -58,10 +58,10 @@ mongodb:
   url: "mongodb+srv://solexgames:password@na1.solexgames.com/SolexGames?retryWrites=true&w=majority"
 freeze-message:
   - " "
-  - "&4&lDO NOT DISCONNECT!"
+  - "&4&lDo not disconnect!"
   - "&7You have been frozen by a staff member!"
   - "&7Please connect to &fTeamSpeak &7within &f3 minutes &7or you will"
-  - "&7be banned for &fRefusing to Screenshare&7!"
+  - "&7be banned for &cRefusing to Screenshare&7!"
   - " "
 whitelisted:
   - GrowlyX

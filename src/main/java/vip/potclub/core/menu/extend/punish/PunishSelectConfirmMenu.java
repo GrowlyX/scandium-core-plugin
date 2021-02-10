@@ -16,6 +16,7 @@ import vip.potclub.core.player.PotPlayer;
 import vip.potclub.core.player.punishment.Punishment;
 import vip.potclub.core.player.punishment.PunishmentType;
 import vip.potclub.core.util.Color;
+import vip.potclub.core.util.RedisUtil;
 import vip.potclub.core.util.SaltUtil;
 import vip.potclub.core.util.UUIDUtil;
 
@@ -89,7 +90,11 @@ public class PunishSelectConfirmMenu extends AbstractInventoryMenu<CorePlugin> {
                 UUID uuidKey = uuidStringEntry.getKey();
                 String nameValue = uuidStringEntry.getValue();
 
-                Punishment punishment = new Punishment(this.punishmentType, this.player.getUniqueId(), uuidKey, this.player.getName(), this.reason, new Date(System.currentTimeMillis()), this.punishmentDuration, this.permanent, new Date(), UUID.randomUUID(), SaltUtil.getRandomSaltedString(7));
+                UUID randomUuid = UUID.randomUUID();
+                String saltedString = SaltUtil.getRandomSaltedString(7);
+                Date newDate = new Date();
+
+                Punishment punishment = new Punishment(this.punishmentType, this.player.getUniqueId(), uuidKey, this.player.getName(), this.reason, new Date(System.currentTimeMillis()), this.punishmentDuration, this.permanent, newDate, randomUuid, saltedString);
 
                 this.player.closeInventory();
 
@@ -100,9 +105,10 @@ public class PunishSelectConfirmMenu extends AbstractInventoryMenu<CorePlugin> {
 
                 if (potPlayer != null) potPlayer.getPunishments().add(punishment);
 
-                CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, this.player, nameValue, this.isSilent);
+                CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, this.player.getName(), nameValue, this.isSilent);
                 if (potPlayer != null) potPlayer.saveWithoutRemove();
 
+                RedisUtil.writeAsync(RedisUtil.executePunishment(this.punishmentType, this.player.getUniqueId(), uuidKey, this.player.getName(), this.reason, new Date(System.currentTimeMillis()), this.punishmentDuration, this.permanent, newDate, randomUuid, saltedString, this.isSilent));
                 return;
             }
 

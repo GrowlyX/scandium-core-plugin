@@ -4,6 +4,7 @@ import com.mongodb.client.model.Filters;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.json.simple.parser.ParseException;
 import redis.clients.jedis.JedisPubSub;
 import vip.potclub.core.CorePlugin;
 import vip.potclub.core.enums.ChatChannelType;
@@ -11,16 +12,21 @@ import vip.potclub.core.enums.NetworkServerStatusType;
 import vip.potclub.core.enums.NetworkServerType;
 import vip.potclub.core.enums.StaffUpdateType;
 import vip.potclub.core.player.PotPlayer;
+import vip.potclub.core.player.punishment.Punishment;
+import vip.potclub.core.player.punishment.PunishmentType;
 import vip.potclub.core.player.ranks.Rank;
 import vip.potclub.core.redis.RedisMessage;
 import vip.potclub.core.server.NetworkServer;
 import vip.potclub.core.util.Color;
+import vip.potclub.core.util.SaltUtil;
+import vip.potclub.core.util.UUIDUtil;
 
-import java.util.Collections;
-import java.util.Objects;
-import java.util.UUID;
+import java.io.IOException;
+import java.util.*;
 
 public class RedisListener extends JedisPubSub {
+
+    private final String SERVER_NAME = CorePlugin.getInstance().getConfig().getString("server-id");
 
     @Override
     public void onMessage(String channel, String message) {
@@ -208,8 +214,62 @@ public class RedisListener extends JedisPubSub {
                         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getRankCollection().deleteOne(Filters.eq("_id", delRank.getUuid())));
                     }
                     break;
+                case PUNISHMENT_EXECUTE_UPDATE:
+                    if (!SERVER_NAME.equals(redisMessage.getParam("SERVER"))) {
+                        Punishment punishment = new Punishment(PunishmentType.valueOf(redisMessage.getParam("TYPE")), UUID.fromString(redisMessage.getParam("ISSUER")), UUID.fromString(redisMessage.getParam("TARGET")), redisMessage.getParam("ISSUERNAME"), redisMessage.getParam("REASON"), new Date(Long.parseLong(redisMessage.getParam("DATE"))), Long.parseLong(redisMessage.getParam("DURATION")), Boolean.parseBoolean(redisMessage.getParam("PERMANENT")), new Date(Long.parseLong(redisMessage.getParam("CREATED"))), UUID.fromString(redisMessage.getParam("UUID")), redisMessage.getParam("IDENTIFICATION"));
+                        PotPlayer potPlayer = null;
+
+                        try {
+                            potPlayer = PotPlayer.getPlayer(redisMessage.getParam("ISSUERNAME"));
+                        } catch (Exception ignored) { }
+
+                        if (potPlayer != null) potPlayer.getPunishments().add(punishment);
+
+                        CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, redisMessage.getParam("ISSUERNAME"), redisMessage.getParam("TARGET"), Boolean.parseBoolean(redisMessage.getParam("SILENT")));
+                        if (potPlayer != null) potPlayer.saveWithoutRemove();
+                    }
+                    break;
+                case PUNISHMENT_REMOVE_UPDATE:
+                    Punishment punishment = null;
+
+                    UUID removerUuid = UUID.fromString(redisMessage.getParam("REMOVERUUID"));
+                    String removerName = redisMessage.getParam("REMOVERNAME");
+                    String removerDisplayName = redisMessage.getParam("REMOVERDISPLAYNAME");
+                    String reason = redisMessage.getParam("REASON");
+
+                    try {
+                        punishment = Punishment.getByIdentification(redisMessage.getParam("ID"));
+                    } catch (Exception ignored) {}
+
+                    Punishment finalPunishment = punishment;
+
+                    if (finalPunishment != null) {
+                        finalPunishment.setRemoved(true);
+                        finalPunishment.setRemovalReason(reason.replace("-s", ""));
+                        finalPunishment.setRemover(removerUuid);
+                        finalPunishment.setActive(false);
+                        finalPunishment.setRemoverName(removerName);
+
+                        String name = UUIDUtil.getName(punishment.getTarget().toString());
+
+                        if (reason.endsWith("-s")) {
+                            Bukkit.getOnlinePlayers().forEach(player1 -> {
+                                if (player1.hasPermission("scandium.staff")) {
+                                    player1.sendMessage(Color.translate(
+                                            "&7[S] " + name + " &awas " + "un" + finalPunishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (removerDisplayName != null ? removerDisplayName : "Console") + "&a."
+                                    ));
+                                }
+                            });
+                        } else {
+                            Bukkit.broadcastMessage(Color.translate(
+                                    "&7" + name + " &awas un" + finalPunishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (removerDisplayName != null ? removerDisplayName : "Console") + "&a."
+                            ));
+                        }
+
+                        finalPunishment.savePunishment();
+                    }
                 case RANK_SETTINGS_UPDATE:
-                    if (!CorePlugin.getInstance().getConfig().getString("server-id").equals(redisMessage.getParam("SERVER"))) {
+                    if (!SERVER_NAME.equals(redisMessage.getParam("SERVER"))) {
                         Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> Rank.getRanks().clear());
                         CorePlugin.getInstance().getRankManager().loadRanks();
                         CorePlugin.getInstance().getLogger().info("[Ranks] Synced all ranks.");
