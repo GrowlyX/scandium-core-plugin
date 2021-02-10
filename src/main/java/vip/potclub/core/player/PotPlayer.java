@@ -65,6 +65,10 @@ public class PotPlayer {
     private boolean isFrozen = false;
     private boolean isSynced = false;
 
+    private boolean isReasonEditing = false;
+    private PunishmentType reasonType = null;
+    private String reasonTarget = null;
+
     private boolean currentlyMuted;
     private boolean currentlyBanned;
     private boolean currentlyOnline;

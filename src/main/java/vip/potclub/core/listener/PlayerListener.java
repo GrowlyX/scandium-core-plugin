@@ -20,6 +20,7 @@ import vip.potclub.core.CorePlugin;
 import vip.potclub.core.enums.ChatChannelType;
 import vip.potclub.core.media.MediaConstants;
 import vip.potclub.core.menu.IMenu;
+import vip.potclub.core.menu.extend.punish.PunishSelectDurationMenu;
 import vip.potclub.core.player.PotPlayer;
 import vip.potclub.core.player.punishment.Punishment;
 import vip.potclub.core.player.punishment.PunishmentStrings;
@@ -157,6 +158,15 @@ public class PlayerListener implements Listener {
         Matcher twitterMatcher = MediaConstants.TWITTER_USERNAME_REGEX.matcher(event.getMessage());
         Matcher instaMatcher = MediaConstants.INSTAGRAM_USERNAME_REGEX.matcher(event.getMessage());
         Matcher youtubeMatcher = MediaConstants.YOUTUBE_PROFILELINK_REGEX.matcher(event.getMessage());
+
+        if (potPlayer.isReasonEditing()) {
+            String message = event.getMessage();
+
+            player.sendMessage(Color.translate("&aSet the punishment reason to &6'" + message + "'&a."));
+
+            new PunishSelectDurationMenu(potPlayer.getPlayer(), potPlayer.getReasonTarget(), message, potPlayer.getReasonType()).open(player);
+            return;
+        }
 
         if (potPlayer.getMedia().getMediaData().isModifyingDiscordData()) {
             if (discordMatcher.matches()) {
@@ -300,7 +310,7 @@ public class PlayerListener implements Listener {
             PotPlayer potPlayer1 = PotPlayer.getPlayer(player1);
             if (!potPlayer1.isIgnoring(potPlayer.getPlayer())) {
                 if (potPlayer1.isCanSeeGlobalChat()) {
-                    player1.sendMessage(Color.translate((potPlayer.getAppliedPrefix() != null ? potPlayer.getAppliedPrefix().getPrefix() + " " : "") + potPlayer.getActiveGrant().getRank().getPrefix() + potPlayer.getActiveGrant().getRank().getColor() + (potPlayer.getCustomColor() != null ? potPlayer.getCustomColor() : "") + player.getName() + " &7" + '»' + " " + (potPlayer.getActiveGrant().getRank().getName().contains("Default") ? "&7" : "&f") + event.getMessage()));
+                    player1.sendMessage(Color.translate((potPlayer.getAppliedPrefix() != null ? potPlayer.getAppliedPrefix().getPrefix() + " " : "") + potPlayer.getActiveGrant().getRank().getPrefix() + potPlayer.getActiveGrant().getRank().getColor() + (potPlayer.getCustomColor() != null ? potPlayer.getCustomColor() : "") + player.getName() + " &7" + '»' + " " + (potPlayer.getActiveGrant().getRank().getName().contains("Default") ? "&7" : "&f")) + (potPlayer.getPlayer().hasPermission("scandium.chat.colors") ? Color.translate(event.getMessage()) : event.getMessage()));
                 }
             }
         });

@@ -40,7 +40,7 @@ public class PunishSelectDurationMenu extends AbstractInventoryMenu<CorePlugin> 
         this.inventory.setItem(13, new InventoryMenuItem(Material.INK_SACK, 4).setDisplayName(network.getSecondaryColor() + "3 Months").create());
         this.inventory.setItem(14, new InventoryMenuItem(Material.INK_SACK, 5).setDisplayName(network.getSecondaryColor() + "6 Months").create());
         this.inventory.setItem(15, new InventoryMenuItem(Material.INK_SACK, 6).setDisplayName(network.getSecondaryColor() + "1 Year").create());
-        this.inventory.setItem(16, new InventoryMenuItem(Material.INK_SACK, 14).setDisplayName(network.getSecondaryColor() + "&4Permanent").create());
+        this.inventory.setItem(16, new InventoryMenuItem(Material.INK_SACK, 7).setDisplayName(network.getSecondaryColor() + "&4Permanent").create());
     }
 
     @Override

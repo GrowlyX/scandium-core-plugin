@@ -63,59 +63,64 @@ public class PunishmentManager {
     }
 
     public void handlePunishment(Punishment punishment, String firstPlayer, String target, boolean silent) {
-        this.punishments.add(punishment);
+        Bukkit.getScheduler().runTask(CorePlugin.getInstance(), new Runnable() {
+            @Override
+            public void run() {
+                CorePlugin.getInstance().getPunishmentManager().getPunishments().add(punishment);
 
-        Player player = null;
-        try {
-            player = Bukkit.getPlayerExact(firstPlayer);
-        } catch (Exception ignored) { }
+                Player player = null;
+                try {
+                    player = Bukkit.getPlayerExact(firstPlayer);
+                } catch (Exception ignored) { }
 
-        PotPlayer potPlayer = null;
-        try {
-            potPlayer = PotPlayer.getPlayer(target);
-        } catch (Exception ignored) {}
+                PotPlayer potPlayer = null;
+                try {
+                    potPlayer = PotPlayer.getPlayer(target);
+                } catch (Exception ignored) {}
 
-        PotPlayer finalPotPlayer = potPlayer;
-        Player finalPlayer = player;
+                PotPlayer finalPotPlayer = potPlayer;
+                Player finalPlayer = player;
 
-        if (silent) {
-            Bukkit.getOnlinePlayers().forEach(player1 -> {
-                if (player1.hasPermission("scandium.staff")) {
-                    player1.sendMessage(Color.translate(
-                            "&7[S] " + (finalPotPlayer != null ? finalPotPlayer.getPlayer().getDisplayName() : "&7" + target) + " &awas " + (!punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (finalPlayer != null ? finalPlayer.getDisplayName() : (firstPlayer != null ? firstPlayer : "&4Console")) + "&a."
+                if (silent) {
+                    Bukkit.getOnlinePlayers().forEach(player1 -> {
+                        if (player1.hasPermission("scandium.staff")) {
+                            player1.sendMessage(Color.translate(
+                                    "&7[S] " + (finalPotPlayer != null ? finalPotPlayer.getPlayer().getDisplayName() : "&7" + target) + " &awas " + (!punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (finalPlayer != null ? finalPlayer.getDisplayName() : (firstPlayer != null ? firstPlayer : "&4Console")) + "&a."
+                            ));
+                        }
+                    });
+                } else {
+                    Bukkit.broadcastMessage(Color.translate(
+                            (finalPotPlayer != null ? finalPotPlayer.getPlayer().getDisplayName() : "&7" + target) + " &awas " + (!punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (finalPlayer != null ? finalPlayer.getDisplayName() : (firstPlayer != null ? firstPlayer : "&4Console")) + "&a."
                     ));
                 }
-            });
-        } else {
-            Bukkit.broadcastMessage(Color.translate(
-                    (finalPotPlayer != null ? finalPotPlayer.getPlayer().getDisplayName() : "&7" + target) + " &awas " + (!punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (finalPlayer != null ? finalPlayer.getDisplayName() : (firstPlayer != null ? firstPlayer : "&4Console")) + "&a."
-            ));
-        }
-        switch (punishment.getPunishmentType()) {
-            case BLACKLIST:
-                if (target != null) {
-                    if (finalPotPlayer != null) {
-                        finalPotPlayer.setCurrentlyBanned(true);
-                        finalPotPlayer.getPlayer().kickPlayer(Color.translate(PunishmentStrings.BLCK_MESSAGE.replace("<reason>", punishment.getReason())));
-                    }
+                switch (punishment.getPunishmentType()) {
+                    case BLACKLIST:
+                        if (target != null) {
+                            if (finalPotPlayer != null) {
+                                finalPotPlayer.setCurrentlyBanned(true);
+                                finalPotPlayer.getPlayer().kickPlayer(Color.translate(PunishmentStrings.BLCK_MESSAGE.replace("<reason>", punishment.getReason())));
+                            }
+                        }
+                        break;
+                    case IPBAN:
+                    case BAN:
+                        if (target != null) {
+                            if (finalPotPlayer != null) {
+                                finalPotPlayer.setCurrentlyBanned(true);
+                                finalPotPlayer.getPlayer().kickPlayer((punishment.isPermanent() ? Color.translate(PunishmentStrings.BAN_MESSAGE_PERM.replace("<reason>", punishment.getReason())) : Color.translate(PunishmentStrings.BAN_MESSAGE_TEMP.replace("<reason>", punishment.getReason()).replace("<time>", punishment.getDurationString()))));
+                            }
+                        }
+                        break;
+                    case KICK:
+                        if (target != null) {
+                            if (finalPotPlayer != null) {
+                                finalPotPlayer.getPlayer().kickPlayer(Color.translate(PunishmentStrings.KICK_MESSAGE.replace("<reason>", punishment.getReason())));
+                            }
+                        }
+                        break;
                 }
-            break;
-            case IPBAN:
-            case BAN:
-                if (target != null) {
-                    if (finalPotPlayer != null) {
-                        finalPotPlayer.setCurrentlyBanned(true);
-                        finalPotPlayer.getPlayer().kickPlayer((punishment.isPermanent() ? Color.translate(PunishmentStrings.BAN_MESSAGE_PERM.replace("<reason>", punishment.getReason())) : Color.translate(PunishmentStrings.BAN_MESSAGE_TEMP.replace("<reason>", punishment.getReason()).replace("<time>", punishment.getDurationString()))));
-                    }
-                }
-                break;
-            case KICK:
-                if (target != null) {
-                    if (finalPotPlayer != null) {
-                        finalPotPlayer.getPlayer().kickPlayer(Color.translate(PunishmentStrings.KICK_MESSAGE.replace("<reason>", punishment.getReason())));
-                    }
-                }
-                break;
-        }
+            }
+        }) ;
     }
 }
