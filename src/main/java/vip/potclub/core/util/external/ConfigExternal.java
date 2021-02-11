@@ -54,10 +54,10 @@ public class ConfigExternal {
     public List<String> getReversedStringList(String path) {
         List<String> list = this.getStringList(path);
         if (list == null) {
-            return Arrays.asList("ERROR: STRING LIST NOT FOUND!");
+            return Collections.singletonList("ERROR: STRING LIST NOT FOUND!");
         } else {
             int size = list.size();
-            List<String> toReturn = new ArrayList();
+            List<String> toReturn = new ArrayList<>();
 
             for(int i = size - 1; i >= 0; --i) {
                 toReturn.add(list.get(i));
@@ -86,9 +86,7 @@ public class ConfigExternal {
         } else {
             ArrayList<String> strings = new ArrayList<>();
 
-            for (String string : this.configuration.getStringList(path)) {
-                strings.add(ChatColor.translateAlternateColorCodes('&', string));
-            }
+            this.configuration.getStringList(path).forEach(s -> strings.add(ChatColor.translateAlternateColorCodes('&', s)));
 
             return strings;
         }

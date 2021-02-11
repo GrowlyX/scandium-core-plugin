@@ -160,11 +160,18 @@ public class PlayerListener implements Listener {
         Matcher youtubeMatcher = MediaConstants.YOUTUBE_PROFILELINK_REGEX.matcher(event.getMessage());
 
         if (potPlayer.isReasonEditing()) {
+            event.setCancelled(true);
             String message = event.getMessage();
 
-            player.sendMessage(Color.translate("&aSet the punishment reason to &6'" + message + "'&a."));
-
-            new PunishSelectDurationMenu(potPlayer.getPlayer(), potPlayer.getReasonTarget(), message, potPlayer.getReasonType()).open(player);
+            if (event.getMessage().equalsIgnoreCase("cancel")) {
+                player.sendMessage(Color.translate("&cCancelled the punishment process."));
+                potPlayer.setReasonTarget(null);
+                potPlayer.setReasonType(null);
+            } else {
+                player.sendMessage(Color.translate("&aSet the punishment reason to &6'" + message + "'&a."));
+                new PunishSelectDurationMenu(potPlayer.getPlayer(), potPlayer.getReasonTarget(), message, potPlayer.getReasonType()).open(player);
+            }
+            potPlayer.setReasonEditing(false);
             return;
         }
 

@@ -230,47 +230,49 @@ public class RedisListener extends JedisPubSub {
                     }
                     break;
                 case PUNISHMENT_REMOVE_UPDATE:
-                    Punishment punishment = null;
+                    if (!SERVER_NAME.equals(redisMessage.getParam("SERVER"))) {
+                        Punishment punishment = null;
 
-                    UUID removerUuid = null;
-                    try {
-                        removerUuid = UUID.fromString(redisMessage.getParam("REMOVERUUID"));
-                    } catch (Exception ignored) {}
-                    String removerName = redisMessage.getParam("REMOVERNAME");
-                    String removerDisplayName = redisMessage.getParam("REMOVERDISPLAYNAME");
-                    String reason = redisMessage.getParam("REASON");
+                        UUID removerUuid = null;
+                        try {
+                            removerUuid = UUID.fromString(redisMessage.getParam("REMOVERUUID"));
+                        } catch (Exception ignored) {}
+                        String removerName = redisMessage.getParam("REMOVERNAME");
+                        String removerDisplayName = redisMessage.getParam("REMOVERDISPLAYNAME");
+                        String reason = redisMessage.getParam("REASON");
 
-                    try {
-                        punishment = Punishment.getByIdentification(redisMessage.getParam("ID"));
-                    } catch (Exception ignored) {}
+                        try {
+                            punishment = Punishment.getByIdentification(redisMessage.getParam("ID"));
+                        } catch (Exception ignored) {}
 
-                    Punishment finalPunishment = punishment;
-                    UUID finalRemoverUuid = removerUuid;
+                        Punishment finalPunishment = punishment;
+                        UUID finalRemoverUuid = removerUuid;
 
-                    if (finalPunishment != null) {
-                        finalPunishment.setRemoved(true);
-                        finalPunishment.setRemovalReason(reason.replace("-s", ""));
-                        finalPunishment.setRemover(finalRemoverUuid);
-                        finalPunishment.setActive(false);
-                        finalPunishment.setRemoverName(removerName);
+                        if (finalPunishment != null) {
+                            finalPunishment.setRemoved(true);
+                            finalPunishment.setRemovalReason(reason.replace("-s", ""));
+                            finalPunishment.setRemover(finalRemoverUuid);
+                            finalPunishment.setActive(false);
+                            finalPunishment.setRemoverName(removerName);
 
-                        String name = UUIDUtil.getName(punishment.getTarget().toString());
+                            String name = UUIDUtil.getName(punishment.getTarget().toString());
 
-                        if (reason.endsWith("-s")) {
-                            Bukkit.getOnlinePlayers().forEach(player1 -> {
-                                if (player1.hasPermission("scandium.staff")) {
-                                    player1.sendMessage(Color.translate(
-                                            "&7[S] " + name + " &awas " + "un" + finalPunishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (removerDisplayName != null ? removerDisplayName : "Console") + "&a."
-                                    ));
-                                }
-                            });
-                        } else {
-                            Bukkit.broadcastMessage(Color.translate(
-                                    "&7" + name + " &awas un" + finalPunishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (removerDisplayName != null ? removerDisplayName : "Console") + "&a."
-                            ));
+                            if (reason.endsWith("-s")) {
+                                Bukkit.getOnlinePlayers().forEach(player1 -> {
+                                    if (player1.hasPermission("scandium.staff")) {
+                                        player1.sendMessage(Color.translate(
+                                                "&7[S] " + name + " &awas " + "un" + finalPunishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (removerDisplayName != null ? removerDisplayName : "Console") + "&a."
+                                        ));
+                                    }
+                                });
+                            } else {
+                                Bukkit.broadcastMessage(Color.translate(
+                                        "&7" + name + " &awas un" + finalPunishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (removerDisplayName != null ? removerDisplayName : "Console") + "&a."
+                                ));
+                            }
+
+                            finalPunishment.savePunishment();
                         }
-
-                        finalPunishment.savePunishment();
                     }
                     break;
                 case RANK_SETTINGS_UPDATE:

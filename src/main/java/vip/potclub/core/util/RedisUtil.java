@@ -140,6 +140,7 @@ public final class RedisUtil {
                     .setParam("REMOVERNAME", remover.getName())
                     .setParam("REMOVERDISPLAYNAME", remover.getDisplayName())
                     .setParam("REASON", message)
+                    .setParam("SERVER", CorePlugin.getInstance().getConfig().getString("server-id"))
                     .setParam("ID", punishment.getPunishIdentification())
                     .toJson();
         } else {
@@ -148,6 +149,7 @@ public final class RedisUtil {
                     .setParam("REMOVERNAME", null)
                     .setParam("REMOVERDISPLAYNAME", null)
                     .setParam("REASON", message)
+                    .setParam("SERVER", CorePlugin.getInstance().getConfig().getString("server-id"))
                     .setParam("ID", punishment.getPunishIdentification())
                     .toJson();
         }
