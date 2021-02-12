@@ -20,7 +20,7 @@ public class RankManager {
         CorePlugin.getInstance().getMongoThread().execute(() -> {
             for (Document document : CorePlugin.getInstance().getCoreDatabase().getRankCollection().find()) {
                 if (Rank.getByName(document.getString("name")) == null) {
-                    new Rank(
+                    Rank rank = new Rank(
                             UUID.fromString(document.getString("uuid")),
                             (ArrayList<UUID>) document.get("inheritance"),
                             (ArrayList<String>) document.get("permissions"),
@@ -31,6 +31,10 @@ public class RankManager {
                             document.getBoolean("defaultRank"),
                             document.getInteger("weight")
                     );
+
+                    if (document.getBoolean("isHidden") != null) {
+                        rank.setHidden(document.getBoolean("isHidden"));
+                    }
                 }
             }
         });
@@ -49,6 +53,7 @@ public class RankManager {
             defaultRank.put("color", "&7");
             defaultRank.put("suffix", "&7");
             defaultRank.put("defaultRank", true);
+            defaultRank.put("isHidden", false);
             defaultRank.put("weight", 0);
 
             CorePlugin.getInstance().getCoreDatabase().getRankCollection().insertOne(defaultRank);

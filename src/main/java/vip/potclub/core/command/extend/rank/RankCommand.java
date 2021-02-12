@@ -34,6 +34,7 @@ public class RankCommand extends BaseCommand {
         player.sendMessage(Color.translate("/rank save &7- Sync ranks across network & save ranks."));
         player.sendMessage(Color.translate("/rank info &7- Show info of a rank."));
         player.sendMessage(Color.translate("/rank weight &7- Set a rank's weight."));
+        player.sendMessage(Color.translate("/rank hidden &7- et a rank as a hidden rank."));
         player.sendMessage(Color.translate("/rank default &7- Set a rank as a default rank."));
         player.sendMessage(Color.translate("/rank addinher &7- Add an inheritance to a rank."));
         player.sendMessage(Color.translate("/rank delinher &7- Remove an inheritance from a rank."));
@@ -67,6 +68,7 @@ public class RankCommand extends BaseCommand {
                                 player.sendMessage(Color.translate("&7Name: &f" + displayName));
                                 player.sendMessage(Color.translate("&7Color: &f" + rank.getColor() + "This Color"));
                                 player.sendMessage(Color.translate("&7Weight: &f" + rank.getWeight()));
+                                player.sendMessage(Color.translate("&7Prefix: &f" + rank.getPrefix()));
                                 player.sendMessage(Color.translate("&7Suffix: &f" + rank.getSuffix()));
                                 player.sendMessage(Color.translate("&7UUID: &f" + rank.getUuid()));
                                 player.sendMessage(Color.translate("  "));
@@ -76,6 +78,38 @@ public class RankCommand extends BaseCommand {
                                 player.sendMessage(Color.translate("&7Inheritances:"));
                                 rank.getInheritance().forEach(s -> player.sendMessage(Color.translate(" &7* &f" + Rank.getByUuid(s).getName())));
                                 player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
+                            } else {
+                                player.sendMessage(Color.translate("&cThat rank does not exist!"));
+                            }
+                        }
+                        break;
+                    case "hidden":
+                        if (args.length == 1) player.sendMessage(Color.translate("&cUsage: /rank hidden <name>."));
+                        if (args.length == 2) {
+                            String name = args[1];
+                            Rank rank = Rank.getByName(name);
+
+                            if (rank != null) {
+                                String displayName = Color.translate(rank.getColor() + rank.getName());
+
+                                rank.setHidden(!rank.isHidden());
+                                player.sendMessage(Color.translate("&aSet the " + displayName + "&a rank hidden mode " + rank.isDefaultRank() + "!"));
+                            } else {
+                                player.sendMessage(Color.translate("&cThat rank does not exist!"));
+                            }
+                        }
+                        break;
+                    case "default":
+                        if (args.length == 1) player.sendMessage(Color.translate("&cUsage: /rank default <name>."));
+                        if (args.length == 2) {
+                            String name = args[1];
+                            Rank rank = Rank.getByName(name);
+
+                            if (rank != null) {
+                                String displayName = Color.translate(rank.getColor() + rank.getName());
+
+                                rank.setDefaultRank(!rank.isDefaultRank());
+                                player.sendMessage(Color.translate("&aSet the " + displayName + "&a rank default mode " + rank.isDefaultRank() + "!"));
                             } else {
                                 player.sendMessage(Color.translate("&cThat rank does not exist!"));
                             }

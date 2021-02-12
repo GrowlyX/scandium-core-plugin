@@ -10,6 +10,7 @@ import vip.potclub.core.CorePlugin;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Getter
 @Setter
@@ -30,6 +31,7 @@ public class Rank {
     private String color;
 
     private boolean defaultRank;
+    private boolean hidden = false;
 
     private int weight;
 
@@ -80,12 +82,15 @@ public class Rank {
     }
 
     public static Rank getDefault() {
-        for (Rank rank : Rank.getRanks()) {
+        AtomicReference<Rank> rankAtomicReference = new AtomicReference<>();
+
+        Rank.getRanks().forEach(rank -> {
             if (rank.isDefaultRank()) {
-                return rank;
+                rankAtomicReference.set(rank);
             }
-        }
-        return null;
+        });
+
+        return rankAtomicReference.get();
     }
 
     public static Rank getByName(String name) {

@@ -28,9 +28,11 @@ public class ListCommand extends BaseCommand {
             StringBuilder playerBuilder = new StringBuilder();
 
             ranks.forEach(rankData -> {
-                rankBuilder.append(Color.translate(rankData.getColor()));
-                rankBuilder.append(rankData.getName());
-                rankBuilder.append(Color.translate("&7, "));
+                if (!rankData.isHidden()) {
+                    rankBuilder.append(Color.translate(rankData.getColor()));
+                    rankBuilder.append(rankData.getName());
+                    rankBuilder.append(Color.translate("&7, "));
+                }
             });
 
             Bukkit.getOnlinePlayers().stream().map(online ->

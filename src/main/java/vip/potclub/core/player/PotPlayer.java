@@ -23,6 +23,7 @@ import vip.potclub.core.util.external.NameMCExternal;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Getter
 @Setter
@@ -370,24 +371,19 @@ public class PotPlayer {
     }
 
     public Grant getActiveGrant() {
-        Grant toReturn = null;
+        AtomicReference<Grant> activeGrant = new AtomicReference<>();
 
-        for (Grant grant : this.getAllGrants()) {
+        this.getAllGrants().forEach(grant -> {
             if (grant != null) {
-                try {
-                    if (grant.isActive() && !grant.getRank().isDefaultRank()) {
-                        toReturn = grant;
-                    }
-                } catch (Exception e) {
-                    toReturn = new Grant(null, Objects.requireNonNull(Rank.getDefault()), System.currentTimeMillis(), 2147483647L, "Automatic Grant (Default)", true, true);
+                if (grant.isActive()) {
+                    activeGrant.set(grant);
                 }
             }
-        }
-        if (toReturn == null) {
-            toReturn = new Grant(null, Objects.requireNonNull(Rank.getDefault()), System.currentTimeMillis(), 2147483647L, "Automatic Grant (Default)", true, true);
-            this.getAllGrants().add(toReturn);
-        }
-        return toReturn;
+        });
+
+        if (activeGrant.get() == null) activeGrant.set(new Grant(null, Objects.requireNonNull(Rank.getDefault()), System.currentTimeMillis(), 2147483647L, "Automatic Grant (Default)", true, true));
+
+        return activeGrant.get();
     }
 
     public void setupAttachment() {
