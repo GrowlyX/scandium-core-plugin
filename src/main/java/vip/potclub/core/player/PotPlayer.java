@@ -66,6 +66,12 @@ public class PotPlayer {
     private boolean isFrozen = false;
     private boolean isSynced = false;
 
+    private boolean isGrantEditing = false;
+    private Player grantTarget = null;
+    private Rank grantRank = null;
+    private long grantDuration;
+    private boolean grantPerm;
+
     private boolean isReasonEditing = false;
     private PunishmentType reasonType = null;
     private String reasonTarget = null;

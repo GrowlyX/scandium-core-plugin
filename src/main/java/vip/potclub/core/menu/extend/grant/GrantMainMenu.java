@@ -42,9 +42,9 @@ public class GrantMainMenu extends AbstractInventoryMenu<CorePlugin> {
         getSortedRanks().forEach(rank -> {
             this.inventory.setItem(i.get(), new InventoryMenuItem(Material.NAME_TAG)
                     .addLore(Arrays.asList(
-                            "&b&m--------------------------------",
+                            "&6&m--------------------------------",
                             network.getSecondaryColor() + "Click to grant the " + rank.getColor() + rank.getName() + network.getSecondaryColor() + " rank!",
-                            "&b&m--------------------------------"
+                            "&6&m--------------------------------"
                     ))
                     .setDisplayName(rank.getColor() + rank.getName())
                     .create()

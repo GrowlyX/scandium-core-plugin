@@ -68,14 +68,16 @@ public class RankCommand extends BaseCommand {
                                 player.sendMessage(Color.translate("&7Name: &f" + displayName));
                                 player.sendMessage(Color.translate("&7Color: &f" + rank.getColor() + "This Color"));
                                 player.sendMessage(Color.translate("&7Weight: &f" + rank.getWeight()));
+                                player.sendMessage(Color.translate("&7Default: &f" + rank.isDefaultRank()));
+                                player.sendMessage(Color.translate("&7Hidden: &f" + rank.isHidden()));
                                 player.sendMessage(Color.translate("&7Prefix: &f" + rank.getPrefix()));
                                 player.sendMessage(Color.translate("&7Suffix: &f" + rank.getSuffix()));
                                 player.sendMessage(Color.translate("&7UUID: &f" + rank.getUuid()));
                                 player.sendMessage(Color.translate("  "));
-                                player.sendMessage(Color.translate("&7Permissions:"));
+                                player.sendMessage(Color.translate("&ePermissions:"));
                                 rank.getPermissions().forEach(s -> player.sendMessage(Color.translate(" &7* &f" + s)));
                                 player.sendMessage(Color.translate("  "));
-                                player.sendMessage(Color.translate("&7Inheritances:"));
+                                player.sendMessage(Color.translate("&eInheritances:"));
                                 rank.getInheritance().forEach(s -> player.sendMessage(Color.translate(" &7* &f" + Rank.getByUuid(s).getName())));
                                 player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
                             } else {
@@ -92,8 +94,13 @@ public class RankCommand extends BaseCommand {
                             if (rank != null) {
                                 String displayName = Color.translate(rank.getColor() + rank.getName());
 
-                                rank.setHidden(!rank.isHidden());
-                                player.sendMessage(Color.translate("&aSet the " + displayName + "&a rank hidden mode " + rank.isDefaultRank() + "!"));
+                                if (rank.isHidden()) {
+                                    rank.setHidden(false);
+                                    player.sendMessage(Color.translate("&aSet the " + displayName + "&a rank hidden mode to false!"));
+                                } else {
+                                    rank.setHidden(true);
+                                    player.sendMessage(Color.translate("&aSet the " + displayName + "&a rank hidden mode to true!"));
+                                }
                             } else {
                                 player.sendMessage(Color.translate("&cThat rank does not exist!"));
                             }
@@ -108,8 +115,13 @@ public class RankCommand extends BaseCommand {
                             if (rank != null) {
                                 String displayName = Color.translate(rank.getColor() + rank.getName());
 
-                                rank.setDefaultRank(!rank.isDefaultRank());
-                                player.sendMessage(Color.translate("&aSet the " + displayName + "&a rank default mode " + rank.isDefaultRank() + "!"));
+                                if (rank.isDefaultRank()) {
+                                    rank.setDefaultRank(false);
+                                    player.sendMessage(Color.translate("&aSet the " + displayName + "&a rank default mode to false!"));
+                                } else {
+                                    rank.setDefaultRank(true);
+                                    player.sendMessage(Color.translate("&aSet the " + displayName + "&a rank default mode to true!"));
+                                }
                             } else {
                                 player.sendMessage(Color.translate("&cThat rank does not exist!"));
                             }

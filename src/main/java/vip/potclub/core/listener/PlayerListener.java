@@ -20,6 +20,7 @@ import vip.potclub.core.CorePlugin;
 import vip.potclub.core.enums.ChatChannelType;
 import vip.potclub.core.media.MediaConstants;
 import vip.potclub.core.menu.IMenu;
+import vip.potclub.core.menu.extend.grant.GrantSelectConfirmMenu;
 import vip.potclub.core.menu.extend.punish.PunishSelectDurationMenu;
 import vip.potclub.core.player.PotPlayer;
 import vip.potclub.core.player.punishment.Punishment;
@@ -93,9 +94,11 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
         PotPlayer potPlayer = PotPlayer.getPlayer(event.getPlayer());
-        if (potPlayer.isFrozen()) {
-            event.setCancelled(true);
-            CorePlugin.getInstance().getPlayerManager().sendFreezeMessage(event.getPlayer());
+        if (potPlayer != null) {
+            if (potPlayer.isFrozen()) {
+                event.setCancelled(true);
+                CorePlugin.getInstance().getPlayerManager().sendFreezeMessage(event.getPlayer());
+            }
         }
     }
 
@@ -105,9 +108,11 @@ public class PlayerListener implements Listener {
             Player player = (Player) event.getEntity();
             PotPlayer potPlayer = PotPlayer.getPlayer(player);
 
-            if (potPlayer.isFrozen()) {
-                event.setCancelled(true);
-                CorePlugin.getInstance().getPlayerManager().sendFreezeMessage(player);
+            if (potPlayer != null) {
+                if (potPlayer.isFrozen()) {
+                    event.setCancelled(true);
+                    CorePlugin.getInstance().getPlayerManager().sendFreezeMessage(player);
+                }
             }
         }
     }
@@ -158,6 +163,23 @@ public class PlayerListener implements Listener {
         Matcher twitterMatcher = MediaConstants.TWITTER_USERNAME_REGEX.matcher(event.getMessage());
         Matcher instaMatcher = MediaConstants.INSTAGRAM_USERNAME_REGEX.matcher(event.getMessage());
         Matcher youtubeMatcher = MediaConstants.YOUTUBE_PROFILELINK_REGEX.matcher(event.getMessage());
+
+        if (potPlayer.isGrantEditing()) {
+            event.setCancelled(true);
+            String message = event.getMessage();
+
+            if (event.getMessage().equalsIgnoreCase("cancel")) {
+                player.sendMessage(Color.translate("&cCancelled the granting process."));
+                potPlayer.setGrantTarget(null);
+                potPlayer.setGrantRank(null);
+                potPlayer.setGrantPerm(false);
+            } else {
+                player.sendMessage(Color.translate("&aSet the grant reason to &6'" + message + "'&a."));
+                new GrantSelectConfirmMenu(potPlayer.getPlayer(), potPlayer.getGrantTarget(), potPlayer.getGrantRank(), potPlayer.getGrantDuration(), message, potPlayer.isGrantPerm()).open(player);
+            }
+            potPlayer.setGrantEditing(false);
+            return;
+        }
 
         if (potPlayer.isReasonEditing()) {
             event.setCancelled(true);
