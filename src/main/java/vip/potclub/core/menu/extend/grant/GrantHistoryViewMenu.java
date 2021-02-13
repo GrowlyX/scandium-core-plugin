@@ -85,7 +85,7 @@ public class GrantHistoryViewMenu extends AbstractInventoryMenu<CorePlugin> {
 
             ItemStack item = event.getCurrentItem();
             Player player = (Player) event.getWhoClicked();
-            PotPlayer potPlayer = PotPlayer.getPlayer(player);
+            PotPlayer potPlayer = PotPlayer.getPlayer(this.target);
 
             if (item.hasItemMeta()) {
                 if (item.getItemMeta().getDisplayName() != null) {

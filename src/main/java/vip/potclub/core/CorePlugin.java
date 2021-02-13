@@ -234,10 +234,9 @@ public final class CorePlugin extends JavaPlugin {
         this.rankManager.saveRanks();
         RedisUtil.write(RedisUtil.updateRanks());
         this.warpManager.saveWarps();
-
         this.prefixManager.savePrefixes();
+
         this.getServer().getOnlinePlayers().forEach(player -> player.kickPlayer(Color.translate("&cThe server is currently rebooting.\n&cPlease reconnect in a few minutes, or check discord for more information.")));
-        this.getServer().getScheduler().cancelAllTasks();
 
         if (this.redisClient.isClientActive()) {
             this.redisClient.destroyClient();

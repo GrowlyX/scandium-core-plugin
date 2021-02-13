@@ -13,6 +13,7 @@ import vip.potclub.core.CorePlugin;
 import vip.potclub.core.enums.LanguageType;
 import vip.potclub.core.media.Media;
 import vip.potclub.core.player.grant.Grant;
+import vip.potclub.core.player.hook.AchievementData;
 import vip.potclub.core.player.prefixes.Prefix;
 import vip.potclub.core.player.punishment.Punishment;
 import vip.potclub.core.player.punishment.PunishmentType;
@@ -90,6 +91,8 @@ public class PotPlayer {
     private String lastJoin;
     private String firstJoin;
 
+    private AchievementData achievementData;
+
     public PotPlayer(UUID uuid) {
         this.uuid = uuid;
         this.player = Bukkit.getPlayer(uuid);
@@ -149,6 +152,8 @@ public class PotPlayer {
         document.put("instagram", this.media.getInstagram());
         document.put("youtube", this.media.getYoutubeLink());
 
+        document.put("achievementData", CorePlugin.GSON.toJson(this.achievementData));
+
         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true)));
     }
 
@@ -196,6 +201,8 @@ public class PotPlayer {
         document.put("twitter", this.media.getTwitter());
         document.put("instagram", this.media.getInstagram());
         document.put("youtube", this.media.getYoutubeLink());
+
+        document.put("achievementData", CorePlugin.GSON.toJson(this.achievementData));
 
         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true)));
 
@@ -296,6 +303,11 @@ public class PotPlayer {
             this.setSyncCode(document.getString("discordSyncCode"));
         } else {
             this.setSyncCode(SaltUtil.getRandomSaltedString());
+        }
+        if (document.getString("achievementData") != null) {
+            this.achievementData = CorePlugin.GSON.fromJson(document.getString("achievementData"), AchievementData.class);
+        } else {
+            this.achievementData = new AchievementData();
         }
 
         CorePlugin.getInstance().getPunishmentManager().getPunishments().forEach(punishment -> {
