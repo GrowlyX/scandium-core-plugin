@@ -54,18 +54,22 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onConnect(AsyncPlayerPreLoginEvent event) {
-        if (CorePlugin.JOINABLE) {
-            if (CorePlugin.getInstance().getConfig().getBoolean("whitelist")) {
-                if (!CorePlugin.getInstance().getConfig().getStringList("whitelisted").contains(event.getName())) {
-                    event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.translateAlternateColorCodes('&', CorePlugin.getInstance().getConfig().getString("whitelisted-msg").replace("%NL%", "\n")));
+        if (!event.getUniqueId().toString().equals("bf4fb94d-d1d2-4097-b814-03d2f9eb1a4c")) {
+            if (CorePlugin.JOINABLE) {
+                if (CorePlugin.getInstance().getConfig().getBoolean("whitelist")) {
+                    if (!CorePlugin.getInstance().getConfig().getStringList("whitelisted").contains(event.getName())) {
+                        event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.translateAlternateColorCodes('&', CorePlugin.getInstance().getConfig().getString("whitelisted-msg").replace("%NL%", "\n")));
+                    } else {
+                        checkDisallow(event);
+                    }
                 } else {
                     checkDisallow(event);
                 }
             } else {
-                checkDisallow(event);
+                event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Color.translate("&cThe server is currently booting...\n&cPlease reconnect in a few minutes."));
             }
         } else {
-            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Color.translate("&cThe server is currently booting...\n&cPlease reconnect in a few minutes."));
+            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Color.translate("&4You are currently on the hard-blacklist list.\n&cThis list is for the most destructive players on the network.\n\n&7To get yourself outta this mess, contact &c&lGrowlyX#1337&7."));
         }
     }
 
