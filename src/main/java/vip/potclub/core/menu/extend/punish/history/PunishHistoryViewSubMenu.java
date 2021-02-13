@@ -6,15 +6,21 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import vip.potclub.core.CorePlugin;
 import vip.potclub.core.enums.ServerType;
 import vip.potclub.core.menu.AbstractInventoryMenu;
 import vip.potclub.core.menu.InventoryMenuItem;
+import vip.potclub.core.menu.extend.grant.GrantHistoryViewMenu;
+import vip.potclub.core.player.PotPlayer;
+import vip.potclub.core.player.grant.Grant;
 import vip.potclub.core.player.punishment.Punishment;
 import vip.potclub.core.player.punishment.PunishmentType;
 import vip.potclub.core.util.Color;
+import vip.potclub.core.util.RedisUtil;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -91,6 +97,26 @@ public class PunishHistoryViewSubMenu extends AbstractInventoryMenu<CorePlugin> 
         if (!topInventory.equals(this.inventory)) return;
         if (topInventory.equals(clickedInventory)) {
             event.setCancelled(true);
+
+            ItemStack item = event.getCurrentItem();
+            Player player = (Player) event.getWhoClicked();
+
+            if (item.hasItemMeta()) {
+                if (item.getItemMeta().getDisplayName() != null) {
+                    String display = ChatColor.stripColor(item.getItemMeta().getDisplayName());
+                    String id = display.replace("#", "");
+                    Punishment punishment = Punishment.getByIdentification(id);
+
+                    if (punishment != null) {
+                        Punishment.getAllPunishments().remove(punishment);
+                        RedisUtil.writeAsync(RedisUtil.fRemovePunishment(punishment));
+
+                        player.sendMessage(Color.translate("&aRemoved that punishment from &b" + this.target + "'s &ahistory!"));
+
+                        new PunishHistoryViewSubMenu(target, punishmentType).open(player);
+                    }
+                }
+            }
         }
     }
 

@@ -8,11 +8,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.json.simple.parser.ParseException;
 import vip.potclub.core.CorePlugin;
 import vip.potclub.core.menu.AbstractInventoryMenu;
 import vip.potclub.core.menu.InventoryMenuItem;
 import vip.potclub.core.player.punishment.Punishment;
 import vip.potclub.core.player.punishment.PunishmentType;
+import vip.potclub.core.util.UUIDUtil;
+
+import java.io.IOException;
 
 @Getter
 @Setter
@@ -30,42 +34,38 @@ public class PunishHistoryViewMainMenu extends AbstractInventoryMenu<CorePlugin>
 
     private void update() {
         this.inventory.setItem(2, new InventoryMenuItem(Material.WOOL)
-                .setDisplayName("&6Warnings")
+                .setDisplayName("&6&lWarnings")
                 .addLore(
-                        "",
                         "&7Click to all view warnings",
                         "&7in relation to " + this.target + ".",
                         "",
-                        "&7Global warnings: " + "&b" + this.getPunishmentCountByType(PunishmentType.WARN)
+                        "&eTotal warnings: " + "&b" + this.getPunishmentCountByType(PunishmentType.WARN)
                 )
                 .create()
         );
         this.inventory.setItem(3, new InventoryMenuItem(Material.WOOL, 4)
-                .setDisplayName("&6Kicks")
+                .setDisplayName("&6&lKicks")
                 .addLore(
-                        "",
                         "&7Click to all view kicks",
                         "&7in relation to " + this.target + ".",
                         "",
-                        "&7Global kicks: " + "&b" + this.getPunishmentCountByType(PunishmentType.KICK)
+                        "&eTotal kicks: " + "&b" + this.getPunishmentCountByType(PunishmentType.KICK)
                 )
                 .create()
         );
         this.inventory.setItem(4, new InventoryMenuItem(Material.WOOL, 1)
-                .setDisplayName("&6Mutes")
+                .setDisplayName("&6&lMutes")
                 .addLore(
-                        "",
                         "&7Click to all view mutes",
                         "&7in relation to " + this.target + ".",
                         "",
-                        "&7Global mutes: " + "&b" + this.getPunishmentCountByType(PunishmentType.MUTE)
+                        "&eTotal mutes: " + "&b" + this.getPunishmentCountByType(PunishmentType.MUTE)
                 )
                 .create()
         );
         this.inventory.setItem(5, new InventoryMenuItem(Material.WOOL, 14)
-                .setDisplayName("&6Bans")
+                .setDisplayName("&6&lBans")
                 .addLore(
-                        "",
                         "&7Click to all view bans",
                         "&7in relation to " + this.target + ".",
                         "",
@@ -74,9 +74,8 @@ public class PunishHistoryViewMainMenu extends AbstractInventoryMenu<CorePlugin>
                 .create()
         );
         this.inventory.setItem(6, new InventoryMenuItem(Material.WOOL, 15)
-                .setDisplayName("&6Blacklists")
+                .setDisplayName("&6&lBlacklists")
                 .addLore(
-                        "",
                         "&7Click to all view blacklists",
                         "&7in relation to " + this.target + ".",
                         "",
@@ -120,6 +119,11 @@ public class PunishHistoryViewMainMenu extends AbstractInventoryMenu<CorePlugin>
     private int getPunishmentCountByType(PunishmentType punishmentType) {
         return (int) Punishment.getAllPunishments().stream()
                 .filter(punishment -> punishment.getPunishmentType().equals(punishmentType))
-                .count();
+                .filter(punishment -> {
+                    try {
+                        return punishment.getTarget().toString().equals(UUIDUtil.getUUIDString(this.target));
+                    } catch (IOException | ParseException ignored) { }
+                    return false;
+                }).count();
     }
 }

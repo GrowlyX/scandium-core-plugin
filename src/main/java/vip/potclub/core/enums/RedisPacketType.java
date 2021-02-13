@@ -22,6 +22,7 @@ public enum RedisPacketType {
 
     PUNISHMENT_EXECUTE_UPDATE("PunishmentExecuteUpdate"),
     PUNISHMENT_REMOVE_UPDATE("PunishmentRemoveUpdate"),
+    PUNISHMENT_FREMOVE_UPDATE("PunishmentFRemoveUpdate"),
 
     RANK_SETTINGS_UPDATE("RankSettingsUpdate"),
     RANK_CREATE_UPDATE("RankCreateUpdate"),

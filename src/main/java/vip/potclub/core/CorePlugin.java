@@ -15,6 +15,7 @@ import vip.potclub.core.command.extend.essential.*;
 import vip.potclub.core.command.extend.grant.CGrantCommand;
 import vip.potclub.core.command.extend.grant.GrantCommand;
 import vip.potclub.core.command.extend.grant.GrantsCommand;
+import vip.potclub.core.command.extend.modsuite.FreezeCommand;
 import vip.potclub.core.command.extend.modsuite.VanishCommand;
 import vip.potclub.core.command.extend.network.ForceUpdateCommand;
 import vip.potclub.core.command.extend.network.NetworkCommand;
@@ -26,12 +27,15 @@ import vip.potclub.core.command.extend.server.SetSlotsCommand;
 import vip.potclub.core.command.extend.warps.WarpCommand;
 import vip.potclub.core.command.extend.web.WebAnnouncementCommand;
 import vip.potclub.core.command.extend.web.WebAnnouncementDeleteCommand;
+import vip.potclub.core.command.extend.whitelist.WhitelistCommand;
 import vip.potclub.core.database.Database;
 import vip.potclub.core.listener.PlayerListener;
 import vip.potclub.core.lunar.AbstractClientInjector;
 import vip.potclub.core.lunar.extend.LunarCommand;
 import vip.potclub.core.manager.*;
-import vip.potclub.core.player.punishment.PunishmentDuration;
+import vip.potclub.core.nms.AbstractNMSImplementation;
+import vip.potclub.core.nms.extend.NMSImplementation_v1_7;
+import vip.potclub.core.nms.extend.NMSImplementation_v1_8;
 import vip.potclub.core.protocol.AbstractChatInterceptor;
 import vip.potclub.core.protocol.extend.ProtocolChatInterceptor;
 import vip.potclub.core.redis.RedisClient;
@@ -79,6 +83,7 @@ public final class CorePlugin extends JavaPlugin {
     private AbstractChatInterceptor chatInterceptor;
     private AbstractClientInjector lunarCommand;
     private AbstractBukkitVersionImplementation bukkitImplementation;
+    private AbstractNMSImplementation NMS;
 
     private Executor taskThread;
     private Executor redisThread;
@@ -115,9 +120,13 @@ public final class CorePlugin extends JavaPlugin {
 
         if (this.getServer().getVersion().contains("1.7")) {
             this.bukkitImplementation = new PingCommand_1_7();
+            this.NMS = new NMSImplementation_v1_7();
+
             this.getLogger().info("[Bukkit] Hooked into Bukkit version " + this.getServer().getVersion() + "!");
         } else if (this.getServer().getVersion().contains("1.8")) {
             this.bukkitImplementation = new PingCommand_1_8();
+            this.NMS = new NMSImplementation_v1_8();
+
             this.getLogger().info("[Bukkit] Hooked into Bukkit version " + this.getServer().getVersion() + "!");
         } else {
             this.getLogger().info("[Bukkit] I don't support this version yet :( Contact growly to add support!");
@@ -164,6 +173,7 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("report").setExecutor(new ReportCommand());
         this.getCommand("punish").setExecutor(new PunishCommand());
         this.getCommand("scandium").setExecutor(new CoreCommand());
+        this.getCommand("freeze").setExecutor(new FreezeCommand());
         this.getCommand("famous").setExecutor(new FamousCommand());
         this.getCommand("profile").setExecutor(new ProfileCommand());
         this.getCommand("ignore").setExecutor(new IgnoreCommand());

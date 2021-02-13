@@ -23,7 +23,7 @@ public final class RedisUtil {
 
     public static String onServerUpdate() {
         return new RedisMessage(RedisPacketType.SERVER_DATA_UPDATE)
-                .setParam("SERVER", CorePlugin.getInstance().getConfig().getString("server-id"))
+                .setParam("SERVER", CorePlugin.getInstance().getServerName())
                 .setParam("SERVER_TYPE", CorePlugin.getInstance().getConfig().getString("server-type"))
                 .setParam("ONLINEPLAYERS", String.valueOf(Bukkit.getOnlinePlayers().size()))
                 .setParam("MAXPLAYERS", String.valueOf(Bukkit.getMaxPlayers()))
@@ -35,13 +35,13 @@ public final class RedisUtil {
 
     public static String onServerOffline(){
         return new RedisMessage(RedisPacketType.SERVER_DATA_OFFLINE)
-                .setParam("SERVER", CorePlugin.getInstance().getConfig().getString("server-id"))
+                .setParam("SERVER", CorePlugin.getInstance().getServerName())
                 .toJson();
     }
 
     public static String onServerOnline(){
         return new RedisMessage(RedisPacketType.SERVER_DATA_ONLINE)
-                .setParam("SERVER", CorePlugin.getInstance().getConfig().getString("server-id"))
+                .setParam("SERVER", CorePlugin.getInstance().getServerName())
                 .toJson();
     }
 
@@ -111,13 +111,13 @@ public final class RedisUtil {
 
     public static String updateRanks() {
         return new RedisMessage(RedisPacketType.RANK_SETTINGS_UPDATE)
-                .setParam("SERVER", CorePlugin.getInstance().getConfig().getString("server-id"))
+                .setParam("SERVER", CorePlugin.getInstance().getServerName())
                 .toJson();
     }
 
     public static String executePunishment(PunishmentType punishmentType, UUID issuer, UUID target, String issuerName, String reason, Date issuingDate, long punishmentDuration, boolean permanent, Date createdAt, UUID uuid, String punishIdentification, boolean silent) {
         return new RedisMessage(RedisPacketType.PUNISHMENT_EXECUTE_UPDATE)
-                .setParam("SERVER", CorePlugin.getInstance().getConfig().getString("server-id"))
+                .setParam("SERVER", CorePlugin.getInstance().getServerName())
                 .setParam("TYPE", punishmentType.toString())
                 .setParam("ISSUER", (issuer != null ? issuer.toString() : null))
                 .setParam("TARGET", target.toString())
@@ -133,6 +133,13 @@ public final class RedisUtil {
                 .toJson();
     }
 
+    public static String fRemovePunishment(Punishment punishment) {
+        return new RedisMessage(RedisPacketType.PUNISHMENT_FREMOVE_UPDATE)
+                .setParam("ID", punishment.getPunishIdentification())
+                .setParam("SERVER", CorePlugin.getInstance().getServerName())
+                .toJson();
+    }
+
     public static String removePunishment(Player remover, Punishment punishment, String message) {
         if (remover != null) {
             return new RedisMessage(RedisPacketType.PUNISHMENT_REMOVE_UPDATE)
@@ -140,7 +147,7 @@ public final class RedisUtil {
                     .setParam("REMOVERNAME", remover.getName())
                     .setParam("REMOVERDISPLAYNAME", remover.getDisplayName())
                     .setParam("REASON", message)
-                    .setParam("SERVER", CorePlugin.getInstance().getConfig().getString("server-id"))
+                    .setParam("SERVER", CorePlugin.getInstance().getServerName())
                     .setParam("ID", punishment.getPunishIdentification())
                     .toJson();
         } else {
@@ -149,7 +156,7 @@ public final class RedisUtil {
                     .setParam("REMOVERNAME", null)
                     .setParam("REMOVERDISPLAYNAME", null)
                     .setParam("REASON", message)
-                    .setParam("SERVER", CorePlugin.getInstance().getConfig().getString("server-id"))
+                    .setParam("SERVER", CorePlugin.getInstance().getServerName())
                     .setParam("ID", punishment.getPunishIdentification())
                     .toJson();
         }
@@ -173,8 +180,9 @@ public final class RedisUtil {
     public static String onUnfreeze(Player player, Player target) {
         return new RedisMessage(RedisPacketType.PLAYER_SERVER_UPDATE)
                 .setParam("PLAYER", player.getDisplayName())
-                .setParam("TARGET", target.getName())
-                .setParam("UPDATETYPE", StaffUpdateType.FREEZE.getName())
+                .setParam("SERVER", CorePlugin.getInstance().getServerName())
+                .setParam("TARGET", target.getDisplayName())
+                .setParam("UPDATETYPE", StaffUpdateType.UNFREEZE.getName())
                 .toJson();
     }
 

@@ -23,6 +23,7 @@ public class VanishCommand extends BaseCommand {
         Player player = (Player) sender;
         PlayerManager vanishManager = CorePlugin.getInstance().getPlayerManager();
         ServerManager manager = CorePlugin.getInstance().getServerManager();
+
         if (player.hasPermission("scandium.command.vanish")) {
             if (args.length == 0) {
                 PotPlayer potPlayer = PotPlayer.getPlayer(player);

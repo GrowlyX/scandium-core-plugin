@@ -26,7 +26,7 @@ import java.util.UUID;
 
 public class RedisListener extends JedisPubSub {
 
-    private final String SERVER_NAME = CorePlugin.getInstance().getConfig().getString("server-id");
+    private final String SERVER_NAME = CorePlugin.getInstance().getServerName();
 
     @Override
     public void onMessage(String channel, String message) {
@@ -280,6 +280,15 @@ public class RedisListener extends JedisPubSub {
                         Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> Rank.getRanks().clear());
                         CorePlugin.getInstance().getRankManager().loadRanks();
                         CorePlugin.getInstance().getLogger().info("[Ranks] Synced all ranks.");
+                    }
+                    break;
+                case PUNISHMENT_FREMOVE_UPDATE:
+                    if (!SERVER_NAME.equals(redisMessage.getParam("SERVER"))) {
+                        String punishmentString = redisMessage.getParam("ID");
+                        Punishment punishment = Punishment.getByIdentification(punishmentString);
+                        if (punishment != null) {
+                            Punishment.getAllPunishments().remove(punishment);
+                        }
                     }
                     break;
                 case NETWORK_BROADCAST_UPDATE:

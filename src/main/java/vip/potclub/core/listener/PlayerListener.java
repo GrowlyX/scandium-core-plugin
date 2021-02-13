@@ -56,14 +56,16 @@ public class PlayerListener implements Listener {
     public void onConnect(AsyncPlayerPreLoginEvent event) {
         if (!event.getUniqueId().toString().equals("bf4fb94d-d1d2-4097-b814-03d2f9eb1a4c")) {
             if (CorePlugin.JOINABLE) {
-                if (CorePlugin.getInstance().getConfig().getBoolean("whitelist")) {
-                    if (!CorePlugin.getInstance().getConfig().getStringList("whitelisted").contains(event.getName())) {
-                        event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.translateAlternateColorCodes('&', CorePlugin.getInstance().getConfig().getString("whitelisted-msg").replace("%NL%", "\n")));
+                if (CorePlugin.getInstance().getConfig().getBoolean("beta-whitelist")) {
+                    if (CorePlugin.getInstance().getConfig().getBoolean("whitelist")) {
+                        if (!CorePlugin.getInstance().getConfig().getStringList("whitelisted").contains(event.getName())) {
+                            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.translateAlternateColorCodes('&', CorePlugin.getInstance().getConfig().getString("whitelisted-msg").replace("%NL%", "\n")));
+                        } else {
+                            checkDisallow(event);
+                        }
                     } else {
                         checkDisallow(event);
                     }
-                } else {
-                    checkDisallow(event);
                 }
             } else {
                 event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Color.translate("&cThe server is currently booting...\n&cPlease reconnect in a few minutes."));
@@ -98,11 +100,11 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
         PotPlayer potPlayer = PotPlayer.getPlayer(event.getPlayer());
-        if (potPlayer != null) {
-            if (potPlayer.isFrozen()) {
-                event.setCancelled(true);
-                CorePlugin.getInstance().getPlayerManager().sendFreezeMessage(event.getPlayer());
-            }
+
+        if (potPlayer.isFrozen()) {
+            event.setCancelled(true);
+            event.getPlayer().teleport(event.getFrom());
+            CorePlugin.getInstance().getPlayerManager().sendFreezeMessage(event.getPlayer());
         }
     }
 
@@ -145,6 +147,7 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onConnect(PlayerJoinEvent event) {
         new PotPlayer(event.getPlayer().getUniqueId());
+
         CorePlugin.getInstance().getServerManager().getVanishedPlayers().forEach(player -> {
             if (!event.getPlayer().hasPermission("scandium.vanished.see")) {
                 event.getPlayer().hidePlayer(player);
@@ -159,6 +162,7 @@ public class PlayerListener implements Listener {
         PotPlayer potPlayer = PotPlayer.getPlayer(player);
 
         if (potPlayer.isFrozen()) {
+            event.setCancelled(true);
             CorePlugin.getInstance().getPlayerManager().sendFreezeMessage(player);
             return;
         }
@@ -324,6 +328,7 @@ public class PlayerListener implements Listener {
     public void onBlockedCommand(PlayerCommandPreprocessEvent event) {
         PotPlayer potPlayer = PotPlayer.getPlayer(event.getPlayer());
         if (potPlayer.isFrozen()) {
+            event.setCancelled(true);
             CorePlugin.getInstance().getPlayerManager().sendFreezeMessage(event.getPlayer());
             return;
         }
