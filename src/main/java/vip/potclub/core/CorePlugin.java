@@ -29,6 +29,7 @@ import vip.potclub.core.command.extend.web.WebAnnouncementCommand;
 import vip.potclub.core.command.extend.web.WebAnnouncementDeleteCommand;
 import vip.potclub.core.command.extend.whitelist.WhitelistCommand;
 import vip.potclub.core.database.Database;
+import vip.potclub.core.enums.ServerType;
 import vip.potclub.core.listener.PlayerListener;
 import vip.potclub.core.lunar.AbstractClientInjector;
 import vip.potclub.core.lunar.extend.LunarCommand;
@@ -226,31 +227,33 @@ public final class CorePlugin extends JavaPlugin {
 
         this.registerListeners(new PlayerListener());
 
-        new AutoMessageTask();
+        if (!this.getServerManager().getNetwork().equals(ServerType.BUZZMC)) new AutoMessageTask();
+
         new PunishExpireTask();
         new GrantExpireTask();
         new PlayerSaveTask();
         new ServerUpdateTask();
         new PunishSaveTask();
+        new FrozenMessageTask();
 
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, this.tpsRunnable, 0L, 1L);
     }
 
     @Override
     public void onDisable() {
+        this.getServer().getOnlinePlayers().forEach(player -> player.kickPlayer(Color.translate("&cThe server is currently rebooting.\n&cPlease reconnect in a few minutes, or check discord for more information.")));
+
         RedisUtil.write(RedisUtil.onServerOffline());
 
         this.punishmentManager.savePunishments();
         this.rankManager.saveRanks();
+
         RedisUtil.write(RedisUtil.updateRanks());
+
         this.warpManager.saveWarps();
         this.prefixManager.savePrefixes();
 
-        this.getServer().getOnlinePlayers().forEach(player -> player.kickPlayer(Color.translate("&cThe server is currently rebooting.\n&cPlease reconnect in a few minutes, or check discord for more information.")));
-
-        if (this.redisClient.isClientActive()) {
-            this.redisClient.destroyClient();
-        }
+        if (this.redisClient.isClientActive()) this.redisClient.destroyClient();
     }
 
     public void registerListeners(Listener... listeners) {

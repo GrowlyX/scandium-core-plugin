@@ -34,52 +34,53 @@ public class PunishHistoryViewMainMenu extends AbstractInventoryMenu<CorePlugin>
 
     private void update() {
         this.inventory.setItem(2, new InventoryMenuItem(Material.WOOL)
-                .setDisplayName("&6&lWarnings")
+                .setDisplayName("&6Warnings")
                 .addLore(
+                        "",
                         "&7Click to all view warnings",
                         "&7in relation to " + this.target + ".",
                         "",
-                        "&eTotal warnings: " + "&b" + this.getPunishmentCountByType(PunishmentType.WARN)
+                        "&7Total warnings: " + "&b" + this.getPunishmentCountByType(PunishmentType.WARN)
                 )
                 .create()
         );
         this.inventory.setItem(3, new InventoryMenuItem(Material.WOOL, 4)
-                .setDisplayName("&6&lKicks")
+                .setDisplayName("&6Kicks")
                 .addLore(
                         "&7Click to all view kicks",
                         "&7in relation to " + this.target + ".",
                         "",
-                        "&eTotal kicks: " + "&b" + this.getPunishmentCountByType(PunishmentType.KICK)
+                        "&7Total kicks: " + "&b" + this.getPunishmentCountByType(PunishmentType.KICK)
                 )
                 .create()
         );
         this.inventory.setItem(4, new InventoryMenuItem(Material.WOOL, 1)
-                .setDisplayName("&6&lMutes")
+                .setDisplayName("&6Mutes")
                 .addLore(
                         "&7Click to all view mutes",
                         "&7in relation to " + this.target + ".",
                         "",
-                        "&eTotal mutes: " + "&b" + this.getPunishmentCountByType(PunishmentType.MUTE)
+                        "&7Total mutes: " + "&b" + this.getPunishmentCountByType(PunishmentType.MUTE)
                 )
                 .create()
         );
         this.inventory.setItem(5, new InventoryMenuItem(Material.WOOL, 14)
-                .setDisplayName("&6&lBans")
+                .setDisplayName("&6Bans")
                 .addLore(
                         "&7Click to all view bans",
                         "&7in relation to " + this.target + ".",
                         "",
-                        "&7Global bans: " + "&b" + this.getPunishmentCountByType(PunishmentType.BAN)
+                        "&7Total bans: " + "&b" + this.getPunishmentCountByType(PunishmentType.BAN)
                 )
                 .create()
         );
         this.inventory.setItem(6, new InventoryMenuItem(Material.WOOL, 15)
-                .setDisplayName("&6&lBlacklists")
+                .setDisplayName("&6Blacklists")
                 .addLore(
                         "&7Click to all view blacklists",
                         "&7in relation to " + this.target + ".",
                         "",
-                        "&7Global blacklists: " + "&b" + this.getPunishmentCountByType(PunishmentType.BLACKLIST)
+                        "&7Total blacklists: " + "&b" + this.getPunishmentCountByType(PunishmentType.BLACKLIST)
                 )
                 .create()
         );
@@ -124,6 +125,7 @@ public class PunishHistoryViewMainMenu extends AbstractInventoryMenu<CorePlugin>
                         return punishment.getTarget().toString().equals(UUIDUtil.getUUIDString(this.target));
                     } catch (IOException | ParseException ignored) { }
                     return false;
-                }).count();
+                })
+                .count();
     }
 }

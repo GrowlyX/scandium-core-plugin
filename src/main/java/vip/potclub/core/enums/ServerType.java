@@ -12,7 +12,8 @@ public enum ServerType {
     POTCLUBVIP("PotClub", "01", ChatColor.LIGHT_PURPLE, ChatColor.YELLOW, "", "https://dsc.gg/pot", "PotClubVIP", "store.potclub.vip", "eu.potclub.vip", UUID.fromString("bbaa8e1d-af94-4aa8-980d-36d69b9de436"), UUID.fromString("bbaa8e1d-af94-4aa8-980d-36d69b9de436")),
     EVENTIS("Eventis", "03", ChatColor.DARK_AQUA, ChatColor.AQUA, "", "https://discord.eventis.club", "EventisClubMC", "store.eventis.club", "eventis.club", UUID.fromString("c9647f7a-abfb-41c4-a8ce-a07d74434ca6"), UUID.fromString("bbaa8e1d-af94-4aa8-980d-36d69b9de436")),
     SCANDIUM("Scandium", "04", ChatColor.DARK_RED, ChatColor.RED, "", "https://solexgames.com", "SolexDev", "store.solexgames.com", "solexgames.com", UUID.fromString("c9647f7a-abfb-41c4-a8ce-a07d74434ca6"), UUID.fromString("bbaa8e1d-af94-4aa8-980d-36d69b9de436")),
-    EYTRILORG("Eytril", "05", ChatColor.GOLD, ChatColor.WHITE, "", "https://discord.eytril.org/", "Eytril Network", "store.eytril.org", "eytril.org", UUID.fromString("c3a45b41-f69b-4bf1-8a0e-d63ae5135782"), UUID.fromString("bbaa8e1d-af94-4aa8-980d-36d69b9de436"));
+    BUZZMC("BuzzMC", "05", ChatColor.RED, ChatColor.AQUA, "", "https://discord.gg/683arg8CZE", "Coming Soon", "store.buzzmc.cf", "https://discord.gg/683arg8CZE", UUID.fromString("c9647f7a-abfb-41c4-a8ce-a07d74434ca6"), UUID.fromString("bbaa8e1d-af94-4aa8-980d-36d69b9de436")),
+    EYTRILORG("Eytril", "06", ChatColor.GOLD, ChatColor.WHITE, "", "https://discord.eytril.org/", "Eytril Network", "store.eytril.org", "eytril.org", UUID.fromString("c3a45b41-f69b-4bf1-8a0e-d63ae5135782"), UUID.fromString("bbaa8e1d-af94-4aa8-980d-36d69b9de436"));
 
     private final String serverName;
     private final String serverId;

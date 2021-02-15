@@ -20,6 +20,7 @@ public class Database {
     private final MongoCollection<Document> webCollection;
     private final MongoCollection<Document> warpCollection;
     private final MongoCollection<Document> rankCollection;
+    private final MongoCollection<Document> ticketCollection;
 
     public Database() {
         this.client = new MongoClient(new MongoClientURI(CorePlugin.getInstance().getConfig().getString("mongodb.url")));
@@ -32,5 +33,6 @@ public class Database {
         this.warpCollection = this.database.getCollection("warps");
         this.punishmentCollection = this.database.getCollection("punishment");
         this.webCollection = this.database.getCollection("website");
+        this.ticketCollection = this.database.getCollection("tickets");
     }
 }

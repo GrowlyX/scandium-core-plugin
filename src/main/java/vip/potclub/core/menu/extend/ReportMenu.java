@@ -34,9 +34,9 @@ public class ReportMenu extends AbstractInventoryMenu<CorePlugin> {
                 .setDisplayName("&3Combat Hacks")
                 .addLore(
                         "",
-                        "&8&l● &fKillAura",
-                        "&8&l● &fReach",
-                        "&8&l● &fAim Assist"
+                        "&8&l■ &fKillAura",
+                        "&8&l■ &fReach",
+                        "&8&l■ &fAim Assist"
                 )
                 .create()
         );
@@ -44,9 +44,9 @@ public class ReportMenu extends AbstractInventoryMenu<CorePlugin> {
                 .setDisplayName("&3Movement Hacks")
                 .addLore(
                         "",
-                        "&8&l● &fSpeed",
-                        "&8&l● &fBunny Hop",
-                        "&8&l● &fFly"
+                        "&8&l■ &fSpeed",
+                        "&8&l■ &fBunny Hop",
+                        "&8&l■ &fFly"
                 )
                 .create()
         );
@@ -54,9 +54,9 @@ public class ReportMenu extends AbstractInventoryMenu<CorePlugin> {
                 .setDisplayName("&3Velocity Hacks")
                 .addLore(
                         "",
-                        "&8&l● &fVelocity",
-                        "&8&l● &fReduced KB",
-                        "&8&l● &fAnti KB"
+                        "&8&l■ &fVelocity",
+                        "&8&l■ &fReduced KB",
+                        "&8&l■ &fAnti KB"
                 )
                 .create()
         );
@@ -64,9 +64,9 @@ public class ReportMenu extends AbstractInventoryMenu<CorePlugin> {
                 .setDisplayName("&3Gameplay Sabotage")
                 .addLore(
                         "",
-                        "&8&l● &fCamping",
-                        "&8&l● &fRunning",
-                        "&8&l● &fStalling"
+                        "&8&l■ &fCamping",
+                        "&8&l■ &fRunning",
+                        "&8&l■ &fStalling"
                 )
                 .create()
         );
@@ -74,9 +74,9 @@ public class ReportMenu extends AbstractInventoryMenu<CorePlugin> {
                 .setDisplayName("&3Chat Violation")
                 .addLore(
                         "",
-                        "&8&l● &fToxicity",
-                        "&8&l● &fSpam",
-                        "&8&l● &fAbuse"
+                        "&8&l■ &fToxicity",
+                        "&8&l■ &fSpam",
+                        "&8&l■ &fAbuse"
                 )
                 .create()
         );

@@ -332,25 +332,20 @@ public class PotPlayer {
             }
         }
 
-        this.getPunishments().forEach(punishment -> {
-            if (punishment.getPunishmentType().equals(PunishmentType.MUTE)) {
-                if (punishment.isActive()) {
-                    if (!punishment.isRemoved()) {
-                        this.currentlyMuted = true;
-                    }
-                }
-            }
-        });
+        this.getPunishments()
+                .stream()
+                .filter(punishment -> punishment.getPunishmentType().equals(PunishmentType.MUTE))
+                .filter(Punishment::isActive)
+                .filter(punishment -> !punishment.isRemoved())
+                .forEach(punishment -> this.currentlyMuted = true);
 
-        this.getPunishments().forEach(punishment -> {
-            if (punishment.getPunishmentType().equals(PunishmentType.BAN)) {
-                if (punishment.isActive()) {
-                    if (!punishment.isRemoved()) {
-                        this.currentlyBanned = true;
-                    }
-                }
-            }
-        });
+        this.getPunishments()
+                .stream()
+                .filter(punishment -> punishment.getPunishmentType().equals(PunishmentType.BAN))
+                .filter(Punishment::isActive)
+                .filter(punishment -> !punishment.isRemoved())
+                .forEach(punishment -> this.currentlyBanned = true);
+
         this.currentlyOnline = true;
 
         Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), this::saveWithoutRemove, 10 * 20L);

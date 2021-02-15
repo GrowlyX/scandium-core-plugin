@@ -104,7 +104,6 @@ public class PlayerListener implements Listener {
         if (potPlayer.isFrozen()) {
             event.setCancelled(true);
             event.getPlayer().teleport(event.getFrom());
-            CorePlugin.getInstance().getPlayerManager().sendFreezeMessage(event.getPlayer());
         }
     }
 
@@ -117,7 +116,6 @@ public class PlayerListener implements Listener {
             if (potPlayer != null) {
                 if (potPlayer.isFrozen()) {
                     event.setCancelled(true);
-                    CorePlugin.getInstance().getPlayerManager().sendFreezeMessage(player);
                 }
             }
         }
@@ -163,7 +161,13 @@ public class PlayerListener implements Listener {
 
         if (potPlayer.isFrozen()) {
             event.setCancelled(true);
-            CorePlugin.getInstance().getPlayerManager().sendFreezeMessage(player);
+
+            Bukkit.getOnlinePlayers()
+                    .stream()
+                    .filter(player1 -> player1.hasPermission("scandium.staff"))
+                    .filter(player1 -> PotPlayer.getPlayer(player1).isCanSeeStaffMessages())
+                    .forEach(player1 -> player1.sendMessage(Color.translate("&4[F] &b" + player1.getDisplayName() + "&f: &7" + event.getMessage())));
+
             return;
         }
 
@@ -329,7 +333,6 @@ public class PlayerListener implements Listener {
         PotPlayer potPlayer = PotPlayer.getPlayer(event.getPlayer());
         if (potPlayer.isFrozen()) {
             event.setCancelled(true);
-            CorePlugin.getInstance().getPlayerManager().sendFreezeMessage(event.getPlayer());
             return;
         }
         if (CorePlugin.getInstance().getConfig().getBoolean("block-commands.enabled")) {
