@@ -24,6 +24,7 @@ import vip.potclub.core.command.extend.punish.*;
 import vip.potclub.core.command.extend.rank.RankCommand;
 import vip.potclub.core.command.extend.rank.RankImportCommand;
 import vip.potclub.core.command.extend.server.SetSlotsCommand;
+import vip.potclub.core.command.extend.shutdown.ShutdownCommand;
 import vip.potclub.core.command.extend.warps.WarpCommand;
 import vip.potclub.core.command.extend.web.WebAnnouncementCommand;
 import vip.potclub.core.command.extend.web.WebAnnouncementDeleteCommand;
@@ -72,6 +73,7 @@ public final class CorePlugin extends JavaPlugin {
     private WarpManager warpManager;
     private PlayerManager playerManager;
     private RankManager rankManager;
+    private ShutdownManager shutdownManager;
     private PrefixManager prefixManager;
     private PunishmentManager punishmentManager;
 
@@ -146,6 +148,7 @@ public final class CorePlugin extends JavaPlugin {
         this.punishmentManager = new PunishmentManager();
         this.playerManager = new PlayerManager();
         this.warpManager = new WarpManager();
+        this.shutdownManager = new ShutdownManager();
 
         this.setupExtra();
 
@@ -174,6 +177,7 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("report").setExecutor(new ReportCommand());
         this.getCommand("punish").setExecutor(new PunishCommand());
         this.getCommand("scandium").setExecutor(new CoreCommand());
+        this.getCommand("shutdown").setExecutor(new ShutdownCommand()A);
         this.getCommand("freeze").setExecutor(new FreezeCommand());
         this.getCommand("famous").setExecutor(new FamousCommand());
         this.getCommand("profile").setExecutor(new ProfileCommand());
