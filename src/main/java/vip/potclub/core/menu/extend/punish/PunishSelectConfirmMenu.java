@@ -94,7 +94,7 @@ public class PunishSelectConfirmMenu extends AbstractInventoryMenu<CorePlugin> {
                 String saltedString = SaltUtil.getRandomSaltedString(7);
                 Date newDate = new Date();
 
-                Punishment punishment = new Punishment(this.punishmentType, this.player.getUniqueId(), uuidKey, this.player.getName(), this.reason, new Date(System.currentTimeMillis()), this.punishmentDuration, this.permanent, newDate, randomUuid, saltedString);
+                Punishment punishment = new Punishment(this.punishmentType, this.player.getUniqueId(), uuidKey, this.player.getName(), this.reason, new Date(System.currentTimeMillis()), this.punishmentDuration, this.permanent, newDate, randomUuid, saltedString, true);
 
                 this.player.closeInventory();
 

@@ -212,6 +212,7 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("clearchat").setExecutor(new ClearChatCommand());
         this.getCommand("slowchat").setExecutor(new SlowChatCommand());
         this.getCommand("mutechat").setExecutor(new MuteChatCommand());
+        this.getCommand("fly").setExecutor(new FlyCommand());
         this.getCommand("language").setExecutor(new LanguageCommand());
         this.getCommand("whitelist").setExecutor(new WhitelistCommand());
 
@@ -241,6 +242,8 @@ public final class CorePlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        this.getConfig().set("whitelisted", this.getServerManager().getWhitelistedPlayers());
+
         this.getServer().getOnlinePlayers().forEach(player -> player.kickPlayer(Color.translate("&cThe server is currently rebooting.\n&cPlease reconnect in a few minutes, or check discord for more information.")));
 
         RedisUtil.write(RedisUtil.onServerOffline());

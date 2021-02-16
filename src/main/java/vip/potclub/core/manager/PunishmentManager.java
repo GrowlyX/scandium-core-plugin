@@ -34,10 +34,10 @@ public class PunishmentManager {
                         punishmentDocument.getBoolean("permanent"),
                         punishmentDocument.getDate("createdAt"),
                         UUID.fromString(punishmentDocument.getString("id")),
-                        punishmentDocument.getString("identification")
+                        punishmentDocument.getString("identification"),
+                        punishmentDocument.getBoolean("active")
                 );
 
-                punishment.setActive(punishmentDocument.getBoolean("active"));
                 punishment.setPermanent(punishmentDocument.getBoolean("permanent"));
                 punishment.setRemoved(punishmentDocument.getBoolean("removed"));
 

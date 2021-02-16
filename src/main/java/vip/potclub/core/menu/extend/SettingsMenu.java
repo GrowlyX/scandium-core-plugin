@@ -34,8 +34,8 @@ public class SettingsMenu extends AbstractInventoryMenu<CorePlugin> {
                         "&7able to view global",
                         "&7chat?",
                         " ",
-                        " " + (potPlayer.isCanSeeGlobalChat() ? "&a&l■ " : "&8&l■ ") + "&fEnabled",
-                        " " + (!potPlayer.isCanSeeGlobalChat() ? "&a&l■ " : "&8&l■ ") + "&fDisabled"
+                        "" + (potPlayer.isCanSeeGlobalChat() ? "&a&l■ " : "&8&l■ ") + "&fEnabled",
+                        "" + (!potPlayer.isCanSeeGlobalChat() ? "&a&l■ " : "&8&l■ ") + "&fDisabled"
                 )
                 .create()
         );
@@ -47,8 +47,8 @@ public class SettingsMenu extends AbstractInventoryMenu<CorePlugin> {
                         "&7able to view server",
                         "&7tips?",
                         " ",
-                        " " + (potPlayer.isCanSeeTips() ? "&a&l■ " : "&8&l■ ") + "&fEnabled",
-                        " " + (!potPlayer.isCanSeeTips() ? "&a&l■ " : "&8&l■ ") + "&fDisabled"
+                        "" + (potPlayer.isCanSeeTips() ? "&a&l■ " : "&8&l■ ") + "&fEnabled",
+                        "" + (!potPlayer.isCanSeeTips() ? "&a&l■ " : "&8&l■ ") + "&fDisabled"
                 )
                 .create()
         );
@@ -60,8 +60,8 @@ public class SettingsMenu extends AbstractInventoryMenu<CorePlugin> {
                         "&7able to receive player",
                         "&7dms?",
                         " ",
-                        " " + (potPlayer.isCanReceiveDms() ? "&a&l■ " : "&8&l■ ") + "&fEnabled",
-                        " " + (!potPlayer.isCanReceiveDms() ? "&a&l■ " : "&8&l■ ") + "&fDisabled"
+                        "" + (potPlayer.isCanReceiveDms() ? "&a&l■ " : "&8&l■ ") + "&fEnabled",
+                        "" + (!potPlayer.isCanReceiveDms() ? "&a&l■ " : "&8&l■ ") + "&fDisabled"
                 )
                 .create()
         );
@@ -73,8 +73,8 @@ public class SettingsMenu extends AbstractInventoryMenu<CorePlugin> {
                         "&7able to receive dm",
                         "&7sounds?",
                         " ",
-                        " " + (potPlayer.isCanReceiveDmsSounds() ? "&a&l■ " : "&8&l■ ") + "&fEnabled",
-                        " " + (!potPlayer.isCanReceiveDmsSounds() ? "&a&l■ " : "&8&l■ ") + "&fDisabled"
+                        "" + (potPlayer.isCanReceiveDmsSounds() ? "&a&l■ " : "&8&l■ ") + "&fEnabled",
+                        "" + (!potPlayer.isCanReceiveDmsSounds() ? "&a&l■ " : "&8&l■ ") + "&fDisabled"
                 )
                 .create()
         );
@@ -87,8 +87,8 @@ public class SettingsMenu extends AbstractInventoryMenu<CorePlugin> {
                             "&7able to receive staff",
                             "&7messages?",
                             " ",
-                            " " + (potPlayer.isCanSeeStaffMessages() ? "&a&l■ " : "&8&l■ ") + "&fEnabled",
-                            " " + (!potPlayer.isCanSeeStaffMessages() ? "&a&l■ " : "&8&l■ ") + "&fDisabled"
+                            "" + (potPlayer.isCanSeeStaffMessages() ? "&a&l■ " : "&8&l■ ") + "&fEnabled",
+                            "" + (!potPlayer.isCanSeeStaffMessages() ? "&a&l■ " : "&8&l■ ") + "&fDisabled"
                     )
                     .create()
             );
@@ -101,8 +101,8 @@ public class SettingsMenu extends AbstractInventoryMenu<CorePlugin> {
                             "&7able to receive global",
                             "&7broadcasts?",
                             " ",
-                            " " + (potPlayer.isCanSeeBroadcasts() ? "&a&l■ " : "&8&l■ ") + "&fEnabled",
-                            " " + (!potPlayer.isCanSeeBroadcasts() ? "&a&l■ " : "&8&l■ ") + "&fDisabled"
+                            "" + (potPlayer.isCanSeeBroadcasts() ? "&a&l■ " : "&8&l■ ") + "&fEnabled",
+                            "" + (!potPlayer.isCanSeeBroadcasts() ? "&a&l■ " : "&8&l■ ") + "&fDisabled"
                     )
                     .create()
             );

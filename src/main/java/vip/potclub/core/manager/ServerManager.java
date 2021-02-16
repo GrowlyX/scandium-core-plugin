@@ -15,6 +15,8 @@ import java.util.List;
 @Setter
 public class ServerManager {
 
+    private List<String> whitelistedPlayers;
+
     private ArrayList<NetworkServer> networkServers = new ArrayList<>();
     private ArrayList<Player> vanishedPlayers = new ArrayList<>();
     private ArrayList<Player> staffModePlayers = new ArrayList<>();
@@ -25,6 +27,8 @@ public class ServerManager {
     private long chatSlow;
 
     public ServerManager() {
+        this.whitelistedPlayers = CorePlugin.getInstance().getConfig().getStringList("whitelisted");
+
         setupServerType();
         CorePlugin.getInstance().getLogger().info("[Server] Loaded server type: " + this.network.getServerName() + ".");
     }

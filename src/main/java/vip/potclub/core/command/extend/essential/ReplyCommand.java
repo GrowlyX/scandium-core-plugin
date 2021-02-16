@@ -26,7 +26,11 @@ public class ReplyCommand extends BaseCommand {
             String message = StringUtil.buildMessage(args, 0);
             if (potPlayer.isCanReceiveDms()) {
                 if (potPlayer.getLastRecipient() != null) {
-                    StringUtil.sendPrivateMessage(player, potPlayer.getLastRecipient(), message);
+                    if (potPlayer.getLastRecipient().isOnline()) {
+                        StringUtil.sendPrivateMessage(player, potPlayer.getLastRecipient(), message);
+                    } else {
+                        player.sendMessage(Color.translate("&cThat player is not online."));
+                    }
                 } else {
                     player.sendMessage(Color.translate("&cYou don't have an ongoing conversation with anyone."));
                 }

@@ -56,9 +56,9 @@ public class PlayerListener implements Listener {
     public void onConnect(AsyncPlayerPreLoginEvent event) {
         if (!event.getUniqueId().toString().equals("bf4fb94d-d1d2-4097-b814-03d2f9eb1a4c")) {
             if (CorePlugin.JOINABLE) {
-                if (CorePlugin.getInstance().getConfig().getBoolean("beta-whitelist")) {
+                if (!CorePlugin.getInstance().getConfig().getBoolean("beta-whitelist")) {
                     if (CorePlugin.getInstance().getConfig().getBoolean("whitelist")) {
-                        if (!CorePlugin.getInstance().getConfig().getStringList("whitelisted").contains(event.getName())) {
+                        if (!CorePlugin.getInstance().getServerManager().getWhitelistedPlayers().contains(event.getName())) {
                             event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.translateAlternateColorCodes('&', CorePlugin.getInstance().getConfig().getString("whitelisted-msg").replace("%NL%", "\n")));
                         } else {
                             checkDisallow(event);
@@ -166,7 +166,7 @@ public class PlayerListener implements Listener {
                     .stream()
                     .filter(player1 -> player1.hasPermission("scandium.staff"))
                     .filter(player1 -> PotPlayer.getPlayer(player1).isCanSeeStaffMessages())
-                    .forEach(player1 -> player1.sendMessage(Color.translate("&4[F] &b" + player1.getDisplayName() + "&f: &7" + event.getMessage())));
+                    .forEach(player1 -> player1.sendMessage(Color.translate("&b[S] &7[Frozen] &b" + potPlayer.getPlayer().getDisplayName() + "&f: &7" + event.getMessage())));
 
             return;
         }

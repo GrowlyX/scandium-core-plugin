@@ -44,7 +44,7 @@ public class Punishment {
 
     private long punishmentDuration;
 
-    public Punishment(PunishmentType punishmentType, UUID issuer, UUID target, String issuerName, String reason, Date issuingDate, long punishmentDuration, boolean permanent, Date createdAt, UUID uuid, String punishIdentification) {
+    public Punishment(PunishmentType punishmentType, UUID issuer, UUID target, String issuerName, String reason, Date issuingDate, long punishmentDuration, boolean permanent, Date createdAt, UUID uuid, String punishIdentification, boolean active) {
         this.punishmentType = punishmentType;
         this.issuer = issuer;
         this.issuerName = issuerName;
@@ -57,7 +57,7 @@ public class Punishment {
         this.expirationDate = new Date(this.createdAt.getTime() + this.punishmentDuration);
         this.id = uuid;
         this.punishIdentification = punishIdentification;
-        this.active = true;
+        this.active = active;
 
         savePunishment();
     }

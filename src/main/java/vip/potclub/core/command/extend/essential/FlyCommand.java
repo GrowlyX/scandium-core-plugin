@@ -20,9 +20,11 @@ public class FlyCommand extends BaseCommand {
         if (player.hasPermission("scandium.command.fly")) {
             if (args.length == 0) {
                 if (player.isFlying()) {
+                    player.setAllowFlight(false);
                     player.setFlying(false);
                     player.sendMessage(Color.translate("&cDisabled your flight."));
                 } else {
+                    player.setAllowFlight(true);
                     player.setFlying(true);
                     player.sendMessage(Color.translate("&aEnabled your flight."));
                 }

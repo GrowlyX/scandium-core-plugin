@@ -21,20 +21,15 @@ public class WhitelistCommand extends BaseCommand {
             sender.sendMessage(Color.translate("&cUsage: /whitelist <toggle|list|add|remove> <player>"));
         }
         if (args.length > 0) {
-            List<String> whitelisted = CorePlugin.getInstance().getConfig().getStringList("whitelisted");
+            List<String> whitelisted = CorePlugin.getInstance().getServerManager().getWhitelistedPlayers();
             boolean enabled = CorePlugin.getInstance().getConfig().getBoolean("whitelist");
             switch (args[0]) {
                 case "toggle":
                     if (enabled) {
                         CorePlugin.getInstance().getConfig().set("whitelist", false);
-                        // May be unnecessary, but ¯\_(ツ)_/¯
-                        CorePlugin.getInstance().saveConfig();
-                        CorePlugin.getInstance().reloadConfig();
                         sender.sendMessage(Color.translate("&cDisabled the whitelist."));
                     } else {
                         CorePlugin.getInstance().getConfig().set("whitelist", true);
-                        CorePlugin.getInstance().saveConfig();
-                        CorePlugin.getInstance().reloadConfig();
                         sender.sendMessage(Color.translate("&aEnabled the whitelist."));
                     }
                     break;
