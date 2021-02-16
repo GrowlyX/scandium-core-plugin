@@ -177,7 +177,7 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("report").setExecutor(new ReportCommand());
         this.getCommand("punish").setExecutor(new PunishCommand());
         this.getCommand("scandium").setExecutor(new CoreCommand());
-        this.getCommand("shutdown").setExecutor(new ShutdownCommand()A);
+        this.getCommand("shutdown").setExecutor(new ShutdownCommand());
         this.getCommand("freeze").setExecutor(new FreezeCommand());
         this.getCommand("famous").setExecutor(new FamousCommand());
         this.getCommand("profile").setExecutor(new ProfileCommand());

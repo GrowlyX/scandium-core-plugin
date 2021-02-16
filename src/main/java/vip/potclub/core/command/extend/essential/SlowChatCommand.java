@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import vip.potclub.core.CorePlugin;
 import vip.potclub.core.command.BaseCommand;
 import vip.potclub.core.util.Color;
+import vip.potclub.core.util.RedisUtil;
 
 public class SlowChatCommand extends BaseCommand {
 
@@ -21,13 +22,14 @@ public class SlowChatCommand extends BaseCommand {
         Player player = (Player) sender;
         if (player.hasPermission("scandium.command.slowchat")) {
             if (args.length == 0) {
-                player.sendMessage(Color.translate("&cUsage: /" + label + " <time> &7(Use 0 to disable slow chat)."));
+                player.sendMessage(Color.translate("&cUsage: /" + label + " <time> &7&o(Use 0 to disable slow chat)&c."));
             }
             if (args.length == 1) {
                 try {
                     int time = Integer.parseInt(args[0]);
                     CorePlugin.getInstance().getServerManager().setChatSlow(time * 1000L);
                     Bukkit.broadcastMessage(CorePlugin.getInstance().getServerManager().getChatSlow() > 0L ? ChatColor.GREEN + "Public chat is now in slow mode. " + ChatColor.GRAY + "(" + time + " seconds)" : ChatColor.RED + "Public chat is no longer in slow mode.");
+                    RedisUtil.writeAsync(RedisUtil.onGlobalBroadcastPermission(Color.translate("&3[S] " + "&7[" + CorePlugin.getInstance().getServerName() + "] " + player.getDisplayName() + " &bhas slowed the chat to &6" + time + " seconds&b."), "scandium.staff"));
                 } catch (NumberFormatException e) {
                     player.sendMessage(Color.translate("&cThat number is invalid."));
                 }
