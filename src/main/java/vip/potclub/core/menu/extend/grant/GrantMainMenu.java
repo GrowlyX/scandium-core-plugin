@@ -42,9 +42,9 @@ public class GrantMainMenu extends AbstractInventoryMenu<CorePlugin> {
         getSortedRanks().forEach(rank -> {
             this.inventory.setItem(i.get(), new InventoryMenuItem(Material.NAME_TAG)
                     .addLore(Arrays.asList(
-                            "&6&m--------------------------------",
+                            "&7&m--------------------------------",
                             network.getSecondaryColor() + "Click to grant the " + rank.getColor() + rank.getName() + network.getSecondaryColor() + " rank!",
-                            "&6&m--------------------------------"
+                            "&7&m--------------------------------"
                     ))
                     .setDisplayName(rank.getColor() + rank.getName())
                     .create()
@@ -69,9 +69,17 @@ public class GrantMainMenu extends AbstractInventoryMenu<CorePlugin> {
                 if (item.getItemMeta().getDisplayName() != null) {
                     String display = ChatColor.stripColor(item.getItemMeta().getDisplayName());
                     Rank rank = Rank.getByName(display);
+                    PotPlayer potPlayer = PotPlayer.getPlayer(this.player);
 
                     if (rank != null) {
-                        new GrantSelectDurationMenu(this.player, this.target, rank).open(player);
+                        if ((potPlayer.getActiveGrant().getRank().getWeight() >= rank.getWeight()) && !player.isOp()) {
+                            new GrantSelectDurationMenu(this.player, this.target, rank).open(player);
+                        } else if ((potPlayer.getActiveGrant().getRank().getWeight() >= rank.getWeight()) && player.isOp()) {
+                            new GrantSelectDurationMenu(this.player, this.target, rank).open(player);
+                        } else {
+                            this.player.sendMessage(Color.translate("&cYou cannot grant a rank weight a weight that is higher than yours."));
+                            this.player.closeInventory();
+                        }
                     }
                 }
             }

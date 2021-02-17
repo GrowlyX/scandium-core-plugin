@@ -38,9 +38,7 @@ public class PunishHistoryViewMainMenu extends AbstractInventoryMenu<CorePlugin>
                 .addLore(
                         "",
                         "&7Click to all view warnings",
-                        "&7in relation to " + this.target + ".",
-                        "",
-                        "&7Total warnings: " + "&b" + this.getPunishmentCountByType(PunishmentType.WARN)
+                        "&7in relation to " + this.target + "."
                 )
                 .create()
         );
@@ -48,9 +46,7 @@ public class PunishHistoryViewMainMenu extends AbstractInventoryMenu<CorePlugin>
                 .setDisplayName("&6Kicks")
                 .addLore(
                         "&7Click to all view kicks",
-                        "&7in relation to " + this.target + ".",
-                        "",
-                        "&7Total kicks: " + "&b" + this.getPunishmentCountByType(PunishmentType.KICK)
+                        "&7in relation to " + this.target + "."
                 )
                 .create()
         );
@@ -58,9 +54,7 @@ public class PunishHistoryViewMainMenu extends AbstractInventoryMenu<CorePlugin>
                 .setDisplayName("&6Mutes")
                 .addLore(
                         "&7Click to all view mutes",
-                        "&7in relation to " + this.target + ".",
-                        "",
-                        "&7Total mutes: " + "&b" + this.getPunishmentCountByType(PunishmentType.MUTE)
+                        "&7in relation to " + this.target + "."
                 )
                 .create()
         );
@@ -68,9 +62,7 @@ public class PunishHistoryViewMainMenu extends AbstractInventoryMenu<CorePlugin>
                 .setDisplayName("&6Bans")
                 .addLore(
                         "&7Click to all view bans",
-                        "&7in relation to " + this.target + ".",
-                        "",
-                        "&7Total bans: " + "&b" + this.getPunishmentCountByType(PunishmentType.BAN)
+                        "&7in relation to " + this.target + "."
                 )
                 .create()
         );
@@ -78,9 +70,7 @@ public class PunishHistoryViewMainMenu extends AbstractInventoryMenu<CorePlugin>
                 .setDisplayName("&6Blacklists")
                 .addLore(
                         "&7Click to all view blacklists",
-                        "&7in relation to " + this.target + ".",
-                        "",
-                        "&7Total blacklists: " + "&b" + this.getPunishmentCountByType(PunishmentType.BLACKLIST)
+                        "&7in relation to " + this.target + "."
                 )
                 .create()
         );
@@ -115,17 +105,5 @@ public class PunishHistoryViewMainMenu extends AbstractInventoryMenu<CorePlugin>
                     break;
             }
         }
-    }
-
-    private int getPunishmentCountByType(PunishmentType punishmentType) {
-        return (int) Punishment.getAllPunishments().stream()
-                .filter(punishment -> punishment.getPunishmentType().equals(punishmentType))
-                .filter(punishment -> {
-                    try {
-                        return punishment.getTarget().toString().equals(UUIDUtil.getUUIDString(this.target));
-                    } catch (IOException | ParseException ignored) { }
-                    return false;
-                })
-                .count();
     }
 }

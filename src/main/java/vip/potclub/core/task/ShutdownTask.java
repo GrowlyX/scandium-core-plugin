@@ -17,7 +17,7 @@ public class ShutdownTask extends BukkitRunnable {
     public ShutdownTask(int seconds) {
         this.seconds = seconds;
 
-        this.runTaskTimer(CorePlugin.getInstance(), 20L, this.seconds);
+        this.runTaskTimer(CorePlugin.getInstance(), this.seconds, 20L);
     }
 
     @Override
@@ -39,7 +39,8 @@ public class ShutdownTask extends BukkitRunnable {
             case 5:
                 Bukkit.getOnlinePlayers().forEach(player -> player.kickPlayer(Color.translate("&cThe server is currently rebooting...\n&cPlease reconnect in a few minutes.")));
                 CorePlugin.getInstance().getServer().shutdown();
-            default: break;
+            default:
+                break;
         }
 
         ticks++;

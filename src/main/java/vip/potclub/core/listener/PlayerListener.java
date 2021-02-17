@@ -1,6 +1,5 @@
 package vip.potclub.core.listener;
 
-import jdk.nashorn.internal.scripts.JO;
 import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -39,15 +38,15 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onServerListPing(ServerListPingEvent event) {
         if (CorePlugin.getInstance().getConfig().getBoolean("whitelist")) {
-            event.setMotd(Color.translate("&d&lPotClub &7&l\u239c &f" + REGION + " Region\n&cThe server is currently in maintenance."));
+            event.setMotd(Color.translate("&d&lPotClub &7&l┃ &f" + REGION + " Region\n&cThe server is currently in maintenance."));
         } else {
             int boundOfThree = CorePlugin.RANDOM.nextInt(3);
             if (boundOfThree == 1) {
-                event.setMotd(Color.translate("&d&lPotClub &7&l\u239c &f" + REGION + " Region\n&7Join our discord via &bhttps://dsc.gg/pot&7!"));
+                event.setMotd(Color.translate("&d&lPotClub &7&l┃ &f" + REGION + " Region\n&7Join our discord via &bhttps://dsc.gg/pot&7!"));
             } else if (boundOfThree == 2) {
-                event.setMotd(Color.translate("&d&lPotClub &7&l\u239c &f" + REGION + " Region\n&7Follow our twitter for giveaways and more! &b@PotClubVIP&7"));
+                event.setMotd(Color.translate("&d&lPotClub &7&l┃ &f" + REGION + " Region\n&7Follow our twitter for giveaways and more! &b@PotClubVIP&7"));
             } else {
-                event.setMotd(Color.translate("&d&lPotClub &7&l\u239c &f" + REGION + " Region\n&7We have a new website! Check it out at &bwww.potclub.vip&7!"));
+                event.setMotd(Color.translate("&d&lPotClub &7&l┃ &f" + REGION + " Region\n&7We have a new website! Check it out at &bwww.potclub.vip&7!"));
             }
         }
     }
@@ -351,7 +350,7 @@ public class PlayerListener implements Listener {
             PotPlayer potPlayer1 = PotPlayer.getPlayer(player1);
             if (!potPlayer1.isIgnoring(potPlayer.getPlayer())) {
                 if (potPlayer1.isCanSeeGlobalChat()) {
-                    player1.sendMessage(Color.translate((potPlayer.getAppliedPrefix() != null ? potPlayer.getAppliedPrefix().getPrefix() + " " : "") + potPlayer.getActiveGrant().getRank().getPrefix() + potPlayer.getActiveGrant().getRank().getColor() + (potPlayer.getCustomColor() != null ? potPlayer.getCustomColor() : "") + player.getName() + " &7" + '»' + " " + (potPlayer.getActiveGrant().getRank().getName().contains("Default") ? "&7" : "&f")) + (potPlayer.getPlayer().hasPermission("scandium.chat.colors") ? Color.translate(event.getMessage()) : event.getMessage()));
+                    player1.sendMessage(Color.translate((potPlayer.getAppliedPrefix() != null ? potPlayer.getAppliedPrefix().getPrefix() + " " : "") + potPlayer.getActiveGrant().getRank().getPrefix() + potPlayer.getActiveGrant().getRank().getColor() + (potPlayer.getCustomColor() != null ? potPlayer.getCustomColor() : "") + player.getName() + " &f: " + (potPlayer.getActiveGrant().getRank().getName().contains("Default") ? "&f" : "&f")) + (potPlayer.getPlayer().hasPermission("scandium.chat.colors") ? Color.translate(event.getMessage()) : event.getMessage()));
                 }
             }
         });

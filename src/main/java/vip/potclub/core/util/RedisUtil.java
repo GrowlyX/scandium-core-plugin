@@ -61,7 +61,7 @@ public final class RedisUtil {
     }
 
     public static String onGlobalBroadcastPermission(String message, String permission) {
-        return new RedisMessage(RedisPacketType.NETWORK_BROADCAST_UPDATE)
+        return new RedisMessage(RedisPacketType.NETWORK_BROADCAST_PERMISSION_UPDATE)
                 .setParam("MESSAGE", message)
                 .setParam("PERMISSION", permission)
                 .toJson();

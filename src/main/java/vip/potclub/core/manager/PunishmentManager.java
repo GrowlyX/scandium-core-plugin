@@ -95,6 +95,22 @@ public class PunishmentManager {
                     ));
                 }
                 switch (punishment.getPunishmentType()) {
+                    case WARN:
+                        if (target != null) {
+                            if (finalPotPlayer != null) {
+                                finalPotPlayer.getPlayer().sendMessage(Color.translate("&cYou were warned!"));
+                                finalPotPlayer.getPlayer().sendMessage(Color.translate("&cReason: &f" + punishment.getReason()));
+                            }
+                        }
+                        break;
+                    case MUTE:
+                        if (target != null) {
+                            if (finalPotPlayer != null) {
+                                finalPotPlayer.getPlayer().sendMessage(Color.translate("&cYou were muted by a staff member."));
+                                finalPotPlayer.setCurrentlyMuted(true);
+                            }
+                        }
+                        break;
                     case BLACKLIST:
                         if (target != null) {
                             if (finalPotPlayer != null) {

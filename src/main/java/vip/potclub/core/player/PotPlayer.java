@@ -18,6 +18,7 @@ import vip.potclub.core.player.prefixes.Prefix;
 import vip.potclub.core.player.punishment.Punishment;
 import vip.potclub.core.player.punishment.PunishmentType;
 import vip.potclub.core.player.ranks.Rank;
+import vip.potclub.core.potion.PotionMessageType;
 import vip.potclub.core.util.Color;
 import vip.potclub.core.util.SaltUtil;
 import vip.potclub.core.util.external.NameMCExternal;
@@ -37,6 +38,7 @@ public class PotPlayer {
     private List<Grant> allGrants = new ArrayList<>();
     private List<String> allPrefixes = new ArrayList<>();
     private List<String> allIgnoring = new ArrayList<>();
+    private List<PotionMessageType> allPurchasedMessages = new ArrayList<>();
 
     private UUID uuid;
     private Player player;
@@ -92,6 +94,7 @@ public class PotPlayer {
     private String firstJoin;
 
     private AchievementData achievementData;
+    private PotionMessageType potionMessageType;
 
     public PotPlayer(UUID uuid) {
         this.uuid = uuid;
@@ -124,9 +127,13 @@ public class PotPlayer {
         List<String> grantStrings = new ArrayList<>();
         this.getAllGrants().forEach(grant -> grantStrings.add(grant.toJson()));
 
+        List<String> messages = new ArrayList<>();
+        this.getAllPurchasedMessages().forEach(grant -> messages.add(grant.typeName));
+
         List<String> prefixStrings = new ArrayList<>(this.getAllPrefixes());
 
         document.put("allGrants", grantStrings);
+        document.put("allMessages", messages);
         document.put("allPrefixes", prefixStrings);
         document.put("allIgnored", this.allIgnoring);
         if (this.appliedPrefix != null) {
@@ -153,6 +160,7 @@ public class PotPlayer {
         document.put("youtube", this.media.getYoutubeLink());
 
         document.put("achievementData", CorePlugin.GSON.toJson(this.achievementData));
+        document.put("potionMessageType", this.potionMessageType.getTypeName());
 
         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true)));
     }
@@ -174,9 +182,13 @@ public class PotPlayer {
         List<String> grantStrings = new ArrayList<>();
         this.getAllGrants().forEach(grant -> grantStrings.add(grant.toJson()));
 
+        List<String> messages = new ArrayList<>();
+        this.getAllPurchasedMessages().forEach(grant -> messages.add(grant.typeName));
+
         List<String> prefixStrings = new ArrayList<>(this.getAllPrefixes());
 
         document.put("allGrants", grantStrings);
+        document.put("allMessages", messages);
         document.put("allPrefixes", prefixStrings);
         document.put("allIgnored", this.allIgnoring);
         if (this.appliedPrefix != null) {
@@ -203,6 +215,7 @@ public class PotPlayer {
         document.put("youtube", this.media.getYoutubeLink());
 
         document.put("achievementData", CorePlugin.GSON.toJson(this.achievementData));
+        document.put("potionMessageType", this.potionMessageType.getTypeName());
 
         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true)));
 
@@ -257,6 +270,11 @@ public class PotPlayer {
         } else {
             this.media.setDiscord("N/A");
         }
+        if (document.getString("potionMessageType") != null) {
+            this.potionMessageType = PotionMessageType.valueOf(document.getString("potionMessageType"));
+        } else {
+            this.potionMessageType = PotionMessageType.NORMAL;
+        }
         if (document.getString("twitter") != null) {
             this.media.setTwitter(document.getString("twitter"));
         } else {
@@ -290,6 +308,12 @@ public class PotPlayer {
             List<String> ignoring = ((List<String>) document.get("allIgnored"));
             if (!ignoring.isEmpty()) {
                 this.allIgnoring.addAll(ignoring);
+            }
+        }
+        if (document.get("allMessages") != null) {
+            List<String> allMessages = ((List<String>) document.get("allMessages"));
+            if (!allMessages.isEmpty()) {
+                allMessages.forEach(s -> this.allPurchasedMessages.add(PotionMessageType.valueOf(s)));
             }
         }
 
