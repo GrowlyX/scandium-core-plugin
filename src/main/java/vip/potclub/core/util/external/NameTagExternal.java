@@ -1,0 +1,54 @@
+package vip.potclub.core.util.external;
+
+import net.minecraft.util.org.apache.commons.lang3.StringEscapeUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
+
+import java.util.Arrays;
+
+public final class NameTagExternal {
+
+    private static final String PREFIX = "nt_team_";
+
+    public static void setupNameTag(Player player, Player other, ChatColor color) {
+        Scoreboard scoreboard = player.getScoreboard();
+
+        if (scoreboard.equals(Bukkit.getServer().getScoreboardManager().getMainScoreboard())) {
+            scoreboard = Bukkit.getServer().getScoreboardManager().getNewScoreboard();
+        }
+
+        Team team = player.getScoreboard().getTeam(getTeamName(color));
+        if (team == null) {
+            team = player.getScoreboard().registerNewTeam(getTeamName(color));
+            team.setPrefix(color.toString());
+        }
+
+        if (!team.hasEntry(other.getName())) {
+            resetNameTag(player, other);
+            team.addEntry(other.getName());
+        }
+
+        player.setScoreboard(scoreboard);
+    }
+
+    public static void resetNameTag(Player player, Player other) {
+        if (player != null && other != null && !player.equals(other)) {
+            Objective objective = player.getScoreboard().getObjective(DisplaySlot.BELOW_NAME);
+
+            if (objective != null) objective.unregister();
+            Arrays.asList(ChatColor.values()).forEach(chatColor -> {
+                Team team = player.getScoreboard().getTeam(getTeamName(chatColor));
+                if (team != null) team.removeEntry(other.getName());
+            });
+        }
+    }
+
+    private static String getTeamName(ChatColor color) {
+        return PREFIX + color.ordinal();
+    }
+}

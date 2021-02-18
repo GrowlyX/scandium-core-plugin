@@ -1,7 +1,6 @@
 package vip.potclub.core.command.extend.essential;
 
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -35,8 +34,8 @@ public class MessageCommand extends BaseCommand {
                     PotPlayer potPlayer = PotPlayer.getPlayer(target);
                     PotPlayer potPerson = PotPlayer.getPlayer(player);
 
-                    if (!potPlayer.isIgnoring(potPerson.getPlayer())) {
-                        if (!potPerson.isIgnoring(potPlayer.getPlayer())) {
+                    if (potPlayer.isIgnoring(potPerson.getPlayer())) {
+                        if (potPerson.isIgnoring(potPlayer.getPlayer())) {
                             if (potPerson.isCanReceiveDms()) {
                                 if (potPerson != potPlayer) {
                                     if (potPlayer.isCanReceiveDms()) {

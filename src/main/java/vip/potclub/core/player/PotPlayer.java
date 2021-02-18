@@ -22,9 +22,9 @@ import vip.potclub.core.potion.PotionMessageType;
 import vip.potclub.core.util.Color;
 import vip.potclub.core.util.SaltUtil;
 import vip.potclub.core.util.external.NameMCExternal;
+import vip.potclub.core.util.external.NameTagExternal;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Getter
@@ -377,36 +377,6 @@ public class PotPlayer {
         return true;
     }
 
-    public boolean isMuted() {
-        AtomicBoolean yes = new AtomicBoolean(false);
-        Punishment.getAllPunishments().forEach(punishment -> {
-            if (punishment.getTarget() == this.uuid) {
-                if (punishment.isActive()) {
-                    if (punishment.getPunishmentType().equals(PunishmentType.MUTE)) {
-                        yes.set(true);
-                    }
-                }
-            }
-        });
-
-        return yes.get();
-    }
-
-    public boolean isBanned() {
-        AtomicBoolean yes = new AtomicBoolean(false);
-        Punishment.getAllPunishments().forEach(punishment -> {
-            if (punishment.getTarget() == this.uuid) {
-                if (punishment.isActive()) {
-                    if (punishment.getPunishmentType().equals(PunishmentType.BAN)) {
-                        yes.set(true);
-                    }
-                }
-            }
-        });
-
-        return yes.get();
-    }
-
     public Grant getActiveGrant() {
         AtomicReference<Grant> activeGrant = new AtomicReference<>();
 
@@ -456,6 +426,12 @@ public class PotPlayer {
             }
         }
 
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            if (this.getActiveGrant().getRank().getColor() != null) {
+                NameTagExternal.setupNameTag(this.player, player, ChatColor.getByChar(this.getActiveGrant().getRank().getColor().replace("&", "").replace("§", "")));
+            }
+        });
+
         player.setPlayerListName(Color.translate(this.getActiveGrant().getRank().getColor() + (this.customColor != null ? this.customColor : "") + this.player.getName()));
         player.recalculatePermissions();
     }
@@ -491,9 +467,10 @@ public class PotPlayer {
                     this.hasVoted = true;
                     this.getAllPrefixes().add("Liked");
 
+                    if (this.getAppliedPrefix() == null) this.appliedPrefix = Prefix.getByName("Liked");
                     if (player != null) {
                         player.sendMessage(Color.translate("&aThanks for voting for us on &6NameMC&a!"));
-                        player.sendMessage(Color.translate("&aYou have received the &b✔ &7(Liked) &aprefix!"));
+                        player.sendMessage(Color.translate("&aYou have received the &b✔ &7(Liked)&a prefix!"));
                     }
                 }
             } catch (Exception exception) {
@@ -507,7 +484,7 @@ public class PotPlayer {
                     this.getAllPrefixes().remove("Liked");
 
                     player.sendMessage(Color.translate("&cYour &b✔ &7(Liked) &ctag has been revoked as you have unliked our server on NameMC!"));
-                    player.sendMessage(Color.translate("&cTo gain your tag back, like us on namemc again!"));
+                    player.sendMessage(Color.translate("&cTo gain your tag back, like us on NameMC again!"));
                 }
             } catch (Exception exception) {
                 CorePlugin.getInstance().getLogger().warning("[NameMC] Could not check " + player.getName() + "'s voting status!");

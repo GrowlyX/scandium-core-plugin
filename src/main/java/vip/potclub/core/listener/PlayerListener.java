@@ -261,7 +261,7 @@ public class PlayerListener implements Listener {
         }
 
         if (CorePlugin.getInstance().getServerManager().isChatEnabled()) {
-            if (!PotPlayer.getPlayer(player).isMuted()) {
+            if (!PotPlayer.getPlayer(player).isCurrentlyMuted()) {
                 checkChannel(event, player, potPlayer);
             } else {
                 event.setCancelled(true);
@@ -336,21 +336,21 @@ public class PlayerListener implements Listener {
         }
         if (CorePlugin.getInstance().getConfig().getBoolean("block-commands.enabled")) {
             if (event.getPlayer().hasPermission("scandium.protocol.bypass")) return;
-            for (String blockedCommand : CorePlugin.getInstance().getConfig().getStringList("block-commands.list")) {
-                if (event.getMessage().contains("/" + blockedCommand)) {
+            CorePlugin.getInstance().getConfig().getStringList("block-commands.list").forEach(s -> {
+                if (event.getMessage().startsWith("/" + s)) {
                     event.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getConfig().getString("block-commands.message")));
                     event.setCancelled(true);
                 }
-            }
+            });
         }
     }
 
     private void checkThenSend(AsyncPlayerChatEvent event, Player player, PotPlayer potPlayer, long slowChat) {
         Bukkit.getOnlinePlayers().forEach(player1 -> {
             PotPlayer potPlayer1 = PotPlayer.getPlayer(player1);
-            if (!potPlayer1.isIgnoring(potPlayer.getPlayer())) {
+            if (potPlayer1.isIgnoring(potPlayer.getPlayer())) {
                 if (potPlayer1.isCanSeeGlobalChat()) {
-                    player1.sendMessage(Color.translate((potPlayer.getAppliedPrefix() != null ? potPlayer.getAppliedPrefix().getPrefix() + " " : "") + potPlayer.getActiveGrant().getRank().getPrefix() + potPlayer.getActiveGrant().getRank().getColor() + (potPlayer.getCustomColor() != null ? potPlayer.getCustomColor() : "") + player.getName() + " &f: " + (potPlayer.getActiveGrant().getRank().getName().contains("Default") ? "&f" : "&f")) + (potPlayer.getPlayer().hasPermission("scandium.chat.colors") ? Color.translate(event.getMessage()) : event.getMessage()));
+                    player1.sendMessage(Color.translate((potPlayer.getAppliedPrefix() != null ? potPlayer.getAppliedPrefix().getPrefix() + " " : "") + potPlayer.getActiveGrant().getRank().getPrefix() + potPlayer.getActiveGrant().getRank().getColor() + (potPlayer.getCustomColor() != null ? potPlayer.getCustomColor() : "") + player.getName() + "&f: " + (potPlayer.getActiveGrant().getRank().getName().contains("Default") ? "&f" : "&f")) + (potPlayer.getPlayer().hasPermission("scandium.chat.colors") ? Color.translate(event.getMessage()) : event.getMessage()));
                 }
             }
         });
