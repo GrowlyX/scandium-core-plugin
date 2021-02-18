@@ -5,6 +5,7 @@ import vip.potclub.core.CorePlugin;
 import vip.potclub.core.player.punishment.Punishment;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class PunishExpireTask extends BukkitRunnable {
 
@@ -14,16 +15,11 @@ public class PunishExpireTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        Punishment.getAllPunishments().forEach(punishment -> {
-            if (punishment.isActive()) {
-                if (!punishment.isRemoved()) {
-                    if (!punishment.isPermanent()) {
-                        if (new Date(punishment.getCreatedAt().getTime() + punishment.getPunishmentDuration()).compareTo(new Date()) >= 0) {
-                            punishment.setActive(false);
-                        }
-                    }
-                }
-            }
-        });
+        Punishment.getAllPunishments()
+                .stream()
+                .filter(Objects::nonNull)
+                .filter(Punishment::isActive)
+                .filter(Punishment::checkIfActive)
+                .forEach(punishment -> punishment.setActive(false));
     }
 }

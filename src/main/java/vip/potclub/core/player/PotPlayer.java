@@ -31,8 +31,10 @@ import java.util.concurrent.atomic.AtomicReference;
 @Setter
 public class PotPlayer {
 
-    @Getter public static Map<UUID, PotPlayer> profilePlayers = new HashMap<>();
-    @Getter public static Map<String, String> syncCodes = new HashMap<>();
+    @Getter
+    public static Map<UUID, PotPlayer> profilePlayers = new HashMap<>();
+    @Getter
+    public static Map<String, String> syncCodes = new HashMap<>();
 
     private List<Punishment> punishments = new ArrayList<>();
     private List<Grant> allGrants = new ArrayList<>();
@@ -110,6 +112,18 @@ public class PotPlayer {
         profilePlayers.put(uuid, this);
     }
 
+    public static PotPlayer getPlayer(Player player) {
+        return profilePlayers.get(player.getUniqueId());
+    }
+
+    public static PotPlayer getPlayer(UUID uuid) {
+        return profilePlayers.get(uuid);
+    }
+
+    public static PotPlayer getPlayer(String name) {
+        return profilePlayers.get(Bukkit.getPlayer(name).getUniqueId());
+    }
+
     public void saveWithoutRemove() {
         Document document = new Document("_id", this.uuid);
 
@@ -160,7 +174,11 @@ public class PotPlayer {
         document.put("youtube", this.media.getYoutubeLink());
 
         document.put("achievementData", CorePlugin.GSON.toJson(this.achievementData));
-        document.put("potionMessageType", this.potionMessageType.getTypeName());
+        if (this.potionMessageType != null) {
+            document.put("potionMessageType", this.potionMessageType.getTypeName());
+        } else {
+            document.put("potionMessageType", "NORMAL");
+        }
 
         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true)));
     }
@@ -215,7 +233,11 @@ public class PotPlayer {
         document.put("youtube", this.media.getYoutubeLink());
 
         document.put("achievementData", CorePlugin.GSON.toJson(this.achievementData));
-        document.put("potionMessageType", this.potionMessageType.getTypeName());
+        if (this.potionMessageType != null) {
+            document.put("potionMessageType", this.potionMessageType.getTypeName());
+        } else {
+            document.put("potionMessageType", "NORMAL");
+        }
 
         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true)));
 
@@ -223,9 +245,9 @@ public class PotPlayer {
         profilePlayers.remove(uuid);
     }
 
-    public boolean loadPlayerData() {
+    public void loadPlayerData() {
         Document document = CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("_id", this.uuid)).first();
-        if (document == null) return false;
+        if (document == null) return;
 
         this.name = document.getString("name");
 
@@ -334,11 +356,10 @@ public class PotPlayer {
             this.achievementData = new AchievementData();
         }
 
-        CorePlugin.getInstance().getPunishmentManager().getPunishments().forEach(punishment -> {
-            if (punishment.getTarget().equals(this.uuid)) {
-                this.punishments.add(punishment);
-            }
-        });
+        CorePlugin.getInstance().getPunishmentManager().getPunishments()
+                .stream()
+                .filter(punishment -> punishment.getTarget().equals(this.uuid))
+                .forEach(punishment -> this.punishments.add(punishment));
 
         syncCodes.put(this.syncCode, this.player.getName());
 
@@ -373,22 +394,20 @@ public class PotPlayer {
         this.currentlyOnline = true;
 
         Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), this::saveWithoutRemove, 10 * 20L);
-
-        return true;
     }
 
     public Grant getActiveGrant() {
         AtomicReference<Grant> activeGrant = new AtomicReference<>();
+        activeGrant.set(null);
 
-        this.getAllGrants().forEach(grant -> {
-            if (grant != null) {
-                if (grant.isActive()) {
-                    activeGrant.set(grant);
-                }
-            }
-        });
+        this.getAllGrants()
+                .stream()
+                .filter(Objects::nonNull)
+                .filter(Grant::isActive)
+                .forEach(activeGrant::set);
 
-        if (activeGrant.get() == null) activeGrant.set(new Grant(null, Objects.requireNonNull(Rank.getDefault()), System.currentTimeMillis(), 2147483647L, "Automatic Grant (Default)", true, true));
+        if (activeGrant.get() == null)
+            activeGrant.set(new Grant(null, Objects.requireNonNull(Rank.getDefault()), System.currentTimeMillis(), 2147483647L, "Automatic Grant (Default)", true, true));
 
         return activeGrant.get();
     }
@@ -442,18 +461,6 @@ public class PotPlayer {
 
     public Grant getById(String id) {
         return this.getAllGrants().stream().filter(grant -> grant.getId().equals(id)).findFirst().orElse(null);
-    }
-
-    public static PotPlayer getPlayer(Player player) {
-        return profilePlayers.get(player.getUniqueId());
-    }
-
-    public static PotPlayer getPlayer(UUID uuid) {
-        return profilePlayers.get(uuid);
-    }
-
-    public static PotPlayer getPlayer(String name) {
-        return profilePlayers.get(Bukkit.getPlayer(name).getUniqueId());
     }
 
     public boolean isIgnoring(Player player) {

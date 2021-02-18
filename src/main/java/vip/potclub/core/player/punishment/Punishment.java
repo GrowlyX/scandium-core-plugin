@@ -62,6 +62,18 @@ public class Punishment {
         savePunishment();
     }
 
+    public static ArrayList<Punishment> getAllPunishments() {
+        return CorePlugin.getInstance().getPunishmentManager().getPunishments();
+    }
+
+    public static Punishment getByIdentification(String id) {
+        return Punishment.getAllPunishments()
+                .stream()
+                .filter(punishment -> punishment.getPunishIdentification().equals(id))
+                .findFirst()
+                .orElse(null);
+    }
+
     public void savePunishment() {
         Document document = new Document("_id", this.id);
 
@@ -138,17 +150,5 @@ public class Punishment {
 
     public long getCreatedAtLong() {
         return this.getCreatedAt().getTime();
-    }
-
-    public static ArrayList<Punishment> getAllPunishments() {
-        return CorePlugin.getInstance().getPunishmentManager().getPunishments();
-    }
-
-    public static Punishment getByIdentification(String id) {
-        return Punishment.getAllPunishments()
-                .stream()
-                .filter(punishment -> punishment.getPunishIdentification().equals(id))
-                .findFirst()
-                .orElse(null);
     }
 }
