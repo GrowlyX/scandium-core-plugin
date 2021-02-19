@@ -20,10 +20,13 @@ server-id: "eu-practice"
 refresh-time: 5
 settings:
   chat-format: "<prefix> <rank_prefix><rank_color><custom_color><player_name>&f: <message>"
-  punishment-gui: true
   color-gui: true
   namemc-rewards: true
-  command-delay: true
+  anti-chat-spam: true
+
+  # Not yet implemented
+  punishment-gui: true
+  anti-command-spam: true
 tab-block:
   enabled: true
   message:

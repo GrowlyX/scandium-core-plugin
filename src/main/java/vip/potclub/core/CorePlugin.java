@@ -61,9 +61,13 @@ public final class CorePlugin extends JavaPlugin {
 
     public static SimpleDateFormat FORMAT;
     public static Random RANDOM;
-    public static boolean JOINABLE = false;
-    public static boolean COLOR_ENABLED = true;
     public static String CHAT_FORMAT;
+
+    public static boolean CAN_JOIN = false;
+    public static boolean COLOR_ENABLED = true;
+    public static boolean NAME_MC_REWARDS = true;
+    public static boolean ANTI_CHAT_SPAM = true;
+    public static boolean ANTI_CMD_SPAM = true;
 
     public static Gson GSON;
     public static GsonBuilder GSONBUILDER;
@@ -121,6 +125,10 @@ public final class CorePlugin extends JavaPlugin {
         this.ranksConfig = new ConfigExternal("ranks");
 
         CHAT_FORMAT = this.getConfig().getString("settings.chat-format");
+        NAME_MC_REWARDS = this.getConfig().getBoolean("settings.namemc-rewards");
+
+        ANTI_CHAT_SPAM = this.getConfig().getBoolean("settings.anti-chat-spam");
+        ANTI_CMD_SPAM = this.getConfig().getBoolean("settings.anti-command-spam");
 
         if (this.getServer().getPluginManager().isPluginEnabled("ProtocolLib")) chatInterceptor = new ProtocolChatInterceptor(); else this.getLogger().info("[Protocol] Could not find ProtocolLib! Chat tab block will not work without it!");
         if (this.getServer().getPluginManager().isPluginEnabled("LunarClient-API")) lunarCommand = new LunarCommand(); else this.getLogger().info("[Protocol] Could not find LunarClient-API! The /lunar command will not work without it!");
@@ -157,7 +165,7 @@ public final class CorePlugin extends JavaPlugin {
         this.setupExtra();
 
         this.getRedisThread().execute(() -> this.getRedisClient().write(RedisUtil.onServerOnline()));
-        Bukkit.getScheduler().runTaskLater(this, () -> JOINABLE = true, 5 * 20L);
+        Bukkit.getScheduler().runTaskLater(this, () -> CAN_JOIN = true, 5 * 20L);
     }
 
     public void setupExtra() {
@@ -199,7 +207,7 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("unban").setExecutor(new UnBanCommand());
         this.getCommand("forceupdate").setExecutor(new ForceUpdateCommand());
         this.getCommand("network").setExecutor(new NetworkCommand());
-        this.getCommand("color").setExecutor(new ColorCommand());
+        if (this.getConfig().getBoolean("settings.color-gui")) this.getCommand("color").setExecutor(new ColorCommand());
         this.getCommand("unblacklist").setExecutor(new UnBlacklistCommand());
         this.getCommand("unmute").setExecutor(new UnMuteCommand());
         this.getCommand("kickall").setExecutor(new KickAllCommand());

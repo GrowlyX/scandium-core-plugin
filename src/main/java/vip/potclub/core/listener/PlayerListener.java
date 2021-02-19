@@ -54,17 +54,15 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onConnect(AsyncPlayerPreLoginEvent event) {
         if (!event.getUniqueId().toString().equals("bf4fb94d-d1d2-4097-b814-03d2f9eb1a4c")) {
-            if (CorePlugin.JOINABLE) {
-                if (!CorePlugin.getInstance().getConfig().getBoolean("beta-whitelist")) {
-                    if (CorePlugin.getInstance().getConfig().getBoolean("whitelist")) {
-                        if (!CorePlugin.getInstance().getServerManager().getWhitelistedPlayers().contains(event.getName())) {
-                            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.translateAlternateColorCodes('&', CorePlugin.getInstance().getConfig().getString("whitelisted-msg").replace("%NL%", "\n")));
-                        } else {
-                            checkDisallow(event);
-                        }
+            if (CorePlugin.CAN_JOIN) {
+                if (CorePlugin.getInstance().getConfig().getBoolean("whitelist")) {
+                    if (!CorePlugin.getInstance().getServerManager().getWhitelistedPlayers().contains(event.getName())) {
+                        event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.translateAlternateColorCodes('&', CorePlugin.getInstance().getConfig().getString("whitelisted-msg").replace("%NL%", "\n")));
                     } else {
                         checkDisallow(event);
                     }
+                } else {
+                    checkDisallow(event);
                 }
             } else {
                 event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Color.translate("&cThe server is currently booting...\n&cPlease reconnect in a few minutes."));
@@ -362,7 +360,7 @@ public class PlayerListener implements Listener {
                 }
             }
         });
-        PotPlayer.getPlayer(player).setChatCooldown(System.currentTimeMillis() + (slowChat > 0L ? slowChat : 3000L));
+        if (CorePlugin.ANTI_CHAT_SPAM) PotPlayer.getPlayer(player).setChatCooldown(System.currentTimeMillis() + (slowChat > 0L ? slowChat : 3000L)); else PotPlayer.getPlayer(player).setChatCooldown(0L);
     }
 
     @EventHandler

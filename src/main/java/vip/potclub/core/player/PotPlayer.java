@@ -89,6 +89,7 @@ public class PotPlayer {
     private PermissionAttachment attachment;
 
     private long chatCooldown;
+    private long commandCooldown;
 
     private Date lastJoined;
 
@@ -364,7 +365,7 @@ public class PotPlayer {
         syncCodes.put(this.syncCode, this.player.getName());
 
         this.setupAttachment();
-        this.checkVoting();
+        if (CorePlugin.NAME_MC_REWARDS) this.checkVoting();
 
         if (document.get("allPrefixes") != null) {
             if (player.hasPermission("scandium.prefixes.all")) {
