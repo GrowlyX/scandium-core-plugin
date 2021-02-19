@@ -150,7 +150,8 @@ public class PlayerListener implements Listener {
                 event.getPlayer().hidePlayer(player);
             }
         });
-        if (event.getPlayer().hasPermission("scandium.staff")) Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onConnect(event.getPlayer()))), 10L);
+        if (event.getPlayer().hasPermission("scandium.staff"))
+            Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onConnect(event.getPlayer()))), 10L);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -165,8 +166,9 @@ public class PlayerListener implements Listener {
                     .stream()
                     .filter(player1 -> player1.hasPermission("scandium.staff"))
                     .filter(player1 -> PotPlayer.getPlayer(player1).isCanSeeStaffMessages())
-                    .forEach(player1 -> player1.sendMessage(Color.translate("&b[S] &7[Frozen] &b" + potPlayer.getPlayer().getDisplayName() + "&f: &7" + event.getMessage())));
+                    .forEach(player1 -> player1.sendMessage(Color.translate("&b[S] &7[Frozen] &b" + potPlayer.getPlayer().getDisplayName() + "&f: &f" + event.getMessage())));
 
+            event.getPlayer().sendMessage(Color.translate(Color.translate("&7[Frozen] &b" + potPlayer.getPlayer().getDisplayName() + "&f: &f" + event.getMessage())));
             return;
         }
 
@@ -350,7 +352,13 @@ public class PlayerListener implements Listener {
             PotPlayer potPlayer1 = PotPlayer.getPlayer(player1);
             if (potPlayer1.isIgnoring(potPlayer.getPlayer())) {
                 if (potPlayer1.isCanSeeGlobalChat()) {
-                    player1.sendMessage(Color.translate((potPlayer.getAppliedPrefix() != null ? potPlayer.getAppliedPrefix().getPrefix() + " " : "") + potPlayer.getActiveGrant().getRank().getPrefix() + potPlayer.getActiveGrant().getRank().getColor() + (potPlayer.getCustomColor() != null ? potPlayer.getCustomColor() : "") + player.getName() + "&f: " + (potPlayer.getActiveGrant().getRank().getName().contains("Default") ? "&f" : "&f")) + (potPlayer.getPlayer().hasPermission("scandium.chat.colors") ? Color.translate(event.getMessage()) : event.getMessage()));
+                    player1.sendMessage(Color.translate(CorePlugin.CHAT_FORMAT
+                            .replace("<prefix>", (potPlayer.getAppliedPrefix() != null ? potPlayer.getAppliedPrefix().getPrefix() + " " : "")
+                            .replace("<rank_prefix>", potPlayer.getActiveGrant().getRank().getPrefix())
+                            .replace("<rank_color>", potPlayer.getActiveGrant().getRank().getColor())
+                            .replace("<custom_color>", (potPlayer.getCustomColor() != null ? potPlayer.getCustomColor().toString() : "")))
+                            .replace("<player_name>", player.getName())
+                            .replace("<message>", event.getMessage())));
                 }
             }
         });
@@ -359,10 +367,12 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onDisconnect(PlayerQuitEvent event) {
-        if (event.getPlayer().hasPermission("scandium.staff")) CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onDisconnect(event.getPlayer())));
+        if (event.getPlayer().hasPermission("scandium.staff"))
+            CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onDisconnect(event.getPlayer())));
 
         PotPlayer potPlayer = PotPlayer.getPlayer(event.getPlayer().getUniqueId());
-        if (potPlayer.isFrozen()) CorePlugin.getInstance().getPlayerManager().sendDisconnectFreezeMessage(event.getPlayer());
+        if (potPlayer.isFrozen())
+            CorePlugin.getInstance().getPlayerManager().sendDisconnectFreezeMessage(event.getPlayer());
 
         CorePlugin.getInstance().getServerManager().getVanishedPlayers().remove(event.getPlayer());
         potPlayer.savePlayerData();

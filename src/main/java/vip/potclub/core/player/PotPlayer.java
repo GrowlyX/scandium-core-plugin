@@ -447,12 +447,22 @@ public class PotPlayer {
 
         Bukkit.getOnlinePlayers().forEach(player -> {
             if (this.getActiveGrant().getRank().getColor() != null) {
-                NameTagExternal.setupNameTag(this.player, player, ChatColor.getByChar(this.getActiveGrant().getRank().getColor().replace("&", "").replace("§", "")));
+                NameTagExternal.setupNameTag(player, this.player, this.getColorByRankColor());
+            } else {
+                NameTagExternal.setupNameTag(player, this.player, ChatColor.GRAY);
             }
         });
 
         player.setPlayerListName(Color.translate(this.getActiveGrant().getRank().getColor() + (this.customColor != null ? this.customColor : "") + this.player.getName()));
         player.recalculatePermissions();
+    }
+
+    public ChatColor getColorByRankColor() {
+        if (this.getActiveGrant().getRank().getColor() != null) {
+            return ChatColor.getByChar(this.getActiveGrant().getRank().getColor().replace("&", "").replace("§", ""));
+        } else {
+            return ChatColor.GRAY;
+        }
     }
 
     public Grant getByDate(long date) {
@@ -464,7 +474,7 @@ public class PotPlayer {
     }
 
     public boolean isIgnoring(Player player) {
-        return this.getAllIgnoring().contains(player.getName());
+        return !this.getAllIgnoring().contains(player.getName());
     }
 
     public void checkVoting() {

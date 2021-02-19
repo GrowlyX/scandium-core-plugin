@@ -98,8 +98,10 @@ public class PunishmentManager {
                     case WARN:
                         if (target != null) {
                             if (finalPotPlayer != null) {
-                                finalPotPlayer.getPlayer().sendMessage(Color.translate("&cYou were warned!"));
-                                finalPotPlayer.getPlayer().sendMessage(Color.translate("&cReason: &f" + punishment.getReason()));
+                                finalPotPlayer.getPlayer().sendMessage(Color.translate("  "));
+                                finalPotPlayer.getPlayer().sendMessage(Color.translate("&6&l⚠ &c&lYOU WERE WARNED!"));
+                                finalPotPlayer.getPlayer().sendMessage(Color.translate("&7Reason: &e" + punishment.getReason()));
+                                finalPotPlayer.getPlayer().sendMessage(Color.translate("  "));
                             }
                         }
                         break;

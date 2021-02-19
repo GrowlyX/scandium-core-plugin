@@ -62,6 +62,8 @@ public final class CorePlugin extends JavaPlugin {
     public static SimpleDateFormat FORMAT;
     public static Random RANDOM;
     public static boolean JOINABLE = false;
+    public static boolean COLOR_ENABLED = true;
+    public static String CHAT_FORMAT;
 
     public static Gson GSON;
     public static GsonBuilder GSONBUILDER;
@@ -117,6 +119,8 @@ public final class CorePlugin extends JavaPlugin {
         this.saveDefaultConfig();
         this.getConfig().options().copyDefaults();
         this.ranksConfig = new ConfigExternal("ranks");
+
+        CHAT_FORMAT = this.getConfig().getString("settings.chat-format");
 
         if (this.getServer().getPluginManager().isPluginEnabled("ProtocolLib")) chatInterceptor = new ProtocolChatInterceptor(); else this.getLogger().info("[Protocol] Could not find ProtocolLib! Chat tab block will not work without it!");
         if (this.getServer().getPluginManager().isPluginEnabled("LunarClient-API")) lunarCommand = new LunarCommand(); else this.getLogger().info("[Protocol] Could not find LunarClient-API! The /lunar command will not work without it!");

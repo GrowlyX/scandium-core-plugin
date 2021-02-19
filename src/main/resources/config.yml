@@ -18,6 +18,12 @@ communism: true
 server-type: "PRACTICE"
 server-id: "eu-practice"
 refresh-time: 5
+settings:
+  chat-format: "<prefix> <rank_prefix><rank_color><custom_color><player_name>&f: <message>"
+  punishment-gui: true
+  color-gui: true
+  namemc-rewards: true
+  command-delay: true
 tab-block:
   enabled: true
   message:
@@ -59,6 +65,8 @@ mongodb:
 freeze-message:
   - " "
   - "&4&lDo not disconnect!"
+  - "&cIf you disconnect, you will be punished!"
+  - ""
   - "&7You have been frozen by a staff member!"
   - "&7Please connect to &fTeamSpeak &7within &f3 minutes &7or you will"
   - "&7be banned for &cRefusing to Screenshare&7!"
