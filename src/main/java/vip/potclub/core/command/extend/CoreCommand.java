@@ -9,6 +9,7 @@ import vip.potclub.core.CorePlugin;
 import vip.potclub.core.command.BaseCommand;
 import vip.potclub.core.menu.extend.ScandiumMenu;
 import vip.potclub.core.util.Color;
+import vip.potclub.core.util.StringUtil;
 
 public class CoreCommand extends BaseCommand {
 
@@ -22,7 +23,7 @@ public class CoreCommand extends BaseCommand {
         Player player = (Player) sender;
         if (player.getUniqueId().equals(CorePlugin.getInstance().getServerManager().getNetwork().getMainOwner()) || player.getUniqueId().equals(CorePlugin.getInstance().getServerManager().getNetwork().getMainDeveloper())) {
             if (args.length == 0) {
-                player.sendMessage(Color.translate("&cUsage: /" + label + " <debug|disallow|destroy|panel>"));
+                player.sendMessage(Color.translate("&cUsage: /" + label + " <debug|disallow|panel>"));
             }
             if (args.length > 0) {
                 switch (args[0]) {
@@ -37,17 +38,13 @@ public class CoreCommand extends BaseCommand {
                     case "panel":
                         new ScandiumMenu(player).open(player);
                         break;
-                    case "destroy":
-                        player.sendMessage(Color.translate("&cBoom! Destroyed!"));
-                        Bukkit.getServer().shutdown();
-                        break;
                 }
             }
         } else {
-            player.sendMessage(Color.translate("&b&m--------&7&m" + StringUtils.repeat("-", 37) + "&b&m--------"));
-            player.sendMessage(Color.translate("&eThis server is running &bScandium Core&e!"));
-            player.sendMessage(Color.translate("&eDeveloped by &dGrowlyX#1337&e."));
-            player.sendMessage(Color.translate("&b&m--------&7&m" + StringUtils.repeat("-", 37) + "&b&m--------"));
+            StringUtil.sendCenteredMessage(player, "&a&m" + StringUtils.repeat("-", 53));
+            StringUtil.sendCenteredMessage(player, "&eThis server is running &6Scandium Core&e.");
+            StringUtil.sendCenteredMessage(player, "&eDeveloped by &bGrowlyX#1337&e.");
+            StringUtil.sendCenteredMessage(player, "&a&m" + StringUtils.repeat("-", 53));
         }
         return false;
     }

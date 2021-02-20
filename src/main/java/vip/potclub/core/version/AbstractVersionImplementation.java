@@ -4,4 +4,4 @@ import lombok.NoArgsConstructor;
 import org.bukkit.command.CommandExecutor;
 
 @NoArgsConstructor
-public abstract class AbstractBukkitVersionImplementation implements CommandExecutor { }
+public abstract class AbstractVersionImplementation implements CommandExecutor { }

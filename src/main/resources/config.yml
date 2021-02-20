@@ -1,40 +1,34 @@
 #
 #  Scandium - by SolexGames (GrowlyX)
 #
-#    PRACTICE("Practice"),
-#    KITPVP("KitPvP"),
-#    HARDCORE_FACTIONS("HCF"),
-#    KITMAP("KitMap"),
-#    SKYWARS("SkyWars"),
-#    BEDWARS("BedWars"),
-#    MEETUP("UHC Meetup"),
-#    UHC_GAMES("UHC Games"),
-#    UHC("UHC"),
-#    HORSE_RACE("Horse Racing"),
-#    POTSG("PotSG");
-#
 region: "EU"
-communism: true
 server-type: "PRACTICE"
 server-id: "eu-practice"
 refresh-time: 5
+
 settings:
-  chat-format: "<prefix> <rank_prefix><rank_color><custom_color><player_name>&f: <message>"
+  chat-format: "<prefix> <rank_prefix><rank_color><custom_color><player_name> &7» &f<message>"
   color-gui: true
   namemc-rewards: true
   anti-chat-spam: true
 
-  # Not yet implemented
+  # Not yet implemented!
   punishment-gui: true
   anti-command-spam: true
+
+server:
+  settings:
+    server-id: "POTCLUBVIP"
+
 tab-block:
   enabled: true
   message:
     enabled: false
     string: "&f/scandium:settings, &f/scandium:media"
+
 block-commands:
   enabled: true
-  message: "&cThat command is blocked."
+  message: 'Unknown command. Type \"/help\" for help.'
   list:
     - "bukkit:plugins"
     - "bukkit:?"
@@ -55,16 +49,24 @@ block-commands:
     - "version"
     - "ver"
     - "icanhasbukkit"
-server:
-  settings:
-    server-id: "POTCLUBVIP"
-redis:
-  host: "na1.solexgames.com"
-  port: 1234
-  password: "testlolhors"
-  authentication: true
-mongodb:
-  url: "mongodb+srv://solexgames:password@na1.solexgames.com/SolexGames?retryWrites=true&w=majority"
+
+player-join:
+  clear-chat: false
+  join-message:
+    enabled: false
+    centered: false
+    message:
+      - '&7&m---------------------------------------------'
+      - '&7'
+      - '&eWelcome %PLAYER%&e, to &dPotClub Practice&e.'
+      - '&7'
+      - '&eStore: &bshop.potclub.vip'
+      - '&eTeamSpeak: &bts.potclub.vip'
+      - '&eTwitter: &bwww.twitter.com/PotClubVIP'
+      - '&eDiscord: &bwww.dsc.gg/pot'
+      - '&7'
+      - '&7&m---------------------------------------------'
+
 freeze-message:
   - " "
   - "&4&lDo not disconnect!"
@@ -74,23 +76,13 @@ freeze-message:
   - "&7Please connect to &fTeamSpeak &7within &f3 minutes &7or you will"
   - "&7be banned for &cRefusing to Screenshare&7!"
   - " "
-whitelisted:
-  - GrowlyX
-whitelist: true
-whitelisted-msg: "&cThis server is currently whitelisted.%NL%&cPlease check our discord for more information."
 tips:
+  enabled: true
   padding: true
+  interval: 120
   use-prefix: true
-  prefix: "&d[TIP] &e"
+  prefix: "&7[&3TIP&7] &b"
   messages:
-    - "Follow our Twitter account for news and giveaways - www.twitter.com/PotClubVIP"
-    - "Join our Discord server to chat with players, get support, and see sneak peeks - https://dsc.gg/pot"
-    - "Purchase ranks, perks, and more on our shop - store.potclub.vip"
-    - "Configure our systems to your liking by using /settings."
-    - "Change your network language type by using /language."
-    - "Modify your social media by using /media."
-    - "Sync your account to our discord server by using /sync."
-    - "Punished? Appeal on our Discord server or purchase to remove your punishment."
-    - "Donators can host events using /event."
-    - "Butterfly clicking may result in a punishment! Use at your own risk."
-    - "View the leaderboards on our website - https://potclub.vip/"
+    - "Here's an example tip! These will broadcast every 120 seconds."
+    - "Here's another tip! This tip will broadcast...<nl><nl>Multiple lines!"
+    - "These tips support color codes too! &6Hey! &bHow are you doing? &lEnjoying Scandium?"

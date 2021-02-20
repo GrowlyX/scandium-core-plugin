@@ -2,8 +2,6 @@ package vip.potclub.core.util;
 
 import vip.potclub.core.CorePlugin;
 
-import java.util.Random;
-
 public final class SaltUtil {
 
     private final static String SALT_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";

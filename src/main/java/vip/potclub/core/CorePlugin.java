@@ -30,7 +30,6 @@ import vip.potclub.core.command.extend.web.WebAnnouncementCommand;
 import vip.potclub.core.command.extend.web.WebAnnouncementDeleteCommand;
 import vip.potclub.core.command.extend.whitelist.WhitelistCommand;
 import vip.potclub.core.database.Database;
-import vip.potclub.core.enums.ServerType;
 import vip.potclub.core.listener.PlayerListener;
 import vip.potclub.core.lunar.AbstractClientInjector;
 import vip.potclub.core.lunar.extend.LunarCommand;
@@ -45,7 +44,7 @@ import vip.potclub.core.task.*;
 import vip.potclub.core.util.Color;
 import vip.potclub.core.util.RedisUtil;
 import vip.potclub.core.util.external.ConfigExternal;
-import vip.potclub.core.version.AbstractBukkitVersionImplementation;
+import vip.potclub.core.version.AbstractVersionImplementation;
 import vip.potclub.core.version.extend.PingCommand_1_7;
 import vip.potclub.core.version.extend.PingCommand_1_8;
 
@@ -87,11 +86,14 @@ public final class CorePlugin extends JavaPlugin {
 
     private Database coreDatabase;
     private RedisClient redisClient;
+
     private ConfigExternal ranksConfig;
+    private ConfigExternal whitelistConfig;
+    private ConfigExternal databaseConfig;
 
     private AbstractChatInterceptor chatInterceptor;
     private AbstractClientInjector lunarCommand;
-    private AbstractBukkitVersionImplementation bukkitImplementation;
+    private AbstractVersionImplementation versionImplementation;
     private AbstractNMSImplementation NMS;
 
     private Executor taskThread;
@@ -122,7 +124,10 @@ public final class CorePlugin extends JavaPlugin {
 
         this.saveDefaultConfig();
         this.getConfig().options().copyDefaults();
+
         this.ranksConfig = new ConfigExternal("ranks");
+        this.databaseConfig = new ConfigExternal("database");
+        this.whitelistConfig = new ConfigExternal("whitelist");
 
         CHAT_FORMAT = this.getConfig().getString("settings.chat-format");
         NAME_MC_REWARDS = this.getConfig().getBoolean("settings.namemc-rewards");
@@ -134,12 +139,12 @@ public final class CorePlugin extends JavaPlugin {
         if (this.getServer().getPluginManager().isPluginEnabled("LunarClient-API")) lunarCommand = new LunarCommand(); else this.getLogger().info("[Protocol] Could not find LunarClient-API! The /lunar command will not work without it!");
 
         if (this.getServer().getVersion().contains("1.7")) {
-            this.bukkitImplementation = new PingCommand_1_7();
+            this.versionImplementation = new PingCommand_1_7();
             this.NMS = new NMSImplementation_v1_7();
 
             this.getLogger().info("[Bukkit] Hooked into Bukkit version " + this.getServer().getVersion() + "!");
         } else if (this.getServer().getVersion().contains("1.8")) {
-            this.bukkitImplementation = new PingCommand_1_8();
+            this.versionImplementation = new PingCommand_1_8();
             this.NMS = new NMSImplementation_v1_8();
 
             this.getLogger().info("[Bukkit] Hooked into Bukkit version " + this.getServer().getVersion() + "!");
@@ -207,7 +212,6 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("unban").setExecutor(new UnBanCommand());
         this.getCommand("forceupdate").setExecutor(new ForceUpdateCommand());
         this.getCommand("network").setExecutor(new NetworkCommand());
-        if (this.getConfig().getBoolean("settings.color-gui")) this.getCommand("color").setExecutor(new ColorCommand());
         this.getCommand("unblacklist").setExecutor(new UnBlacklistCommand());
         this.getCommand("unmute").setExecutor(new UnMuteCommand());
         this.getCommand("kickall").setExecutor(new KickAllCommand());
@@ -240,11 +244,12 @@ public final class CorePlugin extends JavaPlugin {
 
         if (this.lunarCommand != null) this.getCommand("lunar").setExecutor(lunarCommand);
         if (this.chatInterceptor != null) this.chatInterceptor.initializePacketInterceptor();
-        if (this.bukkitImplementation != null) this.getCommand("ping").setExecutor(bukkitImplementation);
+        if (this.versionImplementation != null) this.getCommand("ping").setExecutor(versionImplementation);
 
         this.registerListeners(new PlayerListener());
 
-        if (!this.getServerManager().getNetwork().equals(ServerType.BUZZMC)) new AutoMessageTask();
+        if (this.getConfig().getBoolean("settings.color-gui")) this.getCommand("color").setExecutor(new ColorCommand());
+        if (this.getConfig().getBoolean("tips.enabled")) new AutoMessageTask();
 
         new PunishExpireTask();
         new GrantExpireTask();
@@ -258,11 +263,10 @@ public final class CorePlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        this.getConfig().set("whitelisted", this.getServerManager().getWhitelistedPlayers());
+        CAN_JOIN = false;
 
+        this.getWhitelistConfig().getConfiguration().set("whitelisted", this.getServerManager().getWhitelistedPlayers());
         this.getServer().getOnlinePlayers().forEach(player -> player.kickPlayer(Color.translate("&cThe server is currently rebooting.\n&cPlease reconnect in a few minutes, or check discord for more information.")));
-
-        RedisUtil.write(RedisUtil.onServerOffline());
 
         this.punishmentManager.savePunishments();
         this.rankManager.saveRanks();
@@ -271,6 +275,8 @@ public final class CorePlugin extends JavaPlugin {
 
         this.warpManager.saveWarps();
         this.prefixManager.savePrefixes();
+
+        RedisUtil.write(RedisUtil.onServerOffline());
 
         if (this.redisClient.isClientActive()) this.redisClient.destroyClient();
     }

@@ -1,0 +1,7 @@
+#
+#  Whitelist Configuration
+#
+whitelisted:
+  - GrowlyX
+whitelist: true
+whitelisted-msg: '&cThis server is currently whitelisted.\n&cPlease check our discord for more information.'

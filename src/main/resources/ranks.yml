@@ -1,3 +1,6 @@
+#
+#  Ranks Configuration (Deprecated)
+#
 DEFAULT:
   NAME: "Default"
   PREFIX: "&7"

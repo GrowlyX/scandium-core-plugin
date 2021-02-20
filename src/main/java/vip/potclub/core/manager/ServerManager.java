@@ -16,6 +16,7 @@ import java.util.List;
 public class ServerManager {
 
     private List<String> whitelistedPlayers;
+    private List<String> joinMessage;
 
     private ArrayList<NetworkServer> networkServers = new ArrayList<>();
     private ArrayList<Player> vanishedPlayers = new ArrayList<>();
@@ -24,13 +25,23 @@ public class ServerManager {
     private ServerType network;
 
     private boolean chatEnabled = true;
+
+    private boolean clearChatJoin;
+    private boolean joinMessageEnabled;
+    private boolean joinMessageCentered;
+
     private long chatSlow;
 
     public ServerManager() {
-        this.whitelistedPlayers = CorePlugin.getInstance().getConfig().getStringList("whitelisted");
+        this.whitelistedPlayers = CorePlugin.getInstance().getWhitelistConfig().getStringList("whitelisted");
+
+        this.joinMessage = CorePlugin.getInstance().getConfig().getStringList("player-join.join-message.message");
+        this.clearChatJoin = CorePlugin.getInstance().getConfig().getBoolean("player-join.clear-chat");
+        this.joinMessageEnabled = CorePlugin.getInstance().getConfig().getBoolean("player-join.join-message.enabled");
+        this.joinMessageCentered = CorePlugin.getInstance().getConfig().getBoolean("player-join.join-message.centered");
 
         setupServerType();
-        CorePlugin.getInstance().getLogger().info("[Server] Loaded server type: " + this.network.getServerName() + ".");
+        CorePlugin.getInstance().getLogger().info("[Network] Loaded server type: " + this.network.getServerName() + ".");
     }
 
     public void removeNetworkServer(NetworkServer networkServer) {
@@ -49,7 +60,7 @@ public class ServerManager {
         try {
             this.network = ServerType.valueOf(CorePlugin.getInstance().getConfig().getString("server.settings.server-id"));
         } catch (IllegalArgumentException e) {
-            CorePlugin.getInstance().getLogger().info("Config the plugin correctly dumbass.");
+            CorePlugin.getInstance().getLogger().info("Please double check your configuration! The server ID is not correct.");
             CorePlugin.getInstance().getServer().shutdown();
         }
     }

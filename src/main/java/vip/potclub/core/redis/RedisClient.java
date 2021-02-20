@@ -22,10 +22,10 @@ public class RedisClient {
     private boolean isClientActive;
 
     public RedisClient() {
-        this.redisAddress = CorePlugin.getInstance().getConfig().getString("redis.host");
-        this.redisPassword = CorePlugin.getInstance().getConfig().getString("redis.password");
-        this.redisPort = CorePlugin.getInstance().getConfig().getInt("redis.port");
-        this.redisAuthentication = CorePlugin.getInstance().getConfig().getBoolean("redis.authentication");
+        this.redisAddress = CorePlugin.getInstance().getDatabaseConfig().getString("redis.host");
+        this.redisPassword = CorePlugin.getInstance().getDatabaseConfig().getString("redis.authentication.password");
+        this.redisPort = CorePlugin.getInstance().getDatabaseConfig().getInt("redis.port");
+        this.redisAuthentication = CorePlugin.getInstance().getDatabaseConfig().getBoolean("redis.authentication.enabled");
 
         try {
             this.jedisPool = new JedisPool(redisAddress, redisPort);

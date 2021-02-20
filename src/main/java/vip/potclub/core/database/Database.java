@@ -23,11 +23,11 @@ public class Database {
     private final MongoCollection<Document> ticketCollection;
 
     public Database() {
-        this.client = new MongoClient(new MongoClientURI(CorePlugin.getInstance().getConfig().getString("mongodb.url")));
+        this.client = new MongoClient(new MongoClientURI(CorePlugin.getInstance().getDatabaseConfig().getString("mongodb.url")));
 
         this.database = client.getDatabase("SGSoftware");
-        this.playerCollection = this.database.getCollection("coreprofiles");
 
+        this.playerCollection = this.database.getCollection("coreprofiles");
         this.prefixCollection = this.database.getCollection("prefix");
         this.rankCollection = this.database.getCollection("ranks");
         this.warpCollection = this.database.getCollection("warps");

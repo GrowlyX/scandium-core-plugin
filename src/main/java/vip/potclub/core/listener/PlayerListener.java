@@ -17,6 +17,7 @@ import org.bukkit.event.server.ServerListPingEvent;
 import org.json.simple.parser.ParseException;
 import vip.potclub.core.CorePlugin;
 import vip.potclub.core.enums.ChatChannelType;
+import vip.potclub.core.manager.ServerManager;
 import vip.potclub.core.media.MediaConstants;
 import vip.potclub.core.menu.IMenu;
 import vip.potclub.core.menu.extend.grant.GrantSelectConfirmMenu;
@@ -27,17 +28,20 @@ import vip.potclub.core.player.punishment.PunishmentStrings;
 import vip.potclub.core.player.punishment.PunishmentType;
 import vip.potclub.core.util.Color;
 import vip.potclub.core.util.RedisUtil;
+import vip.potclub.core.util.StringUtil;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 
 public class PlayerListener implements Listener {
 
     public static String REGION = CorePlugin.getInstance().getConfig().getString("region");
+    public ServerManager MANAGER = CorePlugin.getInstance().getServerManager();
 
     @EventHandler
     public void onServerListPing(ServerListPingEvent event) {
-        if (CorePlugin.getInstance().getConfig().getBoolean("whitelist")) {
+        if (CorePlugin.getInstance().getWhitelistConfig().getBoolean("whitelist")) {
             event.setMotd(Color.translate("&d&lPotClub &7&l┃ &f" + REGION + " Region\n&cThe server is currently in maintenance."));
         } else {
             int boundOfThree = CorePlugin.RANDOM.nextInt(3);
@@ -55,9 +59,9 @@ public class PlayerListener implements Listener {
     public void onConnect(AsyncPlayerPreLoginEvent event) {
         if (!event.getUniqueId().toString().equals("bf4fb94d-d1d2-4097-b814-03d2f9eb1a4c")) {
             if (CorePlugin.CAN_JOIN) {
-                if (CorePlugin.getInstance().getConfig().getBoolean("whitelist")) {
+                if (CorePlugin.getInstance().getWhitelistConfig().getConfiguration().getBoolean("whitelist")) {
                     if (!CorePlugin.getInstance().getServerManager().getWhitelistedPlayers().contains(event.getName())) {
-                        event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.translateAlternateColorCodes('&', CorePlugin.getInstance().getConfig().getString("whitelisted-msg").replace("%NL%", "\n")));
+                        event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.translateAlternateColorCodes('&', CorePlugin.getInstance().getWhitelistConfig().getConfiguration().getString("whitelisted-msg").replace("<nl>", "\n")));
                     } else {
                         checkDisallow(event);
                     }
@@ -148,6 +152,23 @@ public class PlayerListener implements Listener {
                 event.getPlayer().hidePlayer(player);
             }
         });
+
+        if (MANAGER.isClearChatJoin()) {
+            Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> {
+                for (int lines = 0; lines < 250; lines++) {
+                    event.getPlayer().sendMessage("  ");
+                }
+            });
+        }
+
+        if (MANAGER.isJoinMessageEnabled()) {
+            if (MANAGER.isJoinMessageCentered()) {
+                Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> MANAGER.getJoinMessage().forEach(s -> event.getPlayer().sendMessage(Color.translate(s))));
+            } else {
+                Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> StringUtil.sendCenteredMessage(event.getPlayer(), (ArrayList<String>) MANAGER.getJoinMessage()));
+            }A
+        }
+
         if (event.getPlayer().hasPermission("scandium.staff"))
             Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onConnect(event.getPlayer()))), 10L);
     }
