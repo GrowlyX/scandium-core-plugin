@@ -278,8 +278,8 @@ public final class CorePlugin extends JavaPlugin {
         FileHandler fileHandler;
         File file;
 
-        file = new File("SolexGames\\Scandium\\Chat_Logs\\chat_log_" + date + ".log");
-        if (!file.getParentFile().exists()) file.getParentFile().mkdir();
+//        file = new File(this.getDat);
+//        if (!file.getParentFile().exists()) file.getParentFile().mkdir();
 
         try {
             fileHandler = new FileHandler("SolexGames\\Scandium\\Chat_Logs\\chat_log_" + date + ".log");

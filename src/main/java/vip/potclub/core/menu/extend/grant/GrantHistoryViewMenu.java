@@ -51,6 +51,9 @@ public class GrantHistoryViewMenu extends AbstractInventoryMenu<CorePlugin> {
                 lore.add("&eRank&7: " + network.getMainColor() + grant.getRank().getColor() + grant.getRank().getName());
                 lore.add("&eDuration&7: " + network.getMainColor() + (grant.isPermanent() ? "&4Forever" : DurationFormatUtils.formatDurationWords(grant.getDuration(), true, true)));
                 lore.add("&b&m------------------------------------");
+                lore.add(network.getMainColor() + "Scopes:");
+                lore.add(" &7- &dglobal");
+                lore.add("&b&m------------------------------------");
                 lore.add("&eIssued By&7: " + network.getMainColor()  + (grant.getIssuer() != null ? Bukkit.getOfflinePlayer(grant.getIssuer()).getName() : "&4Console"));
                 lore.add("&eIssued On&7: " + network.getMainColor()  + CorePlugin.FORMAT.format(new Date(grant.getDateAdded())));
                 lore.add("&eIssued Reason&7: " + network.getMainColor()  + grant.getReason());

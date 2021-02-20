@@ -40,6 +40,7 @@ public class PotPlayer {
     private List<Grant> allGrants = new ArrayList<>();
     private List<String> allPrefixes = new ArrayList<>();
     private List<String> allIgnoring = new ArrayList<>();
+    private List<String> allFriends = new ArrayList<>();
     private List<PotionMessageType> allPurchasedMessages = new ArrayList<>();
 
     private UUID uuid;
@@ -62,6 +63,7 @@ public class PotPlayer {
     private boolean canReceiveDmsSounds = true;
     private boolean canSeeBroadcasts = true;
     private boolean canSeeTips = true;
+    private boolean canAcceptingFriendRequests = true;
 
     private boolean canReport = true;
     private boolean canRequest = true;
