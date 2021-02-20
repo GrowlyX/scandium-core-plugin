@@ -71,7 +71,7 @@ public final class StringUtil {
             compensated += spaceLength;
         }
 
-        player.sendMessage(sb.toString() + message);
+        player.sendMessage(sb.toString() + message.replace("%PLAYER%", player.getDisplayName()));
     }
 
     public static void sendCenteredMessage(Player player, ArrayList<String> messages) {
@@ -108,7 +108,7 @@ public final class StringUtil {
                 compensated += spaceLength;
             }
 
-            player.sendMessage(sb.toString() + message);
+            player.sendMessage(sb.toString() + message.replace("%PLAYER%", player.getDisplayName()));
         });
     }
 }

@@ -48,11 +48,16 @@ import vip.potclub.core.version.AbstractVersionImplementation;
 import vip.potclub.core.version.extend.PingCommand_1_7;
 import vip.potclub.core.version.extend.PingCommand_1_8;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 import java.util.TimeZone;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 @Getter
 @Setter
@@ -83,6 +88,9 @@ public final class CorePlugin extends JavaPlugin {
     private PunishmentManager punishmentManager;
 
     private String serverName;
+
+    private Logger chatLogger;
+    private Logger commandLogger;
 
     private Database coreDatabase;
     private RedisClient redisClient;
@@ -167,6 +175,7 @@ public final class CorePlugin extends JavaPlugin {
         this.warpManager = new WarpManager();
         this.shutdownManager = new ShutdownManager();
 
+        this.setupLogs();
         this.setupExtra();
 
         this.getRedisThread().execute(() -> this.getRedisClient().write(RedisUtil.onServerOnline()));
@@ -259,6 +268,34 @@ public final class CorePlugin extends JavaPlugin {
         new FrozenMessageTask();
 
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, this.tpsRunnable, 0L, 1L);
+    }
+
+    public void setupLogs() {
+        this.chatLogger = Logger.getLogger("Chat");
+        FileHandler fileHandler;
+
+        try {
+            fileHandler = new FileHandler("SolexGames/Scandium/Chat Logs/chat_log_" + FORMAT.format(new Date()) + ".log");
+            this.chatLogger.addHandler(fileHandler);
+
+            SimpleFormatter formatter = new SimpleFormatter();
+            fileHandler.setFormatter(formatter);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        this.commandLogger = Logger.getLogger("Commands");
+        FileHandler commandFileHandler;
+
+        try {
+            commandFileHandler = new FileHandler("SolexGames/Scandium/Command Logs/command_log_" + FORMAT.format(new Date()) + ".log");
+            this.commandLogger.addHandler(commandFileHandler);
+
+            SimpleFormatter formatter = new SimpleFormatter();
+            commandFileHandler.setFormatter(formatter);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

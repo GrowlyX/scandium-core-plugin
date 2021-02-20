@@ -5,7 +5,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import vip.potclub.core.CorePlugin;
-import vip.potclub.kotlin.clickable.ChatClickable;
+import vip.potclub.core.clickable.Clickable;
 import vip.potclub.core.command.BaseCommand;
 import vip.potclub.core.player.ranks.Rank;
 import vip.potclub.core.util.Color;
@@ -17,7 +17,7 @@ import java.util.UUID;
 
 public class RankImportCommand extends BaseCommand {
 
-    public ChatClickable confirmChatClickable = new ChatClickable(Color.translate("&4&l[CONFIRM]"), Color.translate("&cClick to import all ranks."), "/import confirm");
+    public Clickable confirmChatClickable = new Clickable(Color.translate("&4&l[CONFIRM]"), Color.translate("&cClick to import all ranks."), "/import confirm");
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {

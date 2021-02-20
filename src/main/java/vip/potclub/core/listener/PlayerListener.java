@@ -27,6 +27,7 @@ import vip.potclub.core.player.punishment.Punishment;
 import vip.potclub.core.player.punishment.PunishmentStrings;
 import vip.potclub.core.player.punishment.PunishmentType;
 import vip.potclub.core.util.Color;
+import vip.potclub.core.util.LoggerUtil;
 import vip.potclub.core.util.RedisUtil;
 import vip.potclub.core.util.StringUtil;
 
@@ -163,14 +164,13 @@ public class PlayerListener implements Listener {
 
         if (MANAGER.isJoinMessageEnabled()) {
             if (MANAGER.isJoinMessageCentered()) {
-                Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> MANAGER.getJoinMessage().forEach(s -> event.getPlayer().sendMessage(Color.translate(s))));
+                Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> MANAGER.getJoinMessage().forEach(s -> event.getPlayer().sendMessage(Color.translate(s.replace("%PLAYER%", event.getPlayer().getDisplayName())))));
             } else {
                 Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> StringUtil.sendCenteredMessage(event.getPlayer(), (ArrayList<String>) MANAGER.getJoinMessage()));
-            }A
+            }
         }
 
-        if (event.getPlayer().hasPermission("scandium.staff"))
-            Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onConnect(event.getPlayer()))), 10L);
+        if (event.getPlayer().hasPermission("scandium.staff")) Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onConnect(event.getPlayer()))), 10L);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -349,12 +349,13 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
-    public void onBlockedCommand(PlayerCommandPreprocessEvent event) {
+    public void onCommand(PlayerCommandPreprocessEvent event) {
         PotPlayer potPlayer = PotPlayer.getPlayer(event.getPlayer());
         if (potPlayer.isFrozen()) {
             event.setCancelled(true);
             return;
         }
+
         if (CorePlugin.getInstance().getConfig().getBoolean("block-commands.enabled")) {
             if (event.getPlayer().hasPermission("scandium.protocol.bypass")) return;
             CorePlugin.getInstance().getConfig().getStringList("block-commands.list").forEach(s -> {
@@ -364,6 +365,8 @@ public class PlayerListener implements Listener {
                 }
             });
         }
+
+        LoggerUtil.logCommand(event.getPlayer(), event.getMessage());
     }
 
     private void checkThenSend(AsyncPlayerChatEvent event, Player player, PotPlayer potPlayer, long slowChat) {
@@ -372,15 +375,19 @@ public class PlayerListener implements Listener {
             if (potPlayer1.isIgnoring(potPlayer.getPlayer())) {
                 if (potPlayer1.isCanSeeGlobalChat()) {
                     player1.sendMessage(Color.translate(CorePlugin.CHAT_FORMAT
-                            .replace("<prefix>", (potPlayer.getAppliedPrefix() != null ? potPlayer.getAppliedPrefix().getPrefix() + " " : "")
+                            .replace("<prefix>", (potPlayer.getAppliedPrefix() != null ? potPlayer.getAppliedPrefix().getPrefix() + " " : ""))
                             .replace("<rank_prefix>", potPlayer.getActiveGrant().getRank().getPrefix())
                             .replace("<rank_color>", potPlayer.getActiveGrant().getRank().getColor())
-                            .replace("<custom_color>", (potPlayer.getCustomColor() != null ? potPlayer.getCustomColor().toString() : "")))
+                            .replace("<custom_color>", (potPlayer.getCustomColor() != null ? potPlayer.getCustomColor().toString() : ""))
                             .replace("<player_name>", player.getName())
-                            .replace("<message>", event.getMessage())));
+                            .replace("<message>", event.getMessage())
+                    ));
                 }
             }
         });
+
+        LoggerUtil.logChat(player, event.getMessage());
+
         if (CorePlugin.ANTI_CHAT_SPAM) PotPlayer.getPlayer(player).setChatCooldown(System.currentTimeMillis() + (slowChat > 0L ? slowChat : 3000L)); else PotPlayer.getPlayer(player).setChatCooldown(0L);
     }
 
