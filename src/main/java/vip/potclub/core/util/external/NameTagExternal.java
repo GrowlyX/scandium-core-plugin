@@ -1,6 +1,5 @@
 package vip.potclub.core.util.external;
 
-import net.minecraft.util.org.apache.commons.lang3.StringEscapeUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

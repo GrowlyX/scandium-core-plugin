@@ -366,7 +366,7 @@ public class PlayerListener implements Listener {
             });
         }
 
-        LoggerUtil.logCommand(event.getPlayer(), event.getMessage());
+//        LoggerUtil.logCommand(event.getPlayer(), event.getMessage());
     }
 
     private void checkThenSend(AsyncPlayerChatEvent event, Player player, PotPlayer potPlayer, long slowChat) {
@@ -386,7 +386,7 @@ public class PlayerListener implements Listener {
             }
         });
 
-        LoggerUtil.logChat(player, event.getMessage());
+//        LoggerUtil.logChat(player, event.getMessage());
 
         if (CorePlugin.ANTI_CHAT_SPAM) PotPlayer.getPlayer(player).setChatCooldown(System.currentTimeMillis() + (slowChat > 0L ? slowChat : 3000L)); else PotPlayer.getPlayer(player).setChatCooldown(0L);
     }
