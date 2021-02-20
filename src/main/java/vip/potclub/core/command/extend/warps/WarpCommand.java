@@ -7,7 +7,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import vip.potclub.core.CorePlugin;
-import vip.potclub.core.clickable.Clickable;
+import vip.potclub.kotlin.clickable.ChatClickable;
 import vip.potclub.core.command.BaseCommand;
 import vip.potclub.core.enums.ServerType;
 import vip.potclub.core.player.warps.Warp;
@@ -44,8 +44,8 @@ public class WarpCommand extends BaseCommand {
                             player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
                             player.sendMessage(Color.translate(NETWORK.getMainColor() + ChatColor.BOLD.toString() + "All Warps:"));
                             Warp.getWarps().forEach(warp -> {
-                                Clickable clickable = new Clickable(ChatColor.GRAY + " * " + ChatColor.YELLOW + warp.getName(), ChatColor.GREEN + "Click to warp to " + ChatColor.RESET + warp.getName() + ChatColor.GREEN + "!", "/warp " + warp.getName());
-                                player.spigot().sendMessage(clickable.asComponents());
+                                ChatClickable chatClickable = new ChatClickable(ChatColor.GRAY + " * " + ChatColor.YELLOW + warp.getName(), ChatColor.GREEN + "Click to warp to " + ChatColor.RESET + warp.getName() + ChatColor.GREEN + "!", "/warp " + warp.getName());
+                                player.spigot().sendMessage(chatClickable.asComponents());
                             });
                             player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
                             break;

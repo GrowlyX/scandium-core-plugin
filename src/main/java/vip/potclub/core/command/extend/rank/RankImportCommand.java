@@ -1,10 +1,11 @@
 package vip.potclub.core.command.extend.rank;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import vip.potclub.core.CorePlugin;
-import vip.potclub.core.clickable.Clickable;
+import vip.potclub.kotlin.clickable.ChatClickable;
 import vip.potclub.core.command.BaseCommand;
 import vip.potclub.core.player.ranks.Rank;
 import vip.potclub.core.util.Color;
@@ -16,7 +17,7 @@ import java.util.UUID;
 
 public class RankImportCommand extends BaseCommand {
 
-    public Clickable confirmClickable = new Clickable(Color.translate("&4&l[CONFIRM]"), Color.translate("&cClick to import all ranks."), "/import confirm");
+    public ChatClickable confirmChatClickable = new ChatClickable(Color.translate("&4&l[CONFIRM]"), Color.translate("&cClick to import all ranks."), "/import confirm");
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -28,21 +29,21 @@ public class RankImportCommand extends BaseCommand {
         Player player = (Player) sender;
         if (player.getUniqueId().equals(CorePlugin.getInstance().getServerManager().getNetwork().getMainOwner()) || player.getUniqueId().equals(CorePlugin.getInstance().getServerManager().getNetwork().getMainDeveloper())) {
             player.sendMessage(Color.translate("&aNew version coming soon!"));
-            /*if (args.length == 0) {
+            if (args.length == 0) {
                 player.sendMessage(Color.translate("  "));
                 player.sendMessage(Color.translate("&aWould you like to import the ranks from the ranks.yml?"));
                 player.sendMessage(Color.translate("&aIf you proceed, make sure to understand all the current"));
                 player.sendMessage(Color.translate("&aranks will be deleted and replaced with the new ones."));
                 player.sendMessage(Color.translate("&aThis also includes player profiles & grants."));
                 player.sendMessage(Color.translate("  "));
-                player.spigot().sendMessage(confirmClickable.asComponents());
+                player.spigot().sendMessage(confirmChatClickable.asComponents());
                 player.sendMessage(Color.translate("  "));
             }
             if (args.length == 1) {
-                player.sendMessage(Color.translate("&aImporting ranks..."));
+                player.sendMessage(Color.translate("&aImporting ranks from configuration..."));
                 this.handleImport();
                 player.sendMessage(Color.translate("&aSuccessfully imported all ranks!"));
-            }*/
+            }
         } else {
             player.sendMessage(Color.translate("&cThis command is restricted."));
         }
@@ -59,31 +60,33 @@ public class RankImportCommand extends BaseCommand {
 
         ConfigExternal config = CorePlugin.getInstance().getRanksConfig();
 
-        for (String key : config.getConfiguration().getKeys(false)) {
-            String name = config.getString(key + ".NAME");
-            String prefix = config.getString(key + ".PREFIX", "&7", false);
-            String suffix = config.getString(key + ".SUFFIX", "&7", false);
-            String color = config.getString(key + ".COLOR", "&7", false);
+        Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> {
+            for (String key : config.getConfiguration().getKeys(false)) {
+                String name = config.getString(key + ".NAME");
+                String prefix = config.getString(key + ".PREFIX", "&7", false);
+                String suffix = config.getString(key + ".SUFFIX", "&7", false);
+                String color = config.getString(key + ".COLOR", "&7", false);
 
-            int weight = config.getInt(key + ".WEIGHT");
-            boolean defaultRank = config.getBoolean(key + ".DEFAULT");
+                int weight = config.getInt(key + ".WEIGHT");
+                boolean defaultRank = config.getBoolean(key + ".DEFAULT");
 
-            List<String> permissions = config.getStringListOrDefault(key + ".PERMISSIONS", new ArrayList<>());
+                List<String> permissions = config.getStringListOrDefault(key + ".PERMISSIONS", new ArrayList<>());
 
-            new Rank(UUID.randomUUID(), new ArrayList<>(), permissions, name, prefix, color, suffix, defaultRank, weight);
-        }
+                new Rank(UUID.randomUUID(), new ArrayList<>(), permissions, name, prefix, color, suffix, defaultRank, weight);
+            }
 
-        for (String key : config.getConfiguration().getKeys(false)) {
-            Rank rank = Rank.getByName(config.getString(key + ".NAME"));
-            if (rank != null) {
-                for (String name2 : config.getStringListOrDefault(key + ".INHERITANCE", new ArrayList<>())) {
-                    Rank other = Rank.getByName(config.getString(name2 + ".NAME"));
-                    if (other != null) {
-                        rank.getInheritance().add(other.getUuid());
+            for (String key : config.getConfiguration().getKeys(false)) {
+                Rank rank = Rank.getByName(config.getString(key + ".NAME"));
+                if (rank != null) {
+                    for (String name2 : config.getStringListOrDefault(key + ".INHERITANCE", new ArrayList<>())) {
+                        Rank other = Rank.getByName(config.getString(name2 + ".NAME"));
+                        if (other != null) {
+                            rank.getInheritance().add(other.getUuid());
+                        }
                     }
                 }
             }
-        }
+        });
 
         CorePlugin.getInstance().getRankManager().saveRanks();
     }

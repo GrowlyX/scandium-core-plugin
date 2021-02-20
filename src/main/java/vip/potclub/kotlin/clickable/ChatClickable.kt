@@ -1,41 +1,60 @@
-package vip.potclub.core.clickable;
+package vip.potclub.kotlin.clickable
 
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.ClickEvent
+import net.md_5.bungee.api.chat.ComponentBuilder
+import net.md_5.bungee.api.chat.HoverEvent
+import net.md_5.bungee.api.chat.TextComponent
+import org.bukkit.entity.Player
+import java.util.*
 
-import java.util.ArrayList;
-import java.util.List;
+class ChatClickable {
 
-public class Clickable {
+    private val components: MutableList<TextComponent> = ArrayList()
 
-    private final List<TextComponent> components = new ArrayList<>();
-
-    public Clickable(String msg) {
-        TextComponent message = new TextComponent(msg);
-        this.components.add(message);
+    constructor(msg: String?) {
+        val message = TextComponent(msg)
+        components.add(message)
     }
 
-    public Clickable(String msg, String hoverMsg, String clickString) {
-        this.add(msg, hoverMsg, clickString, ClickEvent.Action.RUN_COMMAND);
+    constructor(msg: String?, hoverMsg: String?, clickString: String?) {
+        this.add(msg, hoverMsg, clickString, ClickEvent.Action.RUN_COMMAND)
     }
 
-    public TextComponent add(String msg, String hoverMsg, String clickString, net.md_5.bungee.api.chat.ClickEvent.Action action) {
-        TextComponent message = new TextComponent(msg);
-
-        if (hoverMsg != null) message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, (new ComponentBuilder(hoverMsg)).create()));
-        if (clickString != null) message.setClickEvent(new ClickEvent(action, clickString));
-
-        this.components.add(message);
-        return message;
+    constructor(msg: String?, hoverMsg: String?, clickString: String?, action: ClickEvent.Action?) {
+        this.add(msg, hoverMsg, clickString, action)
     }
 
-    public void add(String message) {
-        this.components.add(new TextComponent(message));
+    fun add(msg: String?, hoverMsg: String?): TextComponent {
+        val message = TextComponent(msg)
+
+        if (hoverMsg != null) message.hoverEvent = HoverEvent(HoverEvent.Action.SHOW_TEXT, ComponentBuilder(hoverMsg).create())
+
+        components.add(message).also {
+            return message
+        }
     }
 
-    public TextComponent[] asComponents() {
-        return this.components.toArray(new TextComponent[0]);
+    fun add(msg: String?, hoverMsg: String?, clickString: String?, action: ClickEvent.Action?): TextComponent {
+        val message = TextComponent(msg)
+
+        if (hoverMsg != null) message.hoverEvent = HoverEvent(
+            HoverEvent.Action.SHOW_TEXT,
+            ComponentBuilder(hoverMsg).create()
+        )
+
+        if (clickString != null) message.clickEvent = ClickEvent(action, clickString)
+
+        components.add(message).also {
+            return message
+        }
+    }
+
+    fun add(message: String?) {
+        components.add(TextComponent(message))
+    }
+
+    fun asComponents(): Array<TextComponent> {
+        return components.toTypedArray()
     }
 }
+
