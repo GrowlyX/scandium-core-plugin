@@ -79,6 +79,11 @@ public class PotPlayer {
     private long grantDuration;
     private boolean grantPerm;
 
+    private boolean isGrantDurationEditing = false;
+    private Document grantDurationTarget = null;
+    private Rank grantDurationRank = null;
+    private boolean grantDurationPerm;
+
     private boolean isReasonEditing = false;
     private PunishmentType reasonType = null;
     private String reasonTarget = null;

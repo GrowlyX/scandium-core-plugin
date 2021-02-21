@@ -117,7 +117,7 @@ public class PunishmentManager {
                         if (target != null) {
                             if (finalPotPlayer != null) {
                                 finalPotPlayer.setCurrentlyBanned(true);
-                                finalPotPlayer.getPlayer().kickPlayer(Color.translate(PunishmentStrings.BLCK_MESSAGE.replace("<reason>", punishment.getReason())));
+                                finalPotPlayer.getPlayer().kickPlayer(Color.translate(PunishmentStrings.BLACK_LIST_MESSAGE.replace("<reason>", punishment.getReason())));
                             }
                         }
                         break;

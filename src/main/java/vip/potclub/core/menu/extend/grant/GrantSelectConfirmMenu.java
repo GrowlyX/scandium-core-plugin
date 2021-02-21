@@ -91,7 +91,11 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu<CorePlugin> {
 
             if (ChatColor.stripColor(Color.translate(event.getCurrentItem().getItemMeta().getDisplayName())).contains("Confirm")) {
                 Grant newGrant = new Grant(player.getUniqueId(), rank, System.currentTimeMillis(), System.currentTimeMillis() - duration, reason, true, permanent);
-                PotPlayer targetPotPlayer = PotPlayer.getPlayer(document.getString("name"));
+                PotPlayer targetPotPlayer = null;
+
+                try {
+                    targetPotPlayer = PotPlayer.getPlayer(document.getString("name"));
+                } catch (Exception ignored) {}
 
                 if (targetPotPlayer != null) {
                     targetPotPlayer.getAllGrants().add(newGrant);

@@ -34,22 +34,19 @@ public class CGrantCommand extends BaseCommand {
         if (!(sender instanceof Player)) {
             if (args.length == 0) {
                 sender.sendMessage(Color.translate("&cUsage: /" + label + " <player> <rank> <duration> <reason>."));
-                sender.sendMessage(Color.translate("&cNOTE: This is not the final granting system."));
             }
             if (args.length > 0) {
                 if (args.length == 1) {
                     sender.sendMessage(Color.translate("&cUsage: /" + label + " <player> <rank> <duration> <reason>."));
-                    sender.sendMessage(Color.translate("&cNOTE: This is not the final granting system."));
                 }
                 if (args.length == 2) {
                     sender.sendMessage(Color.translate("&cUsage: /" + label + " <player> <rank> <duration> <reason>."));
-                    sender.sendMessage(Color.translate("&cNOTE: This is not the final granting system."));
                 }
                 if (args.length > 2) {
                     Map.Entry<UUID, String> uuid = UUIDUtil.getUUID(args[0]);
 
                     if ((uuid.getKey() != null)) {
-                        Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByUuid(uuid.getKey());
+                        Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByUuid(uuid.getValue());
                         if (document != null) {
                             Rank rank = Rank.getByName(args[1]);
                             ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
@@ -57,7 +54,12 @@ public class CGrantCommand extends BaseCommand {
                             if (rank != null) {
                                 if (args[2].equalsIgnoreCase("perm") || args[2].equalsIgnoreCase("permanent")) {
                                     String reason = StringUtil.buildMessage(args, 3);
-                                    PotPlayer targetPotPlayer = PotPlayer.getPlayer(args[0]);
+                                    PotPlayer targetPotPlayer = null;
+
+                                    try {
+                                        targetPotPlayer = PotPlayer.getPlayer(document.getString("name"));
+                                    } catch (Exception ignored) {}
+
                                     Grant newGrant = new Grant(null, rank, System.currentTimeMillis(), 2147483647L, reason, true, true);
 
                                     if (targetPotPlayer != null) {
@@ -90,7 +92,12 @@ public class CGrantCommand extends BaseCommand {
                                 } else {
                                     try {
                                         String reason = StringUtil.buildMessage(args, 3);
-                                        PotPlayer targetPotPlayer = PotPlayer.getPlayer(args[0]);
+                                        PotPlayer targetPotPlayer = null;
+
+                                        try {
+                                            targetPotPlayer = PotPlayer.getPlayer(document.getString("name"));
+                                        } catch (Exception ignored) {}
+
                                         Grant newGrant = new Grant(null, rank, System.currentTimeMillis(), System.currentTimeMillis() - DateUtil.parseDateDiff(args[2], false), reason, true, false);
 
                                         if (targetPotPlayer != null) {

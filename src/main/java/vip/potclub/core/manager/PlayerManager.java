@@ -31,8 +31,8 @@ public class PlayerManager {
         CorePlugin.getInstance().getServerManager().getVanishedPlayers().add(player);
     }
 
-    public Document getDocumentByUuid(UUID uuid) {
-        return CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("_id", uuid)).first();
+    public Document getDocumentByUuid(String name) {
+        return CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("name", name)).first();
     }
 
     public void unVanishPlayer(Player player) {

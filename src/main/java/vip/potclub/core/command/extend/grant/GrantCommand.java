@@ -35,7 +35,7 @@ public class GrantCommand extends BaseCommand {
                 Entry<UUID, String> uuid = UUIDUtil.getUUID(target);
 
                 if ((uuid.getKey() != null)) {
-                    Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByUuid(uuid.getKey());
+                    Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByUuid(uuid.getValue());
 
                     if (document != null) {
                         new GrantMainMenu(player, document).open(player);

@@ -9,8 +9,8 @@ public final class PunishmentStrings {
 
     public static String MUTE_MESSAGE = "&cYou are currently muted.\n&cIf you think this mute is unjustified, fill out a support ticket at " + CorePlugin.getInstance().getServerManager().getNetwork().getDiscordLink();
     public static String KICK_MESSAGE = "&cYou were kicked for: &7<reason>";
-    public static String BLCK_MESSAGE = "&4You are blacklisted from " + CorePlugin.getInstance().getServerManager().getNetwork().getServerName() + ".&7\n&cYou were blacklisted for: &7<reason>\n&6This punishment cannot be appealed.";
+    public static String BLACK_LIST_MESSAGE = "&4You are blacklisted from " + CorePlugin.getInstance().getServerManager().getNetwork().getServerName() + ".&7\n&cYou were blacklisted for: &7<reason>\n&6This punishment cannot be appealed or purchased.";
 
-    public static String SLOW_CHAT = "&cPlease wait another <amount> before chatting again.";
-    public static String COOLDOWN = "&cPlease wait before chatting again.";
+    public static String SLOW_CHAT_MESSAGE = "&cPlease wait another <amount> before chatting again.";
+    public static String COOL_DOWN_MESSAGE = "&cPlease wait before chatting again.";
 }

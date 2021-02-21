@@ -1,5 +1,7 @@
 package vip.potclub.core.listener;
 
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.ReplaceOptions;
 import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -21,18 +23,19 @@ import vip.potclub.core.manager.ServerManager;
 import vip.potclub.core.media.MediaConstants;
 import vip.potclub.core.menu.IMenu;
 import vip.potclub.core.menu.extend.grant.GrantSelectConfirmMenu;
+import vip.potclub.core.menu.extend.grant.GrantSelectReasonMenu;
 import vip.potclub.core.menu.extend.punish.PunishSelectDurationMenu;
 import vip.potclub.core.player.PotPlayer;
+import vip.potclub.core.player.grant.Grant;
 import vip.potclub.core.player.punishment.Punishment;
 import vip.potclub.core.player.punishment.PunishmentStrings;
-import vip.potclub.core.player.punishment.PunishmentType;
-import vip.potclub.core.util.Color;
-import vip.potclub.core.util.LoggerUtil;
-import vip.potclub.core.util.RedisUtil;
-import vip.potclub.core.util.StringUtil;
+import vip.potclub.core.util.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.regex.Matcher;
 
 public class PlayerListener implements Listener {
@@ -58,45 +61,33 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onConnect(AsyncPlayerPreLoginEvent event) {
-        if (!event.getUniqueId().toString().equals("bf4fb94d-d1d2-4097-b814-03d2f9eb1a4c")) {
-            if (CorePlugin.CAN_JOIN) {
-                if (CorePlugin.getInstance().getWhitelistConfig().getConfiguration().getBoolean("whitelist")) {
-                    if (!CorePlugin.getInstance().getServerManager().getWhitelistedPlayers().contains(event.getName())) {
-                        event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.translateAlternateColorCodes('&', CorePlugin.getInstance().getWhitelistConfig().getConfiguration().getString("whitelisted-msg").replace("<nl>", "\n")));
-                    } else {
-                        checkDisallow(event);
-                    }
-                } else {
-                    checkDisallow(event);
-                }
-            } else {
-                event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Color.translate("&cThe server is currently booting...\n&cPlease reconnect in a few minutes."));
-            }
-        } else {
-            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Color.translate("&4You are currently on the hard-blacklist list.\n&cThis list is for the most destructive players on the network.\n\n&7To get yourself outta this mess, contact &c&lGrowlyX#1337&7."));
-        }
+        if (CorePlugin.CAN_JOIN) {
+            if (CorePlugin.getInstance().getWhitelistConfig().getConfiguration().getBoolean("whitelist")) {
+                if (!CorePlugin.getInstance().getServerManager().getWhitelistedPlayers().contains(event.getName())) {
+                    event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.translateAlternateColorCodes('&', CorePlugin.getInstance().getWhitelistConfig().getConfiguration().getString("whitelisted-msg").replace("<nl>", "\n")));
+
+                } else checkDisallow(event);
+            } else checkDisallow(event);
+        } else event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Color.translate("&cThe server is currently booting...\n&cPlease reconnect in a few minutes."));
     }
 
     private void checkDisallow(AsyncPlayerPreLoginEvent event) {
-        Punishment.getAllPunishments().forEach(punishment -> {
-            if (punishment.getTarget().equals(event.getUniqueId())) {
-                if ((punishment.getPunishmentType().equals(PunishmentType.BAN)) || (punishment.getPunishmentType().equals(PunishmentType.BLACKLIST)) || (punishment.getPunishmentType().equals(PunishmentType.IPBAN))) {
-                    if (punishment.isActive()) {
-                        if (!punishment.isRemoved()) {
-                            switch (punishment.getPunishmentType()) {
-                                case BLACKLIST:
-                                    event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Color.translate(PunishmentStrings.BLCK_MESSAGE.replace("<reason>", punishment.getReason())));
-                                    break;
-                                case IPBAN:
-                                case BAN:
-                                    event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, (punishment.isPermanent() ? Color.translate(PunishmentStrings.BAN_MESSAGE_PERM.replace("<reason>", punishment.getReason())) : Color.translate(PunishmentStrings.BAN_MESSAGE_TEMP.replace("<reason>", punishment.getReason()).replace("<time>", punishment.getDurationString()))));
-                                    break;
-                            }
-                        }
+        Punishment.getAllPunishments()
+                .stream()
+                .filter(punishment -> punishment.getTarget().equals(event.getUniqueId()))
+                .filter(Punishment::isActive)
+                .filter(punishment -> !punishment.isRemoved())
+                .forEach(punishment -> {
+                    switch (punishment.getPunishmentType()) {
+                        case BLACKLIST:
+                            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Color.translate(PunishmentStrings.BLACK_LIST_MESSAGE.replace("<reason>", punishment.getReason())));
+                            break;
+                        case IPBAN:
+                        case BAN:
+                            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, (punishment.isPermanent() ? Color.translate(PunishmentStrings.BAN_MESSAGE_PERM.replace("<reason>", punishment.getReason())) : Color.translate(PunishmentStrings.BAN_MESSAGE_TEMP.replace("<reason>", punishment.getReason()).replace("<time>", punishment.getDurationString()))));
+                            break;
                     }
-                }
-            }
-        });
+                });
     }
 
     @EventHandler
@@ -195,6 +186,37 @@ public class PlayerListener implements Listener {
         Matcher twitterMatcher = MediaConstants.TWITTER_USERNAME_REGEX.matcher(event.getMessage());
         Matcher instaMatcher = MediaConstants.INSTAGRAM_USERNAME_REGEX.matcher(event.getMessage());
         Matcher youtubeMatcher = MediaConstants.YOUTUBE_PROFILELINK_REGEX.matcher(event.getMessage());
+
+        if (potPlayer.isGrantDurationEditing()) {
+            event.setCancelled(true);
+            String message = event.getMessage();
+
+            if (event.getMessage().equalsIgnoreCase("cancel")) {
+                player.sendMessage(Color.translate("&cCancelled the granting process."));
+
+                potPlayer.setGrantDurationRank(null);
+                potPlayer.setGrantDurationTarget(null);
+                potPlayer.setGrantDurationEditing(false);
+            } else if (message.equalsIgnoreCase("perm") || message.equalsIgnoreCase("permanent")) {
+                new GrantSelectReasonMenu(player, potPlayer.getGrantDurationTarget(), 2147483647L, potPlayer.getGrantDurationRank(), true).open(player);
+
+                potPlayer.setGrantDurationRank(null);
+                potPlayer.setGrantDurationTarget(null);
+                potPlayer.setGrantDurationEditing(false);
+            } else {
+                try {
+                    new GrantSelectReasonMenu(player, potPlayer.getGrantDurationTarget(), System.currentTimeMillis() - DateUtil.parseDateDiff(event.getMessage(), false), potPlayer.getGrantDurationRank(), false).open(player);
+
+                    potPlayer.setGrantDurationRank(null);
+                    potPlayer.setGrantDurationTarget(null);
+                    potPlayer.setGrantDurationEditing(false);
+                } catch (Exception ignored) {
+                    player.sendMessage(ChatColor.RED + "Invalid duration.");
+                    return;
+                }
+            }
+            return;
+        }
 
         if (potPlayer.isGrantEditing()) {
             event.setCancelled(true);
@@ -339,7 +361,7 @@ public class PlayerListener implements Listener {
                 if (player.hasPermission("scandium.chat.cooldown.bypass")) {
                     checkThenSend(event, player, potPlayer, slowChat);
                 } else {
-                    player.sendMessage(slowChat > 0L ? Color.translate(PunishmentStrings.SLOW_CHAT.replace("<amount>", DurationFormatUtils.formatDurationWords(slowChat, true, true))) : Color.translate(PunishmentStrings.COOLDOWN));
+                    player.sendMessage(slowChat > 0L ? Color.translate(PunishmentStrings.SLOW_CHAT_MESSAGE.replace("<amount>", DurationFormatUtils.formatDurationWords(slowChat, true, true))) : Color.translate(PunishmentStrings.COOL_DOWN_MESSAGE));
                     event.setCancelled(true);
                 }
             } else {
