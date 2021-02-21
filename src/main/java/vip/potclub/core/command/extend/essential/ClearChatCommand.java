@@ -17,11 +17,9 @@ public class ClearChatCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
-        if (player.hasPermission("scandium.command.mutechat")) {
+        if (player.hasPermission("scandium.command.clearchat")) {
             if (args.length == 0) {
-                for (int lines = 0; lines < 250; lines++) {
-                    Bukkit.broadcastMessage(Color.translate("  "));
-                }
+                for (int lines = 0; lines < 250; lines++) { Bukkit.broadcastMessage(Color.translate("  ")); }
                 Bukkit.broadcastMessage(Color.translate("&aThe chat has been cleared by " + player.getDisplayName() + "&a."));
             }
         } else {

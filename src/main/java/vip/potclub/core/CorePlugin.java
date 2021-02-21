@@ -73,6 +73,7 @@ public final class CorePlugin extends JavaPlugin {
     public static boolean NAME_MC_REWARDS = true;
     public static boolean ANTI_CHAT_SPAM = true;
     public static boolean ANTI_CMD_SPAM = true;
+    public static boolean STAFF_ALERTS_COMMAND = false;
 
     public static Gson GSON;
     public static GsonBuilder GSONBUILDER;
@@ -143,6 +144,7 @@ public final class CorePlugin extends JavaPlugin {
 
         ANTI_CHAT_SPAM = this.getConfig().getBoolean("settings.anti-chat-spam");
         ANTI_CMD_SPAM = this.getConfig().getBoolean("settings.anti-command-spam");
+        STAFF_ALERTS_COMMAND = this.getConfig().getBoolean("settings.staff-command-alerts");
 
         if (this.getServer().getPluginManager().isPluginEnabled("ProtocolLib")) chatInterceptor = new ProtocolChatInterceptor(); else this.getLogger().info("[Protocol] Could not find ProtocolLib! Chat tab block will not work without it!");
         if (this.getServer().getPluginManager().isPluginEnabled("LunarClient-API")) lunarCommand = new LunarCommand(); else this.getLogger().info("[Protocol] Could not find LunarClient-API! The /lunar command will not work without it!");

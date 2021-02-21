@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import vip.potclub.core.command.BaseCommand;
 import vip.potclub.core.util.Color;
+import vip.potclub.core.util.StaffUtil;
 
 public class GmcCommand extends BaseCommand {
 
@@ -22,12 +23,16 @@ public class GmcCommand extends BaseCommand {
             if (args.length == 0) {
                 player.setGameMode(GameMode.CREATIVE);
                 player.sendMessage(Color.translate("&aSet your gamemode to Creative."));
+
+                StaffUtil.sendAlert(player, "gmc");
             }
             if (args.length > 0) {
                 Player target = Bukkit.getPlayerExact(args[0]);
                 if (target != null) {
                     target.setGameMode(GameMode.CREATIVE);
                     player.sendMessage(Color.translate("&aSet " + target.getDisplayName() + "'s&a gamemode to Creative."));
+
+                    StaffUtil.sendAlert(player, "gmc for " + target.getName());
                 } else {
                     player.sendMessage(Color.translate("&cThat player does not exist."));
                 }

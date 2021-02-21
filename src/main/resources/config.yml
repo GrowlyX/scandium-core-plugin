@@ -12,6 +12,10 @@ settings:
   namemc-rewards: true
   anti-chat-spam: true
 
+  # Whenever a player executes a command such as /heal, all online server staff will receive "[GrowlyX: healed]"
+  # Needs the permission scandium.staff
+  staff-command-alerts: false
+
   # Not yet implemented!
   punishment-gui: true
   anti-command-spam: true

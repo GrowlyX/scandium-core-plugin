@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import vip.potclub.core.command.BaseCommand;
 import vip.potclub.core.util.Color;
+import vip.potclub.core.util.StaffUtil;
 
 public class KillCommand extends BaseCommand {
 
@@ -21,12 +22,16 @@ public class KillCommand extends BaseCommand {
             if (args.length == 0) {
                 player.setHealth(0);
                 player.sendMessage(Color.translate("&aKilled you."));
+
+                StaffUtil.sendAlert(player, "killed themselves");
             }
             if (args.length > 0) {
                 Player target = Bukkit.getPlayerExact(args[0]);
                 if (target != null) {
                     target.setHealth(0);
                     player.sendMessage(Color.translate("&aKilled " + target.getDisplayName() + "&a."));
+
+                    StaffUtil.sendAlert(player, "killed " + target.getName());
                 } else {
                     player.sendMessage(Color.translate("&cThat player does not exist."));
                 }

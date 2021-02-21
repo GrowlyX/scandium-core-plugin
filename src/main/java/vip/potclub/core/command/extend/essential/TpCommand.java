@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import vip.potclub.core.command.BaseCommand;
 import vip.potclub.core.util.Color;
+import vip.potclub.core.util.StaffUtil;
 
 public class TpCommand extends BaseCommand {
 
@@ -29,6 +30,8 @@ public class TpCommand extends BaseCommand {
                     if (target != null) {
                         player.teleport(target.getLocation());
                         player.sendMessage(Color.translate("&aTeleported you to " + target.getDisplayName() + "&a."));
+
+                        StaffUtil.sendAlert(player, "teleported to " + target.getName());
                     } else {
                         player.sendMessage(Color.translate("&cThat player does not exist."));
                     }

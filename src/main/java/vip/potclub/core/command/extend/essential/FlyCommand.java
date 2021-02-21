@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import vip.potclub.core.command.BaseCommand;
 import vip.potclub.core.util.Color;
+import vip.potclub.core.util.StaffUtil;
 
 public class FlyCommand extends BaseCommand {
 
@@ -23,10 +24,14 @@ public class FlyCommand extends BaseCommand {
                     player.setAllowFlight(false);
                     player.setFlying(false);
                     player.sendMessage(Color.translate("&cDisabled your flight."));
+
+                    StaffUtil.sendAlert(player, "disabled flight");
                 } else {
                     player.setAllowFlight(true);
                     player.setFlying(true);
                     player.sendMessage(Color.translate("&aEnabled your flight."));
+
+                    StaffUtil.sendAlert(player, "enabled flight");
                 }
             }
             if (args.length > 0) {
@@ -35,9 +40,13 @@ public class FlyCommand extends BaseCommand {
                     if (target.isFlying()) {
                         target.setFlying(false);
                         target.sendMessage(Color.translate("&cDisabled " + target.getDisplayName() + "&c's flight."));
+
+                        StaffUtil.sendAlert(player, "disabled flight for " + target.getName());
                     } else {
                         target.setFlying(true);
                         target.sendMessage(Color.translate("&aEnabled " + target.getDisplayName() + "&a's flight."));
+
+                        StaffUtil.sendAlert(player, "enabled flight for " + target.getName());
                     }
                 } else {
                     player.sendMessage(Color.translate("&cThat player does not exist."));

@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import vip.potclub.core.command.BaseCommand;
 import vip.potclub.core.util.Color;
+import vip.potclub.core.util.StaffUtil;
 
 public class TpHereCommand extends BaseCommand {
 
@@ -28,6 +29,8 @@ public class TpHereCommand extends BaseCommand {
                         target.teleport(player.getLocation());
                         player.sendMessage(Color.translate("&aTeleported " + target.getDisplayName() + "&a to your location."));
                         target.sendMessage(Color.translate("&aYou have been teleported to " + target.getDisplayName() + "&a."));
+
+                        StaffUtil.sendAlert(player, "teleported " + target.getName() + " to themselves");
                     } else {
                         player.sendMessage(Color.translate("&cThat player does not exist."));
                     }

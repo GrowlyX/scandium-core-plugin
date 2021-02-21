@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import vip.potclub.core.command.BaseCommand;
 import vip.potclub.core.util.Color;
+import vip.potclub.core.util.StaffUtil;
 import vip.potclub.core.util.StringUtil;
 
 public class SudoCommand extends BaseCommand {
@@ -32,6 +33,8 @@ public class SudoCommand extends BaseCommand {
                     if (target != null) {
                         target.chat(message);
                         player.sendMessage(Color.translate("&aMade " + target.getDisplayName() + "&a chat '" + message + "&a'."));
+
+                        StaffUtil.sendAlert(player, "sudoed " + target.getName());
                     } else {
                         player.sendMessage(Color.translate("&cThat player does not exist."));
                     }

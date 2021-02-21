@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import vip.potclub.core.command.BaseCommand;
 import vip.potclub.core.util.Color;
+import vip.potclub.core.util.StaffUtil;
 
 public class TpPosCommand extends BaseCommand {
 
@@ -38,6 +39,8 @@ public class TpPosCommand extends BaseCommand {
 
                         player.teleport(new Location(player.getWorld(), x1, y1, z1, 0.0F, 0.0F));
                         player.sendMessage(ChatColor.GREEN + "Teleported you to " + x1 + ", " + y1 + ", " + z1 + ".");
+
+                        StaffUtil.sendAlert(player, "teleported to " + x1 + ", " + y1 + ", " + z1);
                     } catch (Exception e) {
                         player.sendMessage(Color.translate("&cTry again!"));
                     }
