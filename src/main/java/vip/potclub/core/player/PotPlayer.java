@@ -74,7 +74,7 @@ public class PotPlayer {
     private boolean isSynced = false;
 
     private boolean isGrantEditing = false;
-    private Player grantTarget = null;
+    private Document grantTarget = null;
     private Rank grantRank = null;
     private long grantDuration;
     private boolean grantPerm;

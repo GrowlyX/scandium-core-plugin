@@ -2,6 +2,7 @@ package vip.potclub.core.menu.extend.grant;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.bson.Document;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -22,15 +23,16 @@ import java.util.Arrays;
 public class GrantSelectReasonMenu extends AbstractInventoryMenu<CorePlugin> {
 
     private Player player;
-    private Player target;
+    private Document document;
     private Rank rank;
     private long duration;
     private boolean permanent;
 
-    public GrantSelectReasonMenu(Player player, Player target, long duration, Rank rank, boolean permanent) {
+    public GrantSelectReasonMenu(Player player, Document document, long duration, Rank rank, boolean permanent) {
         super("Grants - Reason", 9*3);
+
         this.player = player;
-        this.target = target;
+        this.document = document;
         this.rank = rank;
         this.duration = duration;
         this.permanent = permanent;
@@ -65,24 +67,24 @@ public class GrantSelectReasonMenu extends AbstractInventoryMenu<CorePlugin> {
             if (item == null || item.getType() == Material.AIR) return;
             switch (event.getRawSlot()) {
                 case 10:
-                    new GrantSelectConfirmMenu(this.player, this.target, this.rank, this.duration, "Rank Migration", permanent).open(player);
+                    new GrantSelectConfirmMenu(this.player, this.document, this.rank, this.duration, "Rank Migration", permanent).open(player);
                     break;
                 case 11:
-                    new GrantSelectConfirmMenu(this.player, this.target, this.rank, this.duration, "Promotion", permanent).open(player);
+                    new GrantSelectConfirmMenu(this.player, this.document, this.rank, this.duration, "Promotion", permanent).open(player);
                     break;
                 case 12:
-                    new GrantSelectConfirmMenu(this.player, this.target, this.rank, this.duration, "Demotion", permanent).open(player);
+                    new GrantSelectConfirmMenu(this.player, this.document, this.rank, this.duration, "Demotion", permanent).open(player);
                     break;
                 case 13:
-                    new GrantSelectConfirmMenu(this.player, this.target, this.rank, this.duration, "Buycraft Issues", permanent).open(player);
+                    new GrantSelectConfirmMenu(this.player, this.document, this.rank, this.duration, "Buycraft Issues", permanent).open(player);
                     break;
                 case 14:
-                    new GrantSelectConfirmMenu(this.player, this.target, this.rank, this.duration, "Other", permanent).open(player);
+                    new GrantSelectConfirmMenu(this.player, this.document, this.rank, this.duration, "Other", permanent).open(player);
                     break;
                 case 16:
                     PotPlayer potPlayer = PotPlayer.getPlayer(this.player);
                     if (potPlayer != null) {
-                        potPlayer.setGrantTarget(this.target);
+                        potPlayer.setGrantTarget(this.document);
                         potPlayer.setGrantRank(this.rank);
                         potPlayer.setGrantDuration(this.duration);
                         potPlayer.setGrantEditing(true);

@@ -1,6 +1,8 @@
 package vip.potclub.core.manager;
 
+import com.mongodb.client.model.Filters;
 import lombok.NoArgsConstructor;
+import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import vip.potclub.core.CorePlugin;
@@ -9,6 +11,7 @@ import vip.potclub.core.util.Color;
 import vip.potclub.core.util.RedisUtil;
 
 import java.util.List;
+import java.util.UUID;
 
 @NoArgsConstructor
 public class PlayerManager {
@@ -26,6 +29,10 @@ public class PlayerManager {
 
         player.sendMessage(Color.translate("&aYou are now vanished to all online players."));
         CorePlugin.getInstance().getServerManager().getVanishedPlayers().add(player);
+    }
+
+    public Document getDocumentByUuid(UUID uuid) {
+        return CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("_id", uuid)).first();
     }
 
     public void unVanishPlayer(Player player) {

@@ -54,29 +54,34 @@ public class PunishHistoryViewSubMenu extends AbstractInventoryMenu<CorePlugin> 
                     } else {
                         issuerOfflinePlayer = null;
                     }
+
                     OfflinePlayer targetOfflinePlayer = Bukkit.getOfflinePlayer(punishment.getTarget());
                     ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
                     List<String> lore = new ArrayList<>();
                     String statusLore = punishment.isRemoved() ? ChatColor.RED + "Removed" : (punishment.isActive() ? ChatColor.GREEN + "Active" : ChatColor.GOLD + "Expired");
 
-                    lore.add("&b&m------------------------------------");
+                    lore.add(network.getMainColor() + "&m------------------------------------");
                     lore.add("&ePunish By: &b" + network.getMainColor() + (issuerOfflinePlayer != null ? issuerOfflinePlayer.getName() : "&4Console"));
                     lore.add("&ePunish To: &b" + network.getMainColor() + targetOfflinePlayer.getName());
                     lore.add("&ePunish Reason: &b" + network.getMainColor() + punishment.getReason());
-                    lore.add("&b&m------------------------------------");
+                    lore.add(network.getMainColor() + "&m------------------------------------");
                     lore.add("&ePunish Type: &b" + network.getMainColor() + punishment.getPunishmentType().getName());
                     lore.add("&ePunish Status: &b" + network.getMainColor() + statusLore);
                     lore.add("&ePunish Expiring: &b" + network.getMainColor() + punishment.getExpirationString());
-                    lore.add("&b&m------------------------------------");
+                    lore.add(network.getMainColor() + "&m------------------------------------");
 
                     if (punishment.isRemoved()) {
                         lore.add("&eRemoved By: &b" + network.getMainColor() + (punishment.getRemoverName().equals("Console") ? "&4Console" : Bukkit.getOfflinePlayer(punishment.getRemover()).getName()));
                         lore.add("&eRemoved Reason: &b" + network.getMainColor() + punishment.getRemovalReason());
-                        lore.add("&b&m------------------------------------");
+                        lore.add(network.getMainColor() + "&m------------------------------------");
                     }
 
+                    lore.add("&aLeft-Click to remove this punishment from history.");
+                    lore.add(network.getMainColor() + "&m------------------------------------");
+
+
                     this.inventory.setItem(i.get(), new InventoryMenuItem(Material.WOOL, (punishment.isActive() ? 5 : 14))
-                            .setDisplayName(ChatColor.RED + "#" + punishment.getPunishIdentification())
+                            .setDisplayName(ChatColor.RED + "#" + punishment.getPunishIdentification() + " &7(" + statusLore + "&7)")
                             .addLore(Color.translate(lore))
                             .create());
 
@@ -103,7 +108,7 @@ public class PunishHistoryViewSubMenu extends AbstractInventoryMenu<CorePlugin> 
 
             if (item.hasItemMeta()) {
                 if (item.getItemMeta().getDisplayName() != null) {
-                    String display = ChatColor.stripColor(item.getItemMeta().getDisplayName());
+                    String display = ChatColor.stripColor(Color.translate(item.getItemMeta().getDisplayName()));
                     String id = display.replace("#", "");
                     Punishment punishment = Punishment.getByIdentification(id);
 
@@ -111,7 +116,7 @@ public class PunishHistoryViewSubMenu extends AbstractInventoryMenu<CorePlugin> 
                         Punishment.getAllPunishments().remove(punishment);
                         RedisUtil.writeAsync(RedisUtil.fRemovePunishment(punishment));
 
-                        player.sendMessage(Color.translate("&aRemoved that punishment from &b" + this.target + "'s &ahistory!"));
+                        player.sendMessage(Color.translate("&aRemoved the punishment from &b" + this.target + "'s &ahistory!"));
 
                         new PunishHistoryViewSubMenu(target, punishmentType).open(player);
                     }

@@ -1,6 +1,7 @@
 package vip.potclub.core.menu.extend.grant;
 
 import lombok.Getter;
+import org.bson.Document;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -27,12 +28,12 @@ import java.util.stream.Collectors;
 public class GrantMainMenu extends AbstractInventoryMenu<CorePlugin> {
 
     private final Player player;
-    private final Player target;
+    private final Document document;
 
-    public GrantMainMenu(Player player, Player target) {
+    public GrantMainMenu(Player player, Document document) {
         super("Grants - Select", 9*3);
         this.player = player;
-        this.target = target;
+        this.document = document;
         this.update();
     }
 
@@ -41,7 +42,7 @@ public class GrantMainMenu extends AbstractInventoryMenu<CorePlugin> {
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
         getSortedRanks().forEach(rank -> {
-            this.inventory.setItem(i.get(), new InventoryMenuItem(Material.WOOL, ((rank.getColor() != null) ? (ChatColor.getByChar(Color.translate(rank.getColor())) != null) ? WoolUtil.getByColor(ChatColor.getByChar(Color.translate(rank.getColor()))) : 0 : 0))
+            this.inventory.setItem(i.get(), new InventoryMenuItem(Material.WOOL, ((rank.getColor() != null) ? (ChatColor.getByChar(Color.translate(rank.getColor().replace("&", "").replace("§", ""))) != null) ? WoolUtil.getByColor(ChatColor.getByChar(Color.translate(rank.getColor().replace("&", "").replace("§", "")))) : 0 : 0))
                     .addLore(Arrays.asList(
                             network.getMainColor() + "&m--------------------------------",
                             network.getSecondaryColor() + "Priority: " + network.getMainColor() + rank.getWeight(),
@@ -85,9 +86,9 @@ public class GrantMainMenu extends AbstractInventoryMenu<CorePlugin> {
                     } else {
                         if (rank != null) {
                             if ((potPlayer.getActiveGrant().getRank().getWeight() >= rank.getWeight()) && !player.isOp()) {
-                                new GrantSelectDurationMenu(this.player, this.target, rank).open(player);
+                                new GrantSelectDurationMenu(this.player, this.document, rank).open(player);
                             } else if ((potPlayer.getActiveGrant().getRank().getWeight() >= rank.getWeight()) && player.isOp()) {
-                                new GrantSelectDurationMenu(this.player, this.target, rank).open(player);
+                                new GrantSelectDurationMenu(this.player, this.document, rank).open(player);
                             } else {
                                 this.player.sendMessage(Color.translate("&cYou cannot grant a rank weight a weight that is higher than yours."));
                                 this.player.closeInventory();
@@ -100,6 +101,6 @@ public class GrantMainMenu extends AbstractInventoryMenu<CorePlugin> {
     }
 
     private List<Rank> getSortedRanks() {
-        return Rank.getRanks().stream().sorted(Comparator.comparingInt(Rank::getWeight)).collect(Collectors.toList());
+        return Rank.getRanks().stream().sorted(Comparator.comparingInt(Rank::getWeight).reversed()).collect(Collectors.toList());
     }
 }

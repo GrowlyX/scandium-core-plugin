@@ -7,29 +7,12 @@ import java.util.Arrays;
 
 public final class WoolUtil {
 
-    public static final ArrayList<ChatColor> woolColors = (ArrayList<ChatColor>) Arrays.asList(
-            ChatColor.WHITE,
-            ChatColor.GOLD,
-            ChatColor.LIGHT_PURPLE,
-            ChatColor.AQUA,
-            ChatColor.YELLOW,
-            ChatColor.GREEN,
-            ChatColor.LIGHT_PURPLE,
-            ChatColor.DARK_GRAY,
-            ChatColor.GRAY,
-            ChatColor.DARK_AQUA,
-            ChatColor.DARK_PURPLE,
-            ChatColor.BLUE,
-            ChatColor.RESET,
-            ChatColor.DARK_GREEN,
-            ChatColor.RED,
-            ChatColor.BLACK
-    );
+    private static final ArrayList<ChatColor> CHAT_COLORS = new ArrayList<>(Arrays.asList(ChatColor.WHITE, ChatColor.GOLD, ChatColor.LIGHT_PURPLE, ChatColor.AQUA, ChatColor.YELLOW, ChatColor.GREEN, ChatColor.LIGHT_PURPLE, ChatColor.DARK_GRAY, ChatColor.GRAY, ChatColor.DARK_AQUA, ChatColor.DARK_PURPLE, ChatColor.BLUE, ChatColor.BLACK, ChatColor.DARK_GREEN, ChatColor.RED, ChatColor.BLACK));
 
     public static int getByColor(ChatColor color) {
-        if(color == ChatColor.DARK_RED) color = ChatColor.RED;
-        if (color == ChatColor.DARK_BLUE) color = ChatColor.BLUE;
+        if (color.equals(ChatColor.DARK_RED)) color = ChatColor.RED;
+        if (color.equals(ChatColor.DARK_BLUE)) color = ChatColor.BLUE;
 
-        return WoolUtil.woolColors.indexOf(color);
+        return WoolUtil.CHAT_COLORS.indexOf(color);
     }
 }

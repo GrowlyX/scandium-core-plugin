@@ -2,6 +2,7 @@ package vip.potclub.core.menu.extend.grant;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.bson.Document;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -21,13 +22,13 @@ import java.util.Arrays;
 public class GrantSelectDurationMenu extends AbstractInventoryMenu<CorePlugin> {
 
     private Player player;
-    private Player target;
+    private Document document;
     private Rank rank;
 
-    public GrantSelectDurationMenu(Player player, Player target, Rank rank) {
+    public GrantSelectDurationMenu(Player player, Document document, Rank rank) {
         super("Grants - Duration", 9*3);
         this.player = player;
-        this.target = target;
+        this.document = document;
         this.rank = rank;
 
         this.update();
@@ -59,25 +60,25 @@ public class GrantSelectDurationMenu extends AbstractInventoryMenu<CorePlugin> {
             if (item == null || item.getType() == Material.AIR) return;
             switch (event.getRawSlot()) {
                 case 10:
-                    new GrantSelectReasonMenu(this.player, this.target, PunishmentDuration.DAY.getDuration(), this.rank, false).open(player);
+                    new GrantSelectReasonMenu(this.player, this.document, PunishmentDuration.DAY.getDuration(), this.rank, false).open(player);
                     break;
                 case 11:
-                    new GrantSelectReasonMenu(this.player, this.target, PunishmentDuration.WEEK.getDuration(), this.rank, false).open(player);
+                    new GrantSelectReasonMenu(this.player, this.document, PunishmentDuration.WEEK.getDuration(), this.rank, false).open(player);
                     break;
                 case 12:
-                    new GrantSelectReasonMenu(this.player, this.target, PunishmentDuration.MONTH.getDuration(), this.rank, false).open(player);
+                    new GrantSelectReasonMenu(this.player, this.document, PunishmentDuration.MONTH.getDuration(), this.rank, false).open(player);
                     break;
                 case 13:
-                    new GrantSelectReasonMenu(this.player, this.target, PunishmentDuration.MONTH.getDuration() * 3L, this.rank, false).open(player);
+                    new GrantSelectReasonMenu(this.player, this.document, PunishmentDuration.MONTH.getDuration() * 3L, this.rank, false).open(player);
                     break;
                 case 14:
-                    new GrantSelectReasonMenu(this.player, this.target, PunishmentDuration.MONTH.getDuration() * 6L, this.rank, false).open(player);
+                    new GrantSelectReasonMenu(this.player, this.document, PunishmentDuration.MONTH.getDuration() * 6L, this.rank, false).open(player);
                     break;
                 case 15:
-                    new GrantSelectReasonMenu(this.player, this.target, PunishmentDuration.YEAR.getDuration(), this.rank, false).open(player);
+                    new GrantSelectReasonMenu(this.player, this.document, PunishmentDuration.YEAR.getDuration(), this.rank, false).open(player);
                     break;
                 case 16:
-                    new GrantSelectReasonMenu(this.player, this.target, 2147483647L, this.rank, true).open(player);
+                    new GrantSelectReasonMenu(this.player, this.document, 2147483647L, this.rank, true).open(player);
                     break;
             }
         }
