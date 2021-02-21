@@ -371,7 +371,7 @@ public class PotPlayer {
 
         syncCodes.put(this.syncCode, this.player.getName());
 
-        this.setupAttachment();
+        this.setupPlayerCosmetics();
         if (CorePlugin.NAME_MC_REWARDS) this.checkVoting();
 
         if (document.get("allPrefixes") != null) {
@@ -412,57 +412,59 @@ public class PotPlayer {
                 .stream()
                 .filter(Objects::nonNull)
                 .filter(Grant::isActive)
+                .filter(grant -> !grant.getRank().isHidden())
                 .forEach(activeGrant::set);
 
-        if (activeGrant.get() == null)
-            activeGrant.set(new Grant(null, Objects.requireNonNull(Rank.getDefault()), System.currentTimeMillis(), 2147483647L, "Automatic Grant (Default)", true, true));
+        if (activeGrant.get() == null) activeGrant.set(new Grant(null, Objects.requireNonNull(Rank.getDefault()), System.currentTimeMillis(), 2147483647L, "Automatic Grant (Default)", true, true));
 
         return activeGrant.get();
     }
 
-    public void setupAttachment() {
+    public void setupPlayerCosmetics() {
         if (this.player != null) {
             Grant grant;
             try {
                 grant = this.getActiveGrant();
-            } catch (Exception e) {
+            } catch (Exception ignored) {
                 grant = new Grant(null, Objects.requireNonNull(Rank.getDefault()), System.currentTimeMillis(), 2147483647L, "Automatic Grant (Default)", true, true);
                 this.getAllGrants().add(grant);
             }
             this.player.setDisplayName(Color.translate(grant.getRank().getColor() + player.getName()));
         }
 
-        if (!this.attachment.getPermissions().isEmpty()) {
-            this.attachment.getPermissions().keySet().forEach(s -> this.attachment.unsetPermission(s));
-        }
+        if (!this.attachment.getPermissions().isEmpty()) this.attachment.getPermissions().keySet().forEach(s -> this.attachment.unsetPermission(s));
 
-        for (Grant grants : this.getAllGrants()) {
-            if (grants == null) continue;
-            if (grants.isExpired()) continue;
+        this.getAllGrants().stream()
+                .filter(Objects::nonNull)
+                .filter(grant -> !grant.isExpired())
+                .forEach(grant -> {
+                    grant.getRank().getPermissions().forEach(s -> this.attachment.setPermission(s.replace("-", ""), !s.startsWith("-")));
+                    grant.getRank().getInheritance().stream()
+                            .map(Rank::getByUuid)
+                            .filter(Objects::nonNull)
+                            .forEach(rank -> rank.getPermissions().forEach(permission -> this.attachment.setPermission(permission.replace("-", ""), !permission.startsWith("-"))));
+                });
 
-            for (String rankPermissions : grants.getRank().getPermissions()) {
-                this.attachment.setPermission(rankPermissions.replace("-", ""), !rankPermissions.startsWith("-"));
-            }
-            for (UUID rankUuid : grants.getRank().getInheritance()) {
-                Rank rank = Rank.getByUuid(rankUuid);
-                if (rank != null) {
-                    for (String permission3 : rank.getPermissions()) {
-                        this.attachment.setPermission(permission3.replace("-", ""), !permission3.startsWith("-"));
-                    }
-                }
-            }
-        }
+        this.setupPlayerTag();
 
+        player.setPlayerListName(Color.translate(this.getActiveGrant().getRank().getColor() + (this.customColor != null ? this.customColor : "") + this.player.getName()));
+        player.recalculatePermissions();
+    }
+
+    public void setupPlayerTag() {
         Bukkit.getOnlinePlayers().forEach(player -> {
             if (this.getActiveGrant().getRank().getColor() != null) {
-                NameTagExternal.setupNameTag(player, this.player, this.getColorByRankColor());
+                if (this.isStaffMode()) {
+                    NameTagExternal.setupStaffModeTag(player, this.player);
+                } else if (this.isVanished()) {
+                    NameTagExternal.setupVanishTag(player, this.player);
+                } else {
+                    NameTagExternal.setupNameTag(player, this.player, this.getColorByRankColor());
+                }
             } else {
                 NameTagExternal.setupNameTag(player, this.player, ChatColor.GRAY);
             }
         });
-
-        player.setPlayerListName(Color.translate(this.getActiveGrant().getRank().getColor() + (this.customColor != null ? this.customColor : "") + this.player.getName()));
-        player.recalculatePermissions();
     }
 
     public ChatColor getColorByRankColor() {

@@ -387,8 +387,6 @@ public class PlayerListener implements Listener {
                 }
             });
         }
-
-//        LoggerUtil.logCommand(event.getPlayer(), event.getMessage());
     }
 
     private void checkThenSend(AsyncPlayerChatEvent event, Player player, PotPlayer potPlayer, long slowChat) {
@@ -399,6 +397,7 @@ public class PlayerListener implements Listener {
                     player1.sendMessage(Color.translate(CorePlugin.CHAT_FORMAT
                             .replace("<prefix>", (potPlayer.getAppliedPrefix() != null ? potPlayer.getAppliedPrefix().getPrefix() + " " : ""))
                             .replace("<rank_prefix>", potPlayer.getActiveGrant().getRank().getPrefix())
+                            .replace("<rank_suffix>", potPlayer.getActiveGrant().getRank().getSuffix())
                             .replace("<rank_color>", potPlayer.getActiveGrant().getRank().getColor())
                             .replace("<custom_color>", (potPlayer.getCustomColor() != null ? potPlayer.getCustomColor().toString() : ""))
                             .replace("<player_name>", player.getName())
@@ -407,8 +406,6 @@ public class PlayerListener implements Listener {
                 }
             }
         });
-
-//        LoggerUtil.logChat(player, event.getMessage());
 
         if (CorePlugin.ANTI_CHAT_SPAM) PotPlayer.getPlayer(player).setChatCooldown(System.currentTimeMillis() + (slowChat > 0L ? slowChat : 3000L)); else PotPlayer.getPlayer(player).setChatCooldown(0L);
     }

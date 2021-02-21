@@ -7,6 +7,7 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
+import vip.potclub.core.util.Color;
 
 import java.util.Arrays;
 
@@ -17,14 +18,50 @@ public final class NameTagExternal {
     public static void setupNameTag(Player player, Player other, ChatColor color) {
         Scoreboard scoreboard = player.getScoreboard();
 
-        if (scoreboard.equals(Bukkit.getServer().getScoreboardManager().getMainScoreboard())) {
-            scoreboard = Bukkit.getServer().getScoreboardManager().getNewScoreboard();
-        }
+        if (scoreboard.equals(Bukkit.getServer().getScoreboardManager().getMainScoreboard())) scoreboard = Bukkit.getServer().getScoreboardManager().getNewScoreboard();
 
         Team team = player.getScoreboard().getTeam(getTeamName(color));
         if (team == null) {
             team = player.getScoreboard().registerNewTeam(getTeamName(color));
             team.setPrefix(color.toString());
+        }
+
+        if (!team.hasEntry(other.getName())) {
+            resetNameTag(player, other);
+            team.addEntry(other.getName());
+        }
+
+        player.setScoreboard(scoreboard);
+    }
+
+    public static void setupVanishTag(Player player, Player other) {
+        Scoreboard scoreboard = player.getScoreboard();
+
+        if (scoreboard.equals(Bukkit.getServer().getScoreboardManager().getMainScoreboard())) scoreboard = Bukkit.getServer().getScoreboardManager().getNewScoreboard();
+
+        Team team = player.getScoreboard().getTeam(getTeamName(ChatColor.MAGIC));
+        if (team == null) {
+            team = player.getScoreboard().registerNewTeam(getTeamName(ChatColor.MAGIC));
+            team.setPrefix(Color.translate("&7[V] "));
+        }
+
+        if (!team.hasEntry(other.getName())) {
+            resetNameTag(player, other);
+            team.addEntry(other.getName());
+        }
+
+        player.setScoreboard(scoreboard);
+    }
+
+    public static void setupStaffModeTag(Player player, Player other) {
+        Scoreboard scoreboard = player.getScoreboard();
+
+        if (scoreboard.equals(Bukkit.getServer().getScoreboardManager().getMainScoreboard())) scoreboard = Bukkit.getServer().getScoreboardManager().getNewScoreboard();
+
+        Team team = player.getScoreboard().getTeam(getTeamName(ChatColor.STRIKETHROUGH));
+        if (team == null) {
+            team = player.getScoreboard().registerNewTeam(getTeamName(ChatColor.STRIKETHROUGH));
+            team.setPrefix(Color.translate("&6[S] "));
         }
 
         if (!team.hasEntry(other.getName())) {

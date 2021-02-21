@@ -4,7 +4,6 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import lombok.SneakyThrows;
 import org.bson.Document;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -12,7 +11,6 @@ import org.bukkit.entity.Player;
 import vip.potclub.core.CorePlugin;
 import vip.potclub.core.command.BaseCommand;
 import vip.potclub.core.enums.ServerType;
-import vip.potclub.core.menu.extend.grant.GrantMainMenu;
 import vip.potclub.core.player.PotPlayer;
 import vip.potclub.core.player.grant.Grant;
 import vip.potclub.core.player.ranks.Rank;
@@ -64,7 +62,7 @@ public class CGrantCommand extends BaseCommand {
 
                                     if (targetPotPlayer != null) {
                                         targetPotPlayer.getAllGrants().add(newGrant);
-                                        targetPotPlayer.setupAttachment();
+                                        targetPotPlayer.setupPlayerCosmetics();
                                         targetPotPlayer.saveWithoutRemove();
 
                                         targetPotPlayer.getPlayer().sendMessage(ChatColor.GREEN + Color.translate("Your rank has been set to " + newGrant.getRank().getColor() + newGrant.getRank().getName() + ChatColor.GREEN + "."));
@@ -102,7 +100,7 @@ public class CGrantCommand extends BaseCommand {
 
                                         if (targetPotPlayer != null) {
                                             targetPotPlayer.getAllGrants().add(newGrant);
-                                            targetPotPlayer.setupAttachment();
+                                            targetPotPlayer.setupPlayerCosmetics();
                                             targetPotPlayer.saveWithoutRemove();
 
                                             targetPotPlayer.getPlayer().sendMessage(ChatColor.GREEN + Color.translate("Your rank has been set to " + newGrant.getRank().getColor() + newGrant.getRank().getName() + ChatColor.GREEN + "."));

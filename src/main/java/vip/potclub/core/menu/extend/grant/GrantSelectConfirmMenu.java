@@ -99,7 +99,7 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu<CorePlugin> {
 
                 if (targetPotPlayer != null) {
                     targetPotPlayer.getAllGrants().add(newGrant);
-                    targetPotPlayer.setupAttachment();
+                    targetPotPlayer.setupPlayerCosmetics();
                     targetPotPlayer.saveWithoutRemove();
 
                     targetPotPlayer.getPlayer().sendMessage(ChatColor.GREEN + Color.translate("Your rank has been set to " + newGrant.getRank().getColor() + newGrant.getRank().getName() + ChatColor.GREEN + "."));

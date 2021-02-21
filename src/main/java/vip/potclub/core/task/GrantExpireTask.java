@@ -25,7 +25,7 @@ public class GrantExpireTask extends BukkitRunnable {
                 .filter(grant -> !grant.isPermanent())
                 .forEach(grant -> {
                     grant.setActive(false);
-                    potPlayer.setupAttachment();
+                    potPlayer.setupPlayerCosmetics();
 
                     if (potPlayer.getPlayer() != null) potPlayer.getPlayer().sendMessage(ChatColor.GREEN + "Your rank has been set to " + Color.translate(potPlayer.getActiveGrant().getRank().getColor()) + potPlayer.getActiveGrant().getRank().getName() + ChatColor.GREEN + ".");
                 }));

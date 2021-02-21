@@ -7,14 +7,16 @@ server-id: "eu-practice"
 refresh-time: 5
 
 settings:
-  chat-format: "<prefix> <rank_prefix><rank_color><custom_color><player_name> &7» &f<message>"
   color-gui: true
   namemc-rewards: true
   anti-chat-spam: true
 
   # Whenever a player executes a command such as /heal, all online server staff will receive "[GrowlyX: healed]"
-  # Needs the permission scandium.staff
-  staff-command-alerts: false
+  staff-command-alerts: true
+  staff-command-alerts-format: "&7&o[<playername>: &e<message>&7&o]"
+  staff-command-alerts-permission: "scandium.staff"
+
+  chat-format: "<prefix><rank_prefix><rank_color><custom_color><player_name> &7» &f<message>"
 
   # Not yet implemented!
   punishment-gui: true

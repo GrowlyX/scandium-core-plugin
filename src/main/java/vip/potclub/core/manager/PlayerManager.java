@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import vip.potclub.core.CorePlugin;
 import vip.potclub.core.enums.ChatChannelType;
+import vip.potclub.core.player.PotPlayer;
 import vip.potclub.core.util.Color;
 import vip.potclub.core.util.RedisUtil;
 
@@ -27,6 +28,10 @@ public class PlayerManager {
 
         CorePlugin.getInstance().getNMS().removeExecute(player);
 
+        PotPlayer potPlayer = PotPlayer.getPlayer(player);
+        potPlayer.setVanished(true);
+        potPlayer.setupPlayerTag();
+
         player.sendMessage(Color.translate("&aYou are now vanished to all online players."));
         CorePlugin.getInstance().getServerManager().getVanishedPlayers().add(player);
     }
@@ -42,6 +47,10 @@ public class PlayerManager {
                 .forEach(p -> p.showPlayer(player));
 
         CorePlugin.getInstance().getNMS().addExecute(player);
+
+        PotPlayer potPlayer = PotPlayer.getPlayer(player);
+        potPlayer.setVanished(false);
+        potPlayer.setupPlayerTag();
 
         player.sendMessage(Color.translate("&aYou are now visible to all online players."));
         CorePlugin.getInstance().getServerManager().getVanishedPlayers().remove(player);
