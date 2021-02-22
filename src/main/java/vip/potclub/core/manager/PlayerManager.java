@@ -48,18 +48,18 @@ public class PlayerManager {
 
         potPlayer.setStaffMode(true);
         potPlayer.setupPlayerTag();
+        potPlayer.setAllArmor(player.getInventory().getArmorContents());
+        potPlayer.setAllItems(player.getInventory().getContents());
 
-        for (ItemStack itemStack : player.getInventory().getContents()) {
-            potPlayer.getAllItems().add(itemStack);
-        }
+        player.getInventory().clear();
 
-        player.getInventory().setItem(36, new InventoryMenuItem(Material.COMPASS).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + "Push Forward").create());
-        player.getInventory().setItem(37, new InventoryMenuItem(Material.SKULL_ITEM, 1).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + "Online Staff").create());
-        player.getInventory().setItem(37, new InventoryMenuItem(Material.NETHER_STAR).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + "Random Player").create());
+        player.getInventory().setItem(0, new InventoryMenuItem(Material.COMPASS).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + "Push Forward").create());
+        player.getInventory().setItem(1, new InventoryMenuItem(Material.SKULL_ITEM, 1).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + "Online Staff").create());
+        player.getInventory().setItem(2, new InventoryMenuItem(Material.NETHER_STAR).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + "Random Player").create());
 
-        player.getInventory().setItem(42, new InventoryMenuItem(Material.BOOK).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + "Inspect Player").create());
-        player.getInventory().setItem(43, new InventoryMenuItem(Material.PACKED_ICE).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + "Freeze Player").create());
-        player.getInventory().setItem(44, new InventoryMenuItem(Material.INK_SACK, (potPlayer.isVanished() ? 10 : 7)).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + (potPlayer.isVanished() ? "Disable Vanish" : "Enable Vanish")).create());
+        player.getInventory().setItem(6, new InventoryMenuItem(Material.BOOK).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + "Inspect Player").create());
+        player.getInventory().setItem(7, new InventoryMenuItem(Material.PACKED_ICE).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + "Freeze Player").create());
+        player.getInventory().setItem(8, new InventoryMenuItem(Material.INK_SACK, (potPlayer.isVanished() ? 10 : 8)).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + (potPlayer.isVanished() ? "Disable Vanish" : "Enable Vanish")).create());
 
         player.updateInventory();
 
@@ -72,17 +72,17 @@ public class PlayerManager {
         PotPlayer potPlayer = PotPlayer.getPlayer(player);
 
         player.getInventory().clear();
-
-        for (int i = 44; i >= 0; i--) {
-            for (ItemStack itemStack : potPlayer.getAllItems()) {
-                player.getInventory().setItem(i, itemStack);
-            }
-        }
+        player.getInventory().setContents(potPlayer.getAllItems());
+        player.getInventory().setArmorContents(potPlayer.getAllArmor());
 
         potPlayer.setStaffMode(false);
         potPlayer.setupPlayerTag();
 
-        player.sendMessage(Color.translate("&cYou have disabled Mod Mode."));
+        if (CorePlugin.getInstance().getLunarCommand() != null) {
+
+        }
+
+        player.sendMessage(Color.translate("&cYou have exited Mod Mode."));
 
         StaffUtil.sendAlert(player, "unmodmoded");
     }

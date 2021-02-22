@@ -1,5 +1,6 @@
 package vip.potclub.core.lunar.extend;
 
+import com.lunarclient.bukkitapi.LunarClientAPI;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -35,5 +36,13 @@ public class LunarCommand extends AbstractClientInjector {
             }
         }
         return false;
+    }
+
+    public void enableModModules(Player player) {
+        LunarClientAPI.getInstance().giveAllStaffModules(player);
+    }
+
+    public void disableModModules(Player player) {
+        LunarClientAPI.getInstance().disableAllStaffModules(player);
     }
 }
