@@ -8,6 +8,7 @@ import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.PermissionAttachment;
 import vip.potclub.core.CorePlugin;
 import vip.potclub.core.enums.LanguageType;
@@ -41,6 +42,7 @@ public class PotPlayer {
     private List<String> allPrefixes = new ArrayList<>();
     private List<String> allIgnoring = new ArrayList<>();
     private List<String> allFriends = new ArrayList<>();
+    private List<ItemStack> allItems = new ArrayList<>();
     private List<PotionMessageType> allPurchasedMessages = new ArrayList<>();
 
     private UUID uuid;

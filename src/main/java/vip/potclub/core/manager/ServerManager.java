@@ -16,6 +16,7 @@ import java.util.List;
 public class ServerManager {
 
     private List<String> whitelistedPlayers;
+    private List<String> betaWhitelistedPlayers;
     private List<String> joinMessage;
 
     private ArrayList<NetworkServer> networkServers = new ArrayList<>();
@@ -34,6 +35,9 @@ public class ServerManager {
 
     public ServerManager() {
         this.whitelistedPlayers = CorePlugin.getInstance().getWhitelistConfig().getStringList("whitelisted");
+
+        this.betaWhitelistedPlayers = CorePlugin.getInstance().getWhitelistConfig().getStringList("beta-whitelisted");
+        this.betaWhitelistedPlayers.addAll(whitelistedPlayers);
 
         this.joinMessage = CorePlugin.getInstance().getConfig().getStringList("player-join.join-message.message");
         this.clearChatJoin = CorePlugin.getInstance().getConfig().getBoolean("player-join.clear-chat");

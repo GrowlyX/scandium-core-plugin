@@ -62,6 +62,14 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onConnect(AsyncPlayerPreLoginEvent event) {
         if (CorePlugin.CAN_JOIN) {
+            if (CorePlugin.getInstance().getWhitelistConfig().getConfiguration().getBoolean("beta-whitelist")) {
+                if (!CorePlugin.getInstance().getServerManager().getBetaWhitelistedPlayers().contains(event.getName())) {
+                    event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.translateAlternateColorCodes('&', CorePlugin.getInstance().getWhitelistConfig().getConfiguration().getString("whitelisted-msg").replace("<nl>", "\n")));
+                } else {
+                    checkDisallow(event);
+                    return;
+                }
+            } else checkDisallow(event);
             if (CorePlugin.getInstance().getWhitelistConfig().getConfiguration().getBoolean("whitelist")) {
                 if (!CorePlugin.getInstance().getServerManager().getWhitelistedPlayers().contains(event.getName())) {
                     event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.translateAlternateColorCodes('&', CorePlugin.getInstance().getWhitelistConfig().getConfiguration().getString("whitelisted-msg").replace("<nl>", "\n")));

@@ -7,6 +7,8 @@ loadbefore: [dSync]
 load: STARTUP
 
 commands:
+  modmode:
+    aliases: [staffmode, mod, staff]
   shutdown:
     aliases: [delaystop]
   fly:

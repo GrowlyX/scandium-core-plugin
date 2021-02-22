@@ -16,6 +16,7 @@ import vip.potclub.core.command.extend.grant.CGrantCommand;
 import vip.potclub.core.command.extend.grant.GrantCommand;
 import vip.potclub.core.command.extend.grant.GrantsCommand;
 import vip.potclub.core.command.extend.modsuite.FreezeCommand;
+import vip.potclub.core.command.extend.modsuite.StaffModeCommand;
 import vip.potclub.core.command.extend.modsuite.VanishCommand;
 import vip.potclub.core.command.extend.network.ForceUpdateCommand;
 import vip.potclub.core.command.extend.network.NetworkCommand;
@@ -34,6 +35,7 @@ import vip.potclub.core.listener.PlayerListener;
 import vip.potclub.core.lunar.AbstractClientInjector;
 import vip.potclub.core.lunar.extend.LunarCommand;
 import vip.potclub.core.manager.*;
+import vip.potclub.core.modsuite.ModSuiteListener;
 import vip.potclub.core.nms.AbstractNMSImplementation;
 import vip.potclub.core.nms.extend.NMSImplementation_v1_7;
 import vip.potclub.core.nms.extend.NMSImplementation_v1_8;
@@ -241,6 +243,7 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("clear").setExecutor(new ClearCommand());
         this.getCommand("grants").setExecutor(new GrantsCommand());
         this.getCommand("vanish").setExecutor(new VanishCommand());
+        this.getCommand("modmode").setExecutor(new StaffModeCommand());
         this.getCommand("clearchat").setExecutor(new ClearChatCommand());
         this.getCommand("slowchat").setExecutor(new SlowChatCommand());
         this.getCommand("mutechat").setExecutor(new MuteChatCommand());
@@ -258,7 +261,10 @@ public final class CorePlugin extends JavaPlugin {
         if (this.chatInterceptor != null) this.chatInterceptor.initializePacketInterceptor();
         if (this.versionImplementation != null) this.getCommand("ping").setExecutor(versionImplementation);
 
-        this.registerListeners(new PlayerListener());
+        this.registerListeners(
+                new PlayerListener(),
+                new ModSuiteListener()
+        );
 
         if (this.getConfig().getBoolean("settings.color-gui")) this.getCommand("color").setExecutor(new ColorCommand());
         if (this.getConfig().getBoolean("tips.enabled")) new AutoMessageTask();
@@ -317,6 +323,8 @@ public final class CorePlugin extends JavaPlugin {
         CAN_JOIN = false;
 
         this.getWhitelistConfig().getConfiguration().set("whitelisted", this.getServerManager().getWhitelistedPlayers());
+        this.getWhitelistConfig().getConfiguration().set("beta-whitelisted", this.getServerManager().getBetaWhitelistedPlayers());
+
         this.getServer().getOnlinePlayers().forEach(player -> player.kickPlayer(Color.translate("&cThe server is currently rebooting.\n&cPlease reconnect in a few minutes, or check discord for more information.")));
 
         this.punishmentManager.savePunishments();
