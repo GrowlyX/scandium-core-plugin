@@ -201,14 +201,13 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("tphere").setExecutor(new TpHereCommand());
         this.getCommand("gmc").setExecutor(new GmcCommand());
         this.getCommand("gms").setExecutor(new GmsCommand());
+        this.getCommand("gmsp").setExecutor(new GmspCommand());
         this.getCommand("tp").setExecutor(new TpCommand());
         this.getCommand("report").setExecutor(new ReportCommand());
         this.getCommand("punish").setExecutor(new PunishCommand());
         this.getCommand("scandium").setExecutor(new CoreCommand());
         this.getCommand("shutdown").setExecutor(new ShutdownCommand());
         this.getCommand("freeze").setExecutor(new FreezeCommand());
-        this.getCommand("famous").setExecutor(new FamousCommand());
-        this.getCommand("profile").setExecutor(new ProfileCommand());
         this.getCommand("ignore").setExecutor(new IgnoreCommand());
         this.getCommand("rank").setExecutor(new RankCommand());
         this.getCommand("media").setExecutor(new MediaCommand());
@@ -251,6 +250,9 @@ public final class CorePlugin extends JavaPlugin {
         if (this.getServerManager().getNetwork().equals(ServerType.POTCLUBVIP)) {
             this.getCommand("webannouncementdelete").setExecutor(new WebAnnouncementDeleteCommand());
             this.getCommand("webannouncement").setExecutor(new WebAnnouncementCommand());
+
+            this.getCommand("famous").setExecutor(new FamousCommand());
+            this.getCommand("profile").setExecutor(new ProfileCommand());
         }
 
         this.getCommand("toggletips").setExecutor(new ToggleTipsCommand());

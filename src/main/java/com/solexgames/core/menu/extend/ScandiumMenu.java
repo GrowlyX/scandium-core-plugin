@@ -3,6 +3,7 @@ package com.solexgames.core.menu.extend;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.AbstractInventoryMenu;
+import com.solexgames.core.util.UUIDUtil;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.util.Color;
 import lombok.Getter;
@@ -20,8 +21,10 @@ public class ScandiumMenu extends AbstractInventoryMenu {
     private Player player;
 
     public ScandiumMenu(Player player) {
-        super("Scandium - Control Panel", 9);
+        super("Control Panel", 9);
+
         this.player = player;
+
         this.update();
     }
 
@@ -55,21 +58,20 @@ public class ScandiumMenu extends AbstractInventoryMenu {
 
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
         this.inventory.setItem(6, new ItemBuilder(Material.INK_SACK, 14)
-                .setDisplayName("&6Network Info &7(" + network.getServerName() + ")")
+                .setDisplayName("&bNetwork Info &7(" + network.getServerName() + ")")
                 .addLore(
                         "",
                         "&7Server Name: &f" + network.getServerName(),
                         "&7Server ID: &f" + network.getServerId(),
                         "&7Primary Color: &f" + network.getMainColor() + "Color One",
                         "&7Secondary Color: &f" + network.getSecondaryColor() + "Color Two",
-                        "&7General Prefix: &f" + network.getGeneralPrefix(),
                         "&7Discord Link: &f" + network.getDiscordLink(),
                         "&7Store Link: &f" + network.getStoreLink(),
                         "&7Twitter Link: &f" + network.getTwitterLink(),
                         "&7Website Link: &f" + network.getWebsiteLink(),
                         "",
-                        "&7Main Developer: &f" + network.getMainDeveloper(),
-                        "&7Main Owner: &f" + network.getMainOwner(),
+                        "&7Main Developer: &f" + UUIDUtil.getName(network.getMainDeveloper().toString()),
+                        "&7Main Owner: &f" + UUIDUtil.getName(network.getMainOwner().toString()),
                         ""
                 )
                 .create()

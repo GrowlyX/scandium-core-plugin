@@ -63,6 +63,6 @@ public final class UUIDUtil {
             return nameObject.get("name").toString();
         } catch (Exception ignored) { }
 
-        return null;
+        return "N/A";
     }
 }

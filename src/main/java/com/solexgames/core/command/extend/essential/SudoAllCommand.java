@@ -20,16 +20,24 @@ public class SudoAllCommand extends BaseCommand {
         Player player = (Player) sender;
         if (player.hasPermission("scandium.command.sudoall")) {
             if (args.length == 0) {
-                player.sendMessage(Color.translate("&cUsage: /" + label + " <message>."));
+                player.sendMessage(Color.translate("&cUsage: /" + label + " [c:] [e:] <message>."));
             }
 
             if (args.length > 0) {
                 String message = StringUtil.buildMessage(args, 0);
-                Bukkit.getOnlinePlayers().forEach(player1 -> player1.chat(message));
-                player.sendMessage(Color.translate("&aMade all online players chat '" + message + "&a'."));
+                if (message.startsWith("c:")) {
+                    Bukkit.getOnlinePlayers().forEach(player1 -> player1.chat(message));
+                    player.sendMessage(Color.translate("&aMade all online players chat '" + message + "&a'."));
+                } else if (message.startsWith("e:")) {
+                    Bukkit.getOnlinePlayers().forEach(player1 -> player1.performCommand(message));
+                    player.sendMessage(Color.translate("&aMade all online players execute '" + message + "&a'."));
+                } else {
+                    Bukkit.getOnlinePlayers().forEach(player1 -> player1.chat(message));
+                    player.sendMessage(Color.translate("&aMade all online players chat '" + message + "&a'."));
+                }
             }
         } else {
-            player.sendMessage(Color.translate("&cNo permission."));
+            player.sendMessage(Color.translate("&cI'm sorry, but you do not have permission to perform this command."));
         }
         return false;
     }

@@ -34,7 +34,7 @@ public class PunishCommand extends BaseCommand {
                 }
             }
         } else {
-            player.sendMessage(Color.translate("&cNo permission."));
+            player.sendMessage(Color.translate("&cI'm sorry, but you do not have permission to perform this command."));
         }
         return false;
     }

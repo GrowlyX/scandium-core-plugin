@@ -59,6 +59,7 @@ public class CGrantCommand extends BaseCommand {
                                     } catch (Exception ignored) {}
 
                                     Grant newGrant = new Grant(null, rank, System.currentTimeMillis(), -1L, reason, true, true);
+                                    newGrant.setPermanent(true);
 
                                     if (targetPotPlayer != null) {
                                         targetPotPlayer.getAllGrants().add(newGrant);

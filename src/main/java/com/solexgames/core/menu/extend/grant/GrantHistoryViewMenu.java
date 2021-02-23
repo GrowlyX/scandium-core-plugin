@@ -3,6 +3,7 @@ package com.solexgames.core.menu.extend.grant;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.AbstractInventoryMenu;
+import com.solexgames.core.menu.extend.grant.remove.GrantRemoveConfirmMenu;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.grant.Grant;
@@ -13,6 +14,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -29,7 +31,7 @@ public class GrantHistoryViewMenu extends AbstractInventoryMenu {
     private final Player target;
 
     public GrantHistoryViewMenu(Player player, Player target) {
-        super("Grants - History", 9*5);
+        super("Applicable grants of " + target.getDisplayName(), 9*5);
         this.player = player;
         this.target = target;
         this.update();
@@ -88,18 +90,17 @@ public class GrantHistoryViewMenu extends AbstractInventoryMenu {
             Player player = (Player) event.getWhoClicked();
             PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(this.target);
 
+            if (item == null || item.getType() == Material.AIR) return;
             if (item.hasItemMeta()) {
                 if (item.getItemMeta().getDisplayName() != null) {
-                    String display = ChatColor.stripColor(item.getItemMeta().getDisplayName());
-                    String id = display.replace("#", "");
-                    Grant grant = potPlayer.getById(id);
+                    if (event.getClick().equals(ClickType.RIGHT)) {
+                        String display = ChatColor.stripColor(item.getItemMeta().getDisplayName());
+                        String id = display.replace("#", "");
+                        Grant grant = potPlayer.getById(id);
 
-                    if (grant != null) {
-                        potPlayer.getAllGrants().remove(grant);
-                        player.sendMessage(Color.translate("&aRemoved the grant from &b" + potPlayer.getName() + "'s &ahistory!"));
-                        player.closeInventory();
-
-                        new GrantHistoryViewMenu(player, target).open(player);
+                        if (grant != null) {
+                            new GrantRemoveConfirmMenu(this.player, target, grant).open(player);
+                        }
                     }
                 }
             }

@@ -21,18 +21,26 @@ public class SudoCommand extends BaseCommand {
         Player player = (Player) sender;
         if (player.hasPermission("scandium.command.sudo")) {
             if (args.length == 0) {
-                player.sendMessage(Color.translate("&cUsage: /" + label + " <player> <message>."));
+                player.sendMessage(Color.translate("&cUsage: /" + label + " <player> [c:] [e:] <message>."));
             }
             if (args.length > 0) {
                 if (args.length == 1) {
-                    player.sendMessage(Color.translate("&cUsage: /" + label + " <player> <message>."));
+                    player.sendMessage(Color.translate("&cUsage: /" + label + " <player> [c:] [e:] <message>."));
                 }
                 if (args.length > 1) {
                     Player target = Bukkit.getPlayerExact(args[0]);
                     String message = StringUtil.buildMessage(args, 1);
                     if (target != null) {
-                        target.chat(message);
-                        player.sendMessage(Color.translate("&aMade " + target.getDisplayName() + "&a chat '" + message + "&a'."));
+                        if (message.startsWith("c:")) {
+                            target.chat(message);
+                            player.sendMessage(Color.translate("&aMade " + target.getDisplayName() + "&a chat '" + message + "&a'."));
+                        } else if (message.startsWith("e:")) {
+                            target.performCommand(message);
+                            player.sendMessage(Color.translate("&aMade " + target.getDisplayName() + "&a execute '" + message + "&a'."));
+                        } else {
+                            target.chat(message);
+                            player.sendMessage(Color.translate("&aMade " + target.getDisplayName() + "&a chat '" + message + "&a'."));
+                        }
 
                         StaffUtil.sendAlert(player, "sudoed " + target.getName());
                     } else {
@@ -41,7 +49,7 @@ public class SudoCommand extends BaseCommand {
                 }
             }
         } else {
-            player.sendMessage(Color.translate("&cNo permission."));
+            player.sendMessage(Color.translate("&cI'm sorry, but you do not have permission to perform this command."));
         }
         return false;
     }

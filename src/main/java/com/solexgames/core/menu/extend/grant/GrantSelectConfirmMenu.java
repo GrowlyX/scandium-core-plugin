@@ -38,7 +38,7 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
     private final boolean permanent;
 
     public GrantSelectConfirmMenu(Player player, Document document, Rank rank, long duration, String reason, boolean permanent) {
-        super("Grants - Confirm", 9*5);
+        super("Confirm grant for &b" + document.getString("name"), 9*5);
 
         this.player = player;
         this.document = document;
@@ -89,6 +89,7 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
             ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
             Player player = (Player) event.getWhoClicked();
 
+            if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR) return;
             if (ChatColor.stripColor(Color.translate(event.getCurrentItem().getItemMeta().getDisplayName())).contains("Confirm")) {
                 Grant newGrant = new Grant(player.getUniqueId(), rank, System.currentTimeMillis(), System.currentTimeMillis() - duration, reason, true, permanent);
                 PotPlayer targetPotPlayer = null;

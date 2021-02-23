@@ -31,7 +31,7 @@ public class GrantMainMenu extends AbstractInventoryMenu {
     private final Document document;
 
     public GrantMainMenu(Player player, Document document) {
-        super("Grants - Select", 9*3);
+        super("Select grant rank (&61/3&8)", 9*3);
         this.player = player;
         this.document = document;
         this.update();
@@ -74,6 +74,7 @@ public class GrantMainMenu extends AbstractInventoryMenu {
             ItemStack item = event.getCurrentItem();
             Player player = (Player) event.getWhoClicked();
 
+            if (item == null || item.getType() == Material.AIR) return;
             if (item.hasItemMeta()) {
                 if (item.getItemMeta().getDisplayName() != null) {
                     String display = ChatColor.stripColor(Color.translate(item.getItemMeta().getDisplayName()));

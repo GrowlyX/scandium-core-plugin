@@ -24,7 +24,7 @@ public class GmsCommand extends BaseCommand {
                 player.setGameMode(GameMode.SURVIVAL);
                 player.sendMessage(Color.translate("&aSet your gamemode to Survival."));
 
-                StaffUtil.sendAlert(player, "gms");
+                StaffUtil.sendAlert(player, "set gamemode survival");
             }
             if (args.length > 0) {
                 Player target = Bukkit.getPlayerExact(args[0]);
@@ -32,13 +32,13 @@ public class GmsCommand extends BaseCommand {
                     target.setGameMode(GameMode.SURVIVAL);
                     player.sendMessage(Color.translate("&aSet " + target.getDisplayName() + "'s&a gamemode to Survival."));
 
-                    StaffUtil.sendAlert(player, "gms for " + target.getName());
+                    StaffUtil.sendAlert(player, "set gamemode survival for " + target.getName());
                 } else {
                     player.sendMessage(Color.translate("&cThat player does not exist."));
                 }
             }
         } else {
-            player.sendMessage(Color.translate("&cNo permission."));
+            player.sendMessage(Color.translate("&cI'm sorry, but you do not have permission to perform this command."));
         }
         return false;
     }

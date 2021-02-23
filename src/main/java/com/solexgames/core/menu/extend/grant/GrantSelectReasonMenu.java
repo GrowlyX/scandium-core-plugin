@@ -29,7 +29,7 @@ public class GrantSelectReasonMenu extends AbstractInventoryMenu {
     private boolean permanent;
 
     public GrantSelectReasonMenu(Player player, Document document, long duration, Rank rank, boolean permanent) {
-        super("Grants - Reason", 9*3);
+        super("Select grant reason (&63/3&8)", 9*3);
 
         this.player = player;
         this.document = document;

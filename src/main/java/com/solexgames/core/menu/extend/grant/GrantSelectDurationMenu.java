@@ -28,7 +28,7 @@ public class GrantSelectDurationMenu extends AbstractInventoryMenu {
     private Rank rank;
 
     public GrantSelectDurationMenu(Player player, Document document, Rank rank) {
-        super("Grants - Duration", 9*3);
+        super("Select grant duration (&62/3&8)", 9*3);
         this.player = player;
         this.document = document;
         this.rank = rank;

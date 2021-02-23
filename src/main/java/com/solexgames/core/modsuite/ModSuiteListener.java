@@ -47,35 +47,37 @@ public class ModSuiteListener implements Listener {
     public void onEvent(PlayerInteractEvent event) {
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer());
 
-        if (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
+        if (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             if (potPlayer.isStaffMode()) {
-                if (event.getItem().hasItemMeta()) {
-                    switch (event.getMaterial()) {
-                        case COMPASS:
-                            event.getPlayer().setVelocity(event.getPlayer().getLocation().getDirection().multiply(2.5F));
-                            break;
-                        case SKULL_ITEM:
-                            new StaffMenu(event.getPlayer()).open(event.getPlayer());
-                            break;
-                        case NETHER_STAR:
-                            Collections.singletonList(Bukkit.getOnlinePlayers()).get(CorePlugin.RANDOM.nextInt(Bukkit.getOnlinePlayers().size())).stream().findFirst().ifPresent(player -> {
-                                event.getPlayer().teleport(player.getLocation());
-                                event.getPlayer().sendMessage(Color.translate("&aTeleported to &b" + player.getDisplayName() + "&a!"));
-                            });
-                            break;
-                        case BOOK:
-                            event.getPlayer().sendMessage(Color.translate("&aIn development."));
-                            break;
-                        case PACKED_ICE:
-                            event.getPlayer().sendMessage(Color.translate("&aIn development."));
-                            break;
-                        case INK_SACK:
-                            event.getPlayer().performCommand("vanish");
-                            ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
-                            event.getPlayer().getInventory().setItem(8, new ItemBuilder(Material.INK_SACK, (potPlayer.isVanished() ? 10 : 8)).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + (potPlayer.isVanished() ? "Disable Vanish" : "Enable Vanish")).create());
-                            break;
+                if (event.getItem() != null) {
+                    if (event.getItem().hasItemMeta()) {
+                        switch (event.getMaterial()) {
+                            case COMPASS:
+                                event.getPlayer().setVelocity(event.getPlayer().getLocation().getDirection().multiply(2.5F));
+                                break;
+                            case SKULL_ITEM:
+                                new StaffMenu(event.getPlayer()).open(event.getPlayer());
+                                break;
+                            case NETHER_STAR:
+                                Collections.singletonList(Bukkit.getOnlinePlayers()).get(CorePlugin.RANDOM.nextInt(Bukkit.getOnlinePlayers().size())).stream().findFirst().ifPresent(player -> {
+                                    event.getPlayer().teleport(player.getLocation());
+                                    event.getPlayer().sendMessage(Color.translate("&aTeleported to &b" + player.getDisplayName() + "&a!"));
+                                });
+                                break;
+                            case BOOK:
+                                event.getPlayer().sendMessage(Color.translate("&aIn development."));
+                                break;
+                            case PACKED_ICE:
+                                event.getPlayer().sendMessage(Color.translate("&aIn development."));
+                                break;
+                            case INK_SACK:
+                                event.getPlayer().performCommand("vanish");
+                                ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
+                                event.getPlayer().getInventory().setItem(8, new ItemBuilder(Material.INK_SACK, (potPlayer.isVanished() ? 10 : 8)).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + (potPlayer.isVanished() ? "Disable Vanish" : "Enable Vanish")).create());
+                                break;
+                        }
+                        event.getPlayer().updateInventory();
                     }
-                    event.getPlayer().updateInventory();
                 }
             }
         }
