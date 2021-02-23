@@ -31,6 +31,7 @@ import vip.potclub.core.command.extend.web.WebAnnouncementCommand;
 import vip.potclub.core.command.extend.web.WebAnnouncementDeleteCommand;
 import vip.potclub.core.command.extend.whitelist.WhitelistCommand;
 import vip.potclub.core.database.Database;
+import vip.potclub.core.enums.ServerType;
 import vip.potclub.core.listener.PlayerListener;
 import vip.potclub.core.lunar.AbstractClientInjector;
 import vip.potclub.core.lunar.extend.LunarCommand;
@@ -180,7 +181,6 @@ public final class CorePlugin extends JavaPlugin {
         this.warpManager = new WarpManager();
         this.shutdownManager = new ShutdownManager();
 
-//        this.setupLogs();
         this.setupExtra();
 
         this.getRedisThread().execute(() -> this.getRedisClient().write(RedisUtil.onServerOnline()));
@@ -251,8 +251,10 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("language").setExecutor(new LanguageCommand());
         this.getCommand("whitelist").setExecutor(new WhitelistCommand());
 
-        this.getCommand("webannouncementdelete").setExecutor(new WebAnnouncementDeleteCommand());
-        this.getCommand("webannouncement").setExecutor(new WebAnnouncementCommand());
+        if (this.getServerManager().getNetwork().equals(ServerType.POTCLUBVIP)) {
+            this.getCommand("webannouncementdelete").setExecutor(new WebAnnouncementDeleteCommand());
+            this.getCommand("webannouncement").setExecutor(new WebAnnouncementCommand());
+        }
 
         this.getCommand("toggletips").setExecutor(new ToggleTipsCommand());
         this.getCommand("togglestaffmessages").setExecutor(new ToggleStaffMessagesCommand());
@@ -277,45 +279,6 @@ public final class CorePlugin extends JavaPlugin {
         new FrozenMessageTask();
 
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, this.tpsRunnable, 0L, 1L);
-    }
-
-    public void setupLogs() {
-        this.chatLogger = Logger.getLogger("Chat");
-        String date = FORMAT.format(new Date()).replace(" ", "_").replace("/", "_");
-
-        FileHandler fileHandler;
-        File file;
-
-//        file = new File(this.getDat);
-//        if (!file.getParentFile().exists()) file.getParentFile().mkdir();
-
-        try {
-            fileHandler = new FileHandler("SolexGames\\Scandium\\Chat_Logs\\chat_log_" + date + ".log");
-            this.chatLogger.addHandler(fileHandler);
-
-            SimpleFormatter formatter = new SimpleFormatter();
-            fileHandler.setFormatter(formatter);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        this.commandLogger = Logger.getLogger("Commands");
-
-        FileHandler commandFileHandler;
-        File otherFile;
-
-        otherFile = new File("SolexGames\\Scandium\\Command_Logs\\command_log_" + date + ".log");
-        if (!otherFile.getParentFile().exists()) otherFile.getParentFile().mkdir();
-
-        try {
-            commandFileHandler = new FileHandler("SolexGames\\Scandium\\Command_Logs\\command_log_" + date + ".log");
-            this.commandLogger.addHandler(commandFileHandler);
-
-            SimpleFormatter formatter = new SimpleFormatter();
-            commandFileHandler.setFormatter(formatter);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     @Override

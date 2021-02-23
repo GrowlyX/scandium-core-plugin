@@ -9,6 +9,7 @@ refresh-time: 5
 settings:
   color-gui: true
   namemc-rewards: true
+  namemc-ip: "eu.potclub.vip"
   anti-chat-spam: true
 
   # Whenever a player executes a command such as /heal, all online server staff will receive "[GrowlyX: healed]"
