@@ -1,9 +1,10 @@
 
+
 name: Scandium
-version: SD-1.3.3.7
-main: vip.potclub.core.CorePlugin
-softdepend: [ProtocolLib]
-loadbefore: [dSync]
+version: 1.0-${git.commit.id.abbrev}
+main: com.solexgames.core.CorePlugin
+
+softdepend: [ProtocolLib, dRobot, ScandiumPAPI]
 load: STARTUP
 
 commands:
