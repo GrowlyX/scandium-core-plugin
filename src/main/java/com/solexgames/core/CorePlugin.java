@@ -274,6 +274,7 @@ public final class CorePlugin extends JavaPlugin {
         new ServerUpdateTask();
         new PunishSaveTask();
         new FrozenMessageTask();
+        new BoardUpdateTask();
 
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, this.tpsRunnable, 0L, 1L);
     }
