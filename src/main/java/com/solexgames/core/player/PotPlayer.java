@@ -26,6 +26,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.PermissionAttachment;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -395,8 +396,13 @@ public class PotPlayer {
     }
 
     public Grant getActiveGrant() {
-        return this.getAllGrants().stream()
-                .filter(grant -> (grant != null) && (grant.isActive()) && !(grant.getRank().isHidden()))
+        return this.getAllGrants()
+                .stream()
+                .sorted(Comparator.comparingLong(Grant::getDateAdded).reversed()).collect(Collectors.toList())
+                .stream()
+                .filter(Objects::nonNull)
+                .filter(Grant::isActive)
+                .filter(grant -> !grant.getRank().isHidden())
                 .findFirst()
                 .orElseGet(() -> new Grant(null, Objects.requireNonNull(Rank.getDefault()), System.currentTimeMillis(), -1L, "Automatic Grant (Default)", true, true));
     }
