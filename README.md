@@ -1,5 +1,5 @@
 # Scandium | An all-in-one network suite.
-[![Maven Package](https://github.com/GrowlyX/Core/actions/workflows/maven-publish.yml/badge.svg?event=deployment_status)](https://github.com/GrowlyX/Core/actions/workflows/maven-publish.yml)  
+[![Java CI with Maven](https://github.com/GrowlyX/Core/actions/workflows/maven.yml/badge.svg)](https://github.com/GrowlyX/Core/actions/workflows/maven.yml)
 
 
 - Documentation is available at Core-Docs.
