@@ -84,6 +84,7 @@ public final class CorePlugin extends JavaPlugin {
     private PlayerManager playerManager;
     private RankManager rankManager;
     private ShutdownManager shutdownManager;
+    private DiscordManager discordManager;
     private PrefixManager prefixManager;
     private PunishmentManager punishmentManager;
 
@@ -173,6 +174,7 @@ public final class CorePlugin extends JavaPlugin {
         this.prefixManager = new PrefixManager();
         this.punishmentManager = new PunishmentManager();
         this.playerManager = new PlayerManager();
+        this.discordManager = new DiscordManager();
         this.warpManager = new WarpManager();
         this.shutdownManager = new ShutdownManager();
 

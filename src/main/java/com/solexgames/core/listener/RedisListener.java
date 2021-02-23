@@ -30,7 +30,7 @@ public class RedisListener extends JedisPubSub {
         CorePlugin.getInstance().getRedisSubThread().execute(() -> {
             RedisMessage redisMessage = CorePlugin.GSON.fromJson(message, RedisMessage.class);
             switch (redisMessage.getPacket()) {
-                case RedisPacketType.SERVER_DATA_ONLINE:
+                case SERVER_DATA_ONLINE:
                     String bootingServerName = redisMessage.getParam("SERVER");
 
                     if (!CorePlugin.getInstance().getServerManager().existServer(bootingServerName)){
@@ -50,7 +50,7 @@ public class RedisListener extends JedisPubSub {
                         }
                     });
                     break;
-                case RedisPacketType.SERVER_DATA_UPDATE:
+                case SERVER_DATA_UPDATE:
                     String serverName = redisMessage.getParam("SERVER");
                     String serverType = redisMessage.getParam("SERVER_TYPE");
                     String ticksPerSecond = redisMessage.getParam("TPS");
@@ -75,7 +75,7 @@ public class RedisListener extends JedisPubSub {
                     NetworkServer.getByName(serverName).setServerType(NetworkServerType.valueOf(serverType));
 
                     break;
-                case RedisPacketType.SERVER_DATA_OFFLINE:
+                case SERVER_DATA_OFFLINE:
                     String offlineServerName = redisMessage.getParam("SERVER");
 
                     if (NetworkServer.getByName(offlineServerName) != null) {
@@ -89,7 +89,7 @@ public class RedisListener extends JedisPubSub {
                         }
                     });
                     break;
-                case RedisPacketType.PLAYER_CONNECT_UPDATE:
+                case PLAYER_CONNECT_UPDATE:
                     String fromConnectServer = redisMessage.getParam("SERVER");
                     String connectingPlayer = redisMessage.getParam("PLAYER");
 
@@ -102,7 +102,7 @@ public class RedisListener extends JedisPubSub {
                         }
                     });
                     break;
-                case RedisPacketType.PLAYER_DISCONNECT_UPDATE:
+                case PLAYER_DISCONNECT_UPDATE:
                     String fromDisconnectServer = redisMessage.getParam("SERVER");
                     String disconnectingPlayer = redisMessage.getParam("PLAYER");
 
@@ -115,7 +115,7 @@ public class RedisListener extends JedisPubSub {
                         }
                     });
                     break;
-                case RedisPacketType.CHAT_CHANNEL_UPDATE:
+                case CHAT_CHANNEL_UPDATE:
                     ChatChannelType chatChannel = ChatChannelType.valueOf(redisMessage.getParam("CHANNEL"));
                     String sender = redisMessage.getParam("PLAYER");
                     String chatMessage = redisMessage.getParam("MESSAGE");
@@ -130,7 +130,7 @@ public class RedisListener extends JedisPubSub {
                         }
                     });
                     break;
-                case RedisPacketType.PLAYER_SERVER_UPDATE:
+                case PLAYER_SERVER_UPDATE:
                     StaffUpdateType updateType = StaffUpdateType.valueOf(redisMessage.getParam("UPDATETYPE"));
                     switch (updateType) {
                         case FREEZE:
@@ -192,7 +192,7 @@ public class RedisListener extends JedisPubSub {
                             break;
                     }
                     break;
-                case RedisPacketType.RANK_CREATE_UPDATE:
+                case RANK_CREATE_UPDATE:
                     String newRankName = redisMessage.getParam("NAME");
                     String newRankId = redisMessage.getParam("UUID");
                     Rank newRank = new Rank(UUID.fromString(newRankId), Collections.singletonList(Objects.requireNonNull(Rank.getDefault()).getUuid()), Collections.singletonList("permission.testing"), newRankName, Color.translate("&7"), Color.translate("&7"), Color.translate("&7"), false, 0);
@@ -201,7 +201,7 @@ public class RedisListener extends JedisPubSub {
 
                     newRank.saveRank();
                     break;
-                case RedisPacketType.RANK_DELETE_UPDATE:
+                case RANK_DELETE_UPDATE:
                     Rank delRank = Rank.getByName(redisMessage.getParam("RANK"));
                     if (delRank != null) {
                         Player delRankPlayer = Bukkit.getPlayer(redisMessage.getParam("PLAYER"));
@@ -211,7 +211,7 @@ public class RedisListener extends JedisPubSub {
                         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getRankCollection().deleteOne(Filters.eq("_id", delRank.getUuid())));
                     }
                     break;
-                case RedisPacketType.PUNISHMENT_EXECUTE_UPDATE:
+                case PUNISHMENT_EXECUTE_UPDATE:
                     if (!SERVER_NAME.equals(redisMessage.getParam("SERVER"))) {
                         Punishment punishment = new Punishment(PunishmentType.valueOf(redisMessage.getParam("TYPE")), UUID.fromString(redisMessage.getParam("ISSUER")), UUID.fromString(redisMessage.getParam("TARGET")), redisMessage.getParam("ISSUERNAME"), redisMessage.getParam("REASON"), new Date(Long.parseLong(redisMessage.getParam("DATE"))), Long.parseLong(redisMessage.getParam("DURATION")), Boolean.parseBoolean(redisMessage.getParam("PERMANENT")), new Date(Long.parseLong(redisMessage.getParam("CREATED"))), UUID.fromString(redisMessage.getParam("UUID")), redisMessage.getParam("IDENTIFICATION"), true);
                         PotPlayer potPlayer = null;
@@ -226,7 +226,7 @@ public class RedisListener extends JedisPubSub {
                         if (potPlayer != null) potPlayer.saveWithoutRemove();
                     }
                     break;
-                case RedisPacketType.PUNISHMENT_REMOVE_UPDATE:
+                case PUNISHMENT_REMOVE_UPDATE:
                     if (!SERVER_NAME.equals(redisMessage.getParam("SERVER"))) {
                         Punishment punishment = null;
 
@@ -272,14 +272,14 @@ public class RedisListener extends JedisPubSub {
                         }
                     }
                     break;
-                case RedisPacketType.RANK_SETTINGS_UPDATE:
+                case RANK_SETTINGS_UPDATE:
                     if (!SERVER_NAME.equals(redisMessage.getParam("SERVER"))) {
                         Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> Rank.getRanks().clear());
                         CorePlugin.getInstance().getRankManager().loadRanks();
                         CorePlugin.getInstance().getLogger().info("[Ranks] Synced all ranks.");
                     }
                     break;
-                case RedisPacketType.PUNISHMENT_FREMOVE_UPDATE:
+                case PUNISHMENT_FREMOVE_UPDATE:
                     if (!SERVER_NAME.equals(redisMessage.getParam("SERVER"))) {
                         String punishmentString = redisMessage.getParam("ID");
                         Punishment punishment = Punishment.getByIdentification(punishmentString);
@@ -288,11 +288,11 @@ public class RedisListener extends JedisPubSub {
                         }
                     }
                     break;
-                case RedisPacketType.NETWORK_BROADCAST_UPDATE:
+                case NETWORK_BROADCAST_UPDATE:
                     String broadcastMessage = redisMessage.getParam("MESSAGE");
                     Bukkit.broadcastMessage(CorePlugin.getInstance().getPlayerManager().formatBroadcast(broadcastMessage));
                     break;
-                case RedisPacketType.NETWORK_BROADCAST_PERMISSION_UPDATE:
+                case NETWORK_BROADCAST_PERMISSION_UPDATE:
                     String broadcast = redisMessage.getParam("MESSAGE");
                     String permission = redisMessage.getParam("PERMISSION");
 
