@@ -78,7 +78,7 @@ public class GrantMainMenu extends AbstractInventoryMenu<CorePlugin> {
                 if (item.getItemMeta().getDisplayName() != null) {
                     String display = ChatColor.stripColor(Color.translate(item.getItemMeta().getDisplayName()));
                     Rank rank = Rank.getByName(display);
-                    PotPlayer potPlayer = PotPlayer.getPlayer(this.player);
+                    PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(this.player);
 
                     if (event.getClick() == ClickType.RIGHT) {
                         this.player.closeInventory();

@@ -72,7 +72,7 @@ public class PunishSelectReasonMenu extends AbstractInventoryMenu<CorePlugin> {
                     new PunishSelectDurationMenu(this.player, this.target, "Appealed", this.punishmentType).open(player);
                     break;
                 case 16:
-                    PotPlayer potPlayer = PotPlayer.getPlayer(this.player);
+                    PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(this.player);
                     if (potPlayer != null) {
                         this.player.closeInventory();
 

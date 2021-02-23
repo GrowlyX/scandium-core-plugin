@@ -69,7 +69,7 @@ public class NameColorSelectMenu extends AbstractInventoryMenu<CorePlugin> {
 
             ItemStack item = event.getCurrentItem();
             Player player = (Player) event.getWhoClicked();
-            PotPlayer potPlayer = PotPlayer.getPlayer(player);
+            PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
             if (event.getRawSlot() == 49) {
                 potPlayer.setCustomColor(null);

@@ -75,7 +75,7 @@ public class PunishmentManager {
 
                 PotPlayer potPlayer = null;
                 try {
-                    potPlayer = PotPlayer.getPlayer(target);
+                    potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
                 } catch (Exception ignored) {}
 
                 PotPlayer finalPotPlayer = potPlayer;

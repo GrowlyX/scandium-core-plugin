@@ -24,7 +24,7 @@ public class ModSuiteListener implements Listener {
 
     @EventHandler
     public void onEvent(BlockBreakEvent event) {
-        PotPlayer potPlayer = PotPlayer.getPlayer(event.getPlayer());
+        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer());
 
         if (potPlayer.isStaffMode()) {
             event.setCancelled(true);
@@ -34,7 +34,7 @@ public class ModSuiteListener implements Listener {
 
     @EventHandler
     public void onEvent(BlockPlaceEvent event) {
-        PotPlayer potPlayer = PotPlayer.getPlayer(event.getPlayer());
+        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer());
 
         if (potPlayer.isStaffMode()) {
             event.setCancelled(true);
@@ -44,7 +44,7 @@ public class ModSuiteListener implements Listener {
 
     @EventHandler
     public void onEvent(PlayerInteractEvent event) {
-        PotPlayer potPlayer = PotPlayer.getPlayer(event.getPlayer());
+        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer());
 
         if (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
             if (potPlayer.isStaffMode()) {
@@ -83,7 +83,7 @@ public class ModSuiteListener implements Listener {
     @EventHandler
     public void onEvent(EntityDamageEvent event) {
         if (event.getEntityType().equals(EntityType.PLAYER)) {
-            PotPlayer potPlayer = PotPlayer.getPlayer((Player) event.getEntity());
+            PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer((Player) event.getEntity());
 
             if (potPlayer.isStaffMode()) {
                 event.setCancelled(true);

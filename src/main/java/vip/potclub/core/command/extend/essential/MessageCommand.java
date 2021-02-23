@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import vip.potclub.core.CorePlugin;
 import vip.potclub.core.command.BaseCommand;
 import vip.potclub.core.player.PotPlayer;
 import vip.potclub.core.util.Color;
@@ -31,8 +32,8 @@ public class MessageCommand extends BaseCommand {
                 String message = StringUtil.buildMessage(args, 1);
 
                 if (target != null) {
-                    PotPlayer potPlayer = PotPlayer.getPlayer(target);
-                    PotPlayer potPerson = PotPlayer.getPlayer(player);
+                    PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
+                    PotPlayer potPerson = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
                     if (potPlayer.isIgnoring(potPerson.getPlayer())) {
                         if (potPerson.isIgnoring(potPlayer.getPlayer())) {

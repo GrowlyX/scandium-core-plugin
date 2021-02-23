@@ -22,7 +22,7 @@ public class ExternalMediaMenu extends AbstractInventoryMenu<CorePlugin> {
     }
 
     private void update() {
-        PotPlayer potPlayer = PotPlayer.getPlayer(player);
+        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
         this.inventory.setItem(1, new InventoryMenuItem(Material.INK_SACK, 4)
                 .setDisplayName("&9Discord")
                 .addLore(

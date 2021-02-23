@@ -55,14 +55,14 @@ public class CGrantCommand extends BaseCommand {
                                     PotPlayer targetPotPlayer = null;
 
                                     try {
-                                        targetPotPlayer = PotPlayer.getPlayer(document.getString("name"));
+                                        targetPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(document.getString("name"));
                                     } catch (Exception ignored) {}
 
-                                    Grant newGrant = new Grant(null, rank, System.currentTimeMillis(), 2147483647L, reason, true, true);
+                                    Grant newGrant = new Grant(null, rank, System.currentTimeMillis(), -1L, reason, true, true);
 
                                     if (targetPotPlayer != null) {
                                         targetPotPlayer.getAllGrants().add(newGrant);
-                                        targetPotPlayer.setupPlayerCosmetics();
+                                        targetPotPlayer.setupPlayer();
                                         targetPotPlayer.saveWithoutRemove();
 
                                         targetPotPlayer.getPlayer().sendMessage(ChatColor.GREEN + Color.translate("Your rank has been set to " + newGrant.getRank().getColor() + newGrant.getRank().getName() + ChatColor.GREEN + "."));
@@ -93,14 +93,14 @@ public class CGrantCommand extends BaseCommand {
                                         PotPlayer targetPotPlayer = null;
 
                                         try {
-                                            targetPotPlayer = PotPlayer.getPlayer(document.getString("name"));
+                                            targetPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(document.getString("name"));
                                         } catch (Exception ignored) {}
 
                                         Grant newGrant = new Grant(null, rank, System.currentTimeMillis(), System.currentTimeMillis() - DateUtil.parseDateDiff(args[2], false), reason, true, false);
 
                                         if (targetPotPlayer != null) {
                                             targetPotPlayer.getAllGrants().add(newGrant);
-                                            targetPotPlayer.setupPlayerCosmetics();
+                                            targetPotPlayer.setupPlayer();
                                             targetPotPlayer.saveWithoutRemove();
 
                                             targetPotPlayer.getPlayer().sendMessage(ChatColor.GREEN + Color.translate("Your rank has been set to " + newGrant.getRank().getColor() + newGrant.getRank().getName() + ChatColor.GREEN + "."));

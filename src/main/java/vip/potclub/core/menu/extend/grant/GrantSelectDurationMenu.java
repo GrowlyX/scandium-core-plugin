@@ -78,10 +78,10 @@ public class GrantSelectDurationMenu extends AbstractInventoryMenu<CorePlugin> {
                     new GrantSelectReasonMenu(this.player, this.document, PunishmentDuration.YEAR.getDuration(), this.rank, false).open(player);
                     break;
                 case 15:
-                    new GrantSelectReasonMenu(this.player, this.document, 2147483647L, this.rank, true).open(player);
+                    new GrantSelectReasonMenu(this.player, this.document, -1L, this.rank, true).open(player);
                     break;
                 case 16:
-                    PotPlayer potPlayer = PotPlayer.getPlayer(this.player);
+                    PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(this.player);
 
                     potPlayer.setGrantDurationEditing(true);
                     potPlayer.setGrantDurationTarget(this.document);

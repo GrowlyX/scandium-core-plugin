@@ -12,7 +12,7 @@ public final class StaffUtil {
     public static void sendAlert(Player player, String reason) {
         if (CorePlugin.STAFF_ALERTS_COMMAND) {
             Bukkit.getOnlinePlayers().stream()
-                    .map(PotPlayer::getPlayer)
+                    .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
                     .filter(Objects::nonNull)
                     .filter(PotPlayer::isCanSeeStaffMessages)
                     .filter(potPlayer -> potPlayer.getPlayer().hasPermission(CorePlugin.getInstance().getConfig().getString("settings.staff-command-alerts-permission")))

@@ -100,7 +100,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
-        PotPlayer potPlayer = PotPlayer.getPlayer(event.getPlayer());
+        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer());
 
         if (potPlayer.isFrozen()) {
             event.setCancelled(true);
@@ -112,7 +112,7 @@ public class PlayerListener implements Listener {
     public void onDamaged(EntityDamageEvent event) {
         if (event.getEntityType().equals(EntityType.PLAYER)) {
             Player player = (Player) event.getEntity();
-            PotPlayer potPlayer = PotPlayer.getPlayer(player);
+            PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
             if (potPlayer != null) {
                 if (potPlayer.isFrozen()) {
@@ -175,7 +175,7 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onAsyncPlayerChatEvent(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
-        PotPlayer potPlayer = PotPlayer.getPlayer(player);
+        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
         if (potPlayer.isFrozen()) {
             event.setCancelled(true);
@@ -183,7 +183,7 @@ public class PlayerListener implements Listener {
             Bukkit.getOnlinePlayers()
                     .stream()
                     .filter(player1 -> player1.hasPermission("scandium.staff"))
-                    .filter(player1 -> PotPlayer.getPlayer(player1).isCanSeeStaffMessages())
+                    .filter(player1 -> CorePlugin.getInstance().getPlayerManager().getPlayer(player1).isCanSeeStaffMessages())
                     .forEach(player1 -> player1.sendMessage(Color.translate("&b[S] &7[Frozen] &b" + potPlayer.getPlayer().getDisplayName() + "&f: &f" + event.getMessage())));
 
             event.getPlayer().sendMessage(Color.translate(Color.translate("&7[Frozen] &b" + potPlayer.getPlayer().getDisplayName() + "&f: &f" + event.getMessage())));
@@ -206,7 +206,7 @@ public class PlayerListener implements Listener {
                 potPlayer.setGrantDurationTarget(null);
                 potPlayer.setGrantDurationEditing(false);
             } else if (message.equalsIgnoreCase("perm") || message.equalsIgnoreCase("permanent")) {
-                new GrantSelectReasonMenu(player, potPlayer.getGrantDurationTarget(), 2147483647L, potPlayer.getGrantDurationRank(), true).open(player);
+                new GrantSelectReasonMenu(player, potPlayer.getGrantDurationTarget(), -1L, potPlayer.getGrantDurationRank(), true).open(player);
 
                 potPlayer.setGrantDurationRank(null);
                 potPlayer.setGrantDurationTarget(null);
@@ -272,7 +272,7 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (PotPlayer.getPlayer(player).getMedia().getMediaData().isModifyingInstaData()) {
+        if (CorePlugin.getInstance().getPlayerManager().getPlayer(player).getMedia().getMediaData().isModifyingInstaData()) {
             if (instaMatcher.matches()) {
                 potPlayer.getMedia().setInstagram(event.getMessage());
                 player.sendMessage(Color.translate("&aUpdated your instagram to &6" + event.getMessage() + "&a!"));
@@ -285,7 +285,7 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (PotPlayer.getPlayer(player).getMedia().getMediaData().isModifyingYoutubeData()) {
+        if (CorePlugin.getInstance().getPlayerManager().getPlayer(player).getMedia().getMediaData().isModifyingYoutubeData()) {
             if (youtubeMatcher.matches()) {
                 potPlayer.getMedia().setYoutubeLink(event.getMessage());
                 player.sendMessage(Color.translate("&aUpdated your youtube to &6" + event.getMessage() + "&a!"));
@@ -298,7 +298,7 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (PotPlayer.getPlayer(player).getMedia().getMediaData().isModifyingTwitterData()) {
+        if (CorePlugin.getInstance().getPlayerManager().getPlayer(player).getMedia().getMediaData().isModifyingTwitterData()) {
             if (twitterMatcher.matches()) {
                 potPlayer.getMedia().setTwitter(event.getMessage());
                 player.sendMessage(Color.translate("&aUpdated your twitter to &6" + event.getMessage() + "&a!"));
@@ -312,7 +312,7 @@ public class PlayerListener implements Listener {
         }
 
         if (CorePlugin.getInstance().getServerManager().isChatEnabled()) {
-            if (!PotPlayer.getPlayer(player).isCurrentlyMuted()) {
+            if (!CorePlugin.getInstance().getPlayerManager().getPlayer(player).isCurrentlyMuted()) {
                 checkChannel(event, player, potPlayer);
             } else {
                 event.setCancelled(true);
@@ -320,7 +320,7 @@ public class PlayerListener implements Listener {
             }
         } else {
             if (player.hasPermission("scandium.chat.bypass")) {
-                if (!PotPlayer.getPlayer(player).isCurrentlyMuted()) {
+                if (!CorePlugin.getInstance().getPlayerManager().getPlayer(player).isCurrentlyMuted()) {
                     checkChannel(event, player, potPlayer);
                 } else {
                     event.setCancelled(true);
@@ -328,7 +328,7 @@ public class PlayerListener implements Listener {
                 }
             } else {
                 event.setCancelled(true);
-                switch (PotPlayer.getPlayer(player).getLanguage()) {
+                switch (CorePlugin.getInstance().getPlayerManager().getPlayer(player).getLanguage()) {
                     case ENGLISH:
                         player.sendMessage(Color.translate("&cThe chat is currently muted. Please try chatting again later."));
                         break;
@@ -365,7 +365,7 @@ public class PlayerListener implements Listener {
             CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.HOST, event.getMessage().replace("@", ""), event.getPlayer())));
         } else {
             long slowChat = CorePlugin.getInstance().getServerManager().getChatSlow();
-            if ((System.currentTimeMillis() < PotPlayer.getPlayer(player).getChatCooldown())) {
+            if ((System.currentTimeMillis() < CorePlugin.getInstance().getPlayerManager().getPlayer(player).getChatCooldown())) {
                 if (player.hasPermission("scandium.chat.cooldown.bypass")) {
                     checkThenSend(event, player, potPlayer, slowChat);
                 } else {
@@ -380,7 +380,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onCommand(PlayerCommandPreprocessEvent event) {
-        PotPlayer potPlayer = PotPlayer.getPlayer(event.getPlayer());
+        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer());
         if (potPlayer.isFrozen()) {
             event.setCancelled(true);
             return;
@@ -399,7 +399,7 @@ public class PlayerListener implements Listener {
 
     private void checkThenSend(AsyncPlayerChatEvent event, Player player, PotPlayer potPlayer, long slowChat) {
         Bukkit.getOnlinePlayers().forEach(player1 -> {
-            PotPlayer potPlayer1 = PotPlayer.getPlayer(player1);
+            PotPlayer potPlayer1 = CorePlugin.getInstance().getPlayerManager().getPlayer(player1);
             if (potPlayer1.isIgnoring(potPlayer.getPlayer())) {
                 if (potPlayer1.isCanSeeGlobalChat()) {
                     player1.sendMessage(Color.translate(CorePlugin.CHAT_FORMAT
@@ -415,7 +415,7 @@ public class PlayerListener implements Listener {
             }
         });
 
-        if (CorePlugin.ANTI_CHAT_SPAM) PotPlayer.getPlayer(player).setChatCooldown(System.currentTimeMillis() + (slowChat > 0L ? slowChat : 3000L)); else PotPlayer.getPlayer(player).setChatCooldown(0L);
+        if (CorePlugin.ANTI_CHAT_SPAM) CorePlugin.getInstance().getPlayerManager().getPlayer(player).setChatCooldown(System.currentTimeMillis() + (slowChat > 0L ? slowChat : 3000L)); else CorePlugin.getInstance().getPlayerManager().getPlayer(player).setChatCooldown(0L);
     }
 
     @EventHandler
@@ -423,7 +423,7 @@ public class PlayerListener implements Listener {
         if (event.getPlayer().hasPermission("scandium.staff"))
             CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onDisconnect(event.getPlayer())));
 
-        PotPlayer potPlayer = PotPlayer.getPlayer(event.getPlayer().getUniqueId());
+        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer().getUniqueId());
         if (potPlayer.isFrozen())
             CorePlugin.getInstance().getPlayerManager().sendDisconnectFreezeMessage(event.getPlayer());
 

@@ -84,7 +84,7 @@ public class LanguageMenu extends AbstractInventoryMenu<CorePlugin> {
 
             ItemStack item = event.getCurrentItem();
             Player player = (Player) event.getWhoClicked();
-            PotPlayer potPlayer = PotPlayer.getPlayer(player);
+            PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
             if (item == null || item.getType() == Material.AIR) return;
             switch (event.getRawSlot()) {

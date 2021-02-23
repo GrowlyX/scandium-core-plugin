@@ -3,6 +3,7 @@ package vip.potclub.core.command.extend.discord;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import vip.potclub.core.CorePlugin;
 import vip.potclub.core.command.BaseCommand;
 import vip.potclub.core.player.PotPlayer;
 import vip.potclub.core.util.Color;
@@ -18,7 +19,7 @@ public class UnsyncCommand extends BaseCommand {
 
         Player player = (Player) sender;
         if (args.length == 0) {
-            PotPlayer potPlayer = PotPlayer.getPlayer(player);
+            PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
             if (potPlayer.isSynced() && (potPlayer.getSyncDiscord() != null)) {
                 potPlayer.setSynced(false);
                 potPlayer.setSyncDiscord(null);

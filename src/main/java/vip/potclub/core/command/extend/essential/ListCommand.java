@@ -36,7 +36,7 @@ public class ListCommand extends BaseCommand {
             });
 
             Bukkit.getOnlinePlayers().stream().map(online ->
-                    PotPlayer.getPlayer(online.getUniqueId()))
+                    CorePlugin.getInstance().getPlayerManager().getPlayer(online.getUniqueId()))
                     .filter(potPlayer -> !potPlayer.isVanished())
                     .sorted(PLAYER_DATA_COMPARATOR.reversed()).limit(100)
                     .forEach(playerData -> playerBuilder.append(Color.translate(
@@ -50,6 +50,6 @@ public class ListCommand extends BaseCommand {
     }
 
     private int getOnlinePlayers() {
-        return (int) Bukkit.getOnlinePlayers().stream().filter(player -> !PotPlayer.getPlayer(player).isVanished()).count();
+        return (int) Bukkit.getOnlinePlayers().stream().filter(player -> !CorePlugin.getInstance().getPlayerManager().getPlayer(player).isVanished()).count();
     }
 }

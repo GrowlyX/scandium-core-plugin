@@ -31,7 +31,7 @@ public class PrefixMenu extends AbstractInventoryMenu<CorePlugin> {
 
     private void update() {
         AtomicInteger i = new AtomicInteger(10);
-        PotPlayer potPlayer = PotPlayer.getPlayer(player);
+        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
         Prefix.getPrefixes().forEach(prefix -> {
             if (i.get() < 34) {
@@ -82,7 +82,7 @@ public class PrefixMenu extends AbstractInventoryMenu<CorePlugin> {
 
             ItemStack item = event.getCurrentItem();
             Player player = (Player) event.getWhoClicked();
-            PotPlayer potPlayer = PotPlayer.getPlayer(player);
+            PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
             if (item.hasItemMeta()) {
                 if (item.getItemMeta().getDisplayName() != null) {

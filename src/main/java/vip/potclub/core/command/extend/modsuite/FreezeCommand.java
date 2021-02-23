@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import vip.potclub.core.CorePlugin;
 import vip.potclub.core.command.BaseCommand;
 import vip.potclub.core.player.PotPlayer;
 import vip.potclub.core.util.Color;
@@ -26,7 +27,7 @@ public class FreezeCommand extends BaseCommand {
             if (args.length > 0) {
                 Player target = Bukkit.getPlayerExact(args[0]);
                 if (target != null) {
-                    PotPlayer potPlayer = PotPlayer.getPlayer(target);
+                    PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
                     if (potPlayer.isFrozen()) {
                         potPlayer.setFrozen(false);
 

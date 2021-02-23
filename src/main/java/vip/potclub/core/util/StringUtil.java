@@ -32,7 +32,7 @@ public final class StringUtil {
         sender.sendMessage(toMessage);
         target.sendMessage(fromMessage);
 
-        PotPlayer potPlayer = PotPlayer.getPlayer(target);
+        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
         if (potPlayer.isCanReceiveDmsSounds()) {
             target.playSound(target.getLocation(), Sound.NOTE_PLING, 1.0F, 1.0F);
         }

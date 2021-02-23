@@ -94,12 +94,12 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu<CorePlugin> {
                 PotPlayer targetPotPlayer = null;
 
                 try {
-                    targetPotPlayer = PotPlayer.getPlayer(document.getString("name"));
+                    targetPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(document.getString("name"));
                 } catch (Exception ignored) {}
 
                 if (targetPotPlayer != null) {
                     targetPotPlayer.getAllGrants().add(newGrant);
-                    targetPotPlayer.setupPlayerCosmetics();
+                    targetPotPlayer.setupPlayer();
                     targetPotPlayer.saveWithoutRemove();
 
                     targetPotPlayer.getPlayer().sendMessage(ChatColor.GREEN + Color.translate("Your rank has been set to " + newGrant.getRank().getColor() + newGrant.getRank().getName() + ChatColor.GREEN + "."));

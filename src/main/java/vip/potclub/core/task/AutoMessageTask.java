@@ -36,7 +36,7 @@ public class AutoMessageTask extends BukkitRunnable {
 
     private void sendMessage(List<String> input) {
         Bukkit.getOnlinePlayers().forEach(player -> {
-            PotPlayer potPlayer = PotPlayer.getPlayer(player);
+            PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
             if (potPlayer.isCanSeeTips()) {
                 if (padding) player.sendMessage("  ");
                 int count = CorePlugin.RANDOM.nextInt(defaultMessages.size());

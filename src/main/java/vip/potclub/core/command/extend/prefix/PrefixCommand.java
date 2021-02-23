@@ -63,7 +63,7 @@ public class PrefixCommand extends BaseCommand {
                             if (target != null) {
                                 Prefix prefix = Prefix.getByName(args[2]);
                                 if (prefix != null) {
-                                    PotPlayer potPlayer = PotPlayer.getPlayer(target);
+                                    PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
                                     potPlayer.getAllPrefixes().add(prefix.getName());
                                     player.sendMessage(Color.translate("&aAdded the prefix " + prefix.getName() + " to " + target.getDisplayName()));
                                 } else {
@@ -86,7 +86,7 @@ public class PrefixCommand extends BaseCommand {
                             if (target != null) {
                                 Prefix prefix = Prefix.getByName(args[2]);
                                 if (prefix != null) {
-                                    PotPlayer potPlayer = PotPlayer.getPlayer(target);
+                                    PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
                                     potPlayer.getAllPrefixes().remove(prefix.getName());
                                     CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPrefixCollection().deleteOne(Filters.eq("_id", prefix.getId())));
 

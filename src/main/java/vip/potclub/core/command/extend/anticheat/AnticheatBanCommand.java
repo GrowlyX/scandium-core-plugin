@@ -33,7 +33,7 @@ public class AnticheatBanCommand extends BaseCommand {
                         Punishment punishment = new Punishment(PunishmentType.BAN, null, target.getUniqueId(), "Console", "[AC] Unfair Advantage", new Date(System.currentTimeMillis()), PunishmentDuration.MONTH.getDuration(), true, new Date(), UUID.randomUUID(), SaltUtil.getRandomSaltedString(7), true);
                         punishment.savePunishment();
 
-                        PotPlayer potPlayer = PotPlayer.getPlayer(target);
+                        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
                         potPlayer.getPunishments().add(punishment);
 
                         CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, null, target.getName(), true);
@@ -51,7 +51,7 @@ public class AnticheatBanCommand extends BaseCommand {
                             Punishment punishment = new Punishment(PunishmentType.BAN, null, target.getUniqueId(), "Console", "[AC] Unfair Advantage", new Date(System.currentTimeMillis()), System.currentTimeMillis() - DateUtil.parseDateDiff(args[1], false), true, new Date(), UUID.randomUUID(), SaltUtil.getRandomSaltedString(7), true);
                             punishment.savePunishment();
 
-                            PotPlayer potPlayer = PotPlayer.getPlayer(target);
+                            PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
                             potPlayer.getPunishments().add(punishment);
 
                             CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, null, target.getName(), true);

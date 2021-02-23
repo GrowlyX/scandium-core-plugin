@@ -82,7 +82,7 @@ public class GrantSelectReasonMenu extends AbstractInventoryMenu<CorePlugin> {
                     new GrantSelectConfirmMenu(this.player, this.document, this.rank, this.duration, "Other", permanent).open(player);
                     break;
                 case 16:
-                    PotPlayer potPlayer = PotPlayer.getPlayer(this.player);
+                    PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(this.player);
                     if (potPlayer != null) {
                         potPlayer.setGrantTarget(this.document);
                         potPlayer.setGrantRank(this.rank);

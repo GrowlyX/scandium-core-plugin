@@ -23,7 +23,7 @@ public class HelpOpCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
-        PotPlayer potPlayer = PotPlayer.getPlayer(player);
+        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
         if (args.length == 0) {
             player.sendMessage(Color.translate("&cUsage: /" + label + " <message>."));
         }

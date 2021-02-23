@@ -100,7 +100,7 @@ public class PunishSelectConfirmMenu extends AbstractInventoryMenu<CorePlugin> {
 
                 PotPlayer potPlayer = null;
                 try {
-                    potPlayer = PotPlayer.getPlayer(nameValue);
+                    potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(nameValue);
                 } catch (Exception ignored) { }
 
                 if (potPlayer != null) potPlayer.getPunishments().add(punishment);

@@ -3,6 +3,7 @@ package vip.potclub.core.command.extend.essential;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import vip.potclub.core.CorePlugin;
 import vip.potclub.core.command.BaseCommand;
 import vip.potclub.core.player.PotPlayer;
 import vip.potclub.core.util.Color;
@@ -18,7 +19,7 @@ public class ReplyCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
-        PotPlayer potPlayer = PotPlayer.getPlayer(player);
+        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
         if (args.length == 0) {
             player.sendMessage(Color.translate("&cUsage: /" + label + " <message>."));
         }

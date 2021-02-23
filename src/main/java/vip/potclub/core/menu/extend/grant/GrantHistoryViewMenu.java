@@ -41,7 +41,7 @@ public class GrantHistoryViewMenu extends AbstractInventoryMenu<CorePlugin> {
 
         AtomicInteger i = new AtomicInteger(10);
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
-        PotPlayer potPlayer = PotPlayer.getPlayer(target);
+        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
 
         potPlayer.getAllGrants().forEach(grant -> {
             if (i.get() <= 34) {
@@ -58,10 +58,10 @@ public class GrantHistoryViewMenu extends AbstractInventoryMenu<CorePlugin> {
                 lore.add("&eIssued On&7: " + network.getMainColor()  + CorePlugin.FORMAT.format(new Date(grant.getDateAdded())));
                 lore.add("&eIssued Reason&7: " + network.getMainColor()  + grant.getReason());
                 lore.add(network.getMainColor() + "&m------------------------------------");
-                lore.add("&aLeft-Click to remove this grant from history.");
+                lore.add("&aRight-Click to remove this grant from history.");
                 lore.add(network.getMainColor() + "&m------------------------------------");
 
-                this.inventory.setItem(i.get(), new InventoryMenuItem(Material.WOOL, (grant.isActive() ? 5 : 14))
+                this.inventory.setItem(i.get(), new InventoryMenuItem(Material.WOOL, (grant.isActive() ? 5 : (grant.isExpired() ? 8 : 14)))
                         .setDisplayName(ChatColor.RED + "#" + grant.getId())
                         .addLore(Color.translate(lore))
                         .create()
@@ -88,7 +88,7 @@ public class GrantHistoryViewMenu extends AbstractInventoryMenu<CorePlugin> {
 
             ItemStack item = event.getCurrentItem();
             Player player = (Player) event.getWhoClicked();
-            PotPlayer potPlayer = PotPlayer.getPlayer(this.target);
+            PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(this.target);
 
             if (item.hasItemMeta()) {
                 if (item.getItemMeta().getDisplayName() != null) {

@@ -97,7 +97,7 @@ public class RedisListener extends JedisPubSub {
                     String connectingPlayer = redisMessage.getParam("PLAYER");
 
                     Bukkit.getOnlinePlayers().forEach(player -> {
-                        PotPlayer potPlayer = PotPlayer.getPlayer(player);
+                        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
                         if (player.hasPermission("scandium.staff")) {
                             if (potPlayer.isCanSeeStaffMessages()) {
                                 player.sendMessage(Color.translate("&3[S] " + connectingPlayer + " &bconnected to &3" + fromConnectServer + "&b."));
@@ -110,7 +110,7 @@ public class RedisListener extends JedisPubSub {
                     String disconnectingPlayer = redisMessage.getParam("PLAYER");
 
                     Bukkit.getOnlinePlayers().forEach(player -> {
-                        PotPlayer potPlayer = PotPlayer.getPlayer(player);
+                        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
                         if (player.hasPermission("scandium.staff")) {
                             if (potPlayer.isCanSeeStaffMessages()) {
                                 player.sendMessage(Color.translate("&3[S] " + disconnectingPlayer + " &bdisconnected from &3" + fromDisconnectServer + "&b."));
@@ -125,7 +125,7 @@ public class RedisListener extends JedisPubSub {
                     String fromServer = redisMessage.getParam("SERVER");
 
                     Bukkit.getOnlinePlayers().forEach(player -> {
-                        PotPlayer potPlayer = PotPlayer.getPlayer(player);
+                        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
                         if (player.hasPermission(chatChannel.getPermission())) {
                             if (potPlayer.isCanSeeStaffMessages()) {
                                 player.sendMessage(CorePlugin.getInstance().getPlayerManager().formatChatChannel(chatChannel, sender, chatMessage, fromServer));
@@ -142,7 +142,7 @@ public class RedisListener extends JedisPubSub {
                             String freezeTarget = redisMessage.getParam("TARGET");
 
                             Bukkit.getOnlinePlayers().forEach(player -> {
-                                PotPlayer potPlayer = PotPlayer.getPlayer(player);
+                                PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
                                 if (player.hasPermission(updateType.getPermission())) {
                                     if (potPlayer.isCanSeeStaffMessages()) {
                                         player.sendMessage(Color.translate(updateType.getPrefix() + "&7[" + fromFreezeServer + "] " + "&3" + freezeExecutor + " &bhas frozen &3" + freezeTarget + "&b."));
@@ -156,7 +156,7 @@ public class RedisListener extends JedisPubSub {
                             String fromUnFreezeServer = redisMessage.getParam("SERVER");
 
                             Bukkit.getOnlinePlayers().forEach(player -> {
-                                PotPlayer potPlayer = PotPlayer.getPlayer(player);
+                                PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
                                 if (player.hasPermission(updateType.getPermission())) {
                                     if (potPlayer.isCanSeeStaffMessages()) {
                                         player.sendMessage(Color.translate(updateType.getPrefix() + "&7[" + fromUnFreezeServer + "] " + "&3" + unfreezeExecutor + " &bhas unfrozen &3" + unfreezeTarget + "&b."));
@@ -170,7 +170,7 @@ public class RedisListener extends JedisPubSub {
                             String fromHelpOpServer = redisMessage.getParam("SERVER");
 
                             Bukkit.getOnlinePlayers().forEach(player -> {
-                                PotPlayer potPlayer = PotPlayer.getPlayer(player);
+                                PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
                                 if (player.hasPermission(updateType.getPermission())) {
                                     if (potPlayer.isCanSeeStaffMessages()) {
                                         player.sendMessage(Color.translate(updateType.getPrefix() + "&7[" + fromHelpOpServer + "] " + "&3" + helpopPlayer + " &bhas requested assistance: &e" + helpopMessage + "&b."));
@@ -185,7 +185,7 @@ public class RedisListener extends JedisPubSub {
                             String fromReportServer = redisMessage.getParam("SERVER");
 
                             Bukkit.getOnlinePlayers().forEach(player -> {
-                                PotPlayer potPlayer = PotPlayer.getPlayer(player);
+                                PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
                                 if (player.hasPermission(updateType.getPermission())) {
                                     if (potPlayer.isCanSeeStaffMessages()) {
                                         player.sendMessage(Color.translate(updateType.getPrefix() + "&7[" + fromReportServer + "] " + "&3" + reportPlayer + " &bhas reported &3" + reportTarget + "&b for &e" + reportMessage + "&b."));
@@ -220,7 +220,7 @@ public class RedisListener extends JedisPubSub {
                         PotPlayer potPlayer = null;
 
                         try {
-                            potPlayer = PotPlayer.getPlayer(punishment.getIssuerName());
+                            potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(punishment.getIssuerName());
                         } catch (Exception ignored) { }
 
                         if (potPlayer != null) potPlayer.getPunishments().add(punishment);
@@ -301,7 +301,7 @@ public class RedisListener extends JedisPubSub {
 
                     Bukkit.getOnlinePlayers().forEach(player -> {
                         if (player.hasPermission(permission)) {
-                            if (PotPlayer.getPlayer(player).isCanSeeStaffMessages()) {
+                            if (CorePlugin.getInstance().getPlayerManager().getPlayer(player).isCanSeeStaffMessages()) {
                                 player.sendMessage(Color.translate(broadcast));
                             }
                         }

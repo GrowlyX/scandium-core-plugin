@@ -25,6 +25,24 @@ public class PlayerManager {
 
     public final List<String> freezeMessage = CorePlugin.getInstance().getConfig().getStringList("freeze-message");
 
+    public PotPlayer getPlayer(Player player) {
+        return PotPlayer.getProfilePlayers().getOrDefault(player.getUniqueId(), null);
+    }
+
+    public PotPlayer getPlayer(UUID uuid) {
+        return PotPlayer.getProfilePlayers().getOrDefault(uuid, null);
+    }
+
+    public PotPlayer getPlayer(String name) {
+        Player player = Bukkit.getPlayer(name);
+
+        if (player == null) {
+            return null;
+        } else {
+            return PotPlayer.getProfilePlayers().getOrDefault(player.getUniqueId(), null);
+        }
+    }
+
     public void vanishPlayer(Player player) {
         Bukkit.getOnlinePlayers()
                 .stream()
@@ -34,7 +52,7 @@ public class PlayerManager {
 
         CorePlugin.getInstance().getNMS().removeExecute(player);
 
-        PotPlayer potPlayer = PotPlayer.getPlayer(player);
+        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
         potPlayer.setVanished(true);
         potPlayer.setupPlayerTag();
 
@@ -44,7 +62,7 @@ public class PlayerManager {
 
     public void modModePlayer(Player player) {
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
-        PotPlayer potPlayer = PotPlayer.getPlayer(player);
+        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
         potPlayer.setStaffMode(true);
         potPlayer.setupPlayerTag();
@@ -69,7 +87,7 @@ public class PlayerManager {
     }
 
     public void unModModePlayer(Player player) {
-        PotPlayer potPlayer = PotPlayer.getPlayer(player);
+        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
         player.getInventory().clear();
         player.getInventory().setContents(potPlayer.getAllItems());
@@ -77,10 +95,6 @@ public class PlayerManager {
 
         potPlayer.setStaffMode(false);
         potPlayer.setupPlayerTag();
-
-        if (CorePlugin.getInstance().getLunarCommand() != null) {
-
-        }
 
         player.sendMessage(Color.translate("&cYou have exited Mod Mode."));
 
@@ -99,7 +113,7 @@ public class PlayerManager {
 
         CorePlugin.getInstance().getNMS().addExecute(player);
 
-        PotPlayer potPlayer = PotPlayer.getPlayer(player);
+        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
         potPlayer.setVanished(false);
         potPlayer.setupPlayerTag();
 

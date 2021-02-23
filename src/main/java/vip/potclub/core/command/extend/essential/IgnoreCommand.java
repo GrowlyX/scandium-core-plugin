@@ -37,7 +37,7 @@ public class IgnoreCommand extends BaseCommand {
         if (args.length > 0) {
             if (label.equalsIgnoreCase("unignore")) {
                 String value = args[0];
-                PotPlayer potPlayer = PotPlayer.getPlayer(player);
+                PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
                 if (!potPlayer.getName().equalsIgnoreCase(value)) {
                     if (potPlayer.getAllIgnoring().contains(value)) {
@@ -50,7 +50,7 @@ public class IgnoreCommand extends BaseCommand {
                     player.sendMessage(Color.translate("&cYou cannot remove yourself to your ignore list!"));
                 }
             } else if (label.equalsIgnoreCase("ignore")) {
-                PotPlayer potPlayer = PotPlayer.getPlayer(player);
+                PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
                 if ("list".equals(args[0])) {
                     player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
                     player.sendMessage(Color.translate(NETWORK.getMainColor() + ChatColor.BOLD.toString() + "Currently Ignoring:"));
