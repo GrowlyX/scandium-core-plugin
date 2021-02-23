@@ -24,6 +24,11 @@ public class Grant {
     private boolean active;
     private boolean permanent;
 
+    // START OF NEW ADDITION (NON-LEGACY)
+    private String issuedServer;
+    private String scope = "global";
+    // END OF NEW ADDITION (NON-LEGACY)
+
     public Grant(UUID issuer, Rank rank, long dateAdded, long duration, String reason, boolean active, boolean permanent) {
         this.issuer = issuer;
         this.rankId = rank.getUuid();
@@ -34,6 +39,27 @@ public class Grant {
         this.permanent = permanent;
 
         this.id = SaltUtil.getRandomSaltedString();
+    }
+
+    public Grant(UUID issuer, Rank rank, long dateAdded, long duration, String reason, boolean active, boolean permanent, String scope) {
+        this.issuer = issuer;
+        this.rankId = rank.getUuid();
+        this.dateAdded = dateAdded;
+        this.duration = duration;
+        this.reason = reason;
+        this.active = active;
+        this.permanent = permanent;
+        this.scope = scope;
+
+        this.id = SaltUtil.getRandomSaltedString();
+    }
+
+    public boolean isGlobal() {
+        return this.scope.equals("global");
+    }
+
+    public boolean isApplicable() {
+        return this.scope.equals(CorePlugin.getInstance().getServerName());
     }
 
     public Rank getRank() {

@@ -10,6 +10,7 @@ import com.solexgames.core.util.Color;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.Document;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -29,7 +30,7 @@ public class GrantSelectReasonMenu extends AbstractInventoryMenu {
     private boolean permanent;
 
     public GrantSelectReasonMenu(Player player, Document document, long duration, Rank rank, boolean permanent) {
-        super("Select grant reason (&63/3&8)", 9*3);
+        super("Select grant reason for: " + (Bukkit.getPlayer(document.getString("name")) != null ? Bukkit.getPlayer(document.getString("name")).getDisplayName() : document.getString("name")), 9*3);
 
         this.player = player;
         this.document = document;

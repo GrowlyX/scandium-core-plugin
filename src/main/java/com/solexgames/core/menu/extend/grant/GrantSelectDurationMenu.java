@@ -11,6 +11,7 @@ import com.solexgames.core.util.Color;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.Document;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -28,7 +29,7 @@ public class GrantSelectDurationMenu extends AbstractInventoryMenu {
     private Rank rank;
 
     public GrantSelectDurationMenu(Player player, Document document, Rank rank) {
-        super("Select grant duration (&62/3&8)", 9*3);
+        super("Select grant duration for: " + (Bukkit.getPlayer(document.getString("name")) != null ? Bukkit.getPlayer(document.getString("name")).getDisplayName() : document.getString("name")), 9*3);
         this.player = player;
         this.document = document;
         this.rank = rank;
@@ -43,10 +44,9 @@ public class GrantSelectDurationMenu extends AbstractInventoryMenu {
         this.inventory.setItem(11, new ItemBuilder(Material.INK_SACK, 2).setDisplayName(network.getMainColor() + "1 Week").addLore(Arrays.asList("", "&eClick to select this duration.")).create());
         this.inventory.setItem(12, new ItemBuilder(Material.INK_SACK, 3).setDisplayName(network.getMainColor() + "1 Month").addLore(Arrays.asList("", "&eClick to select this duration.")).create());
         this.inventory.setItem(13, new ItemBuilder(Material.INK_SACK, 4).setDisplayName(network.getMainColor() + "3 Months").addLore(Arrays.asList("", "&eClick to select this duration.")).create());
-        this.inventory.setItem(14, new ItemBuilder(Material.INK_SACK, 6).setDisplayName(network.getMainColor() + "1 Year").addLore(Arrays.asList("", "&eClick to select this duration.")).create());
-        this.inventory.setItem(15, new ItemBuilder(Material.INK_SACK, 14).setDisplayName(network.getMainColor() + "Permanent").addLore(Arrays.asList("", "&eClick to select this duration.")).create());
+        this.inventory.setItem(14, new ItemBuilder(Material.INK_SACK, 14).setDisplayName(network.getMainColor() + "Permanent").addLore(Arrays.asList("", "&eClick to select this duration.")).create());
 
-        this.inventory.setItem(16, new ItemBuilder(Material.INK_SACK, 14).setDisplayName(network.getMainColor() + "Custom").addLore(Arrays.asList("", "&eClick to select a custom duration.")).create());
+        this.inventory.setItem(16, new ItemBuilder(Material.INK_SACK, 8).setDisplayName(network.getMainColor() + "Custom").addLore(Arrays.asList("", "&eClick to select a custom duration.")).create());
     }
 
     @Override

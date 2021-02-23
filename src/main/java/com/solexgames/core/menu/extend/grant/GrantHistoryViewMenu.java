@@ -4,10 +4,10 @@ import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.AbstractInventoryMenu;
 import com.solexgames.core.menu.extend.grant.remove.GrantRemoveConfirmMenu;
-import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.grant.Grant;
 import com.solexgames.core.util.Color;
+import com.solexgames.core.util.builder.ItemBuilder;
 import lombok.Getter;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
@@ -31,7 +31,7 @@ public class GrantHistoryViewMenu extends AbstractInventoryMenu {
     private final Player target;
 
     public GrantHistoryViewMenu(Player player, Player target) {
-        super("Applicable grants of " + target.getDisplayName(), 9*5);
+        super("Applicable grants of " + target.getDisplayName(), 9 * 5);
         this.player = player;
         this.target = target;
         this.update();
@@ -52,11 +52,11 @@ public class GrantHistoryViewMenu extends AbstractInventoryMenu {
                 lore.add("&eDuration&7: " + network.getMainColor() + (grant.isPermanent() ? "&4Forever" : DurationFormatUtils.formatDurationWords(grant.getDuration(), true, true)));
                 lore.add(network.getMainColor() + "&m------------------------------------");
                 lore.add(network.getSecondaryColor() + "Scopes:");
-                lore.add(" &7- " + network.getMainColor() +"global");
+                lore.add(" &7- " + network.getMainColor() + grant.getScope());
                 lore.add(network.getMainColor() + "&m------------------------------------");
-                lore.add("&eIssued By&7: " + network.getMainColor()  + (grant.getIssuer() != null ? Bukkit.getOfflinePlayer(grant.getIssuer()).getName() : "&4Console"));
-                lore.add("&eIssued On&7: " + network.getMainColor()  + CorePlugin.FORMAT.format(new Date(grant.getDateAdded())));
-                lore.add("&eIssued Reason&7: " + network.getMainColor()  + grant.getReason());
+                lore.add("&eIssued By&7: " + network.getMainColor() + (grant.getIssuer() != null ? Bukkit.getOfflinePlayer(grant.getIssuer()).getName() : "&4Console"));
+                lore.add("&eIssued On&7: " + network.getMainColor() + CorePlugin.FORMAT.format(new Date(grant.getDateAdded())));
+                lore.add("&eIssued Reason&7: " + network.getMainColor() + grant.getReason());
                 lore.add(network.getMainColor() + "&m------------------------------------");
                 lore.add("&aRight-Click to remove this grant from history.");
                 lore.add(network.getMainColor() + "&m------------------------------------");

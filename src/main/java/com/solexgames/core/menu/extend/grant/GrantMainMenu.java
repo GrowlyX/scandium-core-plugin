@@ -10,6 +10,7 @@ import com.solexgames.core.util.Color;
 import com.solexgames.core.util.WoolUtil;
 import lombok.Getter;
 import org.bson.Document;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -31,14 +32,20 @@ public class GrantMainMenu extends AbstractInventoryMenu {
     private final Document document;
 
     public GrantMainMenu(Player player, Document document) {
-        super("Select grant rank (&61/3&8)", 9*3);
+        super("Granting for " + (Bukkit.getPlayer(document.getString("name")) != null ? Bukkit.getPlayer(document.getString("name")).getDisplayName() : document.getString("name")) + Color.translate(" &7(&61/3&7)"), 9*4);
         this.player = player;
         this.document = document;
         this.update();
     }
 
     public void update() {
-        AtomicInteger i = new AtomicInteger(0);
+        int[] stained = new int[] { 0,1,2,3,4,5,6,7,8 };
+
+        for (int i : stained) {
+            this.inventory.setItem(i, new ItemBuilder(Material.STAINED_GLASS_PANE, 7).create());
+        }
+
+        AtomicInteger i = new AtomicInteger(9);
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
         getSortedRanks().forEach(rank -> {
@@ -82,8 +89,16 @@ public class GrantMainMenu extends AbstractInventoryMenu {
                     PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(this.player);
 
                     if (event.getClick() == ClickType.RIGHT) {
-                        this.player.closeInventory();
-                        this.player.sendMessage(Color.translate("&cThis feature is currently in development."));
+                        if (rank != null) {
+                            if ((potPlayer.getActiveGrant().getRank().getWeight() >= rank.getWeight()) && !player.isOp()) {
+                                new GrantSelectDurationMenu(this.player, this.document, rank).open(player);
+                            } else if ((potPlayer.getActiveGrant().getRank().getWeight() >= rank.getWeight()) && player.isOp()) {
+                                new GrantSelectDurationMenu(this.player, this.document, rank).open(player);
+                            } else {
+                                this.player.sendMessage(Color.translate("&cYou cannot grant a rank weight a weight that is higher than yours."));
+                                this.player.closeInventory();
+                            }
+                        }
                     } else {
                         if (rank != null) {
                             if ((potPlayer.getActiveGrant().getRank().getWeight() >= rank.getWeight()) && !player.isOp()) {

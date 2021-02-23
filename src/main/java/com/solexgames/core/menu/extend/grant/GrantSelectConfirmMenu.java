@@ -37,8 +37,10 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
     private final long duration;
     private final boolean permanent;
 
+    private String scope = "global";
+
     public GrantSelectConfirmMenu(Player player, Document document, Rank rank, long duration, String reason, boolean permanent) {
-        super("Confirm grant for &b" + document.getString("name"), 9*5);
+        super("Confirm grant for &b" + (Bukkit.getPlayer(document.getString("name")) != null ? Bukkit.getPlayer(document.getString("name")).getDisplayName() : document.getString("name")), 9*5);
 
         this.player = player;
         this.document = document;
@@ -46,6 +48,20 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
         this.duration = duration;
         this.reason = reason;
         this.permanent = permanent;
+
+        this.update();
+    }
+
+    public GrantSelectConfirmMenu(Player player, Document document, Rank rank, long duration, String reason, boolean permanent, String scope) {
+        super("Confirm grant for &b" + (Bukkit.getPlayer(document.getString("name")) != null ? Bukkit.getPlayer(document.getString("name")).getDisplayName() : document.getString("name")), 9*5);
+
+        this.player = player;
+        this.document = document;
+        this.rank = rank;
+        this.duration = duration;
+        this.reason = reason;
+        this.permanent = permanent;
+        this.scope = scope;
 
         this.update();
     }
@@ -64,8 +80,9 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
                     network.getSecondaryColor() + "Rank: " + network.getMainColor() + rank.getColor() + rank.getName(),
                     network.getSecondaryColor() + "Duration: " + network.getMainColor()  + (isPermanent() ? "&4Forever" : DurationFormatUtils.formatDurationWords(duration, true, true)),
                     network.getSecondaryColor() + "Reason: " + network.getMainColor()  + reason,
+                    network.getSecondaryColor() + "Scopes: " + network.getMainColor()  + scope,
                     "",
-                    "&aClick to confirm this grant!",
+                    "&aLeft-Click to confirm this grant!",
                     network.getMainColor() + "&m--------------------------------"
             )).create());
         }
@@ -91,7 +108,14 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
 
             if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR) return;
             if (ChatColor.stripColor(Color.translate(event.getCurrentItem().getItemMeta().getDisplayName())).contains("Confirm")) {
-                Grant newGrant = new Grant(player.getUniqueId(), rank, System.currentTimeMillis(), System.currentTimeMillis() - duration, reason, true, permanent);
+                Grant newGrant;
+
+                if (scope.equals("global")) {
+                    newGrant = new Grant(player.getUniqueId(), rank, System.currentTimeMillis(), System.currentTimeMillis() - duration, reason, true, permanent);
+                } else {
+                    newGrant = new Grant(player.getUniqueId(), rank, System.currentTimeMillis(), System.currentTimeMillis() - duration, reason, true, permanent, this.scope);
+                }
+
                 PotPlayer targetPotPlayer = null;
 
                 try {
@@ -125,7 +149,6 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
 
                     player.sendMessage(Color.translate(network.getSecondaryColor() + "You've granted " + uuidStringEntry.getValue() + network.getSecondaryColor() + " the rank " + rank.getColor() + rank.getName() + network.getSecondaryColor() + " for " + network.getMainColor() + this.getReason() + network.getSecondaryColor() + "."));
                 }
-
                 player.closeInventory();
             } else if (ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()).contains("Cancel")) {
                 player.sendMessage(Color.translate("&cYou've cancelled the current granting process."));
