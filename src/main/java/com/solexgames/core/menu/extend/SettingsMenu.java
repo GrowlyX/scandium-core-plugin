@@ -2,7 +2,7 @@ package com.solexgames.core.menu.extend;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.menu.AbstractInventoryMenu;
-import com.solexgames.core.menu.InventoryMenuItem;
+import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.PotPlayer;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 
 @Getter
 @Setter
-public class SettingsMenu extends AbstractInventoryMenu<CorePlugin> {
+public class SettingsMenu extends AbstractInventoryMenu {
 
     private Player player;
 
@@ -24,9 +24,9 @@ public class SettingsMenu extends AbstractInventoryMenu<CorePlugin> {
         this.update();
     }
 
-    private void update() {
+    public void update() {
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(this.player);
-        this.inventory.setItem(2, new InventoryMenuItem(Material.PAPER)
+        this.inventory.setItem(2, new ItemBuilder(Material.PAPER)
                 .setDisplayName("&3Global Chat")
                 .addLore(
                         "",
@@ -39,7 +39,7 @@ public class SettingsMenu extends AbstractInventoryMenu<CorePlugin> {
                 )
                 .create()
         );
-        this.inventory.setItem(3, new InventoryMenuItem(Material.EXP_BOTTLE)
+        this.inventory.setItem(3, new ItemBuilder(Material.EXP_BOTTLE)
                 .setDisplayName("&3Server Tips")
                 .addLore(
                         "",
@@ -52,7 +52,7 @@ public class SettingsMenu extends AbstractInventoryMenu<CorePlugin> {
                 )
                 .create()
         );
-        this.inventory.setItem(4, new InventoryMenuItem(Material.EMERALD)
+        this.inventory.setItem(4, new ItemBuilder(Material.EMERALD)
                 .setDisplayName("&3Receive DMs")
                 .addLore(
                         "",
@@ -65,7 +65,7 @@ public class SettingsMenu extends AbstractInventoryMenu<CorePlugin> {
                 )
                 .create()
         );
-        this.inventory.setItem(5, new InventoryMenuItem(Material.JUKEBOX)
+        this.inventory.setItem(5, new ItemBuilder(Material.JUKEBOX)
                 .setDisplayName("&3DMs Sounds")
                 .addLore(
                         "",
@@ -79,7 +79,7 @@ public class SettingsMenu extends AbstractInventoryMenu<CorePlugin> {
                 .create()
         );
         if (player.hasPermission("scandium.staff")) {
-            this.inventory.setItem(6, new InventoryMenuItem(Material.BLAZE_POWDER)
+            this.inventory.setItem(6, new ItemBuilder(Material.BLAZE_POWDER)
                     .setDisplayName("&3Staff Messages")
                     .addLore(
                             "",
@@ -93,7 +93,7 @@ public class SettingsMenu extends AbstractInventoryMenu<CorePlugin> {
                     .create()
             );
         } else {
-            this.inventory.setItem(6, new InventoryMenuItem(Material.BLAZE_POWDER)
+            this.inventory.setItem(6, new ItemBuilder(Material.BLAZE_POWDER)
                     .setDisplayName("&3Global Broadcasts")
                     .addLore(
                             "",

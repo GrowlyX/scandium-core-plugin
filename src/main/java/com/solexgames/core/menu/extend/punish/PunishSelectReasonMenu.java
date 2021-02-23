@@ -2,7 +2,7 @@ package com.solexgames.core.menu.extend.punish;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.menu.AbstractInventoryMenu;
-import com.solexgames.core.menu.InventoryMenuItem;
+import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.punishment.PunishmentType;
 import com.solexgames.core.util.Color;
@@ -18,7 +18,7 @@ import java.util.Arrays;
 
 @Getter
 @Setter
-public class PunishSelectReasonMenu extends AbstractInventoryMenu<CorePlugin> {
+public class PunishSelectReasonMenu extends AbstractInventoryMenu {
 
     private Player player;
     private String target;
@@ -32,14 +32,14 @@ public class PunishSelectReasonMenu extends AbstractInventoryMenu<CorePlugin> {
         this.update();
     }
 
-    private void update() {
-        this.inventory.setItem(10, new InventoryMenuItem(Material.INK_SACK, 1).setDisplayName("&6Unfair Advantage").addLore(Arrays.asList("", "&eClick to select this reason.")).create());
-        this.inventory.setItem(11, new InventoryMenuItem(Material.INK_SACK, 2).setDisplayName("&6Chat Abuse").addLore(Arrays.asList("", "&eClick to select this reason.")).create());
-        this.inventory.setItem(12, new InventoryMenuItem(Material.INK_SACK, 3).setDisplayName("&6Camping").addLore(Arrays.asList("", "&eClick to select this reason.")).create());
-        this.inventory.setItem(13, new InventoryMenuItem(Material.INK_SACK, 4).setDisplayName("&6Threats").addLore(Arrays.asList("", "&eClick to select this reason.")).create());
-        this.inventory.setItem(14, new InventoryMenuItem(Material.INK_SACK, 5).setDisplayName("&6Appealed").addLore(Arrays.asList("", "&eClick to select this reason.")).create());
+    public void update() {
+        this.inventory.setItem(10, new ItemBuilder(Material.INK_SACK, 1).setDisplayName("&6Unfair Advantage").addLore(Arrays.asList("", "&eClick to select this reason.")).create());
+        this.inventory.setItem(11, new ItemBuilder(Material.INK_SACK, 2).setDisplayName("&6Chat Abuse").addLore(Arrays.asList("", "&eClick to select this reason.")).create());
+        this.inventory.setItem(12, new ItemBuilder(Material.INK_SACK, 3).setDisplayName("&6Camping").addLore(Arrays.asList("", "&eClick to select this reason.")).create());
+        this.inventory.setItem(13, new ItemBuilder(Material.INK_SACK, 4).setDisplayName("&6Threats").addLore(Arrays.asList("", "&eClick to select this reason.")).create());
+        this.inventory.setItem(14, new ItemBuilder(Material.INK_SACK, 5).setDisplayName("&6Appealed").addLore(Arrays.asList("", "&eClick to select this reason.")).create());
 
-        this.inventory.setItem(16, new InventoryMenuItem(Material.INK_SACK, 8).setDisplayName("&6Custom").addLore(Arrays.asList("", "&eClick to type a custom reason.")).create());
+        this.inventory.setItem(16, new ItemBuilder(Material.INK_SACK, 8).setDisplayName("&6Custom").addLore(Arrays.asList("", "&eClick to type a custom reason.")).create());
     }
 
     @Override

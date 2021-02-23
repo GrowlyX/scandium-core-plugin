@@ -3,7 +3,7 @@ package com.solexgames.core.menu.extend.lang;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.LanguageType;
 import com.solexgames.core.menu.AbstractInventoryMenu;
-import com.solexgames.core.menu.InventoryMenuItem;
+import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
 import lombok.Getter;
@@ -16,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
 
 @Getter
 @Setter
-public class LanguageMenu extends AbstractInventoryMenu<CorePlugin> {
+public class LanguageMenu extends AbstractInventoryMenu {
 
     private Player player;
 
@@ -26,8 +26,8 @@ public class LanguageMenu extends AbstractInventoryMenu<CorePlugin> {
         this.update();
     }
 
-    private void update() {
-        this.inventory.setItem(2, new InventoryMenuItem(Material.INK_SACK, 11)
+    public void update() {
+        this.inventory.setItem(2, new ItemBuilder(Material.INK_SACK, 11)
                 .setDisplayName("&eEnglish")
                 .addLore(
                         "",
@@ -36,7 +36,7 @@ public class LanguageMenu extends AbstractInventoryMenu<CorePlugin> {
                 )
                 .create()
         );
-        this.inventory.setItem(3, new InventoryMenuItem(Material.INK_SACK, 14)
+        this.inventory.setItem(3, new ItemBuilder(Material.INK_SACK, 14)
                 .setDisplayName("&6Español")
                 .addLore(
                         "",
@@ -45,7 +45,7 @@ public class LanguageMenu extends AbstractInventoryMenu<CorePlugin> {
                 )
                 .create()
         );
-        this.inventory.setItem(4, new InventoryMenuItem(Material.INK_SACK, 12)
+        this.inventory.setItem(4, new ItemBuilder(Material.INK_SACK, 12)
                 .setDisplayName("&bFrançais")
                 .addLore(
                         "",
@@ -54,7 +54,7 @@ public class LanguageMenu extends AbstractInventoryMenu<CorePlugin> {
                 )
                 .create()
         );
-        this.inventory.setItem(5, new InventoryMenuItem(Material.INK_SACK, 10)
+        this.inventory.setItem(5, new ItemBuilder(Material.INK_SACK, 10)
                 .setDisplayName("&aItaliano")
                 .addLore(
                         "",
@@ -63,7 +63,7 @@ public class LanguageMenu extends AbstractInventoryMenu<CorePlugin> {
                 )
                 .create()
         );
-        this.inventory.setItem(6, new InventoryMenuItem(Material.INK_SACK, 1)
+        this.inventory.setItem(6, new ItemBuilder(Material.INK_SACK, 1)
                 .setDisplayName("&cDeutsch")
                 .addLore(
                         "",

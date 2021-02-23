@@ -3,7 +3,7 @@ package com.solexgames.core.menu.extend.punish;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.AbstractInventoryMenu;
-import com.solexgames.core.menu.InventoryMenuItem;
+import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.punishment.PunishmentDuration;
 import com.solexgames.core.player.punishment.PunishmentType;
 import lombok.Getter;
@@ -16,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
 
 @Getter
 @Setter
-public class PunishSelectDurationMenu extends AbstractInventoryMenu<CorePlugin> {
+public class PunishSelectDurationMenu extends AbstractInventoryMenu {
 
     private Player player;
     private String target;
@@ -32,15 +32,15 @@ public class PunishSelectDurationMenu extends AbstractInventoryMenu<CorePlugin> 
         this.update();
     }
 
-    private void update() {
+    public void update() {
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
-        this.inventory.setItem(10, new InventoryMenuItem(Material.INK_SACK, 1).setDisplayName(network.getSecondaryColor() + "1 Day").create());
-        this.inventory.setItem(11, new InventoryMenuItem(Material.INK_SACK, 2).setDisplayName(network.getSecondaryColor() + "1 Week").create());
-        this.inventory.setItem(12, new InventoryMenuItem(Material.INK_SACK, 3).setDisplayName(network.getSecondaryColor() + "1 Month").create());
-        this.inventory.setItem(13, new InventoryMenuItem(Material.INK_SACK, 4).setDisplayName(network.getSecondaryColor() + "3 Months").create());
-        this.inventory.setItem(14, new InventoryMenuItem(Material.INK_SACK, 5).setDisplayName(network.getSecondaryColor() + "6 Months").create());
-        this.inventory.setItem(15, new InventoryMenuItem(Material.INK_SACK, 6).setDisplayName(network.getSecondaryColor() + "1 Year").create());
-        this.inventory.setItem(16, new InventoryMenuItem(Material.INK_SACK, 7).setDisplayName(network.getSecondaryColor() + "&4Permanent").create());
+        this.inventory.setItem(10, new ItemBuilder(Material.INK_SACK, 1).setDisplayName(network.getSecondaryColor() + "1 Day").create());
+        this.inventory.setItem(11, new ItemBuilder(Material.INK_SACK, 2).setDisplayName(network.getSecondaryColor() + "1 Week").create());
+        this.inventory.setItem(12, new ItemBuilder(Material.INK_SACK, 3).setDisplayName(network.getSecondaryColor() + "1 Month").create());
+        this.inventory.setItem(13, new ItemBuilder(Material.INK_SACK, 4).setDisplayName(network.getSecondaryColor() + "3 Months").create());
+        this.inventory.setItem(14, new ItemBuilder(Material.INK_SACK, 5).setDisplayName(network.getSecondaryColor() + "6 Months").create());
+        this.inventory.setItem(15, new ItemBuilder(Material.INK_SACK, 6).setDisplayName(network.getSecondaryColor() + "1 Year").create());
+        this.inventory.setItem(16, new ItemBuilder(Material.INK_SACK, 7).setDisplayName(network.getSecondaryColor() + "&4Permanent").create());
     }
 
     @Override

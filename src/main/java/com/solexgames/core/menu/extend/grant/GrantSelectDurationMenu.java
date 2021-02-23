@@ -3,7 +3,7 @@ package com.solexgames.core.menu.extend.grant;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.AbstractInventoryMenu;
-import com.solexgames.core.menu.InventoryMenuItem;
+import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.punishment.PunishmentDuration;
 import com.solexgames.core.player.ranks.Rank;
@@ -21,7 +21,7 @@ import java.util.Arrays;
 
 @Getter
 @Setter
-public class GrantSelectDurationMenu extends AbstractInventoryMenu<CorePlugin> {
+public class GrantSelectDurationMenu extends AbstractInventoryMenu {
 
     private Player player;
     private Document document;
@@ -36,17 +36,17 @@ public class GrantSelectDurationMenu extends AbstractInventoryMenu<CorePlugin> {
         this.update();
     }
 
-    private void update() {
+    public void update() {
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
-        this.inventory.setItem(10, new InventoryMenuItem(Material.INK_SACK, 1).setDisplayName(network.getMainColor() + "1 Day").addLore(Arrays.asList("", "&eClick to select this duration.")).create());
-        this.inventory.setItem(11, new InventoryMenuItem(Material.INK_SACK, 2).setDisplayName(network.getMainColor() + "1 Week").addLore(Arrays.asList("", "&eClick to select this duration.")).create());
-        this.inventory.setItem(12, new InventoryMenuItem(Material.INK_SACK, 3).setDisplayName(network.getMainColor() + "1 Month").addLore(Arrays.asList("", "&eClick to select this duration.")).create());
-        this.inventory.setItem(13, new InventoryMenuItem(Material.INK_SACK, 4).setDisplayName(network.getMainColor() + "3 Months").addLore(Arrays.asList("", "&eClick to select this duration.")).create());
-        this.inventory.setItem(14, new InventoryMenuItem(Material.INK_SACK, 6).setDisplayName(network.getMainColor() + "1 Year").addLore(Arrays.asList("", "&eClick to select this duration.")).create());
-        this.inventory.setItem(15, new InventoryMenuItem(Material.INK_SACK, 14).setDisplayName(network.getMainColor() + "Permanent").addLore(Arrays.asList("", "&eClick to select this duration.")).create());
+        this.inventory.setItem(10, new ItemBuilder(Material.INK_SACK, 1).setDisplayName(network.getMainColor() + "1 Day").addLore(Arrays.asList("", "&eClick to select this duration.")).create());
+        this.inventory.setItem(11, new ItemBuilder(Material.INK_SACK, 2).setDisplayName(network.getMainColor() + "1 Week").addLore(Arrays.asList("", "&eClick to select this duration.")).create());
+        this.inventory.setItem(12, new ItemBuilder(Material.INK_SACK, 3).setDisplayName(network.getMainColor() + "1 Month").addLore(Arrays.asList("", "&eClick to select this duration.")).create());
+        this.inventory.setItem(13, new ItemBuilder(Material.INK_SACK, 4).setDisplayName(network.getMainColor() + "3 Months").addLore(Arrays.asList("", "&eClick to select this duration.")).create());
+        this.inventory.setItem(14, new ItemBuilder(Material.INK_SACK, 6).setDisplayName(network.getMainColor() + "1 Year").addLore(Arrays.asList("", "&eClick to select this duration.")).create());
+        this.inventory.setItem(15, new ItemBuilder(Material.INK_SACK, 14).setDisplayName(network.getMainColor() + "Permanent").addLore(Arrays.asList("", "&eClick to select this duration.")).create());
 
-        this.inventory.setItem(16, new InventoryMenuItem(Material.INK_SACK, 14).setDisplayName(network.getMainColor() + "Custom").addLore(Arrays.asList("", "&eClick to select a custom duration.")).create());
+        this.inventory.setItem(16, new ItemBuilder(Material.INK_SACK, 14).setDisplayName(network.getMainColor() + "Custom").addLore(Arrays.asList("", "&eClick to select a custom duration.")).create());
     }
 
     @Override

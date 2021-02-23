@@ -3,7 +3,7 @@ package com.solexgames.core.menu.extend;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.AbstractInventoryMenu;
-import com.solexgames.core.menu.InventoryMenuItem;
+import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.util.Color;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +15,7 @@ import org.bukkit.inventory.ItemStack;
 
 @Getter
 @Setter
-public class ScandiumMenu extends AbstractInventoryMenu<CorePlugin> {
+public class ScandiumMenu extends AbstractInventoryMenu {
 
     private Player player;
 
@@ -25,8 +25,8 @@ public class ScandiumMenu extends AbstractInventoryMenu<CorePlugin> {
         this.update();
     }
 
-    private void update() {
-        this.inventory.setItem(2, new InventoryMenuItem(Material.INK_SACK, 11)
+    public void update() {
+        this.inventory.setItem(2, new ItemBuilder(Material.INK_SACK, 11)
                 .setDisplayName("&eReload Files")
                 .addLore(
                         "",
@@ -38,7 +38,7 @@ public class ScandiumMenu extends AbstractInventoryMenu<CorePlugin> {
                 .create()
         );
 
-        this.inventory.setItem(4, new InventoryMenuItem(Material.INK_SACK, 6)
+        this.inventory.setItem(4, new ItemBuilder(Material.INK_SACK, 6)
                 .setDisplayName("&bScandium Core")
                 .addLore(
                         "",
@@ -54,7 +54,7 @@ public class ScandiumMenu extends AbstractInventoryMenu<CorePlugin> {
         );
 
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
-        this.inventory.setItem(6, new InventoryMenuItem(Material.INK_SACK, 14)
+        this.inventory.setItem(6, new ItemBuilder(Material.INK_SACK, 14)
                 .setDisplayName("&6Network Info &7(" + network.getServerName() + ")")
                 .addLore(
                         "",

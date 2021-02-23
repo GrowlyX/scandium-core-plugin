@@ -5,7 +5,7 @@ import com.mongodb.client.model.ReplaceOptions;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.AbstractInventoryMenu;
-import com.solexgames.core.menu.InventoryMenuItem;
+import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.grant.Grant;
 import com.solexgames.core.player.ranks.Rank;
@@ -26,7 +26,7 @@ import java.io.IOException;
 import java.util.*;
 
 @Getter
-public class GrantSelectConfirmMenu extends AbstractInventoryMenu<CorePlugin> {
+public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
 
     private final Player player;
     private final Document document;
@@ -50,14 +50,14 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu<CorePlugin> {
         this.update();
     }
 
-    private void update() {
+    public void update() {
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
         int[] intsConfirm = new int[] { 10,11,12,19,20,21,28,29,30 };
         int[] intsDecline = new int[] { 14,15,16,23,24,25,32,33,34 };
 
         for (int i : intsConfirm) {
-            this.inventory.setItem(i, new InventoryMenuItem(Material.STAINED_CLAY, 5).setDisplayName("&aConfirm Grant").addLore(Arrays.asList(
+            this.inventory.setItem(i, new ItemBuilder(Material.STAINED_CLAY, 5).setDisplayName("&aConfirm Grant").addLore(Arrays.asList(
                     network.getMainColor() + "&m--------------------------------",
                     network.getSecondaryColor() + "Issuer: " + network.getMainColor() + player.getDisplayName(),
                     network.getSecondaryColor() + "Target: " + network.getMainColor() + (Bukkit.getPlayer(document.getString("name")) != null ? Bukkit.getPlayer(document.getString("name")).getDisplayName() : document.getString("name")),
@@ -71,7 +71,7 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu<CorePlugin> {
         }
 
         for (int i : intsDecline) {
-            this.inventory.setItem(i, new InventoryMenuItem(Material.STAINED_CLAY, 14).setDisplayName("&cCancel Grant").addLore(Arrays.asList(
+            this.inventory.setItem(i, new ItemBuilder(Material.STAINED_CLAY, 14).setDisplayName("&cCancel Grant").addLore(Arrays.asList(
                     "",
                     "&aClick to cancel this grant!"
             )).create());

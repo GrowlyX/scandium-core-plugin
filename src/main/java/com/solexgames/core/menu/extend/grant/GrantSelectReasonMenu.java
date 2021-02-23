@@ -3,7 +3,7 @@ package com.solexgames.core.menu.extend.grant;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.AbstractInventoryMenu;
-import com.solexgames.core.menu.InventoryMenuItem;
+import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.util.Color;
@@ -20,7 +20,7 @@ import java.util.Arrays;
 
 @Getter
 @Setter
-public class GrantSelectReasonMenu extends AbstractInventoryMenu<CorePlugin> {
+public class GrantSelectReasonMenu extends AbstractInventoryMenu {
 
     private Player player;
     private Document document;
@@ -40,16 +40,16 @@ public class GrantSelectReasonMenu extends AbstractInventoryMenu<CorePlugin> {
         this.update();
     }
 
-    private void update() {
+    public void update() {
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
-        this.inventory.setItem(10, new InventoryMenuItem(Material.INK_SACK, 1).setDisplayName(network.getMainColor() + "Rank Migration").addLore(Arrays.asList("", "&7Click to select this reason.")).create());
-        this.inventory.setItem(11, new InventoryMenuItem(Material.INK_SACK, 2).setDisplayName(network.getMainColor() + "Promotion").addLore(Arrays.asList("", "&7Click to select this reason.")).create());
-        this.inventory.setItem(12, new InventoryMenuItem(Material.INK_SACK, 3).setDisplayName(network.getMainColor() + "Demotion").addLore(Arrays.asList("", "&7Click to select this reason.")).create());
-        this.inventory.setItem(13, new InventoryMenuItem(Material.INK_SACK, 4).setDisplayName(network.getMainColor() + "Buycraft Issues").addLore(Arrays.asList("", "&7Click to select this reason.")).create());
-        this.inventory.setItem(14, new InventoryMenuItem(Material.INK_SACK, 5).setDisplayName(network.getMainColor() + "Other").addLore(Arrays.asList("", "&7Click to select this reason.")).create());
+        this.inventory.setItem(10, new ItemBuilder(Material.INK_SACK, 1).setDisplayName(network.getMainColor() + "Rank Migration").addLore(Arrays.asList("", "&7Click to select this reason.")).create());
+        this.inventory.setItem(11, new ItemBuilder(Material.INK_SACK, 2).setDisplayName(network.getMainColor() + "Promotion").addLore(Arrays.asList("", "&7Click to select this reason.")).create());
+        this.inventory.setItem(12, new ItemBuilder(Material.INK_SACK, 3).setDisplayName(network.getMainColor() + "Demotion").addLore(Arrays.asList("", "&7Click to select this reason.")).create());
+        this.inventory.setItem(13, new ItemBuilder(Material.INK_SACK, 4).setDisplayName(network.getMainColor() + "Buycraft Issues").addLore(Arrays.asList("", "&7Click to select this reason.")).create());
+        this.inventory.setItem(14, new ItemBuilder(Material.INK_SACK, 5).setDisplayName(network.getMainColor() + "Other").addLore(Arrays.asList("", "&7Click to select this reason.")).create());
 
-        this.inventory.setItem(16, new InventoryMenuItem(Material.INK_SACK, 8).setDisplayName(network.getMainColor() + "Custom").addLore(Arrays.asList("", "&7Click to choose a custom reason.")).create());
+        this.inventory.setItem(16, new ItemBuilder(Material.INK_SACK, 8).setDisplayName(network.getMainColor() + "Custom").addLore(Arrays.asList("", "&7Click to choose a custom reason.")).create());
     }
 
     @Override

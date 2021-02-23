@@ -3,7 +3,7 @@ package com.solexgames.core.menu.extend.grant;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.AbstractInventoryMenu;
-import com.solexgames.core.menu.InventoryMenuItem;
+import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.util.Color;
@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Getter
-public class GrantMainMenu extends AbstractInventoryMenu<CorePlugin> {
+public class GrantMainMenu extends AbstractInventoryMenu {
 
     private final Player player;
     private final Document document;
@@ -37,12 +37,12 @@ public class GrantMainMenu extends AbstractInventoryMenu<CorePlugin> {
         this.update();
     }
 
-    private void update() {
+    public void update() {
         AtomicInteger i = new AtomicInteger(0);
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
         getSortedRanks().forEach(rank -> {
-            this.inventory.setItem(i.get(), new InventoryMenuItem(Material.WOOL, ((rank.getColor() != null) ? (ChatColor.getByChar(Color.translate(rank.getColor().replace("&", "").replace("§", ""))) != null) ? WoolUtil.getByColor(ChatColor.getByChar(Color.translate(rank.getColor().replace("&", "").replace("§", "")))) : 0 : 0))
+            this.inventory.setItem(i.get(), new ItemBuilder(Material.WOOL, ((rank.getColor() != null) ? (ChatColor.getByChar(Color.translate(rank.getColor().replace("&", "").replace("§", ""))) != null) ? WoolUtil.getByColor(ChatColor.getByChar(Color.translate(rank.getColor().replace("&", "").replace("§", "")))) : 0 : 0))
                     .addLore(Arrays.asList(
                             network.getMainColor() + "&m--------------------------------",
                             network.getSecondaryColor() + "Priority: " + network.getMainColor() + rank.getWeight(),

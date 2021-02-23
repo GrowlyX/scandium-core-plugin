@@ -2,7 +2,7 @@ package com.solexgames.core.menu.extend;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.menu.AbstractInventoryMenu;
-import com.solexgames.core.menu.InventoryMenuItem;
+import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
@@ -17,7 +17,7 @@ import org.bukkit.inventory.ItemStack;
 
 @Getter
 @Setter
-public class ReportMenu extends AbstractInventoryMenu<CorePlugin> {
+public class ReportMenu extends AbstractInventoryMenu {
 
     private Player player;
     private Player target;
@@ -29,8 +29,8 @@ public class ReportMenu extends AbstractInventoryMenu<CorePlugin> {
         this.update();
     }
 
-    private void update() {
-        this.inventory.setItem(2, new InventoryMenuItem(Material.DIAMOND_SWORD)
+    public void update() {
+        this.inventory.setItem(2, new ItemBuilder(Material.DIAMOND_SWORD)
                 .setDisplayName("&3Combat Hacks")
                 .addLore(
                         "",
@@ -40,7 +40,7 @@ public class ReportMenu extends AbstractInventoryMenu<CorePlugin> {
                 )
                 .create()
         );
-        this.inventory.setItem(3, new InventoryMenuItem(Material.DIAMOND_BOOTS)
+        this.inventory.setItem(3, new ItemBuilder(Material.DIAMOND_BOOTS)
                 .setDisplayName("&3Movement Hacks")
                 .addLore(
                         "",
@@ -50,7 +50,7 @@ public class ReportMenu extends AbstractInventoryMenu<CorePlugin> {
                 )
                 .create()
         );
-        this.inventory.setItem(4, new InventoryMenuItem(Material.SLIME_BALL)
+        this.inventory.setItem(4, new ItemBuilder(Material.SLIME_BALL)
                 .setDisplayName("&3Velocity Hacks")
                 .addLore(
                         "",
@@ -60,7 +60,7 @@ public class ReportMenu extends AbstractInventoryMenu<CorePlugin> {
                 )
                 .create()
         );
-        this.inventory.setItem(5, new InventoryMenuItem(Material.BED)
+        this.inventory.setItem(5, new ItemBuilder(Material.BED)
                 .setDisplayName("&3Gameplay Sabotage")
                 .addLore(
                         "",
@@ -70,7 +70,7 @@ public class ReportMenu extends AbstractInventoryMenu<CorePlugin> {
                 )
                 .create()
         );
-        this.inventory.setItem(6, new InventoryMenuItem(Material.NAME_TAG)
+        this.inventory.setItem(6, new ItemBuilder(Material.NAME_TAG)
                 .setDisplayName("&3Chat Violation")
                 .addLore(
                         "",

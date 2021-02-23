@@ -3,6 +3,7 @@ package com.solexgames.core.player;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import com.solexgames.core.CorePlugin;
+import com.solexgames.core.board.ScoreBoard;
 import com.solexgames.core.enums.LanguageType;
 import com.solexgames.core.media.Media;
 import com.solexgames.core.player.grant.Grant;
@@ -76,6 +77,8 @@ public class PotPlayer {
     private boolean isStaffMode = false;
     private boolean isFrozen = false;
     private boolean isSynced = false;
+
+    private ScoreBoard modModeBoard;
 
     private boolean isGrantEditing = false;
     private Document grantTarget = null;

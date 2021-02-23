@@ -2,7 +2,8 @@ package com.solexgames.core.modsuite;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
-import com.solexgames.core.menu.InventoryMenuItem;
+import com.solexgames.core.menu.extend.modsuite.StaffMenu;
+import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
 import org.bukkit.Bukkit;
@@ -54,7 +55,7 @@ public class ModSuiteListener implements Listener {
                             event.getPlayer().setVelocity(event.getPlayer().getLocation().getDirection().multiply(2.5F));
                             break;
                         case SKULL_ITEM:
-                            event.getPlayer().sendMessage(Color.translate("&aIn development."));
+                            new StaffMenu(event.getPlayer()).open(event.getPlayer());
                             break;
                         case NETHER_STAR:
                             Collections.singletonList(Bukkit.getOnlinePlayers()).get(CorePlugin.RANDOM.nextInt(Bukkit.getOnlinePlayers().size())).stream().findFirst().ifPresent(player -> {
@@ -71,7 +72,7 @@ public class ModSuiteListener implements Listener {
                         case INK_SACK:
                             event.getPlayer().performCommand("vanish");
                             ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
-                            event.getPlayer().getInventory().setItem(8, new InventoryMenuItem(Material.INK_SACK, (potPlayer.isVanished() ? 10 : 8)).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + (potPlayer.isVanished() ? "Disable Vanish" : "Enable Vanish")).create());
+                            event.getPlayer().getInventory().setItem(8, new ItemBuilder(Material.INK_SACK, (potPlayer.isVanished() ? 10 : 8)).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + (potPlayer.isVanished() ? "Disable Vanish" : "Enable Vanish")).create());
                             break;
                     }
                     event.getPlayer().updateInventory();

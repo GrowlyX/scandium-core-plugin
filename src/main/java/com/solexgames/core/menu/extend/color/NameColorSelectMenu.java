@@ -2,7 +2,7 @@ package com.solexgames.core.menu.extend.color;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.menu.AbstractInventoryMenu;
-import com.solexgames.core.menu.InventoryMenuItem;
+import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
 import lombok.Getter;
@@ -18,7 +18,7 @@ import java.util.Arrays;
 
 @Getter
 @Setter
-public class NameColorSelectMenu extends AbstractInventoryMenu<CorePlugin> {
+public class NameColorSelectMenu extends AbstractInventoryMenu {
 
     private Player player;
 
@@ -28,14 +28,14 @@ public class NameColorSelectMenu extends AbstractInventoryMenu<CorePlugin> {
         this.update();
     }
 
-    private void update() {
+    public void update() {
         int i = 10;
         for (ChatColor chatColor : ChatColor.values()) {
             if (chatColor != ChatColor.MAGIC) {
                 if (chatColor != ChatColor.STRIKETHROUGH) {
                     if (chatColor != ChatColor.RESET) {
                         if (chatColor != ChatColor.UNDERLINE) {
-                            this.inventory.setItem(i, new InventoryMenuItem(Material.NAME_TAG)
+                            this.inventory.setItem(i, new ItemBuilder(Material.NAME_TAG)
                                     .setDisplayName(chatColor + chatColor.name().replace("_", " "))
                                     .addLore(Arrays.asList(
                                             "&b&m------------------------------------",
@@ -56,7 +56,7 @@ public class NameColorSelectMenu extends AbstractInventoryMenu<CorePlugin> {
             }
         }
 
-        this.inventory.setItem(49, new InventoryMenuItem(Material.BED).setDisplayName("&cReset Chat Color").addLore(Arrays.asList("", "&7Click to reset your", "&7current chat color!")).create());
+        this.inventory.setItem(49, new ItemBuilder(Material.BED).setDisplayName("&cReset Chat Color").addLore(Arrays.asList("", "&7Click to reset your", "&7current chat color!")).create());
     }
 
     @Override

@@ -2,7 +2,7 @@ package com.solexgames.core.menu.extend.media;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.menu.AbstractInventoryMenu;
-import com.solexgames.core.menu.InventoryMenuItem;
+import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
 import lombok.Getter;
@@ -15,7 +15,7 @@ import org.bukkit.inventory.ItemStack;
 
 @Getter
 @Setter
-public class SetMediaMenu extends AbstractInventoryMenu<CorePlugin> {
+public class SetMediaMenu extends AbstractInventoryMenu {
 
     private Player player;
 
@@ -25,8 +25,8 @@ public class SetMediaMenu extends AbstractInventoryMenu<CorePlugin> {
         this.update();
     }
 
-    private void update() {
-        this.inventory.setItem(2, new InventoryMenuItem(Material.INK_SACK, 4)
+    public void update() {
+        this.inventory.setItem(2, new ItemBuilder(Material.INK_SACK, 4)
                 .setDisplayName("&9Discord")
                 .addLore(
                         "",
@@ -36,7 +36,7 @@ public class SetMediaMenu extends AbstractInventoryMenu<CorePlugin> {
                 )
                 .create()
         );
-        this.inventory.setItem(3, new InventoryMenuItem(Material.INK_SACK, 1)
+        this.inventory.setItem(3, new ItemBuilder(Material.INK_SACK, 1)
                 .setDisplayName("&cYouTube")
                 .addLore(
                         "",
@@ -46,7 +46,7 @@ public class SetMediaMenu extends AbstractInventoryMenu<CorePlugin> {
                 )
                 .create()
         );
-        this.inventory.setItem(4, new InventoryMenuItem(Material.INK_SACK, 12)
+        this.inventory.setItem(4, new ItemBuilder(Material.INK_SACK, 12)
                 .setDisplayName("&bTwitter")
                 .addLore(
                         "",
@@ -56,7 +56,7 @@ public class SetMediaMenu extends AbstractInventoryMenu<CorePlugin> {
                 )
                 .create()
         );
-        this.inventory.setItem(5, new InventoryMenuItem(Material.INK_SACK, 14)
+        this.inventory.setItem(5, new ItemBuilder(Material.INK_SACK, 14)
                 .setDisplayName("&6Instagram")
                 .addLore(
                         "",
@@ -66,7 +66,7 @@ public class SetMediaMenu extends AbstractInventoryMenu<CorePlugin> {
                 )
                 .create()
         );
-        this.inventory.setItem(6, new InventoryMenuItem(Material.INK_SACK, 11)
+        this.inventory.setItem(6, new ItemBuilder(Material.INK_SACK, 11)
                 .setDisplayName("&e???")
                 .addLore(
                         "",

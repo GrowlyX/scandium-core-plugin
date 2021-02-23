@@ -2,9 +2,10 @@ package com.solexgames.core.manager;
 
 import com.mongodb.client.model.Filters;
 import com.solexgames.core.CorePlugin;
+import com.solexgames.core.board.extend.ModSuiteBoard;
 import com.solexgames.core.enums.ChatChannelType;
 import com.solexgames.core.enums.ServerType;
-import com.solexgames.core.menu.InventoryMenuItem;
+import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
@@ -62,21 +63,23 @@ public class PlayerManager {
     public void modModePlayer(Player player) {
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+        ModSuiteBoard modSuiteBoard = new ModSuiteBoard(player);
 
         potPlayer.setStaffMode(true);
         potPlayer.setupPlayerTag();
         potPlayer.setAllArmor(player.getInventory().getArmorContents());
         potPlayer.setAllItems(player.getInventory().getContents());
+        potPlayer.setModModeBoard(modSuiteBoard);
 
         player.getInventory().clear();
 
-        player.getInventory().setItem(0, new InventoryMenuItem(Material.COMPASS).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + "Push Forward").create());
-        player.getInventory().setItem(1, new InventoryMenuItem(Material.SKULL_ITEM, 1).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + "Online Staff").create());
-        player.getInventory().setItem(2, new InventoryMenuItem(Material.NETHER_STAR).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + "Random Player").create());
+        player.getInventory().setItem(0, new ItemBuilder(Material.COMPASS).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + "Push Forward").create());
+        player.getInventory().setItem(1, new ItemBuilder(Material.SKULL_ITEM, 1).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + "Online Staff").create());
+        player.getInventory().setItem(2, new ItemBuilder(Material.NETHER_STAR).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + "Random Player").create());
 
-        player.getInventory().setItem(6, new InventoryMenuItem(Material.BOOK).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + "Inspect Player").create());
-        player.getInventory().setItem(7, new InventoryMenuItem(Material.PACKED_ICE).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + "Freeze Player").create());
-        player.getInventory().setItem(8, new InventoryMenuItem(Material.INK_SACK, (potPlayer.isVanished() ? 10 : 8)).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + (potPlayer.isVanished() ? "Disable Vanish" : "Enable Vanish")).create());
+        player.getInventory().setItem(6, new ItemBuilder(Material.BOOK).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + "Inspect Player").create());
+        player.getInventory().setItem(7, new ItemBuilder(Material.PACKED_ICE).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + "Freeze Player").create());
+        player.getInventory().setItem(8, new ItemBuilder(Material.INK_SACK, (potPlayer.isVanished() ? 10 : 8)).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + (potPlayer.isVanished() ? "Disable Vanish" : "Enable Vanish")).create());
 
         player.updateInventory();
 
@@ -94,6 +97,8 @@ public class PlayerManager {
 
         potPlayer.setStaffMode(false);
         potPlayer.setupPlayerTag();
+        potPlayer.getModModeBoard().deleteBoard();
+        potPlayer.setModModeBoard(null);
 
         player.sendMessage(Color.translate("&cYou have exited Mod Mode."));
 

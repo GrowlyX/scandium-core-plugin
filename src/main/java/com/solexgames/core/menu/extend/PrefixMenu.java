@@ -2,7 +2,7 @@ package com.solexgames.core.menu.extend;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.menu.AbstractInventoryMenu;
-import com.solexgames.core.menu.InventoryMenuItem;
+import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.prefixes.Prefix;
 import com.solexgames.core.util.Color;
@@ -19,7 +19,7 @@ import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Getter
-public class PrefixMenu extends AbstractInventoryMenu<CorePlugin> {
+public class PrefixMenu extends AbstractInventoryMenu {
 
     private final Player player;
 
@@ -29,7 +29,7 @@ public class PrefixMenu extends AbstractInventoryMenu<CorePlugin> {
         this.update();
     }
 
-    private void update() {
+    public void update() {
         AtomicInteger i = new AtomicInteger(10);
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
@@ -53,7 +53,7 @@ public class PrefixMenu extends AbstractInventoryMenu<CorePlugin> {
                 lore.add("  ");
                 lore.add((hasPrefix ? "&eClick to equip this prefix." : "&cYou don't own this prefix."));
 
-                this.inventory.setItem(i.get(), new InventoryMenuItem(Material.INK_SACK, (potPlayer.getAllPrefixes().contains(prefix.getName()) ? 10 : 1))
+                this.inventory.setItem(i.get(), new ItemBuilder(Material.INK_SACK, (potPlayer.getAllPrefixes().contains(prefix.getName()) ? 10 : 1))
                         .setDisplayName((hasPrefix ? "&e" : "&c") + prefix.getName())
                         .addLore(Color.translate(lore))
                         .create()
@@ -69,7 +69,7 @@ public class PrefixMenu extends AbstractInventoryMenu<CorePlugin> {
             }
         });
 
-        this.inventory.setItem(40, new InventoryMenuItem(Material.BED).setDisplayName("&cReset Prefix").addLore(Arrays.asList("", "&7Click to reset your", "&7current applied prefix!")).create());
+        this.inventory.setItem(40, new ItemBuilder(Material.BED).setDisplayName("&cReset Prefix").addLore(Arrays.asList("", "&7Click to reset your", "&7current applied prefix!")).create());
     }
 
     @Override

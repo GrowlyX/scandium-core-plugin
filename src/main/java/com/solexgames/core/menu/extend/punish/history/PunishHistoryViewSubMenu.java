@@ -3,7 +3,7 @@ package com.solexgames.core.menu.extend.punish.history;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.AbstractInventoryMenu;
-import com.solexgames.core.menu.InventoryMenuItem;
+import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.punishment.Punishment;
 import com.solexgames.core.player.punishment.PunishmentType;
 import com.solexgames.core.util.Color;
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @Setter
-public class PunishHistoryViewSubMenu extends AbstractInventoryMenu<CorePlugin> {
+public class PunishHistoryViewSubMenu extends AbstractInventoryMenu {
 
     private String target;
     private PunishmentType punishmentType;
@@ -39,7 +39,7 @@ public class PunishHistoryViewSubMenu extends AbstractInventoryMenu<CorePlugin> 
         this.update();
     }
 
-    private void update() {
+    public void update() {
         AtomicInteger i = new AtomicInteger(10);
         getSortedPunishmentsByType().forEach(punishment -> {
             if (i.get() <= 34) {
@@ -77,7 +77,7 @@ public class PunishHistoryViewSubMenu extends AbstractInventoryMenu<CorePlugin> 
                     lore.add(network.getMainColor() + "&m------------------------------------");
 
 
-                    this.inventory.setItem(i.get(), new InventoryMenuItem(Material.WOOL, (punishment.isActive() ? 5 : 14))
+                    this.inventory.setItem(i.get(), new ItemBuilder(Material.WOOL, (punishment.isActive() ? 5 : 14))
                             .setDisplayName(ChatColor.RED + "#" + punishment.getPunishIdentification() + " &7(" + statusLore + "&7)")
                             .addLore(Color.translate(lore))
                             .create());

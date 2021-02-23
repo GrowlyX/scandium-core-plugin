@@ -1,5 +1,6 @@
 package com.solexgames.core.board;
 
+import com.solexgames.core.util.Color;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
@@ -43,6 +44,8 @@ public abstract class ScoreBoard {
     }
 
     public void setTitle(String title) {
+        title = Color.translate(title);
+
         if (title.length() > 32) title = title.substring(0, 32);
         if (!sidebar.getDisplayName().equals(title)) sidebar.setDisplayName(title);
     }
@@ -58,7 +61,7 @@ public abstract class ScoreBoard {
         String prefix = getFirstSplit(text);
 
         int lastIndex = prefix.lastIndexOf(167);
-        String lastColor = lastIndex >= 14 ? prefix.substring(lastIndex, prefix.length()) : ChatColor.getLastColors(prefix);
+        String lastColor = lastIndex >= 14 ? prefix.substring(lastIndex) : ChatColor.getLastColors(prefix);
 
         if (lastIndex >= 14) prefix = prefix.substring(0, lastIndex);
 
@@ -94,6 +97,11 @@ public abstract class ScoreBoard {
     private String getSecondSplit(String s) {
         if (s.length() > 32) s = s.substring(0, 32);
         return s.length() > 16 ? s.substring(16) : "";
+    }
+
+    public void deleteBoard() {
+        this.player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+        ScoreBoard.getAllBoards().remove(this.getPlayer().getUniqueId());
     }
 
     public abstract void update();

@@ -3,7 +3,7 @@ package com.solexgames.core.menu.extend.punish;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.AbstractInventoryMenu;
-import com.solexgames.core.menu.InventoryMenuItem;
+import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.punishment.Punishment;
 import com.solexgames.core.player.punishment.PunishmentType;
@@ -27,7 +27,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
-public class PunishSelectConfirmMenu extends AbstractInventoryMenu<CorePlugin> {
+public class PunishSelectConfirmMenu extends AbstractInventoryMenu {
 
     private Player player;
     private String target;
@@ -48,7 +48,7 @@ public class PunishSelectConfirmMenu extends AbstractInventoryMenu<CorePlugin> {
         this.update();
     }
 
-    private void update() {
+    public void update() {
 
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
@@ -56,7 +56,7 @@ public class PunishSelectConfirmMenu extends AbstractInventoryMenu<CorePlugin> {
         int[] intsDecline = new int[] { 14,15,16,23,24,25,32,33,34 };
 
         for (int i : intsConfirm) {
-            this.inventory.setItem(i, new InventoryMenuItem(Material.STAINED_CLAY, 5)
+            this.inventory.setItem(i, new ItemBuilder(Material.STAINED_CLAY, 5)
                     .setDisplayName("&cConfirm Punishment")
                     .addLore(
                             "",
@@ -70,7 +70,7 @@ public class PunishSelectConfirmMenu extends AbstractInventoryMenu<CorePlugin> {
         }
 
         for (int i : intsDecline) {
-            this.inventory.setItem(i, new InventoryMenuItem(Material.STAINED_CLAY, 14).setDisplayName("&cCancel Punishment").addLore(Arrays.asList(
+            this.inventory.setItem(i, new ItemBuilder(Material.STAINED_CLAY, 14).setDisplayName("&cCancel Punishment").addLore(Arrays.asList(
                     "",
                     "&eClick to cancel this punishment."
             )).create());

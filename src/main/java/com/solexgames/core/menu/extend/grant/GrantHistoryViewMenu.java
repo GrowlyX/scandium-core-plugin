@@ -3,7 +3,7 @@ package com.solexgames.core.menu.extend.grant;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.AbstractInventoryMenu;
-import com.solexgames.core.menu.InventoryMenuItem;
+import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.grant.Grant;
 import com.solexgames.core.util.Color;
@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Getter
-public class GrantHistoryViewMenu extends AbstractInventoryMenu<CorePlugin> {
+public class GrantHistoryViewMenu extends AbstractInventoryMenu {
 
     private final Player player;
     private final Player target;
@@ -35,7 +35,7 @@ public class GrantHistoryViewMenu extends AbstractInventoryMenu<CorePlugin> {
         this.update();
     }
 
-    private void update() {
+    public void update() {
 
         AtomicInteger i = new AtomicInteger(10);
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
@@ -59,7 +59,7 @@ public class GrantHistoryViewMenu extends AbstractInventoryMenu<CorePlugin> {
                 lore.add("&aRight-Click to remove this grant from history.");
                 lore.add(network.getMainColor() + "&m------------------------------------");
 
-                this.inventory.setItem(i.get(), new InventoryMenuItem(Material.WOOL, (grant.isActive() ? 5 : (grant.isExpired() ? 8 : 14)))
+                this.inventory.setItem(i.get(), new ItemBuilder(Material.WOOL, (grant.isActive() ? 5 : (grant.isExpired() ? 8 : 14)))
                         .setDisplayName(ChatColor.RED + "#" + grant.getId())
                         .addLore(Color.translate(lore))
                         .create()

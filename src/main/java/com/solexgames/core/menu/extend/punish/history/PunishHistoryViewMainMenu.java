@@ -1,8 +1,7 @@
 package com.solexgames.core.menu.extend.punish.history;
 
-import com.solexgames.core.CorePlugin;
 import com.solexgames.core.menu.AbstractInventoryMenu;
-import com.solexgames.core.menu.InventoryMenuItem;
+import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.punishment.PunishmentType;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
 
 @Getter
 @Setter
-public class PunishHistoryViewMainMenu extends AbstractInventoryMenu<CorePlugin> {
+public class PunishHistoryViewMainMenu extends AbstractInventoryMenu {
 
     private Player player;
     private String target;
@@ -26,8 +25,8 @@ public class PunishHistoryViewMainMenu extends AbstractInventoryMenu<CorePlugin>
         this.update();
     }
 
-    private void update() {
-        this.inventory.setItem(2, new InventoryMenuItem(Material.WOOL)
+    public void update() {
+        this.inventory.setItem(2, new ItemBuilder(Material.WOOL)
                 .setDisplayName("&6Warnings")
                 .addLore(
                         "",
@@ -36,7 +35,7 @@ public class PunishHistoryViewMainMenu extends AbstractInventoryMenu<CorePlugin>
                 )
                 .create()
         );
-        this.inventory.setItem(3, new InventoryMenuItem(Material.WOOL, 4)
+        this.inventory.setItem(3, new ItemBuilder(Material.WOOL, 4)
                 .setDisplayName("&6Kicks")
                 .addLore(
                         "&7Click to all view kicks",
@@ -44,7 +43,7 @@ public class PunishHistoryViewMainMenu extends AbstractInventoryMenu<CorePlugin>
                 )
                 .create()
         );
-        this.inventory.setItem(4, new InventoryMenuItem(Material.WOOL, 1)
+        this.inventory.setItem(4, new ItemBuilder(Material.WOOL, 1)
                 .setDisplayName("&6Mutes")
                 .addLore(
                         "&7Click to all view mutes",
@@ -52,7 +51,7 @@ public class PunishHistoryViewMainMenu extends AbstractInventoryMenu<CorePlugin>
                 )
                 .create()
         );
-        this.inventory.setItem(5, new InventoryMenuItem(Material.WOOL, 14)
+        this.inventory.setItem(5, new ItemBuilder(Material.WOOL, 14)
                 .setDisplayName("&6Bans")
                 .addLore(
                         "&7Click to all view bans",
@@ -60,7 +59,7 @@ public class PunishHistoryViewMainMenu extends AbstractInventoryMenu<CorePlugin>
                 )
                 .create()
         );
-        this.inventory.setItem(6, new InventoryMenuItem(Material.WOOL, 15)
+        this.inventory.setItem(6, new ItemBuilder(Material.WOOL, 15)
                 .setDisplayName("&6Blacklists")
                 .addLore(
                         "&7Click to all view blacklists",

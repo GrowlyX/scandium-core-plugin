@@ -1,8 +1,7 @@
 package com.solexgames.core.menu.extend.punish;
 
-import com.solexgames.core.CorePlugin;
 import com.solexgames.core.menu.AbstractInventoryMenu;
-import com.solexgames.core.menu.InventoryMenuItem;
+import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.menu.extend.punish.history.PunishHistoryViewMainMenu;
 import com.solexgames.core.util.Color;
 import lombok.Getter;
@@ -18,7 +17,7 @@ import java.util.Arrays;
 
 @Getter
 @Setter
-public class PunishMainMenu extends AbstractInventoryMenu<CorePlugin> {
+public class PunishMainMenu extends AbstractInventoryMenu {
 
     private Player player;
     private String target;
@@ -30,7 +29,7 @@ public class PunishMainMenu extends AbstractInventoryMenu<CorePlugin> {
         this.update();
     }
 
-    private void update() {
+    public void update() {
 
         ItemStack playerhead = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
         SkullMeta playerheadmeta = (SkullMeta) playerhead.getItemMeta();
@@ -44,7 +43,7 @@ public class PunishMainMenu extends AbstractInventoryMenu<CorePlugin> {
         playerheadmeta.setDisplayName(Color.translate("&aPunishments"));
         playerhead.setItemMeta(playerheadmeta);
 
-        this.inventory.setItem(12, new InventoryMenuItem(Material.INK_SACK, 14)
+        this.inventory.setItem(12, new ItemBuilder(Material.INK_SACK, 14)
                 .setDisplayName("&6Punish")
                 .addLore(
                         "",
@@ -56,7 +55,7 @@ public class PunishMainMenu extends AbstractInventoryMenu<CorePlugin> {
                 .create()
         );
 
-        this.inventory.setItem(14, new InventoryMenuItem(Material.INK_SACK, 6)
+        this.inventory.setItem(14, new ItemBuilder(Material.INK_SACK, 6)
                 .setDisplayName("&6Punishments")
                 .addLore(
                         "",

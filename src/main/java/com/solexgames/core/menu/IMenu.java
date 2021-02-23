@@ -16,11 +16,11 @@ public interface IMenu extends InventoryHolder {
         player.openInventory(this.getInventory());
     }
 
-    void onInventoryClick(InventoryClickEvent event) throws IOException, ParseException;
-
     default void onInventoryDrag(InventoryDragEvent event) {
         if (InventoryUtil.clickedTopInventory(event)) event.setCancelled(true);
     }
 
+    void update();
+    void onInventoryClick(InventoryClickEvent event) throws IOException, ParseException;
     default void onInventoryClose(InventoryCloseEvent event) { }
 }
