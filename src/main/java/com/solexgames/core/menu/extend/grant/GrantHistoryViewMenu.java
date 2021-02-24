@@ -52,10 +52,11 @@ public class GrantHistoryViewMenu extends AbstractInventoryMenu {
                 lore.add("&eDuration&7: " + network.getMainColor() + (grant.isPermanent() ? "&4Forever" : DurationFormatUtils.formatDurationWords(grant.getDuration(), true, true)));
                 lore.add(network.getMainColor() + "&m------------------------------------");
                 lore.add(network.getSecondaryColor() + "Scopes:");
-                lore.add(" &7- " + network.getMainColor() + grant.getScope());
+                lore.add(" &7- " + network.getMainColor() + (grant.getScope() != null ? grant.getScope() : "global"));
                 lore.add(network.getMainColor() + "&m------------------------------------");
                 lore.add("&eIssued By&7: " + network.getMainColor() + (grant.getIssuer() != null ? Bukkit.getOfflinePlayer(grant.getIssuer()).getName() : "&4Console"));
                 lore.add("&eIssued On&7: " + network.getMainColor() + CorePlugin.FORMAT.format(new Date(grant.getDateAdded())));
+                lore.add("&eIssued At&7: " + network.getMainColor() + (grant.getIssuedServer() != null ? grant.getIssuedServer() : "Not Recorded"));
                 lore.add("&eIssued Reason&7: " + network.getMainColor() + grant.getReason());
                 lore.add(network.getMainColor() + "&m------------------------------------");
                 lore.add("&aRight-Click to remove this grant from history.");

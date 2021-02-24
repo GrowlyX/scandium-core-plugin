@@ -28,8 +28,9 @@ public class GrantSelectReasonMenu extends AbstractInventoryMenu {
     private Rank rank;
     private long duration;
     private boolean permanent;
+    private String scope;
 
-    public GrantSelectReasonMenu(Player player, Document document, long duration, Rank rank, boolean permanent) {
+    public GrantSelectReasonMenu(Player player, Document document, long duration, Rank rank, boolean permanent, String scope) {
         super("Select grant reason for: " + (Bukkit.getPlayer(document.getString("name")) != null ? Bukkit.getPlayer(document.getString("name")).getDisplayName() : document.getString("name")), 9*3);
 
         this.player = player;
@@ -37,6 +38,7 @@ public class GrantSelectReasonMenu extends AbstractInventoryMenu {
         this.rank = rank;
         this.duration = duration;
         this.permanent = permanent;
+        this.scope = scope;
 
         this.update();
     }
@@ -68,19 +70,19 @@ public class GrantSelectReasonMenu extends AbstractInventoryMenu {
             if (item == null || item.getType() == Material.AIR) return;
             switch (event.getRawSlot()) {
                 case 10:
-                    new GrantSelectConfirmMenu(this.player, this.document, this.rank, this.duration, "Rank Migration", permanent).open(player);
+                    new GrantSelectConfirmMenu(this.player, this.document, this.rank, this.duration, "Rank Migration", permanent, this.scope).open(player);
                     break;
                 case 11:
-                    new GrantSelectConfirmMenu(this.player, this.document, this.rank, this.duration, "Promotion", permanent).open(player);
+                    new GrantSelectConfirmMenu(this.player, this.document, this.rank, this.duration, "Promotion", permanent, this.scope).open(player);
                     break;
                 case 12:
-                    new GrantSelectConfirmMenu(this.player, this.document, this.rank, this.duration, "Demotion", permanent).open(player);
+                    new GrantSelectConfirmMenu(this.player, this.document, this.rank, this.duration, "Demotion", permanent, this.scope).open(player);
                     break;
                 case 13:
-                    new GrantSelectConfirmMenu(this.player, this.document, this.rank, this.duration, "Buycraft Issues", permanent).open(player);
+                    new GrantSelectConfirmMenu(this.player, this.document, this.rank, this.duration, "Buycraft Issues", permanent, this.scope).open(player);
                     break;
                 case 14:
-                    new GrantSelectConfirmMenu(this.player, this.document, this.rank, this.duration, "Other", permanent).open(player);
+                    new GrantSelectConfirmMenu(this.player, this.document, this.rank, this.duration, "Other", permanent, this.scope).open(player);
                     break;
                 case 16:
                     PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(this.player);
@@ -89,6 +91,7 @@ public class GrantSelectReasonMenu extends AbstractInventoryMenu {
                         potPlayer.setGrantRank(this.rank);
                         potPlayer.setGrantDuration(this.duration);
                         potPlayer.setGrantEditing(true);
+                        potPlayer.setGrantScope(this.scope);
 
                         this.player.closeInventory();
 

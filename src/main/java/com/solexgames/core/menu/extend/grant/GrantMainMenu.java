@@ -3,6 +3,7 @@ package com.solexgames.core.menu.extend.grant;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.AbstractInventoryMenu;
+import com.solexgames.core.menu.extend.grant.scope.GrantScopeSelectMenu;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.ranks.Rank;
@@ -42,7 +43,7 @@ public class GrantMainMenu extends AbstractInventoryMenu {
         int[] stained = new int[] { 0,1,2,3,4,5,6,7,8 };
 
         for (int i : stained) {
-            this.inventory.setItem(i, new ItemBuilder(Material.STAINED_GLASS_PANE, 7).create());
+            this.inventory.setItem(i, new ItemBuilder(Material.STAINED_GLASS_PANE, 7).setDisplayName(" ").create());
         }
 
         AtomicInteger i = new AtomicInteger(9);
@@ -91,20 +92,20 @@ public class GrantMainMenu extends AbstractInventoryMenu {
                     if (event.getClick() == ClickType.RIGHT) {
                         if (rank != null) {
                             if ((potPlayer.getActiveGrant().getRank().getWeight() >= rank.getWeight()) && !player.isOp()) {
-                                new GrantSelectDurationMenu(this.player, this.document, rank).open(player);
+                                new GrantScopeSelectMenu(this.player, this.document, rank).open(player);
                             } else if ((potPlayer.getActiveGrant().getRank().getWeight() >= rank.getWeight()) && player.isOp()) {
-                                new GrantSelectDurationMenu(this.player, this.document, rank).open(player);
+                                new GrantScopeSelectMenu(this.player, this.document, rank).open(player);
                             } else {
                                 this.player.sendMessage(Color.translate("&cYou cannot grant a rank weight a weight that is higher than yours."));
                                 this.player.closeInventory();
                             }
                         }
-                    } else {
+                    } else if (event.getClick() == ClickType.LEFT) {
                         if (rank != null) {
                             if ((potPlayer.getActiveGrant().getRank().getWeight() >= rank.getWeight()) && !player.isOp()) {
-                                new GrantSelectDurationMenu(this.player, this.document, rank).open(player);
+                                new GrantSelectDurationMenu(this.player, this.document, rank, "global").open(player);
                             } else if ((potPlayer.getActiveGrant().getRank().getWeight() >= rank.getWeight()) && player.isOp()) {
-                                new GrantSelectDurationMenu(this.player, this.document, rank).open(player);
+                                new GrantSelectDurationMenu(this.player, this.document, rank, "global").open(player);
                             } else {
                                 this.player.sendMessage(Color.translate("&cYou cannot grant a rank weight a weight that is higher than yours."));
                                 this.player.closeInventory();

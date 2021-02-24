@@ -37,20 +37,7 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
     private final long duration;
     private final boolean permanent;
 
-    private String scope = "global";
-
-    public GrantSelectConfirmMenu(Player player, Document document, Rank rank, long duration, String reason, boolean permanent) {
-        super("Confirm grant for &b" + (Bukkit.getPlayer(document.getString("name")) != null ? Bukkit.getPlayer(document.getString("name")).getDisplayName() : document.getString("name")), 9*5);
-
-        this.player = player;
-        this.document = document;
-        this.rank = rank;
-        this.duration = duration;
-        this.reason = reason;
-        this.permanent = permanent;
-
-        this.update();
-    }
+    private final String scope;
 
     public GrantSelectConfirmMenu(Player player, Document document, Rank rank, long duration, String reason, boolean permanent, String scope) {
         super("Confirm grant for &b" + (Bukkit.getPlayer(document.getString("name")) != null ? Bukkit.getPlayer(document.getString("name")).getDisplayName() : document.getString("name")), 9*5);
@@ -111,7 +98,7 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
                 Grant newGrant;
 
                 if (scope.equals("global")) {
-                    newGrant = new Grant(player.getUniqueId(), rank, System.currentTimeMillis(), System.currentTimeMillis() - duration, reason, true, permanent);
+                    newGrant = new Grant(player.getUniqueId(), rank, System.currentTimeMillis(), System.currentTimeMillis() - duration, reason, true, permanent, "global");
                 } else {
                     newGrant = new Grant(player.getUniqueId(), rank, System.currentTimeMillis(), System.currentTimeMillis() - duration, reason, true, permanent, this.scope);
                 }

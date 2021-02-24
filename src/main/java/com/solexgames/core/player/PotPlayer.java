@@ -85,11 +85,13 @@ public class PotPlayer {
     private Rank grantRank = null;
     private long grantDuration;
     private boolean grantPerm;
+    private String grantScope;
 
     private boolean isGrantDurationEditing = false;
     private Document grantDurationTarget = null;
     private Rank grantDurationRank = null;
     private boolean grantDurationPerm;
+    private String grantDurationScope;
 
     private boolean isReasonEditing = false;
     private PunishmentType reasonType = null;
@@ -406,6 +408,7 @@ public class PotPlayer {
                 .filter(Objects::nonNull)
                 .filter(Grant::isActive)
                 .filter(grant -> !grant.getRank().isHidden())
+                .filter(grant -> (grant.getScope().equals("global") || (grant.getScope().equals(CorePlugin.getInstance().getServerName()))))
                 .findFirst()
                 .orElseGet(() -> new Grant(null, Objects.requireNonNull(Rank.getDefault()), System.currentTimeMillis(), -1L, "Automatic Grant (Default)", true, true));
     }
@@ -446,6 +449,7 @@ public class PotPlayer {
         this.getAllGrants().stream()
                 .filter(Objects::nonNull)
                 .filter(grant -> !grant.isExpired())
+                .filter(grant -> (grant.getScope().equals("global") || (grant.getScope().equals(CorePlugin.getInstance().getServerName()))))
                 .forEach(grant -> {
                     grant.getRank().getPermissions().forEach(s -> this.attachment.setPermission(s.replace("-", ""), !s.startsWith("-")));
                     grant.getRank().getInheritance().stream()

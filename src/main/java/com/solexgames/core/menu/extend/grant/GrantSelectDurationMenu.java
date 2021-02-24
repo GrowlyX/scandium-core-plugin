@@ -27,12 +27,14 @@ public class GrantSelectDurationMenu extends AbstractInventoryMenu {
     private Player player;
     private Document document;
     private Rank rank;
+    private String scope;
 
-    public GrantSelectDurationMenu(Player player, Document document, Rank rank) {
+    public GrantSelectDurationMenu(Player player, Document document, Rank rank, String scope) {
         super("Select grant duration for: " + (Bukkit.getPlayer(document.getString("name")) != null ? Bukkit.getPlayer(document.getString("name")).getDisplayName() : document.getString("name")), 9*3);
         this.player = player;
         this.document = document;
         this.rank = rank;
+        this.scope = scope;
 
         this.update();
     }
@@ -63,30 +65,28 @@ public class GrantSelectDurationMenu extends AbstractInventoryMenu {
             if (item == null || item.getType() == Material.AIR) return;
             switch (event.getRawSlot()) {
                 case 10:
-                    new GrantSelectReasonMenu(this.player, this.document, PunishmentDuration.DAY.getDuration(), this.rank, false).open(player);
+                    new GrantSelectReasonMenu(this.player, this.document, PunishmentDuration.DAY.getDuration(), this.rank, false, this.scope).open(player);
                     break;
                 case 11:
-                    new GrantSelectReasonMenu(this.player, this.document, PunishmentDuration.WEEK.getDuration(), this.rank, false).open(player);
+                    new GrantSelectReasonMenu(this.player, this.document, PunishmentDuration.WEEK.getDuration(), this.rank, false, this.scope).open(player);
                     break;
                 case 12:
-                    new GrantSelectReasonMenu(this.player, this.document, PunishmentDuration.MONTH.getDuration(), this.rank, false).open(player);
+                    new GrantSelectReasonMenu(this.player, this.document, PunishmentDuration.MONTH.getDuration(), this.rank, false, this.scope).open(player);
                     break;
                 case 13:
-                    new GrantSelectReasonMenu(this.player, this.document, PunishmentDuration.MONTH.getDuration() * 3L, this.rank, false).open(player);
+                    new GrantSelectReasonMenu(this.player, this.document, PunishmentDuration.MONTH.getDuration() * 3L, this.rank, false, this.scope).open(player);
                     break;
                 case 14:
-                    new GrantSelectReasonMenu(this.player, this.document, PunishmentDuration.YEAR.getDuration(), this.rank, false).open(player);
-                    break;
-                case 15:
-                    new GrantSelectReasonMenu(this.player, this.document, -1L, this.rank, true).open(player);
+                    new GrantSelectReasonMenu(this.player, this.document, -1L, this.rank, true, this.scope).open(player);
                     break;
                 case 16:
                     PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(this.player);
 
                     potPlayer.setGrantDurationEditing(true);
                     potPlayer.setGrantDurationTarget(this.document);
-                    potPlayer.setGrantPerm(false);
+                    potPlayer.setGrantDurationPerm(false);
                     potPlayer.setGrantDurationRank(this.rank);
+                    potPlayer.setGrantDurationScope(this.scope);
 
                     player.sendMessage(Color.translate("  "));
                     player.sendMessage(Color.translate("&aType in a custom duration in chat!"));

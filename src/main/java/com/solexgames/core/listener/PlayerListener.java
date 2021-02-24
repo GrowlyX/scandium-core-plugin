@@ -203,14 +203,14 @@ public class PlayerListener implements Listener {
                 potPlayer.setGrantDurationTarget(null);
                 potPlayer.setGrantDurationEditing(false);
             } else if (message.equalsIgnoreCase("perm") || message.equalsIgnoreCase("permanent")) {
-                new GrantSelectReasonMenu(player, potPlayer.getGrantDurationTarget(), -1L, potPlayer.getGrantDurationRank(), true).open(player);
+                new GrantSelectReasonMenu(player, potPlayer.getGrantDurationTarget(), -1L, potPlayer.getGrantDurationRank(), true, potPlayer.getGrantDurationScope()).open(player);
 
                 potPlayer.setGrantDurationRank(null);
                 potPlayer.setGrantDurationTarget(null);
                 potPlayer.setGrantDurationEditing(false);
             } else {
                 try {
-                    new GrantSelectReasonMenu(player, potPlayer.getGrantDurationTarget(), System.currentTimeMillis() - DateUtil.parseDateDiff(event.getMessage(), false), potPlayer.getGrantDurationRank(), false).open(player);
+                    new GrantSelectReasonMenu(player, potPlayer.getGrantDurationTarget(), System.currentTimeMillis() - DateUtil.parseDateDiff(event.getMessage(), false), potPlayer.getGrantDurationRank(), false, potPlayer.getGrantDurationScope()).open(player);
 
                     potPlayer.setGrantDurationRank(null);
                     potPlayer.setGrantDurationTarget(null);
@@ -234,7 +234,7 @@ public class PlayerListener implements Listener {
                 potPlayer.setGrantPerm(false);
             } else {
                 player.sendMessage(Color.translate("&aSet the grant reason to &6'" + message + "'&a."));
-                new GrantSelectConfirmMenu(potPlayer.getPlayer(), potPlayer.getGrantTarget(), potPlayer.getGrantRank(), potPlayer.getGrantDuration(), message, potPlayer.isGrantPerm()).open(player);
+                new GrantSelectConfirmMenu(potPlayer.getPlayer(), potPlayer.getGrantTarget(), potPlayer.getGrantRank(), potPlayer.getGrantDuration(), message, potPlayer.isGrantPerm(), potPlayer.getGrantScope()).open(player);
             }
             potPlayer.setGrantEditing(false);
             return;
