@@ -58,8 +58,9 @@ public class CGrantCommand extends BaseCommand {
                                         targetPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(document.getString("name"));
                                     } catch (Exception ignored) {}
 
-                                    Grant newGrant = new Grant(null, rank, System.currentTimeMillis(), -1L, reason, true, true);
+                                    Grant newGrant = new Grant(null, rank, System.currentTimeMillis(), -1L, reason, true, true, "global");
                                     newGrant.setPermanent(true);
+                                    newGrant.setIssuedServer(CorePlugin.getInstance().getServerName());
 
                                     if (targetPotPlayer != null) {
                                         targetPotPlayer.getAllGrants().add(newGrant);
@@ -97,7 +98,8 @@ public class CGrantCommand extends BaseCommand {
                                             targetPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(document.getString("name"));
                                         } catch (Exception ignored) {}
 
-                                        Grant newGrant = new Grant(null, rank, System.currentTimeMillis(), System.currentTimeMillis() - DateUtil.parseDateDiff(args[2], false), reason, true, false);
+                                        Grant newGrant = new Grant(null, rank, System.currentTimeMillis(), System.currentTimeMillis() - DateUtil.parseDateDiff(args[2], false), reason, true, false, "global");
+                                        newGrant.setIssuedServer(CorePlugin.getInstance().getServerName());
 
                                         if (targetPotPlayer != null) {
                                             targetPotPlayer.getAllGrants().add(newGrant);

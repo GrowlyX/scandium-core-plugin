@@ -103,6 +103,8 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
                     newGrant = new Grant(player.getUniqueId(), rank, System.currentTimeMillis(), System.currentTimeMillis() - duration, reason, true, permanent, this.scope);
                 }
 
+                newGrant.setIssuedServer(CorePlugin.getInstance().getServerName());
+
                 PotPlayer targetPotPlayer = null;
 
                 try {
