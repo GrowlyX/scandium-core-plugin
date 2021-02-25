@@ -24,6 +24,7 @@ import com.solexgames.core.command.extend.shutdown.ShutdownCommand;
 import com.solexgames.core.command.extend.warps.WarpCommand;
 import com.solexgames.core.command.extend.web.WebAnnouncementCommand;
 import com.solexgames.core.command.extend.web.WebAnnouncementDeleteCommand;
+import com.solexgames.core.command.extend.whitelist.BetaWhitelistCommand;
 import com.solexgames.core.command.extend.whitelist.WhitelistCommand;
 import com.solexgames.core.database.Database;
 import com.solexgames.core.enums.ServerType;
@@ -246,6 +247,7 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("fly").setExecutor(new FlyCommand());
         this.getCommand("language").setExecutor(new LanguageCommand());
         this.getCommand("whitelist").setExecutor(new WhitelistCommand());
+        this.getCommand("betawl").setExecutor(new BetaWhitelistCommand());
 
         if (this.getServerManager().getNetwork().equals(ServerType.POTCLUBVIP)) {
             this.getCommand("webannouncementdelete").setExecutor(new WebAnnouncementDeleteCommand());

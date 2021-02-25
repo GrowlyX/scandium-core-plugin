@@ -59,14 +59,27 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onConnect(AsyncPlayerPreLoginEvent event) {
         if (CorePlugin.CAN_JOIN) {
-            /*if (CorePlugin.getInstance().getWhitelistConfig().getConfiguration().getBoolean("beta-whitelist")) {
-                if (!CorePlugin.getInstance().getServerManager().getBetaWhitelistedPlayers().contains(event.getName())) {
-                    event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.translateAlternateColorCodes('&', CorePlugin.getInstance().getWhitelistConfig().getConfiguration().getString("whitelisted-msg").replace("<nl>", "\n")));
+            if (CorePlugin.getInstance().getWhitelistConfig().getConfiguration().getBoolean("beta-whitelist")) {
+                if (CorePlugin.getInstance().getWhitelistConfig().getBoolean("beta-whitelist-can-join")) {
+                    if (!CorePlugin.getInstance().getServerManager().getBetaWhitelistedPlayers().contains(event.getName())) {
+                        event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.translateAlternateColorCodes('&', CorePlugin.getInstance().getWhitelistConfig().getConfiguration().getString("beta-whitelisted-msg").replace("<nl>", "\n")));
+                    } else {
+                        if (CorePlugin.getInstance().getWhitelistConfig().getConfiguration().getBoolean("whitelist")) {
+                            if (!CorePlugin.getInstance().getServerManager().getWhitelistedPlayers().contains(event.getName())) {
+                                event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.translateAlternateColorCodes('&', CorePlugin.getInstance().getWhitelistConfig().getConfiguration().getString("whitelisted-msg").replace("<nl>", "\n")));
+                            } else checkDisallow(event);
+                        } else event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.translateAlternateColorCodes('&', CorePlugin.getInstance().getWhitelistConfig().getConfiguration().getString("beta-whitelisted-msg").replace("<nl>", "\n")));
+                        return;
+                    }
                 } else {
-                    checkDisallow(event);
-                    return;
+                    if (CorePlugin.getInstance().getWhitelistConfig().getConfiguration().getBoolean("whitelist")) {
+                        if (!CorePlugin.getInstance().getServerManager().getWhitelistedPlayers().contains(event.getName())) {
+                            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.translateAlternateColorCodes('&', CorePlugin.getInstance().getWhitelistConfig().getConfiguration().getString("whitelisted-msg").replace("<nl>", "\n")));
+
+                        } else checkDisallow(event);
+                    } else event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.translateAlternateColorCodes('&', CorePlugin.getInstance().getWhitelistConfig().getConfiguration().getString("beta-whitelisted-msg").replace("<nl>", "\n")));
                 }
-            } else checkDisallow(event);*/
+            } else checkDisallow(event);
             if (CorePlugin.getInstance().getWhitelistConfig().getConfiguration().getBoolean("whitelist")) {
                 if (!CorePlugin.getInstance().getServerManager().getWhitelistedPlayers().contains(event.getName())) {
                     event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.translateAlternateColorCodes('&', CorePlugin.getInstance().getWhitelistConfig().getConfiguration().getString("whitelisted-msg").replace("<nl>", "\n")));
@@ -99,9 +112,11 @@ public class PlayerListener implements Listener {
     public void onMove(PlayerMoveEvent event) {
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer());
 
-        if (potPlayer.isFrozen()) {
-            event.setCancelled(true);
-            event.getPlayer().teleport(event.getFrom());
+        if (potPlayer != null) {
+            if (potPlayer.isFrozen()) {
+                event.setCancelled(true);
+                event.getPlayer().teleport(event.getFrom());
+            }
         }
     }
 

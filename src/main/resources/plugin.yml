@@ -8,6 +8,7 @@ softdepend: [ProtocolLib, dRobot, ScandiumPAPI]
 load: STARTUP
 
 commands:
+  betawl:
   gmsp:
   modmode:
     aliases: [staffmode, mod, staff]
