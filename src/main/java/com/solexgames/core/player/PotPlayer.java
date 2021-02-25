@@ -43,6 +43,7 @@ public class PotPlayer {
     private List<String> allPrefixes = new ArrayList<>();
     private List<String> allIgnoring = new ArrayList<>();
     private List<String> allFriends = new ArrayList<>();
+    private List<String> userPermissions = new ArrayList<>();
     private List<PotionMessageType> allPurchasedMessages = new ArrayList<>();
 
     private UUID uuid;
@@ -104,8 +105,8 @@ public class PotPlayer {
     private LanguageType language;
     private PermissionAttachment attachment;
 
-    private long chatCooldown;
-    private long commandCooldown;
+    private long chatCooldown = 1L;
+    private long commandCooldown = 1L;
 
     private Date lastJoined;
 
@@ -381,19 +382,21 @@ public class PotPlayer {
             }
         }
 
-        this.getPunishments()
-                .stream()
-                .filter(punishment -> punishment.getPunishmentType().equals(PunishmentType.MUTE))
-                .filter(Punishment::isActive)
-                .filter(punishment -> !punishment.isRemoved())
-                .forEach(punishment -> this.currentlyMuted = true);
+        Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> {
+            this.getPunishments()
+                    .stream()
+                    .filter(punishment -> punishment.getPunishmentType().equals(PunishmentType.MUTE))
+                    .filter(Punishment::isActive)
+                    .filter(punishment -> !punishment.isRemoved())
+                    .forEach(punishment -> this.currentlyMuted = true);
 
-        this.getPunishments()
-                .stream()
-                .filter(punishment -> punishment.getPunishmentType().equals(PunishmentType.BAN))
-                .filter(Punishment::isActive)
-                .filter(punishment -> !punishment.isRemoved())
-                .forEach(punishment -> this.currentlyBanned = true);
+            this.getPunishments()
+                    .stream()
+                    .filter(punishment -> punishment.getPunishmentType().equals(PunishmentType.BAN))
+                    .filter(Punishment::isActive)
+                    .filter(punishment -> !punishment.isRemoved())
+                    .forEach(punishment -> this.currentlyBanned = true);
+        });
 
         this.currentlyOnline = true;
 
@@ -446,17 +449,19 @@ public class PotPlayer {
     }
 
     public void setupPermissions() {
-        this.getAllGrants().stream()
-                .filter(Objects::nonNull)
-                .filter(grant -> !grant.isExpired())
-                .filter(grant -> (grant.getScope() == null || (grant.getScope().equals("global") || (grant.getScope().equals(CorePlugin.getInstance().getServerName())))))
-                .forEach(grant -> {
-                    grant.getRank().getPermissions().forEach(s -> this.attachment.setPermission(s.replace("-", ""), !s.startsWith("-")));
-                    grant.getRank().getInheritance().stream()
-                            .map(Rank::getByUuid)
-                            .filter(Objects::nonNull)
-                            .forEach(rank -> rank.getPermissions().forEach(permission -> this.attachment.setPermission(permission.replace("-", ""), !permission.startsWith("-"))));
-                });
+        Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> {
+            this.getAllGrants().stream()
+                    .filter(Objects::nonNull)
+                    .filter(grant -> !grant.isExpired())
+                    .filter(grant -> (grant.getScope() == null || (grant.getScope().equals("global") || (grant.getScope().equals(CorePlugin.getInstance().getServerName())))))
+                    .forEach(grant -> {
+                        grant.getRank().getPermissions().forEach(s -> this.attachment.setPermission(s.replace("-", ""), !s.startsWith("-")));
+                        grant.getRank().getInheritance().stream()
+                                .map(Rank::getByUuid)
+                                .filter(Objects::nonNull)
+                                .forEach(rank -> rank.getPermissions().forEach(permission -> this.attachment.setPermission(permission.replace("-", ""), !permission.startsWith("-"))));
+                    });
+        });
     }
 
     public void setupPlayerTag() {

@@ -1,7 +1,7 @@
 package com.solexgames.core.command.extend.rank;
 
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.clickable.Clickable;
+import com.solexgames.core.util.clickable.Clickable;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.util.Color;

@@ -11,6 +11,7 @@ settings:
   namemc-rewards: true
   namemc-ip: "eu.potclub.vip"
   anti-chat-spam: true
+  anti-command-spam: true
 
   # Whenever a player executes a command such as /heal, all online server staff will receive "[GrowlyX: healed]"
   staff-command-alerts: true
@@ -18,10 +19,6 @@ settings:
   staff-command-alerts-permission: "scandium.staff"
 
   chat-format: "<prefix><rank_prefix><rank_color><custom_color><player_name> &7» &f<message>"
-
-  # Not yet implemented!
-  punishment-gui: true
-  anti-command-spam: true
 
 server:
   settings:

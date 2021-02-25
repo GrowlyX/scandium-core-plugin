@@ -2,7 +2,7 @@ package com.solexgames.core.command.extend.warps;
 
 import com.mongodb.client.model.Filters;
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.clickable.Clickable;
+import com.solexgames.core.util.clickable.Clickable;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.player.warps.Warp;

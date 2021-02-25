@@ -12,5 +12,7 @@ public final class PunishmentStrings {
     public static String BLACK_LIST_MESSAGE = "&4You are blacklisted from " + CorePlugin.getInstance().getServerManager().getNetwork().getServerName() + ".&7\n&cYou were blacklisted for: &7<reason>\n&6This punishment cannot be appealed or purchased.";
 
     public static String SLOW_CHAT_MESSAGE = "&cPlease wait another <amount> before chatting again.";
+    public static String CMD_CHAT_MESSAGE = "&cYou're on command cooldown, please wait <amount>.";
     public static String COOL_DOWN_MESSAGE = "&cPlease wait before chatting again.";
+
 }

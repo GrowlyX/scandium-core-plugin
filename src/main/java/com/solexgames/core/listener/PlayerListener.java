@@ -60,33 +60,28 @@ public class PlayerListener implements Listener {
     public void onConnect(AsyncPlayerPreLoginEvent event) {
         if (CorePlugin.CAN_JOIN) {
             if (CorePlugin.getInstance().getWhitelistConfig().getConfiguration().getBoolean("beta-whitelist")) {
-                if (CorePlugin.getInstance().getWhitelistConfig().getBoolean("beta-whitelist-can-join")) {
-                    if (!CorePlugin.getInstance().getServerManager().getBetaWhitelistedPlayers().contains(event.getName())) {
-                        event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.translateAlternateColorCodes('&', CorePlugin.getInstance().getWhitelistConfig().getConfiguration().getString("beta-whitelisted-msg").replace("<nl>", "\n")));
+                if (CorePlugin.getInstance().getServerManager().getBetaWhitelistedPlayers().contains(event.getName())) {
+                    if (CorePlugin.getInstance().getWhitelistConfig().getBoolean("beta-whitelist-can-join")) {
+                        checkDisallow(event);
                     } else {
-                        if (CorePlugin.getInstance().getWhitelistConfig().getConfiguration().getBoolean("whitelist")) {
-                            if (!CorePlugin.getInstance().getServerManager().getWhitelistedPlayers().contains(event.getName())) {
-                                event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.translateAlternateColorCodes('&', CorePlugin.getInstance().getWhitelistConfig().getConfiguration().getString("whitelisted-msg").replace("<nl>", "\n")));
-                            } else checkDisallow(event);
-                        } else event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.translateAlternateColorCodes('&', CorePlugin.getInstance().getWhitelistConfig().getConfiguration().getString("beta-whitelisted-msg").replace("<nl>", "\n")));
-                        return;
+                        event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.translateAlternateColorCodes('&', CorePlugin.getInstance().getWhitelistConfig().getConfiguration().getString("beta-whitelisted-msg").replace("<nl>", "\n")));
                     }
                 } else {
-                    if (CorePlugin.getInstance().getWhitelistConfig().getConfiguration().getBoolean("whitelist")) {
-                        if (!CorePlugin.getInstance().getServerManager().getWhitelistedPlayers().contains(event.getName())) {
-                            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.translateAlternateColorCodes('&', CorePlugin.getInstance().getWhitelistConfig().getConfiguration().getString("whitelisted-msg").replace("<nl>", "\n")));
-
-                        } else checkDisallow(event);
-                    } else event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.translateAlternateColorCodes('&', CorePlugin.getInstance().getWhitelistConfig().getConfiguration().getString("beta-whitelisted-msg").replace("<nl>", "\n")));
+                    event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.translateAlternateColorCodes('&', CorePlugin.getInstance().getWhitelistConfig().getConfiguration().getString("beta-whitelisted-msg").replace("<nl>", "\n")));
                 }
-            } else checkDisallow(event);
+            }
             if (CorePlugin.getInstance().getWhitelistConfig().getConfiguration().getBoolean("whitelist")) {
                 if (!CorePlugin.getInstance().getServerManager().getWhitelistedPlayers().contains(event.getName())) {
                     event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.translateAlternateColorCodes('&', CorePlugin.getInstance().getWhitelistConfig().getConfiguration().getString("whitelisted-msg").replace("<nl>", "\n")));
-
-                } else checkDisallow(event);
-            } else checkDisallow(event);
-        } else event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Color.translate("&cThe server is currently booting...\n&cPlease reconnect in a few minutes."));
+                } else {
+                    checkDisallow(event);
+                }
+            } else {
+                checkDisallow(event);
+            }
+        } else {
+            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Color.translate("&cThe server is currently booting...\n&cPlease reconnect in a few minutes."));
+        }
     }
 
     private void checkDisallow(AsyncPlayerPreLoginEvent event) {
@@ -181,7 +176,8 @@ public class PlayerListener implements Listener {
             }
         }
 
-        if (event.getPlayer().hasPermission("scandium.staff")) Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onConnect(event.getPlayer()))), 10L);
+        if (event.getPlayer().hasPermission("scandium.staff"))
+            Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onConnect(event.getPlayer()))), 10L);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -407,6 +403,20 @@ public class PlayerListener implements Listener {
                 }
             });
         }
+
+        long commandCooldown = 1L;
+        if (!(System.currentTimeMillis() < CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer()).getCommandCooldown())) {
+            if (!event.getPlayer().hasPermission("scandium.command.cooldown.bypass")) {
+                event.getPlayer().sendMessage(Color.translate(PunishmentStrings.CMD_CHAT_MESSAGE.replace("<amount>", DurationFormatUtils.formatDurationWords(commandCooldown, true, true))));
+                event.setCancelled(true);
+
+                return;
+            }
+        }
+
+        if (CorePlugin.ANTI_CMD_SPAM)
+            CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer()).setCommandCooldown(System.currentTimeMillis() + 1L);
+        else CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer()).setCommandCooldown(0L);
     }
 
     private void checkThenSend(AsyncPlayerChatEvent event, Player player, PotPlayer potPlayer, long slowChat) {
@@ -427,7 +437,9 @@ public class PlayerListener implements Listener {
             }
         });
 
-        if (CorePlugin.ANTI_CHAT_SPAM) CorePlugin.getInstance().getPlayerManager().getPlayer(player).setChatCooldown(System.currentTimeMillis() + (slowChat > 0L ? slowChat : 3000L)); else CorePlugin.getInstance().getPlayerManager().getPlayer(player).setChatCooldown(0L);
+        if (CorePlugin.ANTI_CHAT_SPAM)
+            CorePlugin.getInstance().getPlayerManager().getPlayer(player).setChatCooldown(System.currentTimeMillis() + (slowChat > 0L ? slowChat : 3000L));
+        else CorePlugin.getInstance().getPlayerManager().getPlayer(player).setChatCooldown(0L);
     }
 
     @EventHandler

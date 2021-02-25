@@ -1,4 +1,4 @@
-package com.solexgames.core.clickable;
+package com.solexgames.core.util.clickable;
 
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
