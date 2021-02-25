@@ -1,0 +1,119 @@
+
+
+name: Scandium
+version: 1.0-${git.commit.id.abbrev}
+main: com.solexgames.core.CorePlugin
+
+softdepend: [ProtocolLib, dRobot, ScandiumPAPI]
+load: STARTUP
+
+commands:
+  betawl:
+  gmsp:
+  modmode:
+    aliases: [staffmode, mod, staff]
+  shutdown:
+    aliases: [delaystop]
+  fly:
+  lunar:
+    aliases: [lunarclient]
+  ignore:
+    aliases: [unignore]
+  rank:
+    aliases: [ranks]
+  vanish:
+    aliases: [v]
+  kickall:
+  freeze:
+    aliases: [ss]
+  acban:
+    aliases: [anticheatban, acpunish]
+  setslots:
+    aliases: [setmaxplayers, maxplayers]
+  warp:
+    aliases: [warps]
+  clear:
+    aliases: [clearinventory]
+  network:
+    aliases: [datadump]
+  forceupdate:
+  color:
+    aliases: [chatcolors, chatcolor]
+  slowchat:
+    aliases: [chatslow]
+  list:
+    aliases: [who, online]
+  webannouncementdelete:
+    aliases: [wad]
+  webannouncement:
+    aliases: [walert]
+  profile:
+  staffchat:
+    aliases: [sc]
+  options:
+    aliases: [globalsettings, gsettings, goptions, coreoptions, settings]
+  adminchat:
+    aliases: [ac]
+  hostchat:
+    aliases: [hc]
+  devchat:
+    aliases: [dc]
+  import:
+  helpop:
+    aliases: [request]
+  report:
+  broadcast:
+    aliases: [alert, bc]
+  cgrant:
+  grant:
+  language:
+    aliases: [lang, setlang, deutsche, italiano, français, english, espanol]
+  toggletips:
+    aliases: [ttps]
+  togglestaffmessages:
+    aliases: [tsm]
+  punish:
+    aliases: [punishment, ban, kick, mute, warn, ipban, blacklist]
+  tphere:
+    aliases: [s]
+  message:
+    aliases: [msg, m]
+  grants:
+  reply:
+    aliases: [r]
+  clearchat:
+    aliases: [cc]
+  whitelist:
+    aliases: [wl, maintenance]
+  mutechat:
+    aliases: [mc]
+  tppos:
+    aliases: [tpposition]
+  tp:
+    aliases: [teleport, moveto]
+  heal:
+  kill:
+  feed:
+  twitter:
+  website:
+  store:
+  discord:
+  history:
+    aliases: [punishhistory, c]
+  ping:
+  gmc:
+  gms:
+  sudo:
+  sudoall:
+  scandium:
+  prefix:
+    aliases: [tags, prefixes, tag, chattags]
+  media:
+  famous:
+  unban:
+  unblacklist:
+  unmute:
+  unsync:
+    aliases: [unlink]
+  sync:
+    aliases: [link, discordsync, discordlink]

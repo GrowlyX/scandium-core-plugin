@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="SolexGames Development" uuid="ced32f9b-6ad9-4446-b951-092bc8c3b54b">
+      <driver-ref>mongo</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.dbschema.MongoJdbcDriver</jdbc-driver>
+      <jdbc-url>mongodb+srv://cluster0.z8vz3.mongodb.net/SGSoftware?retryWrites=true&amp;w=majority</jdbc-url>
+    </data-source>
+  </component>
+</project>

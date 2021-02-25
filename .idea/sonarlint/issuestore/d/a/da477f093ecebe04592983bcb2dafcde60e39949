@@ -1,0 +1,23 @@
+
+d
+java:S1192^"IDefine a constant instead of duplicating this literal "<reason>" 4 times.(è€ÓŠøÿÿÿÿ
+@
+java:S5411+"*Use the primitive boolean expression here.(à†ÿÀ
+E
+java:S5411."*Use the primitive boolean expression here.(Ïï£‹øÿÿÿÿ
+@
+java:S54111"*Use the primitive boolean expression here.(“’Ï
+P
+java:S1128"5Remove this unused import 'vip.potclub.core.util.CC'.(´‰éûÿÿÿÿ
+E
+java:S1128"/Remove this unused import 'java.util.Iterator'.(¥ÍòÕ
+A
+java:S1128"+Remove this unused import 'java.util.Date'.(¸…¼ü
+\
+java:S1128	"ARemove this unused import 'vip.potclub.core.clickable.Clickable'.(Àû‚Âÿÿÿÿÿ
+h
+java:S3776"RRefactor this method to reduce its Cognitive Complexity from 20 to the 15 allowed.(Š§Ùà
+h
+java:S3776I"RRefactor this method to reduce its Cognitive Complexity from 37 to the 15 allowed.(Òœ±
+a	java:S128Y"LEnd this switch case with an unconditional break, return or throw statement.(ô¥µ‹
+n	java:S131X"YComplete cases by adding the missing enum constants or add a default case to this switch.(äáı˜

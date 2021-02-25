@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Bungee/Bungee.iml" filepath="$PROJECT_DIR$/Bungee/Bungee.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Legacy/Legacy.iml" filepath="$PROJECT_DIR$/Legacy/Legacy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Non-Legacy/Non-Legacy.iml" filepath="$PROJECT_DIR$/Non-Legacy/Non-Legacy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Scandium.iml" filepath="$PROJECT_DIR$/Scandium.iml" />
+    </modules>
+  </component>
+</project>

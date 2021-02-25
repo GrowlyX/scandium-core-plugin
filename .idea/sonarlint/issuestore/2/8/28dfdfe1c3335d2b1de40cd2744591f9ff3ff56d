@@ -1,0 +1,15 @@
+
+m
+java:S37765"RRefactor this method to reduce its Cognitive Complexity from 70 to the 15 allowed.(§­şÿÿÿÿ
+a
+java:S1301>"KReplace this "switch" statement by "if" statements to increase readability.(äáı˜
+n	java:S131>"YComplete cases by adding the missing enum constants or add a default case to this switch.(äáı˜
+_
+java:S1192@"IDefine a constant instead of duplicating this literal "<reason>" 6 times.(Ï¿·
+a
+java:S1301V"KReplace this "switch" statement by "if" statements to increase readability.(äáı˜
+d
+java:S1192â"HDefine a constant instead of duplicating this literal "Default" 4 times.(Æ—…Çûÿÿÿÿ
+o
+java:S3776"SRefactor this method to reduce its Cognitive Complexity from 178 to the 15 allowed.(Á™¢üúÿÿÿÿ
+n	java:S131V"YComplete cases by adding the missing enum constants or add a default case to this switch.(äáı˜
