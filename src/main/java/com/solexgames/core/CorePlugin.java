@@ -34,6 +34,7 @@ import com.solexgames.core.lunar.extend.LunarCommand;
 import com.solexgames.core.manager.*;
 import com.solexgames.core.modsuite.ModSuiteListener;
 import com.solexgames.core.nms.AbstractNMSImplementation;
+import com.solexgames.core.nms.extend.NMSImplementation_v1_16;
 import com.solexgames.core.nms.extend.NMSImplementation_v1_7;
 import com.solexgames.core.nms.extend.NMSImplementation_v1_8;
 import com.solexgames.core.protocol.AbstractChatInterceptor;
@@ -44,8 +45,9 @@ import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
 import com.solexgames.core.util.external.ConfigExternal;
 import com.solexgames.core.version.AbstractVersionImplementation;
-import com.solexgames.core.version.extend.PingCommand_1_7;
-import com.solexgames.core.version.extend.PingCommand_1_8;
+import com.solexgames.core.version.extend.PingCommand_v1_16;
+import com.solexgames.core.version.extend.PingCommand_v1_7;
+import com.solexgames.core.version.extend.PingCommand_v1_8;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
@@ -150,18 +152,19 @@ public final class CorePlugin extends JavaPlugin {
         if (this.getServer().getPluginManager().isPluginEnabled("LunarClient-API")) lunarCommand = new LunarCommand(); else this.getLogger().info("[Protocol] Could not find LunarClient-API! The /lunar command will not work without it!");
 
         if (this.getServer().getVersion().contains("1.7")) {
-            this.versionImplementation = new PingCommand_1_7();
+            this.versionImplementation = new PingCommand_v1_7();
             this.NMS = new NMSImplementation_v1_7();
-
-            this.getLogger().info("[Bukkit] Hooked into Bukkit version " + this.getServer().getVersion() + "!");
         } else if (this.getServer().getVersion().contains("1.8")) {
-            this.versionImplementation = new PingCommand_1_8();
+            this.versionImplementation = new PingCommand_v1_8();
             this.NMS = new NMSImplementation_v1_8();
-
-            this.getLogger().info("[Bukkit] Hooked into Bukkit version " + this.getServer().getVersion() + "!");
+        } else if (this.getServer().getVersion().contains("1.16")) {
+            this.versionImplementation = new PingCommand_v1_16();
+            this.NMS = new NMSImplementation_v1_16();
         } else {
-            this.getLogger().info("[Bukkit] I don't support this version yet :( Contact growly to add support!");
+            this.getLogger().info("[Bukkit] I don't support this version yet! MANY THINGS MAY BE BROKEN! Please contact Growly to add support.");
         }
+
+        this.getLogger().info("[Bukkit] Hooked into Bukkit version " + this.getServer().getVersion() + "!");
 
         this.serverName = this.getConfig().getString("server-id");
         this.debugging = false;

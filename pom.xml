@@ -137,6 +137,13 @@
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-1_16-api</artifactId>
+            <version>1.16.5-R0.1-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/Spigot_1_16.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
             <artifactId>spigot-1_8-api</artifactId>
             <version>1.8.8-R0.1-SNAPSHOT</version>
             <scope>system</scope>
