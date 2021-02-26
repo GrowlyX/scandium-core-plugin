@@ -13,8 +13,7 @@ public abstract class AbstractJedisSubscriber extends JedisPubSub {
     public AbstractJedisSubscriber(String channel) {
         this.redisClient = CorePlugin.getInstance().getRedisClient();
 
-        Thread thread = new Thread(() -> this.redisClient.getJedisPool().getResource().subscribe(this, channel), channel.toLowerCase() + "-jedis");
-        thread.start();
+        (new Thread(() -> this.redisClient.getJedisPool().getResource().subscribe(this, channel), (channel.toLowerCase() + "-jedis"))).start();
 
         CorePlugin.getInstance().getLogger().info("[Redis] Now listening on jedis channel '" + channel + "'.");
     }
