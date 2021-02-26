@@ -8,6 +8,8 @@
     <artifactId>Scandium-parent</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <packaging>pom</packaging>
+
     <modules>
         <module>Non-Legacy</module>
         <module>Legacy</module>
@@ -19,7 +21,7 @@
     </properties>
 
     <build>
-        <defaultGoal>clean deploy</defaultGoal>
+        <defaultGoal>clean package</defaultGoal>
         <finalName>${project.name}</finalName>
 
         <resources>

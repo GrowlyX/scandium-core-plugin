@@ -33,7 +33,7 @@ public final class StringUtil {
 
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
         if (potPlayer.isCanReceiveDmsSounds()) {
-            target.playSound(target.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0F, 1.0F);
+            target.playSound(target.getLocation(), Sound.NOTE_PLING, 1.0F, 1.0F);
         }
     }
 

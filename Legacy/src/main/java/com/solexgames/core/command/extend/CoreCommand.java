@@ -6,7 +6,6 @@ import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.extend.ScandiumMenu;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.StringUtil;
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
