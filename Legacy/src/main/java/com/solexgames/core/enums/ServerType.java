@@ -16,7 +16,8 @@ public enum ServerType {
     ICE("Ice", "06", ChatColor.AQUA, ChatColor.WHITE, "https://discord.ice.rip", "IceNetworkRIP", "store.ice.rip", "ice.rip"),
     EYTRILORG("Eytril", "07", ChatColor.GOLD, ChatColor.WHITE, "https://discord.eytril.org/", "EytrilOrg", "store.eytril.org", "eytril.org"),
     ADVENTURE("Adventure", "08", ChatColor.DARK_PURPLE, ChatColor.LIGHT_PURPLE, "https://discord.adventure.rip/", "AdventureRIP", " store.adventure.rip", "adventure.rip"),
-    TERRORPVP("Terror", "09", ChatColor.LIGHT_PURPLE, ChatColor.YELLOW, "https://discord.terrorpvp.rip", "TerrorPvPNetwork", " store.terrorpvp.rip", "terrorpvp.rip");
+    TERRORPVP("Terror", "09", ChatColor.LIGHT_PURPLE, ChatColor.YELLOW, "https://discord.terrorpvp.rip", "TerrorPvPNetwork", " store.terrorpvp.rip", "terrorpvp.rip"),
+    MYTHIA("Mythia", "10", ChatColor.DARK_BLUE, ChatColor.GRAY, "https://discord.gg/ykTBmG9KRj", "MythiaMC", " store.mythia.us", "mythia.us");
 
     private final String serverName;
     private final String serverId;

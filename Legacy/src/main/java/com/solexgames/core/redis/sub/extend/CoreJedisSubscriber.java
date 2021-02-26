@@ -10,6 +10,7 @@ import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.punishment.Punishment;
 import com.solexgames.core.player.punishment.PunishmentType;
 import com.solexgames.core.player.ranks.Rank;
+import com.solexgames.core.redis.RedisClient;
 import com.solexgames.core.redis.RedisMessage;
 import com.solexgames.core.redis.sub.AbstractJedisSubscriber;
 import com.solexgames.core.server.NetworkServer;
@@ -18,6 +19,7 @@ import com.solexgames.core.util.UUIDUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import redis.clients.jedis.JedisPubSub;
 
 import java.util.Collections;
 import java.util.Date;
@@ -28,8 +30,8 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
 
     private final String SERVER_NAME = CorePlugin.getInstance().getServerName();
 
-    public CoreJedisSubscriber() {
-        super("SCANDIUM");
+    public CoreJedisSubscriber(RedisClient redisClient) {
+        super("SCANDIUM", redisClient);
     }
 
     @Override

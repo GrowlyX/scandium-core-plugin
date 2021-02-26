@@ -9,12 +9,14 @@ import redis.clients.jedis.JedisPubSub;
 public abstract class AbstractJedisSubscriber extends JedisPubSub {
 
     private final RedisClient redisClient;
+    private final String channelName;
 
-    public AbstractJedisSubscriber(String channel) {
-        this.redisClient = CorePlugin.getInstance().getRedisClient();
+    public AbstractJedisSubscriber(String channel, RedisClient redisClient) {
+        this.redisClient = redisClient;
+        this.channelName = channel;
 
-        (new Thread(() -> this.redisClient.getJedisPool().getResource().subscribe(this, channel), (channel.toLowerCase() + "-jedis"))).start();
 
-        CorePlugin.getInstance().getLogger().info("[Redis] Now listening on jedis channel '" + channel + "'.");
+
+        CorePlugin.getInstance().getLogger().info("[Redis] Now listening on jedis channel '" + channelName + "'.");
     }
 }

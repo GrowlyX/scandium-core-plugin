@@ -37,8 +37,8 @@ public class RedisClient {
 
             if (redisAuthentication) jedis.auth(this.redisPassword);
 
-            this.coreJedisSubscriber = new CoreJedisSubscriber();
-
+            this.coreJedisSubscriber = new CoreJedisSubscriber(this);
+            (new Thread(() -> jedis.subscribe(this.coreJedisSubscriber, "SCANDIUM"))).start();
             jedis.connect();
             this.setClientActive(true);
 
@@ -55,13 +55,6 @@ public class RedisClient {
             this.coreJedisSubscriber.unsubscribe();
         } catch (Exception e) {
             System.out.println("[Redis] Could not destroy Redis Pool.");
-        }
-    }
-
-    public void write(String json, String channel) {
-        try (Jedis jedis = this.jedisPool.getResource()) {
-            jedis.auth(this.redisPassword);
-            jedis.publish(channel, json);
         }
     }
 
