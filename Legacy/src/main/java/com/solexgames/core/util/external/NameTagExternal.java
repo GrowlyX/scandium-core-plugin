@@ -1,5 +1,6 @@
 package com.solexgames.core.util.external;
 
+import com.solexgames.core.CorePlugin;
 import com.solexgames.core.util.Color;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -42,7 +43,7 @@ public final class NameTagExternal {
         Team team = player.getScoreboard().getTeam(getTeamName(ChatColor.MAGIC));
         if (team == null) {
             team = player.getScoreboard().registerNewTeam(getTeamName(ChatColor.MAGIC));
-            team.setPrefix(Color.translate("&7[V] "));
+            team.setPrefix(Color.translate(CorePlugin.getInstance().getConfig().getString("settings.vanish-tag")));
         }
 
         if (!team.hasEntry(other.getName())) {
@@ -61,7 +62,7 @@ public final class NameTagExternal {
         Team team = player.getScoreboard().getTeam(getTeamName(ChatColor.STRIKETHROUGH));
         if (team == null) {
             team = player.getScoreboard().registerNewTeam(getTeamName(ChatColor.STRIKETHROUGH));
-            team.setPrefix(Color.translate("&6[S] "));
+            team.setPrefix(Color.translate(CorePlugin.getInstance().getConfig().getString("settings.mod-mode-tag")));
         }
 
         if (!team.hasEntry(other.getName())) {

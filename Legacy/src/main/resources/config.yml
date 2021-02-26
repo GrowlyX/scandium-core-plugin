@@ -18,6 +18,9 @@ settings:
   staff-command-alerts-format: "&7&o[<playername>: &e<message>&7&o]"
   staff-command-alerts-permission: "scandium.staff"
 
+  mod-mode-tag: "&7[S] "
+  vanish-tag: "&7[V] "
+
   chat-format: "<prefix><rank_prefix><rank_color><custom_color><player_name> &7» &f<message>"
 
 server:

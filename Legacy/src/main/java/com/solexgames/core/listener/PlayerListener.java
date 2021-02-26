@@ -11,10 +11,7 @@ import com.solexgames.core.menu.extend.punish.PunishSelectDurationMenu;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.punishment.Punishment;
 import com.solexgames.core.player.punishment.PunishmentStrings;
-import com.solexgames.core.util.Color;
-import com.solexgames.core.util.DateUtil;
-import com.solexgames.core.util.RedisUtil;
-import com.solexgames.core.util.StringUtil;
+import com.solexgames.core.util.*;
 import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -37,22 +34,14 @@ import java.util.regex.Matcher;
 
 public class PlayerListener implements Listener {
 
-    public static String REGION = CorePlugin.getInstance().getConfig().getString("region");
     public ServerManager MANAGER = CorePlugin.getInstance().getServerManager();
 
     @EventHandler
     public void onServerListPing(ServerListPingEvent event) {
         if (CorePlugin.getInstance().getWhitelistConfig().getBoolean("whitelist")) {
-            event.setMotd(Color.translate("&d&lPotClub &7&l┃ &f" + REGION + " Region\n&cThe server is currently in maintenance."));
+            event.setMotd(MOTDUtil.getWhitelistedMotd());
         } else {
-            int boundOfThree = CorePlugin.RANDOM.nextInt(3);
-            if (boundOfThree == 1) {
-                event.setMotd(Color.translate("&d&lPotClub &7&l┃ &f" + REGION + " Region\n&7Join our discord via &bhttps://dsc.gg/pot&7!"));
-            } else if (boundOfThree == 2) {
-                event.setMotd(Color.translate("&d&lPotClub &7&l┃ &f" + REGION + " Region\n&7Follow our twitter for giveaways and more! &b@PotClubVIP&7"));
-            } else {
-                event.setMotd(Color.translate("&d&lPotClub &7&l┃ &f" + REGION + " Region\n&7We have a new website! Check it out at &bwww.potclub.vip&7!"));
-            }
+            event.setMotd(MOTDUtil.getNormalMotd());
         }
     }
 
