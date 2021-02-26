@@ -368,9 +368,6 @@ public class PotPlayer {
 
         syncCodes.put(this.syncCode, this.player.getName());
 
-        this.setupPlayer();
-        if (CorePlugin.NAME_MC_REWARDS) this.checkVoting();
-
         if (document.get("allPrefixes") != null) {
             if (player.hasPermission("scandium.prefixes.all")) {
                 List<String> prefixes = new ArrayList<>();
@@ -397,6 +394,10 @@ public class PotPlayer {
                     .filter(punishment -> !punishment.isRemoved())
                     .forEach(punishment -> this.currentlyBanned = true);
         });
+
+        this.setupPlayer();
+
+        if (CorePlugin.NAME_MC_REWARDS) this.checkVoting();
 
         this.currentlyOnline = true;
 
@@ -468,9 +469,17 @@ public class PotPlayer {
         Bukkit.getOnlinePlayers().forEach(player -> {
             if (this.getActiveGrant().getRank().getColor() != null) {
                 if (this.isStaffMode()) {
-                    NameTagExternal.setupStaffModeTag(player, this.player);
+                    if (player.hasPermission("scandium.staff")) {
+                        NameTagExternal.setupStaffModeTag(player, this.player);
+                    } else {
+                        NameTagExternal.setupNameTag(player, this.player, this.getColorByRankColor());
+                    }
                 } else if (this.isVanished()) {
-                    NameTagExternal.setupVanishTag(player, this.player);
+                    if (player.hasPermission("scandium.staff")) {
+                        NameTagExternal.setupVanishTag(player, this.player);
+                    } else {
+                        NameTagExternal.setupNameTag(player, this.player, this.getColorByRankColor());
+                    }
                 } else {
                     NameTagExternal.setupNameTag(player, this.player, this.getColorByRankColor());
                 }

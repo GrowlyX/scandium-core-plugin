@@ -49,6 +49,8 @@ public class ItemBuilder {
 
         if (this.itemStack.getType().equals(Material.SKULL_ITEM)) {
             skullMeta.setOwner(name);
+        } else {
+            return this;
         }
 
         this.setItemMeta(skullMeta);
