@@ -26,11 +26,11 @@ public class SudoAllCommand extends BaseCommand {
             if (args.length > 0) {
                 String message = StringUtil.buildMessage(args, 0);
                 if (message.startsWith("c:")) {
-                    Bukkit.getOnlinePlayers().forEach(player1 -> player1.chat(message));
-                    player.sendMessage(Color.translate("&aMade all online players chat '" + message + "&a'."));
+                    Bukkit.getOnlinePlayers().forEach(player1 -> player1.chat(message.replace("c:", "")));
+                    player.sendMessage(Color.translate("&aMade all online players chat '" + message.replace("c:", "") + "&a'."));
                 } else if (message.startsWith("e:")) {
-                    Bukkit.getOnlinePlayers().forEach(player1 -> player1.performCommand(message));
-                    player.sendMessage(Color.translate("&aMade all online players execute '" + message + "&a'."));
+                    Bukkit.getOnlinePlayers().forEach(player1 -> player1.performCommand(message.replace("e:", "")));
+                    player.sendMessage(Color.translate("&aMade all online players execute '" + message.replace("e:", "") + "&a'."));
                 } else {
                     Bukkit.getOnlinePlayers().forEach(player1 -> player1.chat(message));
                     player.sendMessage(Color.translate("&aMade all online players chat '" + message + "&a'."));

@@ -1,6 +1,8 @@
 package com.solexgames.core.command.extend.essential;
 
+import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.StaffUtil;
 import org.bukkit.Bukkit;

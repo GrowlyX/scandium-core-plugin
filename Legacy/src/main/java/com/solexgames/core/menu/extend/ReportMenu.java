@@ -102,12 +102,6 @@ public class ReportMenu extends AbstractInventoryMenu {
                         CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onReport(player, target, "Combat Hacks")));
                         player.sendMessage(Color.translate("&aYour report has been sent to all online staff!"));
                         potPlayer.setCanReport(false);
-
-                        Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> {
-                            if (potPlayer != null) {
-                                potPlayer.setCanReport(true);
-                            }
-                        }, 60 * 20L);
                     } else {
                         player.closeInventory();
                         player.sendMessage(Color.translate("&cYou cannot do that right now."));
@@ -119,12 +113,6 @@ public class ReportMenu extends AbstractInventoryMenu {
                         CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onReport(this.player, this.target, "Movement Hacks")));
                         player.sendMessage(Color.translate("&aYour report has been sent to all online staff!"));
                         potPlayer.setCanReport(false);
-
-                        Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> {
-                            if (potPlayer != null) {
-                                potPlayer.setCanReport(true);
-                            }
-                        }, 60 * 20L);
                     } else {
                         player.closeInventory();
                         player.sendMessage(Color.translate("&cYou cannot do that right now."));
@@ -136,12 +124,6 @@ public class ReportMenu extends AbstractInventoryMenu {
                         CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onReport(this.player, this.target, "Velocity Hacks")));
                         player.sendMessage(Color.translate("&aYour report has been sent to all online staff!"));
                         potPlayer.setCanReport(false);
-
-                        Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> {
-                            if (potPlayer != null) {
-                                potPlayer.setCanReport(true);
-                            }
-                        }, 60 * 20L);
                     } else {
                         player.closeInventory();
                         player.sendMessage(Color.translate("&cYou cannot do that right now."));
@@ -153,12 +135,6 @@ public class ReportMenu extends AbstractInventoryMenu {
                         CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onReport(this.player, this.target, "Gameplay Sabotage")));
                         player.sendMessage(Color.translate("&aYour report has been sent to all online staff!"));
                         potPlayer.setCanReport(false);
-
-                        Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> {
-                            if (potPlayer != null) {
-                                potPlayer.setCanReport(true);
-                            }
-                        }, 60 * 20L);
                     } else {
                         player.closeInventory();
                         player.sendMessage(Color.translate("&cYou cannot do that right now."));
@@ -170,18 +146,18 @@ public class ReportMenu extends AbstractInventoryMenu {
                         CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onReport(this.player, this.target, "Chat Violation")));
                         player.sendMessage(Color.translate("&aYour report has been sent to all online staff!"));
                         potPlayer.setCanReport(false);
-
-                        Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> {
-                            if (potPlayer != null) {
-                                potPlayer.setCanReport(true);
-                            }
-                        }, 60 * 20L);
                     } else {
                         player.closeInventory();
                         player.sendMessage(Color.translate("&cYou cannot do that right now."));
                     }
                     break;
             }
+
+            Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> {
+                if (potPlayer != null) {
+                    potPlayer.setCanReport(true);
+                }
+            }, 60 * 20L);
         }
     }
 }

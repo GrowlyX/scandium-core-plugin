@@ -28,9 +28,9 @@ public class BroadcastCommand extends BaseCommand {
             if (args.length > 0) {
                 String message = StringUtil.buildMessage(args, 0);
                 if (message.startsWith("l:")) {
-                    Bukkit.broadcastMessage(Color.translate(message));
+                    Bukkit.broadcastMessage(Color.translate(message.replace("l:", "")));
                 } else if (message.startsWith("g:")) {
-                    CorePlugin.getInstance().getRedisThread().execute(() -> client.write(RedisUtil.onGlobalBroadcast(message)));
+                    CorePlugin.getInstance().getRedisThread().execute(() -> client.write(RedisUtil.onGlobalBroadcast(message.replace("g:", ""))));
                 } else {
                     CorePlugin.getInstance().getRedisThread().execute(() -> client.write(RedisUtil.onGlobalBroadcast(message)));
                 }

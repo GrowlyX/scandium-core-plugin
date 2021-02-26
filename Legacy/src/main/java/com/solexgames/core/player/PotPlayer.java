@@ -150,6 +150,7 @@ public class PotPlayer {
         document.put("allGrants", grantStrings);
         document.put("allMessages", messages);
         document.put("allPrefixes", prefixStrings);
+        document.put("allPermissions", userPermissions);
         document.put("allIgnored", this.allIgnoring);
         if (this.appliedPrefix != null) {
             document.put("appliedPrefix", this.appliedPrefix.getName());
@@ -209,6 +210,7 @@ public class PotPlayer {
         document.put("allGrants", grantStrings);
         document.put("allMessages", messages);
         document.put("allPrefixes", prefixStrings);
+        document.put("allPermissions", userPermissions);
         document.put("allIgnored", this.allIgnoring);
         if (this.appliedPrefix != null) {
             document.put("appliedPrefix", this.appliedPrefix.getName());
@@ -282,11 +284,9 @@ public class PotPlayer {
         } else {
             this.language = LanguageType.ENGLISH;
         }
-
         if (document.getString("customColor") != null) {
             this.customColor = ChatColor.valueOf(document.getString("customColor"));
         }
-
         if (document.getString("discord") != null) {
             this.media.setDiscord(document.getString("discord"));
         } else {
@@ -330,6 +330,12 @@ public class PotPlayer {
             List<String> ignoring = ((List<String>) document.get("allIgnored"));
             if (!ignoring.isEmpty()) {
                 this.allIgnoring.addAll(ignoring);
+            }
+        }
+        if (document.get("allPermissions") != null) {
+            List<String> permissions = ((List<String>) document.get("allPermissions"));
+            if (!permissions.isEmpty()) {
+                this.userPermissions.addAll(permissions);
             }
         }
         if (document.get("allMessages") != null) {

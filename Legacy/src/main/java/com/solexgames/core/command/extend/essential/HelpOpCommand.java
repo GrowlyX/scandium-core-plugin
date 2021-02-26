@@ -34,8 +34,8 @@ public class HelpOpCommand extends BaseCommand {
 
                 potPlayer.setCanRequest(false);
                 Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> {
-                    // redundant, but checking if player is online or not.
-                    if (potPlayer != null) {
+                    PotPlayer newPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+                    if (newPotPlayer != null) {
                         potPlayer.setCanRequest(true);
                     }
                 }, 60 * 20L);

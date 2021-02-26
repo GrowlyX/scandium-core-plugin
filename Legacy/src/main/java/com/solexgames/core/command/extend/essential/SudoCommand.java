@@ -32,11 +32,11 @@ public class SudoCommand extends BaseCommand {
                     String message = StringUtil.buildMessage(args, 1);
                     if (target != null) {
                         if (message.startsWith("c:")) {
-                            target.chat(message);
-                            player.sendMessage(Color.translate("&aMade " + target.getDisplayName() + "&a chat '" + message + "&a'."));
+                            target.chat(message.replace("c:", ""));
+                            player.sendMessage(Color.translate("&aMade " + target.getDisplayName() + "&a chat '" + message.replace("c:", "") + "&a'."));
                         } else if (message.startsWith("e:")) {
-                            target.performCommand(message);
-                            player.sendMessage(Color.translate("&aMade " + target.getDisplayName() + "&a execute '" + message + "&a'."));
+                            target.performCommand(message.replace("e:", ""));
+                            player.sendMessage(Color.translate("&aMade " + target.getDisplayName() + "&a execute '" + message.replace("e:", "") + "&a'."));
                         } else {
                             target.chat(message);
                             player.sendMessage(Color.translate("&aMade " + target.getDisplayName() + "&a chat '" + message + "&a'."));
