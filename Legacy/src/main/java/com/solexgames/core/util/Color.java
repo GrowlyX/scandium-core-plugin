@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 public final class Color {
 
     public static String translate(String text) {
-        return Color.translate(text);
+        return ChatColor.translateAlternateColorCodes('&', text);
     }
 
     public static List<String> translate(List<String> text) {

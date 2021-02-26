@@ -4,27 +4,35 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
+import java.util.Optional;
+
 public final class LocationUtil {
 
-    public static String getStringFromLocation(Location loc) {
-        if (loc == null) return "";
-        return loc.getWorld().getName() + ":" + loc.getX() + ":" + loc.getY() + ":" + loc.getZ() + ":" + loc.getYaw() + ":" + loc.getPitch();
+    private static final String SEPARATOR = "_S_";
+
+    public static Optional<String> getStringFromLocation(Location location) {
+        if (location != null) {
+            return Optional.of(location.getWorld().getName() + SEPARATOR + location.getX() + SEPARATOR + location.getY() + SEPARATOR + location.getZ() + SEPARATOR + location.getYaw() + SEPARATOR + location.getPitch());
+        }
+        return Optional.empty();
     }
 
-    public static Location getLocationFromString(String s) {
-        if (s == null || s.trim().equals("")) return null;
+    public static Optional<Location> getLocationFromString(String string) {
+        if (string != null && !string.trim().equals("")) {
+            String[] args = string.split(SEPARATOR);
 
-        String[] parts = s.split(":");
+            if (args.length == 6) {
+                World world = Bukkit.getServer().getWorld(args[0]);
 
-        if (parts.length == 6) {
-            World w = Bukkit.getServer().getWorld(parts[0]);
-            double x = Double.parseDouble(parts[1]);
-            double y = Double.parseDouble(parts[2]);
-            double z = Double.parseDouble(parts[3]);
-            float yaw = Float.parseFloat(parts[4]);
-            float pitch = Float.parseFloat(parts[5]);
-            return new Location(w, x, y, z, yaw, pitch);
+                double xCoord = Double.parseDouble(args[1]);
+                double yCoord = Double.parseDouble(args[2]);
+                double zCoord = Double.parseDouble(args[3]);
+                float yawFloat = Float.parseFloat(args[4]);
+                float pitchFloat = Float.parseFloat(args[5]);
+
+                return Optional.of(new Location(world, xCoord, yCoord, zCoord, yawFloat, pitchFloat));
+            }
         }
-        return null;
+        return Optional.empty();
     }
 }

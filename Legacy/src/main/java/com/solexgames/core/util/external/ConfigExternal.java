@@ -1,9 +1,9 @@
 package com.solexgames.core.util.external;
 
 import com.solexgames.core.CorePlugin;
+import com.solexgames.core.util.Color;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -21,7 +21,9 @@ public class ConfigExternal {
     public ConfigExternal(String name) {
         this.file = new File(CorePlugin.getInstance().getDataFolder(), name + ".yml");
         if (!this.file.getParentFile().exists()) {
-            this.file.getParentFile().mkdir();
+            if (this.file.getParentFile().mkdir()) {
+                CorePlugin.getInstance().getLogger().info("Created the file '" + name + ".yml" + "'!");
+            }
         }
 
         CorePlugin.getInstance().saveResource(name + ".yml", false);
@@ -51,23 +53,6 @@ public class ConfigExternal {
             return colorize ? Color.translate(this.configuration.getString(path)) : this.configuration.getString(path);
         }
     }
-
-    public List<String> getReversedStringList(String path) {
-        List<String> list = this.getStringList(path);
-        if (list == null) {
-            return Collections.singletonList("ERROR: STRING LIST NOT FOUND!");
-        } else {
-            int size = list.size();
-            List<String> toReturn = new ArrayList<>();
-
-            for(int i = size - 1; i >= 0; --i) {
-                toReturn.add(list.get(i));
-            }
-
-            return toReturn;
-        }
-    }
-
     public List<String> getStringList(String path) {
         if (!this.configuration.contains(path)) {
             return Collections.singletonList("ERROR: STRING LIST NOT FOUND!");
