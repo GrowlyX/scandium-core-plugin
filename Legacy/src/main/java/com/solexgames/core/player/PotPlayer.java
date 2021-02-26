@@ -463,6 +463,7 @@ public class PotPlayer {
                                 .filter(Objects::nonNull)
                                 .forEach(rank -> rank.getPermissions().forEach(permission -> this.attachment.setPermission(permission.replace("-", ""), !permission.startsWith("-"))));
                     });
+            this.getUserPermissions().forEach(permission -> this.attachment.setPermission(permission.replace("-", ""), !permission.startsWith("-")));
         });
     }
 

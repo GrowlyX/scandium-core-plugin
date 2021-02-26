@@ -248,6 +248,7 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("managerchat").setExecutor(new ManagerChatCommand());
         this.getCommand("mutechat").setExecutor(new MuteChatCommand());
         this.getCommand("fly").setExecutor(new FlyCommand());
+        this.getCommand("user").setExecutor(new UserCommand());
         this.getCommand("language").setExecutor(new LanguageCommand());
         this.getCommand("whitelist").setExecutor(new WhitelistCommand());
         this.getCommand("betawl").setExecutor(new BetaWhitelistCommand());

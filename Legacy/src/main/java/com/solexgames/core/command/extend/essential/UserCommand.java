@@ -2,12 +2,10 @@ package com.solexgames.core.command.extend.essential;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
-import com.solexgames.core.enums.ChatChannelType;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.player.PotPlayer;
+import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.util.Color;
-import com.solexgames.core.util.RedisUtil;
-import com.solexgames.core.util.StringUtil;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -118,6 +116,29 @@ public class UserCommand extends BaseCommand {
                         }
                         break;
                     case "disguise":
+                        if (args.length == 1) {
+                            sendHelp(sender);
+                        }
+                        if (args.length == 2) {
+                            sendHelp(sender);
+                        }
+                        if (args.length == 3) {
+                            Player target = Bukkit.getPlayerExact(args[1]);
+                            Rank rank = Rank.getByName(args[2]);
+                            if (target != null) {
+                                PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
+                                if (rank != null) {
+                                    sender.sendMessage(Color.translate("&cSorry! This feature is coming very soon!"));
+                                } else {
+                                    sender.sendMessage(Color.translate("&cThat rank does not exist."));
+                                }
+                            } else {
+                                sender.sendMessage(Color.translate("&cThat player does not exist."));
+                            }
+                        }
+                        break;
+                    default:
+                        sendHelp(sender);
                         break;
                 }
             }
