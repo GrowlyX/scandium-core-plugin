@@ -41,14 +41,14 @@ public class ConfigExternal {
     }
 
     public String getString(String path) {
-        return this.configuration.contains(path) ? ChatColor.translateAlternateColorCodes('&', this.configuration.getString(path)) : "ERROR: STRING NOT FOUND";
+        return this.configuration.contains(path) ? Color.translate(this.configuration.getString(path)) : "ERROR: STRING NOT FOUND";
     }
 
     public String getString(String path, String callback, boolean colorize) {
         if (!this.configuration.contains(path)) {
             return callback;
         } else {
-            return colorize ? ChatColor.translateAlternateColorCodes('&', this.configuration.getString(path)) : this.configuration.getString(path);
+            return colorize ? Color.translate(this.configuration.getString(path)) : this.configuration.getString(path);
         }
     }
 
@@ -74,7 +74,7 @@ public class ConfigExternal {
         } else {
             ArrayList<String> strings = new ArrayList<>();
             for (String string : this.configuration.getStringList(path)) {
-                strings.add(ChatColor.translateAlternateColorCodes('&', string));
+                strings.add(Color.translate(string));
             }
 
             return strings;
@@ -87,7 +87,7 @@ public class ConfigExternal {
         } else {
             ArrayList<String> strings = new ArrayList<>();
 
-            this.configuration.getStringList(path).forEach(s -> strings.add(ChatColor.translateAlternateColorCodes('&', s)));
+            this.configuration.getStringList(path).forEach(s -> strings.add(Color.translate(s)));
 
             return strings;
         }

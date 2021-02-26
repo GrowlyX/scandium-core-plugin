@@ -139,7 +139,7 @@ public final class CorePlugin extends JavaPlugin {
         this.ranksConfig = new ConfigExternal("ranks");
         this.databaseConfig = new ConfigExternal("database");
         this.whitelistConfig = new ConfigExternal("whitelist");
-        this.whitelistConfig = new ConfigExternal("motd");
+        this.motdConfig = new ConfigExternal("motd");
 
         CHAT_FORMAT = this.getConfig().getString("settings.chat-format");
         NAME_MC_REWARDS = this.getConfig().getBoolean("settings.namemc-rewards");

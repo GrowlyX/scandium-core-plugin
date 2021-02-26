@@ -33,11 +33,6 @@ import java.util.stream.Collectors;
 @Setter
 public class PotPlayer {
 
-    @Getter
-    public static Map<UUID, PotPlayer> profilePlayers = new HashMap<>();
-    @Getter
-    public static Map<String, String> syncCodes = new HashMap<>();
-
     private List<Punishment> punishments = new ArrayList<>();
     private List<Grant> allGrants = new ArrayList<>();
     private List<String> allPrefixes = new ArrayList<>();
@@ -127,7 +122,7 @@ public class PotPlayer {
         this.attachment = this.player.addAttachment(CorePlugin.getInstance());
 
         this.loadPlayerData();
-        profilePlayers.put(uuid, this);
+        CorePlugin.getInstance().getPlayerManager().getAllProfiles().put(uuid, this);
     }
 
     public void saveWithoutRemove() {
@@ -247,8 +242,8 @@ public class PotPlayer {
 
         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true)));
 
-        syncCodes.remove(this.syncCode);
-        profilePlayers.remove(uuid);
+        CorePlugin.getInstance().getPlayerManager().getAllSyncCodes().remove(this.syncCode);
+        CorePlugin.getInstance().getPlayerManager().getAllProfiles().remove(uuid);
     }
 
     public void loadPlayerData() {
@@ -366,7 +361,7 @@ public class PotPlayer {
                 .filter(punishment -> punishment.getTarget().equals(this.uuid))
                 .forEach(punishment -> this.punishments.add(punishment));
 
-        syncCodes.put(this.syncCode, this.player.getName());
+        CorePlugin.getInstance().getPlayerManager().getAllSyncCodes().put(this.syncCode, this.player.getName());
 
         if (document.get("allPrefixes") != null) {
             if (player.hasPermission("scandium.prefixes.all")) {

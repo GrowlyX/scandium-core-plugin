@@ -1,7 +1,6 @@
 package com.solexgames.core.task;
 
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.grant.Grant;
 import com.solexgames.core.util.Color;
 import org.bukkit.ChatColor;
@@ -17,7 +16,7 @@ public class GrantExpireTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        PotPlayer.getProfilePlayers().forEach((uuid, potPlayer) -> potPlayer.getAllGrants()
+        CorePlugin.getInstance().getPlayerManager().getAllProfiles().forEach((uuid, potPlayer) -> potPlayer.getAllGrants()
                 .stream()
                 .filter(Objects::nonNull)
                 .filter(Grant::isExpired)
@@ -27,7 +26,8 @@ public class GrantExpireTask extends BukkitRunnable {
                     grant.setActive(false);
                     potPlayer.setupPlayer();
 
-                    if (potPlayer.getPlayer() != null) potPlayer.getPlayer().sendMessage(ChatColor.GREEN + "Your rank has been set to " + Color.translate(potPlayer.getActiveGrant().getRank().getColor()) + potPlayer.getActiveGrant().getRank().getName() + ChatColor.GREEN + ".");
+                    if (potPlayer.getPlayer() != null)
+                        potPlayer.getPlayer().sendMessage(ChatColor.GREEN + "Your rank has been set to " + Color.translate(potPlayer.getActiveGrant().getRank().getColor()) + potPlayer.getActiveGrant().getRank().getName() + ChatColor.GREEN + ".");
                 }));
     }
 }

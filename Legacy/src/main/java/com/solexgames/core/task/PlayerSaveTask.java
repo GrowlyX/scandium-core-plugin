@@ -12,6 +12,6 @@ public class PlayerSaveTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        PotPlayer.getProfilePlayers().forEach((uuid, potPlayer) -> potPlayer.saveWithoutRemove());
+        CorePlugin.getInstance().getPlayerManager().getAllProfiles().forEach((uuid, potPlayer) -> potPlayer.saveWithoutRemove());
     }
 }

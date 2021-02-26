@@ -10,27 +10,36 @@ import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
 import com.solexgames.core.util.StaffUtil;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
+@Getter
 @NoArgsConstructor
 public class PlayerManager {
+
+    public final Map<UUID, PotPlayer> allProfiles = new HashMap<>();
+    public final Map<String, String> allSyncCodes = new HashMap<>();
+    public final Map<String, String> all2FACodes = new HashMap<>();
 
     public final List<String> freezeMessage = CorePlugin.getInstance().getConfig().getStringList("freeze-message");
 
     public PotPlayer getPlayer(Player player) {
-        return PotPlayer.getProfilePlayers().getOrDefault(player.getUniqueId(), null);
+        return this.allProfiles.getOrDefault(player.getUniqueId(), null);
     }
 
     public PotPlayer getPlayer(UUID uuid) {
-        return PotPlayer.getProfilePlayers().getOrDefault(uuid, null);
+        return this.allProfiles.getOrDefault(uuid, null);
     }
 
     public PotPlayer getPlayer(String name) {
@@ -39,7 +48,7 @@ public class PlayerManager {
         if (player == null) {
             return null;
         } else {
-            return PotPlayer.getProfilePlayers().getOrDefault(player.getUniqueId(), null);
+            return this.allProfiles.getOrDefault(player.getUniqueId(), null);
         }
     }
 

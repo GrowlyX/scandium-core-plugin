@@ -36,7 +36,6 @@ public class ServerManager {
         this.whitelistedPlayers = CorePlugin.getInstance().getWhitelistConfig().getStringList("whitelisted");
 
         this.betaWhitelistedPlayers = CorePlugin.getInstance().getWhitelistConfig().getStringList("beta-whitelisted");
-        this.betaWhitelistedPlayers.forEach(s -> this.whitelistedPlayers.add(s));
 
         this.joinMessage = CorePlugin.getInstance().getConfig().getStringList("player-join.join-message.message");
         this.clearChatJoin = CorePlugin.getInstance().getConfig().getBoolean("player-join.clear-chat");
