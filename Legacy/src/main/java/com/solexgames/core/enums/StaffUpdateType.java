@@ -2,6 +2,8 @@ package com.solexgames.core.enums;
 
 import lombok.Getter;
 
+import java.beans.ConstructorProperties;
+
 @Getter
 public enum StaffUpdateType {
 
@@ -14,6 +16,7 @@ public enum StaffUpdateType {
     public final String name;
     public final String permission;
 
+    @ConstructorProperties({"prefix", "name", "permission"})
     StaffUpdateType(String prefix, String name, String permission) {
         this.prefix = prefix;
         this.permission = permission;

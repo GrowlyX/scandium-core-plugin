@@ -28,6 +28,7 @@ public class FreezeCommand extends BaseCommand {
                 Player target = Bukkit.getPlayerExact(args[0]);
                 if (target != null) {
                     PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
+
                     if (potPlayer.isFrozen()) {
                         potPlayer.setFrozen(false);
 
@@ -35,11 +36,20 @@ public class FreezeCommand extends BaseCommand {
 
                         player.sendMessage(Color.translate("&aUnfroze " + target.getDisplayName() + "&a."));
                     } else if (!potPlayer.isFrozen()) {
-                        potPlayer.setFrozen(true);
+                        PotPlayer mainPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+                        PotPlayer targetPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
 
-                        RedisUtil.writeAsync(RedisUtil.onFreeze(player, target));
+                        if (mainPotPlayer.getActiveGrant().getRank() != null) {
+                            if ((mainPotPlayer.getActiveGrant().getRank().getWeight() >= targetPotPlayer.getActiveGrant().getRank().getWeight()) || player.isOp()) {
+                                targetPotPlayer.setFrozen(true);
 
-                        player.sendMessage(Color.translate("&aFroze " + target.getDisplayName() + "&a."));
+                                RedisUtil.writeAsync(RedisUtil.onFreeze(player, target));
+
+                                player.sendMessage(Color.translate("&aFroze " + target.getDisplayName() + "&a."));
+                            } else {
+                                player.sendMessage(Color.translate("&cYou cannot freeze this player as their rank weight is higher than yours!"));
+                            }
+                        }
                     }
                 } else {
                     player.sendMessage(Color.translate("&cThat player does not exist."));

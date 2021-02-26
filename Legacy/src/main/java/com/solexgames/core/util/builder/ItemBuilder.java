@@ -2,6 +2,7 @@ package com.solexgames.core.util.builder;
 
 import com.solexgames.core.util.Color;
 import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -15,12 +16,13 @@ import java.util.List;
 import java.util.Map;
 
 @Getter
+@Setter
 public class ItemBuilder {
 
-    private final ItemStack itemStack;
-    private final ItemMeta itemMeta;
+    private ItemStack itemStack;
+    private ItemMeta itemMeta;
 
-    private final Map<Enchantment, Integer> enchantments = new HashMap<>();
+    private Map<Enchantment, Integer> enchantments = new HashMap<>();
 
     public ItemBuilder(Material material) {
         this.itemStack = new ItemStack(material);
@@ -42,18 +44,14 @@ public class ItemBuilder {
         return this;
     }
 
-    public SkullMeta getSkullMeta() {
-        if (this.itemStack.getType().equals(Material.SKULL_ITEM)) {
-            return (SkullMeta) this.itemMeta;
-        } else {
-            return null;
-        }
-    }
-
     public ItemBuilder setOwner(String name) {
+        SkullMeta skullMeta = (SkullMeta) this.itemMeta;
+
         if (this.itemStack.getType().equals(Material.SKULL_ITEM)) {
-            this.getSkullMeta().setOwner(name);
+            skullMeta.setOwner(name);
         }
+
+        this.setItemMeta(skullMeta);
         return this;
     }
 

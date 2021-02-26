@@ -1,13 +1,15 @@
-package com.solexgames.core.listener;
+package com.solexgames.core.redis;
 
 import com.mongodb.client.model.Filters;
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.enums.*;
+import com.solexgames.core.enums.ChatChannelType;
+import com.solexgames.core.enums.NetworkServerStatusType;
+import com.solexgames.core.enums.NetworkServerType;
+import com.solexgames.core.enums.StaffUpdateType;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.punishment.Punishment;
 import com.solexgames.core.player.punishment.PunishmentType;
 import com.solexgames.core.player.ranks.Rank;
-import com.solexgames.core.redis.RedisMessage;
 import com.solexgames.core.server.NetworkServer;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.UUIDUtil;
@@ -21,7 +23,7 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 
-public class RedisListener extends JedisPubSub {
+public class RedisSubscriber extends JedisPubSub {
 
     private final String SERVER_NAME = CorePlugin.getInstance().getServerName();
 
@@ -29,11 +31,12 @@ public class RedisListener extends JedisPubSub {
     public void onMessage(String channel, String message) {
         CorePlugin.getInstance().getRedisSubThread().execute(() -> {
             RedisMessage redisMessage = CorePlugin.GSON.fromJson(message, RedisMessage.class);
+
             switch (redisMessage.getPacket()) {
                 case SERVER_DATA_ONLINE:
                     String bootingServerName = redisMessage.getParam("SERVER");
 
-                    if (!CorePlugin.getInstance().getServerManager().existServer(bootingServerName)){
+                    if (!CorePlugin.getInstance().getServerManager().existServer(bootingServerName)) {
                         NetworkServer server = new NetworkServer(bootingServerName, NetworkServerType.NOT_DEFINED);
 
                         server.setServerStatus(NetworkServerStatusType.BOOTING);
@@ -61,7 +64,7 @@ public class RedisListener extends JedisPubSub {
 
                     boolean whitelistEnabled = Boolean.parseBoolean(redisMessage.getParam("WHITELIST"));
 
-                    if (!CorePlugin.getInstance().getServerManager().existServer(serverName)){
+                    if (!CorePlugin.getInstance().getServerManager().existServer(serverName)) {
                         NetworkServer server = new NetworkServer(serverName, NetworkServerType.valueOf(serverType));
 
                         server.setTicksPerSecond(ticksPerSecond);
@@ -197,7 +200,8 @@ public class RedisListener extends JedisPubSub {
                     String newRankId = redisMessage.getParam("UUID");
                     Rank newRank = new Rank(UUID.fromString(newRankId), Collections.singletonList(Objects.requireNonNull(Rank.getDefault()).getUuid()), Collections.singletonList("permission.testing"), newRankName, Color.translate("&7"), Color.translate("&7"), Color.translate("&7"), false, 0);
                     Player newRankPlayer = Bukkit.getPlayer(redisMessage.getParam("PLAYER"));
-                    if (newRankPlayer != null) newRankPlayer.sendMessage(ChatColor.GREEN + "Rank named '" + newRank.getName() + "' successfully created.");
+                    if (newRankPlayer != null)
+                        newRankPlayer.sendMessage(ChatColor.GREEN + "Rank named '" + newRank.getName() + "' successfully created.");
 
                     newRank.saveRank();
                     break;
@@ -205,7 +209,8 @@ public class RedisListener extends JedisPubSub {
                     Rank delRank = Rank.getByName(redisMessage.getParam("RANK"));
                     if (delRank != null) {
                         Player delRankPlayer = Bukkit.getPlayer(redisMessage.getParam("PLAYER"));
-                        if (delRankPlayer != null) delRankPlayer.sendMessage(ChatColor.RED + "Rank named '" + delRank.getName() + "' successfully deleted.");
+                        if (delRankPlayer != null)
+                            delRankPlayer.sendMessage(ChatColor.RED + "Rank named '" + delRank.getName() + "' successfully deleted.");
 
                         Rank.getRanks().remove(delRank);
                         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getRankCollection().deleteOne(Filters.eq("_id", delRank.getUuid())));
@@ -218,7 +223,8 @@ public class RedisListener extends JedisPubSub {
 
                         try {
                             potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(punishment.getIssuerName());
-                        } catch (Exception ignored) { }
+                        } catch (Exception ignored) {
+                        }
 
                         if (potPlayer != null) potPlayer.getPunishments().add(punishment);
 
@@ -233,14 +239,16 @@ public class RedisListener extends JedisPubSub {
                         UUID removerUuid = null;
                         try {
                             removerUuid = UUID.fromString(redisMessage.getParam("REMOVERUUID"));
-                        } catch (Exception ignored) {}
+                        } catch (Exception ignored) {
+                        }
                         String removerName = redisMessage.getParam("REMOVERNAME");
                         String removerDisplayName = redisMessage.getParam("REMOVERDISPLAYNAME");
                         String reason = redisMessage.getParam("REASON");
 
                         try {
                             punishment = Punishment.getByIdentification(redisMessage.getParam("ID"));
-                        } catch (Exception ignored) {}
+                        } catch (Exception ignored) {
+                        }
 
                         Punishment finalPunishment = punishment;
                         UUID finalRemoverUuid = removerUuid;
@@ -255,13 +263,12 @@ public class RedisListener extends JedisPubSub {
                             String name = UUIDUtil.getName(punishment.getTarget().toString());
 
                             if (reason.endsWith("-s")) {
-                                Bukkit.getOnlinePlayers().forEach(player1 -> {
-                                    if (player1.hasPermission("scandium.staff")) {
-                                        player1.sendMessage(Color.translate(
+                                Bukkit.getOnlinePlayers()
+                                        .stream()
+                                        .filter(player -> player.hasPermission("scandium.staff"))
+                                        .forEach(player1 -> player1.sendMessage(Color.translate(
                                                 "&7[S] " + name + " &awas " + "un" + finalPunishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (removerDisplayName != null ? removerDisplayName : "Console") + "&a."
-                                        ));
-                                    }
-                                });
+                                        )));
                             } else {
                                 Bukkit.broadcastMessage(Color.translate(
                                         "&7" + name + " &awas un" + finalPunishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (removerDisplayName != null ? removerDisplayName : "Console") + "&a."

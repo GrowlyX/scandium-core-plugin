@@ -8,6 +8,8 @@ softdepend: [ProtocolLib, dRobot, ScandiumPAPI]
 load: STARTUP
 
 commands:
+  managerchat:
+    aliases: [mc]
   betawl:
   gmsp:
   modmode:

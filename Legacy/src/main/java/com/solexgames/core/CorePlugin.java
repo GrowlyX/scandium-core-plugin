@@ -32,7 +32,7 @@ import com.solexgames.core.listener.PlayerListener;
 import com.solexgames.core.lunar.AbstractClientInjector;
 import com.solexgames.core.lunar.extend.LunarCommand;
 import com.solexgames.core.manager.*;
-import com.solexgames.core.modsuite.ModSuiteListener;
+import com.solexgames.core.listener.ModSuiteListener;
 import com.solexgames.core.nms.AbstractNMSImplementation;
 import com.solexgames.core.nms.extend.NMSImplementation_v1_7;
 import com.solexgames.core.nms.extend.NMSImplementation_v1_8;
@@ -243,6 +243,7 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("modmode").setExecutor(new StaffModeCommand());
         this.getCommand("clearchat").setExecutor(new ClearChatCommand());
         this.getCommand("slowchat").setExecutor(new SlowChatCommand());
+        this.getCommand("managerchat").setExecutor(new ManagerChatCommand());
         this.getCommand("mutechat").setExecutor(new MuteChatCommand());
         this.getCommand("fly").setExecutor(new FlyCommand());
         this.getCommand("language").setExecutor(new LanguageCommand());
@@ -302,7 +303,7 @@ public final class CorePlugin extends JavaPlugin {
 
         RedisUtil.write(RedisUtil.onServerOffline());
 
-        if (this.redisClient.isClientActive()) this.redisClient.destroyClient();
+        if (this.redisClient.isClientActive()) this.redisClient.unsubscribe();
     }
 
     public void registerListeners(Listener... listeners) {

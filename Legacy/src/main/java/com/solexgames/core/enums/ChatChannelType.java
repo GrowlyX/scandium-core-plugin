@@ -8,6 +8,7 @@ public enum ChatChannelType {
     STAFF("&3[S] ", "STAFF", "scandium.channels.staff"),
     ADMIN("&c[A] ", "ADMIN", "scandium.channels.admin"),
     HOST("&2[H] ", "HOST", "scandium.channels.host"),
+    MANAGER("&4[M] ", "MANAGER", "scandium.channels.manager"),
     DEV("&c[D] ", "DEV", "scandium.channels.dev");
 
     private final String prefix;
