@@ -26,6 +26,7 @@ public class BetaWhitelistCommand extends BaseCommand {
                     case "toggle":
                         if (enabled) {
                             CorePlugin.getInstance().getWhitelistConfig().getConfiguration().set("beta-whitelist", false);
+                            CorePlugin.getInstance().getWhitelistConfig().save();
                             sender.sendMessage(Color.translate("&cDisabled the beta whitelist."));
                         } else {
                             CorePlugin.getInstance().getWhitelistConfig().getConfiguration().set("beta-whitelist", true);
@@ -36,9 +37,11 @@ public class BetaWhitelistCommand extends BaseCommand {
                         if (CorePlugin.getInstance().getWhitelistConfig().getConfiguration().getBoolean("beta-whitelisted-can-join")) {
                             CorePlugin.getInstance().getWhitelistConfig().getConfiguration().set("beta-whitelisted-can-join", false);
                             sender.sendMessage(Color.translate("&cDisabled the beta whitelist player join."));
+                            CorePlugin.getInstance().getWhitelistConfig().save();
                         } else {
                             CorePlugin.getInstance().getWhitelistConfig().getConfiguration().set("beta-whitelisted-can-join", true);
                             sender.sendMessage(Color.translate("&aEnabled the beta whitelist player join."));
+                            CorePlugin.getInstance().getWhitelistConfig().save();
                         }
                         break;
                     case "add":

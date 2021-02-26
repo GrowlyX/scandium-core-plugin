@@ -1,4 +1,4 @@
-package com.solexgames.core.redis;
+package com.solexgames.core.redis.sub.extend;
 
 import com.mongodb.client.model.Filters;
 import com.solexgames.core.CorePlugin;
@@ -10,6 +10,8 @@ import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.punishment.Punishment;
 import com.solexgames.core.player.punishment.PunishmentType;
 import com.solexgames.core.player.ranks.Rank;
+import com.solexgames.core.redis.RedisMessage;
+import com.solexgames.core.redis.sub.AbstractJedisSubscriber;
 import com.solexgames.core.server.NetworkServer;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.UUIDUtil;
@@ -23,9 +25,13 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 
-public class RedisSubscriber extends JedisPubSub {
+public class CoreJedisSubscriber extends AbstractJedisSubscriber {
 
     private final String SERVER_NAME = CorePlugin.getInstance().getServerName();
+
+    public CoreJedisSubscriber() {
+        super("SCANDIUM");
+    }
 
     @Override
     public void onMessage(String channel, String message) {
@@ -33,7 +39,7 @@ public class RedisSubscriber extends JedisPubSub {
             RedisMessage redisMessage = CorePlugin.GSON.fromJson(message, RedisMessage.class);
 
             switch (redisMessage.getPacket()) {
-                case SERVER_DATA_ONLINE:
+        A        case SERVER_DATA_ONLINE:
                     String bootingServerName = redisMessage.getParam("SERVER");
 
                     if (!CorePlugin.getInstance().getServerManager().existServer(bootingServerName)) {
@@ -313,7 +319,6 @@ public class RedisSubscriber extends JedisPubSub {
 
                     break;
                 default:
-                    CorePlugin.getInstance().getLogger().info("[Redis] I received a message, but it was not acknowledged.");
                     break;
             }
         });

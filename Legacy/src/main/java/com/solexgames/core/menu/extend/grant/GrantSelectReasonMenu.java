@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bson.Document;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -31,7 +32,7 @@ public class GrantSelectReasonMenu extends AbstractInventoryMenu {
     private String scope;
 
     public GrantSelectReasonMenu(Player player, Document document, long duration, Rank rank, boolean permanent, String scope) {
-        super("Select grant reason for: " + (Bukkit.getPlayer(document.getString("name")) != null ? Bukkit.getPlayer(document.getString("name")).getDisplayName() : document.getString("name")), 9*3);
+        super("Grant reason for: " + (Bukkit.getPlayer(document.getString("name")) != null ? Bukkit.getPlayer(document.getString("name")).getDisplayName() : document.getString("name")), 9*3);
 
         this.player = player;
         this.document = document;
@@ -46,13 +47,13 @@ public class GrantSelectReasonMenu extends AbstractInventoryMenu {
     public void update() {
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
-        this.inventory.setItem(10, new ItemBuilder(Material.INK_SACK, 1).setDisplayName(network.getMainColor() + "Rank Migration").addLore(Arrays.asList("", "&7Click to select this reason.")).create());
-        this.inventory.setItem(11, new ItemBuilder(Material.INK_SACK, 2).setDisplayName(network.getMainColor() + "Promotion").addLore(Arrays.asList("", "&7Click to select this reason.")).create());
-        this.inventory.setItem(12, new ItemBuilder(Material.INK_SACK, 3).setDisplayName(network.getMainColor() + "Demotion").addLore(Arrays.asList("", "&7Click to select this reason.")).create());
-        this.inventory.setItem(13, new ItemBuilder(Material.INK_SACK, 4).setDisplayName(network.getMainColor() + "Buycraft Issues").addLore(Arrays.asList("", "&7Click to select this reason.")).create());
-        this.inventory.setItem(14, new ItemBuilder(Material.INK_SACK, 5).setDisplayName(network.getMainColor() + "Other").addLore(Arrays.asList("", "&7Click to select this reason.")).create());
+        this.inventory.setItem(10, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + "Rank Migration").addLore(Arrays.asList("", "&7Click to select this reason.")).create());
+        this.inventory.setItem(11, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + "Promotion").addLore(Arrays.asList("", "&7Click to select this reason.")).create());
+        this.inventory.setItem(12, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + "Demotion").addLore(Arrays.asList("", "&7Click to select this reason.")).create());
+        this.inventory.setItem(13, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + "Buycraft Issues").addLore(Arrays.asList("", "&7Click to select this reason.")).create());
+        this.inventory.setItem(14, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + "Other").addLore(Arrays.asList("", "&7Click to select this reason.")).create());
 
-        this.inventory.setItem(16, new ItemBuilder(Material.INK_SACK, 8).setDisplayName(network.getMainColor() + "Custom").addLore(Arrays.asList("", "&7Click to choose a custom reason.")).create());
+        this.inventory.setItem(16, new ItemBuilder(Material.STAINED_CLAY, 5).setDisplayName(ChatColor.GREEN + ChatColor.BOLD.toString() + "Custom").addLore(Arrays.asList("", "&7Click to choose a custom reason.")).create());
     }
 
     @Override
@@ -70,19 +71,19 @@ public class GrantSelectReasonMenu extends AbstractInventoryMenu {
             if (item == null || item.getType() == Material.AIR) return;
             switch (event.getRawSlot()) {
                 case 10:
-                    new GrantSelectConfirmMenu(this.player, this.document, this.rank, this.duration, "Rank Migration", permanent, this.scope).open(player);
+                    new GrantSelectConfirmMenu(this.player, this.document, this.rank, this.duration, "Rank Migration", this.permanent, this.scope).open(player);
                     break;
                 case 11:
-                    new GrantSelectConfirmMenu(this.player, this.document, this.rank, this.duration, "Promotion", permanent, this.scope).open(player);
+                    new GrantSelectConfirmMenu(this.player, this.document, this.rank, this.duration, "Promotion", this.permanent, this.scope).open(player);
                     break;
                 case 12:
-                    new GrantSelectConfirmMenu(this.player, this.document, this.rank, this.duration, "Demotion", permanent, this.scope).open(player);
+                    new GrantSelectConfirmMenu(this.player, this.document, this.rank, this.duration, "Demotion", this.permanent, this.scope).open(player);
                     break;
                 case 13:
-                    new GrantSelectConfirmMenu(this.player, this.document, this.rank, this.duration, "Buycraft Issues", permanent, this.scope).open(player);
+                    new GrantSelectConfirmMenu(this.player, this.document, this.rank, this.duration, "Buycraft Issues", this.permanent, this.scope).open(player);
                     break;
                 case 14:
-                    new GrantSelectConfirmMenu(this.player, this.document, this.rank, this.duration, "Other", permanent, this.scope).open(player);
+                    new GrantSelectConfirmMenu(this.player, this.document, this.rank, this.duration, "Other", this.permanent, this.scope).open(player);
                     break;
                 case 16:
                     PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(this.player);

@@ -30,6 +30,12 @@ public class ConfigExternal {
         this.configuration = YamlConfiguration.loadConfiguration(this.file);
     }
 
+    public void save() {
+        try {
+            this.configuration.save(file);
+        } catch (Exception ignored) {}
+    }
+
     public double getDouble(String path) {
         return this.configuration.contains(path) ? this.configuration.getDouble(path) : 0.0D;
     }
@@ -76,13 +82,5 @@ public class ConfigExternal {
 
             return strings;
         }
-    }
-
-    public File getFile() {
-        return this.file;
-    }
-
-    public YamlConfiguration getConfiguration() {
-        return this.configuration;
     }
 }

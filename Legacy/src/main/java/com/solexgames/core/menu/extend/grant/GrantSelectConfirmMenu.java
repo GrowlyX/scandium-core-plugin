@@ -5,12 +5,12 @@ import com.mongodb.client.model.ReplaceOptions;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.AbstractInventoryMenu;
-import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.grant.Grant;
 import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.UUIDUtil;
+import com.solexgames.core.util.builder.ItemBuilder;
 import lombok.Getter;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.bson.Document;
@@ -40,7 +40,7 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
     private final String scope;
 
     public GrantSelectConfirmMenu(Player player, Document document, Rank rank, long duration, String reason, boolean permanent, String scope) {
-        super("Confirm grant for &b" + (Bukkit.getPlayer(document.getString("name")) != null ? Bukkit.getPlayer(document.getString("name")).getDisplayName() : document.getString("name")), 9*5);
+        super("Confirm grant for &b" + (Bukkit.getPlayer(document.getString("name")) != null ? Bukkit.getPlayer(document.getString("name")).getDisplayName() : document.getString("name")), 9 * 5);
 
         this.player = player;
         this.document = document;
@@ -56,8 +56,8 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
     public void update() {
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
-        int[] intsConfirm = new int[] { 10,11,12,19,20,21,28,29,30 };
-        int[] intsDecline = new int[] { 14,15,16,23,24,25,32,33,34 };
+        int[] intsConfirm = new int[]{10, 11, 12, 19, 20, 21, 28, 29, 30};
+        int[] intsDecline = new int[]{14, 15, 16, 23, 24, 25, 32, 33, 34};
 
         for (int i : intsConfirm) {
             this.inventory.setItem(i, new ItemBuilder(Material.STAINED_CLAY, 5).setDisplayName("&aConfirm Grant").addLore(Arrays.asList(
@@ -65,9 +65,9 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
                     network.getSecondaryColor() + "Issuer: " + network.getMainColor() + player.getDisplayName(),
                     network.getSecondaryColor() + "Target: " + network.getMainColor() + (Bukkit.getPlayer(document.getString("name")) != null ? Bukkit.getPlayer(document.getString("name")).getDisplayName() : document.getString("name")),
                     network.getSecondaryColor() + "Rank: " + network.getMainColor() + rank.getColor() + rank.getName(),
-                    network.getSecondaryColor() + "Duration: " + network.getMainColor()  + (isPermanent() ? "&4Forever" : DurationFormatUtils.formatDurationWords(duration, true, true)),
-                    network.getSecondaryColor() + "Reason: " + network.getMainColor()  + reason,
-                    network.getSecondaryColor() + "Scopes: " + network.getMainColor()  + scope,
+                    network.getSecondaryColor() + "Duration: " + network.getMainColor() + (isPermanent() ? "&4Forever" : DurationFormatUtils.formatDurationWords(duration, true, true)),
+                    network.getSecondaryColor() + "Reason: " + network.getMainColor() + reason,
+                    network.getSecondaryColor() + "Scopes: " + network.getMainColor() + scope,
                     "",
                     "&aLeft-Click to confirm this grant!",
                     network.getMainColor() + "&m--------------------------------"
@@ -98,9 +98,9 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
                 Grant newGrant;
 
                 if (scope.equals("global")) {
-                    newGrant = new Grant(player.getUniqueId(), rank, System.currentTimeMillis(), System.currentTimeMillis() - duration, reason, true, permanent, "global");
+                    newGrant = new Grant(player.getUniqueId(), rank, System.currentTimeMillis(), System.currentTimeMillis() - duration, reason, true, this.permanent, "global");
                 } else {
-                    newGrant = new Grant(player.getUniqueId(), rank, System.currentTimeMillis(), System.currentTimeMillis() - duration, reason, true, permanent, this.scope);
+                    newGrant = new Grant(player.getUniqueId(), rank, System.currentTimeMillis(), System.currentTimeMillis() - duration, reason, true, this.permanent, this.scope);
                 }
 
                 newGrant.setIssuedServer(CorePlugin.getInstance().getServerName());
@@ -109,7 +109,8 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
 
                 try {
                     targetPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(document.getString("name"));
-                } catch (Exception ignored) {}
+                } catch (Exception ignored) {
+                }
 
                 if (targetPotPlayer != null) {
                     targetPotPlayer.getAllGrants().add(newGrant);
@@ -117,7 +118,11 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
                     targetPotPlayer.saveWithoutRemove();
 
                     targetPotPlayer.getPlayer().sendMessage(ChatColor.GREEN + Color.translate("Your rank has been set to " + newGrant.getRank().getColor() + newGrant.getRank().getName() + ChatColor.GREEN + "."));
+                    player.sendMessage("  ");
                     player.sendMessage(Color.translate(network.getSecondaryColor() + "You've granted " + targetPotPlayer.getPlayer().getDisplayName() + network.getSecondaryColor() + " the rank " + rank.getColor() + rank.getName() + network.getSecondaryColor() + " for " + network.getMainColor() + this.getReason() + network.getSecondaryColor() + "."));
+                    player.sendMessage(Color.translate(network.getSecondaryColor() + "Granted for scopes: " + network.getMainColor() + this.scope + network.getSecondaryColor() + "."));
+                    player.sendMessage(Color.translate(network.getSecondaryColor() + "The grant will " + network.getMainColor() + "expire in " + (newGrant.isPermanent() ? "&4Never" : DurationFormatUtils.formatDurationWords(newGrant.getDuration(), true, true) + " (" + CorePlugin.FORMAT.format(new Date(System.currentTimeMillis() + newGrant.getDuration())) + ")")));
+                    player.sendMessage("  ");
                 } else {
                     List<Grant> allGrants = new ArrayList<>();
 
@@ -136,7 +141,11 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
                     Map.Entry<UUID, String> uuidStringEntry = UUIDUtil.getUUID(document.getString("name"));
                     CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuidStringEntry.getKey()), document, new ReplaceOptions().upsert(true)));
 
-                    player.sendMessage(Color.translate(network.getSecondaryColor() + "You've granted " + uuidStringEntry.getValue() + network.getSecondaryColor() + " the rank " + rank.getColor() + rank.getName() + network.getSecondaryColor() + " for " + network.getMainColor() + this.getReason() + network.getSecondaryColor() + "."));
+                    player.sendMessage("  ");
+                    player.sendMessage(Color.translate(network.getSecondaryColor() + "You've granted " + document.getString("name") + network.getSecondaryColor() + " the rank " + rank.getColor() + rank.getName() + network.getSecondaryColor() + " for " + network.getMainColor() + this.getReason() + network.getSecondaryColor() + "."));
+                    player.sendMessage(Color.translate(network.getSecondaryColor() + "Granted for scopes: " + network.getMainColor() + this.scope + network.getSecondaryColor() + "."));
+                    player.sendMessage(Color.translate(network.getSecondaryColor() + "The grant will " + network.getMainColor() + "expire " + (newGrant.isPermanent() ? "&4Never&e." : "in " + DurationFormatUtils.formatDurationWords(newGrant.getDuration(), true, true) + " (" + CorePlugin.FORMAT.format(new Date(System.currentTimeMillis() + newGrant.getDuration())) + ")")));
+                    player.sendMessage("  ");
                 }
                 player.closeInventory();
             } else if (ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()).contains("Cancel")) {

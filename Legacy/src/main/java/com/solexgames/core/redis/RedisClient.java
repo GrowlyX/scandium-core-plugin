@@ -1,6 +1,7 @@
 package com.solexgames.core.redis;
 
 import com.solexgames.core.CorePlugin;
+import com.solexgames.core.redis.sub.extend.CoreJedisSubscriber;
 import lombok.Getter;
 import lombok.Setter;
 import redis.clients.jedis.Jedis;
@@ -15,7 +16,7 @@ public class RedisClient {
     private final int redisPort;
 
     private JedisPool jedisPool;
-    private RedisSubscriber redisSubscriber;
+    private CoreJedisSubscriber coreJedisSubscriber;
 
     private boolean redisAuthentication;
     private boolean isClientActive;
@@ -36,8 +37,8 @@ public class RedisClient {
 
             if (redisAuthentication) jedis.auth(this.redisPassword);
 
-            this.redisSubscriber = new RedisSubscriber();
-            (new Thread(() -> jedis.subscribe(this.redisSubscriber, "SCANDIUM"))).start();
+            this.coreJedisSubscriber = new CoreJedisSubscriber();
+
             jedis.connect();
             this.setClientActive(true);
 
@@ -51,9 +52,16 @@ public class RedisClient {
     public void unsubscribe() {
         try {
             jedisPool.destroy();
-            this.redisSubscriber.unsubscribe();
+            this.coreJedisSubscriber.unsubscribe();
         } catch (Exception e) {
             System.out.println("[Redis] Could not destroy Redis Pool.");
+        }
+    }
+
+    public void write(String json, String channel) {
+        try (Jedis jedis = this.jedisPool.getResource()) {
+            jedis.auth(this.redisPassword);
+            jedis.publish(channel, json);
         }
     }
 

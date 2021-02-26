@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bson.Document;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -30,7 +31,7 @@ public class GrantSelectDurationMenu extends AbstractInventoryMenu {
     private String scope;
 
     public GrantSelectDurationMenu(Player player, Document document, Rank rank, String scope) {
-        super("Select grant duration for: " + (Bukkit.getPlayer(document.getString("name")) != null ? Bukkit.getPlayer(document.getString("name")).getDisplayName() : document.getString("name")), 9*3);
+        super("Grant time for: " + (Bukkit.getPlayer(document.getString("name")) != null ? Bukkit.getPlayer(document.getString("name")).getDisplayName() : document.getString("name")), 9*3);
         this.player = player;
         this.document = document;
         this.rank = rank;
@@ -42,13 +43,13 @@ public class GrantSelectDurationMenu extends AbstractInventoryMenu {
     public void update() {
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
-        this.inventory.setItem(10, new ItemBuilder(Material.INK_SACK, 1).setDisplayName(network.getMainColor() + "1 Day").addLore(Arrays.asList("", "&eClick to select this duration.")).create());
-        this.inventory.setItem(11, new ItemBuilder(Material.INK_SACK, 2).setDisplayName(network.getMainColor() + "1 Week").addLore(Arrays.asList("", "&eClick to select this duration.")).create());
-        this.inventory.setItem(12, new ItemBuilder(Material.INK_SACK, 3).setDisplayName(network.getMainColor() + "1 Month").addLore(Arrays.asList("", "&eClick to select this duration.")).create());
-        this.inventory.setItem(13, new ItemBuilder(Material.INK_SACK, 4).setDisplayName(network.getMainColor() + "3 Months").addLore(Arrays.asList("", "&eClick to select this duration.")).create());
-        this.inventory.setItem(14, new ItemBuilder(Material.INK_SACK, 14).setDisplayName(network.getMainColor() + "Permanent").addLore(Arrays.asList("", "&eClick to select this duration.")).create());
+        this.inventory.setItem(10, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + "1 Day").addLore(Arrays.asList("", "&7Click to select this duration.")).create());
+        this.inventory.setItem(11, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + "1 Week").addLore(Arrays.asList("", "&7Click to select this duration.")).create());
+        this.inventory.setItem(12, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + "1 Month").addLore(Arrays.asList("", "&7Click to select this duration.")).create());
+        this.inventory.setItem(13, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + "3 Months").addLore(Arrays.asList("", "&7Click to select this duration.")).create());
+        this.inventory.setItem(14, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + "Permanent").addLore(Arrays.asList("", "&7Click to select this duration.")).create());
 
-        this.inventory.setItem(16, new ItemBuilder(Material.INK_SACK, 8).setDisplayName(network.getMainColor() + "Custom").addLore(Arrays.asList("", "&eClick to select a custom duration.")).create());
+        this.inventory.setItem(16, new ItemBuilder(Material.STAINED_CLAY, 5).setDisplayName(ChatColor.GREEN + ChatColor.BOLD.toString() + "Custom").addLore(Arrays.asList("", "&7Click to select a custom duration.")).create());
     }
 
     @Override

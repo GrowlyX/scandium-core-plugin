@@ -27,9 +27,11 @@ public class WhitelistCommand extends BaseCommand {
                         if (enabled) {
                             CorePlugin.getInstance().getWhitelistConfig().getConfiguration().set("whitelist", false);
                             sender.sendMessage(Color.translate("&cDisabled the whitelist."));
+                            CorePlugin.getInstance().getWhitelistConfig().save();
                         } else {
                             CorePlugin.getInstance().getWhitelistConfig().getConfiguration().set("whitelist", true);
                             sender.sendMessage(Color.translate("&aEnabled the whitelist."));
+                            CorePlugin.getInstance().getWhitelistConfig().save();
                         }
                         break;
                     case "add":
@@ -43,8 +45,7 @@ public class WhitelistCommand extends BaseCommand {
                             } else {
                                 whitelisted.add(target);
                                 CorePlugin.getInstance().getWhitelistConfig().getConfiguration().set("whitelisted", whitelisted);
-                                CorePlugin.getInstance().saveConfig();
-                                CorePlugin.getInstance().reloadConfig();
+                                CorePlugin.getInstance().getWhitelistConfig().save();
                                 sender.sendMessage(Color.translate("&aAdded " + target + " to the whitelist."));
                             }
                         }
