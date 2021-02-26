@@ -18,7 +18,6 @@ import com.solexgames.core.util.UUIDUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import redis.clients.jedis.JedisPubSub;
 
 import java.util.Collections;
 import java.util.Date;
@@ -39,7 +38,7 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
             RedisMessage redisMessage = CorePlugin.GSON.fromJson(message, RedisMessage.class);
 
             switch (redisMessage.getPacket()) {
-        A        case SERVER_DATA_ONLINE:
+                case SERVER_DATA_ONLINE:
                     String bootingServerName = redisMessage.getParam("SERVER");
 
                     if (!CorePlugin.getInstance().getServerManager().existServer(bootingServerName)) {
