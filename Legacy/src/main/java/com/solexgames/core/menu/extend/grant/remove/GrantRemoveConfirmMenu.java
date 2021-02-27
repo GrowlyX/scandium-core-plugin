@@ -1,9 +1,8 @@
 package com.solexgames.core.menu.extend.grant.remove;
 
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.AbstractInventoryMenu;
-import com.solexgames.core.menu.extend.grant.GrantHistoryViewMenu;
+import com.solexgames.core.menu.extend.grant.history.GrantHistoryViewMenu;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.grant.Grant;
 import com.solexgames.core.util.Color;
@@ -12,7 +11,6 @@ import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;

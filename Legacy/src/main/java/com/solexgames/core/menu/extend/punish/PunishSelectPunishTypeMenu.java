@@ -29,11 +29,11 @@ public class PunishSelectPunishTypeMenu extends AbstractInventoryMenu {
     }
 
     public void update() {
-        this.inventory.setItem(10, new ItemBuilder(Material.INK_SACK, 1).setDisplayName("&6Ban").addLore(Arrays.asList("", "&eClick to select the Ban punishment.")).create());
-        this.inventory.setItem(11, new ItemBuilder(Material.INK_SACK, 2).setDisplayName("&6Kick").addLore(Arrays.asList("", "&eClick to select the Kick punishment.")).create());
-        this.inventory.setItem(12, new ItemBuilder(Material.INK_SACK, 3).setDisplayName("&6Mute").addLore(Arrays.asList("", "&eClick to select the Mute punishment.")).create());
-        this.inventory.setItem(13, new ItemBuilder(Material.INK_SACK, 4).setDisplayName("&6Warn").addLore(Arrays.asList("", "&eClick to select the Warn punishment.")).create());
-        this.inventory.setItem(14, new ItemBuilder(Material.INK_SACK, 5).setDisplayName("&6Blacklist").addLore(Arrays.asList("", "&eClick to select the Blacklist punishment.")).create());
+        this.inventory.setItem(10, new ItemBuilder(Material.INK_SACK, 1).setDisplayName("&6Ban").addLore(Arrays.asList("", "&7Click to select this punishment.")).create());
+        this.inventory.setItem(11, new ItemBuilder(Material.INK_SACK, 2).setDisplayName("&6Kick").addLore(Arrays.asList("", "&7Click to select this punishment.")).create());
+        this.inventory.setItem(12, new ItemBuilder(Material.INK_SACK, 3).setDisplayName("&6Mute").addLore(Arrays.asList("", "&7Click to select this punishment.")).create());
+        this.inventory.setItem(13, new ItemBuilder(Material.INK_SACK, 4).setDisplayName("&6Warn").addLore(Arrays.asList("", "&7Click to select this punishment.")).create());
+        this.inventory.setItem(14, new ItemBuilder(Material.INK_SACK, 5).setDisplayName("&6Blacklist").addLore(Arrays.asList("", "&7Click to select this punishment.")).create());
     }
 
     @Override

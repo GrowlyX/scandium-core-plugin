@@ -57,22 +57,25 @@ public class PunishSelectConfirmMenu extends AbstractInventoryMenu {
 
         for (int i : intsConfirm) {
             this.inventory.setItem(i, new ItemBuilder(Material.STAINED_CLAY, 5)
-                    .setDisplayName("&cConfirm Punishment")
+                    .setDisplayName("&a&lConfirm Punishment")
                     .addLore(
-                            "",
+                            network.getMainColor() + "&m--------------------------------",
                             "&7Punisher: &b" + network.getSecondaryColor() + this.player.getName(),
                             "&7Target: &b" + network.getSecondaryColor() + this.target,
                             "&7Reason: &b" + network.getSecondaryColor() + this.reason,
                             "&7Type: &b" + network.getSecondaryColor() + punishmentType.getName(),
-                            "&7Duration: &b" + network.getSecondaryColor() + (permanent ? "Permanent" : DurationFormatUtils.formatDurationWords(this.getPunishmentDuration(), true, true))
+                            "&7Duration: &b" + network.getSecondaryColor() + (permanent ? "&4Forever" : DurationFormatUtils.formatDurationWords(this.getPunishmentDuration(), true, true)),
+                            "",
+                            "&aLeft-Click to confirm this grant!",
+                            network.getMainColor() + "&m--------------------------------"
                     )
                     .create());
         }
 
         for (int i : intsDecline) {
-            this.inventory.setItem(i, new ItemBuilder(Material.STAINED_CLAY, 14).setDisplayName("&cCancel Punishment").addLore(Arrays.asList(
+            this.inventory.setItem(i, new ItemBuilder(Material.STAINED_CLAY, 14).setDisplayName("&c&lCancel Punishment").addLore(Arrays.asList(
                     "",
-                    "&eClick to cancel this punishment."
+                    "&7Click to cancel this punishment."
             )).create());
         }
     }

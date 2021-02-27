@@ -1,4 +1,4 @@
-package com.solexgames.core.menu.extend.grant;
+package com.solexgames.core.menu.extend.grant.history;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
@@ -32,13 +32,14 @@ public class GrantHistoryViewMenu extends AbstractInventoryMenu {
 
     public GrantHistoryViewMenu(Player player, Player target) {
         super("Applicable grants of " + target.getDisplayName(), 9 * 5);
+
         this.player = player;
         this.target = target;
+
         this.update();
     }
 
     public void update() {
-
         AtomicInteger i = new AtomicInteger(10);
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
@@ -52,14 +53,12 @@ public class GrantHistoryViewMenu extends AbstractInventoryMenu {
                 lore.add("&eDuration&7: " + network.getMainColor() + (grant.isPermanent() ? "&4Forever" : DurationFormatUtils.formatDurationWords(grant.getDuration(), true, true)));
                 lore.add(network.getMainColor() + "&m------------------------------------");
                 lore.add(network.getSecondaryColor() + "Scopes:");
-                lore.add(" &7- " + network.getMainColor() + (grant.getScope() != null ? grant.getScope() : "global"));
+                lore.add(" &7- " + ChatColor.GREEN + (grant.getScope() != null ? grant.getScope() : "global"));
                 lore.add(network.getMainColor() + "&m------------------------------------");
                 lore.add("&eIssued By&7: " + network.getMainColor() + (grant.getIssuer() != null ? Bukkit.getOfflinePlayer(grant.getIssuer()).getName() : "&4Console"));
                 lore.add("&eIssued On&7: " + network.getMainColor() + CorePlugin.FORMAT.format(new Date(grant.getDateAdded())));
                 lore.add("&eIssued At&7: " + network.getMainColor() + (grant.getIssuedServer() != null ? grant.getIssuedServer() : "Not Recorded"));
                 lore.add("&eIssued Reason&7: " + network.getMainColor() + grant.getReason());
-                lore.add(network.getMainColor() + "&m------------------------------------");
-                lore.add("&aRight-Click to remove this grant from history.");
                 lore.add(network.getMainColor() + "&m------------------------------------");
 
                 this.inventory.setItem(i.get(), new ItemBuilder(Material.WOOL, (grant.isActive() ? 5 : (grant.isExpired() ? 8 : 14)))

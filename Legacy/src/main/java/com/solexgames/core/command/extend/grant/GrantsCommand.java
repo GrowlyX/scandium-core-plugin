@@ -1,7 +1,7 @@
 package com.solexgames.core.command.extend.grant;
 
 import com.solexgames.core.command.BaseCommand;
-import com.solexgames.core.menu.extend.grant.GrantHistoryViewMenu;
+import com.solexgames.core.menu.extend.grant.history.GrantHistoryViewMenu;
 import com.solexgames.core.util.Color;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;

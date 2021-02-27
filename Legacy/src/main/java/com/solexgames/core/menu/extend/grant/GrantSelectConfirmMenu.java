@@ -60,7 +60,7 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
         int[] intsDecline = new int[]{14, 15, 16, 23, 24, 25, 32, 33, 34};
 
         for (int i : intsConfirm) {
-            this.inventory.setItem(i, new ItemBuilder(Material.STAINED_CLAY, 5).setDisplayName("&aConfirm Grant").addLore(Arrays.asList(
+            this.inventory.setItem(i, new ItemBuilder(Material.STAINED_CLAY, 5).setDisplayName("&a&lConfirm Grant").addLore(Arrays.asList(
                     network.getMainColor() + "&m--------------------------------",
                     network.getSecondaryColor() + "Issuer: " + network.getMainColor() + player.getDisplayName(),
                     network.getSecondaryColor() + "Target: " + network.getMainColor() + (Bukkit.getPlayer(document.getString("name")) != null ? Bukkit.getPlayer(document.getString("name")).getDisplayName() : document.getString("name")),
@@ -75,9 +75,9 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
         }
 
         for (int i : intsDecline) {
-            this.inventory.setItem(i, new ItemBuilder(Material.STAINED_CLAY, 14).setDisplayName("&cCancel Grant").addLore(Arrays.asList(
+            this.inventory.setItem(i, new ItemBuilder(Material.STAINED_CLAY, 14).setDisplayName("&c&lCancel Grant").addLore(Arrays.asList(
                     "",
-                    "&aClick to cancel this grant!"
+                    "&7Click to cancel this grant!"
             )).create());
         }
     }
