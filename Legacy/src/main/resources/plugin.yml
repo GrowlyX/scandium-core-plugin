@@ -38,6 +38,8 @@ commands:
     aliases: [warps]
   toggleautovanish:
     aliases: [tav]
+  togglefilteredmessages:
+    aliases: [tfm]
   toggleautomodmode:
     aliases: [tamod]
   clear:

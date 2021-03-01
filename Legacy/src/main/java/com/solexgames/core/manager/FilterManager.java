@@ -2,6 +2,7 @@ package com.solexgames.core.manager;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.player.PotPlayer;
+import com.solexgames.core.util.Color;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
@@ -23,7 +24,7 @@ public class FilterManager {
     }
 
     public boolean isMessageFiltered(Player player, String message) {
-        AtomicBoolean cancel = new AtomicBoolean(false);
+        AtomicBoolean atomicBoolean = new AtomicBoolean(false);
         String fixedMessage = message.toLowerCase()
                 .replaceAll("[^a-z0-9 ] ", " ")
                 .replace("@ ", " a")
@@ -36,13 +37,15 @@ public class FilterManager {
         this.filteredMessages.stream()
                 .filter(s -> fixedMessage.contains(s.toLowerCase()))
                 .forEach(s -> {
-                    if (!cancel.get()) {
-                        handleAlert(player, fixedMessage);
-                        cancel.set(true);
+                    if (!atomicBoolean.get()) {
+                        if (!player.hasPermission("scandium.filter.bypass"))
+                            handleAlert(player, fixedMessage);
+
+                        atomicBoolean.set(true);
                     }
                 });
 
-        return cancel.get();
+        return atomicBoolean.get();
     }
 
     private void handleAlert(Player player, String message) {
@@ -52,7 +55,7 @@ public class FilterManager {
                 .filter(PotPlayer::isCanSeeFiltered)
                 .forEach(potPlayer -> {
                     PotPlayer targetPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-                    potPlayer.getPlayer().sendMessage("&c[Filtered] &e" + targetPlayer.getColorByRankColor() + targetPlayer.getName() + "&7: &e" + message);
+                    potPlayer.getPlayer().sendMessage(Color.translate("&c[Filtered] &e" + targetPlayer.getColorByRankColor() + targetPlayer.getName() + "&7: &e" + message));
                 });
     }
 }
