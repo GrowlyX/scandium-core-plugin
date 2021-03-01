@@ -1,4 +1,4 @@
-package com.solexgames.core.command.extend.essential;
+package com.solexgames.core.command.extend.toggle;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
@@ -8,7 +8,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class TogglePrivateMessagesCommand extends BaseCommand {
+public class ToggleTipsCommand extends BaseCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -20,12 +20,12 @@ public class TogglePrivateMessagesCommand extends BaseCommand {
         Player player = (Player) sender;
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
-        if (potPlayer.isCanReceiveDms()) {
-            player.sendMessage(Color.translate("&cYou have disabled private messages."));
-            potPlayer.setCanSeeStaffMessages(false);
+        if (potPlayer.isCanSeeTips()) {
+            player.sendMessage(Color.translate("&cYou have disabled tip broadcasts."));
+            potPlayer.setCanSeeTips(false);
         } else {
-            player.sendMessage(Color.translate("&aYou can now see private messages."));
-            potPlayer.setCanSeeStaffMessages(true);
+            player.sendMessage(Color.translate("&aYou can now see tip broadcasts."));
+            potPlayer.setCanSeeTips(true);
         }
 
         return false;

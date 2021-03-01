@@ -36,8 +36,12 @@ commands:
     aliases: [setmaxplayers, maxplayers]
   warp:
     aliases: [warps]
+  toggleautovanish:
+    aliases: [tav]
+  toggleautomodmode:
+    aliases: [tamod]
   clear:
-    aliases: [clearinventory]
+    aliases: [clearinventory, ci]
   network:
     aliases: [datadump]
   forceupdate:

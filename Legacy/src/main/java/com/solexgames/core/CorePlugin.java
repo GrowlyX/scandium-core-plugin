@@ -21,6 +21,10 @@ import com.solexgames.core.command.extend.rank.RankCommand;
 import com.solexgames.core.command.extend.rank.RankImportCommand;
 import com.solexgames.core.command.extend.server.SetSlotsCommand;
 import com.solexgames.core.command.extend.shutdown.ShutdownCommand;
+import com.solexgames.core.command.extend.toggle.ToggleAutoModModeCommand;
+import com.solexgames.core.command.extend.toggle.ToggleAutoVanishCommand;
+import com.solexgames.core.command.extend.toggle.ToggleStaffMessagesCommand;
+import com.solexgames.core.command.extend.toggle.ToggleTipsCommand;
 import com.solexgames.core.command.extend.warps.WarpCommand;
 import com.solexgames.core.command.extend.web.WebAnnouncementCommand;
 import com.solexgames.core.command.extend.web.WebAnnouncementDeleteCommand;
@@ -268,6 +272,8 @@ public final class CorePlugin extends JavaPlugin {
 
         this.getCommand("toggletips").setExecutor(new ToggleTipsCommand());
         this.getCommand("togglestaffmessages").setExecutor(new ToggleStaffMessagesCommand());
+        this.getCommand("toggleautomodmode").setExecutor(new ToggleAutoModModeCommand());
+        this.getCommand("toggleautovanish").setExecutor(new ToggleAutoVanishCommand());
 
         if (this.lunarCommand != null) this.getCommand("lunar").setExecutor(lunarCommand);
         if (this.chatInterceptor != null) this.chatInterceptor.initializePacketInterceptor();

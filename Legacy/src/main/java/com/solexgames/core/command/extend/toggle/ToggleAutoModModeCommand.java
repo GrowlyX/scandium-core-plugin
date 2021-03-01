@@ -1,4 +1,4 @@
-package com.solexgames.core.command.extend.essential;
+package com.solexgames.core.command.extend.toggle;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
@@ -8,7 +8,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class ToggleStaffMessagesCommand extends BaseCommand {
+public class ToggleAutoModModeCommand extends BaseCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -21,12 +21,12 @@ public class ToggleStaffMessagesCommand extends BaseCommand {
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
         if (player.hasPermission("scandium.staff")) {
-            if (potPlayer.isCanSeeStaffMessages()) {
-                player.sendMessage(Color.translate("&cYou have disabled staff messages."));
-                potPlayer.setCanSeeStaffMessages(false);
+            if (potPlayer.isAutoModMode()) {
+                player.sendMessage(Color.translate("&cYou have disabled auto mod mode."));
+                potPlayer.setAutoModMode(false);
             } else {
-                player.sendMessage(Color.translate("&aYou can now see staff messages."));
-                potPlayer.setCanSeeStaffMessages(true);
+                player.sendMessage(Color.translate("&aYou have enabled auto mod mode."));
+                potPlayer.setAutoModMode(true);
             }
         } else {
             player.sendMessage(Color.translate("&cI'm sorry, but you do not have permission to perform this command."));
