@@ -93,6 +93,7 @@ public final class CorePlugin extends JavaPlugin {
     private RankManager rankManager;
     private ShutdownManager shutdownManager;
     private DiscordManager discordManager;
+    private FilterManager filterManager;
     private PrefixManager prefixManager;
     private PunishmentManager punishmentManager;
 
@@ -108,6 +109,7 @@ public final class CorePlugin extends JavaPlugin {
     private ConfigExternal whitelistConfig;
     private ConfigExternal databaseConfig;
     private ConfigExternal motdConfig;
+    private ConfigExternal filterConfig;
 
     private AbstractChatInterceptor chatInterceptor;
     private AbstractClientInjector lunarCommand;
@@ -150,6 +152,7 @@ public final class CorePlugin extends JavaPlugin {
         this.databaseConfig = new ConfigExternal("database");
         this.whitelistConfig = new ConfigExternal("whitelist");
         this.motdConfig = new ConfigExternal("motd");
+        this.filterConfig = new ConfigExternal("filtered");
 
         CHAT_FORMAT = this.getConfig().getString("settings.chat-format");
         NAME_MC_REWARDS = this.getConfig().getBoolean("settings.namemc-rewards");

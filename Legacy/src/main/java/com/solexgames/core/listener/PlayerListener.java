@@ -173,24 +173,40 @@ public class PlayerListener implements Listener {
             }
         }
 
+        if (event.getPlayer().hasPermission("scandium.staff"))
+            Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onConnect(event.getPlayer()))), 10L);
+
         if (potPlayer.isAutoVanish()) {
-            potPlayer.getPlayer().sendMessage(Color.translate("&7&oYou have been automatically put into &eVanish&7&o."));
-            potPlayer.getPlayer().chat("/vanish");
+            potPlayer.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getServerManager().getAutomaticallyPutInto().replace("<value>", "vanish")));
+
+            CorePlugin.getInstance().getPlayerManager().vanishPlayerRaw(event.getPlayer());
+            StaffUtil.sendAlert(event.getPlayer(), "vanished");
         }
 
         if (potPlayer.isAutoModMode()) {
-            potPlayer.getPlayer().sendMessage(Color.translate("&7&oYou have been automatically put into &eMod Mode&7&o."));
-            potPlayer.getPlayer().chat("/modmode");
-        }
+            potPlayer.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getServerManager().getAutomaticallyPutInto().replace("<value>", "mod mode")));
 
-        if (event.getPlayer().hasPermission("scandium.staff"))
-            Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onConnect(event.getPlayer()))), 10L);
+            CorePlugin.getInstance().getPlayerManager().modModeRaw(event.getPlayer());
+            StaffUtil.sendAlert(event.getPlayer(), "modmoded");
+        }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onAsyncPlayerChatEvent(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+        String message = event.getMessage();
+
+        boolean filtered = CorePlugin.getInstance().getFilterManager().isMessageFiltered(player, message);
+        if (filtered) {
+            if (player.hasPermission("scandium.filter.bypass")) {
+                player.sendMessage(Color.translate("&cBe careful, that message would have been filtered!"));
+            } else {
+                event.setCancelled(true);
+                player.sendMessage(Color.translate("&cThat message is not allowed!"));
+                return;
+            }
+        }
 
         if (potPlayer.isFrozen()) {
             event.setCancelled(true);
@@ -199,9 +215,9 @@ public class PlayerListener implements Listener {
                     .stream()
                     .filter(player1 -> player1.hasPermission("scandium.staff"))
                     .filter(player1 -> CorePlugin.getInstance().getPlayerManager().getPlayer(player1).isCanSeeStaffMessages())
-                    .forEach(player1 -> player1.sendMessage(Color.translate("&b[S] &7[Frozen] &b" + potPlayer.getPlayer().getDisplayName() + "&f: &f" + event.getMessage())));
+                    .forEach(player1 -> player1.sendMessage(Color.translate("&c[Frozen] &f" + potPlayer.getPlayer().getDisplayName() + "&7: &e" + event.getMessage())));
 
-            event.getPlayer().sendMessage(Color.translate(Color.translate("&7[Frozen] &b" + potPlayer.getPlayer().getDisplayName() + "&f: &f" + event.getMessage())));
+            event.getPlayer().sendMessage(Color.translate(Color.translate("&c[Frozen] &f" + potPlayer.getPlayer().getDisplayName() + "&7: &e" + event.getMessage())));
             return;
         }
 
@@ -212,7 +228,6 @@ public class PlayerListener implements Listener {
 
         if (potPlayer.isGrantDurationEditing()) {
             event.setCancelled(true);
-            String message = event.getMessage();
 
             if (event.getMessage().equalsIgnoreCase("cancel")) {
                 player.sendMessage(Color.translate("&cCancelled the granting process."));
@@ -243,7 +258,6 @@ public class PlayerListener implements Listener {
 
         if (potPlayer.isGrantEditing()) {
             event.setCancelled(true);
-            String message = event.getMessage();
 
             if (event.getMessage().equalsIgnoreCase("cancel")) {
                 player.sendMessage(Color.translate("&cCancelled the granting process."));
@@ -260,7 +274,6 @@ public class PlayerListener implements Listener {
 
         if (potPlayer.isReasonEditing()) {
             event.setCancelled(true);
-            String message = event.getMessage();
 
             if (event.getMessage().equalsIgnoreCase("cancel")) {
                 player.sendMessage(Color.translate("&cCancelled the punishment process."));
@@ -326,8 +339,14 @@ public class PlayerListener implements Listener {
             return;
         }
 
+        if (potPlayer.getChannel() != null) {
+            event.setCancelled(true);
+            RedisUtil.writeAsync(RedisUtil.onChatChannel(potPlayer.getChannel(), message, player));
+            return;
+        }
+
         if (CorePlugin.getInstance().getServerManager().isChatEnabled()) {
-            if (!CorePlugin.getInstance().getPlayerManager().getPlayer(player).isCurrentlyMuted()) {
+            if (!potPlayer.isCurrentlyMuted()) {
                 checkChannel(event, player, potPlayer);
             } else {
                 event.setCancelled(true);
@@ -335,7 +354,7 @@ public class PlayerListener implements Listener {
             }
         } else {
             if (player.hasPermission("scandium.chat.bypass")) {
-                if (!CorePlugin.getInstance().getPlayerManager().getPlayer(player).isCurrentlyMuted()) {
+                if (!potPlayer.isCurrentlyMuted()) {
                     checkChannel(event, player, potPlayer);
                 } else {
                     event.setCancelled(true);
@@ -343,7 +362,7 @@ public class PlayerListener implements Listener {
                 }
             } else {
                 event.setCancelled(true);
-                switch (CorePlugin.getInstance().getPlayerManager().getPlayer(player).getLanguage()) {
+                switch (potPlayer.getLanguage()) {
                     case ENGLISH:
                         player.sendMessage(Color.translate("&cThe chat is currently muted. Please try chatting again later."));
                         break;

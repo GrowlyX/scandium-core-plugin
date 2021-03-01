@@ -23,6 +23,7 @@ public class ServerManager {
     private ArrayList<Player> staffModePlayers = new ArrayList<>();
 
     private ServerType network;
+    private String automaticallyPutInto;
 
     private boolean chatEnabled = true;
 
@@ -41,6 +42,7 @@ public class ServerManager {
         this.clearChatJoin = CorePlugin.getInstance().getConfig().getBoolean("player-join.clear-chat");
         this.joinMessageEnabled = CorePlugin.getInstance().getConfig().getBoolean("player-join.join-message.enabled");
         this.joinMessageCentered = CorePlugin.getInstance().getConfig().getBoolean("player-join.join-message.centered");
+        this.automaticallyPutInto = CorePlugin.getInstance().getConfig().getString("settings.automatic-string");
 
         setupServerType();
         CorePlugin.getInstance().getLogger().info("[Network] Loaded server type: " + this.network.getServerName() + ".");

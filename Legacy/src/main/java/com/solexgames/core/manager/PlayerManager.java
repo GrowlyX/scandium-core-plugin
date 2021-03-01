@@ -68,6 +68,22 @@ public class PlayerManager {
         CorePlugin.getInstance().getServerManager().getVanishedPlayers().add(player);
     }
 
+    public void vanishPlayerRaw(Player player) {
+        Bukkit.getOnlinePlayers()
+                .stream()
+                .filter(player1 -> player1 != player)
+                .filter(player1 -> !player1.hasPermission("scandium.vanished.see"))
+                .forEach(p -> p.hidePlayer(player));
+
+        CorePlugin.getInstance().getNMS().removeExecute(player);
+
+        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+        potPlayer.setVanished(true);
+        potPlayer.setupPlayerTag();
+
+        CorePlugin.getInstance().getServerManager().getVanishedPlayers().add(player);
+    }
+
     public void modModePlayer(Player player) {
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
@@ -94,6 +110,30 @@ public class PlayerManager {
         player.sendMessage(Color.translate("&aYou have enabled Mod Mode."));
 
         StaffUtil.sendAlert(player, "modmoded");
+    }
+
+    public void modModeRaw(Player player) {
+        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
+        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+        ModSuiteBoard modSuiteBoard = new ModSuiteBoard(player);
+
+        potPlayer.setStaffMode(true);
+        potPlayer.setupPlayerTag();
+        potPlayer.setArmorHistory(player.getInventory().getArmorContents());
+        potPlayer.setItemHistory(player.getInventory().getContents());
+        potPlayer.setModModeBoard(modSuiteBoard);
+
+        player.getInventory().clear();
+
+        player.getInventory().setItem(0, new ItemBuilder(Material.COMPASS).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + "Push Forward").create());
+        player.getInventory().setItem(1, new ItemBuilder(Material.SKULL_ITEM, 1).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + "Online Staff").create());
+        player.getInventory().setItem(2, new ItemBuilder(Material.NETHER_STAR).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + "Random Player").create());
+
+        player.getInventory().setItem(6, new ItemBuilder(Material.BOOK).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + "Inspect Player").create());
+        player.getInventory().setItem(7, new ItemBuilder(Material.PACKED_ICE).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + "Freeze Player").create());
+        player.getInventory().setItem(8, new ItemBuilder(Material.INK_SACK, (potPlayer.isVanished() ? 10 : 8)).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + (potPlayer.isVanished() ? "Disable Vanish" : "Enable Vanish")).create());
+
+        player.updateInventory();
     }
 
     public void unModModePlayer(Player player) {

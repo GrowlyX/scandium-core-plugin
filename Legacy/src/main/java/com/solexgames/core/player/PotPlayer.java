@@ -4,6 +4,7 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.board.ScoreBoard;
+import com.solexgames.core.enums.ChatChannelType;
 import com.solexgames.core.enums.LanguageType;
 import com.solexgames.core.media.Media;
 import com.solexgames.core.player.grant.Grant;
@@ -60,6 +61,7 @@ public class PotPlayer {
     private boolean canReceiveDms = true;
     private boolean canReceiveDmsSounds = true;
     private boolean canSeeBroadcasts = true;
+    private boolean canSeeFiltered = true;
     private boolean canSeeTips = true;
     private boolean canAcceptingFriendRequests = true;
 
@@ -85,6 +87,8 @@ public class PotPlayer {
     private long grantDuration;
     private boolean grantPerm;
     private String grantScope;
+
+    private ChatChannelType channel;
 
     private boolean isGrantDurationEditing = false;
     private Document grantDurationTarget = null;
@@ -137,6 +141,7 @@ public class PotPlayer {
         document.put("canSeeTips", this.canSeeTips);
         document.put("canReceiveDms", this.canReceiveDms);
         document.put("canSeeGlobalChat", this.canSeeGlobalChat);
+        document.put("canSeeFiltered", this.canSeeFiltered);
         document.put("canReceiveDmsSounds", this.canReceiveDmsSounds);
         document.put("canSeeBroadcasts", this.canSeeBroadcasts);
         document.put("lastJoined", CorePlugin.FORMAT.format(new Date()));
@@ -200,6 +205,7 @@ public class PotPlayer {
         document.put("canSeeTips", this.canSeeTips);
         document.put("canReceiveDms", this.canReceiveDms);
         document.put("canSeeGlobalChat", this.canSeeGlobalChat);
+        document.put("canSeeFiltered", this.canSeeFiltered);
         document.put("canReceiveDmsSounds", this.canReceiveDmsSounds);
         document.put("canSeeBroadcasts", this.canSeeBroadcasts);
         document.put("lastJoined", CorePlugin.FORMAT.format(new Date()));
@@ -270,6 +276,9 @@ public class PotPlayer {
         }
         if (document.getBoolean("canReceiveDms") != null) {
             this.canReceiveDms = document.getBoolean("canReceiveDms");
+        }
+        if (document.getBoolean("canSeeFiltered") != null) {
+            this.canSeeFiltered = document.getBoolean("canSeeFiltered");
         }
         if (document.getBoolean("canSeeBroadcasts") != null) {
             this.canSeeBroadcasts = document.getBoolean("canSeeBroadcasts");
