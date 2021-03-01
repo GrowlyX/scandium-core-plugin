@@ -149,7 +149,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onConnect(PlayerJoinEvent event) {
-        new PotPlayer(event.getPlayer().getUniqueId());
+        PotPlayer potPlayer = new PotPlayer(event.getPlayer().getUniqueId());
 
         CorePlugin.getInstance().getServerManager().getVanishedPlayers().forEach(player -> {
             if (!event.getPlayer().hasPermission("scandium.vanished.see")) {
@@ -171,6 +171,16 @@ public class PlayerListener implements Listener {
             } else {
                 Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> StringUtil.sendCenteredMessage(event.getPlayer(), (ArrayList<String>) MANAGER.getJoinMessage()));
             }
+        }
+
+        if (potPlayer.isAutoVanish()) {
+            potPlayer.getPlayer().sendMessage(Color.translate("&7&oYou have been automatically put into &eVanish&7&o."));
+            potPlayer.getPlayer().chat("/vanish");
+        }
+
+        if (potPlayer.isAutoModMode()) {
+            potPlayer.getPlayer().sendMessage(Color.translate("&7&oYou have been automatically put into &eMod Mode&7&o."));
+            potPlayer.getPlayer().chat("/modmode");
         }
 
         if (event.getPlayer().hasPermission("scandium.staff"))
@@ -401,10 +411,10 @@ public class PlayerListener implements Listener {
             });
         }
 
-        long commandCooldown = 1L;
-        if (!(System.currentTimeMillis() < CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer()).getCommandCooldown())) {
+        long commandCoolDown = 1L;
+        if (System.currentTimeMillis() < potPlayer.getCommandCooldown()) {
             if (!event.getPlayer().hasPermission("scandium.command.cooldown.bypass")) {
-                event.getPlayer().sendMessage(Color.translate(PunishmentStrings.CMD_CHAT_MESSAGE.replace("<amount>", DurationFormatUtils.formatDurationWords(commandCooldown, true, true))));
+                event.getPlayer().sendMessage(Color.translate(PunishmentStrings.CMD_CHAT_MESSAGE.replace("<amount>", DurationFormatUtils.formatDurationWords(commandCoolDown, true, true))));
                 event.setCancelled(true);
 
                 return;

@@ -6,6 +6,10 @@ server-type: "PRACTICE"
 server-id: "eu-practice"
 refresh-time: 5
 
+core-settings:
+  name: "Scandium"
+  command-name: "scandium"
+
 settings:
   color-gui: true
   namemc-rewards: true

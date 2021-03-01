@@ -63,8 +63,8 @@ public class PotPlayer {
     private boolean canSeeTips = true;
     private boolean canAcceptingFriendRequests = true;
 
-    private ItemStack[] allItems;
-    private ItemStack[] allArmor;
+    private ItemStack[] itemHistory;
+    private ItemStack[] armorHistory;
 
     private boolean canReport = true;
     private boolean canRequest = true;
@@ -73,6 +73,9 @@ public class PotPlayer {
     private boolean isStaffMode = false;
     private boolean isFrozen = false;
     private boolean isSynced = false;
+
+    private boolean isAutoVanish = false;
+    private boolean isAutoModMode = false;
 
     private ScoreBoard modModeBoard;
 
@@ -182,6 +185,9 @@ public class PotPlayer {
             document.put("potionMessageType", "NORMAL");
         }
 
+        document.put("autoVanish", this.isAutoVanish);
+        document.put("autoModMode", this.isAutoModMode);
+
         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true)));
     }
 
@@ -242,6 +248,9 @@ public class PotPlayer {
             document.put("potionMessageType", "NORMAL");
         }
 
+        document.put("autoVanish", this.isAutoVanish);
+        document.put("autoModMode", this.isAutoModMode);
+
         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true)));
 
         CorePlugin.getInstance().getPlayerManager().getAllSyncCodes().remove(this.syncCode);
@@ -270,6 +279,12 @@ public class PotPlayer {
         }
         if (document.getBoolean("hasVoted") != null) {
             this.hasVoted = document.getBoolean("hasVoted");
+        }
+        if (document.getBoolean("autoModMode") != null) {
+            this.isAutoModMode = document.getBoolean("autoModMode");
+        }
+        if (document.getBoolean("autoVanish") != null) {
+            this.isAutoVanish = document.getBoolean("autoVanish");
         }
         if (document.getBoolean("canReceiveDmsSounds") != null) {
             this.canReceiveDmsSounds = document.getBoolean("canReceiveDmsSounds");

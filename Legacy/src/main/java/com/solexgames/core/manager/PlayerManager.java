@@ -12,7 +12,6 @@ import com.solexgames.core.util.RedisUtil;
 import com.solexgames.core.util.StaffUtil;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -76,8 +75,8 @@ public class PlayerManager {
 
         potPlayer.setStaffMode(true);
         potPlayer.setupPlayerTag();
-        potPlayer.setAllArmor(player.getInventory().getArmorContents());
-        potPlayer.setAllItems(player.getInventory().getContents());
+        potPlayer.setArmorHistory(player.getInventory().getArmorContents());
+        potPlayer.setItemHistory(player.getInventory().getContents());
         potPlayer.setModModeBoard(modSuiteBoard);
 
         player.getInventory().clear();
@@ -101,8 +100,8 @@ public class PlayerManager {
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
         player.getInventory().clear();
-        player.getInventory().setContents(potPlayer.getAllItems());
-        player.getInventory().setArmorContents(potPlayer.getAllArmor());
+        player.getInventory().setContents(potPlayer.getItemHistory());
+        player.getInventory().setArmorContents(potPlayer.getArmorHistory());
 
         potPlayer.setStaffMode(false);
         potPlayer.setupPlayerTag();

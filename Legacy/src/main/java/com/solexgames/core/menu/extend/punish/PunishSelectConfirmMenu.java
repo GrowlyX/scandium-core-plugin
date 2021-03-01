@@ -60,13 +60,13 @@ public class PunishSelectConfirmMenu extends AbstractInventoryMenu {
                     .setDisplayName("&a&lConfirm Punishment")
                     .addLore(
                             network.getMainColor() + "&m--------------------------------",
-                            "&7Punisher: &b" + network.getSecondaryColor() + this.player.getName(),
-                            "&7Target: &b" + network.getSecondaryColor() + this.target,
-                            "&7Reason: &b" + network.getSecondaryColor() + this.reason,
-                            "&7Type: &b" + network.getSecondaryColor() + punishmentType.getName(),
-                            "&7Duration: &b" + network.getSecondaryColor() + (permanent ? "&4Forever" : DurationFormatUtils.formatDurationWords(this.getPunishmentDuration(), true, true)),
+                            network.getSecondaryColor() + "Punisher: " + network.getSecondaryColor() + this.player.getName(),
+                            network.getSecondaryColor() + "Target: " + network.getSecondaryColor() + this.target,
+                            network.getSecondaryColor() + "Reason: " + network.getSecondaryColor() + this.reason,
+                            network.getSecondaryColor() + "Type: " + network.getSecondaryColor() + punishmentType.getName(),
+                            network.getSecondaryColor() + "Duration: " + network.getSecondaryColor() + (permanent ? "&4Forever" : DurationFormatUtils.formatDurationWords(this.getPunishmentDuration(), true, true)),
                             "",
-                            "&aLeft-Click to confirm this grant!",
+                            "&aLeft-Click to confirm this punishment!",
                             network.getMainColor() + "&m--------------------------------"
                     )
                     .create());

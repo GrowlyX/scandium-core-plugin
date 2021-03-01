@@ -8,12 +8,20 @@ import com.solexgames.core.util.Color;
 import com.solexgames.core.util.StringUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.entity.Player;
 
-public class CoreCommand extends BaseCommand {
+import java.util.Arrays;
+import java.util.List;
+
+public class CoreCommand extends BukkitCommand {
+
+    public CoreCommand(String name) {
+        super(name, "Base Command for " + name + " Core.", "/" + name + " <debug|disallow|panel>", Arrays.asList("core", "suite"));
+    }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean execute(CommandSender sender, String label, String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage("die");
             return false;
@@ -37,25 +45,6 @@ public class CoreCommand extends BaseCommand {
                     case "panel":
                         new ScandiumMenu(player).open(player);
                         break;
-                    case "type":
-                        if (args.length == 1) {
-                            player.sendMessage(Color.translate("&cUsage: /" + label + " type <type>"));
-                        }
-                        if (args.length == 2) {
-                            String type = args[1];
-                            try {
-                                ServerType serverType = ServerType.valueOf(type);
-                                CorePlugin.getInstance().getServerManager().setNetwork(serverType);
-                                player.sendMessage(Color.translate("&aSet the server type to " + serverType.getServerName()));
-                            } catch (Exception e) {
-                                player.sendMessage(Color.translate("&cThat's not a valid server type."));
-                                player.sendMessage(Color.translate("&cTypes:"));
-                                for (ServerType value : ServerType.values()) {
-                                    player.sendMessage(Color.translate(" &7* &b" + value));
-                                }
-                            }
-                        }
-                        break;
                     default:
                         player.sendMessage(Color.translate("&cUsage: /" + label + " <debug|disallow|panel>"));
                         break;
@@ -63,6 +52,8 @@ public class CoreCommand extends BaseCommand {
             }
         } else {
             StringUtil.sendCenteredMessage(player, "&cI'm sorry, but you do not have permission to perform this command.");
+            StringUtil.sendCenteredMessage(player, "&7This server is running " + CorePlugin.getInstance().getConfig().getString("core-settings.name") + ".");
+            StringUtil.sendCenteredMessage(player, "&7Created by SolexGames.");
         }
         return false;
     }

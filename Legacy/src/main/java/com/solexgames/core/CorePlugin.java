@@ -50,8 +50,11 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
+import org.bukkit.command.CommandMap;
+import org.bukkit.plugin.SimplePluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Random;
 import java.util.TimeZone;
@@ -120,6 +123,9 @@ public final class CorePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+
+        if (!this.getName().equals("Scandium"))
+            this.getServer().shutdown();
 
         FORMAT = new SimpleDateFormat("MM/dd/yyyy HH:mma");
         FORMAT.setTimeZone(TimeZone.getTimeZone("EST"));
@@ -208,7 +214,6 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("tp").setExecutor(new TpCommand());
         this.getCommand("report").setExecutor(new ReportCommand());
         this.getCommand("punish").setExecutor(new PunishCommand());
-        this.getCommand("scandium").setExecutor(new CoreCommand());
         this.getCommand("shutdown").setExecutor(new ShutdownCommand());
         this.getCommand("freeze").setExecutor(new FreezeCommand());
         this.getCommand("ignore").setExecutor(new IgnoreCommand());
@@ -284,7 +289,35 @@ public final class CorePlugin extends JavaPlugin {
         new FrozenMessageTask();
         new BoardUpdateTask();
 
+        this.registerBukkitCommand();
+
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, this.tpsRunnable, 0L, 1L);
+    }
+
+    private void registerBukkitCommand() {
+
+        // Thanks to ItsSteve for the general concept of using the commandMap to register commands without using the plugin.yml
+        // Source: https://www.spigotmc.org/threads/small-easy-register-command-without-plugin-yml.38036/
+        if (this.getServer().getPluginManager() instanceof SimplePluginManager) {
+            CommandMap commandMap = null;
+
+            try {
+                Field commandMapField = SimplePluginManager.class.getDeclaredField("commandMap");
+                commandMapField.setAccessible(true);
+                commandMap = (CommandMap) commandMapField.get(this.getServer().getPluginManager());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+            if (commandMap != null) {
+                commandMap.register(getConfig().getString("core-settings.command-name"), new CoreCommand(getConfig().getString("core-settings.command-name")));
+            } else {
+                this.getServer().getPluginManager().disablePlugin(this);
+                this.getLogger().warning("Your server software's PluginManager does not contain a commandMap so I cannot register a command. This may be due to the fact you might be running a custom Bukkit/Spigot version.");
+            }
+        } else {
+            this.getLogger().warning("Your server software is running a PluginManager that is unrecognized. This may be due to the fact you might be running a custom Bukkit/Spigot version.");
+        }
     }
 
     @Override

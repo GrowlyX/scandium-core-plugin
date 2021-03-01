@@ -109,7 +109,6 @@ commands:
   gms:
   sudo:
   sudoall:
-  scandium:
   prefix:
     aliases: [tags, prefixes, tag, chattags]
   media:
