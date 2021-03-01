@@ -10,6 +10,10 @@ core-settings:
   name: "Scandium"
   command-name: "scandium"
 
+# The crypto key should be a randomly generated STRING with only letters.
+crypto:
+  key: "JRzRsNGvutZbcrrTklcSJsWSQNImMJSqxLZZ"
+
 settings:
   color-gui: true
   namemc-rewards: true

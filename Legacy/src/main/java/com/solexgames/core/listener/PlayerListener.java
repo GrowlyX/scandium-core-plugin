@@ -149,7 +149,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onConnect(PlayerJoinEvent event) {
-        PotPlayer potPlayer = new PotPlayer(event.getPlayer().getUniqueId());
+        PotPlayer potPlayer = new PotPlayer(event.getPlayer().getUniqueId(), event.getPlayer().getAddress().getAddress());
 
         CorePlugin.getInstance().getServerManager().getVanishedPlayers().forEach(player -> {
             if (!event.getPlayer().hasPermission("scandium.vanished.see")) {

@@ -27,6 +27,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.PermissionAttachment;
 
+import java.net.InetAddress;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -44,6 +45,7 @@ public class PotPlayer {
 
     private UUID uuid;
     private Player player;
+    private InetAddress ipAddress;
     private Media media;
     private Prefix appliedPrefix;
 
@@ -118,18 +120,21 @@ public class PotPlayer {
     private AchievementData achievementData;
     private PotionMessageType potionMessageType;
 
-    public PotPlayer(UUID uuid) {
+    public PotPlayer(UUID uuid, InetAddress ipAddress) {
         this.uuid = uuid;
         this.player = Bukkit.getPlayer(uuid);
         this.name = player.getName();
+        this.ipAddress = ipAddress;
+
         this.media = new Media();
         this.lastJoined = new Date();
         this.syncCode = SaltUtil.getRandomSaltedString(6);
 
         this.attachment = this.player.addAttachment(CorePlugin.getInstance());
 
-        this.loadPlayerData();
         CorePlugin.getInstance().getPlayerManager().getAllProfiles().put(uuid, this);
+
+        this.loadPlayerData();
     }
 
     public void saveWithoutRemove() {
@@ -192,6 +197,7 @@ public class PotPlayer {
 
         document.put("autoVanish", this.isAutoVanish);
         document.put("autoModMode", this.isAutoModMode);
+        document.put("ipAddress", CorePlugin.getInstance().getCryptoManager().encrypt(ipAddress.toString()));
 
         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true)));
     }
@@ -256,6 +262,7 @@ public class PotPlayer {
 
         document.put("autoVanish", this.isAutoVanish);
         document.put("autoModMode", this.isAutoModMode);
+        document.put("ipAddress", CorePlugin.getInstance().getCryptoManager().encrypt(ipAddress.toString()));
 
         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true)));
 

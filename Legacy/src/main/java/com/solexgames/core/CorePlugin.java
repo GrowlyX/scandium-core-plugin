@@ -90,6 +90,7 @@ public final class CorePlugin extends JavaPlugin {
     private RankManager rankManager;
     private ShutdownManager shutdownManager;
     private DiscordManager discordManager;
+    private CryptoManager cryptoManager;
     private FilterManager filterManager;
     private PrefixManager prefixManager;
     private PunishmentManager punishmentManager;
@@ -182,6 +183,7 @@ public final class CorePlugin extends JavaPlugin {
         this.coreDatabase = new Database();
         this.redisClient = new RedisClient();
 
+        this.cryptoManager = new CryptoManager();
         this.serverManager = new ServerManager();
         this.rankManager = new RankManager();
         this.prefixManager = new PrefixManager();
@@ -303,7 +305,6 @@ public final class CorePlugin extends JavaPlugin {
     }
 
     private void registerBukkitCommand() {
-
         // Thanks to ItsSteve for the general concept of using the commandMap to register commands without using the plugin.yml
         // Source: https://www.spigotmc.org/threads/small-easy-register-command-without-plugin-yml.38036/
         if (this.getServer().getPluginManager() instanceof SimplePluginManager) {
