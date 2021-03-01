@@ -8,9 +8,16 @@ import com.solexgames.core.util.StringUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-public class MessageCommand extends BaseCommand {
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+public class MessageCommand extends BaseCommand implements TabCompleter {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -65,5 +72,24 @@ public class MessageCommand extends BaseCommand {
             }
         }
         return false;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        return this.getOnlineString();
+    }
+
+    public List<String> getOnlineString() {
+        List<PotPlayer> potPlayers = Bukkit.getOnlinePlayers().stream()
+                .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
+                .filter(Objects::nonNull)
+                .filter(potPlayer -> !potPlayer.isVanished())
+                .filter(potPlayer -> !potPlayer.isStaffMode())
+                .collect(Collectors.toList());
+
+        List<String> players = new ArrayList<>();
+        potPlayers.forEach(potPlayer -> players.add(potPlayer.getPlayer().getName()));
+
+        return players;
     }
 }

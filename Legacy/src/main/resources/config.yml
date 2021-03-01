@@ -33,6 +33,17 @@ settings:
 
   chat-format: "<prefix><rank_prefix><rank_color><custom_color><player_name> &7» &f<message>"
 
+# Sends to staff on join
+staff-information:
+  - " "
+  - "&b&lStaff Information:"
+  - "  &7<nice_char> &3Channel: <channel>"
+  - "  &7<nice_char> &3Messages: <messages> &7(/tsm)"
+  - "  &7<nice_char> &3Filter: <filter> &7(/tfm)"
+  - "  &7<nice_char> &3Mod Mode: <modmode> &7(/mod)"
+  - "  &7<nice_char> &3Vanish: <vanish> &7(/vanish)"
+  - " "
+
 server:
   settings:
     server-id: "POTCLUBVIP"

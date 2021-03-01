@@ -10,14 +10,13 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
+import java.util.*;
 import java.util.stream.Collectors;
 
-public class ListCommand extends BaseCommand {
+public class ListCommand extends BaseCommand implements TabCompleter {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
@@ -58,6 +57,25 @@ public class ListCommand extends BaseCommand {
         }
 
         return false;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        return this.getOnlineString();
+    }
+
+    public List<String> getOnlineString() {
+        List<PotPlayer> potPlayers = Bukkit.getOnlinePlayers().stream()
+                .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
+                .filter(Objects::nonNull)
+                .filter(potPlayer -> !potPlayer.isVanished())
+                .filter(potPlayer -> !potPlayer.isStaffMode())
+                .collect(Collectors.toList());
+
+        List<String> players = new ArrayList<>();
+        potPlayers.forEach(potPlayer -> players.add(potPlayer.getPlayer().getName()));
+
+        return players;
     }
 
     private String getFormattedName(PotPlayer potPlayer, Player viewer) {

@@ -150,6 +150,9 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onConnect(PlayerJoinEvent event) {
         PotPlayer potPlayer = new PotPlayer(event.getPlayer().getUniqueId(), event.getPlayer().getAddress().getAddress());
+        ServerManager serverManager = CorePlugin.getInstance().getServerManager();
+
+        event.setJoinMessage(null);
 
         CorePlugin.getInstance().getServerManager().getVanishedPlayers().forEach(player -> {
             if (!event.getPlayer().hasPermission("scandium.vanished.see")) {
@@ -173,21 +176,29 @@ public class PlayerListener implements Listener {
             }
         }
 
-        if (event.getPlayer().hasPermission("scandium.staff"))
-            Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onConnect(event.getPlayer()))), 10L);
-
         if (potPlayer.isAutoVanish()) {
             potPlayer.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getServerManager().getAutomaticallyPutInto().replace("<value>", "vanish")));
 
             CorePlugin.getInstance().getPlayerManager().vanishPlayerRaw(event.getPlayer());
-            StaffUtil.sendAlert(event.getPlayer(), "vanished");
         }
 
         if (potPlayer.isAutoModMode()) {
             potPlayer.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getServerManager().getAutomaticallyPutInto().replace("<value>", "mod mode")));
 
             CorePlugin.getInstance().getPlayerManager().modModeRaw(event.getPlayer());
-            StaffUtil.sendAlert(event.getPlayer(), "modmoded");
+        }
+
+        if (event.getPlayer().hasPermission("scandium.staff")) {
+            Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onConnect(event.getPlayer()))), 10L);
+
+            serverManager.getStaffInformation().forEach(s -> event.getPlayer().sendMessage(s
+                    .replace("<nice_char>", Character.toString('»'))
+                    .replace("<channel>", ChatColor.RED + "None")
+                    .replace("<messages>", (potPlayer.isCanSeeStaffMessages() ? ChatColor.GREEN + "Shown" : ChatColor.RED + "Hidden"))
+                    .replace("<filter>", (potPlayer.isCanSeeFiltered() ? ChatColor.GREEN + "Shown" : ChatColor.RED + "Hidden"))
+                    .replace("<modmode>", (potPlayer.isStaffMode() ? ChatColor.GREEN + "Enabled" : ChatColor.RED + "Disabled"))
+                    .replace("<vanish>", (potPlayer.isVanished() ? ChatColor.GREEN + "Enabled" : ChatColor.RED + "Disabled"))
+            ));
         }
     }
 
@@ -420,6 +431,11 @@ public class PlayerListener implements Listener {
             return;
         }
 
+        if (event.getMessage().contains(":")) {
+            event.setCancelled(true);
+            event.getPlayer().sendMessage(Color.translate("&cThat syntax is not accepted!"));
+        }
+
         if (CorePlugin.getInstance().getConfig().getBoolean("block-commands.enabled")) {
             if (event.getPlayer().hasPermission("scandium.protocol.bypass")) return;
             CorePlugin.getInstance().getConfig().getStringList("block-commands.list").forEach(s -> {
@@ -470,6 +486,8 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onDisconnect(PlayerQuitEvent event) {
+        event.setQuitMessage(null);
+
         if (event.getPlayer().hasPermission("scandium.staff"))
             CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onDisconnect(event.getPlayer())));
 

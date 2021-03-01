@@ -3,6 +3,7 @@ package com.solexgames.core.manager;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.server.NetworkServer;
+import com.solexgames.core.util.Color;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.entity.Player;
@@ -17,6 +18,7 @@ public class ServerManager {
     private List<String> whitelistedPlayers;
     private List<String> betaWhitelistedPlayers;
     private List<String> joinMessage;
+    private List<String> staffInformation;
 
     private ArrayList<NetworkServer> networkServers = new ArrayList<>();
     private ArrayList<Player> vanishedPlayers = new ArrayList<>();
@@ -43,6 +45,8 @@ public class ServerManager {
         this.joinMessageEnabled = CorePlugin.getInstance().getConfig().getBoolean("player-join.join-message.enabled");
         this.joinMessageCentered = CorePlugin.getInstance().getConfig().getBoolean("player-join.join-message.centered");
         this.automaticallyPutInto = CorePlugin.getInstance().getConfig().getString("settings.automatic-string");
+
+        this.staffInformation = Color.translate(CorePlugin.getInstance().getConfig().getStringList("staff-information"));
 
         setupServerType();
         CorePlugin.getInstance().getLogger().info("[Network] Loaded server type: " + this.network.getServerName() + ".");

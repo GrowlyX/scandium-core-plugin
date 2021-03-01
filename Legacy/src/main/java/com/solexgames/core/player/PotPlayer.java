@@ -127,6 +127,7 @@ public class PotPlayer {
         this.ipAddress = ipAddress;
 
         this.media = new Media();
+        this.achievementData = new AchievementData();
         this.lastJoined = new Date();
         this.syncCode = SaltUtil.getRandomSaltedString(6);
 

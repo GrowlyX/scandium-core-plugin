@@ -54,6 +54,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.command.CommandMap;
 import org.bukkit.plugin.SimplePluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.java.annotation.plugin.Plugin;
 
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
@@ -65,6 +66,7 @@ import java.util.logging.Logger;
 
 @Getter
 @Setter
+@Plugin(name = "Scandium", version = "1.0")
 public final class CorePlugin extends JavaPlugin {
 
     public static SimpleDateFormat FORMAT;
@@ -212,7 +214,6 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("heal").setExecutor(new HealCommand());
         this.getCommand("tppos").setExecutor(new TpPosCommand());
         this.getCommand("sudo").setExecutor(new SudoCommand());
-        this.getCommand("list").setExecutor(new ListCommand());
         this.getCommand("sudoall").setExecutor(new SudoAllCommand());
         this.getCommand("tphere").setExecutor(new TpHereCommand());
         this.getCommand("gmc").setExecutor(new GmcCommand());
@@ -244,7 +245,6 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("store").setExecutor(new StoreCommand());
         this.getCommand("sync").setExecutor(new SyncCommand());
         this.getCommand("unsync").setExecutor(new UnsyncCommand());
-        this.getCommand("message").setExecutor(new MessageCommand());
         this.getCommand("reply").setExecutor(new ReplyCommand());
         this.getCommand("grant").setExecutor(new GrantCommand());
         this.getCommand("cgrant").setExecutor(new CGrantCommand());
@@ -278,6 +278,14 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("toggleautomodmode").setExecutor(new ToggleAutoModModeCommand());
         this.getCommand("toggleautovanish").setExecutor(new ToggleAutoVanishCommand());
         this.getCommand("togglefilteredmessages").setExecutor(new ToggleFilteredMessagesCommand());
+
+        MessageCommand messageCommand = new MessageCommand();
+        this.getCommand("message").setExecutor(messageCommand);
+        this.getCommand("message").setTabCompleter(messageCommand);
+
+        ListCommand listCommand = new ListCommand();
+        this.getCommand("list").setExecutor(listCommand);
+        this.getCommand("list").setTabCompleter(listCommand);
 
         if (this.lunarCommand != null) this.getCommand("lunar").setExecutor(lunarCommand);
         if (this.chatInterceptor != null) this.chatInterceptor.initializePacketInterceptor();

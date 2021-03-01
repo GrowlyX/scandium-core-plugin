@@ -17,7 +17,7 @@ public class ProtocolChatInterceptor extends AbstractChatInterceptor {
 
     @Override
     public void initializePacketInterceptor() {
-        this.adapter = new PacketAdapter(this.coreInstance, ListenerPriority.HIGHEST, new PacketType[]{ PacketType.Play.Client.TAB_COMPLETE }) {
+        this.adapter = new PacketAdapter(this.coreInstance, ListenerPriority.HIGHEST, PacketType.Play.Client.TAB_COMPLETE) {
             public void onPacketReceiving(PacketEvent event) {
                 if (event.getPacketType() == PacketType.Play.Client.TAB_COMPLETE) {
                     try {
