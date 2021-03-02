@@ -152,54 +152,54 @@ public class PlayerListener implements Listener {
         PotPlayer potPlayer = new PotPlayer(event.getPlayer().getUniqueId(), event.getPlayer().getAddress().getAddress());
         ServerManager serverManager = CorePlugin.getInstance().getServerManager();
 
-        event.setJoinMessage(null);
-
-        CorePlugin.getInstance().getServerManager().getVanishedPlayers().forEach(player -> {
-            if (!event.getPlayer().hasPermission("scandium.vanished.see")) {
-                event.getPlayer().hidePlayer(player);
-            }
-        });
-
-        if (MANAGER.isClearChatJoin()) {
-            Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> {
-                for (int lines = 0; lines < 250; lines++) {
-                    event.getPlayer().sendMessage("  ");
+        Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> {
+            CorePlugin.getInstance().getServerManager().getVanishedPlayers().forEach(player -> {
+                if (!event.getPlayer().hasPermission("scandium.vanished.see")) {
+                    event.getPlayer().hidePlayer(player);
                 }
             });
-        }
 
-        if (MANAGER.isJoinMessageEnabled()) {
-            if (MANAGER.isJoinMessageCentered()) {
-                Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> MANAGER.getJoinMessage().forEach(s -> event.getPlayer().sendMessage(Color.translate(s.replace("%PLAYER%", event.getPlayer().getDisplayName())))));
-            } else {
-                Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> StringUtil.sendCenteredMessage(event.getPlayer(), (ArrayList<String>) MANAGER.getJoinMessage()));
+            if (MANAGER.isClearChatJoin()) {
+                Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> {
+                    for (int lines = 0; lines < 250; lines++) {
+                        event.getPlayer().sendMessage("  ");
+                    }
+                });
             }
-        }
 
-        if (potPlayer.isAutoVanish()) {
-            potPlayer.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getServerManager().getAutomaticallyPutInto().replace("<value>", "vanish")));
+            if (MANAGER.isJoinMessageEnabled()) {
+                if (MANAGER.isJoinMessageCentered()) {
+                    Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> MANAGER.getJoinMessage().forEach(s -> event.getPlayer().sendMessage(Color.translate(s.replace("%PLAYER%", event.getPlayer().getDisplayName())))));
+                } else {
+                    Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> StringUtil.sendCenteredMessage(event.getPlayer(), (ArrayList<String>) MANAGER.getJoinMessage()));
+                }
+            }
 
-            CorePlugin.getInstance().getPlayerManager().vanishPlayerRaw(event.getPlayer());
-        }
+            if (potPlayer.isAutoVanish()) {
+                potPlayer.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getServerManager().getAutomaticallyPutInto().replace("<value>", "vanish")));
 
-        if (potPlayer.isAutoModMode()) {
-            potPlayer.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getServerManager().getAutomaticallyPutInto().replace("<value>", "mod mode")));
+                CorePlugin.getInstance().getPlayerManager().vanishPlayerRaw(event.getPlayer());
+            }
 
-            CorePlugin.getInstance().getPlayerManager().modModeRaw(event.getPlayer());
-        }
+            if (potPlayer.isAutoModMode()) {
+                potPlayer.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getServerManager().getAutomaticallyPutInto().replace("<value>", "mod mode")));
 
-        if (event.getPlayer().hasPermission("scandium.staff")) {
-            Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onConnect(event.getPlayer()))), 10L);
+                CorePlugin.getInstance().getPlayerManager().modModeRaw(event.getPlayer());
+            }
 
-            serverManager.getStaffInformation().forEach(s -> event.getPlayer().sendMessage(s
-                    .replace("<nice_char>", Character.toString('»'))
-                    .replace("<channel>", ChatColor.RED + "None")
-                    .replace("<messages>", (potPlayer.isCanSeeStaffMessages() ? ChatColor.GREEN + "Shown" : ChatColor.RED + "Hidden"))
-                    .replace("<filter>", (potPlayer.isCanSeeFiltered() ? ChatColor.GREEN + "Shown" : ChatColor.RED + "Hidden"))
-                    .replace("<modmode>", (potPlayer.isStaffMode() ? ChatColor.GREEN + "Enabled" : ChatColor.RED + "Disabled"))
-                    .replace("<vanish>", (potPlayer.isVanished() ? ChatColor.GREEN + "Enabled" : ChatColor.RED + "Disabled"))
-            ));
-        }
+            if (event.getPlayer().hasPermission("scandium.staff")) {
+                Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onConnect(event.getPlayer()))), 10L);
+
+                serverManager.getStaffInformation().forEach(s -> event.getPlayer().sendMessage(s
+                        .replace("<nice_char>", Character.toString('»'))
+                        .replace("<channel>", ChatColor.RED + "None")
+                        .replace("<messages>", (potPlayer.isCanSeeStaffMessages() ? ChatColor.GREEN + "Shown" : ChatColor.RED + "Hidden"))
+                        .replace("<filter>", (potPlayer.isCanSeeFiltered() ? ChatColor.GREEN + "Shown" : ChatColor.RED + "Hidden"))
+                        .replace("<modmode>", (potPlayer.isStaffMode() ? ChatColor.GREEN + "Enabled" : ChatColor.RED + "Disabled"))
+                        .replace("<vanish>", (potPlayer.isVanished() ? ChatColor.GREEN + "Enabled" : ChatColor.RED + "Disabled"))
+                ));
+            }
+        });
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -431,7 +431,7 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (event.getMessage().contains(":")) {
+        if (event.getMessage().contains(":") && !event.getPlayer().isOp()) {
             event.setCancelled(true);
             event.getPlayer().sendMessage(Color.translate("&cThat syntax is not accepted!"));
         }

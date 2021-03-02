@@ -66,7 +66,6 @@ import java.util.logging.Logger;
 
 @Getter
 @Setter
-@Plugin(name = "Scandium", version = "1.0")
 public final class CorePlugin extends JavaPlugin {
 
     public static SimpleDateFormat FORMAT;

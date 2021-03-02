@@ -77,6 +77,7 @@ public class PotPlayer {
     private boolean isStaffMode = false;
     private boolean isFrozen = false;
     private boolean isSynced = false;
+    private boolean isLoaded = false;
 
     private boolean isAutoVanish = false;
     private boolean isAutoModMode = false;
@@ -127,7 +128,6 @@ public class PotPlayer {
         this.ipAddress = ipAddress;
 
         this.media = new Media();
-        this.achievementData = new AchievementData();
         this.lastJoined = new Date();
         this.syncCode = SaltUtil.getRandomSaltedString(6);
 

@@ -93,6 +93,7 @@ public class GrantSelectReasonMenu extends AbstractInventoryMenu {
                         potPlayer.setGrantDuration(this.duration);
                         potPlayer.setGrantEditing(true);
                         potPlayer.setGrantScope(this.scope);
+                        potPlayer.setGrantPerm(this.permanent);
 
                         this.player.closeInventory();
 
