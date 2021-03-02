@@ -44,7 +44,7 @@ public class Warp {
         Document document = new Document("_id", this.id);
 
         document.put("name", this.name);
-        document.put("location", LocationUtil.getStringFromLocation(this.location));
+        document.put("location", LocationUtil.getStringFromLocation(this.location).orElse(""));
 
         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getWarpCollection().replaceOne(Filters.eq("_id", this.id), document, new ReplaceOptions().upsert(true)));
     }
@@ -53,7 +53,7 @@ public class Warp {
         Document document = new Document("_id", this.id);
 
         document.put("name", this.name);
-        document.put("location", LocationUtil.getStringFromLocation(this.location));
+        document.put("location", LocationUtil.getStringFromLocation(this.location).orElse(""));
 
         CorePlugin.getInstance().getCoreDatabase().getWarpCollection().replaceOne(Filters.eq("_id", this.id), document, new ReplaceOptions().upsert(true));
     }

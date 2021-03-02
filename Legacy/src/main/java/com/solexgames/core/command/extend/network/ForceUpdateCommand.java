@@ -22,7 +22,7 @@ public class ForceUpdateCommand extends BaseCommand {
 
         if (player.hasPermission("scandium.command.forceupdate")) {
             if (args.length == 0) {
-                CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onServerUpdate()));
+                CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onServerUpdate()));
                 player.sendMessage(Color.translate("&aForce-updated the server."));
             }
         } else {

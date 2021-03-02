@@ -15,6 +15,7 @@ import com.solexgames.core.player.punishment.PunishmentType;
 import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.potion.PotionMessageType;
 import com.solexgames.core.util.Color;
+import com.solexgames.core.util.RedisUtil;
 import com.solexgames.core.util.SaltUtil;
 import com.solexgames.core.util.external.NameMCExternal;
 import com.solexgames.core.util.external.NameTagExternal;
@@ -27,7 +28,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.PermissionAttachment;
 
-import java.net.InetAddress;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -45,7 +45,7 @@ public class PotPlayer {
 
     private UUID uuid;
     private Player player;
-    private InetAddress ipAddress;
+    private String ipAddress;
     private Media media;
     private Prefix appliedPrefix;
 
@@ -121,11 +121,11 @@ public class PotPlayer {
     private AchievementData achievementData;
     private PotionMessageType potionMessageType;
 
-    public PotPlayer(UUID uuid, InetAddress ipAddress) {
+    public PotPlayer(UUID uuid) {
         this.uuid = uuid;
         this.player = Bukkit.getPlayer(uuid);
+        this.ipAddress = player.getAddress().getAddress().toString();
         this.name = player.getName();
-        this.ipAddress = ipAddress;
 
         this.media = new Media();
         this.lastJoined = new Date();

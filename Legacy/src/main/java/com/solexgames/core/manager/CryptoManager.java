@@ -25,9 +25,6 @@ public class CryptoManager {
 
     private final String secretKey;
 
-    private Cipher encryptCipher;
-    private Cipher decryptCipher;
-
     private int iterationCount = 19;
 
     public CryptoManager() {
@@ -35,17 +32,18 @@ public class CryptoManager {
     }
 
     public String encrypt(String plainText) {
+        Cipher encryptCipher;
         byte[] out;
         try {
             KeySpec keySpec = new PBEKeySpec(this.secretKey.toCharArray(), CryptoManager.SALT, this.iterationCount);
             SecretKey key = SecretKeyFactory.getInstance("PBEWithMD5AndDES").generateSecret(keySpec);
             AlgorithmParameterSpec paramSpec = new PBEParameterSpec(CryptoManager.SALT, this.iterationCount);
 
-            this.encryptCipher = Cipher.getInstance(key.getAlgorithm());
-            this.encryptCipher.init(Cipher.ENCRYPT_MODE, key, paramSpec);
+            encryptCipher = Cipher.getInstance(key.getAlgorithm());
+            encryptCipher.init(Cipher.ENCRYPT_MODE, key, paramSpec);
 
             byte[] in = plainText.getBytes(StandardCharsets.UTF_8);
-            out = this.encryptCipher.doFinal(in);
+            out = encryptCipher.doFinal(in);
         } catch (Exception ignored) {
             return "";
         }
@@ -53,17 +51,18 @@ public class CryptoManager {
     }
 
     public String decrypt(String encryptedText) {
+        Cipher decryptCipher;
         byte[] utf8;
         try {
             KeySpec keySpec = new PBEKeySpec(this.secretKey.toCharArray(), CryptoManager.SALT, this.iterationCount);
             SecretKey key = SecretKeyFactory.getInstance("PBEWithMD5AndDES").generateSecret(keySpec);
             AlgorithmParameterSpec paramSpec = new PBEParameterSpec(CryptoManager.SALT, this.iterationCount);
 
-            this.decryptCipher = Cipher.getInstance(key.getAlgorithm());
-            this.decryptCipher.init(Cipher.DECRYPT_MODE, key, paramSpec);
+            decryptCipher = Cipher.getInstance(key.getAlgorithm());
+            decryptCipher.init(Cipher.DECRYPT_MODE, key, paramSpec);
 
             byte[] enc = Base64.getDecoder().decode(encryptedText);
-            utf8 = this.decryptCipher.doFinal(enc);
+            utf8 = decryptCipher.doFinal(enc);
         } catch (Exception ignored) {
             return "";
         }

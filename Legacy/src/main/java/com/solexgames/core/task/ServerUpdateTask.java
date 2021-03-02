@@ -12,6 +12,6 @@ public class ServerUpdateTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onServerUpdate()));
+        CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onServerUpdate()));
     }
 }

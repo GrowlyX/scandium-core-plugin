@@ -149,48 +149,42 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onConnect(PlayerJoinEvent event) {
-        PotPlayer potPlayer = new PotPlayer(event.getPlayer().getUniqueId(), event.getPlayer().getAddress().getAddress());
-        ServerManager serverManager = CorePlugin.getInstance().getServerManager();
+        PotPlayer potPlayer = new PotPlayer(event.getPlayer().getUniqueId());
+        CorePlugin.getInstance().getServerManager().getVanishedPlayers().forEach(player -> {
+            if (!event.getPlayer().hasPermission("scandium.vanished.see")) {
+                event.getPlayer().hidePlayer(player);
+            }
+        });
 
         Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> {
-            CorePlugin.getInstance().getServerManager().getVanishedPlayers().forEach(player -> {
-                if (!event.getPlayer().hasPermission("scandium.vanished.see")) {
-                    event.getPlayer().hidePlayer(player);
-                }
-            });
-
             if (MANAGER.isClearChatJoin()) {
-                Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> {
-                    for (int lines = 0; lines < 250; lines++) {
-                        event.getPlayer().sendMessage("  ");
-                    }
-                });
+                for (int lines = 0; lines < 250; lines++) {
+                    event.getPlayer().sendMessage("  ");
+                }
             }
 
             if (MANAGER.isJoinMessageEnabled()) {
                 if (MANAGER.isJoinMessageCentered()) {
-                    Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> MANAGER.getJoinMessage().forEach(s -> event.getPlayer().sendMessage(Color.translate(s.replace("%PLAYER%", event.getPlayer().getDisplayName())))));
+                    MANAGER.getJoinMessage().forEach(s -> event.getPlayer().sendMessage(Color.translate(s.replace("%PLAYER%", event.getPlayer().getDisplayName()))));
                 } else {
-                    Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> StringUtil.sendCenteredMessage(event.getPlayer(), (ArrayList<String>) MANAGER.getJoinMessage()));
+                    StringUtil.sendCenteredMessage(event.getPlayer(), (ArrayList<String>) MANAGER.getJoinMessage());
                 }
             }
 
             if (potPlayer.isAutoVanish()) {
                 potPlayer.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getServerManager().getAutomaticallyPutInto().replace("<value>", "vanish")));
 
-                CorePlugin.getInstance().getPlayerManager().vanishPlayerRaw(event.getPlayer());
+                CorePlugin.getInstance().getPlayerManager().vanishPlayerRaw(potPlayer.getPlayer());
             }
 
             if (potPlayer.isAutoModMode()) {
                 potPlayer.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getServerManager().getAutomaticallyPutInto().replace("<value>", "mod mode")));
 
-                CorePlugin.getInstance().getPlayerManager().modModeRaw(event.getPlayer());
+                CorePlugin.getInstance().getPlayerManager().modModeRaw(potPlayer.getPlayer());
             }
 
-            if (event.getPlayer().hasPermission("scandium.staff")) {
-                Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onConnect(event.getPlayer()))), 10L);
-
-                serverManager.getStaffInformation().forEach(s -> event.getPlayer().sendMessage(s
+            if (potPlayer.getPlayer().hasPermission("scandium.staff")) {
+                CorePlugin.getInstance().getServerManager().getStaffInformation().forEach(s -> potPlayer.getPlayer().sendMessage(s
                         .replace("<nice_char>", Character.toString('»'))
                         .replace("<channel>", ChatColor.RED + "None")
                         .replace("<messages>", (potPlayer.isCanSeeStaffMessages() ? ChatColor.GREEN + "Shown" : ChatColor.RED + "Hidden"))
@@ -198,6 +192,8 @@ public class PlayerListener implements Listener {
                         .replace("<modmode>", (potPlayer.isStaffMode() ? ChatColor.GREEN + "Enabled" : ChatColor.RED + "Disabled"))
                         .replace("<vanish>", (potPlayer.isVanished() ? ChatColor.GREEN + "Enabled" : ChatColor.RED + "Disabled"))
                 ));
+
+                Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onConnect(potPlayer.getPlayer()))), 10L);
             }
         });
     }
@@ -398,16 +394,16 @@ public class PlayerListener implements Listener {
         event.setCancelled(true);
         if (event.getMessage().startsWith("!") && event.getPlayer().hasPermission(ChatChannelType.STAFF.getPermission())) {
             event.setCancelled(true);
-            CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.STAFF, event.getMessage().replace("!", ""), event.getPlayer())));
+            CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onChatChannel(ChatChannelType.STAFF, event.getMessage().replace("!", ""), event.getPlayer())));
         } else if (event.getMessage().startsWith("#") && event.getPlayer().hasPermission(ChatChannelType.ADMIN.getPermission())) {
             event.setCancelled(true);
-            CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.ADMIN, event.getMessage().replace("#", ""), event.getPlayer())));
+            CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onChatChannel(ChatChannelType.ADMIN, event.getMessage().replace("#", ""), event.getPlayer())));
         } else if (event.getMessage().startsWith("$") && event.getPlayer().hasPermission(ChatChannelType.DEV.getPermission())) {
             event.setCancelled(true);
-            CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.DEV, event.getMessage().replace("$", ""), event.getPlayer())));
+            CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onChatChannel(ChatChannelType.DEV, event.getMessage().replace("$", ""), event.getPlayer())));
         } else if (event.getMessage().startsWith("@") && event.getPlayer().hasPermission(ChatChannelType.HOST.getPermission())) {
             event.setCancelled(true);
-            CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onChatChannel(ChatChannelType.HOST, event.getMessage().replace("@", ""), event.getPlayer())));
+            CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onChatChannel(ChatChannelType.HOST, event.getMessage().replace("@", ""), event.getPlayer())));
         } else {
             long slowChat = CorePlugin.getInstance().getServerManager().getChatSlow();
             if ((System.currentTimeMillis() < CorePlugin.getInstance().getPlayerManager().getPlayer(player).getChatCooldown())) {
@@ -489,7 +485,7 @@ public class PlayerListener implements Listener {
         event.setQuitMessage(null);
 
         if (event.getPlayer().hasPermission("scandium.staff"))
-            CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onDisconnect(event.getPlayer())));
+            CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onDisconnect(event.getPlayer())));
 
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer().getUniqueId());
         if (potPlayer.isFrozen())

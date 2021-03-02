@@ -1,4 +1,4 @@
-package com.solexgames.core.redis.sub.extend;
+package com.solexgames.core.redis.subscription.extend;
 
 import com.mongodb.client.model.Filters;
 import com.solexgames.core.CorePlugin;
@@ -10,16 +10,14 @@ import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.punishment.Punishment;
 import com.solexgames.core.player.punishment.PunishmentType;
 import com.solexgames.core.player.ranks.Rank;
-import com.solexgames.core.redis.RedisClient;
-import com.solexgames.core.redis.RedisMessage;
-import com.solexgames.core.redis.sub.AbstractJedisSubscriber;
+import com.solexgames.core.redis.json.JsonAppender;
+import com.solexgames.core.redis.subscription.AbstractJedisSubscriber;
 import com.solexgames.core.server.NetworkServer;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.UUIDUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import redis.clients.jedis.JedisPubSub;
 
 import java.util.Collections;
 import java.util.Date;
@@ -30,18 +28,18 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
 
     private final String SERVER_NAME = CorePlugin.getInstance().getServerName();
 
-    public CoreJedisSubscriber(RedisClient redisClient) {
-        super("SCANDIUM", redisClient);
+    public CoreJedisSubscriber() {
+        super("SCANDIUM");
     }
 
     @Override
     public void onMessage(String channel, String message) {
         CorePlugin.getInstance().getRedisSubThread().execute(() -> {
-            RedisMessage redisMessage = CorePlugin.GSON.fromJson(message, RedisMessage.class);
+            JsonAppender jsonAppender = CorePlugin.GSON.fromJson(message, JsonAppender.class);
 
-            switch (redisMessage.getPacket()) {
+            switch (jsonAppender.getPacket()) {
                 case SERVER_DATA_ONLINE:
-                    String bootingServerName = redisMessage.getParam("SERVER");
+                    String bootingServerName = jsonAppender.getParam("SERVER");
 
                     if (!CorePlugin.getInstance().getServerManager().existServer(bootingServerName)) {
                         NetworkServer server = new NetworkServer(bootingServerName, NetworkServerType.NOT_DEFINED);
@@ -61,15 +59,15 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                     });
                     break;
                 case SERVER_DATA_UPDATE:
-                    String serverName = redisMessage.getParam("SERVER");
-                    String serverType = redisMessage.getParam("SERVER_TYPE");
-                    String ticksPerSecond = redisMessage.getParam("TPS");
-                    String ticksPerSecondSimple = redisMessage.getParam("TPSSIMPLE");
+                    String serverName = jsonAppender.getParam("SERVER");
+                    String serverType = jsonAppender.getParam("SERVER_TYPE");
+                    String ticksPerSecond = jsonAppender.getParam("TPS");
+                    String ticksPerSecondSimple = jsonAppender.getParam("TPSSIMPLE");
 
-                    int maxPlayerLimit = Integer.parseInt(redisMessage.getParam("MAXPLAYERS"));
-                    int onlinePlayers = Integer.parseInt(redisMessage.getParam("ONLINEPLAYERS"));
+                    int maxPlayerLimit = Integer.parseInt(jsonAppender.getParam("MAXPLAYERS"));
+                    int onlinePlayers = Integer.parseInt(jsonAppender.getParam("ONLINEPLAYERS"));
 
-                    boolean whitelistEnabled = Boolean.parseBoolean(redisMessage.getParam("WHITELIST"));
+                    boolean whitelistEnabled = Boolean.parseBoolean(jsonAppender.getParam("WHITELIST"));
 
                     if (!CorePlugin.getInstance().getServerManager().existServer(serverName)) {
                         NetworkServer server = new NetworkServer(serverName, NetworkServerType.valueOf(serverType));
@@ -86,7 +84,7 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
 
                     break;
                 case SERVER_DATA_OFFLINE:
-                    String offlineServerName = redisMessage.getParam("SERVER");
+                    String offlineServerName = jsonAppender.getParam("SERVER");
 
                     if (NetworkServer.getByName(offlineServerName) != null) {
                         NetworkServer.getByName(offlineServerName).update(0, "0.0", 100, false, "0.0", false);
@@ -100,8 +98,8 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                     });
                     break;
                 case PLAYER_CONNECT_UPDATE:
-                    String fromConnectServer = redisMessage.getParam("SERVER");
-                    String connectingPlayer = redisMessage.getParam("PLAYER");
+                    String fromConnectServer = jsonAppender.getParam("SERVER");
+                    String connectingPlayer = jsonAppender.getParam("PLAYER");
 
                     Bukkit.getOnlinePlayers().forEach(player -> {
                         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
@@ -113,8 +111,8 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                     });
                     break;
                 case PLAYER_DISCONNECT_UPDATE:
-                    String fromDisconnectServer = redisMessage.getParam("SERVER");
-                    String disconnectingPlayer = redisMessage.getParam("PLAYER");
+                    String fromDisconnectServer = jsonAppender.getParam("SERVER");
+                    String disconnectingPlayer = jsonAppender.getParam("PLAYER");
 
                     Bukkit.getOnlinePlayers().forEach(player -> {
                         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
@@ -126,10 +124,10 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                     });
                     break;
                 case CHAT_CHANNEL_UPDATE:
-                    ChatChannelType chatChannel = ChatChannelType.valueOf(redisMessage.getParam("CHANNEL"));
-                    String sender = redisMessage.getParam("PLAYER");
-                    String chatMessage = redisMessage.getParam("MESSAGE");
-                    String fromServer = redisMessage.getParam("SERVER");
+                    ChatChannelType chatChannel = ChatChannelType.valueOf(jsonAppender.getParam("CHANNEL"));
+                    String sender = jsonAppender.getParam("PLAYER");
+                    String chatMessage = jsonAppender.getParam("MESSAGE");
+                    String fromServer = jsonAppender.getParam("SERVER");
 
                     Bukkit.getOnlinePlayers().forEach(player -> {
                         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
@@ -141,12 +139,12 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                     });
                     break;
                 case PLAYER_SERVER_UPDATE:
-                    StaffUpdateType updateType = StaffUpdateType.valueOf(redisMessage.getParam("UPDATETYPE"));
+                    StaffUpdateType updateType = StaffUpdateType.valueOf(jsonAppender.getParam("UPDATETYPE"));
                     switch (updateType) {
                         case FREEZE:
-                            String freezeExecutor = redisMessage.getParam("PLAYER");
-                            String fromFreezeServer = redisMessage.getParam("SERVER");
-                            String freezeTarget = redisMessage.getParam("TARGET");
+                            String freezeExecutor = jsonAppender.getParam("PLAYER");
+                            String fromFreezeServer = jsonAppender.getParam("SERVER");
+                            String freezeTarget = jsonAppender.getParam("TARGET");
 
                             Bukkit.getOnlinePlayers().forEach(player -> {
                                 PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
@@ -158,9 +156,9 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                             });
                             break;
                         case UNFREEZE:
-                            String unfreezeExecutor = redisMessage.getParam("PLAYER");
-                            String unfreezeTarget = redisMessage.getParam("TARGET");
-                            String fromUnFreezeServer = redisMessage.getParam("SERVER");
+                            String unfreezeExecutor = jsonAppender.getParam("PLAYER");
+                            String unfreezeTarget = jsonAppender.getParam("TARGET");
+                            String fromUnFreezeServer = jsonAppender.getParam("SERVER");
 
                             Bukkit.getOnlinePlayers().forEach(player -> {
                                 PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
@@ -172,9 +170,9 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                             });
                             break;
                         case HELPOP:
-                            String helpopMessage = redisMessage.getParam("MESSAGE");
-                            String helpopPlayer = redisMessage.getParam("PLAYER");
-                            String fromHelpOpServer = redisMessage.getParam("SERVER");
+                            String helpopMessage = jsonAppender.getParam("MESSAGE");
+                            String helpopPlayer = jsonAppender.getParam("PLAYER");
+                            String fromHelpOpServer = jsonAppender.getParam("SERVER");
 
                             Bukkit.getOnlinePlayers().forEach(player -> {
                                 PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
@@ -186,10 +184,10 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                             });
                             break;
                         case REPORT:
-                            String reportMessage = redisMessage.getParam("MESSAGE");
-                            String reportPlayer = redisMessage.getParam("PLAYER");
-                            String reportTarget = redisMessage.getParam("TARGET");
-                            String fromReportServer = redisMessage.getParam("SERVER");
+                            String reportMessage = jsonAppender.getParam("MESSAGE");
+                            String reportPlayer = jsonAppender.getParam("PLAYER");
+                            String reportTarget = jsonAppender.getParam("TARGET");
+                            String fromReportServer = jsonAppender.getParam("SERVER");
 
                             Bukkit.getOnlinePlayers().forEach(player -> {
                                 PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
@@ -203,19 +201,19 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                     }
                     break;
                 case RANK_CREATE_UPDATE:
-                    String newRankName = redisMessage.getParam("NAME");
-                    String newRankId = redisMessage.getParam("UUID");
+                    String newRankName = jsonAppender.getParam("NAME");
+                    String newRankId = jsonAppender.getParam("UUID");
                     Rank newRank = new Rank(UUID.fromString(newRankId), Collections.singletonList(Objects.requireNonNull(Rank.getDefault()).getUuid()), Collections.singletonList("permission.testing"), newRankName, Color.translate("&7"), Color.translate("&7"), Color.translate("&7"), false, 0);
-                    Player newRankPlayer = Bukkit.getPlayer(redisMessage.getParam("PLAYER"));
+                    Player newRankPlayer = Bukkit.getPlayer(jsonAppender.getParam("PLAYER"));
                     if (newRankPlayer != null)
                         newRankPlayer.sendMessage(ChatColor.GREEN + "Rank named '" + newRank.getName() + "' successfully created.");
 
                     newRank.saveRank();
                     break;
                 case RANK_DELETE_UPDATE:
-                    Rank delRank = Rank.getByName(redisMessage.getParam("RANK"));
+                    Rank delRank = Rank.getByName(jsonAppender.getParam("RANK"));
                     if (delRank != null) {
-                        Player delRankPlayer = Bukkit.getPlayer(redisMessage.getParam("PLAYER"));
+                        Player delRankPlayer = Bukkit.getPlayer(jsonAppender.getParam("PLAYER"));
                         if (delRankPlayer != null)
                             delRankPlayer.sendMessage(ChatColor.RED + "Rank named '" + delRank.getName() + "' successfully deleted.");
 
@@ -224,8 +222,8 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                     }
                     break;
                 case PUNISHMENT_EXECUTE_UPDATE:
-                    if (!SERVER_NAME.equals(redisMessage.getParam("SERVER"))) {
-                        Punishment punishment = new Punishment(PunishmentType.valueOf(redisMessage.getParam("TYPE")), UUID.fromString(redisMessage.getParam("ISSUER")), UUID.fromString(redisMessage.getParam("TARGET")), redisMessage.getParam("ISSUERNAME"), redisMessage.getParam("REASON"), new Date(Long.parseLong(redisMessage.getParam("DATE"))), Long.parseLong(redisMessage.getParam("DURATION")), Boolean.parseBoolean(redisMessage.getParam("PERMANENT")), new Date(Long.parseLong(redisMessage.getParam("CREATED"))), UUID.fromString(redisMessage.getParam("UUID")), redisMessage.getParam("IDENTIFICATION"), true);
+                    if (!SERVER_NAME.equals(jsonAppender.getParam("SERVER"))) {
+                        Punishment punishment = new Punishment(PunishmentType.valueOf(jsonAppender.getParam("TYPE")), UUID.fromString(jsonAppender.getParam("ISSUER")), UUID.fromString(jsonAppender.getParam("TARGET")), jsonAppender.getParam("ISSUERNAME"), jsonAppender.getParam("REASON"), new Date(Long.parseLong(jsonAppender.getParam("DATE"))), Long.parseLong(jsonAppender.getParam("DURATION")), Boolean.parseBoolean(jsonAppender.getParam("PERMANENT")), new Date(Long.parseLong(jsonAppender.getParam("CREATED"))), UUID.fromString(jsonAppender.getParam("UUID")), jsonAppender.getParam("IDENTIFICATION"), true);
                         PotPlayer potPlayer = null;
 
                         try {
@@ -235,25 +233,25 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
 
                         if (potPlayer != null) potPlayer.getPunishments().add(punishment);
 
-                        CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, redisMessage.getParam("ISSUERNAME"), UUIDUtil.getName(redisMessage.getParam("TARGET")), Boolean.parseBoolean(redisMessage.getParam("SILENT")));
+                        CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, jsonAppender.getParam("ISSUERNAME"), UUIDUtil.getName(jsonAppender.getParam("TARGET")), Boolean.parseBoolean(jsonAppender.getParam("SILENT")));
                         if (potPlayer != null) potPlayer.saveWithoutRemove();
                     }
                     break;
                 case PUNISHMENT_REMOVE_UPDATE:
-                    if (!SERVER_NAME.equals(redisMessage.getParam("SERVER"))) {
+                    if (!SERVER_NAME.equals(jsonAppender.getParam("SERVER"))) {
                         Punishment punishment = null;
 
                         UUID removerUuid = null;
                         try {
-                            removerUuid = UUID.fromString(redisMessage.getParam("REMOVERUUID"));
+                            removerUuid = UUID.fromString(jsonAppender.getParam("REMOVERUUID"));
                         } catch (Exception ignored) {
                         }
-                        String removerName = redisMessage.getParam("REMOVERNAME");
-                        String removerDisplayName = redisMessage.getParam("REMOVERDISPLAYNAME");
-                        String reason = redisMessage.getParam("REASON");
+                        String removerName = jsonAppender.getParam("REMOVERNAME");
+                        String removerDisplayName = jsonAppender.getParam("REMOVERDISPLAYNAME");
+                        String reason = jsonAppender.getParam("REASON");
 
                         try {
-                            punishment = Punishment.getByIdentification(redisMessage.getParam("ID"));
+                            punishment = Punishment.getByIdentification(jsonAppender.getParam("ID"));
                         } catch (Exception ignored) {
                         }
 
@@ -287,15 +285,15 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                     }
                     break;
                 case RANK_SETTINGS_UPDATE:
-                    if (!SERVER_NAME.equals(redisMessage.getParam("SERVER"))) {
+                    if (!SERVER_NAME.equals(jsonAppender.getParam("SERVER"))) {
                         Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> Rank.getRanks().clear());
                         CorePlugin.getInstance().getRankManager().loadRanks();
                         CorePlugin.getInstance().getLogger().info("[Ranks] Synced all ranks.");
                     }
                     break;
                 case PUNISHMENT_FREMOVE_UPDATE:
-                    if (!SERVER_NAME.equals(redisMessage.getParam("SERVER"))) {
-                        String punishmentString = redisMessage.getParam("ID");
+                    if (!SERVER_NAME.equals(jsonAppender.getParam("SERVER"))) {
+                        String punishmentString = jsonAppender.getParam("ID");
                         Punishment punishment = Punishment.getByIdentification(punishmentString);
                         if (punishment != null) {
                             Punishment.getAllPunishments().remove(punishment);
@@ -303,12 +301,12 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                     }
                     break;
                 case NETWORK_BROADCAST_UPDATE:
-                    String broadcastMessage = redisMessage.getParam("MESSAGE");
+                    String broadcastMessage = jsonAppender.getParam("MESSAGE");
                     Bukkit.broadcastMessage(CorePlugin.getInstance().getPlayerManager().formatBroadcast(broadcastMessage));
                     break;
                 case NETWORK_BROADCAST_PERMISSION_UPDATE:
-                    String broadcast = redisMessage.getParam("MESSAGE");
-                    String permission = redisMessage.getParam("PERMISSION");
+                    String broadcast = jsonAppender.getParam("MESSAGE");
+                    String permission = jsonAppender.getParam("PERMISSION");
 
                     Bukkit.getOnlinePlayers().forEach(player -> {
                         if (player.hasPermission(permission)) {

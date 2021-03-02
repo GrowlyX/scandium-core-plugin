@@ -20,7 +20,7 @@ public final class StringUtil {
 
     public static void sendStaffAlert(Player player, String value) {
         if (CorePlugin.getInstance().getConfig().getBoolean("operator-alerts")) {
-            CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onGlobalBroadcastPermission(Color.translate("&7&o[" + player.getName() + ": &e&o" + value + "&7&o]"), "scandium.operator.alerts")));
+            CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onGlobalBroadcastPermission(Color.translate("&7&o[" + player.getName() + ": &e&o" + value + "&7&o]"), "scandium.operator.alerts")));
         }
     }
 

@@ -99,7 +99,7 @@ public class ReportMenu extends AbstractInventoryMenu {
                 case 2:
                     player.closeInventory();
                     if (potPlayer.isCanReport()) {
-                        CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onReport(player, target, "Combat Hacks")));
+                        CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onReport(player, target, "Combat Hacks")));
                         player.sendMessage(Color.translate("&aYour report has been sent to all online staff!"));
                         potPlayer.setCanReport(false);
                     } else {
@@ -110,7 +110,7 @@ public class ReportMenu extends AbstractInventoryMenu {
                 case 3:
                     player.closeInventory();
                     if (potPlayer.isCanReport()) {
-                        CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onReport(this.player, this.target, "Movement Hacks")));
+                        CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onReport(this.player, this.target, "Movement Hacks")));
                         player.sendMessage(Color.translate("&aYour report has been sent to all online staff!"));
                         potPlayer.setCanReport(false);
                     } else {
@@ -121,7 +121,7 @@ public class ReportMenu extends AbstractInventoryMenu {
                 case 4:
                     player.closeInventory();
                     if (potPlayer.isCanReport()) {
-                        CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onReport(this.player, this.target, "Velocity Hacks")));
+                        CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onReport(this.player, this.target, "Velocity Hacks")));
                         player.sendMessage(Color.translate("&aYour report has been sent to all online staff!"));
                         potPlayer.setCanReport(false);
                     } else {
@@ -132,7 +132,7 @@ public class ReportMenu extends AbstractInventoryMenu {
                 case 5:
                     player.closeInventory();
                     if (potPlayer.isCanReport()) {
-                        CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onReport(this.player, this.target, "Gameplay Sabotage")));
+                        CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onReport(this.player, this.target, "Gameplay Sabotage")));
                         player.sendMessage(Color.translate("&aYour report has been sent to all online staff!"));
                         potPlayer.setCanReport(false);
                     } else {
@@ -143,7 +143,7 @@ public class ReportMenu extends AbstractInventoryMenu {
                 case 6:
                     player.closeInventory();
                     if (potPlayer.isCanReport()) {
-                        CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisClient().write(RedisUtil.onReport(this.player, this.target, "Chat Violation")));
+                        CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onReport(this.player, this.target, "Chat Violation")));
                         player.sendMessage(Color.translate("&aYour report has been sent to all online staff!"));
                         potPlayer.setCanReport(false);
                     } else {

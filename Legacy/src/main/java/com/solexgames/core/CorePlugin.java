@@ -29,17 +29,19 @@ import com.solexgames.core.command.extend.whitelist.BetaWhitelistCommand;
 import com.solexgames.core.command.extend.whitelist.WhitelistCommand;
 import com.solexgames.core.database.Database;
 import com.solexgames.core.enums.ServerType;
+import com.solexgames.core.listener.ModSuiteListener;
 import com.solexgames.core.listener.PlayerListener;
 import com.solexgames.core.lunar.AbstractClientInjector;
 import com.solexgames.core.lunar.extend.LunarCommand;
 import com.solexgames.core.manager.*;
-import com.solexgames.core.listener.ModSuiteListener;
 import com.solexgames.core.nms.AbstractNMSImplementation;
 import com.solexgames.core.nms.extend.NMSImplementation_v1_7;
 import com.solexgames.core.nms.extend.NMSImplementation_v1_8;
 import com.solexgames.core.protocol.AbstractChatInterceptor;
 import com.solexgames.core.protocol.extend.ProtocolChatInterceptor;
-import com.solexgames.core.redis.RedisClient;
+import com.solexgames.core.redis.RedisManager;
+import com.solexgames.core.redis.RedisSettings;
+import com.solexgames.core.redis.RedisSubscriptions;
 import com.solexgames.core.task.*;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
@@ -50,11 +52,10 @@ import com.solexgames.core.version.extend.PingCommand_v1_8;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
-import org.bukkit.event.Listener;
 import org.bukkit.command.CommandMap;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.SimplePluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.plugin.java.annotation.plugin.Plugin;
 
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
@@ -63,6 +64,13 @@ import java.util.TimeZone;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
+
+/**
+ * @author GrowlyX
+ * @since 3/1/2021
+ * <p>
+ * Holds instances to anything important.
+ */
 
 @Getter
 @Setter
@@ -102,13 +110,15 @@ public final class CorePlugin extends JavaPlugin {
     private Logger commandLogger;
 
     private Database coreDatabase;
-    private RedisClient redisClient;
+    private RedisManager redisManager;
 
     private ConfigExternal ranksConfig;
     private ConfigExternal whitelistConfig;
     private ConfigExternal databaseConfig;
     private ConfigExternal motdConfig;
     private ConfigExternal filterConfig;
+
+    private RedisSubscriptions subscriptions;
 
     private AbstractChatInterceptor chatInterceptor;
     private AbstractClientInjector lunarCommand;
@@ -181,8 +191,15 @@ public final class CorePlugin extends JavaPlugin {
         this.debugging = false;
         this.disallow = false;
 
+        this.subscriptions = new RedisSubscriptions();
+
         this.coreDatabase = new Database();
-        this.redisClient = new RedisClient();
+        this.redisManager = new RedisManager(new RedisSettings(
+                this.databaseConfig.getString("redis.host"),
+                this.databaseConfig.getInt("redis.port"),
+                this.databaseConfig.getBoolean("redis.authentication.enabled"),
+                this.databaseConfig.getString("redis.authentication.password")
+        ));
 
         this.cryptoManager = new CryptoManager();
         this.serverManager = new ServerManager();
@@ -197,7 +214,7 @@ public final class CorePlugin extends JavaPlugin {
 
         this.setupExtra();
 
-        this.getRedisThread().execute(() -> this.getRedisClient().write(RedisUtil.onServerOnline()));
+        this.getRedisThread().execute(() -> this.getRedisManager().write(RedisUtil.onServerOnline()));
         Bukkit.getScheduler().runTaskLater(this, () -> CAN_JOIN = true, 5 * 20L);
     }
 
@@ -355,7 +372,7 @@ public final class CorePlugin extends JavaPlugin {
 
         RedisUtil.write(RedisUtil.onServerOffline());
 
-        if (this.redisClient.isClientActive()) this.redisClient.unsubscribe();
+        if (this.redisManager.isActive()) this.redisManager.unsubscribe();
     }
 
     public void registerListeners(Listener... listeners) {
