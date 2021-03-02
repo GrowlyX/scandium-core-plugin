@@ -3,6 +3,7 @@ package com.solexgames.core.menu.extend.grant;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.AbstractInventoryMenu;
+import com.solexgames.core.util.DateUtil;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.punishment.PunishmentDuration;
@@ -20,6 +21,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 @Getter
 @Setter
@@ -43,13 +45,13 @@ public class GrantSelectDurationMenu extends AbstractInventoryMenu {
     public void update() {
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
-        this.inventory.setItem(10, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + "1 Day").addLore(Arrays.asList("", "&7Click to select this duration.")).create());
-        this.inventory.setItem(11, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + "1 Week").addLore(Arrays.asList("", "&7Click to select this duration.")).create());
-        this.inventory.setItem(12, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + "1 Month").addLore(Arrays.asList("", "&7Click to select this duration.")).create());
-        this.inventory.setItem(13, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + "3 Months").addLore(Arrays.asList("", "&7Click to select this duration.")).create());
-        this.inventory.setItem(14, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + "Permanent").addLore(Arrays.asList("", "&7Click to select this duration.")).create());
+        this.inventory.setItem(10, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "1 Day").addLore(Collections.singletonList("&7Click to select this duration.")).create());
+        this.inventory.setItem(11, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "1 Week").addLore(Collections.singletonList("&7Click to select this duration.")).create());
+        this.inventory.setItem(12, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "1 Month").addLore(Collections.singletonList("&7Click to select this duration.")).create());
+        this.inventory.setItem(13, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "3 Months").addLore(Collections.singletonList("&7Click to select this duration.")).create());
+        this.inventory.setItem(14, new ItemBuilder(Material.PAPER).setDisplayName("&4&oPermanent").addLore(Collections.singletonList("&7Click to select this duration.")).create());
 
-        this.inventory.setItem(16, new ItemBuilder(Material.STAINED_CLAY, 5).setDisplayName(ChatColor.GREEN + ChatColor.BOLD.toString() + "Custom").addLore(Arrays.asList("", "&7Click to select a custom duration.")).create());
+        this.inventory.setItem(16, new ItemBuilder(Material.STAINED_CLAY, 5).setDisplayName(ChatColor.GREEN + ChatColor.BOLD.toString() + "Custom").addLore(Collections.singletonList("&7Click to select a custom duration.")).create());
     }
 
     @Override
@@ -66,16 +68,16 @@ public class GrantSelectDurationMenu extends AbstractInventoryMenu {
             if (item == null || item.getType() == Material.AIR) return;
             switch (event.getRawSlot()) {
                 case 10:
-                    new GrantSelectReasonMenu(this.player, this.document, PunishmentDuration.DAY.getDuration(), this.rank, false, this.scope).open(player);
+                    new GrantSelectReasonMenu(this.player, this.document, System.currentTimeMillis() - DateUtil.parseDateDiff("1d", false), this.rank, false, this.scope).open(player);
                     break;
                 case 11:
-                    new GrantSelectReasonMenu(this.player, this.document, PunishmentDuration.WEEK.getDuration(), this.rank, false, this.scope).open(player);
+                    new GrantSelectReasonMenu(this.player, this.document, System.currentTimeMillis() - DateUtil.parseDateDiff("1w", false), this.rank, false, this.scope).open(player);
                     break;
                 case 12:
-                    new GrantSelectReasonMenu(this.player, this.document, PunishmentDuration.MONTH.getDuration(), this.rank, false, this.scope).open(player);
+                    new GrantSelectReasonMenu(this.player, this.document, System.currentTimeMillis() - DateUtil.parseDateDiff("1m", false), this.rank, false, this.scope).open(player);
                     break;
                 case 13:
-                    new GrantSelectReasonMenu(this.player, this.document, PunishmentDuration.MONTH.getDuration() * 3L, this.rank, false, this.scope).open(player);
+                    new GrantSelectReasonMenu(this.player, this.document, System.currentTimeMillis() - DateUtil.parseDateDiff("3m", false), this.rank, false, this.scope).open(player);
                     break;
                 case 14:
                     new GrantSelectReasonMenu(this.player, this.document, -1L, this.rank, true, this.scope).open(player);

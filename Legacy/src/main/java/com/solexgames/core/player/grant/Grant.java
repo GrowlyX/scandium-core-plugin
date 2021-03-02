@@ -24,10 +24,8 @@ public class Grant {
     private boolean active;
     private boolean permanent;
 
-    // START OF NEW ADDITION (NON-LEGACY)
     private String issuedServer;
     private String scope = "global";
-    // END OF NEW ADDITION (NON-LEGACY)
 
     public Grant(UUID issuer, Rank rank, long dateAdded, long duration, String reason, boolean active, boolean permanent) {
         this.issuer = issuer;

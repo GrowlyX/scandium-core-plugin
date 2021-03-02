@@ -15,7 +15,7 @@ public final class DateUtil {
         return DateUtil.timePattern.matcher(input).replaceFirst("").trim();
     }
 
-    public static long parseDateDiff(final String time, final boolean future) throws Exception {
+    public static long parseDateDiff(final String time, final boolean future) {
         final Matcher m = DateUtil.timePattern.matcher(time);
         int years = 0;
         int months = 0;
@@ -62,7 +62,7 @@ public final class DateUtil {
             }
         }
         if (!found) {
-            throw new Exception("Illegal Date");
+            return -1L;
         }
         final GregorianCalendar var13 = new GregorianCalendar();
         if (years > 0) {

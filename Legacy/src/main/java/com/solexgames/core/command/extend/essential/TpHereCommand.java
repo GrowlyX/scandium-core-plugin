@@ -1,9 +1,12 @@
 package com.solexgames.core.command.extend.essential;
 
+import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.StaffUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -17,6 +20,9 @@ public class TpHereCommand extends BaseCommand {
             return false;
         }
 
+        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+        ChatColor mainColor = serverType.getMainColor();
+        ChatColor secondColor = serverType.getSecondaryColor();
         Player player = (Player) sender;
         if (player.hasPermission("scandium.command.tphere")) {
             if (args.length == 0) {
@@ -27,8 +33,8 @@ public class TpHereCommand extends BaseCommand {
                     Player target = Bukkit.getPlayerExact(args[0]);
                     if (target != null) {
                         target.teleport(player.getLocation());
-                        player.sendMessage(Color.translate("&aTeleported " + target.getDisplayName() + "&a to your location."));
-                        target.sendMessage(Color.translate("&aYou have been teleported to " + target.getDisplayName() + "&a."));
+                        player.sendMessage(Color.translate(secondColor + "Teleported " + target.getDisplayName() + secondColor + " to your location."));
+                        target.sendMessage(Color.translate(secondColor + "You have been teleported to " + target.getDisplayName() + secondColor + "."));
 
                         StaffUtil.sendAlert(player, "teleported " + target.getName() + " to themselves");
                     } else {

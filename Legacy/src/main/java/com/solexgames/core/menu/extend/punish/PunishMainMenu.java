@@ -6,6 +6,7 @@ import com.solexgames.core.menu.extend.punish.history.PunishHistoryViewMainMenu;
 import com.solexgames.core.util.Color;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -23,7 +24,7 @@ public class PunishMainMenu extends AbstractInventoryMenu {
     private String target;
 
     public PunishMainMenu(Player player, String target) {
-        super("Punishment - Main", 9*3);
+        super("Punishment menu for &b" + (Bukkit.getPlayer(target) != null ? Bukkit.getPlayer(target).getDisplayName() : target), 9*3);
         this.player = player;
         this.target = target;
         this.update();
@@ -46,7 +47,6 @@ public class PunishMainMenu extends AbstractInventoryMenu {
         this.inventory.setItem(12, new ItemBuilder(Material.INK_SACK, 14)
                 .setDisplayName("&6Punish")
                 .addLore(
-                        "",
                         "&7Start the punishment process",
                         "&7for this player.",
                         "",
@@ -58,7 +58,6 @@ public class PunishMainMenu extends AbstractInventoryMenu {
         this.inventory.setItem(14, new ItemBuilder(Material.INK_SACK, 6)
                 .setDisplayName("&6Punishments")
                 .addLore(
-                        "",
                         "&7View all punishments",
                         "&7in relation to this player.",
                         "",

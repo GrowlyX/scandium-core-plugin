@@ -150,11 +150,25 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onConnect(PlayerJoinEvent event) {
         PotPlayer potPlayer = new PotPlayer(event.getPlayer().getUniqueId());
+
         CorePlugin.getInstance().getServerManager().getVanishedPlayers().forEach(player -> {
-            if (!event.getPlayer().hasPermission("scandium.vanished.see")) {
+            PotPlayer potPlayer1 = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+            if (potPlayer.getActiveGrant().getRank().getWeight() < potPlayer1.getActiveGrant().getRank().getWeight()) {
                 event.getPlayer().hidePlayer(player);
             }
         });
+
+        if (potPlayer.isAutoVanish()) {
+            potPlayer.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getServerManager().getAutomaticallyPutInto().replace("<value>", "vanish")));
+
+            CorePlugin.getInstance().getPlayerManager().vanishPlayerRaw(potPlayer.getPlayer());
+        }
+
+        if (potPlayer.isAutoModMode()) {
+            potPlayer.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getServerManager().getAutomaticallyPutInto().replace("<value>", "mod mode")));
+
+            CorePlugin.getInstance().getPlayerManager().modModeRaw(potPlayer.getPlayer());
+        }
 
         Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> {
             if (MANAGER.isClearChatJoin()) {
@@ -169,18 +183,6 @@ public class PlayerListener implements Listener {
                 } else {
                     StringUtil.sendCenteredMessage(event.getPlayer(), (ArrayList<String>) MANAGER.getJoinMessage());
                 }
-            }
-
-            if (potPlayer.isAutoVanish()) {
-                potPlayer.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getServerManager().getAutomaticallyPutInto().replace("<value>", "vanish")));
-
-                CorePlugin.getInstance().getPlayerManager().vanishPlayerRaw(potPlayer.getPlayer());
-            }
-
-            if (potPlayer.isAutoModMode()) {
-                potPlayer.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getServerManager().getAutomaticallyPutInto().replace("<value>", "mod mode")));
-
-                CorePlugin.getInstance().getPlayerManager().modModeRaw(potPlayer.getPlayer());
             }
 
             if (potPlayer.getPlayer().hasPermission("scandium.staff")) {

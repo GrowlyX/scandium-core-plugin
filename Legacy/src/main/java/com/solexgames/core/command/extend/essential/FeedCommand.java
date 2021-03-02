@@ -1,9 +1,12 @@
 package com.solexgames.core.command.extend.essential;
 
+import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.StaffUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -17,11 +20,14 @@ public class FeedCommand extends BaseCommand {
             return false;
         }
 
+        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+        ChatColor mainColor = serverType.getMainColor();
+        ChatColor secondColor = serverType.getSecondaryColor();
         Player player = (Player) sender;
         if (player.hasPermission("scandium.command.feed")) {
             if (args.length == 0) {
                 player.setFoodLevel(20);
-                player.sendMessage(Color.translate("&aSet your food level to 20."));
+                player.sendMessage(Color.translate(secondColor + "Set your food level to " + mainColor + "20" + secondColor +"."));
 
                 StaffUtil.sendAlert(player, "fed");
             }
@@ -29,7 +35,7 @@ public class FeedCommand extends BaseCommand {
                 Player target = Bukkit.getPlayerExact(args[0]);
                 if (target != null) {
                     target.setFoodLevel(20);
-                    player.sendMessage(Color.translate("&aSet " + target.getDisplayName() + "&a's food level to 20."));
+                    player.sendMessage(Color.translate(secondColor + "Set " + target.getDisplayName() + " food level to " + mainColor + "20" + secondColor +"."));
 
                     StaffUtil.sendAlert(player, "fed " + target.getName());
                 } else {

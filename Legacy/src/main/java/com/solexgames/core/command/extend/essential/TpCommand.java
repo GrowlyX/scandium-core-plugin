@@ -1,9 +1,12 @@
 package com.solexgames.core.command.extend.essential;
 
+import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.StaffUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -17,6 +20,9 @@ public class TpCommand extends BaseCommand {
             return false;
         }
 
+        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+        ChatColor mainColor = serverType.getMainColor();
+        ChatColor secondColor = serverType.getSecondaryColor();
         Player player = (Player) sender;
         if (player.hasPermission("scandium.command.tp")) {
             if (args.length == 0) {
@@ -27,7 +33,7 @@ public class TpCommand extends BaseCommand {
                     Player target = Bukkit.getPlayerExact(args[0]);
                     if (target != null) {
                         player.teleport(target.getLocation());
-                        player.sendMessage(Color.translate("&aTeleported you to " + target.getDisplayName() + "&a."));
+                        player.sendMessage(Color.translate(secondColor + "Teleported you to " + target.getDisplayName() + secondColor + "."));
 
                         StaffUtil.sendAlert(player, "teleported to " + target.getName());
                     } else {

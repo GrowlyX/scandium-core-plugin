@@ -14,6 +14,7 @@ import com.solexgames.core.util.UUIDUtil;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.time.DurationFormatUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -38,7 +39,7 @@ public class PunishSelectConfirmMenu extends AbstractInventoryMenu {
     private boolean isSilent;
 
     public PunishSelectConfirmMenu(Player player, String target, String reason, PunishmentType punishmentType, long punishmentDuration, boolean permanent) {
-        super("Punishment - Confirm", 9*5);
+        super("Confirm punishment for: &b" + (Bukkit.getPlayer(target) != null ? Bukkit.getPlayer(target).getDisplayName() : target), 9*5);
         this.player = player;
         this.target = target;
         this.reason = reason;
@@ -60,11 +61,11 @@ public class PunishSelectConfirmMenu extends AbstractInventoryMenu {
                     .setDisplayName("&a&lConfirm Punishment")
                     .addLore(
                             network.getMainColor() + "&m--------------------------------",
-                            network.getSecondaryColor() + "Punisher: " + network.getSecondaryColor() + this.player.getName(),
-                            network.getSecondaryColor() + "Target: " + network.getSecondaryColor() + this.target,
-                            network.getSecondaryColor() + "Reason: " + network.getSecondaryColor() + this.reason,
-                            network.getSecondaryColor() + "Type: " + network.getSecondaryColor() + punishmentType.getName(),
-                            network.getSecondaryColor() + "Duration: " + network.getSecondaryColor() + (permanent ? "&4Forever" : DurationFormatUtils.formatDurationWords(this.getPunishmentDuration(), true, true)),
+                            network.getSecondaryColor() + "Punisher: " + network.getMainColor() + this.player.getName(),
+                            network.getSecondaryColor() + "Target: " + network.getMainColor() + this.target,
+                            network.getSecondaryColor() + "Reason: " + network.getMainColor() + this.reason,
+                            network.getSecondaryColor() + "Type: " + network.getMainColor() + punishmentType.getName(),
+                            network.getSecondaryColor() + "Duration: " + network.getMainColor() + (permanent ? "&4Forever" : DurationFormatUtils.formatDurationWords(this.getPunishmentDuration(), true, true)),
                             "",
                             "&aLeft-Click to confirm this punishment!",
                             network.getMainColor() + "&m--------------------------------"

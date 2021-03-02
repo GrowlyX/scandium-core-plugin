@@ -18,10 +18,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Getter
 @NoArgsConstructor
@@ -52,34 +49,44 @@ public class PlayerManager {
     }
 
     public void vanishPlayer(Player player) {
+        PotPlayer vanishedPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+
         Bukkit.getOnlinePlayers()
                 .stream()
                 .filter(player1 -> player1 != player)
-                .filter(player1 -> !player1.hasPermission("scandium.vanished.see"))
-                .forEach(p -> p.hidePlayer(player));
+                .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
+                .filter(Objects::nonNull)
+                .filter(potPlayer -> potPlayer.getActiveGrant().getRank().getWeight() < vanishedPotPlayer.getActiveGrant().getRank().getWeight())
+                .forEach(potPlayer -> potPlayer.getPlayer().hidePlayer(player));
 
         CorePlugin.getInstance().getNMS().removeExecute(player);
 
-        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-        potPlayer.setVanished(true);
-        potPlayer.setupPlayerTag();
+        vanishedPotPlayer.setVanished(true);
+        vanishedPotPlayer.setupPlayerTag();
 
-        player.sendMessage(Color.translate("&aYou are now vanished to all online players."));
+        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+        ChatColor mainColor = serverType.getMainColor();
+        ChatColor secondColor = serverType.getSecondaryColor();
+
+        player.sendMessage(Color.translate(secondColor + "You are now vanished to all online players with a priority less than " + mainColor + vanishedPotPlayer.getActiveGrant().getRank().getWeight() + secondColor + "."));
         CorePlugin.getInstance().getServerManager().getVanishedPlayers().add(player);
     }
 
     public void vanishPlayerRaw(Player player) {
+        PotPlayer vanishedPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+
         Bukkit.getOnlinePlayers()
                 .stream()
                 .filter(player1 -> player1 != player)
-                .filter(player1 -> !player1.hasPermission("scandium.vanished.see"))
-                .forEach(p -> p.hidePlayer(player));
+                .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
+                .filter(Objects::nonNull)
+                .filter(potPlayer -> potPlayer.getActiveGrant().getRank().getWeight() < vanishedPotPlayer.getActiveGrant().getRank().getWeight())
+                .forEach(potPlayer -> potPlayer.getPlayer().hidePlayer(player));
 
         CorePlugin.getInstance().getNMS().removeExecute(player);
 
-        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-        potPlayer.setVanished(true);
-        potPlayer.setupPlayerTag();
+        vanishedPotPlayer.setVanished(true);
+        vanishedPotPlayer.setupPlayerTag();
 
         CorePlugin.getInstance().getServerManager().getVanishedPlayers().add(player);
     }
@@ -107,7 +114,11 @@ public class PlayerManager {
 
         player.updateInventory();
 
-        player.sendMessage(Color.translate("&aYou have enabled Mod Mode."));
+        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+        ChatColor mainColor = serverType.getMainColor();
+        ChatColor secondColor = serverType.getSecondaryColor();
+
+        player.sendMessage(Color.translate(secondColor + "You are now in moderation mode."));
 
         StaffUtil.sendAlert(player, "modmoded");
     }
@@ -148,7 +159,7 @@ public class PlayerManager {
         potPlayer.getModModeBoard().deleteBoard();
         potPlayer.setModModeBoard(null);
 
-        player.sendMessage(Color.translate("&cYou have exited Mod Mode."));
+        player.sendMessage(Color.translate(ChatColor.RED + "You have exited in moderation mode."));
 
         StaffUtil.sendAlert(player, "unmodmoded");
     }
@@ -179,7 +190,7 @@ public class PlayerManager {
 
     public void sendDisconnectFreezeMessage(Player target) {
         RedisUtil.writeAsync(RedisUtil.onGlobalBroadcastPermission(Color.translate("  "), "scandium.staff"));
-        RedisUtil.writeAsync(RedisUtil.onGlobalBroadcastPermission(Color.translate("&c&l" + target.getName() + "&c disconnected while being frozen!"), "scandium.staff"));
+        RedisUtil.writeAsync(RedisUtil.onGlobalBroadcastPermission(Color.translate("&c&l" + target.getName() + "&c disconnected while frozen!"), "scandium.staff"));
         RedisUtil.writeAsync(RedisUtil.onGlobalBroadcastPermission(Color.translate("  "), "scandium.staff"));
     }
 

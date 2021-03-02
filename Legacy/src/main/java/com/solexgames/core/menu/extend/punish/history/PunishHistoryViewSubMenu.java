@@ -3,6 +3,7 @@ package com.solexgames.core.menu.extend.punish.history;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.AbstractInventoryMenu;
+import com.solexgames.core.menu.extend.punish.remove.PunishRemoveConfirmMenu;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.punishment.Punishment;
 import com.solexgames.core.player.punishment.PunishmentType;
@@ -15,6 +16,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -22,6 +24,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -33,7 +36,7 @@ public class PunishHistoryViewSubMenu extends AbstractInventoryMenu {
     private PunishmentType punishmentType;
 
     public PunishHistoryViewSubMenu(String target, PunishmentType punishmentType) {
-        super("Punishment - " + punishmentType.getName(), 9*5);
+        super("Applicable punishments of " + (Bukkit.getPlayer(target) != null ? Bukkit.getPlayer(target).getDisplayName() : target), 9*5);
         this.target = target;
         this.punishmentType = punishmentType;
         this.update();
@@ -73,12 +76,8 @@ public class PunishHistoryViewSubMenu extends AbstractInventoryMenu {
                         lore.add(network.getMainColor() + "&m------------------------------------");
                     }
 
-                    lore.add("&aLeft-Click to remove this punishment from history.");
-                    lore.add(network.getMainColor() + "&m------------------------------------");
-
-
-                    this.inventory.setItem(i.get(), new ItemBuilder(Material.WOOL, (punishment.isActive() ? 5 : 14))
-                            .setDisplayName(ChatColor.RED + "#" + punishment.getPunishIdentification() + " &7(" + statusLore + "&7)")
+                    this.inventory.setItem(i.get(), new ItemBuilder(Material.WOOL, (punishment.isActive() ? 5 : (punishment.isRemoved() ? 8 : 14)))
+                            .setDisplayName(ChatColor.RED + "#" + punishment.getPunishIdentification())
                             .addLore(Color.translate(lore))
                             .create());
 
@@ -103,19 +102,17 @@ public class PunishHistoryViewSubMenu extends AbstractInventoryMenu {
             ItemStack item = event.getCurrentItem();
             Player player = (Player) event.getWhoClicked();
 
-            if (item.hasItemMeta()) {
-                if (item.getItemMeta().getDisplayName() != null) {
-                    String display = ChatColor.stripColor(Color.translate(item.getItemMeta().getDisplayName()));
-                    String id = display.replace("#", "");
-                    Punishment punishment = Punishment.getByIdentification(id);
+            if (item == null || item.getType() == Material.AIR) return;
+            if (event.getClick().equals(ClickType.RIGHT)) {
+                if (item.hasItemMeta()) {
+                    if (item.getItemMeta().getDisplayName() != null) {
+                        String display = ChatColor.stripColor(Color.translate(item.getItemMeta().getDisplayName()));
+                        String id = display.replace("#", "");
+                        Punishment punishment = Punishment.getByIdentification(id);
 
-                    if (punishment != null) {
-                        Punishment.getAllPunishments().remove(punishment);
-                        RedisUtil.writeAsync(RedisUtil.fRemovePunishment(punishment));
-
-                        player.sendMessage(Color.translate("&aRemoved the punishment from &b" + this.target + "'s &ahistory!"));
-
-                        new PunishHistoryViewSubMenu(target, punishmentType).open(player);
+                        if (punishment != null) {
+                            new PunishRemoveConfirmMenu(player, target, punishment).open(player);
+                        }
                     }
                 }
             }
@@ -123,6 +120,6 @@ public class PunishHistoryViewSubMenu extends AbstractInventoryMenu {
     }
 
     private List<Punishment> getSortedPunishmentsByType() {
-        return Punishment.getAllPunishments().stream().filter(punishment -> punishment.getPunishmentType() == this.punishmentType).sorted(Comparator.comparingLong(Punishment::getCreatedAtLong).reversed()).collect(Collectors.toList());
+        return Punishment.getAllPunishments().stream().filter(Objects::nonNull).filter(punishment -> punishment.getPunishmentType() == this.punishmentType).sorted(Comparator.comparingLong(Punishment::getCreatedAtLong).reversed()).collect(Collectors.toList());
     }
 }

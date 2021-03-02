@@ -1,6 +1,8 @@
 package com.solexgames.core.command.extend.essential;
 
+import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.StaffUtil;
 import org.bukkit.ChatColor;
@@ -18,6 +20,9 @@ public class TpPosCommand extends BaseCommand {
             return false;
         }
 
+        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+        ChatColor mainColor = serverType.getMainColor();
+        ChatColor secondColor = serverType.getSecondaryColor();
         Player player = (Player) sender;
         if (player.hasPermission("scandium.command.tppos")) {
             if (args.length == 0) {
@@ -37,11 +42,11 @@ public class TpPosCommand extends BaseCommand {
                         int z1 = Integer.parseInt(args[2]);
 
                         player.teleport(new Location(player.getWorld(), x1, y1, z1, 0.0F, 0.0F));
-                        player.sendMessage(ChatColor.GREEN + "Teleported you to " + x1 + ", " + y1 + ", " + z1 + ".");
+                        player.sendMessage(secondColor + "Teleported you to " + mainColor + x1 + secondColor + ", " + mainColor + y1 + secondColor + ", " + mainColor + z1 + secondColor + ".");
 
                         StaffUtil.sendAlert(player, "teleported to " + x1 + ", " + y1 + ", " + z1);
                     } catch (Exception e) {
-                        player.sendMessage(Color.translate("&cTry again!"));
+                        player.sendMessage(Color.translate("&cOne of those values was not an integer."));
                     }
                 }
             }

@@ -9,6 +9,7 @@ import com.solexgames.core.player.punishment.PunishmentType;
 import com.solexgames.core.util.Color;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -17,6 +18,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 @Getter
 @Setter
@@ -27,7 +29,7 @@ public class PunishSelectReasonMenu extends AbstractInventoryMenu {
     private PunishmentType punishmentType;
 
     public PunishSelectReasonMenu(Player player, String target, PunishmentType punishmentType) {
-        super("Punishment - Reason", 9*3);
+        super("Punishment reason for: &b" + (Bukkit.getPlayer(target) != null ? Bukkit.getPlayer(target).getDisplayName() : target), 9*3);
         this.player = player;
         this.target = target;
         this.punishmentType = punishmentType;
@@ -37,13 +39,13 @@ public class PunishSelectReasonMenu extends AbstractInventoryMenu {
     public void update() {
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
-        this.inventory.setItem(10, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + "Unfair Advantage").addLore(Arrays.asList("", "&7Click to select this reason.")).create());
-        this.inventory.setItem(11, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + "Chat Abuse").addLore(Arrays.asList("", "&7Click to select this reason.")).create());
-        this.inventory.setItem(12, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + "Camping").addLore(Arrays.asList("", "&7Click to select this reason.")).create());
-        this.inventory.setItem(13, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + "Threats").addLore(Arrays.asList("", "&7Click to select this reason.")).create());
-        this.inventory.setItem(14, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + "Appealed").addLore(Arrays.asList("", "&7Click to select this reason.")).create());
+        this.inventory.setItem(10, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Unfair Advantage").addLore(Collections.singletonList("&7Click to select this reason.")).create());
+        this.inventory.setItem(11, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Chat Abuse").addLore(Collections.singletonList("&7Click to select this reason.")).create());
+        this.inventory.setItem(12, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Camping").addLore(Collections.singletonList("&7Click to select this reason.")).create());
+        this.inventory.setItem(13, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Threats").addLore(Collections.singletonList("&7Click to select this reason.")).create());
+        this.inventory.setItem(14, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Appealed").addLore(Collections.singletonList("&7Click to select this reason.")).create());
 
-        this.inventory.setItem(16, new ItemBuilder(Material.STAINED_CLAY, 5).setDisplayName(ChatColor.GREEN + ChatColor.BOLD.toString() + "Custom").addLore(Arrays.asList("", "&7Click to select a custom reason.")).create());
+        this.inventory.setItem(16, new ItemBuilder(Material.STAINED_CLAY, 5).setDisplayName(ChatColor.GREEN + ChatColor.BOLD.toString() + "Custom").addLore(Collections.singletonList("&7Click to select a custom reason.")).create());
     }
 
     @Override

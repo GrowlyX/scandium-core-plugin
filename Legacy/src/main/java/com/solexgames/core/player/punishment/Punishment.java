@@ -144,7 +144,7 @@ public class Punishment {
         } else if (this.isPermanent()) {
             return true;
         } else {
-            return System.currentTimeMillis() < this.createdAt.getTime() + punishmentDuration;
+            return System.currentTimeMillis() >= this.createdAt.getTime() + this.punishmentDuration;
         }
     }
 

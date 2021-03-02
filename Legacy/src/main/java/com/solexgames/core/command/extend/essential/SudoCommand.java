@@ -1,10 +1,13 @@
 package com.solexgames.core.command.extend.essential;
 
+import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.StaffUtil;
 import com.solexgames.core.util.StringUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -18,6 +21,9 @@ public class SudoCommand extends BaseCommand {
             return false;
         }
 
+        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+        ChatColor mainColor = serverType.getMainColor();
+        ChatColor secondColor = serverType.getSecondaryColor();
         Player player = (Player) sender;
         if (player.hasPermission("scandium.command.sudo")) {
             if (args.length == 0) {
@@ -33,13 +39,13 @@ public class SudoCommand extends BaseCommand {
                     if (target != null) {
                         if (message.startsWith("c:")) {
                             target.chat(message.replace("c:", ""));
-                            player.sendMessage(Color.translate("&aMade " + target.getDisplayName() + "&a chat '" + message.replace("c:", "") + "&a'."));
+                            player.sendMessage(Color.translate(secondColor + "Made " + target.getDisplayName() + secondColor + " chat '" + mainColor + message.replace("c:", "") + secondColor + "'."));
                         } else if (message.startsWith("e:")) {
                             target.performCommand(message.replace("e:", ""));
-                            player.sendMessage(Color.translate("&aMade " + target.getDisplayName() + "&a execute '" + message.replace("e:", "") + "&a'."));
+                            player.sendMessage(Color.translate(secondColor + "Made " + target.getDisplayName() + secondColor + " execute '" + mainColor + message.replace("e:", "") + secondColor + "'."));
                         } else {
                             target.chat(message);
-                            player.sendMessage(Color.translate("&aMade " + target.getDisplayName() + "&a chat '" + message + "&a'."));
+                            player.sendMessage(Color.translate(secondColor + "Made " + target.getDisplayName() + secondColor + " chat '" + mainColor + message + secondColor + "'."));
                         }
 
                         StaffUtil.sendAlert(player, "sudoed " + target.getName());

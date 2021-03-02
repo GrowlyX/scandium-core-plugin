@@ -8,6 +8,8 @@ import com.solexgames.core.player.punishment.PunishmentDuration;
 import com.solexgames.core.player.punishment.PunishmentType;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -15,6 +17,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 @Getter
 @Setter
@@ -26,7 +29,7 @@ public class PunishSelectDurationMenu extends AbstractInventoryMenu {
     private PunishmentType punishmentType;
 
     public PunishSelectDurationMenu(Player player, String target, String reason, PunishmentType punishmentType) {
-        super("Punishment - Duration", 9*3);
+        super("Punishment duration for: &b" + (Bukkit.getPlayer(target) != null ? Bukkit.getPlayer(target).getDisplayName() : target), 9*3);
         this.player = player;
         this.target = target;
         this.reason = reason;
@@ -37,14 +40,14 @@ public class PunishSelectDurationMenu extends AbstractInventoryMenu {
     public void update() {
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
-        this.inventory.setItem(10, new ItemBuilder(Material.INK_SACK, 1).setDisplayName(network.getSecondaryColor() + "1 Day").addLore(Arrays.asList("", "&7Click to select this duration.")).create());
-        this.inventory.setItem(11, new ItemBuilder(Material.INK_SACK, 2).setDisplayName(network.getSecondaryColor() + "1 Week").addLore(Arrays.asList("", "&7Click to select this duration.")).create());
-        this.inventory.setItem(12, new ItemBuilder(Material.INK_SACK, 3).setDisplayName(network.getSecondaryColor() + "1 Month").addLore(Arrays.asList("", "&7Click to select this duration.")).create());
-        this.inventory.setItem(13, new ItemBuilder(Material.INK_SACK, 4).setDisplayName(network.getSecondaryColor() + "3 Months").addLore(Arrays.asList("", "&7Click to select this duration.")).create());
-        this.inventory.setItem(14, new ItemBuilder(Material.INK_SACK, 5).setDisplayName(network.getSecondaryColor() + "6 Months").addLore(Arrays.asList("", "&7Click to select this duration.")).create());
-        this.inventory.setItem(15, new ItemBuilder(Material.INK_SACK, 6).setDisplayName(network.getSecondaryColor() + "1 Year").addLore(Arrays.asList("", "&7Click to select this duration.")).create());
+        this.inventory.setItem(10, new ItemBuilder(Material.INK_SACK, 1).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "1 Day").addLore(Collections.singletonList("&7Click to select this duration.")).create());
+        this.inventory.setItem(11, new ItemBuilder(Material.INK_SACK, 2).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "1 Week").addLore(Collections.singletonList("&7Click to select this duration.")).create());
+        this.inventory.setItem(12, new ItemBuilder(Material.INK_SACK, 3).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "1 Month").addLore(Collections.singletonList("&7Click to select this duration.")).create());
+        this.inventory.setItem(13, new ItemBuilder(Material.INK_SACK, 4).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "3 Months").addLore(Collections.singletonList("&7Click to select this duration.")).create());
+        this.inventory.setItem(14, new ItemBuilder(Material.INK_SACK, 5).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "6 Months").addLore(Collections.singletonList("&7Click to select this duration.")).create());
+        this.inventory.setItem(15, new ItemBuilder(Material.INK_SACK, 6).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "1 Year").addLore(Collections.singletonList("&7Click to select this duration.")).create());
 
-        this.inventory.setItem(16, new ItemBuilder(Material.STAINED_CLAY, 5).setDisplayName(network.getSecondaryColor() + "&4Permanent").addLore(Arrays.asList("", "&7Click to select this duration.")).create());
+        this.inventory.setItem(16, new ItemBuilder(Material.STAINED_CLAY, 5).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "&4&oPermanent").addLore(Collections.singletonList("&7Click to select this duration.")).create());
     }
 
     @Override
