@@ -41,7 +41,7 @@ public class CGrantCommand extends BaseCommand {
                     sender.sendMessage(Color.translate("&cUsage: /" + label + " <player> <rank> <duration> <reason>."));
                 }
                 if (args.length > 2) {
-                    Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByName(args[0]);
+                    Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByName(args[0]).orElse(null);
                     if (document != null) {
                         Rank rank = Rank.getByName(args[1]);
                         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();

@@ -73,6 +73,7 @@ public class GrantRemoveConfirmMenu extends AbstractInventoryMenu {
             if (item == null || item.getType() == Material.AIR) return;
             if (ChatColor.stripColor(Color.translate(item.getItemMeta().getDisplayName())).contains("Confirm")) {
                 potPlayer.getAllGrants().remove(grant);
+                potPlayer.setupPlayer();
                 player.sendMessage(Color.translate("&aRemoved the grant from &b" + potPlayer.getName() + "'s &ahistory!"));
                 player.closeInventory();
 

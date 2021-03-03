@@ -29,7 +29,8 @@ public class SlowChatCommand extends BaseCommand {
                     int time = Integer.parseInt(args[0]);
                     CorePlugin.getInstance().getServerManager().setChatSlow(time * 1000L);
                     Bukkit.broadcastMessage(CorePlugin.getInstance().getServerManager().getChatSlow() > 0L ? ChatColor.GREEN + "Public chat is now in slow mode. " + ChatColor.GRAY + "(" + time + " seconds)" : ChatColor.RED + "Public chat is no longer in slow mode.");
-                    RedisUtil.writeAsync(RedisUtil.onGlobalBroadcastPermission(Color.translate("&3[S] " + "&7[" + CorePlugin.getInstance().getServerName() + "] " + player.getDisplayName() + " &bhas slowed the chat to &6" + time + " seconds&b."), "scandium.staff"));
+
+                    CorePlugin.getInstance().getPlayerManager().sendToNetworkStaff("&3[S] " + "&7[" + CorePlugin.getInstance().getServerName() + "] " + player.getDisplayName() + " &bhas slowed the chat to &6" + time + " seconds&b.");
                 } catch (NumberFormatException e) {
                     player.sendMessage(Color.translate("&cThat number is invalid."));
                 }

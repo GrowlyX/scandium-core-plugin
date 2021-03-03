@@ -33,7 +33,7 @@ public class GrantMainMenu extends AbstractInventoryMenu {
     private final Document document;
 
     public GrantMainMenu(Player player, Document document) {
-        super("Granting for " + (Bukkit.getPlayer(document.getString("name")) != null ? Bukkit.getPlayer(document.getString("name")).getDisplayName() : document.getString("name")) + Color.translate(" &7(&61/3&7)"), 9*4);
+        super("Granting for " + (Bukkit.getPlayer(document.getString("name")) != null ? Bukkit.getPlayer(document.getString("name")).getDisplayName() : document.getString("name")) , 9*4);
         this.player = player;
         this.document = document;
         this.update();

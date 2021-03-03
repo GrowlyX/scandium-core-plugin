@@ -1,4 +1,4 @@
-package com.solexgames.core.command.extend.modsuite;
+package com.solexgames.core.command.extend.moderation;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;

@@ -164,8 +164,8 @@ public class PlayerManager {
         StaffUtil.sendAlert(player, "unmodmoded");
     }
 
-    public Document getDocumentByName(String name) {
-        return CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("name", name)).first();
+    public Optional<Document> getDocumentByName(String name) {
+        return Optional.ofNullable(CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("name", name)).first());
     }
 
     public void unVanishPlayer(Player player) {
@@ -189,9 +189,13 @@ public class PlayerManager {
     }
 
     public void sendDisconnectFreezeMessage(Player target) {
-        RedisUtil.writeAsync(RedisUtil.onGlobalBroadcastPermission(Color.translate("  "), "scandium.staff"));
-        RedisUtil.writeAsync(RedisUtil.onGlobalBroadcastPermission(Color.translate("&c&l" + target.getName() + "&c disconnected while frozen!"), "scandium.staff"));
-        RedisUtil.writeAsync(RedisUtil.onGlobalBroadcastPermission(Color.translate("  "), "scandium.staff"));
+        this.sendToNetworkStaff("&3[S] &7[" + CorePlugin.getInstance().getServerName() + "&7] &3" + target.getDisplayName() + " &cdisconnected while frozen!");
+    }
+
+    public void sendToNetworkStaff(String... strings) {
+        for (String string : strings) {
+            RedisUtil.writeAsync(RedisUtil.onGlobalBroadcastPermission(Color.translate(string), "scandium.staff"));
+        }
     }
 
     public void sendFreezeMessage(Player player) {

@@ -1,7 +1,6 @@
 package com.solexgames.core.listener;
 
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.command.extend.modsuite.FreezeCommand;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.extend.modsuite.StaffMenu;
 import com.solexgames.core.util.builder.ItemBuilder;
@@ -11,7 +10,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

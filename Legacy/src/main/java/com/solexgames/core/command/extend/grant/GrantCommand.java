@@ -27,8 +27,7 @@ public class GrantCommand extends BaseCommand {
             }
             if (args.length > 0) {
                 String target = args[0];
-
-                Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByName(target);
+                Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByName(target).orElse(null);
 
                 if (document != null) {
                     new GrantMainMenu(player, document).open(player);

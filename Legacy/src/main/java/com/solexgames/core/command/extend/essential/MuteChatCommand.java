@@ -24,11 +24,11 @@ public class MuteChatCommand extends BaseCommand {
                 if (CorePlugin.getInstance().getServerManager().isChatEnabled()) {
                     CorePlugin.getInstance().getServerManager().setChatEnabled(false);
                     Bukkit.broadcastMessage(Color.translate("&aThe chat has been disabled by " + player.getDisplayName() + "&a."));
-                    RedisUtil.writeAsync(RedisUtil.onGlobalBroadcastPermission(Color.translate("&3[S] " + "&7[" + CorePlugin.getInstance().getServerName() + "] " + player.getDisplayName() + " &bhas disabled global chat&b."), "scandium.staff"));
+                    CorePlugin.getInstance().getPlayerManager().sendToNetworkStaff("&3[S] " + "&7[" + CorePlugin.getInstance().getServerName() + "] " + player.getDisplayName() + " &bhas disabled global chat&b.");
                 } else if (!CorePlugin.getInstance().getServerManager().isChatEnabled()) {
                     CorePlugin.getInstance().getServerManager().setChatEnabled(true);
                     Bukkit.broadcastMessage(Color.translate("&aThe chat has been enabled by " + player.getDisplayName() + "&a."));
-                    RedisUtil.writeAsync(RedisUtil.onGlobalBroadcastPermission(Color.translate("&3[S] " + "&7[" + CorePlugin.getInstance().getServerName() + "] " + player.getDisplayName() + " &bhas enabled global chat&b."), "scandium.staff"));
+                    CorePlugin.getInstance().getPlayerManager().sendToNetworkStaff("&3[S] " + "&7[" + CorePlugin.getInstance().getServerName() + "] " + player.getDisplayName() + " &bhas enabled global chat&b.");
                 }
             }
         } else {
