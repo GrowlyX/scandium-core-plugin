@@ -27,6 +27,7 @@ public class Rank {
     private String name;
     private String prefix;
     private String suffix;
+    private String teamLetter;
 
     private String color;
 

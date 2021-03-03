@@ -27,8 +27,8 @@ public class RankCommand extends BaseCommand {
         player.sendMessage(Color.translate(NETWORK.getMainColor() + ChatColor.BOLD.toString() + "Rank Management:"));
         player.sendMessage(Color.translate("/rank create &7- Create a new rank."));
         player.sendMessage(Color.translate("/rank delete &7- Delete an existing rank."));
-        player.sendMessage(Color.translate("/rank addperm &7- Add a permission to a rank."));
-        player.sendMessage(Color.translate("/rank delperm &7- Remove a permission from a rank."));
+        player.sendMessage(Color.translate("/rank addPerm &7- Add a permission to a rank."));
+        player.sendMessage(Color.translate("/rank delPerm &7- Remove a permission from a rank."));
         player.sendMessage(Color.translate("/rank prefix &7- Set a rank's prefix."));
         player.sendMessage(Color.translate("/rank suffix &7- Set a rank's suffix."));
         player.sendMessage(Color.translate("/rank color &7- Set a rank's color."));
@@ -38,8 +38,9 @@ public class RankCommand extends BaseCommand {
         player.sendMessage(Color.translate("/rank weight &7- Set a rank's weight."));
         player.sendMessage(Color.translate("/rank hidden &7- et a rank as a hidden rank."));
         player.sendMessage(Color.translate("/rank default &7- Set a rank as a default rank."));
-        player.sendMessage(Color.translate("/rank addinher &7- Add an inheritance to a rank."));
-        player.sendMessage(Color.translate("/rank delinher &7- Remove an inheritance from a rank."));
+        player.sendMessage(Color.translate("/rank addInher &7- Add an inheritance to a rank."));
+        player.sendMessage(Color.translate("/rank delInher &7- Remove an inheritance from a rank."));
+        player.sendMessage(Color.translate("/rank teamLetter &7- Set the team letter of a rank (For tablist sorting; \"a\" would be highest on tablist, \"z\" would be lowest.) (Don't use)"));
         player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
     }
 
@@ -144,6 +145,29 @@ public class RankCommand extends BaseCommand {
                                 player.sendMessage(Color.translate(" &7* " + displayName + " &7(" + rank.getWeight() + ") (" + rank.getPrefix() + "&7)" + " (" + rank.getColor() + "C&7)"));
                             });
                             player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
+                            break;
+                        case "teamletter":
+                            if (args.length == 1) player.sendMessage(Color.translate("&cUsage: /rank teamLetter <name> <letter>."));
+                            if (args.length == 2) player.sendMessage(Color.translate("&cUsage: /rank teamLetter <name> <letter>."));
+                            if (args.length == 3) {
+                                String name = args[1];
+                                String value = args[2];
+
+                                Rank rank = Rank.getByName(name);
+
+                                if (rank != null) {
+                                    String displayName = Color.translate(rank.getColor() + rank.getName());
+
+                                    if (!(value.length() > 1)) {
+                                        rank.setTeamLetter(value.toLowerCase());
+                                        player.sendMessage(Color.translate("&aSet the team letter '" + rank.getTeamLetter() + "&a' for the rank " + displayName + "&a."));
+                                    } else {
+                                        player.sendMessage(Color.translate("&cThat has to be a letter!"));
+                                    }
+                                } else {
+                                    player.sendMessage(Color.translate("&cThat rank does not exist!"));
+                                }
+                            }
                             break;
                         case "delinher":
                             if (args.length == 1) player.sendMessage(Color.translate("&cUsage: /rank delinher <name> <inheritance>."));

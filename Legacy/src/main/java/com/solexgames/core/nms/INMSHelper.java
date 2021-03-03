@@ -7,4 +7,6 @@ public interface INMSHelper {
     void removeExecute(Player player);
     void addExecute(Player player);
 
+    void updateTablist();
+
 }

@@ -22,7 +22,28 @@ public class PrefixCommand extends BaseCommand {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage("die");
+            if (args.length == 1) {
+                sender.sendMessage(Color.translate("&cUsage: /tag <player> <tag>."));
+            }
+            if (args.length == 2) {
+                sender.sendMessage(Color.translate("&cUsage: /tag <player> <tag>."));
+            }
+            if (args.length >= 3) {
+                Player target = Bukkit.getPlayerExact(args[0]);
+                if (target != null) {
+                    Prefix prefix = Prefix.getByName(args[1]);
+                    if (prefix != null) {
+                        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
+                        potPlayer.getAllPrefixes().add(prefix.getName());
+                        sender.sendMessage(Color.translate("&aAdded the prefix " + prefix.getName() + " to " + target.getDisplayName()));
+                        target.sendMessage(Color.translate("&aYou've been given access to the " + prefix.getPrefix() + "&a prefix."));
+                    } else {
+                        sender.sendMessage(Color.translate("&cThat prefix does not exist."));
+                    }
+                } else {
+                    sender.sendMessage(Color.translate("&cThat player does not exist."));
+                }
+            }
             return false;
         }
 

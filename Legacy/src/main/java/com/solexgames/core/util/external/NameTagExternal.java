@@ -1,7 +1,9 @@
 package com.solexgames.core.util.external;
 
 import com.solexgames.core.CorePlugin;
+import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
+import com.solexgames.core.util.RankUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -19,7 +21,8 @@ public final class NameTagExternal {
     public static void setupNameTag(Player player, Player other, ChatColor color) {
         Scoreboard scoreboard = player.getScoreboard();
 
-        if (scoreboard.equals(Bukkit.getServer().getScoreboardManager().getMainScoreboard())) scoreboard = Bukkit.getServer().getScoreboardManager().getNewScoreboard();
+        if (scoreboard.equals(Bukkit.getServer().getScoreboardManager().getMainScoreboard()))
+            scoreboard = Bukkit.getServer().getScoreboardManager().getNewScoreboard();
 
         Team team = player.getScoreboard().getTeam(getTeamName(color));
         if (team == null) {
@@ -38,7 +41,8 @@ public final class NameTagExternal {
     public static void setupVanishTag(Player player, Player other) {
         Scoreboard scoreboard = player.getScoreboard();
 
-        if (scoreboard.equals(Bukkit.getServer().getScoreboardManager().getMainScoreboard())) scoreboard = Bukkit.getServer().getScoreboardManager().getNewScoreboard();
+        if (scoreboard.equals(Bukkit.getServer().getScoreboardManager().getMainScoreboard()))
+            scoreboard = Bukkit.getServer().getScoreboardManager().getNewScoreboard();
 
         Team team = player.getScoreboard().getTeam(getTeamName(ChatColor.MAGIC));
         if (team == null) {
@@ -54,10 +58,32 @@ public final class NameTagExternal {
         player.setScoreboard(scoreboard);
     }
 
+    public static void setTabPosition(PotPlayer potPlayer) {
+        Player player = potPlayer.getPlayer();
+        Scoreboard scoreboard = player.getScoreboard();
+
+        String teamName;
+        if (potPlayer.getActiveGrant().getRank().getTeamLetter() != null) {
+            teamName = potPlayer.getActiveGrant().getRank().getTeamLetter() + potPlayer.getActiveGrant().getRank().getName().toUpperCase();
+        } else {
+            teamName = "a" + potPlayer.getActiveGrant().getRank().getName().toUpperCase();
+        }
+
+        if (scoreboard.equals(Bukkit.getServer().getScoreboardManager().getMainScoreboard()))
+            scoreboard = Bukkit.getServer().getScoreboardManager().getNewScoreboard();
+
+        Team team = player.getScoreboard().getTeam(teamName);
+        if (team == null)
+            team = player.getScoreboard().registerNewTeam(teamName);
+
+        player.setScoreboard(scoreboard);
+    }
+
     public static void setupStaffModeTag(Player player, Player other) {
         Scoreboard scoreboard = player.getScoreboard();
 
-        if (scoreboard.equals(Bukkit.getServer().getScoreboardManager().getMainScoreboard())) scoreboard = Bukkit.getServer().getScoreboardManager().getNewScoreboard();
+        if (scoreboard.equals(Bukkit.getServer().getScoreboardManager().getMainScoreboard()))
+            scoreboard = Bukkit.getServer().getScoreboardManager().getNewScoreboard();
 
         Team team = player.getScoreboard().getTeam(getTeamName(ChatColor.STRIKETHROUGH));
         if (team == null) {

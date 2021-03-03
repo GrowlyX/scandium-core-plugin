@@ -19,23 +19,6 @@ import java.util.UUID;
 
 public final class UUIDUtil {
 
-    public static String getUUIDString(String name) throws IOException, ParseException {
-        URL url = new URL("https://api.mojang.com/users/profiles/minecraft/" + name);
-        URLConnection conn = url.openConnection();
-
-        conn.setDoOutput(true);
-
-        BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-        JSONParser parser = new JSONParser();
-        JSONObject obj = (JSONObject) parser.parse(reader.readLine());
-
-        UUID uuid = UUID.fromString(String.valueOf(obj.get("id")).replaceAll("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})", "$1-$2-$3-$4-$5"));
-        name = String.valueOf(obj.get("name"));
-        reader.close();
-
-        return uuid.toString();
-    }
-
     public static Map.Entry<UUID, String> getUUID(String name) throws IOException, ParseException {
         URL url = new URL("https://api.mojang.com/users/profiles/minecraft/" + name);
         URLConnection conn = url.openConnection();

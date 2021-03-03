@@ -164,7 +164,7 @@ public class PlayerManager {
         StaffUtil.sendAlert(player, "unmodmoded");
     }
 
-    public Document getDocumentByUuid(String name) {
+    public Document getDocumentByName(String name) {
         return CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("name", name)).first();
     }
 
