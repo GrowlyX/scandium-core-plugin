@@ -2,8 +2,8 @@ package com.solexgames.core.command.extend.grant;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
-import com.solexgames.core.menu.extend.grant.GrantMainMenu;
 import com.solexgames.core.util.Color;
+import com.solexgames.core.util.external.pagination.extend.GrantMainPaginatedMenu;
 import lombok.SneakyThrows;
 import org.bson.Document;
 import org.bukkit.command.Command;
@@ -30,7 +30,7 @@ public class GrantCommand extends BaseCommand {
                 Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByName(target).orElse(null);
 
                 if (document != null) {
-                    new GrantMainMenu(player, document).open(player);
+                    new GrantMainPaginatedMenu(document, player).openMenu(player);
                 } else {
                     player.sendMessage(Color.translate("&cThat player does not exist in our databases."));
                 }

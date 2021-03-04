@@ -1,24 +1,18 @@
 package com.solexgames.core.menu.extend.grant.scope;
 
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.enums.ServerType;
-import com.solexgames.core.manager.ServerManager;
 import com.solexgames.core.menu.AbstractInventoryMenu;
-import com.solexgames.core.menu.extend.grant.GrantMainMenu;
 import com.solexgames.core.menu.extend.grant.GrantSelectDurationMenu;
-import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.ranks.Rank;
-import com.solexgames.core.server.NetworkServer;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.builder.ItemBuilder;
+import com.solexgames.core.util.external.pagination.extend.GrantMainPaginatedMenu;
 import lombok.Getter;
-import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -96,7 +90,7 @@ public class GrantScopeSelectMenu extends AbstractInventoryMenu {
                 if (item.getItemMeta().getDisplayName() != null) {
                     String display = ChatColor.stripColor(Color.translate(item.getItemMeta().getDisplayName()));
                     if (display.contains("Cancel")) {
-                        new GrantMainMenu(this.player, this.document).open(player);
+                        new GrantMainPaginatedMenu(this.document, this.player).openMenu(player);
                     } else if (display.contains("Global")) {
                         new GrantSelectDurationMenu(this.player, this.document, rank, "global").open(player);
                     } else {

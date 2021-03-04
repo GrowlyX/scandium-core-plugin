@@ -1,15 +1,12 @@
 package com.solexgames.core.menu.extend.punish.remove;
 
-import com.solexgames.core.CorePlugin;
 import com.solexgames.core.menu.AbstractInventoryMenu;
-import com.solexgames.core.menu.extend.grant.history.GrantHistoryViewMenu;
-import com.solexgames.core.menu.extend.punish.history.PunishHistoryViewSubMenu;
-import com.solexgames.core.player.PotPlayer;
-import com.solexgames.core.player.grant.Grant;
+import com.solexgames.core.menu.extend.punish.history.PunishHistoryViewMainMenu;
 import com.solexgames.core.player.punishment.Punishment;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
 import com.solexgames.core.util.builder.ItemBuilder;
+import com.solexgames.core.util.external.pagination.extend.PunishViewPaginatedMenu;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -77,7 +74,7 @@ public class PunishRemoveConfirmMenu extends AbstractInventoryMenu {
                 Punishment.getAllPunishments().remove(punishment);
                 RedisUtil.writeAsync(RedisUtil.fRemovePunishment(punishment));
 
-                new PunishHistoryViewSubMenu(target, punishment.getPunishmentType()).open(player);
+                new PunishViewPaginatedMenu(player, target, punishment.getPunishmentType()).openMenu(player);
             } else if (ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()).contains("Cancel")) {
                 player.sendMessage(Color.translate("&cYou've cancelled the current punishment remove process."));
                 player.closeInventory();

@@ -1,6 +1,5 @@
 package com.solexgames.core.lunar.extend;
 
-import com.lunarclient.bukkitapi.LunarClientAPI;
 import com.solexgames.core.lunar.AbstractClientInjector;
 import com.solexgames.core.util.Color;
 import org.apache.commons.lang.StringUtils;
@@ -10,7 +9,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class LunarCommand extends AbstractClientInjector {
-
+    @Override
+    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
+        return false;
+    }
+/*
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
         if (!(sender instanceof Player)) {
@@ -44,5 +47,5 @@ public class LunarCommand extends AbstractClientInjector {
 
     public void disableModModules(Player player) {
         LunarClientAPI.getInstance().disableAllStaffModules(player);
-    }
+    }*/
 }

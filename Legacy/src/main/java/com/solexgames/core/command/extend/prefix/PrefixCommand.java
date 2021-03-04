@@ -4,11 +4,11 @@ import com.mongodb.client.model.Filters;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.enums.ServerType;
-import com.solexgames.core.menu.extend.PrefixMenu;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.prefixes.Prefix;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.StringUtil;
+import com.solexgames.core.util.external.pagination.extend.PrefixViewPaginatedMenu;
 import org.apache.commons.lang.StringUtils;
 import org.bson.Document;
 import org.bukkit.Bukkit;
@@ -50,7 +50,7 @@ public class PrefixCommand extends BaseCommand {
         Player player = (Player) sender;
         if (player.hasPermission("scandium.command.prefix")) {
             if (args.length == 0) {
-                new PrefixMenu(player).open(player);
+                new PrefixViewPaginatedMenu(player).openMenu(player);
             }
             if (args.length > 0) {
                 switch (args[0]) {
@@ -149,7 +149,7 @@ public class PrefixCommand extends BaseCommand {
                 }
             }
         } else {
-            new PrefixMenu(player).open(player);
+            new PrefixViewPaginatedMenu(player).openMenu(player);
         }
         return false;
     }

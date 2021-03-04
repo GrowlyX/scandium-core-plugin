@@ -22,6 +22,7 @@ import com.solexgames.core.command.extend.rank.RankCommand;
 import com.solexgames.core.command.extend.rank.RankImportCommand;
 import com.solexgames.core.command.extend.server.SetSlotsCommand;
 import com.solexgames.core.command.extend.shutdown.ShutdownCommand;
+import com.solexgames.core.command.extend.test.TestCommand;
 import com.solexgames.core.command.extend.toggle.*;
 import com.solexgames.core.command.extend.warps.WarpCommand;
 import com.solexgames.core.command.extend.web.WebAnnouncementCommand;
@@ -47,6 +48,7 @@ import com.solexgames.core.task.*;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
 import com.solexgames.core.util.external.ConfigExternal;
+import com.solexgames.core.util.external.pagination.pagination.PaginationListener;
 import com.solexgames.core.version.AbstractVersionImplementation;
 import com.solexgames.core.version.extend.PingCommand_v1_7;
 import com.solexgames.core.version.extend.PingCommand_v1_8;
@@ -291,6 +293,7 @@ public final class CorePlugin extends JavaPlugin {
             this.getCommand("profile").setExecutor(new ProfileCommand());
         }
 
+        this.getCommand("test").setExecutor(new TestCommand());
         this.getCommand("toggletips").setExecutor(new ToggleTipsCommand());
         this.getCommand("togglestaffmessages").setExecutor(new ToggleStaffMessagesCommand());
         this.getCommand("toggleautomodmode").setExecutor(new ToggleAutoModModeCommand());
@@ -311,6 +314,7 @@ public final class CorePlugin extends JavaPlugin {
 
         this.registerListeners(
                 new PlayerListener(),
+                new PaginationListener(),
                 new ModSuiteListener()
         );
 

@@ -3,6 +3,7 @@ package com.solexgames.core.menu.extend.punish.history;
 import com.solexgames.core.menu.AbstractInventoryMenu;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.punishment.PunishmentType;
+import com.solexgames.core.util.external.pagination.extend.PunishViewPaginatedMenu;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
@@ -82,19 +83,19 @@ public class PunishHistoryViewMainMenu extends AbstractInventoryMenu {
             if (item == null || item.getType() == Material.AIR) return;
             switch (event.getRawSlot()) {
                 case 2:
-                    new PunishHistoryViewSubMenu(this.target, PunishmentType.WARN).open(this.player);
+                    new PunishViewPaginatedMenu(player, this.target, PunishmentType.WARN).openMenu(this.player);
                     break;
                 case 3:
-                    new PunishHistoryViewSubMenu(this.target, PunishmentType.KICK).open(this.player);
+                    new PunishViewPaginatedMenu(player, this.target, PunishmentType.KICK).openMenu(this.player);
                     break;
                 case 4:
-                    new PunishHistoryViewSubMenu(this.target, PunishmentType.MUTE).open(this.player);
+                    new PunishViewPaginatedMenu(player, this.target, PunishmentType.MUTE).openMenu(this.player);
                     break;
                 case 5:
-                    new PunishHistoryViewSubMenu(this.target, PunishmentType.BAN).open(this.player);
+                    new PunishViewPaginatedMenu(player, this.target, PunishmentType.BAN).openMenu(this.player);
                     break;
                 case 6:
-                    new PunishHistoryViewSubMenu(this.target, PunishmentType.BLACKLIST).open(this.player);
+                    new PunishViewPaginatedMenu(player, this.target, PunishmentType.BLACKLIST).openMenu(this.player);
                     break;
             }
         }
