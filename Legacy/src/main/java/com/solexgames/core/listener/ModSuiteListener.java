@@ -1,5 +1,6 @@
 package com.solexgames.core.listener;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.extend.modsuite.StaffMenu;
@@ -105,7 +106,7 @@ public class ModSuiteListener implements Listener {
                             case INK_SACK:
                                 event.getPlayer().performCommand("vanish");
                                 ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
-                                event.getPlayer().getInventory().setItem(8, new ItemBuilder(Material.INK_SACK, (potPlayer.isVanished() ? 10 : 8)).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + (potPlayer.isVanished() ? "Disable Vanish" : "Enable Vanish")).create());
+                                event.getPlayer().getInventory().setItem(8, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), (potPlayer.isVanished() ? 10 : 8)).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + (potPlayer.isVanished() ? "Disable Vanish" : "Enable Vanish")).create());
                                 break;
                         }
                         event.getPlayer().updateInventory();

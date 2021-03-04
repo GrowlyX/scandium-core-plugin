@@ -1,5 +1,6 @@
 package com.solexgames.core.util.external.pagination.button;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.util.external.pagination.Button;
 import com.solexgames.core.util.external.pagination.Menu;
@@ -19,7 +20,7 @@ public class BackButton extends Button {
 
     @Override
     public ItemStack getButtonItem(Player player) {
-        return new ItemBuilder(Material.SPECKLED_MELON)
+        return new ItemBuilder(XMaterial.GLISTERING_MELON_SLICE.parseMaterial())
                 .setDisplayName(ChatColor.RED + "Back")
                 .addLore(Arrays.asList(
                         ChatColor.GRAY + "Click here to return to",

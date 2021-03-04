@@ -1,5 +1,6 @@
 package com.solexgames.core.menu.extend.media;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.menu.AbstractInventoryMenu;
 import com.solexgames.core.util.builder.ItemBuilder;
@@ -23,7 +24,7 @@ public class ExternalMediaMenu extends AbstractInventoryMenu {
 
     public void update() {
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-        this.inventory.setItem(1, new ItemBuilder(Material.INK_SACK, 4)
+        this.inventory.setItem(1, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 4)
                 .setDisplayName("&9Discord")
                 .addLore(
                         "",
@@ -33,7 +34,7 @@ public class ExternalMediaMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(3, new ItemBuilder(Material.INK_SACK, 1)
+        this.inventory.setItem(3, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 1)
                 .setDisplayName("&cYouTube")
                 .addLore(
                         "",
@@ -43,7 +44,7 @@ public class ExternalMediaMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(5, new ItemBuilder(Material.INK_SACK, 12)
+        this.inventory.setItem(5, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 12)
                 .setDisplayName("&bTwitter")
                 .addLore(
                         "",
@@ -53,7 +54,7 @@ public class ExternalMediaMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(7, new ItemBuilder(Material.INK_SACK, 14)
+        this.inventory.setItem(7, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 14)
                 .setDisplayName("&6Instagram")
                 .addLore(
                         "",

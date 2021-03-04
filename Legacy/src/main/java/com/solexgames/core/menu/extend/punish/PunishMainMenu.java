@@ -1,5 +1,6 @@
 package com.solexgames.core.menu.extend.punish;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.menu.AbstractInventoryMenu;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.menu.extend.punish.history.PunishHistoryViewMainMenu;
@@ -32,7 +33,7 @@ public class PunishMainMenu extends AbstractInventoryMenu {
 
     public void update() {
 
-        ItemStack playerhead = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
+        ItemStack playerhead = new ItemStack(XMaterial.SKELETON_SKULL.parseMaterial(), 1, (short) 3);
         SkullMeta playerheadmeta = (SkullMeta) playerhead.getItemMeta();
         playerheadmeta.setOwner(target);
         playerheadmeta.setLore(Arrays.asList(
@@ -44,7 +45,7 @@ public class PunishMainMenu extends AbstractInventoryMenu {
         playerheadmeta.setDisplayName(Color.translate("&aPunishments"));
         playerhead.setItemMeta(playerheadmeta);
 
-        this.inventory.setItem(12, new ItemBuilder(Material.INK_SACK, 14)
+        this.inventory.setItem(12, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 14)
                 .setDisplayName("&6Punish")
                 .addLore(
                         "&7Start the punishment process",
@@ -55,7 +56,7 @@ public class PunishMainMenu extends AbstractInventoryMenu {
                 .create()
         );
 
-        this.inventory.setItem(14, new ItemBuilder(Material.INK_SACK, 6)
+        this.inventory.setItem(14, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 6)
                 .setDisplayName("&6Punishments")
                 .addLore(
                         "&7View all punishments",
@@ -80,7 +81,7 @@ public class PunishMainMenu extends AbstractInventoryMenu {
             ItemStack item = event.getCurrentItem();
             Player player = (Player) event.getWhoClicked();
 
-            if (item == null || item.getType() == Material.AIR) return;
+            if (item == null || item.getType() == XMaterial.AIR.parseMaterial()) return;
             switch (event.getRawSlot()) {
                 case 12:
                     new PunishSelectPunishTypeMenu(player, target).open(player);

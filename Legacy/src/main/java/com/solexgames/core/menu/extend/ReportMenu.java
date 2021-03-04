@@ -1,5 +1,6 @@
 package com.solexgames.core.menu.extend;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.menu.AbstractInventoryMenu;
 import com.solexgames.core.util.builder.ItemBuilder;
@@ -30,7 +31,7 @@ public class ReportMenu extends AbstractInventoryMenu {
     }
 
     public void update() {
-        this.inventory.setItem(2, new ItemBuilder(Material.DIAMOND_SWORD)
+        this.inventory.setItem(2, new ItemBuilder(XMaterial.DIAMOND_SWORD.parseMaterial())
                 .setDisplayName("&3Combat Hacks")
                 .addLore(
                         "",
@@ -40,7 +41,7 @@ public class ReportMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(3, new ItemBuilder(Material.DIAMOND_BOOTS)
+        this.inventory.setItem(3, new ItemBuilder(XMaterial.DIAMOND_BOOTS.parseMaterial())
                 .setDisplayName("&3Movement Hacks")
                 .addLore(
                         "",
@@ -50,7 +51,7 @@ public class ReportMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(4, new ItemBuilder(Material.SLIME_BALL)
+        this.inventory.setItem(4, new ItemBuilder(XMaterial.SLIME_BALL.parseMaterial())
                 .setDisplayName("&3Velocity Hacks")
                 .addLore(
                         "",
@@ -60,7 +61,7 @@ public class ReportMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(5, new ItemBuilder(Material.BED)
+        this.inventory.setItem(5, new ItemBuilder(XMaterial.RED_BED.parseMaterial())
                 .setDisplayName("&3Gameplay Sabotage")
                 .addLore(
                         "",
@@ -70,7 +71,7 @@ public class ReportMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(6, new ItemBuilder(Material.NAME_TAG)
+        this.inventory.setItem(6, new ItemBuilder(XMaterial.NAME_TAG.parseMaterial())
                 .setDisplayName("&3Chat Violation")
                 .addLore(
                         "",
@@ -94,7 +95,7 @@ public class ReportMenu extends AbstractInventoryMenu {
             Player player = (Player) event.getWhoClicked();
             PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
-            if (item == null || item.getType() == Material.AIR) return;
+            if (item == null || item.getType() == XMaterial.AIR.parseMaterial()) return;
             switch (event.getRawSlot()) {
                 case 2:
                     player.closeInventory();

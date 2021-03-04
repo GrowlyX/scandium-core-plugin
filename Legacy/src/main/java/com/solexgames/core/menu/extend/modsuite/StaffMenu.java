@@ -1,5 +1,6 @@
 package com.solexgames.core.menu.extend.modsuite;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.AbstractInventoryMenu;
@@ -41,7 +42,7 @@ public class StaffMenu extends AbstractInventoryMenu {
                 .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
                 .filter(Objects::nonNull)
                 .filter(potPlayer -> potPlayer.getPlayer().hasPermission("scandium.staff"))
-                .forEach(potPlayer -> this.inventory.setItem(integer.getAndIncrement(), new ItemBuilder(Material.SKULL_ITEM)
+                .forEach(potPlayer -> this.inventory.setItem(integer.getAndIncrement(), new ItemBuilder(XMaterial.SKELETON_SKULL.parseMaterial())
                         .setOwner(potPlayer.getName())
                         .setDisplayName(Color.translate(potPlayer.getColorByRankColor() + potPlayer.getPlayer().getName()))
                         .addLore(

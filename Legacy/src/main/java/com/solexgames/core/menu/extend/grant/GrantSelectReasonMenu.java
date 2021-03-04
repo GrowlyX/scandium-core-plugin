@@ -1,5 +1,6 @@
 package com.solexgames.core.menu.extend.grant;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.AbstractInventoryMenu;
@@ -48,13 +49,13 @@ public class GrantSelectReasonMenu extends AbstractInventoryMenu {
     public void update() {
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
-        this.inventory.setItem(10, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Rank Migration").addLore(Collections.singletonList("&7Click to select this reason.")).create());
-        this.inventory.setItem(11, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Promotion").addLore(Collections.singletonList("&7Click to select this reason.")).create());
-        this.inventory.setItem(12, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Demotion").addLore(Collections.singletonList("&7Click to select this reason.")).create());
-        this.inventory.setItem(13, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Buycraft Issues").addLore(Collections.singletonList("&7Click to select this reason.")).create());
-        this.inventory.setItem(14, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Other").addLore(Collections.singletonList("&7Click to select this reason.")).create());
+        this.inventory.setItem(10, new ItemBuilder(XMaterial.PAPER.parseMaterial()).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Rank Migration").addLore(Collections.singletonList("&7Click to select this reason.")).create());
+        this.inventory.setItem(11, new ItemBuilder(XMaterial.PAPER.parseMaterial()).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Promotion").addLore(Collections.singletonList("&7Click to select this reason.")).create());
+        this.inventory.setItem(12, new ItemBuilder(XMaterial.PAPER.parseMaterial()).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Demotion").addLore(Collections.singletonList("&7Click to select this reason.")).create());
+        this.inventory.setItem(13, new ItemBuilder(XMaterial.PAPER.parseMaterial()).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Buycraft Issues").addLore(Collections.singletonList("&7Click to select this reason.")).create());
+        this.inventory.setItem(14, new ItemBuilder(XMaterial.PAPER.parseMaterial()).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Other").addLore(Collections.singletonList("&7Click to select this reason.")).create());
 
-        this.inventory.setItem(16, new ItemBuilder(Material.STAINED_CLAY, 5).setDisplayName(ChatColor.GREEN + ChatColor.BOLD.toString() + "Custom").addLore(Collections.singletonList("&7Click to choose a custom reason.")).create());
+        this.inventory.setItem(16, new ItemBuilder(XMaterial.GREEN_TERRACOTTA.parseMaterial(), 5).setDisplayName(ChatColor.GREEN + ChatColor.BOLD.toString() + "Custom").addLore(Collections.singletonList("&7Click to choose a custom reason.")).create());
     }
 
     @Override
@@ -69,7 +70,7 @@ public class GrantSelectReasonMenu extends AbstractInventoryMenu {
             ItemStack item = event.getCurrentItem();
             Player player = (Player) event.getWhoClicked();
 
-            if (item == null || item.getType() == Material.AIR) return;
+            if (item == null || item.getType() == XMaterial.AIR.parseMaterial()) return;
             switch (event.getRawSlot()) {
                 case 10:
                     new GrantSelectConfirmMenu(this.player, this.document, this.rank, this.duration, "Rank Migration", this.permanent, this.scope).open(player);

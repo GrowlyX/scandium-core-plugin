@@ -1,5 +1,6 @@
 package com.solexgames.core.menu.extend;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.AbstractInventoryMenu;
@@ -29,7 +30,7 @@ public class ScandiumMenu extends AbstractInventoryMenu {
     }
 
     public void update() {
-        this.inventory.setItem(2, new ItemBuilder(Material.INK_SACK, 11)
+        this.inventory.setItem(2, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 11)
                 .setDisplayName("&eReload Files")
                 .addLore(
                         "",
@@ -41,7 +42,7 @@ public class ScandiumMenu extends AbstractInventoryMenu {
                 .create()
         );
 
-        this.inventory.setItem(4, new ItemBuilder(Material.INK_SACK, 6)
+        this.inventory.setItem(4, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 6)
                 .setDisplayName("&bScandium Core")
                 .addLore(
                         "",
@@ -57,7 +58,7 @@ public class ScandiumMenu extends AbstractInventoryMenu {
         );
 
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
-        this.inventory.setItem(6, new ItemBuilder(Material.INK_SACK, 14)
+        this.inventory.setItem(6, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 14)
                 .setDisplayName("&bNetwork Info &7(" + network.getServerName() + ")")
                 .addLore(
                         "",
@@ -86,7 +87,7 @@ public class ScandiumMenu extends AbstractInventoryMenu {
             ItemStack item = event.getCurrentItem();
             Player player = (Player) event.getWhoClicked();
 
-            if (item == null || item.getType() == Material.AIR) return;
+            if (item == null || item.getType() == XMaterial.AIR.parseMaterial()) return;
             if (event.getRawSlot() == 2) {
                 CorePlugin.getInstance().reloadConfig();
                 player.sendMessage(Color.translate("&aReloaded the main config!"));

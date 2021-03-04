@@ -1,5 +1,6 @@
 package com.solexgames.core.menu.extend.punish;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.AbstractInventoryMenu;
@@ -40,14 +41,14 @@ public class PunishSelectDurationMenu extends AbstractInventoryMenu {
     public void update() {
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
-        this.inventory.setItem(10, new ItemBuilder(Material.INK_SACK, 1).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "1 Day").addLore(Collections.singletonList("&7Click to select this duration.")).create());
-        this.inventory.setItem(11, new ItemBuilder(Material.INK_SACK, 2).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "1 Week").addLore(Collections.singletonList("&7Click to select this duration.")).create());
-        this.inventory.setItem(12, new ItemBuilder(Material.INK_SACK, 3).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "1 Month").addLore(Collections.singletonList("&7Click to select this duration.")).create());
-        this.inventory.setItem(13, new ItemBuilder(Material.INK_SACK, 4).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "3 Months").addLore(Collections.singletonList("&7Click to select this duration.")).create());
-        this.inventory.setItem(14, new ItemBuilder(Material.INK_SACK, 5).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "6 Months").addLore(Collections.singletonList("&7Click to select this duration.")).create());
-        this.inventory.setItem(15, new ItemBuilder(Material.INK_SACK, 6).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "1 Year").addLore(Collections.singletonList("&7Click to select this duration.")).create());
+        this.inventory.setItem(10, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 1).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "1 Day").addLore(Collections.singletonList("&7Click to select this duration.")).create());
+        this.inventory.setItem(11, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 2).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "1 Week").addLore(Collections.singletonList("&7Click to select this duration.")).create());
+        this.inventory.setItem(12, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 3).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "1 Month").addLore(Collections.singletonList("&7Click to select this duration.")).create());
+        this.inventory.setItem(13, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 4).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "3 Months").addLore(Collections.singletonList("&7Click to select this duration.")).create());
+        this.inventory.setItem(14, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 5).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "6 Months").addLore(Collections.singletonList("&7Click to select this duration.")).create());
+        this.inventory.setItem(15, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 6).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "1 Year").addLore(Collections.singletonList("&7Click to select this duration.")).create());
 
-        this.inventory.setItem(16, new ItemBuilder(Material.STAINED_CLAY, 5).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "&4&oPermanent").addLore(Collections.singletonList("&7Click to select this duration.")).create());
+        this.inventory.setItem(16, new ItemBuilder(XMaterial.LIME_TERRACOTTA.parseMaterial(), 13).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "&4&oPermanent").addLore(Collections.singletonList("&7Click to select this duration.")).create());
     }
 
     @Override
@@ -61,7 +62,7 @@ public class PunishSelectDurationMenu extends AbstractInventoryMenu {
             ItemStack item = event.getCurrentItem();
             Player player = (Player) event.getWhoClicked();
 
-            if (item == null || item.getType() == Material.AIR) return;
+            if (item == null || item.getType() == XMaterial.AIR.parseMaterial()) return;
             switch (event.getRawSlot()) {
                 case 10:
                     new PunishSelectConfirmMenu(this.player, this.target, this.reason, this.punishmentType, PunishmentDuration.DAY.getDuration(), false).open(player);

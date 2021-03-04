@@ -1,5 +1,6 @@
 package com.solexgames.core.menu.extend.media;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.menu.AbstractInventoryMenu;
 import com.solexgames.core.util.builder.ItemBuilder;
@@ -26,7 +27,7 @@ public class MediaMenu extends AbstractInventoryMenu {
 
     public void update() {
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-        this.inventory.setItem(0, new ItemBuilder(Material.INK_SACK, 4)
+        this.inventory.setItem(0, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 4)
                 .setDisplayName("&9Discord")
                 .addLore(
                         "",
@@ -36,7 +37,7 @@ public class MediaMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(1, new ItemBuilder(Material.INK_SACK, 1)
+        this.inventory.setItem(1, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 1)
                 .setDisplayName("&cYouTube")
                 .addLore(
                         "",
@@ -46,7 +47,7 @@ public class MediaMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(2, new ItemBuilder(Material.INK_SACK, 12)
+        this.inventory.setItem(2, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 12)
                 .setDisplayName("&bTwitter")
                 .addLore(
                         "",
@@ -56,7 +57,7 @@ public class MediaMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(3, new ItemBuilder(Material.INK_SACK, 14)
+        this.inventory.setItem(3, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 14)
                 .setDisplayName("&6Instagram")
                 .addLore(
                         "",
@@ -66,7 +67,7 @@ public class MediaMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(8, new ItemBuilder(Material.NETHER_STAR)
+        this.inventory.setItem(8, new ItemBuilder(XMaterial.NETHER_STAR.parseMaterial())
                 .setDisplayName("&eModify Values")
                 .addLore(
                         "",
@@ -89,7 +90,7 @@ public class MediaMenu extends AbstractInventoryMenu {
             ItemStack item = event.getCurrentItem();
             Player player = (Player) event.getWhoClicked();
 
-            if (item == null || item.getType() == Material.AIR) return;
+            if (item == null || item.getType() == XMaterial.AIR.parseMaterial()) return;
             if (event.getRawSlot() == 8) {
                 new SetMediaMenu(player).open(player);
             }

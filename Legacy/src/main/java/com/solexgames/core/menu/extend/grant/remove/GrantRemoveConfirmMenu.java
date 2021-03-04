@@ -1,5 +1,6 @@
 package com.solexgames.core.menu.extend.grant.remove;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.menu.AbstractInventoryMenu;
 import com.solexgames.core.menu.extend.grant.history.GrantHistoryViewMenu;
@@ -38,7 +39,7 @@ public class GrantRemoveConfirmMenu extends AbstractInventoryMenu {
         int[] intsDecline = new int[] { 14,15,16,23,24,25,32,33,34 };
 
         for (int i : intsConfirm) {
-            this.inventory.setItem(i, new ItemBuilder(Material.STAINED_CLAY, 5)
+            this.inventory.setItem(i, new ItemBuilder(XMaterial.LIME_TERRACOTTA.parseMaterial(), 13)
                     .setDisplayName("&aConfirm Remove")
                     .addLore(
                             "&7Would you like to remove:",
@@ -51,7 +52,7 @@ public class GrantRemoveConfirmMenu extends AbstractInventoryMenu {
         }
 
         for (int i : intsDecline) {
-            this.inventory.setItem(i, new ItemBuilder(Material.STAINED_CLAY, 14).setDisplayName("&cCancel Remove").addLore(Arrays.asList(
+            this.inventory.setItem(i, new ItemBuilder(XMaterial.RED_TERRACOTTA.parseMaterial(), 14).setDisplayName("&cCancel Remove").addLore(Arrays.asList(
                     "",
                     "&aClick to cancel this grant!"
             )).create());
@@ -70,7 +71,7 @@ public class GrantRemoveConfirmMenu extends AbstractInventoryMenu {
             Player player = (Player) event.getWhoClicked();
             PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(this.target);
 
-            if (item == null || item.getType() == Material.AIR) return;
+            if (item == null || item.getType() == XMaterial.AIR.parseMaterial()) return;
             if (ChatColor.stripColor(Color.translate(item.getItemMeta().getDisplayName())).contains("Confirm")) {
                 potPlayer.getAllGrants().remove(grant);
                 potPlayer.setupPlayer();

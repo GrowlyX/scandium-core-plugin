@@ -1,5 +1,6 @@
 package com.solexgames.core.menu.extend.media;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.menu.AbstractInventoryMenu;
 import com.solexgames.core.util.builder.ItemBuilder;
@@ -26,7 +27,7 @@ public class SetMediaMenu extends AbstractInventoryMenu {
     }
 
     public void update() {
-        this.inventory.setItem(2, new ItemBuilder(Material.INK_SACK, 4)
+        this.inventory.setItem(2, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 4)
                 .setDisplayName("&9Discord")
                 .addLore(
                         "",
@@ -36,7 +37,7 @@ public class SetMediaMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(3, new ItemBuilder(Material.INK_SACK, 1)
+        this.inventory.setItem(3, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 1)
                 .setDisplayName("&cYouTube")
                 .addLore(
                         "",
@@ -46,7 +47,7 @@ public class SetMediaMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(4, new ItemBuilder(Material.INK_SACK, 12)
+        this.inventory.setItem(4, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 12)
                 .setDisplayName("&bTwitter")
                 .addLore(
                         "",
@@ -56,7 +57,7 @@ public class SetMediaMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(5, new ItemBuilder(Material.INK_SACK, 14)
+        this.inventory.setItem(5, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 14)
                 .setDisplayName("&6Instagram")
                 .addLore(
                         "",
@@ -66,7 +67,7 @@ public class SetMediaMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(6, new ItemBuilder(Material.INK_SACK, 11)
+        this.inventory.setItem(6, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 11)
                 .setDisplayName("&e???")
                 .addLore(
                         "",
@@ -90,7 +91,7 @@ public class SetMediaMenu extends AbstractInventoryMenu {
             Player player = (Player) event.getWhoClicked();
             PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
-            if (item == null || item.getType() == Material.AIR) return;
+            if (item == null || item.getType() == XMaterial.AIR.parseMaterial()) return;
             switch (event.getRawSlot()) {
                 case 2:
                     player.sendMessage(Color.translate("&cPlease sync your account to our discord server to use this feature."));

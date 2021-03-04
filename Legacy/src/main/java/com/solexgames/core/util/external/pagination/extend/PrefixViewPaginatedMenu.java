@@ -1,5 +1,6 @@
 package com.solexgames.core.util.external.pagination.extend;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.extend.grant.GrantSelectDurationMenu;
@@ -68,7 +69,7 @@ public class PrefixViewPaginatedMenu extends PaginatedMenu {
             buttons.put(i.get(), new Button() {
                 @Override
                 public ItemStack getButtonItem(Player player) {
-                    return new ItemBuilder(Material.INK_SACK, (potPlayer.getAllPrefixes().contains(prefix.getName()) ? 10 : 1))
+                    return new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), (potPlayer.getAllPrefixes().contains(prefix.getName()) ? 10 : 1))
                             .setDisplayName((hasPrefix ? "&e" : "&c") + prefix.getName())
                             .addLore(Color.translate(lore))
                             .create();

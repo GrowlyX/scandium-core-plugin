@@ -1,5 +1,6 @@
 package com.solexgames.core.util.external.pagination.extend;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.extend.punish.remove.PunishRemoveConfirmMenu;
@@ -32,10 +33,18 @@ public class PunishViewPaginatedMenu extends PaginatedMenu {
     private final String target;
     private final PunishmentType punishmentType;
 
+    private UUID targetUuid;
+
     public PunishViewPaginatedMenu(Player player, String target, PunishmentType punishmentType) {
         this.player = player;
         this.target = target;
         this.punishmentType = punishmentType;
+        try {
+            Map.Entry<UUID, String> entry = UUIDUtil.getUUID(this.target);
+            this.targetUuid = entry.getKey();
+        } catch (Exception ignored) {
+
+        }
     }
 
     @Override
@@ -73,7 +82,7 @@ public class PunishViewPaginatedMenu extends PaginatedMenu {
             lore.add(network.getMainColor() + "&m------------------------------------");
 
             if (punishment.isRemoved()) {
-                lore.add("&eRemoved By: &b" + network.getMainColor() + (punishment.getRemoverName().equals("Console") ? "&4Console" : Bukkit.getOfflinePlayer(punishment.getRemover()).getName()));
+                lore.add("&eRemoved By: &b" + network.getMainColor() + (punishment.getRemoverName() != null ? (punishment.getRemoverName().equals("Console") ? "&4Console" : UUIDUtil.getName(punishment.getRemover().toString())) : "Not recorded"));
                 lore.add("&eRemoved Reason: &b" + network.getMainColor() + punishment.getRemovalReason());
                 lore.add(network.getMainColor() + "&m------------------------------------");
             }
@@ -81,7 +90,7 @@ public class PunishViewPaginatedMenu extends PaginatedMenu {
             buttons.put(i.get(), new Button() {
                 @Override
                 public ItemStack getButtonItem(Player player) {
-                    return new ItemBuilder(Material.WOOL, (punishment.isActive() ? 5 : (punishment.isRemoved() ? 8 : 14)))
+                    return new ItemBuilder(XMaterial.LIME_WOOL.parseMaterial(), (punishment.isActive() ? 5 : (punishment.isRemoved() ? 8 : 14)))
                             .setDisplayName(ChatColor.RED + "#" + punishment.getPunishIdentification())
                             .addLore(Color.translate(lore))
                             .create();
@@ -109,7 +118,7 @@ public class PunishViewPaginatedMenu extends PaginatedMenu {
         return Punishment.getAllPunishments().stream()
                 .filter(Objects::nonNull)
                 .filter(punishment -> punishment.getPunishmentType() == this.punishmentType)
-                .filter(punishment -> Bukkit.getOfflinePlayer(punishment.getTarget()).getName().equalsIgnoreCase(this.target))
+                .filter(punishment -> punishment.getTarget().equals(this.getTargetUuid()))
                 .sorted(Comparator.comparingLong(Punishment::getCreatedAtLong).reversed())
                 .collect(Collectors.toList());
     }

@@ -1,5 +1,6 @@
 package com.solexgames.core.menu.extend.color;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.menu.AbstractInventoryMenu;
 import com.solexgames.core.util.builder.ItemBuilder;
@@ -36,7 +37,7 @@ public class NameColorSelectMenu extends AbstractInventoryMenu {
                 if (chatColor != ChatColor.STRIKETHROUGH) {
                     if (chatColor != ChatColor.RESET) {
                         if (chatColor != ChatColor.UNDERLINE) {
-                            this.inventory.setItem(i, new ItemBuilder(Material.NAME_TAG)
+                            this.inventory.setItem(i, new ItemBuilder(XMaterial.NAME_TAG.parseMaterial())
                                     .setDisplayName(chatColor + chatColor.name().replace("_", " "))
                                     .addLore(Arrays.asList(
                                             "&b&m------------------------------------",
@@ -57,7 +58,7 @@ public class NameColorSelectMenu extends AbstractInventoryMenu {
             }
         }
 
-        this.inventory.setItem(49, new ItemBuilder(Material.BED).setDisplayName("&cReset Chat Color").addLore(Arrays.asList("", "&7Click to reset your", "&7current chat color!")).create());
+        this.inventory.setItem(49, new ItemBuilder(XMaterial.RED_BED.parseMaterial()).setDisplayName("&cReset Chat Color").addLore(Arrays.asList("", "&7Click to reset your", "&7current chat color!")).create());
     }
 
     @Override

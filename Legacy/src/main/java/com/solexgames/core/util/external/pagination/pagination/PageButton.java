@@ -1,5 +1,6 @@
 package com.solexgames.core.util.external.pagination.pagination;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.util.external.pagination.Button;
 import lombok.AllArgsConstructor;
@@ -17,7 +18,7 @@ public class PageButton extends Button {
 
     @Override
     public ItemStack getButtonItem(Player player) {
-        return new ItemBuilder(Material.SPECKLED_MELON)
+        return new ItemBuilder(XMaterial.GLISTERING_MELON_SLICE.parseMaterial())
                 .setDisplayName(this.mod > 0 ? ChatColor.GREEN + "Next page" : ChatColor.RED + "Previous page")
                 .addLore(
                         "&7Click to go to the " + (this.mod > 0 ? "next" : "previous"),

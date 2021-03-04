@@ -1,5 +1,6 @@
 package com.solexgames.core.util;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.google.common.base.Preconditions;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -31,20 +32,6 @@ public final class InventoryUtil {
         return (initialSize + 8) / 9 * 9;
     }
 
-    public static int repairItem(ItemStack item) {
-        if (item == null) {
-            return 0;
-        }
-        Material material = Material.getMaterial(item.getTypeId());
-        if (material.isBlock() || material.getMaxDurability() < 1) {
-            return 0;
-        }
-        if (item.getDurability() <= 0) {
-            return 0;
-        }
-        item.setDurability((short) 0);
-        return 1;
-    }
 
     public static void removeItem(Inventory inventory, Material type, short data, int quantity) {
         ItemStack[] contents = inventory.getContents();
@@ -83,14 +70,14 @@ public final class InventoryUtil {
         ItemStack[] contents;
         boolean result = true;
         for (ItemStack content : contents = inventory.getContents()) {
-            if (content == null || content.getType() == Material.AIR) continue;
+            if (content == null || content.getType() == XMaterial.AIR.parseMaterial()) continue;
             result = false;
             break;
         }
         if (!result) return false;
         if (checkArmour && inventory instanceof PlayerInventory) {
             for (ItemStack content : contents = ((PlayerInventory) inventory).getArmorContents()) {
-                if (content == null || content.getType() == Material.AIR) continue;
+                if (content == null || content.getType() == XMaterial.AIR.parseMaterial()) continue;
                 result = false;
                 break;
             }
@@ -184,7 +171,7 @@ public final class InventoryUtil {
         ItemMeta meta = null;
 
         if (in.equals("null")) {
-            return new ItemStack(Material.AIR);
+            return new ItemStack(XMaterial.AIR.parseMaterial());
         }
 
         String[] split = in.split(":");

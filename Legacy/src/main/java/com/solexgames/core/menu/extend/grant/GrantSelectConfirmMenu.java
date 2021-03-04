@@ -1,5 +1,6 @@
 package com.solexgames.core.menu.extend.grant;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import com.solexgames.core.CorePlugin;
@@ -60,7 +61,7 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
         int[] intsDecline = new int[]{14, 15, 16, 23, 24, 25, 32, 33, 34};
 
         for (int i : intsConfirm) {
-            this.inventory.setItem(i, new ItemBuilder(Material.STAINED_CLAY, 5).setDisplayName("&a&lConfirm Grant").addLore(Arrays.asList(
+            this.inventory.setItem(i, new ItemBuilder(XMaterial.GREEN_TERRACOTTA.parseMaterial(), 13).setDisplayName("&a&lConfirm Grant").addLore(Arrays.asList(
                     network.getMainColor() + "&m--------------------------------",
                     network.getSecondaryColor() + "Issuer: " + network.getMainColor() + player.getDisplayName(),
                     network.getSecondaryColor() + "Target: " + network.getMainColor() + (Bukkit.getPlayer(document.getString("name")) != null ? Bukkit.getPlayer(document.getString("name")).getDisplayName() : document.getString("name")),
@@ -75,7 +76,7 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
         }
 
         for (int i : intsDecline) {
-            this.inventory.setItem(i, new ItemBuilder(Material.STAINED_CLAY, 14).setDisplayName("&c&lCancel Grant").addLore(Arrays.asList(
+            this.inventory.setItem(i, new ItemBuilder(XMaterial.RED_TERRACOTTA.parseMaterial(), 14).setDisplayName("&c&lCancel Grant").addLore(Arrays.asList(
                     "",
                     "&7Click to cancel this grant!"
             )).create());
@@ -93,7 +94,7 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
             ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
             Player player = (Player) event.getWhoClicked();
 
-            if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR) return;
+            if (event.getCurrentItem() == null || event.getCurrentItem().getType() == XMaterial.AIR.parseMaterial()) return;
             if (ChatColor.stripColor(Color.translate(event.getCurrentItem().getItemMeta().getDisplayName())).contains("Confirm")) {
                 Grant newGrant;
 

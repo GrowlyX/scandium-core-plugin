@@ -1,5 +1,6 @@
 package com.solexgames.core.util.external.pagination.extend;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.extend.grant.GrantSelectDurationMenu;
@@ -51,7 +52,7 @@ public class GrantMainPaginatedMenu extends PaginatedMenu {
             buttons.put(i.get(), new Button() {
                 @Override
                 public ItemStack getButtonItem(Player player) {
-                    return new ItemBuilder(Material.WOOL, ((rank.getColor() != null) ? (ChatColor.getByChar(Color.translate(rank.getColor().replace("&", "").replace("§", ""))) != null) ? WoolUtil.getByColor(ChatColor.getByChar(Color.translate(rank.getColor().replace("&", "").replace("§", "")))) : 0 : 0))
+                    return new ItemBuilder(XMaterial.RED_WOOL.parseMaterial(), ((rank.getColor() != null) ? (ChatColor.getByChar(Color.translate(rank.getColor().replace("&", "").replace("§", ""))) != null) ? WoolUtil.getByColor(ChatColor.getByChar(Color.translate(rank.getColor().replace("&", "").replace("§", "")))) : 0 : 0))
                             .addLore(Arrays.asList(
                                     network.getMainColor() + "&m--------------------------------",
                                     network.getSecondaryColor() + "Priority: " + network.getMainColor() + rank.getWeight(),

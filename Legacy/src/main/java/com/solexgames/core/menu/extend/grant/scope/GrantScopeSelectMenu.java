@@ -1,5 +1,6 @@
 package com.solexgames.core.menu.extend.grant.scope;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.menu.AbstractInventoryMenu;
 import com.solexgames.core.menu.extend.grant.GrantSelectDurationMenu;
@@ -42,12 +43,12 @@ public class GrantScopeSelectMenu extends AbstractInventoryMenu {
         int[] stained = new int[] { 0,1,2,6,7,8 };
 
         for (int i : stained) {
-            this.inventory.setItem(i, new ItemBuilder(Material.STAINED_GLASS_PANE, 7).setDisplayName(" ").create());
+            this.inventory.setItem(i, new ItemBuilder(XMaterial.GRAY_STAINED_GLASS_PANE.parseMaterial()).setDisplayName(" ").create());
         }
 
-        this.inventory.setItem(3, new ItemBuilder(Material.STAINED_CLAY, 13).setDisplayName("&aGlobal Scope").addLore(Arrays.asList("", "&7Click to select the global", "&7scope for this grant.")).create());
-        this.inventory.setItem(4, new ItemBuilder(Material.STAINED_CLAY, 9).setDisplayName("&bScope Selection").addLore(Arrays.asList("", "&7Use the buttons below to", "&7select a server for this", "&7grant to be applied on!")).create());
-        this.inventory.setItem(5, new ItemBuilder(Material.STAINED_CLAY, 14).setDisplayName("&cReturn to Main").addLore(Arrays.asList("", "&7Click to cancel this grant", "&7and return to the main menu.")).create());
+        this.inventory.setItem(3, new ItemBuilder(XMaterial.LIME_TERRACOTTA.parseMaterial()).setDisplayName("&aGlobal Scope").addLore(Arrays.asList("", "&7Click to select the global", "&7scope for this grant.")).create());
+        this.inventory.setItem(4, new ItemBuilder(XMaterial.LIGHT_BLUE_TERRACOTTA.parseMaterial()).setDisplayName("&bScope Selection").addLore(Arrays.asList("", "&7Use the buttons below to", "&7select a server for this", "&7grant to be applied on!")).create());
+        this.inventory.setItem(5, new ItemBuilder(XMaterial.RED_TERRACOTTA.parseMaterial()).setDisplayName("&cReturn to Main").addLore(Arrays.asList("", "&7Click to cancel this grant", "&7and return to the main menu.")).create());
 
         AtomicInteger i = new AtomicInteger(19);
 
@@ -55,7 +56,7 @@ public class GrantScopeSelectMenu extends AbstractInventoryMenu {
                 .filter(Objects::nonNull)
                 .forEach(server -> {
                     if (i.get() <= 34) {
-                        this.inventory.setItem(i.get(), new ItemBuilder(Material.PAPER)
+                        this.inventory.setItem(i.get(), new ItemBuilder(XMaterial.PAPER.parseMaterial())
                                 .setDisplayName(ChatColor.GREEN + server.getServerName())
                                 .addLore(
                                         "",
@@ -85,7 +86,7 @@ public class GrantScopeSelectMenu extends AbstractInventoryMenu {
             event.setCancelled(true);
 
             ItemStack item = event.getCurrentItem();
-            if (item == null || item.getType() == Material.AIR) return;
+            if (item == null || item.getType() == XMaterial.AIR.parseMaterial()) return;
             if (item.hasItemMeta()) {
                 if (item.getItemMeta().getDisplayName() != null) {
                     String display = ChatColor.stripColor(Color.translate(item.getItemMeta().getDisplayName()));

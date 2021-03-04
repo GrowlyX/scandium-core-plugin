@@ -1,5 +1,6 @@
 package com.solexgames.core.menu.extend.punish;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.AbstractInventoryMenu;
@@ -57,7 +58,7 @@ public class PunishSelectConfirmMenu extends AbstractInventoryMenu {
         int[] intsDecline = new int[] { 14,15,16,23,24,25,32,33,34 };
 
         for (int i : intsConfirm) {
-            this.inventory.setItem(i, new ItemBuilder(Material.STAINED_CLAY, 5)
+            this.inventory.setItem(i, new ItemBuilder(XMaterial.TERRACOTTA.parseMaterial(), 5)
                     .setDisplayName("&a&lConfirm Punishment")
                     .addLore(
                             network.getMainColor() + "&m--------------------------------",
@@ -74,7 +75,7 @@ public class PunishSelectConfirmMenu extends AbstractInventoryMenu {
         }
 
         for (int i : intsDecline) {
-            this.inventory.setItem(i, new ItemBuilder(Material.STAINED_CLAY, 14).setDisplayName("&c&lCancel Punishment").addLore(Arrays.asList(
+            this.inventory.setItem(i, new ItemBuilder(XMaterial.TERRACOTTA.parseMaterial(), 14).setDisplayName("&c&lCancel Punishment").addLore(Arrays.asList(
                     "",
                     "&7Click to cancel this punishment."
             )).create());
@@ -86,7 +87,7 @@ public class PunishSelectConfirmMenu extends AbstractInventoryMenu {
         if (!event.getView().getTopInventory().equals(this.inventory)) return;
         if (event.getView().getTopInventory().equals(event.getClickedInventory())) {
             event.setCancelled(true);
-            if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR) return;
+            if (event.getCurrentItem() == null || event.getCurrentItem().getType() == XMaterial.AIR.parseMaterial()) return;
             if (event.getCurrentItem().getItemMeta().getDisplayName().contains("Confirm")) {
                 Entry<UUID, String> uuidStringEntry = UUIDUtil.getUUID(this.target);
 

@@ -1,5 +1,6 @@
 package com.solexgames.core.util.builder;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.util.Color;
 import lombok.Getter;
 import lombok.Setter;
@@ -47,7 +48,7 @@ public class ItemBuilder {
     public ItemBuilder setOwner(String name) {
         SkullMeta skullMeta = (SkullMeta) this.itemMeta;
 
-        if (this.itemStack.getType().equals(Material.SKULL_ITEM)) {
+        if (this.itemStack.getType().equals(XMaterial.SKELETON_SKULL.parseMaterial())) {
             skullMeta.setOwner(name);
         } else {
             return this;

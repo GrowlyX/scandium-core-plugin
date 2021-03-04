@@ -5,6 +5,7 @@ main: com.solexgames.core.CorePlugin
 
 softdepend: [ProtocolLib, dRobot, ScandiumPAPI]
 load: STARTUP
+api-version: "1.13"
 
 commands:
   test:

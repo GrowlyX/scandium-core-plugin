@@ -1,5 +1,6 @@
 package com.solexgames.core.menu.extend.punish.history;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.menu.AbstractInventoryMenu;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.punishment.PunishmentType;
@@ -28,7 +29,7 @@ public class PunishHistoryViewMainMenu extends AbstractInventoryMenu {
     }
 
     public void update() {
-        this.inventory.setItem(2, new ItemBuilder(Material.WOOL)
+        this.inventory.setItem(2, new ItemBuilder(XMaterial.WHITE_WOOL.parseMaterial())
                 .setDisplayName("&6Warnings")
                 .addLore(
                         "&7Click to all view warnings",
@@ -36,7 +37,7 @@ public class PunishHistoryViewMainMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(3, new ItemBuilder(Material.WOOL, 4)
+        this.inventory.setItem(3, new ItemBuilder(XMaterial.YELLOW_WOOL.parseMaterial(), 4)
                 .setDisplayName("&6Kicks")
                 .addLore(
                         "&7Click to all view kicks",
@@ -44,7 +45,7 @@ public class PunishHistoryViewMainMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(4, new ItemBuilder(Material.WOOL, 1)
+        this.inventory.setItem(4, new ItemBuilder(XMaterial.ORANGE_WOOL.parseMaterial(), 1)
                 .setDisplayName("&6Mutes")
                 .addLore(
                         "&7Click to all view mutes",
@@ -52,7 +53,7 @@ public class PunishHistoryViewMainMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(5, new ItemBuilder(Material.WOOL, 14)
+        this.inventory.setItem(5, new ItemBuilder(XMaterial.RED_WOOL.parseMaterial(), 14)
                 .setDisplayName("&6Bans")
                 .addLore(
                         "&7Click to all view bans",
@@ -60,7 +61,7 @@ public class PunishHistoryViewMainMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(6, new ItemBuilder(Material.WOOL, 15)
+        this.inventory.setItem(6, new ItemBuilder(XMaterial.BLACK_WOOL.parseMaterial(), 15)
                 .setDisplayName("&6Blacklists")
                 .addLore(
                         "&7Click to all view blacklists",
@@ -80,7 +81,7 @@ public class PunishHistoryViewMainMenu extends AbstractInventoryMenu {
 
             ItemStack item = event.getCurrentItem();
 
-            if (item == null || item.getType() == Material.AIR) return;
+            if (item == null || item.getType() == XMaterial.AIR.parseMaterial()) return;
             switch (event.getRawSlot()) {
                 case 2:
                     new PunishViewPaginatedMenu(player, this.target, PunishmentType.WARN).openMenu(this.player);

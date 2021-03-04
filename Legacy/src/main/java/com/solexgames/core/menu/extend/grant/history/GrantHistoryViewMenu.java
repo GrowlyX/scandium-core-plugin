@@ -1,5 +1,6 @@
 package com.solexgames.core.menu.extend.grant.history;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.AbstractInventoryMenu;
@@ -61,7 +62,7 @@ public class GrantHistoryViewMenu extends AbstractInventoryMenu {
                 lore.add("&eIssued Reason&7: " + network.getMainColor() + grant.getReason());
                 lore.add(network.getMainColor() + "&m------------------------------------");
 
-                this.inventory.setItem(i.get(), new ItemBuilder(Material.WOOL, (grant.isActive() ? 5 : (grant.isExpired() ? 8 : 14)))
+                this.inventory.setItem(i.get(), new ItemBuilder(XMaterial.LIME_WOOL.parseMaterial(), (grant.isActive() ? 5 : (grant.isExpired() ? 8 : 14)))
                         .setDisplayName(ChatColor.RED + "#" + grant.getId())
                         .addLore(Color.translate(lore))
                         .create()
@@ -90,7 +91,7 @@ public class GrantHistoryViewMenu extends AbstractInventoryMenu {
             Player player = (Player) event.getWhoClicked();
             PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(this.target);
 
-            if (item == null || item.getType() == Material.AIR) return;
+            if (item == null || item.getType() == XMaterial.AIR.parseMaterial()) return;
             if (item.hasItemMeta()) {
                 if (item.getItemMeta().getDisplayName() != null) {
                     if (event.getClick().equals(ClickType.RIGHT)) {

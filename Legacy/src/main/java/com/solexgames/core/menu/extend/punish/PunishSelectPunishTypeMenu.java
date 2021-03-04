@@ -1,5 +1,6 @@
 package com.solexgames.core.menu.extend.punish;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.AbstractInventoryMenu;
@@ -36,11 +37,11 @@ public class PunishSelectPunishTypeMenu extends AbstractInventoryMenu {
     public void update() {
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
-        this.inventory.setItem(10, new ItemBuilder(Material.INK_SACK, 1).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Ban").addLore(Collections.singletonList("&7Click to select this punishment.")).create());
-        this.inventory.setItem(11, new ItemBuilder(Material.INK_SACK, 2).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Kick").addLore(Collections.singletonList("&7Click to select this punishment.")).create());
-        this.inventory.setItem(12, new ItemBuilder(Material.INK_SACK, 3).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Mute").addLore(Collections.singletonList("&7Click to select this punishment.")).create());
-        this.inventory.setItem(13, new ItemBuilder(Material.INK_SACK, 4).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Warn").addLore(Collections.singletonList("&7Click to select this punishment.")).create());
-        this.inventory.setItem(14, new ItemBuilder(Material.INK_SACK, 5).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Blacklist").addLore(Collections.singletonList("&7Click to select this punishment.")).create());
+        this.inventory.setItem(10, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 1).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Ban").addLore(Collections.singletonList("&7Click to select this punishment.")).create());
+        this.inventory.setItem(11, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 2).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Kick").addLore(Collections.singletonList("&7Click to select this punishment.")).create());
+        this.inventory.setItem(12, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 3).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Mute").addLore(Collections.singletonList("&7Click to select this punishment.")).create());
+        this.inventory.setItem(13, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 4).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Warn").addLore(Collections.singletonList("&7Click to select this punishment.")).create());
+        this.inventory.setItem(14, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 5).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Blacklist").addLore(Collections.singletonList("&7Click to select this punishment.")).create());
     }
 
     @Override
@@ -54,7 +55,7 @@ public class PunishSelectPunishTypeMenu extends AbstractInventoryMenu {
             ItemStack item = event.getCurrentItem();
             Player player = (Player) event.getWhoClicked();
 
-            if (item == null || item.getType() == Material.AIR) return;
+            if (item == null || item.getType() == XMaterial.AIR.parseMaterial()) return;
             switch (event.getRawSlot()) {
                 case 10:
                     if (this.player.hasPermission("scandium.punishments.ban")) {

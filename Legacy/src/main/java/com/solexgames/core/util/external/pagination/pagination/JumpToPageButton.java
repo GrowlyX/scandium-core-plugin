@@ -1,5 +1,6 @@
 package com.solexgames.core.util.external.pagination.pagination;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.util.external.pagination.Button;
 import lombok.AllArgsConstructor;
@@ -18,7 +19,7 @@ public class JumpToPageButton extends Button {
 
     @Override
     public ItemStack getButtonItem(Player player) {
-        return new ItemBuilder(this.current ? Material.ENCHANTED_BOOK : Material.BOOK)
+        return new ItemBuilder(this.current ? XMaterial.ENCHANTED_BOOK.parseMaterial() : XMaterial.BOOK.parseMaterial())
                 .addLore(this.current ? "&7You are on page &b" + this.page + "&7!" : "&aClick to jump to this menu!")
                 .setDisplayName(this.current ? ChatColor.GREEN + "Current Page" : ChatColor.YELLOW + "Page " + this.page)
                 .create();

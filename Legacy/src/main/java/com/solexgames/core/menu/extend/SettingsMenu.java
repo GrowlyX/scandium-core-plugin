@@ -1,5 +1,6 @@
 package com.solexgames.core.menu.extend;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.menu.AbstractInventoryMenu;
 import com.solexgames.core.util.builder.ItemBuilder;
@@ -26,7 +27,7 @@ public class SettingsMenu extends AbstractInventoryMenu {
 
     public void update() {
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(this.player);
-        this.inventory.setItem(2, new ItemBuilder(Material.PAPER)
+        this.inventory.setItem(2, new ItemBuilder(XMaterial.PAPER.parseMaterial())
                 .setDisplayName("&3Global Chat")
                 .addLore(
                         "",
@@ -39,7 +40,7 @@ public class SettingsMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(3, new ItemBuilder(Material.EXP_BOTTLE)
+        this.inventory.setItem(3, new ItemBuilder(XMaterial.EXPERIENCE_BOTTLE.parseMaterial())
                 .setDisplayName("&3Server Tips")
                 .addLore(
                         "",
@@ -52,7 +53,7 @@ public class SettingsMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(4, new ItemBuilder(Material.EMERALD)
+        this.inventory.setItem(4, new ItemBuilder(XMaterial.EMERALD.parseMaterial())
                 .setDisplayName("&3Receive DMs")
                 .addLore(
                         "",
@@ -65,7 +66,7 @@ public class SettingsMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(5, new ItemBuilder(Material.JUKEBOX)
+        this.inventory.setItem(5, new ItemBuilder(XMaterial.JUKEBOX.parseMaterial())
                 .setDisplayName("&3DMs Sounds")
                 .addLore(
                         "",
@@ -79,7 +80,7 @@ public class SettingsMenu extends AbstractInventoryMenu {
                 .create()
         );
         if (player.hasPermission("scandium.staff")) {
-            this.inventory.setItem(6, new ItemBuilder(Material.BLAZE_POWDER)
+            this.inventory.setItem(6, new ItemBuilder(XMaterial.BLAZE_POWDER.parseMaterial())
                     .setDisplayName("&3Staff Messages")
                     .addLore(
                             "",
@@ -93,7 +94,7 @@ public class SettingsMenu extends AbstractInventoryMenu {
                     .create()
             );
         } else {
-            this.inventory.setItem(6, new ItemBuilder(Material.BLAZE_POWDER)
+            this.inventory.setItem(6, new ItemBuilder(XMaterial.BLAZE_POWDER.parseMaterial())
                     .setDisplayName("&3Global Broadcasts")
                     .addLore(
                             "",
@@ -121,7 +122,7 @@ public class SettingsMenu extends AbstractInventoryMenu {
             Player player = (Player) event.getWhoClicked();
             PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
-            if (item == null || item.getType() == Material.AIR) return;
+            if (item == null || item.getType() == XMaterial.AIR.parseMaterial()) return;
             switch (event.getRawSlot()) {
                 case 2:
                     potPlayer.setCanSeeGlobalChat(!potPlayer.isCanSeeGlobalChat());

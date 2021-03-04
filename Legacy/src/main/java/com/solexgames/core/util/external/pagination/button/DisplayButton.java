@@ -1,5 +1,7 @@
 package com.solexgames.core.util.external.pagination.button;
 
+import com.cryptomorin.xseries.XMaterial;
+import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.util.external.pagination.Button;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,7 +22,7 @@ public class DisplayButton extends Button {
     @Override
     public ItemStack getButtonItem(Player player) {
         if (this.itemStack == null) {
-            return new ItemStack(Material.AIR);
+            return new ItemBuilder(XMaterial.AIR.parseMaterial()).create();
         } else {
             return this.itemStack;
         }

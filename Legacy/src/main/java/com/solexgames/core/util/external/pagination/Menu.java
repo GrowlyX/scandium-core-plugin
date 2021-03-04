@@ -1,5 +1,6 @@
 package com.solexgames.core.util.external.pagination;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.util.Color;
 import lombok.Getter;
@@ -28,12 +29,12 @@ public abstract class Menu {
     private boolean updateAfterClick = true;
     private boolean closedByMenu = false;
     private boolean placeholder = false;
-    private Button placeholderButton = Button.placeholder(Material.STAINED_GLASS_PANE, (byte) 15, " ");
+    private Button placeholderButton = Button.placeholder(XMaterial.GLASS_PANE.parseMaterial(), (byte) 15, " ");
 
     private ItemStack createItemStack(Player player, Button button) {
         ItemStack item = button.getButtonItem(player);
 
-        if (item.getType() != Material.SKULL_ITEM) {
+        if (item.getType() != XMaterial.SKELETON_SKULL.parseMaterial()) {
             ItemMeta meta = item.getItemMeta();
 
             if (meta != null && meta.hasDisplayName()) {

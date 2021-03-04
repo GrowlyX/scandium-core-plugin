@@ -1,5 +1,6 @@
 package com.solexgames.core.menu.extend.punish;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.AbstractInventoryMenu;
@@ -39,13 +40,13 @@ public class PunishSelectReasonMenu extends AbstractInventoryMenu {
     public void update() {
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
-        this.inventory.setItem(10, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Unfair Advantage").addLore(Collections.singletonList("&7Click to select this reason.")).create());
-        this.inventory.setItem(11, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Chat Abuse").addLore(Collections.singletonList("&7Click to select this reason.")).create());
-        this.inventory.setItem(12, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Camping").addLore(Collections.singletonList("&7Click to select this reason.")).create());
-        this.inventory.setItem(13, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Threats").addLore(Collections.singletonList("&7Click to select this reason.")).create());
-        this.inventory.setItem(14, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Appealed").addLore(Collections.singletonList("&7Click to select this reason.")).create());
+        this.inventory.setItem(10, new ItemBuilder(XMaterial.PAPER.parseMaterial()).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Unfair Advantage").addLore(Collections.singletonList("&7Click to select this reason.")).create());
+        this.inventory.setItem(11, new ItemBuilder(XMaterial.PAPER.parseMaterial()).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Chat Abuse").addLore(Collections.singletonList("&7Click to select this reason.")).create());
+        this.inventory.setItem(12, new ItemBuilder(XMaterial.PAPER.parseMaterial()).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Camping").addLore(Collections.singletonList("&7Click to select this reason.")).create());
+        this.inventory.setItem(13, new ItemBuilder(XMaterial.PAPER.parseMaterial()).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Threats").addLore(Collections.singletonList("&7Click to select this reason.")).create());
+        this.inventory.setItem(14, new ItemBuilder(XMaterial.PAPER.parseMaterial()).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Appealed").addLore(Collections.singletonList("&7Click to select this reason.")).create());
 
-        this.inventory.setItem(16, new ItemBuilder(Material.STAINED_CLAY, 5).setDisplayName(ChatColor.GREEN + ChatColor.BOLD.toString() + "Custom").addLore(Collections.singletonList("&7Click to select a custom reason.")).create());
+        this.inventory.setItem(16, new ItemBuilder(XMaterial.LIME_TERRACOTTA.parseMaterial(), 13).setDisplayName(ChatColor.GREEN + ChatColor.BOLD.toString() + "Custom").addLore(Collections.singletonList("&7Click to select a custom reason.")).create());
     }
 
     @Override
@@ -59,7 +60,7 @@ public class PunishSelectReasonMenu extends AbstractInventoryMenu {
             ItemStack item = event.getCurrentItem();
             Player player = (Player) event.getWhoClicked();
 
-            if (item == null || item.getType() == Material.AIR) return;
+            if (item == null || item.getType() == XMaterial.AIR.parseMaterial()) return;
             switch (event.getRawSlot()) {
                 case 10:
                     new PunishSelectDurationMenu(this.player, this.target, "Unfair Advantage", this.punishmentType).open(player);

@@ -1,5 +1,6 @@
 package com.solexgames.core.menu.extend.grant;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.AbstractInventoryMenu;
@@ -33,7 +34,7 @@ public class GrantSelectDurationMenu extends AbstractInventoryMenu {
     private String scope;
 
     public GrantSelectDurationMenu(Player player, Document document, Rank rank, String scope) {
-        super("Grant time for: " + (Bukkit.getPlayer(document.getString("name")) != null ? Bukkit.getPlayer(document.getString("name")).getDisplayName() : document.getString("name")), 9*3);
+        super("Grant time for: " + (Bukkit.getPlayer(document.getString("name")) != null ? Bukkit.getPlayer(document.getString("name")).getDisplayName() : document.getString("name")), 9 * 3);
         this.player = player;
         this.document = document;
         this.rank = rank;
@@ -45,13 +46,13 @@ public class GrantSelectDurationMenu extends AbstractInventoryMenu {
     public void update() {
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
-        this.inventory.setItem(10, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "1 Day").addLore(Collections.singletonList("&7Click to select this duration.")).create());
-        this.inventory.setItem(11, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "1 Week").addLore(Collections.singletonList("&7Click to select this duration.")).create());
-        this.inventory.setItem(12, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "1 Month").addLore(Collections.singletonList("&7Click to select this duration.")).create());
-        this.inventory.setItem(13, new ItemBuilder(Material.PAPER).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "3 Months").addLore(Collections.singletonList("&7Click to select this duration.")).create());
-        this.inventory.setItem(14, new ItemBuilder(Material.PAPER).setDisplayName("&4&oPermanent").addLore(Collections.singletonList("&7Click to select this duration.")).create());
+        this.inventory.setItem(10, new ItemBuilder(XMaterial.PAPER.parseMaterial()).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "1 Day").addLore(Collections.singletonList("&7Click to select this duration.")).create());
+        this.inventory.setItem(11, new ItemBuilder(XMaterial.PAPER.parseMaterial()).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "1 Week").addLore(Collections.singletonList("&7Click to select this duration.")).create());
+        this.inventory.setItem(12, new ItemBuilder(XMaterial.PAPER.parseMaterial()).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "1 Month").addLore(Collections.singletonList("&7Click to select this duration.")).create());
+        this.inventory.setItem(13, new ItemBuilder(XMaterial.PAPER.parseMaterial()).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "3 Months").addLore(Collections.singletonList("&7Click to select this duration.")).create());
+        this.inventory.setItem(14, new ItemBuilder(XMaterial.PAPER.parseMaterial()).setDisplayName("&4&oPermanent").addLore(Collections.singletonList("&7Click to select this duration.")).create());
 
-        this.inventory.setItem(16, new ItemBuilder(Material.STAINED_CLAY, 5).setDisplayName(ChatColor.GREEN + ChatColor.BOLD.toString() + "Custom").addLore(Collections.singletonList("&7Click to select a custom duration.")).create());
+        this.inventory.setItem(16, new ItemBuilder(XMaterial.GREEN_TERRACOTTA.parseMaterial(), 5).setDisplayName(ChatColor.GREEN + ChatColor.BOLD.toString() + "Custom").addLore(Collections.singletonList("&7Click to select a custom duration.")).create());
     }
 
     @Override
@@ -65,7 +66,7 @@ public class GrantSelectDurationMenu extends AbstractInventoryMenu {
             ItemStack item = event.getCurrentItem();
             Player player = (Player) event.getWhoClicked();
 
-            if (item == null || item.getType() == Material.AIR) return;
+            if (item == null || item.getType() == XMaterial.AIR.parseMaterial()) return;
             switch (event.getRawSlot()) {
                 case 10:
                     new GrantSelectReasonMenu(this.player, this.document, System.currentTimeMillis() - DateUtil.parseDateDiff("1d", false), this.rank, false, this.scope).open(player);

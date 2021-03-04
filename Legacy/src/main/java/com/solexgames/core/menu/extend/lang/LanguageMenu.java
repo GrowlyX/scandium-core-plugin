@@ -1,5 +1,6 @@
 package com.solexgames.core.menu.extend.lang;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.LanguageType;
 import com.solexgames.core.menu.AbstractInventoryMenu;
@@ -27,7 +28,7 @@ public class LanguageMenu extends AbstractInventoryMenu {
     }
 
     public void update() {
-        this.inventory.setItem(2, new ItemBuilder(Material.INK_SACK, 11)
+        this.inventory.setItem(2, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 11)
                 .setDisplayName("&eEnglish")
                 .addLore(
                         "",
@@ -36,7 +37,7 @@ public class LanguageMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(3, new ItemBuilder(Material.INK_SACK, 14)
+        this.inventory.setItem(3, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 14)
                 .setDisplayName("&6Español")
                 .addLore(
                         "",
@@ -45,7 +46,7 @@ public class LanguageMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(4, new ItemBuilder(Material.INK_SACK, 12)
+        this.inventory.setItem(4, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 12)
                 .setDisplayName("&bFrançais")
                 .addLore(
                         "",
@@ -54,7 +55,7 @@ public class LanguageMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(5, new ItemBuilder(Material.INK_SACK, 10)
+        this.inventory.setItem(5, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 10)
                 .setDisplayName("&aItaliano")
                 .addLore(
                         "",
@@ -63,7 +64,7 @@ public class LanguageMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(6, new ItemBuilder(Material.INK_SACK, 1)
+        this.inventory.setItem(6, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 1)
                 .setDisplayName("&cDeutsch")
                 .addLore(
                         "",
@@ -86,7 +87,7 @@ public class LanguageMenu extends AbstractInventoryMenu {
             Player player = (Player) event.getWhoClicked();
             PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
-            if (item == null || item.getType() == Material.AIR) return;
+            if (item == null || item.getType() == XMaterial.AIR.parseMaterial()) return;
             switch (event.getRawSlot()) {
                 case 2:
                     potPlayer.setLanguage(LanguageType.ENGLISH);

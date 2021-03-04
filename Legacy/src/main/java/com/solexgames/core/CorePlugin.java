@@ -1,5 +1,6 @@
 package com.solexgames.core;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.solexgames.core.command.extend.CoreCommand;
@@ -37,6 +38,7 @@ import com.solexgames.core.lunar.AbstractClientInjector;
 import com.solexgames.core.lunar.extend.LunarCommand;
 import com.solexgames.core.manager.*;
 import com.solexgames.core.nms.AbstractNMSImplementation;
+import com.solexgames.core.nms.extend.NMSImplementation_v1_16;
 import com.solexgames.core.nms.extend.NMSImplementation_v1_7;
 import com.solexgames.core.nms.extend.NMSImplementation_v1_8;
 import com.solexgames.core.protocol.AbstractChatInterceptor;
@@ -50,6 +52,7 @@ import com.solexgames.core.util.RedisUtil;
 import com.solexgames.core.util.external.ConfigExternal;
 import com.solexgames.core.util.external.pagination.pagination.PaginationListener;
 import com.solexgames.core.version.AbstractVersionImplementation;
+import com.solexgames.core.version.extend.PingCommand_v1_16;
 import com.solexgames.core.version.extend.PingCommand_v1_7;
 import com.solexgames.core.version.extend.PingCommand_v1_8;
 import lombok.Getter;
@@ -183,9 +186,8 @@ public final class CorePlugin extends JavaPlugin {
             this.versionImplementation = new PingCommand_v1_8();
             this.NMS = new NMSImplementation_v1_8();
         } else if (this.getServer().getVersion().contains("1.16")) {
-            this.getLogger().info("[Bukkit] Please use the non-legacy version!");
-        } else {
-            this.getLogger().info("[Bukkit] I don't support this version yet! MANY THINGS MAY BE BROKEN! Please contact Growly to add support.");
+            this.versionImplementation = new PingCommand_v1_16();
+            this.NMS = new NMSImplementation_v1_16();
         }
 
         this.getLogger().info("[Bukkit] Hooked into Bukkit version " + this.getServer().getVersion() + "!");
