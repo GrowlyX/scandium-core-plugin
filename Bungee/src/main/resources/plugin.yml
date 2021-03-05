@@ -1,0 +1,5 @@
+
+name: Xenon
+version: 1.0-${git.commit.id.abbrev}
+main: com.solexgames.CorePlugin
+author: SolexGames

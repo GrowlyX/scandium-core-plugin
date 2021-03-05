@@ -47,6 +47,7 @@ public class CGrantCommand extends BaseCommand {
                         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
                         if (rank != null) {
+                            UUID uuid = UUIDUtil.getId(args[0]);
                             if (args[2].equalsIgnoreCase("perm") || args[2].equalsIgnoreCase("permanent")) {
                                 String reason = StringUtil.buildMessage(args, 3);
                                 PotPlayer targetPotPlayer = null;
@@ -81,10 +82,9 @@ public class CGrantCommand extends BaseCommand {
 
                                     document.put("allGrants", grantStrings);
 
-                                    Map.Entry<UUID, String> uuidStringEntry = UUIDUtil.getUUID(document.getString("name"));
-                                    CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuidStringEntry.getKey()), document, new ReplaceOptions().upsert(true)));
+                                    CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("uuid", uuid), document, new ReplaceOptions().upsert(true)));
 
-                                    sender.sendMessage(Color.translate(network.getSecondaryColor() + "You've granted " + uuidStringEntry.getValue() + network.getSecondaryColor() + " the rank " + rank.getColor() + rank.getName() + network.getSecondaryColor() + " for " + network.getMainColor() + reason + network.getSecondaryColor() + "."));
+                                    sender.sendMessage(Color.translate(network.getSecondaryColor() + "You've granted &b" + UUIDUtil.getName(document.getString("uuid")) + network.getSecondaryColor() + " the rank " + rank.getColor() + rank.getName() + network.getSecondaryColor() + " for " + network.getMainColor() + reason + network.getSecondaryColor() + "."));
                                 }
                             } else {
                                 try {
@@ -120,10 +120,9 @@ public class CGrantCommand extends BaseCommand {
 
                                         document.put("allGrants", grantStrings);
 
-                                        Map.Entry<UUID, String> uuidStringEntry = UUIDUtil.getUUID(document.getString("name"));
-                                        CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuidStringEntry.getKey()), document, new ReplaceOptions().upsert(true)));
+                                        CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("uuid", uuid), document, new ReplaceOptions().upsert(true)));
 
-                                        sender.sendMessage(Color.translate(network.getSecondaryColor() + "You've granted " + uuidStringEntry.getValue() + network.getSecondaryColor() + " the rank " + rank.getColor() + rank.getName() + network.getSecondaryColor() + " for " + network.getMainColor() + reason + network.getSecondaryColor() + "."));
+                                        sender.sendMessage(Color.translate(network.getSecondaryColor() + "You've granted " + args[0] + network.getSecondaryColor() + " the rank " + rank.getColor() + rank.getName() + network.getSecondaryColor() + " for " + network.getMainColor() + reason + network.getSecondaryColor() + "."));
                                     }
                                 } catch (Exception exception) {
                                     sender.sendMessage(ChatColor.RED + "Invalid duration.");

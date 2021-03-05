@@ -1,0 +1,10 @@
+#
+#  Xenon - Created by SolexGames
+#
+region: "EU"
+maintenance: true
+whitelistedPlayers:
+  - "GrowlyX"
+motd:
+  maintenance: "<bar><nl>"
+  normal: "<bar><nl>"
