@@ -9,7 +9,6 @@
         <outputRelativeToContentRoot value="true" />
         <module name="Bungee" />
         <module name="Legacy" />
-        <module name="Non-Legacy" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

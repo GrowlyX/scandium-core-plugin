@@ -2,6 +2,7 @@ package com.solexgames.core.listener;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ChatChannelType;
+import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.manager.ServerManager;
 import com.solexgames.core.media.MediaConstants;
 import com.solexgames.core.menu.IMenu;
@@ -352,6 +353,16 @@ public class PlayerListener implements Listener {
             event.setCancelled(true);
             RedisUtil.writeAsync(RedisUtil.onChatChannel(potPlayer.getChannel(), message, player));
             return;
+        }
+
+        if (CorePlugin.getInstance().getServerManager().getNetwork().equals(ServerType.EVENTIS)) {
+            if (CorePlugin.getInstance().getServerName().contains("hub")) {
+                if (!player.hasPermission("scandium.staff")) {
+                    event.setCancelled(true);
+                    player.sendMessage(Color.translate("&cYou cannot chat on the hub."));
+                    return;
+                }
+            }
         }
 
         if (CorePlugin.getInstance().getServerManager().isChatEnabled()) {

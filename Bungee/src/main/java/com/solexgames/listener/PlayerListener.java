@@ -39,7 +39,7 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onLogin(PreLoginEvent event) {
         if (plugin.isMaintenance() && !plugin.getWhitelistedPlayers().contains(event.getConnection().getName())) {
-            event.setCancelReason(TextComponent.fromLegacyText(ChatColor.RED + "We are currently in maintenance.\nJoin our discord server for more information!"));
+            event.setCancelReason(TextComponent.fromLegacyText(ChatColor.RED + "The network is currently whitelisted.\nWe should be back online shortly."));
             event.setCancelled(true);
         }
     }
