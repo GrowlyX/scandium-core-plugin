@@ -1,6 +1,5 @@
 package com.solexgames.core;
 
-import com.cryptomorin.xseries.XMaterial;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.solexgames.core.command.extend.CoreCommand;

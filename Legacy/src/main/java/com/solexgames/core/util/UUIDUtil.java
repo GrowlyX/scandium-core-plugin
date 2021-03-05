@@ -41,6 +41,29 @@ public final class UUIDUtil {
         return new AbstractMap.SimpleEntry<>(uuid, name);
     }
 
+    public static UUID getId(String name) {
+        UUID uuid;
+
+        try {
+            URL url = new URL("https://api.mojang.com/users/profiles/minecraft/" + name);
+            URLConnection conn = url.openConnection();
+
+            conn.setDoOutput(true);
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            JSONParser parser = new JSONParser();
+            JSONObject obj = (JSONObject) parser.parse(reader.readLine());
+
+            uuid = UUID.fromString(String.valueOf(obj.get("id")).replaceAll("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})", "$1-$2-$3-$4-$5"));
+
+            reader.close();
+        } catch (Exception ignored) {
+            return null;
+        }
+
+        return uuid;
+    }
+
     public static String getName(String uuid) {
         String url = "https://api.mojang.com/user/profiles/" + uuid.replace("-", "") + "/names";
         try {

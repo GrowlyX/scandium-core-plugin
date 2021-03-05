@@ -19,7 +19,7 @@ public class ProtocolChatInterceptor extends AbstractChatInterceptor {
     public void initializePacketInterceptor() {
         this.adapter = new PacketAdapter(this.coreInstance, ListenerPriority.HIGHEST, PacketType.Play.Client.TAB_COMPLETE) {
             public void onPacketReceiving(PacketEvent event) {
-                if (event.getPacketType() == PacketType.Play.Client.TAB_COMPLETE) {
+                if (event.getPacketType().equals(PacketType.Play.Client.TAB_COMPLETE)) {
                     try {
                         if (event.getPlayer().hasPermission("scandium.tabcomplete.bypass")) return;
 
