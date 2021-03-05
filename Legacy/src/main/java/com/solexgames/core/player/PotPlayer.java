@@ -141,7 +141,7 @@ public class PotPlayer {
     public void saveWithoutRemove() {
         Document document = new Document("_id", this.uuid);
 
-        document.put("name", this.name);
+        document.put("name", this.getPlayer().getName());
         document.put("uuid", this.uuid.toString());
         document.put("canSeeStaffMessages", this.canSeeStaffMessages);
         document.put("canSeeTips", this.canSeeTips);
@@ -206,7 +206,7 @@ public class PotPlayer {
     public void savePlayerData() {
         Document document = new Document("_id", this.uuid);
 
-        document.put("name", this.name);
+        document.put("name", this.getPlayer().getName());
         document.put("uuid", this.uuid.toString());
         document.put("canSeeStaffMessages", this.canSeeStaffMessages);
         document.put("canSeeTips", this.canSeeTips);
@@ -263,7 +263,7 @@ public class PotPlayer {
 
         document.put("autoVanish", this.isAutoVanish);
         document.put("autoModMode", this.isAutoModMode);
-        document.put("ipAddress", CorePlugin.getInstance().getCryptoManager().encrypt(ipAddress.toString()));
+        document.put("ipAddress", CorePlugin.getInstance().getCryptoManager().encrypt(ipAddress));
 
         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true)));
 
@@ -275,7 +275,7 @@ public class PotPlayer {
         Document document = CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("_id", this.uuid)).first();
         if (document == null) return;
 
-        this.name = document.getString("name");
+        this.name = this.getPlayer().getName();
         if (document.getBoolean("canSeeStaffMessages") != null) {
             this.canSeeStaffMessages = document.getBoolean("canSeeStaffMessages");
         }

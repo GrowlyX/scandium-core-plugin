@@ -138,8 +138,7 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
 
                     document.put("allGrants", grantStrings);
 
-                    Map.Entry<UUID, String> uuidStringEntry = UUIDUtil.getUUID(document.getString("name"));
-                    CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuidStringEntry.getKey()), document, new ReplaceOptions().upsert(true)));
+                    CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("uuid", this.document.getString("uuid")), document, new ReplaceOptions().upsert(true)));
 
                     player.sendMessage("  ");
                     player.sendMessage(Color.translate(network.getSecondaryColor() + "You've granted " + document.getString("name") + network.getSecondaryColor() + " the rank " + rank.getColor() + rank.getName() + network.getSecondaryColor() + " for " + network.getMainColor() + this.getReason() + network.getSecondaryColor() + "."));
