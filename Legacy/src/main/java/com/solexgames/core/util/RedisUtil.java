@@ -14,6 +14,11 @@ import org.bukkit.entity.Player;
 import java.util.Date;
 import java.util.UUID;
 
+/**
+ * @author GrowlyX
+ * @since 3/4/2021
+ */
+
 public final class RedisUtil {
 
     public static String getTicksPerSecondFormatted() {

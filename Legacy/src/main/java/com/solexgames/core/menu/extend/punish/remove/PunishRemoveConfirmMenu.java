@@ -26,7 +26,7 @@ public class PunishRemoveConfirmMenu extends AbstractInventoryMenu {
     public Punishment punishment;
 
     public PunishRemoveConfirmMenu(Player player, String target, Punishment punishment) {
-        super("Punishment removal for: " + target, 9 * 5);
+        super("Punishment removal for: &b" + target, 9 * 5);
         this.punishment = punishment;
         this.player = player;
         this.target = target;
@@ -74,6 +74,9 @@ public class PunishRemoveConfirmMenu extends AbstractInventoryMenu {
             if (ChatColor.stripColor(Color.translate(item.getItemMeta().getDisplayName())).contains("Confirm")) {
                 Punishment.getAllPunishments().remove(punishment);
                 RedisUtil.writeAsync(RedisUtil.fRemovePunishment(punishment));
+
+                player.sendMessage(Color.translate("&aRemoved the punishment from &b" + target + "'s &ahistory!"));
+                player.closeInventory();
 
                 new PunishViewPaginatedMenu(player, target, punishment.getPunishmentType()).openMenu(player);
             } else if (ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()).contains("Cancel")) {

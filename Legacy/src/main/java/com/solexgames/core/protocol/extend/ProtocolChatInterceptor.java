@@ -26,7 +26,7 @@ public class ProtocolChatInterceptor extends AbstractChatInterceptor {
                         PacketContainer packet = event.getPacket();
                         String message = packet.getSpecificModifier(String.class).read(0).toLowerCase();
 
-                        if (((message.startsWith("/")) && (!message.contains(" "))) || ((message.startsWith("/ver")) && (!message.contains("  "))) || ((message.startsWith("/version")) && (!message.contains("  "))) || ((message.startsWith("/?")) && (!message.contains("  "))) || ((message.startsWith("/about")) && (!message.contains("  "))) || ((message.startsWith("/help")) && (!message.contains("  ")))) {
+                        if (((message.startsWith("/")) && (!message.contains(" "))) || ((message.startsWith("/ver")) && (!message.contains("  "))) || ((message.startsWith("/version")) && (!message.contains("  "))) || ((message.startsWith("/?")) && (!message.contains("  "))) || ((message.startsWith("/about")) && (!message.contains("  "))) || ((message.startsWith("/help")) && (!message.contains("  "))) || message.contains("/to") || message.contains("/targetoffset")) {
                             event.setCancelled(true);
                             if (getConfig().getBoolean("tab-block.message.enabled")) {
                                 event.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getConfig().getString("tab-block.message.string")));

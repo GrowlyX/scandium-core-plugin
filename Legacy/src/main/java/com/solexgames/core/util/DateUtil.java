@@ -7,6 +7,11 @@ import java.util.GregorianCalendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * @author GrowlyX
+ * @since 3/4/2021
+ */
+
 public final class DateUtil {
 
     private static Pattern timePattern;

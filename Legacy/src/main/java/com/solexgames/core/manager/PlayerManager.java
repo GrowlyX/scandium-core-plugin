@@ -169,6 +169,10 @@ public class PlayerManager {
         return Optional.ofNullable(CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("name", name)).first());
     }
 
+    public Optional<Document> getDocumentByUuid(UUID uuid) {
+        return Optional.ofNullable(CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("uuid", uuid.toString())).first());
+    }
+
     public void unVanishPlayer(Player player) {
         Bukkit.getOnlinePlayers()
                 .stream()

@@ -6,6 +6,11 @@ import org.bukkit.World;
 
 import java.util.Optional;
 
+/**
+ * @author GrowlyX
+ * @since 3/4/2021
+ */
+
 public final class LocationUtil {
 
     private static final String SEPARATOR = "_S_";

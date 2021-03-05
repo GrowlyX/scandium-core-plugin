@@ -7,6 +7,11 @@ import org.bukkit.entity.Player;
 
 import java.util.Objects;
 
+/**
+ * @author GrowlyX
+ * @since 3/4/2021
+ */
+
 public final class StaffUtil {
 
     public static void sendAlert(Player player, String reason) {

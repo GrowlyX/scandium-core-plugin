@@ -2,8 +2,11 @@ package com.solexgames.core.board.extend;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.board.ScoreBoard;
+import com.solexgames.core.enums.ChatChannelType;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.player.PotPlayer;
+import com.solexgames.core.task.TPSUpdateTask;
+import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -18,24 +21,37 @@ public class ModSuiteBoard extends ScoreBoard {
         super(player);
     }
 
+    public String getChannel(ChatChannelType chatChannelType) {
+        switch (chatChannelType) {
+            case DEV:
+                return "&3Developer";
+            case STAFF:
+                return "&bStaff";
+            case HOST:
+                return "&2Host";
+            case MANAGER:
+                return "&4Manager";
+            case ADMIN:
+                return "&cAdmin";
+            default:
+                return "Normal";
+        }
+    }
+
     @Override
     public void update() {
         List<String> lines = new ArrayList<>();
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(this.getPlayer());
 
-        this.setTitle(network.getMainColor() + ChatColor.BOLD.toString() + "Staff");
+        this.setTitle(network.getSecondaryColor() + ChatColor.BOLD.toString() + "Mod Mode");
 
-        lines.add(ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + "------------------------");
-        lines.add(network.getMainColor() + ChatColor.BOLD.toString() + "Player:");
-        lines.add(ChatColor.GRAY + " * " + network.getSecondaryColor() + "Vanish: " + (potPlayer.isVanished() ? ChatColor.GREEN + "Enabled" : ChatColor.RED + "Disabled"));
-        lines.add("  ");
-        lines.add(network.getMainColor() + ChatColor.BOLD.toString() + "Server:");
-        lines.add(ChatColor.GRAY + " * " + network.getSecondaryColor() + "TPS: " + network.getMainColor() + RedisUtil.getTicksPerSecondFormatted());
-        lines.add(ChatColor.GRAY + " * " + network.getSecondaryColor() + "Whitelist: " + (CorePlugin.getInstance().getWhitelistConfig().getBoolean("whitelist") ? ChatColor.GREEN + "Enabled" : ChatColor.RED + "Disabled"));
-        lines.add(ChatColor.GRAY + " * " + network.getSecondaryColor() + "Players: " + network.getMainColor() + Bukkit.getOnlinePlayers().size() + "/" + Bukkit.getMaxPlayers());
-        lines.add(ChatColor.GRAY + " * " + network.getSecondaryColor() + "Staff: " + network.getMainColor() + Bukkit.getOnlinePlayers().stream().filter(player -> player.hasPermission("scandium.staff")).count());
-        lines.add(ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + "------------------------");
+        lines.add(ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + "--------------------");
+        lines.add((!potPlayer.isVanished() ? ChatColor.GREEN + "Visible (Showing staff)" : ChatColor.RED + "Hidden (Showing staff)"));
+        lines.add(network.getSecondaryColor() + "Channel: " + network.getMainColor() + (potPlayer.getChannel() != null ? Color.translate(getChannel(potPlayer.getChannel())) : "Regular"));
+        lines.add(network.getSecondaryColor() + "Players: " + network.getMainColor() + Bukkit.getOnlinePlayers().size());
+        lines.add(network.getSecondaryColor() + "TPS: " + RedisUtil.getTicksPerSecondFormatted());
+        lines.add(ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + "--------------------");
 
         this.setSlotsFromList(lines);
     }

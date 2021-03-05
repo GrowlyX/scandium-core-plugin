@@ -32,6 +32,7 @@ public class GrantMainPaginatedMenu extends PaginatedMenu {
     private final Player player;
 
     public GrantMainPaginatedMenu(Document document, Player player) {
+        super(45);
         this.document = document;
         this.player = player;
     }

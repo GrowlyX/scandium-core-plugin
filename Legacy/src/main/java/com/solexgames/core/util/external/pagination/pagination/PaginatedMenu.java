@@ -18,12 +18,17 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+@Getter
 public abstract class PaginatedMenu extends Menu {
 
-    @Getter
-    private int page = 1;
+    private int maxPerPage = 45;
 
-    {
+    public PaginatedMenu(int maxPerPage) {
+        this.maxPerPage = maxPerPage;
+    }
+
+    @Getter
+    private int page = 1; {
         setUpdateAfterClick(false);
     }
 
@@ -54,13 +59,13 @@ public abstract class PaginatedMenu extends Menu {
             return 1;
         }
 
-        return (int) Math.ceil(buttonAmount / (double) getMaxItemsPerPage(player));
+        return (int) Math.ceil(buttonAmount / (double) maxPerPage);
     }
 
     @Override
     public final Map<Integer, Button> getButtons(Player player) {
-        int minIndex = (int) ((double) (page - 1) * getMaxItemsPerPage(player));
-        int maxIndex = (int) ((double) (page) * getMaxItemsPerPage(player));
+        int minIndex = (int) ((double) (page - 1) * maxPerPage);
+        int maxIndex = (int) ((double) (page) * maxPerPage);
 
         HashMap<Integer, Button> buttons = new HashMap<>();
 
@@ -87,7 +92,7 @@ public abstract class PaginatedMenu extends Menu {
             int ind = entry.getKey();
 
             if (ind >= minIndex && ind < maxIndex) {
-                ind -= (int) ((double) (getMaxItemsPerPage(player)) * (page - 1)) - 9;
+                ind -= (int) ((double) (this.maxPerPage) * (page - 1)) - 9;
                 buttons.put(ind, entry.getValue());
             }
         }
@@ -101,10 +106,6 @@ public abstract class PaginatedMenu extends Menu {
         }
 
         return buttons;
-    }
-
-    public int getMaxItemsPerPage(Player player) {
-        return 45;
     }
 
     /**

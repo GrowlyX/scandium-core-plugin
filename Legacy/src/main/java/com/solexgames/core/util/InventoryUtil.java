@@ -16,6 +16,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author GrowlyX
+ * @since 3/4/2021
+ */
+
 public final class InventoryUtil {
 
     public static ItemStack[] deepClone(ItemStack[] origin) {

@@ -3,20 +3,24 @@ package com.solexgames.core.menu.extend.grant.remove;
 import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.menu.AbstractInventoryMenu;
-import com.solexgames.core.menu.extend.grant.history.GrantHistoryViewMenu;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.grant.Grant;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.builder.ItemBuilder;
+import com.solexgames.core.util.external.pagination.extend.GrantViewPaginatedMenu;
 import lombok.Getter;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
+
+/**
+ * @author GrowlyX
+ * @since 3/4/2021
+ */
 
 @Getter
 public class GrantRemoveConfirmMenu extends AbstractInventoryMenu {
@@ -78,7 +82,7 @@ public class GrantRemoveConfirmMenu extends AbstractInventoryMenu {
                 player.sendMessage(Color.translate("&aRemoved the grant from &b" + potPlayer.getName() + "'s &ahistory!"));
                 player.closeInventory();
 
-                new GrantHistoryViewMenu(this.player, this.target).open(this.player);
+                new GrantViewPaginatedMenu(this.player, this.target).openMenu(this.player);
             } else if (ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()).contains("Cancel")) {
                 player.sendMessage(Color.translate("&cYou've cancelled the current grant remove process."));
                 player.closeInventory();

@@ -10,6 +10,11 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * @author GrowlyX
+ * @since 3/4/2021
+ */
+
 public final class StringUtil {
 
     private final static int CENTER_PX = 154;

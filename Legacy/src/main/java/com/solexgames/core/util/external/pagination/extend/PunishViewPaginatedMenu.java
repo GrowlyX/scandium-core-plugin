@@ -36,6 +36,7 @@ public class PunishViewPaginatedMenu extends PaginatedMenu {
     private UUID targetUuid;
 
     public PunishViewPaginatedMenu(Player player, String target, PunishmentType punishmentType) {
+        super(45);
         this.player = player;
         this.target = target;
         this.punishmentType = punishmentType;
@@ -98,12 +99,14 @@ public class PunishViewPaginatedMenu extends PaginatedMenu {
 
                 @Override
                 public void clicked(Player player, ClickType clickType) {
-                    String display = ChatColor.stripColor(Color.translate(getButtonItem(player).getItemMeta().getDisplayName()));
-                    String id = display.replace("#", "");
-                    Punishment punishment = Punishment.getByIdentification(id);
+                    if (clickType.equals(ClickType.RIGHT)) {
+                        String display = ChatColor.stripColor(Color.translate(getButtonItem(player).getItemMeta().getDisplayName()));
+                        String id = display.replace("#", "");
+                        Punishment punishment = Punishment.getByIdentification(id);
 
-                    if (punishment != null) {
-                        new PunishRemoveConfirmMenu(player, target, punishment).open(player);
+                        if (punishment != null) {
+                            new PunishRemoveConfirmMenu(player, target, punishment).open(player);
+                        }
                     }
                 }
             });

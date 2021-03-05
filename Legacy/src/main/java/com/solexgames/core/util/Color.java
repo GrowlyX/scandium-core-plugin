@@ -5,6 +5,11 @@ import org.bukkit.ChatColor;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * @author GrowlyX
+ * @since 3/4/2021
+ */
+
 public final class Color {
 
     public static String translate(String text) {

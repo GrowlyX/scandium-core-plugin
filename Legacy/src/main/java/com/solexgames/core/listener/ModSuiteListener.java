@@ -3,13 +3,12 @@ package com.solexgames.core.listener;
 import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
-import com.solexgames.core.menu.extend.modsuite.StaffMenu;
-import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
+import com.solexgames.core.util.builder.ItemBuilder;
+import com.solexgames.core.util.external.pagination.extend.StaffViewPaginatedMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -92,7 +91,7 @@ public class ModSuiteListener implements Listener {
                                 event.getPlayer().setVelocity(event.getPlayer().getLocation().getDirection().multiply(2.5F));
                                 break;
                             case SKULL_ITEM:
-                                new StaffMenu(event.getPlayer()).open(event.getPlayer());
+                                new StaffViewPaginatedMenu(event.getPlayer()).openMenu(event.getPlayer());
                                 break;
                             case NETHER_STAR:
                                 Collections.singletonList(Bukkit.getOnlinePlayers()).get(CorePlugin.RANDOM.nextInt(Bukkit.getOnlinePlayers().size()))

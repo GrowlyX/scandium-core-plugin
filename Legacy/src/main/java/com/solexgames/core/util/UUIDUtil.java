@@ -17,6 +17,11 @@ import java.util.AbstractMap;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * @author GrowlyX
+ * @since 3/4/2021
+ */
+
 public final class UUIDUtil {
 
     public static Map.Entry<UUID, String> getUUID(String name) throws IOException, ParseException {

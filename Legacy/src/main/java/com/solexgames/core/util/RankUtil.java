@@ -6,6 +6,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * @author GrowlyX
+ * @since 3/4/2021
+ */
+
 public final class RankUtil {
 
     private static final List<Rank> RANKS = Rank.getRanks().stream()

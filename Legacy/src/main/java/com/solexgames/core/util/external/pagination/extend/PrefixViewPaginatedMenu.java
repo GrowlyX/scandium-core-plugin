@@ -32,6 +32,7 @@ public class PrefixViewPaginatedMenu extends PaginatedMenu {
     private final Player player;
 
     public PrefixViewPaginatedMenu(Player player) {
+        super(27);
         this.player = player;
     }
 
@@ -65,8 +66,7 @@ public class PrefixViewPaginatedMenu extends PaginatedMenu {
             lore.add(prefix.getPrefix());
             lore.add("  ");
             lore.add((hasPrefix ? "&aClick to equip this prefix." : "&cYou don't own this prefix."));
-
-            buttons.put(i.get(), new Button() {
+            buttons.put(i.getAndIncrement(), new Button() {
                 @Override
                 public ItemStack getButtonItem(Player player) {
                     return new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), (potPlayer.getAllPrefixes().contains(prefix.getName()) ? 10 : 1))
@@ -88,8 +88,6 @@ public class PrefixViewPaginatedMenu extends PaginatedMenu {
                     player.closeInventory();
                 }
             });
-
-            i.getAndIncrement();
         });
 
         return buttons;
