@@ -79,7 +79,7 @@ public class RankCommand extends BaseCommand {
                                     player.sendMessage(Color.translate("&7UUID: &f" + rank.getUuid()));
                                     player.sendMessage(Color.translate("  "));
                                     player.sendMessage(Color.translate("&ePermissions:"));
-                                    rank.getPermissions().forEach(s -> player.sendMessage(Color.translate(" &7* &f" + s)));
+                                    rank.permissions.forEach(s -> player.sendMessage(Color.translate(" &7* &f" + s)));
                                     player.sendMessage(Color.translate("  "));
                                     player.sendMessage(Color.translate("&eInheritances:"));
                                     rank.getInheritance().forEach(s -> player.sendMessage(Color.translate(" &7* &f" + Rank.getByUuid(s).getName())));
@@ -222,7 +222,7 @@ public class RankCommand extends BaseCommand {
                                 if (rank != null) {
                                     String displayName = Color.translate(rank.getColor() + rank.getName());
 
-                                    rank.getPermissions().remove(value);
+                                    rank.permissions.remove(value);
                                     player.sendMessage(Color.translate("&aRemoved the permission '" + value + "&a' from the rank " + displayName + "&a."));
                                 } else {
                                     player.sendMessage(Color.translate("&cThat rank does not exist!"));
@@ -238,10 +238,10 @@ public class RankCommand extends BaseCommand {
                                 Rank rank = Rank.getByName(name);
 
                                 if (rank != null) {
-                                    if (!rank.getPermissions().contains(value)) {
+                                    if (!rank.permissions.contains(value)) {
                                         String displayName = Color.translate(rank.getColor() + rank.getName());
 
-                                        rank.getPermissions().add(value);
+                                        rank.permissions.add(value);
                                         player.sendMessage(Color.translate("&aAdded the permission '" + value + "&a' to the rank " + displayName + "&a."));
                                     } else {
                                         player.sendMessage(Color.translate("&cThat rank already has that permission!"));

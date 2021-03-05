@@ -19,8 +19,8 @@ public class Rank {
     @Getter
     private static List<Rank> ranks = new ArrayList<>();
 
-    private List<UUID> inheritance;
-    private List<String> permissions;
+    public final List<UUID> inheritance;
+    public final List<String> permissions;
 
     private UUID uuid;
 
@@ -51,23 +51,14 @@ public class Rank {
     }
 
     public void saveRank() {
-        Document document = new Document("_id", this.uuid);
-
-        document.put("uuid", this.uuid.toString());
-        document.put("inheritance", this.inheritance);
-        document.put("permissions", this.permissions);
-        document.put("name", this.name);
-        document.put("prefix", this.prefix);
-        document.put("color", this.color);
-        document.put("suffix", this.suffix);
-        document.put("defaultRank", this.defaultRank);
-        document.put("weight", this.weight);
-        document.put("hidden", this.hidden);
-
-        CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getRankCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true)));
+        CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getRankCollection().replaceOne(Filters.eq("_id", uuid), this.getDocument(), new ReplaceOptions().upsert(true)));
     }
 
     public void saveMainThread() {
+        CorePlugin.getInstance().getCoreDatabase().getRankCollection().replaceOne(Filters.eq("_id", uuid), this.getDocument(), new ReplaceOptions().upsert(true));
+    }
+
+    public Document getDocument() {
         Document document = new Document("_id", this.uuid);
 
         document.put("uuid", this.uuid.toString());
@@ -81,7 +72,7 @@ public class Rank {
         document.put("weight", this.weight);
         document.put("hidden", this.hidden);
 
-        CorePlugin.getInstance().getCoreDatabase().getRankCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true));
+        return document;
     }
 
     public static Rank getDefault() {
