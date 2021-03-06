@@ -1,7 +1,7 @@
 package com.solexgames.core.task;
 
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.server.Network;
+import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.util.Color;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -22,7 +22,7 @@ public class ShutdownTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        Network network = CorePlugin.getInstance().getServerManager().getNetwork();
+        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
         ChatColor mainColor = network.getMainColor();
         ChatColor secondaryColor = network.getSecondaryColor();
 

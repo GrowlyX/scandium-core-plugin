@@ -1,7 +1,7 @@
 package com.solexgames.core.manager;
 
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.server.Network;
+import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.server.NetworkServer;
 import com.solexgames.core.util.Color;
 import lombok.Getter;
@@ -24,7 +24,7 @@ public class ServerManager {
     private ArrayList<Player> vanishedPlayers = new ArrayList<>();
     private ArrayList<Player> staffModePlayers = new ArrayList<>();
 
-    private Network network;
+    private ServerType network;
     private String automaticallyPutInto;
 
     private boolean chatEnabled = true;
@@ -49,7 +49,7 @@ public class ServerManager {
         this.staffInformation = Color.translate(CorePlugin.getInstance().getConfig().getStringList("staff-information"));
 
         setupServerType();
-        CorePlugin.getInstance().getLogger().info("[Network] Loaded server type: " + this.network.getServerName() + ".");
+        CorePlugin.getInstance().getLogger().info("[ServerType] Loaded server type: " + this.network.getServerName() + ".");
     }
 
     public void removeNetworkServer(NetworkServer networkServer) {
@@ -74,7 +74,7 @@ public class ServerManager {
 
     public void setupServerType() {
         try {
-            this.network = Network.valueOf(CorePlugin.getInstance().getConfig().getString("server.settings.server-id"));
+            this.network = ServerType.valueOf(CorePlugin.getInstance().getConfig().getString("server.settings.server-id"));
         } catch (IllegalArgumentException e) {
             CorePlugin.getInstance().getLogger().info("Please double check your configuration! The server ID is not correct.");
             CorePlugin.getInstance().getServer().shutdown();

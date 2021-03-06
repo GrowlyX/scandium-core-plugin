@@ -2,7 +2,7 @@ package com.solexgames.core.menu.extend;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.server.Network;
+import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.AbstractInventoryMenu;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.util.Color;
@@ -55,7 +55,7 @@ public class ScandiumMenu extends AbstractInventoryMenu {
                 .create()
         );
 
-        Network network = CorePlugin.getInstance().getServerManager().getNetwork();
+        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
         this.inventory.setItem(6, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 14)
                 .setDisplayName("&bNetwork Info &7(" + network.getServerName() + ")")
                 .addLore(

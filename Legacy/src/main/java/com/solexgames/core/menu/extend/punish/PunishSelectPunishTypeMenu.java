@@ -2,7 +2,7 @@ package com.solexgames.core.menu.extend.punish;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.server.Network;
+import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.AbstractInventoryMenu;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.punishment.PunishmentType;
@@ -33,7 +33,7 @@ public class PunishSelectPunishTypeMenu extends AbstractInventoryMenu {
     }
 
     public void update() {
-        Network network = CorePlugin.getInstance().getServerManager().getNetwork();
+        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
         this.inventory.setItem(10, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 1).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Ban").addLore(Collections.singletonList("&7Click to select this punishment.")).create());
         this.inventory.setItem(11, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 2).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Kick").addLore(Collections.singletonList("&7Click to select this punishment.")).create());

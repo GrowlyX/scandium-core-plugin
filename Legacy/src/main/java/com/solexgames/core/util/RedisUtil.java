@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * @author GrowlyX
@@ -28,7 +29,7 @@ public final class RedisUtil {
 
     public static String onServerUpdate() {
         return new JsonAppender(RedisAction.SERVER_DATA_UPDATE)
-                .put("SPLITPLAYERS", Arrays.toString(Bukkit.getOnlinePlayers().stream().map(Player::getName).toArray(String[]::new)))
+                .put("SPLITPLAYERS", (Bukkit.getOnlinePlayers().isEmpty() ? "" : Bukkit.getOnlinePlayers().stream().map(Player::getName).collect(Collectors.joining(" "))))
                 .put("SERVER", CorePlugin.getInstance().getServerName())
                 .put("SERVER_TYPE", CorePlugin.getInstance().getConfig().getString("server-type"))
                 .put("ONLINEPLAYERS", String.valueOf(Bukkit.getOnlinePlayers().size()))

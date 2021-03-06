@@ -1,7 +1,7 @@
 package com.solexgames.core.manager;
 
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.server.Network;
+import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.task.ShutdownTask;
 import com.solexgames.core.util.Color;
 import lombok.Getter;
@@ -19,7 +19,7 @@ public class ShutdownManager {
     private boolean shutdownScheduled;
 
     public void initiateShutdown(int seconds, Player initiator) {
-        Network network = CorePlugin.getInstance().getServerManager().getNetwork();
+        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
         ChatColor mainColor = network.getMainColor();
         ChatColor secondaryColor = network.getSecondaryColor();
 

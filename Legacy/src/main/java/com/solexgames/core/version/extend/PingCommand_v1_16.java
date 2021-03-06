@@ -1,7 +1,7 @@
 package com.solexgames.core.version.extend;
 
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.server.Network;
+import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.version.AbstractVersionImplementation;
 import net.minecraft.server.v1_16_R3.EntityPlayer;
@@ -19,7 +19,7 @@ public class PingCommand_v1_16 extends AbstractVersionImplementation {
             sender.sendMessage("die");
             return false;
         }
-        Network network = CorePlugin.getInstance().getServerManager().getNetwork();
+        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
         Player player = (Player) sender;
         if (args.length == 0) {
             EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();

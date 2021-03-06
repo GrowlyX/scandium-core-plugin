@@ -2,7 +2,7 @@ package com.solexgames.core.util.external.pagination.extend;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.server.Network;
+import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.builder.ItemBuilder;
@@ -40,7 +40,7 @@ public class StaffViewPaginatedMenu extends PaginatedMenu {
         HashMap<Integer, Button> buttons = new HashMap<>();
 
         AtomicInteger i = new AtomicInteger(0);
-        Network network = CorePlugin.getInstance().getServerManager().getNetwork();
+        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
         Bukkit.getOnlinePlayers().stream()
                 .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)

@@ -1,7 +1,7 @@
 package com.solexgames.core.command.extend;
 
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.server.Network;
+import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.extend.ScandiumMenu;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.StringUtil;
@@ -30,7 +30,7 @@ public class CoreCommand extends BukkitCommand {
                 player.sendMessage(Color.translate("&cUsage: /" + label + " <debug|disallow|panel>"));
             }
             if (args.length > 0) {
-                Network network = CorePlugin.getInstance().getServerManager().getNetwork();
+                ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
                 switch (args[0]) {
                     case "debug":
@@ -50,7 +50,7 @@ public class CoreCommand extends BukkitCommand {
                 }
             }
         } else {
-            Network network = CorePlugin.getInstance().getServerManager().getNetwork();
+            ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
             player.sendMessage("  ");
             StringUtil.sendCenteredMessage(player, network.getSecondaryColor() + "This server is running " + network.getMainColor() + CorePlugin.getInstance().getConfig().getString("core-settings.name") + network.getSecondaryColor() + ".");
             StringUtil.sendCenteredMessage(player, "&7&oCreated by SolexGames.");

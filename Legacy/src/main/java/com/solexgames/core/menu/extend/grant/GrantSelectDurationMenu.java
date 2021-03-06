@@ -2,7 +2,7 @@ package com.solexgames.core.menu.extend.grant;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.server.Network;
+import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.AbstractInventoryMenu;
 import com.solexgames.core.util.DateUtil;
 import com.solexgames.core.util.builder.ItemBuilder;
@@ -41,7 +41,7 @@ public class GrantSelectDurationMenu extends AbstractInventoryMenu {
     }
 
     public void update() {
-        Network network = CorePlugin.getInstance().getServerManager().getNetwork();
+        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
         this.inventory.setItem(10, new ItemBuilder(XMaterial.PAPER.parseMaterial()).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "1 Day").addLore(Collections.singletonList("&7Click to select this duration.")).create());
         this.inventory.setItem(11, new ItemBuilder(XMaterial.PAPER.parseMaterial()).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "1 Week").addLore(Collections.singletonList("&7Click to select this duration.")).create());

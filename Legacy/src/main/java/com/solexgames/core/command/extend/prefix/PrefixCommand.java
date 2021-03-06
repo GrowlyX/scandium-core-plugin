@@ -3,7 +3,7 @@ package com.solexgames.core.command.extend.prefix;
 import com.mongodb.client.model.Filters;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
-import com.solexgames.core.server.Network;
+import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.prefixes.Prefix;
 import com.solexgames.core.util.Color;
@@ -138,7 +138,7 @@ public class PrefixCommand extends BaseCommand {
                         }
                         break;
                     case "list":
-                        Network network = CorePlugin.getInstance().getServerManager().getNetwork();
+                        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
                         player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
                         player.sendMessage(Color.translate(network.getMainColor() + ChatColor.BOLD.toString() + "Prefixes:"));
                         Prefix.getPrefixes().forEach(prefix -> player.sendMessage(Color.translate(" &7- &e" + prefix.getName() + " &7(&d#" + prefix.getId() + "&7) &7(" + prefix.getPrefix() + "&7)")));
@@ -155,7 +155,7 @@ public class PrefixCommand extends BaseCommand {
     }
 
     public void sendHelp(Player player) {
-        Network network = CorePlugin.getInstance().getServerManager().getNetwork();
+        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
         player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
         player.sendMessage(Color.translate(network.getMainColor() + ChatColor.BOLD.toString() + "Prefix Management:"));
         player.sendMessage(Color.translate("&f/prefix create <name> <prefix> &7- Create a new prefix."));

@@ -2,7 +2,7 @@ package com.solexgames.core.util.external.pagination.extend;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.server.Network;
+import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.extend.punish.remove.PunishRemoveConfirmMenu;
 import com.solexgames.core.player.punishment.Punishment;
 import com.solexgames.core.player.punishment.PunishmentType;
@@ -65,7 +65,7 @@ public class PunishViewPaginatedMenu extends PaginatedMenu {
             }
 
             OfflinePlayer targetOfflinePlayer = Bukkit.getOfflinePlayer(punishment.getTarget());
-            Network network = CorePlugin.getInstance().getServerManager().getNetwork();
+            ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
             List<String> lore = new ArrayList<>();
             String statusLore = punishment.isRemoved() ? ChatColor.RED + "Removed" : (punishment.isActive() ? ChatColor.GREEN + "Active" : ChatColor.GOLD + "Expired");
 

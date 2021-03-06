@@ -5,7 +5,7 @@ import com.mongodb.client.model.Filters;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.board.extend.ModSuiteBoard;
 import com.solexgames.core.enums.ChatChannelType;
-import com.solexgames.core.server.Network;
+import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
@@ -64,7 +64,7 @@ public class PlayerManager {
         vanishedPotPlayer.setVanished(true);
         vanishedPotPlayer.setupPlayerTag();
 
-        Network network = CorePlugin.getInstance().getServerManager().getNetwork();
+        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
         ChatColor mainColor = network.getMainColor();
         ChatColor secondColor = network.getSecondaryColor();
 
@@ -92,7 +92,7 @@ public class PlayerManager {
     }
 
     public void modModePlayer(Player player) {
-        Network network = CorePlugin.getInstance().getServerManager().getNetwork();
+        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
         ModSuiteBoard modSuiteBoard = new ModSuiteBoard(player);
 
@@ -114,7 +114,7 @@ public class PlayerManager {
 
         player.updateInventory();
 
-        Network serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
         ChatColor mainColor = serverType.getMainColor();
         ChatColor secondColor = serverType.getSecondaryColor();
 
@@ -124,7 +124,7 @@ public class PlayerManager {
     }
 
     public void modModeRaw(Player player) {
-        Network network = CorePlugin.getInstance().getServerManager().getNetwork();
+        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
         ModSuiteBoard modSuiteBoard = new ModSuiteBoard(player);
 

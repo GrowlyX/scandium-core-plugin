@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Getter
@@ -31,8 +32,8 @@ public class NetworkServer {
     /**
      * Create a new instance of {@link NetworkServer}
      *
-     * @param serverName Network Server name
-     * @param serverType Network Server type
+     * @param serverName ServerType Server name
+     * @param serverType ServerType Server type
      */
     public NetworkServer(String serverName, NetworkServerType serverType) {
         this.serverName = serverName;
@@ -61,7 +62,7 @@ public class NetworkServer {
         this.maxPlayerLimit = maxPlayerLimit;
         this.whitelistEnabled = whitelistEnabled;
         this.ticksPerSecondSimplified = ticksPerSecondSimplified;
-        this.allPlayers = Arrays.asList(onlinePlayersSplit.split(" "));
+        this.allPlayers = (onlinePlayersSplit == null || onlinePlayersSplit.equals("")) ? Collections.singletonList("") : Arrays.asList(onlinePlayersSplit.split(" "));
 
         updateServerStatus(online, whitelistEnabled);
     }

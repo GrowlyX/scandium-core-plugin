@@ -2,7 +2,7 @@ package com.solexgames.core.util.external.pagination.extend;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.server.Network;
+import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.extend.grant.GrantSelectDurationMenu;
 import com.solexgames.core.menu.extend.grant.scope.GrantScopeSelectMenu;
 import com.solexgames.core.player.PotPlayer;
@@ -46,7 +46,7 @@ public class GrantMainPaginatedMenu extends PaginatedMenu {
         HashMap<Integer, Button> buttons = new HashMap<>();
 
         AtomicInteger i = new AtomicInteger(0);
-        Network network = CorePlugin.getInstance().getServerManager().getNetwork();
+        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
         this.getSortedRanks().forEach(rank -> {
             buttons.put(i.get(), new Button() {

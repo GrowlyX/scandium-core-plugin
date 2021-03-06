@@ -4,7 +4,7 @@ import com.cryptomorin.xseries.XMaterial;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.server.Network;
+import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.AbstractInventoryMenu;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.grant.Grant;
@@ -53,7 +53,7 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
     }
 
     public void update() {
-        Network network = CorePlugin.getInstance().getServerManager().getNetwork();
+        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
         int[] intsConfirm = new int[]{10, 11, 12, 19, 20, 21, 28, 29, 30};
         int[] intsDecline = new int[]{14, 15, 16, 23, 24, 25, 32, 33, 34};
@@ -89,7 +89,7 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
         if (topInventory.equals(clickedInventory)) {
             event.setCancelled(true);
 
-            Network network = CorePlugin.getInstance().getServerManager().getNetwork();
+            ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
             Player player = (Player) event.getWhoClicked();
 
             if (event.getCurrentItem() == null || event.getCurrentItem().getType() == XMaterial.AIR.parseMaterial()) return;

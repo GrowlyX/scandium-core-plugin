@@ -1,4 +1,4 @@
-package com.solexgames.core.server;
+package com.solexgames.core.enums;
 
 import lombok.Getter;
 import org.bukkit.ChatColor;
@@ -6,7 +6,7 @@ import org.bukkit.ChatColor;
 import java.beans.ConstructorProperties;
 
 @Getter
-public enum Network {
+public enum ServerType {
 
     POTCLUBVIP("PotClub Network", "01", ChatColor.LIGHT_PURPLE, ChatColor.YELLOW, "https://dsc.gg/pot", "PotClubVIP", "store.potclub.vip", "eu.potclub.vip"),
     EVENTIS("Eventis Network", "03", ChatColor.AQUA, ChatColor.DARK_AQUA, "https://discord.eventis.club", "EventisClubMC", "store.eventis.club", "eventis.club"),
@@ -31,7 +31,7 @@ public enum Network {
     private final String websiteLink;
 
     @ConstructorProperties({"serverName", "serverId", "mainColor", "secondaryColor", "generalPrefix", "discordLink", "storeLink", "websiteLink", "mainOwner", "mainDeveloper"})
-    Network(String serverName, String serverId, ChatColor mainColor, ChatColor secondaryColor, String discordLink, String twitterLink, String storeLink, String websiteLink) {
+    ServerType(String serverName, String serverId, ChatColor mainColor, ChatColor secondaryColor, String discordLink, String twitterLink, String storeLink, String websiteLink) {
         this.serverName = serverName;
         this.serverId = serverId;
         this.mainColor = mainColor;

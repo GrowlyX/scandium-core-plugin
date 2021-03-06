@@ -30,7 +30,7 @@ import com.solexgames.core.command.extend.web.WebAnnouncementDeleteCommand;
 import com.solexgames.core.command.extend.whitelist.BetaWhitelistCommand;
 import com.solexgames.core.command.extend.whitelist.WhitelistCommand;
 import com.solexgames.core.database.Database;
-import com.solexgames.core.server.Network;
+import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.listener.ModSuiteListener;
 import com.solexgames.core.listener.PlayerListener;
 import com.solexgames.core.lunar.AbstractClientInjector;
@@ -286,7 +286,7 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("whitelist").setExecutor(new WhitelistCommand());
         this.getCommand("betawl").setExecutor(new BetaWhitelistCommand());
 
-        if (this.getServerManager().getNetwork().equals(Network.POTCLUBVIP)) {
+        if (this.getServerManager().getNetwork().equals(ServerType.POTCLUBVIP)) {
             this.getCommand("webannouncementdelete").setExecutor(new WebAnnouncementDeleteCommand());
             this.getCommand("webannouncement").setExecutor(new WebAnnouncementCommand());
 
@@ -374,7 +374,7 @@ public final class CorePlugin extends JavaPlugin {
 
         RedisUtil.write(RedisUtil.updateRanks());
 
-        this.warpManager.saveWarps();
+//        this.warpManager.saveWarps();
         this.prefixManager.savePrefixes();
 
         RedisUtil.write(RedisUtil.onServerOffline());

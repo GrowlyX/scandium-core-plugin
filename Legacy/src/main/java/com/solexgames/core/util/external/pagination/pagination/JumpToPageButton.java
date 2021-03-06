@@ -1,6 +1,7 @@
 package com.solexgames.core.util.external.pagination.pagination;
 
 import com.cryptomorin.xseries.XMaterial;
+import com.solexgames.core.util.Color;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.util.external.pagination.Button;
 import lombok.AllArgsConstructor;
@@ -9,6 +10,9 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 public class JumpToPageButton extends Button {
@@ -19,9 +23,17 @@ public class JumpToPageButton extends Button {
 
     @Override
     public ItemStack getButtonItem(Player player) {
+        List<String> stringList = new ArrayList<>();
+
+        stringList.add(Color.translate("&7Click to jump to this menu!"));
+        if (this.current) {
+            stringList.add("  ");
+            stringList.add(Color.translate("&aThis is the current page."));
+        }
+
         return new ItemBuilder(this.current ? XMaterial.ENCHANTED_BOOK.parseMaterial() : XMaterial.BOOK.parseMaterial())
-                .addLore(this.current ? "&7You are on page &b" + this.page + "&7!" : "&aClick to jump to this menu!")
-                .setDisplayName(this.current ? ChatColor.GREEN + "Current Page" : ChatColor.YELLOW + "Page " + this.page)
+                .addLore(stringList)
+                .setDisplayName(ChatColor.YELLOW + "Page " + this.page)
                 .create();
     }
 
@@ -30,5 +42,4 @@ public class JumpToPageButton extends Button {
         this.menu.modPage(player, this.page - this.menu.getPage());
         Button.playNeutral(player);
     }
-
 }
