@@ -1,15 +1,13 @@
 package com.solexgames;
 
-import com.solexgames.command.XenonCommand;
-import com.solexgames.command.GlobalListCommand;
-import com.solexgames.command.MaintenanceCommand;
-import com.solexgames.command.StaffListCommand;
+import com.solexgames.command.*;
 import com.solexgames.listener.PlayerListener;
 import com.solexgames.util.Color;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
@@ -21,6 +19,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author GrowlyX
@@ -38,6 +39,7 @@ public class CorePlugin extends Plugin {
     public static CorePlugin instance;
 
     public ArrayList<String> whitelistedPlayers = new ArrayList<>();
+    public ArrayList<ServerInfo> hubServers = new ArrayList<>();
 
     public Configuration configuration;
     public File configurationFile;
@@ -67,10 +69,16 @@ public class CorePlugin extends Plugin {
                 .replace("<bar>", Character.toString('⎜'))
                 .replace("<nl>", "\n"));
 
+        this.getProxy().getServers().values().stream()
+                .filter(serverInfo -> serverInfo.getName().contains("hub") || serverInfo.getName().contains("lobby"))
+                .forEach(serverInfo -> this.hubServers.add(serverInfo));
+
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new GlobalListCommand());
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new StaffListCommand());
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new XenonCommand());
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new HubCommand(this));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new MaintenanceCommand());
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new ProxyStatusCommand());
 
         this.getProxy().getPluginManager().registerListener(this, new PlayerListener());
     }
@@ -92,6 +100,13 @@ public class CorePlugin extends Plugin {
         for (Command command : commands) {
             ProxyServer.getInstance().getPluginManager().registerCommand(this, command);
         }
+    }
+
+    public ServerInfo getBestHub() {
+        return this.hubServers.stream()
+                .filter(Objects::nonNull)
+                .min(Comparator.comparingInt(server -> (int) +(long) server.getPlayers().size()))
+                .orElse(null);
     }
 
     @SneakyThrows
