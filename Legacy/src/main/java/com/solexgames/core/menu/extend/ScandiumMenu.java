@@ -2,14 +2,12 @@ package com.solexgames.core.menu.extend;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.enums.ServerType;
+import com.solexgames.core.server.Network;
 import com.solexgames.core.menu.AbstractInventoryMenu;
-import com.solexgames.core.util.UUIDUtil;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.util.Color;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
@@ -57,7 +55,7 @@ public class ScandiumMenu extends AbstractInventoryMenu {
                 .create()
         );
 
-        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
+        Network network = CorePlugin.getInstance().getServerManager().getNetwork();
         this.inventory.setItem(6, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 14)
                 .setDisplayName("&bNetwork Info &7(" + network.getServerName() + ")")
                 .addLore(

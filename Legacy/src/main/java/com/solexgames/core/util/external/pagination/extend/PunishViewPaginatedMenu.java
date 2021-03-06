@@ -2,10 +2,8 @@ package com.solexgames.core.util.external.pagination.extend;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.enums.ServerType;
+import com.solexgames.core.server.Network;
 import com.solexgames.core.menu.extend.punish.remove.PunishRemoveConfirmMenu;
-import com.solexgames.core.player.PotPlayer;
-import com.solexgames.core.player.prefixes.Prefix;
 import com.solexgames.core.player.punishment.Punishment;
 import com.solexgames.core.player.punishment.PunishmentType;
 import com.solexgames.core.util.Color;
@@ -16,7 +14,6 @@ import com.solexgames.core.util.external.pagination.pagination.PaginatedMenu;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -68,7 +65,7 @@ public class PunishViewPaginatedMenu extends PaginatedMenu {
             }
 
             OfflinePlayer targetOfflinePlayer = Bukkit.getOfflinePlayer(punishment.getTarget());
-            ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
+            Network network = CorePlugin.getInstance().getServerManager().getNetwork();
             List<String> lore = new ArrayList<>();
             String statusLore = punishment.isRemoved() ? ChatColor.RED + "Removed" : (punishment.isActive() ? ChatColor.GREEN + "Active" : ChatColor.GOLD + "Expired");
 

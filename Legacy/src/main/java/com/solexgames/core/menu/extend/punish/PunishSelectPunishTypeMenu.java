@@ -2,7 +2,7 @@ package com.solexgames.core.menu.extend.punish;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.enums.ServerType;
+import com.solexgames.core.server.Network;
 import com.solexgames.core.menu.AbstractInventoryMenu;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.punishment.PunishmentType;
@@ -11,13 +11,11 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 @Getter
@@ -35,7 +33,7 @@ public class PunishSelectPunishTypeMenu extends AbstractInventoryMenu {
     }
 
     public void update() {
-        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
+        Network network = CorePlugin.getInstance().getServerManager().getNetwork();
 
         this.inventory.setItem(10, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 1).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Ban").addLore(Collections.singletonList("&7Click to select this punishment.")).create());
         this.inventory.setItem(11, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 2).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Kick").addLore(Collections.singletonList("&7Click to select this punishment.")).create());

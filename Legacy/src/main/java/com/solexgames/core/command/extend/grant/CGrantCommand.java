@@ -4,7 +4,7 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
-import com.solexgames.core.enums.ServerType;
+import com.solexgames.core.server.Network;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.grant.Grant;
 import com.solexgames.core.player.ranks.Rank;
@@ -21,7 +21,6 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 public class CGrantCommand extends BaseCommand {
@@ -44,7 +43,7 @@ public class CGrantCommand extends BaseCommand {
                     Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByUuid(UUIDUtil.getId(args[0])).orElse(null);
                     if (document != null) {
                         Rank rank = Rank.getByName(args[1]);
-                        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
+                        Network network = CorePlugin.getInstance().getServerManager().getNetwork();
 
                         if (rank != null) {
                             UUID uuid = UUIDUtil.getId(args[0]);

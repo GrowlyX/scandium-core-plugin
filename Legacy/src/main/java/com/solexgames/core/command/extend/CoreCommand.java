@@ -1,7 +1,7 @@
 package com.solexgames.core.command.extend;
 
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.enums.ServerType;
+import com.solexgames.core.server.Network;
 import com.solexgames.core.menu.extend.ScandiumMenu;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.StringUtil;
@@ -30,15 +30,15 @@ public class CoreCommand extends BukkitCommand {
                 player.sendMessage(Color.translate("&cUsage: /" + label + " <debug|disallow|panel>"));
             }
             if (args.length > 0) {
-                ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+                Network network = CorePlugin.getInstance().getServerManager().getNetwork();
 
                 switch (args[0]) {
                     case "debug":
-                        player.sendMessage(Color.translate((CorePlugin.getInstance().isDebugging() ? serverType.getMainColor() + "[" + CorePlugin.getInstance().getConfig().getString("core-settings.name") + "] &cDisabled debugging." : serverType.getMainColor() + "[" + CorePlugin.getInstance().getConfig().getString("core-settings.name") + "] &aEnabled debugging.")));
+                        player.sendMessage(Color.translate((CorePlugin.getInstance().isDebugging() ? network.getMainColor() + "[" + CorePlugin.getInstance().getConfig().getString("core-settings.name") + "] &cDisabled debugging." : network.getMainColor() + "[" + CorePlugin.getInstance().getConfig().getString("core-settings.name") + "] &aEnabled debugging.")));
                         CorePlugin.getInstance().setDebugging(!CorePlugin.getInstance().isDebugging());
                         break;
                     case "disallow":
-                        player.sendMessage(Color.translate((CorePlugin.getInstance().isDisallow() ? serverType.getMainColor() + "[" + CorePlugin.getInstance().getConfig().getString("core-settings.name") + "] &cDisabled disallow." : serverType.getMainColor() + "[" + CorePlugin.getInstance().getConfig().getString("core-settings.name") + "] &aEnabled disallow.")));
+                        player.sendMessage(Color.translate((CorePlugin.getInstance().isDisallow() ? network.getMainColor() + "[" + CorePlugin.getInstance().getConfig().getString("core-settings.name") + "] &cDisabled disallow." : network.getMainColor() + "[" + CorePlugin.getInstance().getConfig().getString("core-settings.name") + "] &aEnabled disallow.")));
                         CorePlugin.getInstance().setDisallow(!CorePlugin.getInstance().isDisallow());
                         break;
                     case "panel":
@@ -50,9 +50,9 @@ public class CoreCommand extends BukkitCommand {
                 }
             }
         } else {
-            ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+            Network network = CorePlugin.getInstance().getServerManager().getNetwork();
             player.sendMessage("  ");
-            StringUtil.sendCenteredMessage(player, serverType.getSecondaryColor() + "This server is running " + serverType.getMainColor() + CorePlugin.getInstance().getConfig().getString("core-settings.name") + serverType.getSecondaryColor() + ".");
+            StringUtil.sendCenteredMessage(player, network.getSecondaryColor() + "This server is running " + network.getMainColor() + CorePlugin.getInstance().getConfig().getString("core-settings.name") + network.getSecondaryColor() + ".");
             StringUtil.sendCenteredMessage(player, "&7&oCreated by SolexGames.");
             player.sendMessage("  ");
         }

@@ -2,7 +2,7 @@ package com.solexgames.core.command.extend.essential;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
-import com.solexgames.core.enums.ServerType;
+import com.solexgames.core.server.Network;
 import com.solexgames.core.util.Color;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import org.bukkit.Bukkit;
@@ -19,17 +19,17 @@ public class PingCommand extends BaseCommand {
             sender.sendMessage("die");
             return false;
         }
-        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+        Network network = CorePlugin.getInstance().getServerManager().getNetwork();
         Player player = (Player) sender;
         if (args.length == 0) {
             EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
-            player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Your ping is: " + serverType.getMainColor() + entityPlayer.ping));
+            player.sendMessage(Color.translate(network.getSecondaryColor() + "Your ping is: " + network.getMainColor() + entityPlayer.ping));
         }
         if (args.length > 0) {
             Player target = Bukkit.getPlayerExact(args[0]);
             if (target != null) {
                 EntityPlayer entityPlayer = ((CraftPlayer) target).getHandle();
-                player.sendMessage(Color.translate(serverType.getSecondaryColor() + target.getName() + "'s ping is: " + serverType.getMainColor() + entityPlayer.ping));
+                player.sendMessage(Color.translate(network.getSecondaryColor() + target.getName() + "'s ping is: " + network.getMainColor() + entityPlayer.ping));
             } else {
                 player.sendMessage(Color.translate("&cThat player does not exist."));
             }

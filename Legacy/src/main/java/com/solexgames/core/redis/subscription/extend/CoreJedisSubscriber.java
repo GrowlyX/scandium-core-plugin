@@ -52,13 +52,10 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                         server.setServerType(NetworkServerType.NOT_DEFINED);
                     }
 
-                    Bukkit.getOnlinePlayers().forEach(player -> {
-                        if (player.hasPermission("scandium.network.alerts")) {
-                            player.sendMessage(Color.translate("&3[S] &e" + bootingServerName + " &bhas just booted and will be joinable in &65 seconds&b."));
-                        }
-                    });
+                    Bukkit.getOnlinePlayers().stream().filter(player -> player.hasPermission("scandium.network.alerts")).forEach(player -> player.sendMessage(Color.translate("&3[S] &e" + bootingServerName + " &bhas just &6booted&b and will be joinable in 5 seconds.")));
                     break;
                 case SERVER_DATA_UPDATE:
+                    String splitPlayers = jsonAppender.getParam("SPLITPLAYERS");
                     String serverName = jsonAppender.getParam("SERVER");
                     String serverType = jsonAppender.getParam("SERVER_TYPE");
                     String ticksPerSecond = jsonAppender.getParam("TPS");
@@ -79,7 +76,7 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                         server.setTicksPerSecondSimplified(ticksPerSecondSimple);
 
                     }
-                    NetworkServer.getByName(serverName).update(onlinePlayers, ticksPerSecond, maxPlayerLimit, whitelistEnabled, ticksPerSecondSimple, true);
+                    NetworkServer.getByName(serverName).update(onlinePlayers, ticksPerSecond, maxPlayerLimit, whitelistEnabled, ticksPerSecondSimple, true, splitPlayers);
                     NetworkServer.getByName(serverName).setServerType(NetworkServerType.valueOf(serverType));
 
                     break;
@@ -87,41 +84,45 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                     String offlineServerName = jsonAppender.getParam("SERVER");
 
                     if (NetworkServer.getByName(offlineServerName) != null) {
-                        NetworkServer.getByName(offlineServerName).update(0, "0.0", 100, false, "0.0", false);
+                        NetworkServer.getByName(offlineServerName).update(0, "0.0", 100, false, "0.0", false, " ");
                         CorePlugin.getInstance().getServerManager().removeNetworkServer(NetworkServer.getByName(offlineServerName));
                     }
 
-                    Bukkit.getOnlinePlayers().forEach(player -> {
-                        if (player.hasPermission("scandium.network.alerts")) {
-                            player.sendMessage(Color.translate("&3[S] &e" + offlineServerName + " &bhas just went &coffline&b and is no longer joinable."));
-                        }
-                    });
+                    Bukkit.getOnlinePlayers().stream().filter(player -> player.hasPermission("scandium.network.alerts")).forEach(player -> player.sendMessage(Color.translate("&3[S] &e" + offlineServerName + " &bhas just went &coffline&b and is no longer joinable.")));
                     break;
                 case PLAYER_CONNECT_UPDATE:
                     String fromConnectServer = jsonAppender.getParam("SERVER");
                     String connectingPlayer = jsonAppender.getParam("PLAYER");
 
-                    Bukkit.getOnlinePlayers().forEach(player -> {
-                        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-                        if (player.hasPermission("scandium.staff")) {
-                            if (potPlayer.isCanSeeStaffMessages()) {
-                                player.sendMessage(Color.translate("&3[S] " + connectingPlayer + " &bconnected to &3" + fromConnectServer + "&b."));
-                            }
-                        }
-                    });
+                    Bukkit.getOnlinePlayers().stream()
+                            .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
+                            .filter(Objects::nonNull)
+                            .filter(potPlayer -> potPlayer.getPlayer().hasPermission("scandium.staff"))
+                            .filter(PotPlayer::isCanSeeStaffMessages)
+                            .forEach(potPlayer -> potPlayer.getPlayer().sendMessage(Color.translate("&3[S] " + connectingPlayer + " &bconnected to &3" + fromConnectServer + "&b.")));
                     break;
                 case PLAYER_DISCONNECT_UPDATE:
                     String fromDisconnectServer = jsonAppender.getParam("SERVER");
                     String disconnectingPlayer = jsonAppender.getParam("PLAYER");
 
-                    Bukkit.getOnlinePlayers().forEach(player -> {
-                        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-                        if (player.hasPermission("scandium.staff")) {
-                            if (potPlayer.isCanSeeStaffMessages()) {
-                                player.sendMessage(Color.translate("&3[S] " + disconnectingPlayer + " &bdisconnected from &3" + fromDisconnectServer + "&b."));
-                            }
-                        }
-                    });
+                    Bukkit.getOnlinePlayers().stream()
+                            .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
+                            .filter(Objects::nonNull)
+                            .filter(potPlayer -> potPlayer.getPlayer().hasPermission("scandium.staff"))
+                            .filter(PotPlayer::isCanSeeStaffMessages)
+                            .forEach(potPlayer -> potPlayer.getPlayer().sendMessage(Color.translate("&3[S] " + disconnectingPlayer + " &bdisconnected from &3" + fromDisconnectServer + "&b.")));
+                    break;
+                case PLAYER_SERVER_SWITCH_UPDATE:
+                    String newServer = jsonAppender.getParam("NEW_SERVER");
+                    String fromSwitchingServer = jsonAppender.getParam("SERVER");
+                    String switchingPlayer = jsonAppender.getParam("PLAYER");
+
+                    Bukkit.getOnlinePlayers().stream()
+                            .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
+                            .filter(Objects::nonNull)
+                            .filter(potPlayer -> potPlayer.getPlayer().hasPermission("scandium.staff"))
+                            .filter(PotPlayer::isCanSeeStaffMessages)
+                            .forEach(potPlayer -> potPlayer.getPlayer().sendMessage(Color.translate("&3[S] " + switchingPlayer + " &bjoined &3" + newServer + " from &3" + fromSwitchingServer + "&b.")));
                     break;
                 case CHAT_CHANNEL_UPDATE:
                     ChatChannelType chatChannel = ChatChannelType.valueOf(jsonAppender.getParam("CHANNEL"));
@@ -129,14 +130,12 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                     String chatMessage = jsonAppender.getParam("MESSAGE");
                     String fromServer = jsonAppender.getParam("SERVER");
 
-                    Bukkit.getOnlinePlayers().forEach(player -> {
-                        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-                        if (player.hasPermission(chatChannel.getPermission())) {
-                            if (potPlayer.isCanSeeStaffMessages()) {
-                                player.sendMessage(CorePlugin.getInstance().getPlayerManager().formatChatChannel(chatChannel, sender, chatMessage, fromServer));
-                            }
-                        }
-                    });
+                    Bukkit.getOnlinePlayers().stream()
+                            .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
+                            .filter(Objects::nonNull)
+                            .filter(potPlayer -> potPlayer.getPlayer().hasPermission("scandium.staff"))
+                            .filter(PotPlayer::isCanSeeStaffMessages)
+                            .forEach(potPlayer -> potPlayer.getPlayer().sendMessage(CorePlugin.getInstance().getPlayerManager().formatChatChannel(chatChannel, sender, chatMessage, fromServer)));
                     break;
                 case PLAYER_SERVER_UPDATE:
                     StaffUpdateType updateType = StaffUpdateType.valueOf(jsonAppender.getParam("UPDATETYPE"));
@@ -146,39 +145,35 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                             String fromFreezeServer = jsonAppender.getParam("SERVER");
                             String freezeTarget = jsonAppender.getParam("TARGET");
 
-                            Bukkit.getOnlinePlayers().forEach(player -> {
-                                PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-                                if (player.hasPermission(updateType.getPermission())) {
-                                    if (potPlayer.isCanSeeStaffMessages()) {
-                                        player.sendMessage(Color.translate(updateType.getPrefix() + "&7[" + fromFreezeServer + "] " + "&3" + freezeExecutor + " &bhas frozen &3" + freezeTarget + "&b."));
-                                    }
-                                }
-                            });
+                            Bukkit.getOnlinePlayers().stream()
+                                    .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
+                                    .filter(Objects::nonNull)
+                                    .filter(potPlayer -> potPlayer.getPlayer().hasPermission(updateType.getPermission()))
+                                    .filter(PotPlayer::isCanSeeStaffMessages)
+                                    .forEach(potPlayer -> potPlayer.getPlayer().sendMessage(Color.translate(updateType.getPrefix() + "&7[" + fromFreezeServer + "] " + "&3" + freezeExecutor + " &bhas frozen &3" + freezeTarget + "&b.")));
                             break;
                         case UNFREEZE:
                             String unfreezeExecutor = jsonAppender.getParam("PLAYER");
                             String unfreezeTarget = jsonAppender.getParam("TARGET");
                             String fromUnFreezeServer = jsonAppender.getParam("SERVER");
 
-                            Bukkit.getOnlinePlayers().forEach(player -> {
-                                PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-                                if (player.hasPermission(updateType.getPermission())) {
-                                    if (potPlayer.isCanSeeStaffMessages()) {
-                                        player.sendMessage(Color.translate(updateType.getPrefix() + "&7[" + fromUnFreezeServer + "] " + "&3" + unfreezeExecutor + " &bhas unfrozen &3" + unfreezeTarget + "&b."));
-                                    }
-                                }
-                            });
+                            Bukkit.getOnlinePlayers().stream()
+                                    .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
+                                    .filter(Objects::nonNull)
+                                    .filter(potPlayer -> potPlayer.getPlayer().hasPermission(updateType.getPermission()))
+                                    .filter(PotPlayer::isCanSeeStaffMessages)
+                                    .forEach(potPlayer -> potPlayer.getPlayer().sendMessage(Color.translate(updateType.getPrefix() + "&7[" + fromUnFreezeServer + "] " + "&3" + unfreezeExecutor + " &bhas unfrozen &3" + unfreezeTarget + "&b.")));
                             break;
                         case HELPOP:
-                            String helpopMessage = jsonAppender.getParam("MESSAGE");
-                            String helpopPlayer = jsonAppender.getParam("PLAYER");
+                            String helpOpMessage = jsonAppender.getParam("MESSAGE");
+                            String helpOpPlayer = jsonAppender.getParam("PLAYER");
                             String fromHelpOpServer = jsonAppender.getParam("SERVER");
 
                             Bukkit.getOnlinePlayers().forEach(player -> {
                                 PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
                                 if (player.hasPermission(updateType.getPermission())) {
                                     if (potPlayer.isCanSeeStaffMessages()) {
-                                        player.sendMessage(Color.translate(updateType.getPrefix() + "&7[" + fromHelpOpServer + "] " + "&3" + helpopPlayer + " &bhas requested assistance: &e" + helpopMessage + "&b."));
+                                        player.sendMessage(Color.translate(updateType.getPrefix() + "&7[" + fromHelpOpServer + "] " + "&3" + helpOpPlayer + " &bhas requested assistance: &e" + helpOpMessage + "&b."));
                                     }
                                 }
                             });
@@ -291,7 +286,7 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                         CorePlugin.getInstance().getLogger().info("[Ranks] Synced all ranks.");
                     }
                     break;
-                case PUNISHMENT_FREMOVE_UPDATE:
+                case PUNISHMENT_F_REMOVE_UPDATE:
                     if (!SERVER_NAME.equals(jsonAppender.getParam("SERVER"))) {
                         String punishmentString = jsonAppender.getParam("ID");
                         Punishment punishment = Punishment.getByIdentification(punishmentString);
@@ -308,14 +303,9 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                     String broadcast = jsonAppender.getParam("MESSAGE");
                     String permission = jsonAppender.getParam("PERMISSION");
 
-                    Bukkit.getOnlinePlayers().forEach(player -> {
-                        if (player.hasPermission(permission)) {
-                            if (CorePlugin.getInstance().getPlayerManager().getPlayer(player).isCanSeeStaffMessages()) {
-                                player.sendMessage(Color.translate(broadcast));
-                            }
-                        }
-                    });
-
+                    Bukkit.getOnlinePlayers().stream()
+                            .filter(player -> player.hasPermission(permission))
+                            .forEach(player -> player.sendMessage(Color.translate(broadcast)));
                     break;
                 default:
                     break;

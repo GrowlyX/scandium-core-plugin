@@ -2,11 +2,8 @@ package com.solexgames.core.util.external.pagination.extend;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.enums.ServerType;
-import com.solexgames.core.menu.extend.punish.remove.PunishRemoveConfirmMenu;
+import com.solexgames.core.server.Network;
 import com.solexgames.core.player.PotPlayer;
-import com.solexgames.core.player.prefixes.Prefix;
-import com.solexgames.core.player.punishment.Punishment;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.util.external.pagination.Button;
@@ -18,7 +15,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -44,7 +40,7 @@ public class StaffViewPaginatedMenu extends PaginatedMenu {
         HashMap<Integer, Button> buttons = new HashMap<>();
 
         AtomicInteger i = new AtomicInteger(0);
-        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
+        Network network = CorePlugin.getInstance().getServerManager().getNetwork();
 
         Bukkit.getOnlinePlayers().stream()
                 .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)

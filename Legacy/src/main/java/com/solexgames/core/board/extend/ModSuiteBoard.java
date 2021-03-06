@@ -3,9 +3,8 @@ package com.solexgames.core.board.extend;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.board.ScoreBoard;
 import com.solexgames.core.enums.ChatChannelType;
-import com.solexgames.core.enums.ServerType;
+import com.solexgames.core.server.Network;
 import com.solexgames.core.player.PotPlayer;
-import com.solexgames.core.task.TPSUpdateTask;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
 import org.bukkit.Bukkit;
@@ -17,7 +16,7 @@ import java.util.List;
 
 public class ModSuiteBoard extends ScoreBoard {
 
-    public final ServerType network;
+    public final Network network;
     public final PotPlayer potPlayer;
 
     public ModSuiteBoard(Player player) {

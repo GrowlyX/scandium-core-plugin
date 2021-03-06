@@ -1,10 +1,8 @@
 package com.solexgames.core.redis.json;
 
 import com.google.gson.Gson;
-import com.solexgames.core.enums.RedisPacketType;
+import com.solexgames.core.redis.action.RedisAction;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,14 +18,14 @@ import java.util.Map;
 public class JsonAppender {
 
     private final Map<String, String> parameters;
-    private final RedisPacketType packet;
+    private final RedisAction packet;
 
     /**
-     * Creates a new instance of {@link JsonAppender} with a packet type {@link RedisPacketType}
+     * Creates a new instance of {@link JsonAppender} with a packet type {@link RedisAction}
      *
      * @param packet Redis packet type for this instance.
      */
-    public JsonAppender(RedisPacketType packet) {
+    public JsonAppender(RedisAction packet) {
         this.packet = packet;
         this.parameters = new HashMap<>();
     }

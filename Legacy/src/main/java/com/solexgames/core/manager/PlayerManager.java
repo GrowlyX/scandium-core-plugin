@@ -5,7 +5,7 @@ import com.mongodb.client.model.Filters;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.board.extend.ModSuiteBoard;
 import com.solexgames.core.enums.ChatChannelType;
-import com.solexgames.core.enums.ServerType;
+import com.solexgames.core.server.Network;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
@@ -16,7 +16,6 @@ import lombok.NoArgsConstructor;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -65,9 +64,9 @@ public class PlayerManager {
         vanishedPotPlayer.setVanished(true);
         vanishedPotPlayer.setupPlayerTag();
 
-        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
-        ChatColor mainColor = serverType.getMainColor();
-        ChatColor secondColor = serverType.getSecondaryColor();
+        Network network = CorePlugin.getInstance().getServerManager().getNetwork();
+        ChatColor mainColor = network.getMainColor();
+        ChatColor secondColor = network.getSecondaryColor();
 
         player.sendMessage(Color.translate(secondColor + "You are now vanished to all online players with a priority less than " + mainColor + vanishedPotPlayer.getActiveGrant().getRank().getWeight() + secondColor + "."));
         CorePlugin.getInstance().getServerManager().getVanishedPlayers().add(player);
@@ -93,7 +92,7 @@ public class PlayerManager {
     }
 
     public void modModePlayer(Player player) {
-        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
+        Network network = CorePlugin.getInstance().getServerManager().getNetwork();
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
         ModSuiteBoard modSuiteBoard = new ModSuiteBoard(player);
 
@@ -115,7 +114,7 @@ public class PlayerManager {
 
         player.updateInventory();
 
-        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+        Network serverType = CorePlugin.getInstance().getServerManager().getNetwork();
         ChatColor mainColor = serverType.getMainColor();
         ChatColor secondColor = serverType.getSecondaryColor();
 
@@ -125,7 +124,7 @@ public class PlayerManager {
     }
 
     public void modModeRaw(Player player) {
-        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
+        Network network = CorePlugin.getInstance().getServerManager().getNetwork();
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
         ModSuiteBoard modSuiteBoard = new ModSuiteBoard(player);
 

@@ -2,7 +2,7 @@ package com.solexgames.core.command.extend.essential;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
-import com.solexgames.core.enums.ServerType;
+import com.solexgames.core.server.Network;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.util.Color;
@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
 
 public class UserCommand extends BaseCommand {
 
-    public final ServerType NETWORK = CorePlugin.getInstance().getServerManager().getNetwork();
+    public final Network NETWORK = CorePlugin.getInstance().getServerManager().getNetwork();
 
     public void sendHelp(CommandSender player) {
         player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));

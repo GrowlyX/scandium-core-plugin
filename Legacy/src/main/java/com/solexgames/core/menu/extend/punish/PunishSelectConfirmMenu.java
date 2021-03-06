@@ -2,7 +2,7 @@ package com.solexgames.core.menu.extend.punish;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.enums.ServerType;
+import com.solexgames.core.server.Network;
 import com.solexgames.core.menu.AbstractInventoryMenu;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.PotPlayer;
@@ -16,7 +16,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.json.simple.parser.ParseException;
@@ -52,7 +51,7 @@ public class PunishSelectConfirmMenu extends AbstractInventoryMenu {
 
     public void update() {
 
-        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
+        Network network = CorePlugin.getInstance().getServerManager().getNetwork();
 
         int[] intsConfirm = new int[] { 10,11,12,19,20,21,28,29,30 };
         int[] intsDecline = new int[] { 14,15,16,23,24,25,32,33,34 };

@@ -2,7 +2,7 @@ package com.solexgames.core.command.extend.rank;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
-import com.solexgames.core.enums.ServerType;
+import com.solexgames.core.server.Network;
 import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 public class RankCommand extends BaseCommand {
 
-    public final ServerType NETWORK = CorePlugin.getInstance().getServerManager().getNetwork();
+    public final Network NETWORK = CorePlugin.getInstance().getServerManager().getNetwork();
 
     public void sendHelp(Player player) {
         player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));

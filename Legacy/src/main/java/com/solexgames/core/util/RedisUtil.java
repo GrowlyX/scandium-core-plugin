@@ -2,7 +2,7 @@ package com.solexgames.core.util;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ChatChannelType;
-import com.solexgames.core.enums.RedisPacketType;
+import com.solexgames.core.redis.action.RedisAction;
 import com.solexgames.core.enums.StaffUpdateType;
 import com.solexgames.core.player.punishment.Punishment;
 import com.solexgames.core.player.punishment.PunishmentType;
@@ -11,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.UUID;
 
@@ -26,7 +27,8 @@ public final class RedisUtil {
     }
 
     public static String onServerUpdate() {
-        return new JsonAppender(RedisPacketType.SERVER_DATA_UPDATE)
+        return new JsonAppender(RedisAction.SERVER_DATA_UPDATE)
+                .put("SPLITPLAYERS", Arrays.toString(Bukkit.getOnlinePlayers().stream().map(Player::getName).toArray(String[]::new)))
                 .put("SERVER", CorePlugin.getInstance().getServerName())
                 .put("SERVER_TYPE", CorePlugin.getInstance().getConfig().getString("server-type"))
                 .put("ONLINEPLAYERS", String.valueOf(Bukkit.getOnlinePlayers().size()))
@@ -38,19 +40,19 @@ public final class RedisUtil {
     }
 
     public static String onServerOffline(){
-        return new JsonAppender(RedisPacketType.SERVER_DATA_OFFLINE)
+        return new JsonAppender(RedisAction.SERVER_DATA_OFFLINE)
                 .put("SERVER", CorePlugin.getInstance().getServerName())
                 .getAppended();
     }
 
     public static String onServerOnline(){
-        return new JsonAppender(RedisPacketType.SERVER_DATA_ONLINE)
+        return new JsonAppender(RedisAction.SERVER_DATA_ONLINE)
                 .put("SERVER", CorePlugin.getInstance().getServerName())
                 .getAppended();
     }
 
     public static String onChatChannel(ChatChannelType chatChannel, String message, Player player) {
-        return new JsonAppender(RedisPacketType.CHAT_CHANNEL_UPDATE)
+        return new JsonAppender(RedisAction.CHAT_CHANNEL_UPDATE)
                 .put("CHANNEL", chatChannel.getName())
                 .put("MESSAGE", message)
                 .put("SERVER", CorePlugin.getInstance().getServerName())
@@ -59,34 +61,42 @@ public final class RedisUtil {
     }
 
     public static String onGlobalBroadcast(String message) {
-        return new JsonAppender(RedisPacketType.NETWORK_BROADCAST_UPDATE)
+        return new JsonAppender(RedisAction.NETWORK_BROADCAST_UPDATE)
                 .put("MESSAGE", message)
                 .getAppended();
     }
 
     public static String onGlobalBroadcastPermission(String message, String permission) {
-        return new JsonAppender(RedisPacketType.NETWORK_BROADCAST_PERMISSION_UPDATE)
+        return new JsonAppender(RedisAction.NETWORK_BROADCAST_PERMISSION_UPDATE)
                 .put("MESSAGE", message)
                 .put("PERMISSION", permission)
                 .getAppended();
     }
 
-    public static String onDisconnect(Player player) {
-        return new JsonAppender(RedisPacketType.PLAYER_DISCONNECT_UPDATE)
-                .put("PLAYER", player.getDisplayName())
+    public static String onDisconnect(String player) {
+        return new JsonAppender(RedisAction.PLAYER_DISCONNECT_UPDATE)
+                .put("PLAYER", player)
                 .put("SERVER", CorePlugin.getInstance().getServerName())
                 .getAppended();
     }
 
+    public static String onSwitchServer(String player, String newServer) {
+        return new JsonAppender(RedisAction.PLAYER_SERVER_SWITCH_UPDATE)
+                .put("PLAYER", player)
+                .put("SERVER", CorePlugin.getInstance().getServerName())
+                .put("NEW_SERVER", newServer)
+                .getAppended();
+    }
+
     public static String onConnect(Player player) {
-        return new JsonAppender(RedisPacketType.PLAYER_CONNECT_UPDATE)
+        return new JsonAppender(RedisAction.PLAYER_CONNECT_UPDATE)
                 .put("PLAYER", player.getDisplayName())
                 .put("SERVER", CorePlugin.getInstance().getServerName())
                 .getAppended();
     }
 
     public static String onHelpOp(Player player, String message) {
-        return new JsonAppender(RedisPacketType.PLAYER_SERVER_UPDATE)
+        return new JsonAppender(RedisAction.PLAYER_SERVER_UPDATE)
                 .put("MESSAGE", message)
                 .put("PLAYER", player.getDisplayName())
                 .put("SERVER", CorePlugin.getInstance().getServerName())
@@ -95,7 +105,7 @@ public final class RedisUtil {
     }
 
     public static String onReport(Player player, Player target, String message) {
-        return new JsonAppender(RedisPacketType.PLAYER_SERVER_UPDATE)
+        return new JsonAppender(RedisAction.PLAYER_SERVER_UPDATE)
                 .put("MESSAGE", message)
                 .put("PLAYER", player.getDisplayName())
                 .put("TARGET", target.getDisplayName())
@@ -105,7 +115,7 @@ public final class RedisUtil {
     }
 
     public static String onFreeze(Player player, Player target) {
-        return new JsonAppender(RedisPacketType.PLAYER_SERVER_UPDATE)
+        return new JsonAppender(RedisAction.PLAYER_SERVER_UPDATE)
                 .put("PLAYER", player.getDisplayName())
                 .put("TARGET", target.getDisplayName())
                 .put("SERVER", CorePlugin.getInstance().getServerName())
@@ -114,13 +124,13 @@ public final class RedisUtil {
     }
 
     public static String updateRanks() {
-        return new JsonAppender(RedisPacketType.RANK_SETTINGS_UPDATE)
+        return new JsonAppender(RedisAction.RANK_SETTINGS_UPDATE)
                 .put("SERVER", CorePlugin.getInstance().getServerName())
                 .getAppended();
     }
 
     public static String executePunishment(PunishmentType punishmentType, UUID issuer, UUID target, String issuerName, String reason, Date issuingDate, long punishmentDuration, boolean permanent, Date createdAt, UUID uuid, String punishIdentification, boolean silent) {
-        return new JsonAppender(RedisPacketType.PUNISHMENT_EXECUTE_UPDATE)
+        return new JsonAppender(RedisAction.PUNISHMENT_EXECUTE_UPDATE)
                 .put("SERVER", CorePlugin.getInstance().getServerName())
                 .put("TYPE", punishmentType.toString())
                 .put("ISSUER", (issuer != null ? issuer.toString() : null))
@@ -138,7 +148,7 @@ public final class RedisUtil {
     }
 
     public static String fRemovePunishment(Punishment punishment) {
-        return new JsonAppender(RedisPacketType.PUNISHMENT_FREMOVE_UPDATE)
+        return new JsonAppender(RedisAction.PUNISHMENT_F_REMOVE_UPDATE)
                 .put("ID", punishment.getPunishIdentification())
                 .put("SERVER", CorePlugin.getInstance().getServerName())
                 .getAppended();
@@ -146,7 +156,7 @@ public final class RedisUtil {
 
     public static String removePunishment(Player remover, Punishment punishment, String message) {
         if (remover != null) {
-            return new JsonAppender(RedisPacketType.PUNISHMENT_REMOVE_UPDATE)
+            return new JsonAppender(RedisAction.PUNISHMENT_REMOVE_UPDATE)
                     .put("REMOVERUUID", remover.getUniqueId().toString())
                     .put("REMOVERNAME", remover.getName())
                     .put("REMOVERDISPLAYNAME", remover.getDisplayName())
@@ -155,7 +165,7 @@ public final class RedisUtil {
                     .put("ID", punishment.getPunishIdentification())
                     .getAppended();
         } else {
-            return new JsonAppender(RedisPacketType.PUNISHMENT_REMOVE_UPDATE)
+            return new JsonAppender(RedisAction.PUNISHMENT_REMOVE_UPDATE)
                     .put("REMOVERUUID", null)
                     .put("REMOVERNAME", null)
                     .put("REMOVERDISPLAYNAME", null)
@@ -167,7 +177,7 @@ public final class RedisUtil {
     }
 
     public static String createRank(String name, Player player, String uuid) {
-        return new JsonAppender(RedisPacketType.RANK_CREATE_UPDATE)
+        return new JsonAppender(RedisAction.RANK_CREATE_UPDATE)
                 .put("NAME", name)
                 .put("UUID", uuid)
                 .put("PLAYER", player.getName())
@@ -175,14 +185,14 @@ public final class RedisUtil {
     }
 
     public static String deleteRank(String rank, Player player) {
-        return new JsonAppender(RedisPacketType.RANK_DELETE_UPDATE)
+        return new JsonAppender(RedisAction.RANK_DELETE_UPDATE)
                 .put("RANK", rank)
                 .put("PLAYER", player.getName())
                 .getAppended();
     }
 
     public static String onUnfreeze(Player player, Player target) {
-        return new JsonAppender(RedisPacketType.PLAYER_SERVER_UPDATE)
+        return new JsonAppender(RedisAction.PLAYER_SERVER_UPDATE)
                 .put("PLAYER", player.getDisplayName())
                 .put("SERVER", CorePlugin.getInstance().getServerName())
                 .put("TARGET", target.getDisplayName())

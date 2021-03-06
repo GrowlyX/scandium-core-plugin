@@ -67,7 +67,6 @@ public class CorePlugin extends Plugin {
                 .replace("<bar>", Character.toString('⎜'))
                 .replace("<nl>", "\n"));
 
-
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new GlobalListCommand());
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new StaffListCommand());
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new XenonCommand());

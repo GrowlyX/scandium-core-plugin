@@ -1,15 +1,16 @@
-package com.solexgames.core.enums;
+package com.solexgames.core.redis.action;
 
 import lombok.Getter;
 
 import java.beans.ConstructorProperties;
 
 @Getter
-public enum RedisPacketType {
+public enum RedisAction {
 
     CHAT_CHANNEL_UPDATE("ChatChannelUpdate"),
 
     PLAYER_SERVER_UPDATE("PlayerServerUpdate"),
+    PLAYER_SERVER_SWITCH_UPDATE("PlayerServerSwitchUpdate"),
     PLAYER_CONNECT_UPDATE("PlayerConnectUpdate"),
     PLAYER_DISCONNECT_UPDATE("PlayerDisconnectUpdate"),
 
@@ -22,7 +23,7 @@ public enum RedisPacketType {
 
     PUNISHMENT_EXECUTE_UPDATE("PunishmentExecuteUpdate"),
     PUNISHMENT_REMOVE_UPDATE("PunishmentRemoveUpdate"),
-    PUNISHMENT_FREMOVE_UPDATE("PunishmentFRemoveUpdate"),
+    PUNISHMENT_F_REMOVE_UPDATE("PunishmentFRemoveUpdate"),
 
     RANK_SETTINGS_UPDATE("RankSettingsUpdate"),
     RANK_CREATE_UPDATE("RankCreateUpdate"),
@@ -31,7 +32,7 @@ public enum RedisPacketType {
     private final String packetDataName;
 
     @ConstructorProperties("packetDataName")
-    RedisPacketType(String packetDataName) {
+    RedisAction(String packetDataName) {
         this.packetDataName = packetDataName;
     }
 }

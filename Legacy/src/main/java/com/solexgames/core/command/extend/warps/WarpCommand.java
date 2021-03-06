@@ -4,7 +4,7 @@ import com.mongodb.client.model.Filters;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.util.clickable.Clickable;
 import com.solexgames.core.command.BaseCommand;
-import com.solexgames.core.enums.ServerType;
+import com.solexgames.core.server.Network;
 import com.solexgames.core.player.warps.Warp;
 import com.solexgames.core.util.Color;
 import org.apache.commons.lang3.StringUtils;
@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
 
 public class WarpCommand extends BaseCommand {
 
-    public final ServerType NETWORK = CorePlugin.getInstance().getServerManager().getNetwork();
+    public final Network NETWORK = CorePlugin.getInstance().getServerManager().getNetwork();
 
     public void sendHelp(Player player) {
         player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));

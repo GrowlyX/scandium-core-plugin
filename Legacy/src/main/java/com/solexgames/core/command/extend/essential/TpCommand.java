@@ -2,7 +2,7 @@ package com.solexgames.core.command.extend.essential;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
-import com.solexgames.core.enums.ServerType;
+import com.solexgames.core.server.Network;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.StaffUtil;
 import org.bukkit.Bukkit;
@@ -20,9 +20,9 @@ public class TpCommand extends BaseCommand {
             return false;
         }
 
-        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
-        ChatColor mainColor = serverType.getMainColor();
-        ChatColor secondColor = serverType.getSecondaryColor();
+        Network network = CorePlugin.getInstance().getServerManager().getNetwork();
+        ChatColor mainColor = network.getMainColor();
+        ChatColor secondColor = network.getSecondaryColor();
         Player player = (Player) sender;
         if (player.hasPermission("scandium.command.tp")) {
             if (args.length == 0) {

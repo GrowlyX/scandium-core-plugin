@@ -2,29 +2,20 @@ package com.solexgames.core.util.external.pagination.extend;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.enums.ServerType;
-import com.solexgames.core.menu.extend.grant.GrantSelectDurationMenu;
-import com.solexgames.core.menu.extend.grant.scope.GrantScopeSelectMenu;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.prefixes.Prefix;
-import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.util.Color;
-import com.solexgames.core.util.WoolUtil;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.util.external.pagination.Button;
 import com.solexgames.core.util.external.pagination.pagination.PaginatedMenu;
 import lombok.Getter;
-import org.bson.Document;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 @Getter
 public class PrefixViewPaginatedMenu extends PaginatedMenu {

@@ -2,12 +2,11 @@ package com.solexgames.core.menu.extend.grant;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.enums.ServerType;
+import com.solexgames.core.server.Network;
 import com.solexgames.core.menu.AbstractInventoryMenu;
 import com.solexgames.core.util.DateUtil;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.PotPlayer;
-import com.solexgames.core.player.punishment.PunishmentDuration;
 import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.util.Color;
 import lombok.Getter;
@@ -15,13 +14,11 @@ import lombok.Setter;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 @Getter
@@ -44,7 +41,7 @@ public class GrantSelectDurationMenu extends AbstractInventoryMenu {
     }
 
     public void update() {
-        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
+        Network network = CorePlugin.getInstance().getServerManager().getNetwork();
 
         this.inventory.setItem(10, new ItemBuilder(XMaterial.PAPER.parseMaterial()).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "1 Day").addLore(Collections.singletonList("&7Click to select this duration.")).create());
         this.inventory.setItem(11, new ItemBuilder(XMaterial.PAPER.parseMaterial()).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "1 Week").addLore(Collections.singletonList("&7Click to select this duration.")).create());

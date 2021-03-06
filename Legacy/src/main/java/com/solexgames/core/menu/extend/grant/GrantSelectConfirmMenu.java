@@ -4,20 +4,18 @@ import com.cryptomorin.xseries.XMaterial;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.enums.ServerType;
+import com.solexgames.core.server.Network;
 import com.solexgames.core.menu.AbstractInventoryMenu;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.grant.Grant;
 import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.util.Color;
-import com.solexgames.core.util.UUIDUtil;
 import com.solexgames.core.util.builder.ItemBuilder;
 import lombok.Getter;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
@@ -55,7 +53,7 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
     }
 
     public void update() {
-        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
+        Network network = CorePlugin.getInstance().getServerManager().getNetwork();
 
         int[] intsConfirm = new int[]{10, 11, 12, 19, 20, 21, 28, 29, 30};
         int[] intsDecline = new int[]{14, 15, 16, 23, 24, 25, 32, 33, 34};
@@ -91,7 +89,7 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
         if (topInventory.equals(clickedInventory)) {
             event.setCancelled(true);
 
-            ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
+            Network network = CorePlugin.getInstance().getServerManager().getNetwork();
             Player player = (Player) event.getWhoClicked();
 
             if (event.getCurrentItem() == null || event.getCurrentItem().getType() == XMaterial.AIR.parseMaterial()) return;

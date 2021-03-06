@@ -1,10 +1,9 @@
 package com.solexgames.core.manager;
 
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.enums.ServerType;
+import com.solexgames.core.server.Network;
 import com.solexgames.core.task.ShutdownTask;
 import com.solexgames.core.util.Color;
-import com.solexgames.core.util.RedisUtil;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.bukkit.Bukkit;
@@ -20,9 +19,9 @@ public class ShutdownManager {
     private boolean shutdownScheduled;
 
     public void initiateShutdown(int seconds, Player initiator) {
-        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
-        ChatColor mainColor = serverType.getMainColor();
-        ChatColor secondaryColor = serverType.getSecondaryColor();
+        Network network = CorePlugin.getInstance().getServerManager().getNetwork();
+        ChatColor mainColor = network.getMainColor();
+        ChatColor secondaryColor = network.getSecondaryColor();
 
         Bukkit.broadcastMessage(Color.translate(secondaryColor + "The server will be shutting down in " + mainColor + seconds + " seconds" + secondaryColor + "."));
         CorePlugin.getInstance().getPlayerManager().sendToNetworkStaff("&3[S] " + "&7[" + CorePlugin.getInstance().getServerName() + "] " + initiator.getDisplayName() + " &bhas initiated a shutdown on &6" + CorePlugin.getInstance().getServerName() + "&b.");

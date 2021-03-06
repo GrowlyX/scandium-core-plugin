@@ -2,7 +2,7 @@ package com.solexgames.core.command.extend.network;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
-import com.solexgames.core.enums.ServerType;
+import com.solexgames.core.server.Network;
 import com.solexgames.core.server.NetworkServer;
 import com.solexgames.core.util.Color;
 import org.apache.commons.lang.StringUtils;
@@ -22,7 +22,7 @@ public class NetworkCommand extends BaseCommand {
         }
 
         Player player = (Player) commandSender;
-        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
+        Network network = CorePlugin.getInstance().getServerManager().getNetwork();
         if (player.hasPermission("scandium.command.network")) {
             if (args.length == 0) {
                 if (!CorePlugin.getInstance().getServerManager().getNetworkServers().isEmpty()) {

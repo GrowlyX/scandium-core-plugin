@@ -2,7 +2,7 @@ package com.solexgames.core.listener;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ChatChannelType;
-import com.solexgames.core.enums.ServerType;
+import com.solexgames.core.server.Network;
 import com.solexgames.core.manager.ServerManager;
 import com.solexgames.core.media.MediaConstants;
 import com.solexgames.core.menu.IMenu;
@@ -355,7 +355,7 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (CorePlugin.getInstance().getServerManager().getNetwork().equals(ServerType.EVENTIS)) {
+        if (CorePlugin.getInstance().getServerManager().getNetwork().equals(Network.EVENTIS)) {
             if (CorePlugin.getInstance().getServerName().contains("hub")) {
                 if (!player.hasPermission("scandium.staff")) {
                     event.setCancelled(true);
@@ -497,8 +497,18 @@ public class PlayerListener implements Listener {
     public void onDisconnect(PlayerQuitEvent event) {
         event.setQuitMessage(null);
 
-        if (event.getPlayer().hasPermission("scandium.staff"))
-            CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onDisconnect(event.getPlayer())));
+        if (event.getPlayer().hasPermission("scandium.staff")) {
+            Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> {
+                ServerManager serverManager = CorePlugin.getInstance().getServerManager();
+                boolean online = serverManager.isOnlineNetwork(event.getPlayer().getName());
+
+                if (online) {
+                    CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onSwitchServer(event.getPlayer().getDisplayName(), CorePlugin.getInstance().getServerManager().getServer(event.getPlayer().getName()).getServerName())));
+                } else {
+                    CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onDisconnect(event.getPlayer().getDisplayName())));
+                }
+            }, 10 * 20L);
+        }
 
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer().getUniqueId());
         if (potPlayer.isFrozen())
