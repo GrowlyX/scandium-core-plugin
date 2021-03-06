@@ -18,7 +18,7 @@ public class RedisSettings {
     private final String password;
 
     /**
-     * Constructor to initialize jedis values
+     * Constructor to initialize jedis values for {@link RedisManager}
      *
      * @param hostAddress Redis host address/ip address
      * @param port Redis host port

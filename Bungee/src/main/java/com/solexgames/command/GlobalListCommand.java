@@ -13,6 +13,11 @@ import java.util.Collection;
 
 import static net.md_5.bungee.api.ChatColor.*;
 
+/**
+ * @author GrowlyX
+ * @since 3/5/2021
+ */
+
 public class GlobalListCommand extends Command {
 
 	public GlobalListCommand() {

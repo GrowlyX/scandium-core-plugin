@@ -25,8 +25,9 @@ import java.util.ArrayList;
 /**
  * @author GrowlyX
  * @since 3/5/2021
+ * @version 1.0
  * <p>
- * Holds instances to anything important.
+ * Holds instances to everything Xenon related.
  */
 
 @Getter

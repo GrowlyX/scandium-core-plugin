@@ -31,9 +31,9 @@ public class RedisManager {
     private boolean active;
 
     /**
-     * Initializes Redis Manager.
+     * Initializes Redis Manager with values from {@link RedisSettings}.
      *
-     * @param settings Instance to core redis settings
+     * @param settings Instance to core redis settings.
      */
     public RedisManager(RedisSettings settings) {
         this.settings = settings;

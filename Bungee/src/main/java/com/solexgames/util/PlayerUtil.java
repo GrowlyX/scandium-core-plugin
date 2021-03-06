@@ -2,6 +2,11 @@ package com.solexgames.util;
 
 import net.md_5.bungee.BungeeCord;
 
+/**
+ * @author GrowlyX
+ * @since 3/5/2021
+ */
+
 public final class PlayerUtil {
 
 	public static void sendMessage(String message) {

@@ -15,6 +15,11 @@ import java.util.HashMap;
 import static net.md_5.bungee.api.ChatColor.GRAY;
 import static net.md_5.bungee.api.ChatColor.WHITE;
 
+/**
+ * @author GrowlyX
+ * @since 3/5/2021
+ */
+
 public class StaffListCommand extends Command {
 
 	public StaffListCommand() {

@@ -6,6 +6,11 @@ import com.solexgames.util.StringUtil;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.plugin.Command;
 
+/**
+ * @author GrowlyX
+ * @since 3/5/2021
+ */
+
 public class XenonCommand extends Command {
 
     public XenonCommand() {
@@ -57,7 +62,7 @@ public class XenonCommand extends Command {
                         }
                         break;
                     default:
-                        sender.sendMessage(Color.translate("&3Usage: &b/xenon &f<motd> <message>..."));
+                        sender.sendMessage(Color.translate("&3Usage: &b/xenon &f<normalmotd|maintenancemotd> <message>..."));
                         break;
                 }
             } else {

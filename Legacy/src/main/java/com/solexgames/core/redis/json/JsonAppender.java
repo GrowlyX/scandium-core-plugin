@@ -22,6 +22,11 @@ public class JsonAppender {
     private final Map<String, String> parameters;
     private final RedisPacketType packet;
 
+    /**
+     * Creates a new instance of {@link JsonAppender} with a packet type {@link RedisPacketType}
+     *
+     * @param packet Redis packet type for this instance.
+     */
     public JsonAppender(RedisPacketType packet) {
         this.packet = packet;
         this.parameters = new HashMap<>();

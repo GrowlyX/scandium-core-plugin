@@ -9,6 +9,11 @@ import net.md_5.bungee.api.plugin.Command;
 
 import static net.md_5.bungee.api.ChatColor.translateAlternateColorCodes;
 
+/**
+ * @author GrowlyX
+ * @since 3/5/2021
+ */
+
 public class MaintenanceCommand extends Command {
 
     public MaintenanceCommand() {

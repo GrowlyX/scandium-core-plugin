@@ -17,8 +17,14 @@ import java.util.List;
 
 public class ModSuiteBoard extends ScoreBoard {
 
+    public final ServerType network;
+    public final PotPlayer potPlayer;
+
     public ModSuiteBoard(Player player) {
         super(player);
+
+        this.potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(this.getPlayer());
+        this.network = CorePlugin.getInstance().getServerManager().getNetwork();
     }
 
     public String getChannel(ChatChannelType chatChannelType) {
@@ -41,8 +47,6 @@ public class ModSuiteBoard extends ScoreBoard {
     @Override
     public void update() {
         List<String> lines = new ArrayList<>();
-        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
-        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(this.getPlayer());
 
         this.setTitle(network.getSecondaryColor() + ChatColor.BOLD.toString() + "Mod Mode");
 
