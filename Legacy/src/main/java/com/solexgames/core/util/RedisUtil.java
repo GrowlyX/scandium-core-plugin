@@ -2,6 +2,7 @@ package com.solexgames.core.util;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ChatChannelType;
+import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.redis.action.RedisAction;
 import com.solexgames.core.enums.StaffUpdateType;
 import com.solexgames.core.player.punishment.Punishment;
@@ -199,6 +200,11 @@ public final class RedisUtil {
                 .put("TARGET", target.getDisplayName())
                 .put("UPDATETYPE", StaffUpdateType.UNFREEZE.getName())
                 .getAppended();
+    }
+
+    public static String addGlobalPlayer(PotPlayer potPlayer) {
+        // UUID uuid, String name, String serverName, String rankName, boolean receivingDms
+        return A
     }
 
     public static void writeAsync(String message) {

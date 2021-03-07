@@ -6,6 +6,7 @@ import com.solexgames.core.CorePlugin;
 import com.solexgames.core.board.extend.ModSuiteBoard;
 import com.solexgames.core.enums.ChatChannelType;
 import com.solexgames.core.enums.ServerType;
+import com.solexgames.core.server.NetworkPlayer;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
@@ -24,7 +25,9 @@ import java.util.*;
 @NoArgsConstructor
 public class PlayerManager {
 
+    public final Map<UUID, NetworkPlayer> allNetworkProfiles = new HashMap<>();
     public final Map<UUID, PotPlayer> allProfiles = new HashMap<>();
+
     public final Map<String, String> allSyncCodes = new HashMap<>();
     public final Map<String, String> all2FACodes = new HashMap<>();
 
@@ -36,6 +39,22 @@ public class PlayerManager {
 
     public PotPlayer getPlayer(UUID uuid) {
         return this.allProfiles.getOrDefault(uuid, null);
+    }
+
+    public NetworkPlayer getNetworkPlayer(String player) {
+        return this.allNetworkProfiles.values()
+                .stream()
+                .filter(networkPlayer -> networkPlayer.getName().equalsIgnoreCase(player))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public boolean isOnline(String player) {
+        return this.allNetworkProfiles.values()
+                .stream()
+                .filter(networkPlayer -> networkPlayer.getName().equalsIgnoreCase(player))
+                .findFirst()
+                .orElse(null) != null;
     }
 
     public PotPlayer getPlayer(String name) {

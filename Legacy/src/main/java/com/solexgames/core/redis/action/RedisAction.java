@@ -14,6 +14,10 @@ public enum RedisAction {
     PLAYER_CONNECT_UPDATE("PlayerConnectUpdate"),
     PLAYER_DISCONNECT_UPDATE("PlayerDisconnectUpdate"),
 
+    GLOBAL_PLAYER_ADDITION("GlobalPlayerAddition"),
+    GLOBAL_PLAYER_REMOVE("GlobalPlayerRemove"),
+    GLOBAL_PLAYER_MESSAGE("GlobalPlayerMessage"),
+
     SERVER_DATA_ONLINE("ServerDataOnline"),
     SERVER_DATA_UPDATE("ServerDataUpdate"),
     SERVER_DATA_OFFLINE("ServerDataOffline"),
