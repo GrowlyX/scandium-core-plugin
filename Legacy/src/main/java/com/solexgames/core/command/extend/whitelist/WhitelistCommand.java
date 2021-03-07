@@ -21,18 +21,17 @@ public class WhitelistCommand extends BaseCommand {
         Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> {
             if (args.length > 0) {
                 List<String> whitelisted = CorePlugin.getInstance().getServerManager().getWhitelistedPlayers();
-                boolean enabled = CorePlugin.getInstance().getWhitelistConfig().getConfiguration().getBoolean("whitelist");
+                boolean enabled = CorePlugin.getInstance().getConfig().getBoolean("whitelist");
                 switch (args[0]) {
                     case "toggle":
                         if (enabled) {
-                            CorePlugin.getInstance().getWhitelistConfig().getConfiguration().set("whitelist", false);
+                            CorePlugin.getInstance().getConfig().set("whitelist", false);
                             sender.sendMessage(Color.translate("&cDisabled the whitelist."));
-                            CorePlugin.getInstance().getWhitelistConfig().save();
                         } else {
-                            CorePlugin.getInstance().getWhitelistConfig().getConfiguration().set("whitelist", true);
+                            CorePlugin.getInstance().getConfig().set("whitelist", true);
                             sender.sendMessage(Color.translate("&aEnabled the whitelist."));
-                            CorePlugin.getInstance().getWhitelistConfig().save();
                         }
+                        CorePlugin.getInstance().saveConfig();
                         break;
                     case "add":
                         if (args.length == 1) {
@@ -44,8 +43,8 @@ public class WhitelistCommand extends BaseCommand {
                                 sender.sendMessage(Color.translate("&cThat player is already whitelisted."));
                             } else {
                                 whitelisted.add(target);
-                                CorePlugin.getInstance().getWhitelistConfig().getConfiguration().set("whitelisted", whitelisted);
-                                CorePlugin.getInstance().getWhitelistConfig().save();
+                                CorePlugin.getInstance().getConfig().set("whitelisted", whitelisted);
+                                CorePlugin.getInstance().saveConfig();
                                 sender.sendMessage(Color.translate("&aAdded " + target + " to the whitelist."));
                             }
                         }
@@ -60,7 +59,7 @@ public class WhitelistCommand extends BaseCommand {
                                 sender.sendMessage(Color.translate("&cThat player is not whitelisted."));
                             } else {
                                 whitelisted.remove(target);
-                                CorePlugin.getInstance().getWhitelistConfig().getConfiguration().set("whitelisted", whitelisted);
+                                CorePlugin.getInstance().getConfig().set("whitelisted", whitelisted);
                                 CorePlugin.getInstance().saveConfig();
                                 CorePlugin.getInstance().reloadConfig();
                                 sender.sendMessage(Color.translate("&aRemoved " + target + " from the whitelist."));

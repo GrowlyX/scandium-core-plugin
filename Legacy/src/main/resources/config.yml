@@ -6,6 +6,17 @@ server-type: "PRACTICE"
 server-id: "eu-practice"
 refresh-time: 5
 
+whitelisted:
+  - GrowlyX
+whitelist: true
+whitelisted-msg: '&cThis server is currently whitelisted.\n&cPlease check our discord for more information.'
+
+beta-whitelisted:
+  - GrowlyX
+beta-whitelist: true
+beta-whitelisted-can-join: false
+beta-whitelisted-msg: '&cThis server is currently whitelisted.\n&cPlease check our discord for more information.'
+
 core-settings:
   name: "Scandium"
   command-name: "scandium"
@@ -13,6 +24,18 @@ core-settings:
 # The crypto key should be a randomly generated STRING with only letters.
 crypto:
   key: "JRzRsNGvutZbcrrTklcSJsWSQNImMJSqxLZZ"
+
+whitelisted:
+  - GrowlyX
+whitelist: true
+whitelisted-msg: '&cThis server is currently whitelisted.\n&cPlease check our discord for more information.'
+
+beta-whitelisted:
+  - GrowlyX
+beta-whitelist: true
+beta-whitelisted-can-join: false
+beta-whitelisted-msg: '&cThis server is currently whitelisted.\n&cPlease check our discord for more information.'
+
 
 settings:
   color-gui: true

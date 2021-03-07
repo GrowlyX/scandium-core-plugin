@@ -118,7 +118,6 @@ public final class CorePlugin extends JavaPlugin {
     private RedisManager redisManager;
 
     private ConfigExternal ranksConfig;
-    private ConfigExternal whitelistConfig;
     private ConfigExternal databaseConfig;
     private ConfigExternal motdConfig;
     private ConfigExternal filterConfig;
@@ -164,7 +163,6 @@ public final class CorePlugin extends JavaPlugin {
 
         this.ranksConfig = new ConfigExternal("ranks");
         this.databaseConfig = new ConfigExternal("database");
-        this.whitelistConfig = new ConfigExternal("whitelist");
         this.motdConfig = new ConfigExternal("motd");
         this.filterConfig = new ConfigExternal("filtered");
 
@@ -364,8 +362,8 @@ public final class CorePlugin extends JavaPlugin {
     public void onDisable() {
         CAN_JOIN = false;
 
-        this.getWhitelistConfig().getConfiguration().set("whitelisted", this.getServerManager().getWhitelistedPlayers());
-        this.getWhitelistConfig().getConfiguration().set("beta-whitelisted", this.getServerManager().getBetaWhitelistedPlayers());
+        this.getConfig().set("whitelisted", this.getServerManager().getWhitelistedPlayers());
+        this.getConfig().set("beta-whitelisted", this.getServerManager().getBetaWhitelistedPlayers());
 
         this.getServer().getOnlinePlayers().forEach(player -> player.kickPlayer(Color.translate("&cThe server is currently rebooting.\n&cPlease reconnect in a few minutes, or check discord for more information.")));
 

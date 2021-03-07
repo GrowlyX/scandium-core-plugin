@@ -21,27 +21,27 @@ public class BetaWhitelistCommand extends BaseCommand {
         Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> {
             if (args.length > 0) {
                 List<String> whitelisted = CorePlugin.getInstance().getServerManager().getBetaWhitelistedPlayers();
-                boolean enabled = CorePlugin.getInstance().getWhitelistConfig().getConfiguration().getBoolean("beta-whitelist");
+                boolean enabled = CorePlugin.getInstance().getConfig().getBoolean("beta-whitelist");
                 switch (args[0]) {
                     case "toggle":
                         if (enabled) {
-                            CorePlugin.getInstance().getWhitelistConfig().getConfiguration().set("beta-whitelist", false);
-                            CorePlugin.getInstance().getWhitelistConfig().save();
+                            CorePlugin.getInstance().getConfig().set("beta-whitelist", false);
+                            CorePlugin.getInstance().saveConfig();
                             sender.sendMessage(Color.translate("&cDisabled the beta whitelist."));
                         } else {
-                            CorePlugin.getInstance().getWhitelistConfig().getConfiguration().set("beta-whitelist", true);
+                            CorePlugin.getInstance().getConfig().set("beta-whitelist", true);
                             sender.sendMessage(Color.translate("&aEnabled the beta whitelist."));
                         }
                         break;
                     case "allow":
-                        if (CorePlugin.getInstance().getWhitelistConfig().getConfiguration().getBoolean("beta-whitelisted-can-join")) {
-                            CorePlugin.getInstance().getWhitelistConfig().getConfiguration().set("beta-whitelisted-can-join", false);
+                        if (CorePlugin.getInstance().getConfig().getBoolean("beta-whitelisted-can-join")) {
+                            CorePlugin.getInstance().getConfig().set("beta-whitelisted-can-join", false);
                             sender.sendMessage(Color.translate("&cDisabled the beta whitelist player join."));
-                            CorePlugin.getInstance().getWhitelistConfig().save();
+                            CorePlugin.getInstance().saveConfig();
                         } else {
-                            CorePlugin.getInstance().getWhitelistConfig().getConfiguration().set("beta-whitelisted-can-join", true);
+                            CorePlugin.getInstance().getConfig().set("beta-whitelisted-can-join", true);
                             sender.sendMessage(Color.translate("&aEnabled the beta whitelist player join."));
-                            CorePlugin.getInstance().getWhitelistConfig().save();
+                            CorePlugin.getInstance().saveConfig();
                         }
                         break;
                     case "add":
@@ -54,7 +54,7 @@ public class BetaWhitelistCommand extends BaseCommand {
                                 sender.sendMessage(Color.translate("&cThat player is already beta-whitelisted."));
                             } else {
                                 whitelisted.add(target);
-                                CorePlugin.getInstance().getWhitelistConfig().getConfiguration().set("beta-whitelisted", whitelisted);
+                                CorePlugin.getInstance().getConfig().set("beta-whitelisted", whitelisted);
                                 CorePlugin.getInstance().saveConfig();
                                 CorePlugin.getInstance().reloadConfig();
                                 sender.sendMessage(Color.translate("&aAdded " + target + " to the beta-whitelist."));
@@ -71,7 +71,7 @@ public class BetaWhitelistCommand extends BaseCommand {
                                 sender.sendMessage(Color.translate("&cThat player is not beta-whitelisted."));
                             } else {
                                 whitelisted.remove(target);
-                                CorePlugin.getInstance().getWhitelistConfig().getConfiguration().set("beta-whitelisted", whitelisted);
+                                CorePlugin.getInstance().getConfig().set("beta-whitelisted", whitelisted);
                                 CorePlugin.getInstance().saveConfig();
                                 CorePlugin.getInstance().reloadConfig();
                                 sender.sendMessage(Color.translate("&aRemoved " + target + " from the beta-whitelist."));

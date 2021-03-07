@@ -14,7 +14,7 @@ import net.md_5.bungee.api.plugin.Command;
 public class XenonCommand extends Command {
 
     public XenonCommand() {
-        super("xenon", null, "bungee");
+        super("xenon", null, "bungee", "proxy");
     }
 
     @Override
