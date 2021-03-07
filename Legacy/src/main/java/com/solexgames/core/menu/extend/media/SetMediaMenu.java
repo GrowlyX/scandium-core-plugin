@@ -27,7 +27,8 @@ public class SetMediaMenu extends AbstractInventoryMenu {
     }
 
     public void update() {
-        this.inventory.setItem(2, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 4)
+        this.inventory.setItem(2, new ItemBuilder(XMaterial.INK_SAC.parseMaterial())
+                .setDurability(4)
                 .setDisplayName("&9Discord")
                 .addLore(
                         "",
@@ -37,7 +38,8 @@ public class SetMediaMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(3, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 1)
+        this.inventory.setItem(3, new ItemBuilder(XMaterial.INK_SAC.parseMaterial())
+                .setDurability(1)
                 .setDisplayName("&cYouTube")
                 .addLore(
                         "",
@@ -47,7 +49,8 @@ public class SetMediaMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(4, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 12)
+        this.inventory.setItem(4, new ItemBuilder(XMaterial.INK_SAC.parseMaterial())
+                .setDurability(12)
                 .setDisplayName("&bTwitter")
                 .addLore(
                         "",
@@ -57,7 +60,8 @@ public class SetMediaMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(5, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 14)
+        this.inventory.setItem(5, new ItemBuilder(XMaterial.INK_SAC.parseMaterial())
+                .setDurability(14)
                 .setDisplayName("&6Instagram")
                 .addLore(
                         "",
@@ -67,7 +71,8 @@ public class SetMediaMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(6, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 11)
+        this.inventory.setItem(6, new ItemBuilder(XMaterial.INK_SAC.parseMaterial())
+                .setDurability(11)
                 .setDisplayName("&e???")
                 .addLore(
                         "",

@@ -28,7 +28,7 @@ public class PunishSelectReasonMenu extends AbstractInventoryMenu {
     private PunishmentType punishmentType;
 
     public PunishSelectReasonMenu(Player player, String target, PunishmentType punishmentType) {
-        super("Punishment reason for: &b" + (Bukkit.getPlayer(target) != null ? Bukkit.getPlayer(target).getDisplayName() : target), 9*3);
+        super("Punishment reason for: " + Color.translate("&b") + (Bukkit.getPlayer(target) != null ? Bukkit.getPlayer(target).getDisplayName() : target), 9*3);
         this.player = player;
         this.target = target;
         this.punishmentType = punishmentType;

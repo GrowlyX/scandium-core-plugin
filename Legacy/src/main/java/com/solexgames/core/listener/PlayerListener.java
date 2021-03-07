@@ -365,6 +365,12 @@ public class PlayerListener implements Listener {
             }
         }
 
+        if (potPlayer.isCurrentlyBanned()) {
+            player.sendMessage(Color.translate("&cYou cannot chat as you are currently banned."));
+            event.setCancelled(true);
+            return;
+        }
+
         if (CorePlugin.getInstance().getServerManager().isChatEnabled()) {
             if (!potPlayer.isCurrentlyMuted()) {
                 checkChannel(event, player, potPlayer);
@@ -440,9 +446,16 @@ public class PlayerListener implements Listener {
             return;
         }
 
+        if (potPlayer.isCurrentlyBanned() && !event.getMessage().startsWith("/discord")) {
+            event.getPlayer().sendMessage(Color.translate("&cYou cannot execute commands as you are currently banned."));
+            event.getPlayer().sendMessage(Color.translate("&cThe only command you can execute is &4/discord&c."));
+            event.setCancelled(true);
+            return;
+        }
+
         if (event.getMessage().contains(":") && !event.getPlayer().isOp()) {
             event.setCancelled(true);
-            event.getPlayer().sendMessage(Color.translate("&cThat syntax is not accepted!"));
+            event.getPlayer().sendMessage(Color.translate("&cThat syntax is not accepted."));
         }
 
         if (CorePlugin.getInstance().getConfig().getBoolean("block-commands.enabled")) {

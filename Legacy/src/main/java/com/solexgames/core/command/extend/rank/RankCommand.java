@@ -190,7 +190,7 @@ public class RankCommand extends BaseCommand {
                             break;
                         case "addinher":
                             if (args.length == 1) player.sendMessage(Color.translate("&cUsage: /rank addinher <name> <inheritance>."));
-                            if (args.length == 2) player.sendMessage(Color.translate("&cUsage: /rank adddelinher <name> <inheritance>."));
+                            if (args.length == 2) player.sendMessage(Color.translate("&cUsage: /rank addinher <name> <inheritance>."));
                             if (args.length == 3) {
                                 String name = args[1];
                                 String value = args[2];

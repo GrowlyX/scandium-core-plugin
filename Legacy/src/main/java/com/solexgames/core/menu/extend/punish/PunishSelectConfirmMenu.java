@@ -39,7 +39,7 @@ public class PunishSelectConfirmMenu extends AbstractInventoryMenu {
     private boolean isSilent;
 
     public PunishSelectConfirmMenu(Player player, String target, String reason, PunishmentType punishmentType, long punishmentDuration, boolean permanent) {
-        super("Confirm punishment for: &b" + (Bukkit.getPlayer(target) != null ? Bukkit.getPlayer(target).getDisplayName() : target), 9*5);
+        super("Confirm punishment for: " + Color.translate("&b") + (Bukkit.getPlayer(target) != null ? Bukkit.getPlayer(target).getDisplayName() : target), 9*5);
         this.player = player;
         this.target = target;
         this.reason = reason;

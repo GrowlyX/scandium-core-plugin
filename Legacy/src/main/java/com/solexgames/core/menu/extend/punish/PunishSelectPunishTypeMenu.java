@@ -26,7 +26,7 @@ public class PunishSelectPunishTypeMenu extends AbstractInventoryMenu {
     private String target;
 
     public PunishSelectPunishTypeMenu(Player player, String target) {
-        super("Punishment type for: &b" + (Bukkit.getPlayer(target) != null ? Bukkit.getPlayer(target).getDisplayName() : target), 9*3);
+        super("Punishment type for: " + Color.translate("&b") + (Bukkit.getPlayer(target) != null ? Bukkit.getPlayer(target).getDisplayName() : target), 9*3);
         this.player = player;
         this.target = target;
         this.update();
@@ -35,11 +35,11 @@ public class PunishSelectPunishTypeMenu extends AbstractInventoryMenu {
     public void update() {
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
-        this.inventory.setItem(10, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 1).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Ban").addLore(Collections.singletonList("&7Click to select this punishment.")).create());
-        this.inventory.setItem(11, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 2).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Kick").addLore(Collections.singletonList("&7Click to select this punishment.")).create());
-        this.inventory.setItem(12, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 3).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Mute").addLore(Collections.singletonList("&7Click to select this punishment.")).create());
-        this.inventory.setItem(13, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 4).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Warn").addLore(Collections.singletonList("&7Click to select this punishment.")).create());
-        this.inventory.setItem(14, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 5).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Blacklist").addLore(Collections.singletonList("&7Click to select this punishment.")).create());
+        this.inventory.setItem(10, new ItemBuilder(XMaterial.INK_SAC.parseMaterial()).setDurability(1).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Ban").addLore(Collections.singletonList("&7Click to select this punishment.")).create());
+        this.inventory.setItem(11, new ItemBuilder(XMaterial.INK_SAC.parseMaterial()).setDurability(2).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Kick").addLore(Collections.singletonList("&7Click to select this punishment.")).create());
+        this.inventory.setItem(12, new ItemBuilder(XMaterial.INK_SAC.parseMaterial()).setDurability(3).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Mute").addLore(Collections.singletonList("&7Click to select this punishment.")).create());
+        this.inventory.setItem(13, new ItemBuilder(XMaterial.INK_SAC.parseMaterial()).setDurability(4).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Warn").addLore(Collections.singletonList("&7Click to select this punishment.")).create());
+        this.inventory.setItem(14, new ItemBuilder(XMaterial.INK_SAC.parseMaterial()).setDurability(5).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "Blacklist").addLore(Collections.singletonList("&7Click to select this punishment.")).create());
     }
 
     @Override

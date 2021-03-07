@@ -72,6 +72,7 @@ public class PunishViewPaginatedMenu extends PaginatedMenu {
             lore.add(network.getMainColor() + "&m------------------------------------");
             lore.add("&ePunish By: &b" + network.getMainColor() + (issuerOfflinePlayer != null ? issuerOfflinePlayer.getName() : "&4Console"));
             lore.add("&ePunish To: &b" + network.getMainColor() + targetOfflinePlayer.getName());
+            lore.add("&ePunish On: &b" + network.getMainColor() + CorePlugin.FORMAT.format(punishment.getCreatedAt()));
             lore.add("&ePunish Reason: &b" + network.getMainColor() + punishment.getReason());
             lore.add(network.getMainColor() + "&m------------------------------------");
             lore.add("&ePunish Type: &b" + network.getMainColor() + punishment.getPunishmentType().getName());

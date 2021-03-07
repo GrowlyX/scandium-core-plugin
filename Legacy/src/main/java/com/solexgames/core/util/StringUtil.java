@@ -1,5 +1,6 @@
 package com.solexgames.core.util;
 
+import com.cryptomorin.xseries.XSound;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.font.DefaultFontInfo;
@@ -38,7 +39,7 @@ public final class StringUtil {
 
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
         if (potPlayer.isCanReceiveDmsSounds()) {
-            target.playSound(target.getLocation(), Sound.NOTE_PLING, 1.0F, 1.0F);
+            target.playSound(target.getLocation(), XSound.BLOCK_NOTE_BLOCK_PLING.parseSound(), 1.0F, 1.0F);
         }
     }
 

@@ -17,6 +17,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -42,6 +43,15 @@ public class ModSuiteListener implements Listener {
         if (potPlayer.isStaffMode()) {
             event.setCancelled(true);
             potPlayer.getPlayer().sendMessage(Color.translate("&cYou cannot place blocks while in mod mode."));
+        }
+    }
+
+    @EventHandler
+    public void onEvent(PlayerDropItemEvent event) {
+        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer());
+
+        if (potPlayer.isStaffMode()) {
+            event.setCancelled(true);
         }
     }
 
@@ -122,7 +132,6 @@ public class ModSuiteListener implements Listener {
 
             if (potPlayer.isStaffMode()) {
                 event.setCancelled(true);
-                potPlayer.getPlayer().sendMessage(Color.translate("&cYou cannot be damaged while in mod mode."));
             }
         }
     }

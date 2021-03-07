@@ -4,6 +4,7 @@ import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.AbstractInventoryMenu;
+import com.solexgames.core.util.Color;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.punishment.PunishmentDuration;
 import com.solexgames.core.player.punishment.PunishmentType;
@@ -28,7 +29,7 @@ public class PunishSelectDurationMenu extends AbstractInventoryMenu {
     private PunishmentType punishmentType;
 
     public PunishSelectDurationMenu(Player player, String target, String reason, PunishmentType punishmentType) {
-        super("Punishment duration for: &b" + (Bukkit.getPlayer(target) != null ? Bukkit.getPlayer(target).getDisplayName() : target), 9*3);
+        super("Punishment duration for: " + Color.translate("&b") + (Bukkit.getPlayer(target) != null ? Bukkit.getPlayer(target).getDisplayName() : target), 9*3);
         this.player = player;
         this.target = target;
         this.reason = reason;

@@ -25,7 +25,7 @@ public class PunishMainMenu extends AbstractInventoryMenu {
     private String target;
 
     public PunishMainMenu(Player player, String target) {
-        super("Punishment menu for &b" + (Bukkit.getPlayer(target) != null ? Bukkit.getPlayer(target).getDisplayName() : target), 9*3);
+        super("Punishment menu for: " + Color.translate("&b") + (Bukkit.getPlayer(target) != null ? Bukkit.getPlayer(target).getDisplayName() : target), 9*3);
         this.player = player;
         this.target = target;
         this.update();
