@@ -14,6 +14,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
 @Getter
@@ -33,6 +34,7 @@ public class ReportMenu extends AbstractInventoryMenu {
     public void update() {
         this.inventory.setItem(2, new ItemBuilder(XMaterial.DIAMOND_SWORD.parseMaterial())
                 .setDisplayName("&3Combat Hacks")
+                .addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS)
                 .addLore(
                         "",
                         "&8&l■ &fKillAura",
@@ -43,6 +45,7 @@ public class ReportMenu extends AbstractInventoryMenu {
         );
         this.inventory.setItem(3, new ItemBuilder(XMaterial.DIAMOND_BOOTS.parseMaterial())
                 .setDisplayName("&3Movement Hacks")
+                .addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS)
                 .addLore(
                         "",
                         "&8&l■ &fSpeed",
@@ -53,6 +56,7 @@ public class ReportMenu extends AbstractInventoryMenu {
         );
         this.inventory.setItem(4, new ItemBuilder(XMaterial.SLIME_BALL.parseMaterial())
                 .setDisplayName("&3Velocity Hacks")
+                .addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS)
                 .addLore(
                         "",
                         "&8&l■ &fVelocity",
@@ -63,6 +67,7 @@ public class ReportMenu extends AbstractInventoryMenu {
         );
         this.inventory.setItem(5, new ItemBuilder(XMaterial.RED_BED.parseMaterial())
                 .setDisplayName("&3Gameplay Sabotage")
+                .addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS)
                 .addLore(
                         "",
                         "&8&l■ &fCamping",
@@ -73,6 +78,7 @@ public class ReportMenu extends AbstractInventoryMenu {
         );
         this.inventory.setItem(6, new ItemBuilder(XMaterial.NAME_TAG.parseMaterial())
                 .setDisplayName("&3Chat Violation")
+                .addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS)
                 .addLore(
                         "",
                         "&8&l■ &fToxicity",

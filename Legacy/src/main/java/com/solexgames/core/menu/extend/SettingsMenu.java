@@ -11,6 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
 @Getter
@@ -28,6 +29,7 @@ public class SettingsMenu extends AbstractInventoryMenu {
     public void update() {
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(this.player);
         this.inventory.setItem(2, new ItemBuilder(XMaterial.PAPER.parseMaterial())
+                .addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS)
                 .setDisplayName("&3Global Chat")
                 .addLore(
                         "",
@@ -42,6 +44,7 @@ public class SettingsMenu extends AbstractInventoryMenu {
         );
         this.inventory.setItem(3, new ItemBuilder(XMaterial.EXPERIENCE_BOTTLE.parseMaterial())
                 .setDisplayName("&3Server Tips")
+                .addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS)
                 .addLore(
                         "",
                         "&7Would you like to be",
@@ -55,6 +58,7 @@ public class SettingsMenu extends AbstractInventoryMenu {
         );
         this.inventory.setItem(4, new ItemBuilder(XMaterial.EMERALD.parseMaterial())
                 .setDisplayName("&3Receive DMs")
+                .addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS)
                 .addLore(
                         "",
                         "&7Would you like to be",
@@ -68,6 +72,7 @@ public class SettingsMenu extends AbstractInventoryMenu {
         );
         this.inventory.setItem(5, new ItemBuilder(XMaterial.JUKEBOX.parseMaterial())
                 .setDisplayName("&3DMs Sounds")
+                .addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS)
                 .addLore(
                         "",
                         "&7Would you like to be",
@@ -82,6 +87,7 @@ public class SettingsMenu extends AbstractInventoryMenu {
         if (player.hasPermission("scandium.staff")) {
             this.inventory.setItem(6, new ItemBuilder(XMaterial.BLAZE_POWDER.parseMaterial())
                     .setDisplayName("&3Staff Messages")
+                    .addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS)
                     .addLore(
                             "",
                             "&7Would you like to be",

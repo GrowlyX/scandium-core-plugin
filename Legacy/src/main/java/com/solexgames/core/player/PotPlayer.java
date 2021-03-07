@@ -14,6 +14,7 @@ import com.solexgames.core.player.punishment.Punishment;
 import com.solexgames.core.player.punishment.PunishmentType;
 import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.potion.PotionMessageType;
+import com.solexgames.core.server.NetworkPlayer;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
 import com.solexgames.core.util.SaltUtil;
@@ -267,8 +268,11 @@ public class PotPlayer {
 
         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true)));
 
+        CorePlugin.getInstance().getPlayerManager().getAllNetworkProfiles().remove(this.uuid);
         CorePlugin.getInstance().getPlayerManager().getAllSyncCodes().remove(this.syncCode);
-        CorePlugin.getInstance().getPlayerManager().getAllProfiles().remove(uuid);
+        CorePlugin.getInstance().getPlayerManager().getAllProfiles().remove(this.uuid);
+
+        RedisUtil.writeAsync(RedisUtil.removeGlobalPlayer(this.uuid));
     }
 
     public void loadPlayerData() {
@@ -429,6 +433,10 @@ public class PotPlayer {
         });
 
         this.setupPlayer();
+
+        new NetworkPlayer(this.uuid, this.name, CorePlugin.getInstance().getServerName(), this.getActiveGrant().getRank().getName(), this.isCanReceiveDms());
+
+        RedisUtil.writeAsync(RedisUtil.addGlobalPlayer(this));
 
         if (CorePlugin.NAME_MC_REWARDS) this.checkVoting();
 

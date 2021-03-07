@@ -3,6 +3,7 @@ package com.solexgames.core.listener;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ChatChannelType;
 import com.solexgames.core.enums.ServerType;
+import com.solexgames.core.manager.PlayerManager;
 import com.solexgames.core.manager.ServerManager;
 import com.solexgames.core.media.MediaConstants;
 import com.solexgames.core.menu.IMenu;
@@ -199,7 +200,9 @@ public class PlayerListener implements Listener {
                         .replace("<vanish>", (potPlayer.isVanished() ? ChatColor.GREEN + "Enabled" : ChatColor.RED + "Disabled"))
                 ));
 
-                Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onConnect(potPlayer.getPlayer()))), 10L);
+                if (!CorePlugin.getInstance().getPlayerManager().isOnline(event.getPlayer().getName())) {
+                    Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onConnect(potPlayer.getPlayer()))), 10L);
+                }
             }
         });
     }
@@ -498,7 +501,7 @@ public class PlayerListener implements Listener {
                             .replace("<rank_color>", potPlayer.getActiveGrant().getRank().getColor())
                             .replace("<custom_color>", (potPlayer.getCustomColor() != null ? potPlayer.getCustomColor().toString() : ""))
                             .replace("<player_name>", player.getName())
-                            .replace("<message>", event.getMessage())
+                            .replace("<message>", ChatColor.stripColor(Color.translate(event.getMessage())))
                     ));
                 }
             }
@@ -514,18 +517,16 @@ public class PlayerListener implements Listener {
         event.setQuitMessage(null);
 
         if (event.getPlayer().hasPermission("scandium.staff")) {
-            CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onDisconnect(event.getPlayer().getDisplayName())));
-
-            /*Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> {
-                ServerManager serverManager = CorePlugin.getInstance().getServerManager();
-                boolean online = serverManager.isOnlineNetwork(event.getPlayer().getName());
+            Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> {
+                PlayerManager playerManager = CorePlugin.getInstance().getPlayerManager();
+                boolean online = playerManager.isOnline(event.getPlayer().getName());
 
                 if (online) {
                     CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onSwitchServer(event.getPlayer().getDisplayName(), CorePlugin.getInstance().getServerManager().getServer(event.getPlayer().getName()).getServerName())));
                 } else {
                     CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onDisconnect(event.getPlayer().getDisplayName())));
                 }
-            }, 6 * 20L);*/
+            }, 3 * 20L);
         }
 
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer().getUniqueId());

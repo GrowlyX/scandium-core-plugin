@@ -1,5 +1,6 @@
 package com.solexgames.core.player.grant;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.util.SaltUtil;

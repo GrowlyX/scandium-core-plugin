@@ -12,6 +12,7 @@ import com.solexgames.core.player.punishment.PunishmentType;
 import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.redis.json.JsonAppender;
 import com.solexgames.core.redis.subscription.AbstractJedisSubscriber;
+import com.solexgames.core.server.NetworkPlayer;
 import com.solexgames.core.server.NetworkServer;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.UUIDUtil;
@@ -38,6 +39,25 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
             JsonAppender jsonAppender = CorePlugin.GSON.fromJson(message, JsonAppender.class);
 
             switch (jsonAppender.getPacket()) {
+                case GLOBAL_PLAYER_REMOVE:
+                    UUID removingPlayer = UUID.fromString(jsonAppender.getParam("UUID"));
+                    String removalServer = jsonAppender.getParam("SERVER");
+
+                    if (!removalServer.equalsIgnoreCase(CorePlugin.getInstance().getServerName())) {
+                        CorePlugin.getInstance().getPlayerManager().getAllNetworkProfiles().remove(removingPlayer);
+                    }
+                    break;
+                case GLOBAL_PLAYER_ADDITION:
+                    UUID uuid = UUID.fromString(jsonAppender.getParam("UUID"));
+                    String name = jsonAppender.getParam("NAME");
+                    Rank rank = Rank.getByName(jsonAppender.getParam("RANK"));
+                    String globalServer = jsonAppender.getParam("SERVER");
+                    boolean dmsEnabled = Boolean.parseBoolean(jsonAppender.getParam("DMS_ENABLED"));
+
+                    if (!globalServer.equalsIgnoreCase(CorePlugin.getInstance().getServerName())) {
+                        new NetworkPlayer(uuid, name, rank.getName(), globalServer, dmsEnabled);
+                    }
+                    break;
                 case SERVER_DATA_ONLINE:
                     String bootingServerName = jsonAppender.getParam("SERVER");
 
@@ -260,18 +280,18 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                             finalPunishment.setActive(false);
                             finalPunishment.setRemoverName(removerName);
 
-                            String name = UUIDUtil.getName(punishment.getTarget().toString());
+                            String punishedName = UUIDUtil.getName(punishment.getTarget().toString());
 
                             if (reason.endsWith("-s")) {
                                 Bukkit.getOnlinePlayers()
                                         .stream()
                                         .filter(player -> player.hasPermission("scandium.staff"))
                                         .forEach(player1 -> player1.sendMessage(Color.translate(
-                                                "&7[S] " + name + " &awas " + "un" + finalPunishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (removerDisplayName != null ? removerDisplayName : "Console") + "&a."
+                                                "&7[S] " + punishedName + " &awas " + "un" + finalPunishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (removerDisplayName != null ? removerDisplayName : "Console") + "&a."
                                         )));
                             } else {
                                 Bukkit.broadcastMessage(Color.translate(
-                                        "&7" + name + " &awas un" + finalPunishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (removerDisplayName != null ? removerDisplayName : "Console") + "&a."
+                                        "&7" + punishedName + " &awas un" + finalPunishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (removerDisplayName != null ? removerDisplayName : "Console") + "&a."
                                 ));
                             }
 

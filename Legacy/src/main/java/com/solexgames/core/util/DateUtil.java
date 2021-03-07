@@ -8,8 +8,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * @author GrowlyX
- * @since 3/4/2021
+ * @author HCRival
+ * @since 11/1/2019
  */
 
 public final class DateUtil {

@@ -150,7 +150,9 @@ public final class CorePlugin extends JavaPlugin {
         FORMAT.setTimeZone(TimeZone.getTimeZone("EST"));
 
         RANDOM = new Random();
-        GSONBUILDER = new GsonBuilder().setPrettyPrinting();
+        GSONBUILDER = new GsonBuilder()
+                .serializeNulls()
+                .setPrettyPrinting();
         GSON = GSONBUILDER.create();
 
         this.mongoThread = Executors.newFixedThreadPool(1);

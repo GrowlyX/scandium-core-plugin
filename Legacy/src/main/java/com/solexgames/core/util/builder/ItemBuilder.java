@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -60,6 +61,11 @@ public class ItemBuilder {
 
     public ItemBuilder setDisplayName(String name) {
         itemMeta.setDisplayName(Color.translate(name));
+        return this;
+    }
+
+    public ItemBuilder addItemFlags(ItemFlag... flags) {
+        this.itemMeta.addItemFlags(flags);
         return this;
     }
 

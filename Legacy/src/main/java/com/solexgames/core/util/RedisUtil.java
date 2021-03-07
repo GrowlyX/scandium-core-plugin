@@ -203,8 +203,20 @@ public final class RedisUtil {
     }
 
     public static String addGlobalPlayer(PotPlayer potPlayer) {
-        // UUID uuid, String name, String serverName, String rankName, boolean receivingDms
-        return A
+        return new JsonAppender(RedisAction.GLOBAL_PLAYER_ADDITION)
+                .put("UUID", potPlayer.getUuid().toString())
+                .put("NAME", potPlayer.getName())
+                .put("SERVER", CorePlugin.getInstance().getServerName())
+                .put("RANK", potPlayer.getActiveGrant().getRank().getName())
+                .put("DMS_ENABLED", String.valueOf(potPlayer.isCanReceiveDms()))
+                .getAppended();
+    }
+
+    public static String removeGlobalPlayer(UUID uuid) {
+        return new JsonAppender(RedisAction.GLOBAL_PLAYER_REMOVE)
+                .put("UUID", uuid.toString())
+                .put("SERVER", CorePlugin.getInstance().getServerName())
+                .getAppended();
     }
 
     public static void writeAsync(String message) {
