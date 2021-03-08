@@ -26,7 +26,7 @@ public class HelpOpCommand extends BaseCommand {
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
         ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
         if (args.length == 0) {
-            player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " <message>."));
+            player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <message>."));
         }
 
         if (args.length > 0) {

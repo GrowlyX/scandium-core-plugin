@@ -25,7 +25,7 @@ public class BroadcastCommand extends BaseCommand {
         if (player.hasPermission("scandium.command.broadcast")) {
             ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
             if (args.length == 0) {
-                player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " [l:] [g:] <message>."));
+                player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " [l:] [g:] <message>."));
             }
 
             if (args.length > 0) {

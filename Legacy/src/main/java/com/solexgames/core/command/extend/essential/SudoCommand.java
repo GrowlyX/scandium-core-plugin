@@ -28,11 +28,11 @@ public class SudoCommand extends BaseCommand {
         if (player.hasPermission("scandium.command.sudo")) {
             ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
             if (args.length == 0) {
-                player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " [c:] [e:] <message>."));
+                player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " [c:] [e:] <message>."));
             }
             if (args.length > 0) {
                 if (args.length == 1) {
-                    player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " [c:] [e:] <message>."));
+                    player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " [c:] [e:] <message>."));
                 }
                 if (args.length > 1) {
                     Player target = Bukkit.getPlayerExact(args[0]);

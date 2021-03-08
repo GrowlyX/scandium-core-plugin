@@ -1,6 +1,5 @@
 package com.solexgames.command;
 
-import com.solexgames.CorePlugin;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;

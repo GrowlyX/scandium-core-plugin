@@ -24,11 +24,11 @@ public class UnBanCommand extends BaseCommand {
         ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
         if (!(sender instanceof Player)) {
             if (args.length == 0) {
-                sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " <player> <reason> &7[-s]."));
+                sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player> <reason> &7[-s]."));
             }
             if (args.length > 0) {
                 if (args.length == 1) {
-                    sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " <player> <reason> &7[-s]."));
+                    sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player> <reason> &7[-s]."));
                 }
                 if (args.length > 1) {
                     OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[0]);
@@ -74,11 +74,11 @@ public class UnBanCommand extends BaseCommand {
             Player player = (Player) sender;
             if (player.hasPermission("scandium.command.unban")) {
                 if (args.length == 0) {
-                    sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " <player> <reason> &7[-s]."));
+                    sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player> <reason> &7[-s]."));
                 }
                 if (args.length > 0) {
                     if (args.length == 1) {
-                        sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " <player> <reason> &7[-s]."));
+                        sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player> <reason> &7[-s]."));
                     }
                     if (args.length > 1) {
                         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[0]);

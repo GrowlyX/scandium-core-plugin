@@ -25,7 +25,7 @@ public class FreezeCommand extends BaseCommand {
         if (player.hasPermission("scandium.command.freeze")) {
             ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
             if (args.length == 0) {
-                sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " <player>."));
+                sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player>."));
             }
             if (args.length > 0) {
                 Player target = Bukkit.getPlayerExact(args[0]);

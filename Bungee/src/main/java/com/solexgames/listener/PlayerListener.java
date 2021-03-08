@@ -30,7 +30,7 @@ public class PlayerListener implements Listener {
             event.getResponse().setPlayers(new ServerPing.Players(0, 1, new ServerPing.PlayerInfo[] {}));
         } else {
             event.getResponse().setDescription(this.plugin.getNormalMotd());
-            event.getResponse().setPlayers(new ServerPing.Players(this.plugin.getProxy().getPlayers().size(), 1, new ServerPing.PlayerInfo[]{}));
+            event.getResponse().setPlayers(new ServerPing.Players(this.plugin.getProxyManager().getOnlineAllProxies(), 1, new ServerPing.PlayerInfo[]{}));
         }
         event.getResponse().setVersion(responseProtocol);
     }

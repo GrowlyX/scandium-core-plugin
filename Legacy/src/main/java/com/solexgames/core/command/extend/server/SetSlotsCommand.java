@@ -31,7 +31,7 @@ public class SetSlotsCommand extends BaseCommand {
         if (player.hasPermission("scandium.command.setslots")) {
             if (args.length == 0) {
                 ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
-                sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " <int>."));
+                sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <int>."));
             }
             if (args.length > 0) {
                 try {
@@ -55,7 +55,7 @@ public class SetSlotsCommand extends BaseCommand {
 
             declaredField.setAccessible(true);
             declaredField.set(invoke, slots);
-            
+
             changeProperties(slots);
         } catch (ReflectiveOperationException exception) {
             System.out.println("[Error] While setting slots of server. " + exception.getMessage());

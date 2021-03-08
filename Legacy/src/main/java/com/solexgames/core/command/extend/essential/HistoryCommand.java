@@ -25,7 +25,7 @@ public class HistoryCommand extends BaseCommand {
         if (player.hasPermission("scandium.command.history")) {
             ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
             if (args.length == 0) {
-                player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " <player>."));
+                player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player>."));
             }
             if (args.length > 0) {
                 OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[0]);

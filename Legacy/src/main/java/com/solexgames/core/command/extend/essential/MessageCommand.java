@@ -31,7 +31,7 @@ public class MessageCommand extends BaseCommand implements TabCompleter {
         Player player = (Player) sender;
         ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
         if (args.length == 0) {
-            player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " <player> <message>."));
+            player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player> <message>."));
         }
         if (args.length > 0) {
             if (args.length == 1) {

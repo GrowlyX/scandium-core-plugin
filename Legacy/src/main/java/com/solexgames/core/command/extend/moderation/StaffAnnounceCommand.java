@@ -26,7 +26,7 @@ public class StaffAnnounceCommand extends BaseCommand {
         if (player.hasPermission("scandium.command.staffannounce")) {
             ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
             if (args.length == 0) {
-                sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " <message>."));
+                sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <message>."));
             }
             if (args.length > 0) {
                 String message = StringUtil.buildMessage(args, 0);

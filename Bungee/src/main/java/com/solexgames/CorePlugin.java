@@ -1,7 +1,10 @@
 package com.solexgames;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.solexgames.command.*;
 import com.solexgames.listener.PlayerListener;
+import com.solexgames.proxy.ProxyManager;
 import com.solexgames.redis.RedisManager;
 import com.solexgames.redis.RedisSettings;
 import com.solexgames.util.Color;
@@ -42,6 +45,9 @@ public class CorePlugin extends Plugin {
     @Getter
     private static CorePlugin instance;
 
+    public static Gson GSON;
+    public static GsonBuilder GSONBUILDER;
+
     private ArrayList<String> whitelistedPlayers = new ArrayList<>();
     private ArrayList<ServerInfo> hubServers = new ArrayList<>();
 
@@ -50,6 +56,7 @@ public class CorePlugin extends Plugin {
     private File configurationFile;
     private File redisConfigFile;
 
+    private ProxyManager proxyManager;
     private RedisManager redisManager;
 
     private boolean maintenance;
@@ -64,6 +71,11 @@ public class CorePlugin extends Plugin {
     public void onEnable() {
         instance = this;
 
+        GSONBUILDER = new GsonBuilder()
+                .serializeNulls()
+                .setPrettyPrinting();
+        GSON = GSONBUILDER.create();
+
         createConfig();
 
         this.redisExecutor = Executors.newFixedThreadPool(1);
@@ -74,6 +86,7 @@ public class CorePlugin extends Plugin {
         this.configuration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(configurationFile);
         this.redisConfig = ConfigurationProvider.getProvider(YamlConfiguration.class).load(redisConfigFile);
 
+        this.proxyManager = new ProxyManager();
         this.redisManager = new RedisManager(new RedisSettings(
                 this.redisConfig.getString("redis.host"),
                 this.redisConfig.getInt("redis.port"),

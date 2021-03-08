@@ -23,7 +23,7 @@ public class WebAnnouncementDeleteCommand extends BaseCommand {
         ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
         if (player.hasPermission("scandium.command.webannouncementdelete")) {
             if (args.length == 0) {
-                sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " <title>."));
+                sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <title>."));
             }
 
             if (args.length > 0) {

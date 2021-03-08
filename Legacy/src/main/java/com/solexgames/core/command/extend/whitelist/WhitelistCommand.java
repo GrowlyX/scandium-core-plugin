@@ -19,7 +19,7 @@ public class WhitelistCommand extends BaseCommand {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
         if (args.length == 0) {
-            sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " <toggle|list|add|remove> <player>."));
+            sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <toggle|list|add|remove> <player>."));
         }
         Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> {
             if (args.length > 0) {
@@ -38,7 +38,7 @@ public class WhitelistCommand extends BaseCommand {
                         break;
                     case "add":
                         if (args.length == 1) {
-                            sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " <toggle|list|add|remove> <player>."));
+                            sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <toggle|list|add|remove> <player>."));
                         }
                         if (args.length == 2) {
                             String target = args[1];
@@ -54,7 +54,7 @@ public class WhitelistCommand extends BaseCommand {
                         break;
                     case "remove":
                         if (args.length == 1) {
-                            sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " <toggle|list|add|remove> <player>."));
+                            sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <toggle|list|add|remove> <player>."));
                         }
                         if (args.length == 2) {
                             String target = args[1];
@@ -83,7 +83,7 @@ public class WhitelistCommand extends BaseCommand {
                         sender.sendMessage(Color.translate(serverType.getMainColor() + "&m" + StringUtils.repeat("-", 53)));
                         break;
                     default:
-                        sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " <toggle|list|add|remove> <player>."));
+                        sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <toggle|list|add|remove> <player>."));
                         break;
                 }
             }

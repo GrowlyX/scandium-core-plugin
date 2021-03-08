@@ -21,12 +21,12 @@ public class WebAnnouncementCommand extends BaseCommand {
         ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
         if (!(sender instanceof Player)) {
             if (args.length == 0) {
-                sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " <title|split with _> <content>."));
+                sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <title|split with _> <content>."));
             }
 
             if (args.length > 0) {
                 if (args.length == 1) {
-                    sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " <title|split with _> <content>."));
+                    sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <title|split with _> <content>."));
                 }
                 if (args.length == 2) {
                     String title = args[0].replace("_", " ");
@@ -50,12 +50,12 @@ public class WebAnnouncementCommand extends BaseCommand {
         Player player = (Player) sender;
         if (player.hasPermission("scandium.command.webbc")) {
             if (args.length == 0) {
-                sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " <title|split with _> <content>."));
+                sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <title|split with _> <content>."));
             }
 
             if (args.length > 0) {
                 if (args.length == 1) {
-                    sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " <title|split with _> <content>."));
+                    sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <title|split with _> <content>."));
                 }
                 if (args.length > 1) {
                     String title = args[0].replace("_", " ");
