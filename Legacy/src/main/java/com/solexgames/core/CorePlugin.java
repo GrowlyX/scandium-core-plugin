@@ -368,11 +368,6 @@ public final class CorePlugin extends JavaPlugin {
         this.getServer().getOnlinePlayers().forEach(player -> player.kickPlayer(Color.translate("&cThe server is currently rebooting.\n&cPlease reconnect in a few minutes, or check discord for more information.")));
 
         this.punishmentManager.savePunishments();
-        this.rankManager.saveRanks();
-
-        RedisUtil.write(RedisUtil.updateRanks());
-
-//        this.warpManager.saveWarps();
         this.prefixManager.savePrefixes();
 
         RedisUtil.write(RedisUtil.onServerOffline());

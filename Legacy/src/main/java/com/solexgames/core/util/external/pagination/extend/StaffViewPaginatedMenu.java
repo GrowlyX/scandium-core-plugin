@@ -46,39 +46,37 @@ public class StaffViewPaginatedMenu extends PaginatedMenu {
                 .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
                 .filter(Objects::nonNull)
                 .filter(potPlayer -> potPlayer.getPlayer().hasPermission("scandium.staff"))
-                .forEach(potPlayer -> {
-                    buttons.put(i.getAndIncrement(), new Button() {
-                        @Override
-                        public ItemStack getButtonItem(Player player) {
-                            return new ItemBuilder(XMaterial.SKELETON_SKULL.parseMaterial())
-                                    .setOwner(potPlayer.getName())
-                                    .setDisplayName(Color.translate(potPlayer.getActiveGrant().getRank().getPrefix() + potPlayer.getColorByRankColor() + potPlayer.getPlayer().getName()))
-                                    .addLore(
-                                            network.getMainColor() + "&m------------------------",
-                                            network.getSecondaryColor() + "Mod-Mode: " + (potPlayer.isStaffMode() ? "&aEnabled" : "&cDisabled"),
-                                            network.getSecondaryColor() + "Vanish: " + (potPlayer.isVanished() ? "&aEnabled" : "&cDisabled"),
-                                            network.getSecondaryColor() + "Discord: " + (potPlayer.getSyncDiscord() != null ? network.getMainColor() + potPlayer.getSyncDiscord() : "&cNot Synced"),
-                                            "",
-                                            "&aClick to teleport to " + potPlayer.getColorByRankColor() + potPlayer.getPlayer().getName() + "&a!",
-                                            network.getMainColor() + "&m------------------------"
-                                    )
-                                    .create();
+                .forEach(potPlayer -> buttons.put(i.getAndIncrement(), new Button() {
+                    @Override
+                    public ItemStack getButtonItem(Player player) {
+                        return new ItemBuilder(XMaterial.SKELETON_SKULL.parseMaterial())
+                                .setOwner(potPlayer.getName())
+                                .setDisplayName(Color.translate(potPlayer.getActiveGrant().getRank().getPrefix() + potPlayer.getColorByRankColor() + potPlayer.getPlayer().getName()))
+                                .addLore(
+                                        network.getMainColor() + "&m------------------------",
+                                        network.getSecondaryColor() + "Mod-Mode: " + (potPlayer.isStaffMode() ? "&aEnabled" : "&cDisabled"),
+                                        network.getSecondaryColor() + "Vanish: " + (potPlayer.isVanished() ? "&aEnabled" : "&cDisabled"),
+                                        network.getSecondaryColor() + "Discord: " + (potPlayer.getSyncDiscord() != null ? network.getMainColor() + potPlayer.getSyncDiscord() : "&cNot Synced"),
+                                        "",
+                                        "&aClick to teleport to " + potPlayer.getColorByRankColor() + potPlayer.getPlayer().getName() + "&a!",
+                                        network.getMainColor() + "&m------------------------"
+                                )
+                                .create();
+                    }
+
+                    @Override
+                    public void clicked(Player player, ClickType clickType) {
+                        String display = ChatColor.stripColor(getButtonItem(player).getItemMeta().getDisplayName());
+
+                        if (Bukkit.getPlayer(display) != null) {
+                            Player clickedUser = Bukkit.getPlayer(display);
+                            PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(clickedUser);
+
+                            player.teleport(clickedUser.getLocation());
+                            player.sendMessage(Color.translate("&aYou have been teleported to " + potPlayer.getColorByRankColor() + potPlayer.getPlayer().getName() + "&a!"));
                         }
-
-                        @Override
-                        public void clicked(Player player, ClickType clickType) {
-                            String display = ChatColor.stripColor(getButtonItem(player).getItemMeta().getDisplayName());
-
-                            if (Bukkit.getPlayer(display) != null) {
-                                Player clickedUser = Bukkit.getPlayer(display);
-                                PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(clickedUser);
-
-                                player.teleport(clickedUser.getLocation());
-                                player.sendMessage(Color.translate("&aYou have been teleported to " + potPlayer.getColorByRankColor() + potPlayer.getPlayer().getName() + "&a!"));
-                            }
-                        }
-                    });
-                });
+                    }
+                }));
 
         return buttons;
     }

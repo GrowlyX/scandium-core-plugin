@@ -50,6 +50,7 @@ public class ItemBuilder {
         SkullMeta skullMeta = (SkullMeta) this.itemMeta;
 
         if (this.itemStack.getType().equals(XMaterial.SKELETON_SKULL.parseMaterial())) {
+
             skullMeta.setOwner(name);
         } else {
             return this;

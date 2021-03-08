@@ -35,7 +35,7 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
 
     @Override
     public void onMessage(String channel, String message) {
-        CorePlugin.getInstance().getRedisSubThread().execute(() -> {
+        Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> {
             JsonAppender jsonAppender = CorePlugin.GSON.fromJson(message, JsonAppender.class);
 
             switch (jsonAppender.getPacket()) {
