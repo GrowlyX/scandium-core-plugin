@@ -17,7 +17,7 @@ public class ProtocolChatInterceptor extends AbstractChatInterceptor {
 
     @Override
     public void initializePacketInterceptor() {
-        this.adapter = new PacketAdapter(this.coreInstance, ListenerPriority.HIGHEST, PacketType.Play.Client.TAB_COMPLETE) {
+        this.adapter = new PacketAdapter(CorePlugin.getInstance(), ListenerPriority.HIGHEST, PacketType.Play.Client.TAB_COMPLETE) {
             public void onPacketReceiving(PacketEvent event) {
                 if (event.getPacketType().equals(PacketType.Play.Client.TAB_COMPLETE)) {
                     try {
@@ -26,13 +26,10 @@ public class ProtocolChatInterceptor extends AbstractChatInterceptor {
                         PacketContainer packet = event.getPacket();
                         String message = packet.getSpecificModifier(String.class).read(0).toLowerCase();
 
-                        if (((message.startsWith("/")) && (!message.contains(" "))) || ((message.startsWith("/ver")) && (!message.contains("  "))) || ((message.startsWith("/version")) && (!message.contains("  "))) || ((message.startsWith("/?")) && (!message.contains("  "))) || ((message.startsWith("/about")) && (!message.contains("  "))) || ((message.startsWith("/help")) && (!message.contains("  "))) || message.contains("/to") || message.contains("/targetoffset")) {
+                        if (((message.startsWith("/")) && (!message.contains(" "))) || ((message.startsWith("/ver")) && (!message.contains("  "))) || ((message.startsWith("/version")) && (!message.contains("  "))) || ((message.startsWith("/?")) && (!message.contains("  "))) || ((message.startsWith("/about")) && (!message.contains("  "))) || ((message.startsWith("/help")) && (!message.contains("  ")))) {
                             event.setCancelled(true);
-                            if (getConfig().getBoolean("tab-block.message.enabled")) {
-                                event.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getConfig().getString("tab-block.message.string")));
-                            }
                         }
-                    } catch (FieldAccessException ignored) { }
+                    } catch (Exception ignored) { }
                 }
             }
         };
