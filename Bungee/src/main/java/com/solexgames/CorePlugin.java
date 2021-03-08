@@ -2,6 +2,8 @@ package com.solexgames;
 
 import com.solexgames.command.*;
 import com.solexgames.listener.PlayerListener;
+import com.solexgames.redis.RedisManager;
+import com.solexgames.redis.RedisSettings;
 import com.solexgames.util.Color;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +23,8 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Objects;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 /**
@@ -36,18 +40,24 @@ import java.util.stream.Collectors;
 public class CorePlugin extends Plugin {
 
     @Getter
-    public static CorePlugin instance;
+    private static CorePlugin instance;
 
-    public ArrayList<String> whitelistedPlayers = new ArrayList<>();
-    public ArrayList<ServerInfo> hubServers = new ArrayList<>();
+    private ArrayList<String> whitelistedPlayers = new ArrayList<>();
+    private ArrayList<ServerInfo> hubServers = new ArrayList<>();
 
-    public Configuration configuration;
-    public File configurationFile;
+    private Configuration configuration;
+    private Configuration redisConfig;
+    private File configurationFile;
+    private File redisConfigFile;
 
-    public boolean maintenance;
+    private RedisManager redisManager;
 
-    public String maintenanceMotd;
-    public String normalMotd;
+    private boolean maintenance;
+
+    private String maintenanceMotd;
+    private String normalMotd;
+
+    private Executor redisExecutor;
 
     @SneakyThrows
     @Override
@@ -56,8 +66,20 @@ public class CorePlugin extends Plugin {
 
         createConfig();
 
+        this.redisExecutor = Executors.newFixedThreadPool(1);
+
         this.configurationFile = new File(getDataFolder(), "config.yml");
+        this.redisConfigFile = new File("Xenon", "config.yml");
+
         this.configuration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(configurationFile);
+        this.redisConfig = ConfigurationProvider.getProvider(YamlConfiguration.class).load(redisConfigFile);
+
+        this.redisManager = new RedisManager(new RedisSettings(
+                this.redisConfig.getString("redis.host"),
+                this.redisConfig.getInt("redis.port"),
+                this.redisConfig.getBoolean("redis.authentication.enabled"),
+                this.redisConfig.getString("redis.authentication.password")
+        ));
 
         this.maintenance = this.configuration.getBoolean("maintenance");
         this.whitelistedPlayers.addAll(this.configuration.getStringList("whitelistedPlayers"));
@@ -94,11 +116,16 @@ public class CorePlugin extends Plugin {
                 e.printStackTrace();
             }
         }
-    }
 
-    public void registerCommands(Command... commands) {
-        for (Command command : commands) {
-            ProxyServer.getInstance().getPluginManager().registerCommand(this, command);
+        if (!new File("Xenon").exists())
+            new File("Xenon").mkdir();
+        File newFile = new File("Xenon", "data.yml");
+        if (!newFile.exists()) {
+            try (InputStream in = getResourceAsStream("data.yml")) {
+                Files.copy(in, newFile.toPath());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -112,6 +139,12 @@ public class CorePlugin extends Plugin {
     @SneakyThrows
     @Override
     public void onDisable() {
+        if (this.redisManager != null) {
+            if (this.redisManager.isActive()) {
+                this.redisManager.unsubscribe();
+            }
+        }
+
         this.configuration.set("whitelistedPlayers", whitelistedPlayers);
         this.configuration.set("maintenance", maintenance);
 
