@@ -200,9 +200,11 @@ public class PlayerListener implements Listener {
                         .replace("<vanish>", (potPlayer.isVanished() ? ChatColor.GREEN + "Enabled" : ChatColor.RED + "Disabled"))
                 ));
 
-                if (!CorePlugin.getInstance().getPlayerManager().isOnline(event.getPlayer().getName())) {
-                    Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onConnect(potPlayer.getPlayer()))), 10L);
-                }
+                Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> {
+                    if (!CorePlugin.getInstance().getPlayerManager().isOnline(event.getPlayer().getName())) {
+                        CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onConnect(potPlayer.getPlayer())));
+                    }
+                }, 2 * 20L);
             }
         });
     }
