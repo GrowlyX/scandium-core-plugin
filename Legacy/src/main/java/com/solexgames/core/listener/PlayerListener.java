@@ -200,11 +200,9 @@ public class PlayerListener implements Listener {
                         .replace("<vanish>", (potPlayer.isVanished() ? ChatColor.GREEN + "Enabled" : ChatColor.RED + "Disabled"))
                 ));
 
-                Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> {
-                    if (!CorePlugin.getInstance().getPlayerManager().isOnline(event.getPlayer().getName())) {
-                        CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onConnect(potPlayer.getPlayer())));
-                    }
-                }, 2 * 20L);
+                if (!CorePlugin.getInstance().getPlayerManager().isOnline(event.getPlayer().getName())) {
+                    CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onConnect(potPlayer.getPlayer())));
+                }
             }
         });
     }
@@ -518,13 +516,13 @@ public class PlayerListener implements Listener {
     public void onDisconnect(PlayerQuitEvent event) {
         event.setQuitMessage(null);
 
+        PlayerManager playerManager = CorePlugin.getInstance().getPlayerManager();
         if (event.getPlayer().hasPermission("scandium.staff")) {
             Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> {
-                PlayerManager playerManager = CorePlugin.getInstance().getPlayerManager();
                 boolean online = playerManager.isOnline(event.getPlayer().getName());
 
                 if (online) {
-                    CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onSwitchServer(event.getPlayer().getDisplayName(), CorePlugin.getInstance().getServerManager().getServer(event.getPlayer().getName()).getServerName())));
+                    CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onSwitchServer(event.getPlayer().getDisplayName(), (CorePlugin.getInstance().getServerManager().getServer(event.getPlayer().getName()).getServerName()) != null ? CorePlugin.getInstance().getServerManager().getServer(event.getPlayer().getName()).getServerName() : CorePlugin.getInstance().getServerName())));
                 } else {
                     CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onDisconnect(event.getPlayer().getDisplayName())));
                 }

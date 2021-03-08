@@ -142,7 +142,7 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                             .filter(Objects::nonNull)
                             .filter(potPlayer -> potPlayer.getPlayer().hasPermission("scandium.staff"))
                             .filter(PotPlayer::isCanSeeStaffMessages)
-                            .forEach(potPlayer -> potPlayer.getPlayer().sendMessage(Color.translate("&3[S] " + switchingPlayer + " &bjoined &3" + newServer + "&b from &3" + fromSwitchingServer + "&b.")));
+                            .forEach(potPlayer -> potPlayer.getPlayer().sendMessage(Color.translate((!fromSwitchingServer.equalsIgnoreCase(newServer)) ? "&3[S] " + switchingPlayer + " &bjoined &3" + newServer + "&b from &3" + fromSwitchingServer + "&b." : "&3[S] " + switchingPlayer + " &bconnected to &3" + newServer + "&b.")));
                     break;
                 case CHAT_CHANNEL_UPDATE:
                     ChatChannelType chatChannel = ChatChannelType.valueOf(jsonAppender.getParam("CHANNEL"));
