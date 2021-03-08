@@ -29,15 +29,16 @@ public class CGrantCommand extends BaseCommand {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
+            ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
             if (args.length == 0) {
-                sender.sendMessage(Color.translate("&cUsage: /" + label + " <player> <rank> <duration> <reason>."));
+                sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " <player> <rank> <duration> <reason>."));
             }
             if (args.length > 0) {
                 if (args.length == 1) {
-                    sender.sendMessage(Color.translate("&cUsage: /" + label + " <player> <rank> <duration> <reason>."));
+                    sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " <player> <rank> <duration> <reason>."));
                 }
                 if (args.length == 2) {
-                    sender.sendMessage(Color.translate("&cUsage: /" + label + " <player> <rank> <duration> <reason>."));
+                    sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " <player> <rank> <duration> <reason>."));
                 }
                 if (args.length > 2) {
                     Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByUuid(UUIDUtil.getId(args[0])).orElse(null);

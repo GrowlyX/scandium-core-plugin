@@ -27,7 +27,6 @@ import com.solexgames.core.command.extend.toggle.*;
 import com.solexgames.core.command.extend.warps.WarpCommand;
 import com.solexgames.core.command.extend.web.WebAnnouncementCommand;
 import com.solexgames.core.command.extend.web.WebAnnouncementDeleteCommand;
-import com.solexgames.core.command.extend.whitelist.BetaWhitelistCommand;
 import com.solexgames.core.command.extend.whitelist.WhitelistCommand;
 import com.solexgames.core.database.Database;
 import com.solexgames.core.enums.ServerType;

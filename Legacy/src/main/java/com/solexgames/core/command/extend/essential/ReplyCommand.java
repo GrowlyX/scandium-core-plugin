@@ -2,9 +2,11 @@ package com.solexgames.core.command.extend.essential;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.StringUtil;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -20,8 +22,9 @@ public class ReplyCommand extends BaseCommand {
 
         Player player = (Player) sender;
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
         if (args.length == 0) {
-            player.sendMessage(Color.translate("&cUsage: /" + label + " <message>."));
+            player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " <message>."));
         }
         if (args.length > 0) {
             String message = StringUtil.buildMessage(args, 0);

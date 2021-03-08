@@ -2,8 +2,10 @@ package com.solexgames.core.command.extend.web;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.util.Color;
 import org.bson.Document;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -18,9 +20,10 @@ public class WebAnnouncementDeleteCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
+        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
         if (player.hasPermission("scandium.command.webannouncementdelete")) {
             if (args.length == 0) {
-                player.sendMessage(Color.translate("&cUsage: /" + label + " <title>."));
+                sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " <title>."));
             }
 
             if (args.length > 0) {

@@ -2,10 +2,12 @@ package com.solexgames.core.command.extend.moderation;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -13,7 +15,7 @@ import org.bukkit.entity.Player;
 public class FreezeCommand extends BaseCommand {
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage("die");
             return false;
@@ -21,8 +23,9 @@ public class FreezeCommand extends BaseCommand {
 
         Player player = (Player) sender;
         if (player.hasPermission("scandium.command.freeze")) {
+            ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
             if (args.length == 0) {
-                player.sendMessage(Color.translate("&cUsage: /" + s + " <player>."));
+                sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " <player>."));
             }
             if (args.length > 0) {
                 Player target = Bukkit.getPlayerExact(args[0]);

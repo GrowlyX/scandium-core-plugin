@@ -3,10 +3,12 @@ package com.solexgames.core.command.extend.moderation;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.enums.ChatChannelType;
+import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
 import com.solexgames.core.util.StringUtil;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -22,8 +24,9 @@ public class StaffAnnounceCommand extends BaseCommand {
 
         Player player = (Player) sender;
         if (player.hasPermission("scandium.command.staffannounce")) {
+            ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
             if (args.length == 0) {
-                player.sendMessage(Color.translate("&cUsage: /staffannounce <message>"));
+                sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " <message>."));
             }
             if (args.length > 0) {
                 String message = StringUtil.buildMessage(args, 0);

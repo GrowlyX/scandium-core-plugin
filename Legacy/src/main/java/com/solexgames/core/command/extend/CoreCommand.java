@@ -5,6 +5,7 @@ import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.extend.ScandiumMenu;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.StringUtil;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.entity.Player;
@@ -25,13 +26,12 @@ public class CoreCommand extends BukkitCommand {
         }
 
         Player player = (Player) sender;
+        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
         if (player.isOp()) {
             if (args.length == 0) {
-                player.sendMessage(Color.translate("&cUsage: /" + label + " <debug|disallow|panel>"));
+                sender.sendMessage(Color.translate(network.getSecondaryColor() + "Usage: /" + network.getMainColor() + label + ChatColor.WHITE + " <debug|disallow|panel>."));
             }
             if (args.length > 0) {
-                ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
-
                 switch (args[0]) {
                     case "debug":
                         player.sendMessage(Color.translate((CorePlugin.getInstance().isDebugging() ? network.getMainColor() + "[" + CorePlugin.getInstance().getConfig().getString("core-settings.name") + "] &cDisabled debugging." : network.getMainColor() + "[" + CorePlugin.getInstance().getConfig().getString("core-settings.name") + "] &aEnabled debugging.")));
@@ -50,7 +50,6 @@ public class CoreCommand extends BukkitCommand {
                 }
             }
         } else {
-            ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
             player.sendMessage("  ");
             StringUtil.sendCenteredMessage(player, network.getSecondaryColor() + "This server is running " + network.getMainColor() + CorePlugin.getInstance().getConfig().getString("core-settings.name") + network.getSecondaryColor() + ".");
             StringUtil.sendCenteredMessage(player, "&7&oCreated by SolexGames.");

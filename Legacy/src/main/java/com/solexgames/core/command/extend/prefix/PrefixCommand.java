@@ -22,13 +22,14 @@ public class PrefixCommand extends BaseCommand {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
+            ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+            if (args.length == 0) {
+                sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " <player> <tag>."));
+            }
             if (args.length == 1) {
-                sender.sendMessage(Color.translate("&cUsage: /tag <player> <tag>."));
+                sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " <player> <tag>."));
             }
             if (args.length == 2) {
-                sender.sendMessage(Color.translate("&cUsage: /tag <player> <tag>."));
-            }
-            if (args.length >= 3) {
                 Player target = Bukkit.getPlayerExact(args[0]);
                 if (target != null) {
                     Prefix prefix = Prefix.getByName(args[1]);

@@ -2,11 +2,13 @@ package com.solexgames.core.command.extend.grant;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.UUIDUtil;
 import com.solexgames.core.util.external.pagination.extend.GrantMainPaginatedMenu;
 import lombok.SneakyThrows;
 import org.bson.Document;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -24,8 +26,9 @@ public class GrantCommand extends BaseCommand {
 
         Player player = (Player) sender;
         if (player.hasPermission("scandium.command.grant")) {
+            ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
             if (args.length == 0) {
-                player.sendMessage(Color.translate("&cUsage: /" + label + " <player>."));
+                sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " <player>."));
             }
             if (args.length > 0) {
                 String target = args[0];

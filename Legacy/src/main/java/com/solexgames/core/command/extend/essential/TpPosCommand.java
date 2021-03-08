@@ -25,15 +25,16 @@ public class TpPosCommand extends BaseCommand {
         ChatColor secondColor = network.getSecondaryColor();
         Player player = (Player) sender;
         if (player.hasPermission("scandium.command.tppos")) {
+            ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
             if (args.length == 0) {
-                player.sendMessage(Color.translate("&cUsage: /" + label + " <x> <y> <z>."));
+                player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " <x> <y> <z>."));
             }
             if (args.length > 0) {
                 if (args.length == 1) {
-                    player.sendMessage(Color.translate("&cUsage: /" + label + " <x> <y> <z>."));
+                    player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " <x> <y> <z>."));
                 }
                 if (args.length == 2) {
-                    player.sendMessage(Color.translate("&cUsage: /" + label + " <x> <y> <z>."));
+                    player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " <x> <y> <z>."));
                 }
                 if (args.length == 3) {
                     try {

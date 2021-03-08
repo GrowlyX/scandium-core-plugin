@@ -2,10 +2,12 @@ package com.solexgames.core.command.extend.essential;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.StringUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -27,8 +29,9 @@ public class MessageCommand extends BaseCommand implements TabCompleter {
         }
 
         Player player = (Player) sender;
+        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
         if (args.length == 0) {
-            player.sendMessage(Color.translate("&cUsage: /" + label + " <player> <message>."));
+            player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " <player> <message>."));
         }
         if (args.length > 0) {
             if (args.length == 1) {
@@ -38,37 +41,43 @@ public class MessageCommand extends BaseCommand implements TabCompleter {
                 Player target = Bukkit.getPlayerExact(args[0]);
                 String message = StringUtil.buildMessage(args, 1);
 
-                if (target != null) {
-                    PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
-                    PotPlayer potPerson = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-
-                    if (potPlayer.isIgnoring(potPerson.getPlayer())) {
-                        if (potPerson.isIgnoring(potPlayer.getPlayer())) {
-                            if (potPerson.isCanReceiveDms()) {
-                                if (potPerson != potPlayer) {
-                                    if (potPlayer.isCanReceiveDms()) {
-                                        StringUtil.sendPrivateMessage(player, target, message);
-
-                                        potPerson.setLastRecipient(target);
-                                        potPlayer.setLastRecipient(player);
-                                    } else {
-                                        player.sendMessage(Color.translate("&cThat player has their dms disabled."));
-                                    }
-                                } else {
-                                    player.sendMessage(Color.translate("&cYou cannot message yourself."));
-                                }
-                            } else {
-                                player.sendMessage(Color.translate("&cYou have your dms disabled."));
-                            }
-                        } else {
-                            player.sendMessage(Color.translate("&cYou are currently ignoring that player."));
-                        }
-                    } else {
-                        player.sendMessage(Color.translate("&cThat player is currently ignoring you."));
-                    }
-                } else {
+                if (target == null) {
                     player.sendMessage(Color.translate("&cThat player does not exist."));
+                    return false;
                 }
+
+                PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+                PotPlayer potTarget = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
+
+                if (potTarget.isVanished()) {
+                    player.sendMessage(Color.translate("&cThat player does not exist."));
+                    return false;
+                }
+                if (potTarget.isIgnoring(potPlayer.getPlayer())) {
+                    player.sendMessage(Color.translate("&cThat player is currently ignoring you."));
+                    return false;
+                }
+                if (potPlayer.isIgnoring(potTarget.getPlayer())) {
+                    player.sendMessage(Color.translate("&cYou are currently ignoring that player."));
+                    return false;
+                }
+                if (!potPlayer.isCanReceiveDms()) {
+                    player.sendMessage(Color.translate("&cYou have your dms disabled."));
+                    return false;
+                }
+                if (!potTarget.isCanReceiveDms()) {
+                    player.sendMessage(Color.translate("&cThat player has their dms disabled."));
+                    return false;
+                }
+                if (CorePlugin.getInstance().getFilterManager().isDmFiltered(player, target.getName(), message)) {
+                    player.sendMessage(Color.translate("&cYou cannot use censored words in a direct message."));
+                    return false;
+                }
+
+                StringUtil.sendPrivateMessage(player, target, message);
+
+                potPlayer.setLastRecipient(target);
+                potTarget.setLastRecipient(player);
             }
         }
         return false;

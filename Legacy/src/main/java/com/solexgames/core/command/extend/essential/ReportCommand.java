@@ -1,9 +1,12 @@
 package com.solexgames.core.command.extend.essential;
 
+import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.extend.ReportMenu;
 import com.solexgames.core.util.Color;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -18,8 +21,9 @@ public class ReportCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
+        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
         if (args.length == 0) {
-            player.sendMessage(Color.translate("&cUsage: /" + label + " <player>."));
+            player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " <player>."));
         }
 
         if (args.length > 0) {

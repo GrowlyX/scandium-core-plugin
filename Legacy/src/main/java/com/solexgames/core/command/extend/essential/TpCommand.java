@@ -25,8 +25,9 @@ public class TpCommand extends BaseCommand {
         ChatColor secondColor = network.getSecondaryColor();
         Player player = (Player) sender;
         if (player.hasPermission("scandium.command.tp")) {
+            ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
             if (args.length == 0) {
-                player.sendMessage(Color.translate("&cUsage: /" + label + " <player>."));
+                player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " <player>."));
             }
             if (args.length > 0) {
                 if (args.length == 1) {

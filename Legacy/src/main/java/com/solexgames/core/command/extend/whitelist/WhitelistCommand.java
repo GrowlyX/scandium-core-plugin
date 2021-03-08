@@ -2,9 +2,11 @@ package com.solexgames.core.command.extend.whitelist;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.util.Color;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -15,8 +17,9 @@ public class WhitelistCommand extends BaseCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
         if (args.length == 0) {
-            sender.sendMessage(Color.translate("&cUsage: /whitelist <toggle|list|add|remove> <player>"));
+            sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " <toggle|list|add|remove> <player>."));
         }
         Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> {
             if (args.length > 0) {
@@ -35,7 +38,7 @@ public class WhitelistCommand extends BaseCommand {
                         break;
                     case "add":
                         if (args.length == 1) {
-                            sender.sendMessage(Color.translate("&cUsage: /whitelist <toggle|add|remove> <player>"));
+                            sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " <toggle|list|add|remove> <player>."));
                         }
                         if (args.length == 2) {
                             String target = args[1];
@@ -51,7 +54,7 @@ public class WhitelistCommand extends BaseCommand {
                         break;
                     case "remove":
                         if (args.length == 1) {
-                            sender.sendMessage(Color.translate("&cUsage: /whitelist <toggle|add|remove> <player>"));
+                            sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " <toggle|list|add|remove> <player>."));
                         }
                         if (args.length == 2) {
                             String target = args[1];
@@ -67,8 +70,8 @@ public class WhitelistCommand extends BaseCommand {
                         }
                         break;
                     case "list":
-                        sender.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
-                        sender.sendMessage(Color.translate("&d&lWhitelisted Players"));
+                        sender.sendMessage(Color.translate(serverType.getMainColor() + "&m" + StringUtils.repeat("-", 53)));
+                        sender.sendMessage(Color.translate(serverType.getMainColor() + ChatColor.BOLD.toString() + "Whitelisted Players"));
                         whitelisted.forEach(s -> {
                             OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(s);
                             if (offlinePlayer != null) {
@@ -77,10 +80,10 @@ public class WhitelistCommand extends BaseCommand {
                                 sender.sendMessage(Color.translate(" &7- " + "&c" + s));
                             }
                         });
-                        sender.sendMessage(Color.translate("&7&M" + StringUtils.repeat("-", 53)));
+                        sender.sendMessage(Color.translate(serverType.getMainColor() + "&m" + StringUtils.repeat("-", 53)));
                         break;
                     default:
-                        sender.sendMessage(Color.translate("&cUsage: /whitelist <toggle|list|add|remove> <player>"));
+                        sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " <toggle|list|add|remove> <player>."));
                         break;
                 }
             }

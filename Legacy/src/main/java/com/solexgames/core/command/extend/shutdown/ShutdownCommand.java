@@ -2,8 +2,10 @@ package com.solexgames.core.command.extend.shutdown;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.manager.ShutdownManager;
 import com.solexgames.core.util.Color;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -21,7 +23,8 @@ public class ShutdownCommand extends BaseCommand {
         ShutdownManager shutdownManager = CorePlugin.getInstance().getShutdownManager();
         if (player.hasPermission("scandium.command.shutdown")) {
             if (args.length == 0) {
-                player.sendMessage(Color.translate("&cUsage: /" + label + " <start|cancel>"));
+                ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+                sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " <start|cancel>."));
             }
             if (args.length > 0) {
                 switch (args[0]) {

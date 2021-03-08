@@ -2,8 +2,10 @@ package com.solexgames.core.command.extend.server;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.util.Color;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -28,7 +30,8 @@ public class SetSlotsCommand extends BaseCommand {
         Player player = (Player) sender;
         if (player.hasPermission("scandium.command.setslots")) {
             if (args.length == 0) {
-                player.sendMessage(Color.translate("&cUsage: /" + label + " <integer>."));
+                ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+                sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " <int>."));
             }
             if (args.length > 0) {
                 try {
@@ -49,8 +52,10 @@ public class SetSlotsCommand extends BaseCommand {
         try {
             Object invoke = Class.forName(Bukkit.getServer().getClass().getPackage().getName() + ".CraftServer").getDeclaredMethod("getHandle", new Class[0]).invoke(Bukkit.getServer());
             Field declaredField = invoke.getClass().getSuperclass().getDeclaredField("maxPlayers");
+
             declaredField.setAccessible(true);
             declaredField.set(invoke, slots);
+            
             changeProperties(slots);
         } catch (ReflectiveOperationException exception) {
             System.out.println("[Error] While setting slots of server. " + exception.getMessage());

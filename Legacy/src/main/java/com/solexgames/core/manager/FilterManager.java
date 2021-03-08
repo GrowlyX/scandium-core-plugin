@@ -29,6 +29,49 @@ public class FilterManager {
         this.filteredMessages = this.plugin.getFilterConfig().getStringList("messages");
     }
 
+    public boolean isDmFiltered(Player player, String target, String message) {
+        AtomicBoolean atomicBoolean = new AtomicBoolean(false);
+        String fixedMessage = message.toLowerCase()
+                .replace("3", "e")
+                .replace("1", "i")
+                .replace("!", "i")
+                .replace("@", "a")
+                .replace("7", "t")
+                .replace("0", "o")
+                .replace("5", "s")
+                .replace("8", "b")
+                .replaceAll("\\p{Punct}|\\d", "")
+                .trim();
+        String[] words = fixedMessage.replace("(dot)", ".").replace("[dot]", ".").replace("<dot>", ".").trim().split(" ");
+
+        this.filteredMessages.stream()
+                .filter(s -> fixedMessage.contains(s.toLowerCase()))
+                .forEach(s -> {
+                    if (!atomicBoolean.get()) {
+                        if (!player.hasPermission("scandium.filter.bypass"))
+                            handleDmAlert(player, target, fixedMessage);
+
+                        atomicBoolean.set(true);
+                    }
+                });
+
+        if (!atomicBoolean.get()) {
+            Arrays.asList(words).forEach(word -> {
+                Matcher ipMatcher = FilterManager.IP_REGEX.matcher(word);
+                if (ipMatcher.matches()) {
+                    atomicBoolean.set(true);
+                }
+
+                Matcher urlMatcher = FilterManager.URL_REGEX.matcher(word);
+                if (urlMatcher.matches()) {
+                    atomicBoolean.set(true);
+                }
+            });
+        }
+
+        return atomicBoolean.get();
+    }
+
     public boolean isMessageFiltered(Player player, String message) {
         AtomicBoolean atomicBoolean = new AtomicBoolean(false);
         String fixedMessage = message.toLowerCase()
@@ -81,6 +124,18 @@ public class FilterManager {
                 .forEach(potPlayer -> {
                     PotPlayer targetPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
                     potPlayer.getPlayer().sendMessage(Color.translate("&c[Filtered] &e" + targetPlayer.getColorByRankColor() + targetPlayer.getName() + "&7: &e" + message));
+                });
+    }
+
+    private void handleDmAlert(Player player, String target, String message) {
+        Bukkit.getOnlinePlayers()
+                .stream()
+                .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
+                .filter(PotPlayer::isCanSeeFiltered)
+                .filter(potPlayer -> potPlayer.getPlayer().hasPermission("scandium.staff"))
+                .forEach(potPlayer -> {
+                    PotPlayer targetPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+                    potPlayer.getPlayer().sendMessage(Color.translate("&c[Filtered] &7(" + targetPlayer.getName() + " -> " + target + ")" + "&7: &e" + message));
                 });
     }
 }

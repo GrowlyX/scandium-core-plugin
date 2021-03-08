@@ -19,7 +19,7 @@ public class TestCommand extends BaseCommand {
 
         Player player = (Player) sender;
         if (player.hasPermission("scandium.command.broadcast")) {
-            new GrantMainPaginatedMenu(CorePlugin.getInstance().getPlayerManager().getDocumentByName("GrowlyX").get(), player).openMenu(player);
+
         } else {
             player.sendMessage(Color.translate("&cI'm sorry, but you do not have permission to perform this command."));
         }

@@ -25,8 +25,9 @@ public class SudoAllCommand extends BaseCommand {
         ChatColor secondColor = network.getSecondaryColor();
         Player player = (Player) sender;
         if (player.hasPermission("scandium.command.sudoall")) {
+            ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
             if (args.length == 0) {
-                player.sendMessage(Color.translate("&cUsage: /" + label + " [c:] [e:] <message>."));
+                player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: /" + serverType.getMainColor() + label + ChatColor.WHITE + " [c:] [e:] <message>."));
             }
 
             if (args.length > 0) {
