@@ -356,6 +356,12 @@ public class PotPlayer {
             allGrants.forEach(s -> this.allGrants.add(CorePlugin.GSON.fromJson(s, Grant.class)));
         }
 
+        if (this.getPlayer().hasPermission("scandium.staff")) {
+            if (!CorePlugin.getInstance().getPlayerManager().isOnline(this.getPlayer().getName())) {
+                CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onConnect(this.getPlayer())));
+            }
+        }
+
         new NetworkPlayer(uuid, name, this.getActiveGrant().getRank().getName(), CorePlugin.getInstance().getServerName(), this.isCanReceiveDms());
         RedisUtil.writeAsync(RedisUtil.addGlobalPlayer(this));
 

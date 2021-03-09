@@ -199,10 +199,6 @@ public class PlayerListener implements Listener {
                         .replace("<modmode>", (potPlayer.isStaffMode() ? ChatColor.GREEN + "Enabled" : ChatColor.RED + "Disabled"))
                         .replace("<vanish>", (potPlayer.isVanished() ? ChatColor.GREEN + "Enabled" : ChatColor.RED + "Disabled"))
                 ));
-
-                if (!CorePlugin.getInstance().getPlayerManager().isOnline(event.getPlayer().getName())) {
-                    CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onConnect(potPlayer.getPlayer())));
-                }
             }
         });
     }
