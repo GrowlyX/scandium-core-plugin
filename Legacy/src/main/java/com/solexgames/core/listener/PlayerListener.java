@@ -517,6 +517,13 @@ public class PlayerListener implements Listener {
         event.setQuitMessage(null);
 
         PlayerManager playerManager = CorePlugin.getInstance().getPlayerManager();
+        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer().getUniqueId());
+        if (potPlayer.isFrozen())
+            CorePlugin.getInstance().getPlayerManager().sendDisconnectFreezeMessage(event.getPlayer());
+
+        CorePlugin.getInstance().getServerManager().getVanishedPlayers().remove(event.getPlayer());
+        potPlayer.savePlayerData();
+
         if (event.getPlayer().hasPermission("scandium.staff")) {
             Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> {
                 boolean online = playerManager.isOnline(event.getPlayer().getName());
@@ -526,14 +533,7 @@ public class PlayerListener implements Listener {
                 } else {
                     CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onDisconnect(event.getPlayer().getDisplayName())));
                 }
-            }, 3 * 20L);
+            }, 4 * 20L);
         }
-
-        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer().getUniqueId());
-        if (potPlayer.isFrozen())
-            CorePlugin.getInstance().getPlayerManager().sendDisconnectFreezeMessage(event.getPlayer());
-
-        CorePlugin.getInstance().getServerManager().getVanishedPlayers().remove(event.getPlayer());
-        potPlayer.savePlayerData();
     }
 }
