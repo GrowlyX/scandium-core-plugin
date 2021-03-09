@@ -199,12 +199,15 @@ public class PotPlayer {
 
         document.put("autoVanish", this.isAutoVanish);
         document.put("autoModMode", this.isAutoModMode);
-        document.put("ipAddress", CorePlugin.getInstance().getCryptoManager().encrypt(ipAddress.toString()));
+        document.put("ipAddress", CorePlugin.getInstance().getCryptoManager().encrypt(this.ipAddress));
 
         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true)));
     }
 
     public void savePlayerData() {
+        CorePlugin.getInstance().getPlayerManager().getAllNetworkProfiles().remove(this.uuid);
+        RedisUtil.writeAsync(RedisUtil.removeGlobalPlayer(this.uuid));
+
         Document document = new Document("_id", this.uuid);
 
         document.put("name", this.getPlayer().getName());
@@ -270,9 +273,6 @@ public class PotPlayer {
 
         CorePlugin.getInstance().getPlayerManager().getAllSyncCodes().remove(this.syncCode);
         CorePlugin.getInstance().getPlayerManager().getAllProfiles().remove(this.uuid);
-        CorePlugin.getInstance().getPlayerManager().getAllNetworkProfiles().remove(this.uuid);
-
-        RedisUtil.writeAsync(RedisUtil.removeGlobalPlayer(this.uuid));
     }
 
     public void loadPlayerData() {
@@ -355,15 +355,6 @@ public class PotPlayer {
             List<String> allGrants = ((List<String>) document.get("allGrants"));
             allGrants.forEach(s -> this.allGrants.add(CorePlugin.GSON.fromJson(s, Grant.class)));
         }
-
-        if (this.getPlayer().hasPermission("scandium.staff")) {
-            if (!CorePlugin.getInstance().getPlayerManager().isOnline(this.getPlayer().getName())) {
-                CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onConnect(this.getPlayer())));
-            }
-        }
-
-        new NetworkPlayer(uuid, name, this.getActiveGrant().getRank().getName(), CorePlugin.getInstance().getServerName(), this.isCanReceiveDms());
-        RedisUtil.writeAsync(RedisUtil.addGlobalPlayer(this));
 
         if ((document.getString("appliedPrefix") != null) && !document.getString("appliedPrefix").equals("Default")) {
             this.appliedPrefix = Prefix.getByName(document.getString("appliedPrefix"));
@@ -448,6 +439,15 @@ public class PotPlayer {
         this.currentlyOnline = true;
 
         Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), this::saveWithoutRemove, 10 * 20L);
+
+        if (this.getPlayer().hasPermission("scandium.staff")) {
+            if (!CorePlugin.getInstance().getPlayerManager().isOnline(this.getPlayer().getName())) {
+                CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onConnect(this.getPlayer())));
+            }
+        }
+
+        new NetworkPlayer(uuid, name, this.getActiveGrant().getRank().getName(), CorePlugin.getInstance().getServerName(), this.isCanReceiveDms());
+        RedisUtil.writeAsync(RedisUtil.addGlobalPlayer(this));
     }
 
     public Grant getActiveGrant() {

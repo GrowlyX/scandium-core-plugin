@@ -516,7 +516,6 @@ public class PlayerListener implements Listener {
     public void onDisconnect(PlayerQuitEvent event) {
         event.setQuitMessage(null);
 
-        PlayerManager playerManager = CorePlugin.getInstance().getPlayerManager();
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer().getUniqueId());
         if (potPlayer.isFrozen())
             CorePlugin.getInstance().getPlayerManager().sendDisconnectFreezeMessage(event.getPlayer());
@@ -525,15 +524,13 @@ public class PlayerListener implements Listener {
         potPlayer.savePlayerData();
 
         if (event.getPlayer().hasPermission("scandium.staff")) {
-            Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> {
-                boolean online = playerManager.isOnline(event.getPlayer().getName());
-
-                if (online) {
-                    CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onSwitchServer(event.getPlayer().getDisplayName(), (CorePlugin.getInstance().getServerManager().getServer(event.getPlayer().getName())) != null ? CorePlugin.getInstance().getServerManager().getServer(event.getPlayer().getName()).getServerName() : CorePlugin.getInstance().getServerName())));
+            Bukkit.getScheduler().runTaskLaterAsynchronously(CorePlugin.getInstance(), () -> {
+                if (CorePlugin.getInstance().getServerManager().getServer(event.getPlayer().getName()) != null) {
+                    RedisUtil.writeAsync(RedisUtil.onSwitchServer(event.getPlayer().getDisplayName(), CorePlugin.getInstance().getServerManager().getServer(event.getPlayer().getName()).getServerName()));
                 } else {
-                    CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onDisconnect(event.getPlayer().getDisplayName())));
+                    RedisUtil.writeAsync(RedisUtil.onDisconnect(event.getPlayer().getDisplayName()));
                 }
-            }, 4 * 20L);
+            }, 60);
         }
     }
 }
