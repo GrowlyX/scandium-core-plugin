@@ -59,7 +59,7 @@ public class PlayerListener implements Listener {
             try {
                 ServerInfo hub = CorePlugin.getInstance().getBestHub();
                 if (hub == null) {
-                    event.getPlayer().disconnect((new ComponentBuilder("§cCould not find a hub server to connect you to.\n&bPlease contact administration if you think this is a bug.")).create());
+                    event.getPlayer().disconnect((new ComponentBuilder("§cCould not find a hub server to connect you to.\n§7Please contact administration if you think this is a bug.")).create());
                     return;
                 }
 

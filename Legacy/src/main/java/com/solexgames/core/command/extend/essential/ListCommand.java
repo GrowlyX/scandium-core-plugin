@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class ListCommand extends BaseCommand implements TabCompleter {
+public class ListCommand extends BaseCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
@@ -57,25 +57,6 @@ public class ListCommand extends BaseCommand implements TabCompleter {
         }
 
         return false;
-    }
-
-    @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        return this.getOnlineString();
-    }
-
-    public List<String> getOnlineString() {
-        List<PotPlayer> potPlayers = Bukkit.getOnlinePlayers().stream()
-                .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
-                .filter(Objects::nonNull)
-                .filter(potPlayer -> !potPlayer.isVanished())
-                .filter(potPlayer -> !potPlayer.isStaffMode())
-                .collect(Collectors.toList());
-
-        List<String> players = new ArrayList<>();
-        potPlayers.forEach(potPlayer -> players.add(potPlayer.getPlayer().getName()));
-
-        return players;
     }
 
     private String getFormattedName(PotPlayer potPlayer, Player viewer) {

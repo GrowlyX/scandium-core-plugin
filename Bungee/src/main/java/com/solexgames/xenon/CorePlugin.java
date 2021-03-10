@@ -103,7 +103,7 @@ public class CorePlugin extends Plugin {
                 .replace("<nl>", "\n"));
 
         this.getProxy().getServers().values().stream()
-                .filter(serverInfo -> serverInfo.getName().contains("hub") || serverInfo.getName().contains("lobby"))
+                .filter(serverInfo -> (serverInfo.getName().contains("hub") || serverInfo.getName().contains("Hub") || serverInfo.getName().contains("Lobby") || serverInfo.getName().contains("lobby")) && !(serverInfo.getName().contains("Restricted") || serverInfo.getName().contains("restricted")))
                 .forEach(serverInfo -> this.hubServers.add(serverInfo));
 
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new GlobalListCommand());

@@ -24,7 +24,7 @@ public class UnsyncCommand extends BaseCommand {
                 potPlayer.setSynced(false);
                 potPlayer.setSyncDiscord(null);
 
-                player.sendMessage(Color.translate("&aUnsynced your account!"));
+                player.sendMessage(Color.translate("&aUn-synced your account!"));
             } else {
                 player.sendMessage(Color.translate("&cYou are not synced to a discord account."));
             }

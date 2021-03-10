@@ -2,9 +2,14 @@ package com.solexgames.core.manager;
 
 import club.minnced.discord.webhook.WebhookClient;
 import club.minnced.discord.webhook.WebhookClientBuilder;
+import club.minnced.discord.webhook.send.WebhookEmbed;
+import club.minnced.discord.webhook.send.WebhookEmbedBuilder;
 import com.solexgames.core.CorePlugin;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.entity.Player;
+
+import java.time.temporal.TemporalAccessor;
 
 @Getter
 @Setter
@@ -36,5 +41,28 @@ public class DiscordManager {
         this.client = builder.build();
     }
 
+    public void sendReport(Player player, Player target, String reason) {
+        WebhookEmbedBuilder embedBuilder = new WebhookEmbedBuilder();
 
+        embedBuilder.addField(new WebhookEmbed.EmbedField(true, "Player", player.getName()));
+        embedBuilder.addField(new WebhookEmbed.EmbedField(true, "Target", target.getName()));
+        embedBuilder.addField(new WebhookEmbed.EmbedField(true, "Reason", reason));
+
+        embedBuilder.setThumbnailUrl("https://visage.surgeplay.com/head/512/" + player.getUniqueId());
+        embedBuilder.setColor(0xFF0000);
+
+        this.client.send(embedBuilder.build());
+    }
+
+    public void sendRequest(Player player, String reason) {
+        WebhookEmbedBuilder embedBuilder = new WebhookEmbedBuilder();
+
+        embedBuilder.addField(new WebhookEmbed.EmbedField(true, "Player", player.getName()));
+        embedBuilder.addField(new WebhookEmbed.EmbedField(true, "Request", reason));
+
+        embedBuilder.setThumbnailUrl("https://visage.surgeplay.com/head/512/" + player.getUniqueId());
+        embedBuilder.setColor(0xFF0000);
+
+        this.client.send(embedBuilder.build());
+    }
 }

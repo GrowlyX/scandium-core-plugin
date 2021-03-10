@@ -277,7 +277,10 @@ public class PotPlayer {
 
     public void loadPlayerData() {
         Document document = CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("_id", this.uuid)).first();
-        if (document == null) return;
+        if (document == null) {
+            this.saveWithoutRemove();
+            return;
+        }
 
         this.name = this.getPlayer().getName();
         if (document.getBoolean("canSeeStaffMessages") != null) {
