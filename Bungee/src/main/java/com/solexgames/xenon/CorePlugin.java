@@ -1,19 +1,18 @@
-package com.solexgames;
+package com.solexgames.xenon;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.solexgames.command.*;
-import com.solexgames.listener.PlayerListener;
-import com.solexgames.proxy.ProxyManager;
-import com.solexgames.redis.RedisManager;
-import com.solexgames.redis.RedisSettings;
-import com.solexgames.util.Color;
+import com.solexgames.xenon.command.*;
+import com.solexgames.xenon.listener.PlayerListener;
+import com.solexgames.xenon.proxy.ProxyManager;
+import com.solexgames.xenon.redis.RedisManager;
+import com.solexgames.xenon.redis.RedisSettings;
+import com.solexgames.xenon.util.Color;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
-import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
@@ -28,7 +27,6 @@ import java.util.Comparator;
 import java.util.Objects;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
 
 /**
  * @author GrowlyX
@@ -80,8 +78,8 @@ public class CorePlugin extends Plugin {
 
         this.redisExecutor = Executors.newFixedThreadPool(1);
 
-        this.configurationFile = new File(getDataFolder(), "config.yml");
-        this.redisConfigFile = new File("Xenon", "config.yml");
+        this.configurationFile = new File("Xenon", "settings.yml");
+        this.redisConfigFile = new File("Xenon", "data.yml");
 
         this.configuration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(configurationFile);
         this.redisConfig = ConfigurationProvider.getProvider(YamlConfiguration.class).load(redisConfigFile);
@@ -119,9 +117,9 @@ public class CorePlugin extends Plugin {
     }
 
     private void createConfig() {
-        if (!getDataFolder().exists())
-            getDataFolder().mkdir();
-        File file = new File(getDataFolder(), "config.yml");
+        if (!new File("Xenon").exists())
+            new File("Xenon").mkdir();
+        File file = new File("Xenon", "settings.yml");
         if (!file.exists()) {
             try (InputStream in = getResourceAsStream("config.yml")) {
                 Files.copy(in, file.toPath());

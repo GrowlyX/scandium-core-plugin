@@ -1,4 +1,4 @@
-package com.solexgames.redis;
+package com.solexgames.xenon.redis;
 
 import lombok.Data;
 

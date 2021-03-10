@@ -1,8 +1,8 @@
-package com.solexgames.redis.subscription.extend;
+package com.solexgames.xenon.redis.subscription.extend;
 
-import com.solexgames.CorePlugin;
-import com.solexgames.redis.json.JsonAppender;
-import com.solexgames.redis.subscription.AbstractJedisSubscriber;
+import com.solexgames.xenon.CorePlugin;
+import com.solexgames.xenon.redis.json.JsonAppender;
+import com.solexgames.xenon.redis.subscription.AbstractJedisSubscriber;
 
 public class ProxyRedisSubscriber extends AbstractJedisSubscriber {
 

@@ -1,6 +1,6 @@
-package com.solexgames.redis.subscription;
+package com.solexgames.xenon.redis.subscription;
 
-import com.solexgames.CorePlugin;
+import com.solexgames.xenon.CorePlugin;
 import lombok.Getter;
 import redis.clients.jedis.JedisPubSub;
 

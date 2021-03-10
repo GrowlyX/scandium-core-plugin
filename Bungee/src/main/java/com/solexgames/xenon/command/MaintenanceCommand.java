@@ -1,8 +1,7 @@
-package com.solexgames.command;
+package com.solexgames.xenon.command;
 
-import com.solexgames.CorePlugin;
-import com.solexgames.util.Color;
-import net.md_5.bungee.BungeeCord;
+import com.solexgames.xenon.CorePlugin;
+import com.solexgames.xenon.util.Color;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.plugin.Command;

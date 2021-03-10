@@ -1,7 +1,6 @@
-package com.solexgames.listener;
+package com.solexgames.xenon.listener;
 
-import com.solexgames.CorePlugin;
-import com.solexgames.util.Color;
+import com.solexgames.xenon.CorePlugin;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ServerPing;
 import net.md_5.bungee.api.chat.ComponentBuilder;

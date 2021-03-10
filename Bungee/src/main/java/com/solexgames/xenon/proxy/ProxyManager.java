@@ -1,6 +1,5 @@
-package com.solexgames.proxy;
+package com.solexgames.xenon.proxy;
 
-import com.solexgames.CorePlugin;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

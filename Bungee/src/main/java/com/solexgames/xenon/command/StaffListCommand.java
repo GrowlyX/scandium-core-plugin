@@ -1,6 +1,6 @@
-package com.solexgames.command;
+package com.solexgames.xenon.command;
 
-import com.solexgames.util.Color;
+import com.solexgames.xenon.util.Color;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
@@ -10,7 +10,6 @@ import net.md_5.bungee.api.plugin.Command;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 
 import static net.md_5.bungee.api.ChatColor.GRAY;
 import static net.md_5.bungee.api.ChatColor.WHITE;

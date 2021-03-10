@@ -1,4 +1,4 @@
-package com.solexgames.command;
+package com.solexgames.xenon.command;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;

@@ -1,7 +1,7 @@
-package com.solexgames.redis.json;
+package com.solexgames.xenon.redis.json;
 
 import com.google.gson.Gson;
-import com.solexgames.redis.action.RedisAction;
+import com.solexgames.xenon.redis.action.RedisAction;
 import lombok.Getter;
 
 import java.util.HashMap;

@@ -1,14 +1,12 @@
-package com.solexgames.redis;
+package com.solexgames.xenon.redis;
 
-import com.solexgames.CorePlugin;
-import com.solexgames.redis.subscription.AbstractJedisSubscriber;
-import com.solexgames.redis.subscription.extend.ProxyRedisSubscriber;
+import com.solexgames.xenon.CorePlugin;
+import com.solexgames.xenon.redis.subscription.AbstractJedisSubscriber;
+import com.solexgames.xenon.redis.subscription.extend.ProxyRedisSubscriber;
 import lombok.Getter;
 import lombok.Setter;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
-
-import java.lang.reflect.Proxy;
 
 /**
  * @author GrowlyX

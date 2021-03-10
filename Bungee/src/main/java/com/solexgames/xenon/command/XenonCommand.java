@@ -1,8 +1,8 @@
-package com.solexgames.command;
+package com.solexgames.xenon.command;
 
-import com.solexgames.CorePlugin;
-import com.solexgames.util.Color;
-import com.solexgames.util.StringUtil;
+import com.solexgames.xenon.CorePlugin;
+import com.solexgames.xenon.util.Color;
+import com.solexgames.xenon.util.StringUtil;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.plugin.Command;
 
@@ -21,7 +21,7 @@ public class XenonCommand extends Command {
     public void execute(CommandSender sender, String[] args) {
         if (args.length == 0) {
             sender.sendMessages(
-                    Color.translate("&bThis server is running &3&lXenon&b."),
+                    Color.translate("&bThis proxy is running &3&lXenon&b."),
                     Color.translate("&7Created by SolexGames.")
             );
         }

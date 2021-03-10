@@ -1,6 +1,6 @@
-package com.solexgames.command;
+package com.solexgames.xenon.command;
 
-import com.solexgames.util.Color;
+import com.solexgames.xenon.util.Color;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;

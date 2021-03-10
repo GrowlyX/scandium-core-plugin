@@ -1,4 +1,4 @@
-package com.solexgames.proxy;
+package com.solexgames.xenon.proxy;
 
 import lombok.Getter;
 
