@@ -17,7 +17,7 @@ public class LunarCommand extends AbstractClientInjector {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage("die");
+            sender.sendMessage(ONLY_PLAYERS);
             return false;
         }
 

@@ -6,11 +6,14 @@ import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.manager.PlayerManager;
 import com.solexgames.core.redis.RedisManager;
 import com.solexgames.core.util.Color;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 public abstract class BaseCommand implements CommandExecutor {
+
+    public final String ONLY_PLAYERS = ChatColor.RED + "Only players can execute this command.";
 
     public PlayerManager playerManager;
     public RedisManager client;

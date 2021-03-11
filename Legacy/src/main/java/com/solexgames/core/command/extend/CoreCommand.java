@@ -21,7 +21,7 @@ public class CoreCommand extends BukkitCommand {
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage("die");
+            sender.sendMessage(ONLY_PLAYERS);
             return false;
         }
 

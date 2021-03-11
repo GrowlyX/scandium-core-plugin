@@ -12,7 +12,7 @@ public class ClearChatCommand extends BaseCommand {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage("die");
+            sender.sendMessage(ONLY_PLAYERS);
             return false;
         }
 

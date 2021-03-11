@@ -303,9 +303,7 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("message").setExecutor(messageCommand);
         this.getCommand("message").setTabCompleter(messageCommand);
 
-        ListCommand listCommand = new ListCommand();
-        this.getCommand("list").setExecutor(listCommand);
-        this.getCommand("list").setTabCompleter(listCommand);
+        this.getCommand("list").setExecutor(new ListCommand());
 
         if (this.lunarCommand != null) this.getCommand("lunar").setExecutor(lunarCommand);
         if (this.chatInterceptor != null) this.chatInterceptor.initializePacketInterceptor();

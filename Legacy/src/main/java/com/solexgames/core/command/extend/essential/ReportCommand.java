@@ -16,7 +16,7 @@ public class ReportCommand extends BaseCommand {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            System.out.println("die");
+            sender.sendMessage(ONLY_PLAYERS);
             return false;
         }
 

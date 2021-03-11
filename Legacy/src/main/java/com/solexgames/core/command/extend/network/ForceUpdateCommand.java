@@ -12,13 +12,13 @@ import org.bukkit.entity.Player;
 public class ForceUpdateCommand extends BaseCommand {
 
     @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
-        if (commandSender instanceof ConsoleCommandSender) {
-            System.out.println("no");
+    public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(ONLY_PLAYERS);
             return false;
         }
 
-        Player player = (Player) commandSender;
+        Player player = (Player) sender;
 
         if (player.hasPermission("scandium.command.forceupdate")) {
             if (args.length == 0) {

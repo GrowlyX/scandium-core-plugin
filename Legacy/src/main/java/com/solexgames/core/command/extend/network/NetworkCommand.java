@@ -16,8 +16,8 @@ public class NetworkCommand extends BaseCommand {
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
-        if (commandSender instanceof ConsoleCommandSender) {
-            System.out.println("no");
+        if (!(commandSender instanceof Player)) {
+            commandSender.sendMessage(ONLY_PLAYERS);
             return false;
         }
 
