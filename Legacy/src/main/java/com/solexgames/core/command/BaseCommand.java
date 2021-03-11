@@ -13,13 +13,14 @@ import org.bukkit.command.CommandSender;
 
 public abstract class BaseCommand implements CommandExecutor {
 
-    public final String ONLY_PLAYERS = ChatColor.RED + "Only players can execute this command.";
+    protected final String ONLY_PLAYERS = ChatColor.RED + "Only players can execute this command.";
+    protected final String NO_PERMISSION = ChatColor.RED + "I'm sorry, but you do not have permission to perform this command.";
 
-    public PlayerManager playerManager;
-    public RedisManager client;
-    public Database database;
+    protected PlayerManager playerManager;
+    protected RedisManager client;
+    protected Database database;
 
-    public BaseCommand() {
+    protected BaseCommand() {
         this.playerManager = CorePlugin.getInstance().getPlayerManager();
         this.database = CorePlugin.getInstance().getCoreDatabase();
         this.client = CorePlugin.getInstance().getRedisManager();

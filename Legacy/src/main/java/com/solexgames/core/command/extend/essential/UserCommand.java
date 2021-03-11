@@ -143,7 +143,7 @@ public class UserCommand extends BaseCommand {
                 }
             }
         } else {
-            sender.sendMessage(Color.translate("&cI'm sorry, but you do not have permission to perform this command."));
+            sender.sendMessage(NO_PERMISSION);
         }
         return false;
     }

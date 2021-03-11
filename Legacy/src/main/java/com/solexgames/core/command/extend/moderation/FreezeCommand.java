@@ -59,7 +59,7 @@ public class FreezeCommand extends BaseCommand {
                 }
             }
         } else {
-            player.sendMessage(Color.translate("&cI'm sorry, but you do not have permission to perform this command."));
+            player.sendMessage(NO_PERMISSION);
         }
         return false;
     }

@@ -66,7 +66,7 @@ public class XenonCommand extends Command {
                         break;
                 }
             } else {
-                sender.sendMessage(Color.translate("&cI'm sorry, but you do not have permission to perform this command."));
+                sender.sendMessage(NO_PERMISSION);
             }
         }
     }

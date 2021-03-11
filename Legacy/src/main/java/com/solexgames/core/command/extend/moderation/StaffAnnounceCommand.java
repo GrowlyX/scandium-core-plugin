@@ -33,7 +33,7 @@ public class StaffAnnounceCommand extends BaseCommand {
                 CorePlugin.getInstance().getPlayerManager().sendToNetworkStaff("&3[S] &c[Alert] &b" + message);
             }
         } else {
-            player.sendMessage(Color.translate("&cI'm sorry, but you do not have permission to perform this command."));
+            player.sendMessage(NO_PERMISSION);
         }
         return false;
     }
