@@ -36,7 +36,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onServerConnect(ServerConnectEvent event) {
-        if ((event.getTarget().getName().contains("hub") || event.getTarget().getName().contains("lobby") || event.getReason() == ServerConnectEvent.Reason.JOIN_PROXY) && event.getReason() != ServerConnectEvent.Reason.COMMAND) {
+        if ((event.getReason() == ServerConnectEvent.Reason.JOIN_PROXY)) {
             ServerInfo hub = this.plugin.getBestHub();
 
             if (hub != null && hub != event.getTarget()) {

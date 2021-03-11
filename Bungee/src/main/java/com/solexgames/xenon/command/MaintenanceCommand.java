@@ -2,6 +2,7 @@ package com.solexgames.xenon.command;
 
 import com.solexgames.xenon.CorePlugin;
 import com.solexgames.xenon.util.Color;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.plugin.Command;
@@ -14,6 +15,9 @@ import static net.md_5.bungee.api.ChatColor.translateAlternateColorCodes;
  */
 
 public class MaintenanceCommand extends Command {
+
+    protected final String ONLY_PLAYERS = ChatColor.RED + "Only players can execute this command.";
+    protected final String NO_PERMISSION = ChatColor.RED + "I'm sorry, but you do not have permission to perform this command.";
 
     public MaintenanceCommand() {
         super("maintenance");

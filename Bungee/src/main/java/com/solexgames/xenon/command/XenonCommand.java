@@ -3,6 +3,7 @@ package com.solexgames.xenon.command;
 import com.solexgames.xenon.CorePlugin;
 import com.solexgames.xenon.util.Color;
 import com.solexgames.xenon.util.StringUtil;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.plugin.Command;
 
@@ -12,6 +13,9 @@ import net.md_5.bungee.api.plugin.Command;
  */
 
 public class XenonCommand extends Command {
+
+    protected final String ONLY_PLAYERS = ChatColor.RED + "Only players can execute this command.";
+    protected final String NO_PERMISSION = ChatColor.RED + "I'm sorry, but you do not have permission to perform this command.";
 
     public XenonCommand() {
         super("xenon", null, "bungee", "proxy");

@@ -2,6 +2,7 @@ package com.solexgames.xenon.command;
 
 import com.solexgames.xenon.util.Color;
 import net.md_5.bungee.BungeeCord;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -20,6 +21,9 @@ import static net.md_5.bungee.api.ChatColor.WHITE;
  */
 
 public class StaffListCommand extends Command {
+
+	protected final String ONLY_PLAYERS = ChatColor.RED + "Only players can execute this command.";
+	protected final String NO_PERMISSION = ChatColor.RED + "I'm sorry, but you do not have permission to perform this command.";
 
 	public StaffListCommand() {
 		super("slist", null, "stafflist");
