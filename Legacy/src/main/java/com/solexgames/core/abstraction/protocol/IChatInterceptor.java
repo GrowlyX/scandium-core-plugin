@@ -1,4 +1,4 @@
-package com.solexgames.core.protocol;
+package com.solexgames.core.abstraction.protocol;
 
 public interface IChatInterceptor {
 

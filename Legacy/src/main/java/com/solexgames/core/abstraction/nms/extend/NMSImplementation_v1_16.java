@@ -1,27 +1,28 @@
-package com.solexgames.core.nms.extend;
+package com.solexgames.core.abstraction.nms.extend;
 
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.nms.AbstractNMSImplementation;
-import net.minecraft.server.v1_7_R4.MinecraftServer;
-import net.minecraft.server.v1_7_R4.PacketPlayOutPlayerInfo;
+import com.solexgames.core.abstraction.nms.AbstractNMSImplementation;
+import net.minecraft.server.v1_16_R3.MinecraftServer;
+import net.minecraft.server.v1_16_R3.PacketPlayOutPlayerInfo;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_7_R4.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.stream.Collectors;
 
-public class NMSImplementation_v1_7 extends AbstractNMSImplementation {
+public class NMSImplementation_v1_16 extends AbstractNMSImplementation {
 
     @Override
     public void removeExecute(Player player) {
-        MinecraftServer.getServer().getPlayerList().sendAll(PacketPlayOutPlayerInfo.removePlayer((((CraftPlayer) player).getHandle())));
+        PacketPlayOutPlayerInfo packetPlayOutPlayerInfo = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, (((CraftPlayer) player).getHandle()));
+        MinecraftServer.getServer().getPlayerList().sendAll(packetPlayOutPlayerInfo);
     }
 
     @Override
     public void addExecute(Player player) {
-        MinecraftServer.getServer().getPlayerList().sendAll(PacketPlayOutPlayerInfo.addPlayer((((CraftPlayer) player).getHandle())));
+        PacketPlayOutPlayerInfo packetPlayOutPlayerInfo = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, (((CraftPlayer) player).getHandle()));
+        MinecraftServer.getServer().getPlayerList().sendAll(packetPlayOutPlayerInfo);
     }
 
     @Override

@@ -36,11 +36,11 @@ public class RankCommand extends BaseCommand {
         player.sendMessage(Color.translate("/rank save &7- Sync ranks across network & save ranks."));
         player.sendMessage(Color.translate("/rank info &7- Show info of a rank."));
         player.sendMessage(Color.translate("/rank weight &7- Set a rank's weight."));
-        player.sendMessage(Color.translate("/rank hidden &7- et a rank as a hidden rank."));
+        player.sendMessage(Color.translate("/rank hidden &7- Set a rank as a hidden rank."));
         player.sendMessage(Color.translate("/rank default &7- Set a rank as a default rank."));
         player.sendMessage(Color.translate("/rank addInher &7- Add an inheritance to a rank."));
         player.sendMessage(Color.translate("/rank delInher &7- Remove an inheritance from a rank."));
-        player.sendMessage(Color.translate("/rank teamLetter &7- Set the team letter of a rank (For tablist sorting; \"a\" would be highest on tablist, \"z\" would be lowest.) (Don't use)"));
+//        player.sendMessage(Color.translate("/rank teamLetter &7- Set the team letter of a rank (For tablist sorting; \"a\" would be highest on tablist, \"z\" would be lowest.) (Don't use)"));
         player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
     }
 
@@ -53,7 +53,9 @@ public class RankCommand extends BaseCommand {
 
         Player player = (Player) sender;
         if (player.hasPermission("scandium.command.rank")) {
-            if (args.length == 0) sendHelp(player);
+            if (args.length == 0)
+                sendHelp(player);
+
             if (args.length > 0) {
                 Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> {
                     switch (args[0]) {
@@ -139,11 +141,8 @@ public class RankCommand extends BaseCommand {
                             break;
                         case "list":
                             player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
-                            player.sendMessage(Color.translate(NETWORK.getMainColor() + ChatColor.BOLD.toString() + "Rank Management:"));
-                            this.getSortedRanks().forEach(rank -> {
-                                String displayName = Color.translate(rank.getColor() + rank.getName());
-                                player.sendMessage(Color.translate(" &7* " + displayName + " &7(" + rank.getWeight() + ") (" + rank.getPrefix() + "&7)" + " (" + rank.getColor() + "C&7)"));
-                            });
+                            player.sendMessage(Color.translate(NETWORK.getMainColor() + ChatColor.BOLD.toString() + "All Ranks:"));
+                            this.getSortedRanks().forEach(rank -> player.sendMessage(Color.translate(" &7* " + Color.translate(rank.getColor() + rank.getName()) + " &7(" + rank.getWeight() + ") (" + rank.getPrefix() + "&7)" + " (" + rank.getColor() + "C&7)")));
                             player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
                             break;
                         case "teamletter":
@@ -366,6 +365,8 @@ public class RankCommand extends BaseCommand {
     }
 
     private List<Rank> getSortedRanks() {
-        return Rank.getRanks().stream().sorted(Comparator.comparingInt(Rank::getWeight).reversed()).collect(Collectors.toList());
+        return Rank.getRanks().stream()
+                .sorted(Comparator.comparingInt(Rank::getWeight).reversed())
+                .collect(Collectors.toList());
     }
 }

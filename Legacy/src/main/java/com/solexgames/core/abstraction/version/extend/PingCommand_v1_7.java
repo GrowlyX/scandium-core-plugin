@@ -1,22 +1,22 @@
-package com.solexgames.core.version.extend;
+package com.solexgames.core.abstraction.version.extend;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.util.Color;
-import com.solexgames.core.version.AbstractVersionImplementation;
-import net.minecraft.server.v1_8_R3.EntityPlayer;
+import com.solexgames.core.abstraction.version.AbstractVersionImplementation;
+import net.minecraft.server.v1_7_R4.EntityPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_7_R4.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-public class PingCommand_v1_8 extends AbstractVersionImplementation {
+public class PingCommand_v1_7 extends AbstractVersionImplementation {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage("");
+            sender.sendMessage("no");
             return false;
         }
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();

@@ -1,4 +1,4 @@
-package com.solexgames.core.potion;
+package com.solexgames.core.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -21,30 +21,31 @@ public class ClearCommand extends BaseCommand {
         }
 
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
-        ChatColor mainColor = network.getMainColor();
         ChatColor secondColor = network.getSecondaryColor();
         Player player = (Player) sender;
-        if (player.hasPermission("scandium.command.clear")) {
-            if (args.length == 0) {
-                player.getInventory().clear();
-                player.sendMessage(Color.translate(secondColor + "Cleared your inventory."));
 
-                StaffUtil.sendAlert(player, "cleared");
-            }
-            if (args.length > 0) {
-                Player target = Bukkit.getPlayerExact(args[0]);
-                if (target != null) {
-                    player.getInventory().clear();
-
-                    player.sendMessage(Color.translate(secondColor + "Cleared " + target.getDisplayName() + secondColor + "'s inventory."));
-
-                    StaffUtil.sendAlert(player, "cleared " + target.getName());
-                } else {
-                    player.sendMessage(Color.translate("&cThat player does not exist."));
-                }
-            }
-        } else {
+        if (!player.hasPermission("scandium.command.clear")) {
             player.sendMessage(NO_PERMISSION);
+            return false;
+        }
+
+        if (args.length == 0) {
+            player.getInventory().clear();
+            player.sendMessage(Color.translate(secondColor + "Cleared your inventory."));
+
+            StaffUtil.sendAlert(player, "cleared");
+        }
+        if (args.length == 1) {
+            Player target = Bukkit.getPlayerExact(args[0]);
+            if (target != null) {
+                player.getInventory().clear();
+
+                player.sendMessage(Color.translate(secondColor + "Cleared " + target.getDisplayName() + secondColor + "'s inventory."));
+
+                StaffUtil.sendAlert(player, "cleared " + target.getName());
+            } else {
+                player.sendMessage(Color.translate("&cThat player does not exist."));
+            }
         }
         return false;
     }

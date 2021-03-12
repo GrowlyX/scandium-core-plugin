@@ -1,4 +1,4 @@
-package com.solexgames.core.media;
+package com.solexgames.core.player.media;
 
 import java.util.regex.Pattern;
 

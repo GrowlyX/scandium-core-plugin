@@ -1,4 +1,4 @@
-package com.solexgames.core.nms;
+package com.solexgames.core.abstraction.nms;
 
 import lombok.NoArgsConstructor;
 

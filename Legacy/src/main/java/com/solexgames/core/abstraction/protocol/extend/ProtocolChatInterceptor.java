@@ -1,4 +1,4 @@
-package com.solexgames.core.protocol.extend;
+package com.solexgames.core.abstraction.protocol.extend;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
@@ -7,7 +7,7 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.protocol.AbstractChatInterceptor;
+import com.solexgames.core.abstraction.protocol.AbstractChatInterceptor;
 
 public class ProtocolChatInterceptor extends AbstractChatInterceptor {
 

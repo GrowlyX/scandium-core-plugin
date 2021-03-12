@@ -16,9 +16,8 @@ public class ColorCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
-        if (args.length == 0) {
-            new NameColorSelectMenu(player).open(player);
-        }
+        new NameColorSelectMenu(player).open(player);
+
         return false;
     }
 }

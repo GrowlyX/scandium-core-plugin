@@ -1,12 +1,8 @@
-package com.solexgames.core.lunar.extend;
+package com.solexgames.core.abstraction.lunar.extend;
 
-import com.solexgames.core.lunar.AbstractClientInjector;
-import com.solexgames.core.util.Color;
-import org.apache.commons.lang.StringUtils;
-import org.bukkit.Bukkit;
+import com.solexgames.core.abstraction.lunar.AbstractClientInjector;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 public class LunarCommand extends AbstractClientInjector {
     @Override
