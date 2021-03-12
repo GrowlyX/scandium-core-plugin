@@ -32,8 +32,8 @@ public class UnBlacklistCommand extends BaseCommand {
             sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player> <reason> &7[-s]."));
         }
         if (args.length > 1) {
-            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[0]);
-            String message = StringUtil.buildMessage(args, 1);
+            final OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[0]);
+            final String message = StringUtil.buildMessage(args, 1);
 
             if (offlinePlayer != null) {
                 CorePlugin.getInstance().getPunishmentManager().handleUnpunishment(offlinePlayer, message, (sender instanceof Player ? (Player) sender : null), PunishmentType.BLACKLIST);

@@ -21,7 +21,7 @@ public final class StringUtil {
     private final static int CENTER_PX = 154;
 
     public static String buildMessage(String[] args, int start) {
-        return start >= args.length ? "" : ChatColor.stripColor(String.join(" ", Arrays.copyOfRange(args, start, args.length)));
+        return start >= args.length ? "" : String.join(" ", Arrays.copyOfRange(args, start, args.length));
     }
 
     public static void sendStaffAlert(Player player, String value) {

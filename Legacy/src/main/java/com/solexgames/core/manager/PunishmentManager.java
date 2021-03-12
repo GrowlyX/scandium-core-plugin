@@ -153,21 +153,21 @@ public class PunishmentManager {
                 .forEach(punishment -> {
                     punishment.setRemoved(true);
                     punishment.setRemovalReason(message.replace("-s", ""));
-                    punishment.setRemover(player.getUniqueId());
+                    punishment.setRemover((player != null ? player.getUniqueId() : null));
                     punishment.setActive(false);
-                    punishment.setRemoverName(player.getName());
+                    punishment.setRemoverName((player != null ? player.getName() : null));
 
                     if (message.endsWith("-s")) {
                         Bukkit.getOnlinePlayers().forEach(player1 -> {
                             if (player1.hasPermission("scandium.staff")) {
                                 player1.sendMessage(Color.translate(
-                                        "&7[S] " + offlinePlayer.getName() + " &awas " + "un" + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + player.getDisplayName() + "&a."
+                                        "&7[S] " + offlinePlayer.getName() + " &awas " + "un" + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (player != null ? player.getDisplayName() : "Console") + "&a."
                                 ));
                             }
                         });
                     } else {
                         Bukkit.broadcastMessage(Color.translate(
-                                "&7" + offlinePlayer.getName() + " &awas un" + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + player.getDisplayName() + "&a."
+                                "&7" + offlinePlayer.getName() + " &awas un" + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (player != null ? player.getDisplayName() : "Console") + "&a."
                         ));
                     }
 
