@@ -14,6 +14,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Objects;
+import java.util.UUID;
 
 public class GrantCommand extends BaseCommand {
 
@@ -31,8 +32,8 @@ public class GrantCommand extends BaseCommand {
                 sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player>."));
             }
             if (args.length > 0) {
-                String target = args[0];
-                Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByUuid(Objects.requireNonNull(UUIDUtil.getId(target))).orElse(null);
+                UUID uuid = UUIDUtil.getId(args[0]);
+                Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByUuid(uuid).orElse(null);
 
                 if (document != null) {
                     new GrantMainPaginatedMenu(document, player).openMenu(player);

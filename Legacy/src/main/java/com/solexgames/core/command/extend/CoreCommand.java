@@ -27,6 +27,7 @@ public class CoreCommand extends BukkitCommand {
 
         Player player = (Player) sender;
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
+
         if (player.isOp()) {
             if (args.length == 0) {
                 sender.sendMessage(Color.translate(network.getSecondaryColor() + "Usage: /" + network.getMainColor() + label + ChatColor.WHITE + " <debug|disallow|panel>."));

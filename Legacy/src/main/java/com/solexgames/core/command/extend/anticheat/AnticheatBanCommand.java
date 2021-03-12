@@ -30,11 +30,28 @@ public class AnticheatBanCommand extends BaseCommand {
             if (args.length == 0) {
                 sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player> <time>."));
             }
-            if (args.length > 0) {
-                if (args.length == 1) {
+            if (args.length == 1) {
+                Player target = Bukkit.getPlayerExact(args[0]);
+                if (target != null) {
+                    Punishment punishment = new Punishment(PunishmentType.BAN, null, target.getUniqueId(), "Console", "[AC] Unfair Advantage", new Date(System.currentTimeMillis()), PunishmentDuration.MONTH.getDuration(), true, new Date(), UUID.randomUUID(), SaltUtil.getRandomSaltedString(7), true);
+                    punishment.savePunishment();
+
+                    PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
+                    potPlayer.getPunishments().add(punishment);
+
+                    CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, null, target.getName(), true);
+                    potPlayer.saveWithoutRemove();
+
+                    RedisUtil.writeAsync(RedisUtil.executePunishment(PunishmentType.BAN, null, target.getUniqueId(), "Console", "[AC] Unfair Advantage", new Date(System.currentTimeMillis()), PunishmentDuration.MONTH.getDuration(), true, new Date(), UUID.randomUUID(), SaltUtil.getRandomSaltedString(7), false));
+                } else {
+                    sender.sendMessage(Color.translate("&cThat player does not exist."));
+                }
+            }
+            if (args.length == 2) {
+                try {
                     Player target = Bukkit.getPlayerExact(args[0]);
                     if (target != null) {
-                        Punishment punishment = new Punishment(PunishmentType.BAN, null, target.getUniqueId(), "Console", "[AC] Unfair Advantage", new Date(System.currentTimeMillis()), PunishmentDuration.MONTH.getDuration(), true, new Date(), UUID.randomUUID(), SaltUtil.getRandomSaltedString(7), true);
+                        Punishment punishment = new Punishment(PunishmentType.BAN, null, target.getUniqueId(), "Console", "[AC] Unfair Advantage", new Date(System.currentTimeMillis()), System.currentTimeMillis() - DateUtil.parseDateDiff(args[1], false), true, new Date(), UUID.randomUUID(), SaltUtil.getRandomSaltedString(7), true);
                         punishment.savePunishment();
 
                         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
@@ -43,31 +60,12 @@ public class AnticheatBanCommand extends BaseCommand {
                         CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, null, target.getName(), true);
                         potPlayer.saveWithoutRemove();
 
-                        RedisUtil.writeAsync(RedisUtil.executePunishment(PunishmentType.BAN, null, target.getUniqueId(), "Console", "[AC] Unfair Advantage", new Date(System.currentTimeMillis()), PunishmentDuration.MONTH.getDuration(), true, new Date(), UUID.randomUUID(), SaltUtil.getRandomSaltedString(7), false));
+                        RedisUtil.writeAsync(RedisUtil.executePunishment(PunishmentType.BAN, null, target.getUniqueId(), "Console", "[AC] Unfair Advantage", new Date(System.currentTimeMillis()), System.currentTimeMillis() - DateUtil.parseDateDiff(args[1], false), true, new Date(), UUID.randomUUID(), SaltUtil.getRandomSaltedString(7), false));
                     } else {
                         sender.sendMessage(Color.translate("&cThat player does not exist."));
                     }
-                }
-                if (args.length == 2) {
-                    try {
-                        Player target = Bukkit.getPlayerExact(args[0]);
-                        if (target != null) {
-                            Punishment punishment = new Punishment(PunishmentType.BAN, null, target.getUniqueId(), "Console", "[AC] Unfair Advantage", new Date(System.currentTimeMillis()), System.currentTimeMillis() - DateUtil.parseDateDiff(args[1], false), true, new Date(), UUID.randomUUID(), SaltUtil.getRandomSaltedString(7), true);
-                            punishment.savePunishment();
-
-                            PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
-                            potPlayer.getPunishments().add(punishment);
-
-                            CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, null, target.getName(), true);
-                            potPlayer.saveWithoutRemove();
-
-                            RedisUtil.writeAsync(RedisUtil.executePunishment(PunishmentType.BAN, null, target.getUniqueId(), "Console", "[AC] Unfair Advantage", new Date(System.currentTimeMillis()), System.currentTimeMillis() - DateUtil.parseDateDiff(args[1], false), true, new Date(), UUID.randomUUID(), SaltUtil.getRandomSaltedString(7), false));
-                        } else {
-                            sender.sendMessage(Color.translate("&cThat player does not exist."));
-                        }
-                    } catch (Exception ignored) {
-                        sender.sendMessage(Color.translate("&cInvalid duration."));
-                    }
+                } catch (Exception ignored) {
+                    sender.sendMessage(Color.translate("&cInvalid duration."));
                 }
             }
             return false;

@@ -46,43 +46,22 @@ public class PlayerListener implements Listener {
         }
     }
 
-    /**
-     * if (CorePlugin.getInstance().getConfig().getBoolean("beta-whitelist")) {
-     *                 if (CorePlugin.getInstance().getServerManager().getBetaWhitelistedPlayers().contains(event.getName())) {
-     *                     if (CorePlugin.getInstance().getConfig().getBoolean("beta-whitelist-can-join")) {
-     *                         allowConnection(event);
-     *                     } else {
-     *                         if (CorePlugin.getInstance().getConfig().getBoolean("whitelist")) {
-     *                             if (!CorePlugin.getInstance().getServerManager().getWhitelistedPlayers().contains(event.getName())) {
-     *                                 event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Color.translate(CorePlugin.getInstance().getConfig().getString("beta-whitelisted-msg").replace("<nl>", "\n")));
-     *                             } else {
-     *                                 allowConnection(event);
-     *                             }
-     *                         } else {
-     *                             event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Color.translate(CorePlugin.getInstance().getConfig().getString("beta-whitelisted-msg").replace("<nl>", "\n")));
-     *                         }
-     *                     }
-     *                 } else {
-     *                     event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Color.translate(CorePlugin.getInstance().getConfig().getString("beta-whitelisted-msg").replace("<nl>", "\n")));
-     *                 }
-     *             }
-     */
-
     @EventHandler
     public void onConnect(AsyncPlayerPreLoginEvent event) {
-        if (CorePlugin.CAN_JOIN) {
-            if (CorePlugin.getInstance().getConfig().getBoolean("whitelist")) {
-                if (!CorePlugin.getInstance().getServerManager().getWhitelistedPlayers().contains(event.getName())) {
-                    event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Color.translate(CorePlugin.getInstance().getConfig().getString("whitelisted-msg").replace("<nl>", "\n")));
-                } else {
-                    allowConnection(event);
-                }
-            } else {
-                allowConnection(event);
-            }
-        } else {
-            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Color.translate("&cThe server is currently booting...\n&cPlease reconnect in a few minutes."));
+        if (!CorePlugin.CAN_JOIN) {
+            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.RED + "The server is currently booting...\n" + ChatColor.GRAY + "Please try reconnecting in a few minutes.");
+            return;
         }
+        if (!CorePlugin.getInstance().getConfig().getBoolean("whitelist")) {
+            allowConnection(event);
+            return;
+        }
+        if (CorePlugin.getInstance().getServerManager().getWhitelistedPlayers().contains(event.getName())) {
+            allowConnection(event);
+            return;
+        }
+
+        event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Color.translate(CorePlugin.getInstance().getConfig().getString("whitelisted-msg").replace("<nl>", "\n")));
     }
 
     private void allowConnection(AsyncPlayerPreLoginEvent event) {

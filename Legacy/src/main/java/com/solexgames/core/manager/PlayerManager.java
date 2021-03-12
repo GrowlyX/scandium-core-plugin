@@ -188,6 +188,9 @@ public class PlayerManager {
     }
 
     public Optional<Document> getDocumentByUuid(UUID uuid) {
+        if (uuid == null) {
+            return Optional.empty();
+        }
         return Optional.ofNullable(CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("uuid", uuid.toString())).first());
     }
 
