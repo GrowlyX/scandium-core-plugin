@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class MessageCommand extends BaseCommand implements TabCompleter {
+public class MessageCommand extends BaseCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -30,75 +30,53 @@ public class MessageCommand extends BaseCommand implements TabCompleter {
 
         Player player = (Player) sender;
         ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
-        if (args.length == 0) {
+
+        if (args.length < 1) {
             player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player> <message>."));
         }
-        if (args.length > 0) {
-            if (args.length == 1) {
-                player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player> <message>."));
+        if (args.length > 1) {
+            Player target = Bukkit.getPlayerExact(args[0]);
+            String message = StringUtil.buildMessage(args, 1);
+
+            if (target == null) {
+                player.sendMessage(Color.translate("&cThat player does not exist."));
+                return false;
             }
-            if (args.length > 1) {
-                Player target = Bukkit.getPlayerExact(args[0]);
-                String message = StringUtil.buildMessage(args, 1);
 
-                if (target == null) {
-                    player.sendMessage(Color.translate("&cThat player does not exist."));
-                    return false;
-                }
+            PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+            PotPlayer potTarget = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
 
-                PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-                PotPlayer potTarget = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
-
-                if (potTarget.isVanished()) {
-                    player.sendMessage(Color.translate("&cThat player does not exist."));
-                    return false;
-                }
-                if (!potTarget.isIgnoring(potPlayer.getPlayer())) {
-                    player.sendMessage(Color.translate("&cThat player is currently ignoring you."));
-                    return false;
-                }
-                if (!potPlayer.isIgnoring(potTarget.getPlayer())) {
-                    player.sendMessage(Color.translate("&cYou are currently ignoring that player."));
-                    return false;
-                }
-                if (!potPlayer.isCanReceiveDms()) {
-                    player.sendMessage(Color.translate("&cYou have your dms disabled."));
-                    return false;
-                }
-                if (!potTarget.isCanReceiveDms()) {
-                    player.sendMessage(Color.translate("&cThat player has their dms disabled."));
-                    return false;
-                }
-                if (CorePlugin.getInstance().getFilterManager().isDmFiltered(player, target.getName(), message)) {
-                    player.sendMessage(Color.translate("&cYou cannot use censored words in a direct message."));
-                    return false;
-                }
-
-                StringUtil.sendPrivateMessage(player, target, message);
-
-                potPlayer.setLastRecipient(target);
-                potTarget.setLastRecipient(player);
+            if (potTarget.isVanished() && !(potPlayer.getActiveGrant().getRank().getWeight() < potTarget.getActiveGrant().getRank().getWeight())) {
+                player.sendMessage(Color.translate("&cThat player does not exist."));
+                return false;
             }
+            if (!potTarget.isIgnoring(potPlayer.getPlayer())) {
+                player.sendMessage(Color.translate("&cThat player is currently ignoring you."));
+                return false;
+            }
+            if (!potPlayer.isIgnoring(potTarget.getPlayer())) {
+                player.sendMessage(Color.translate("&cYou are currently ignoring that player."));
+                return false;
+            }
+            if (!potPlayer.isCanReceiveDms()) {
+                player.sendMessage(Color.translate("&cYou have your dms disabled."));
+                return false;
+            }
+            if (!potTarget.isCanReceiveDms()) {
+                player.sendMessage(Color.translate("&cThat player has their dms disabled."));
+                return false;
+            }
+            if (CorePlugin.getInstance().getFilterManager().isDmFiltered(player, target.getName(), message)) {
+                player.sendMessage(Color.translate("&cYou cannot use censored words in a direct message."));
+                return false;
+            }
+
+            StringUtil.sendPrivateMessage(player, target, message);
+
+            potPlayer.setLastRecipient(target);
+            potTarget.setLastRecipient(player);
         }
+
         return false;
-    }
-
-    @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        return this.getOnlineString();
-    }
-
-    public List<String> getOnlineString() {
-        List<PotPlayer> potPlayers = Bukkit.getOnlinePlayers().stream()
-                .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
-                .filter(Objects::nonNull)
-                .filter(potPlayer -> !potPlayer.isVanished())
-                .filter(potPlayer -> !potPlayer.isStaffMode())
-                .collect(Collectors.toList());
-
-        List<String> players = new ArrayList<>();
-        potPlayers.forEach(potPlayer -> players.add(potPlayer.getPlayer().getName()));
-
-        return players;
     }
 }

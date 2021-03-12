@@ -297,10 +297,7 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("toggleautovanish").setExecutor(new ToggleAutoVanishCommand());
         this.getCommand("togglefilteredmessages").setExecutor(new ToggleFilteredMessagesCommand());
 
-        MessageCommand messageCommand = new MessageCommand();
-        this.getCommand("message").setExecutor(messageCommand);
-        this.getCommand("message").setTabCompleter(messageCommand);
-
+        this.getCommand("message").setExecutor(new MessageCommand());
         this.getCommand("list").setExecutor(new ListCommand());
 
         if (this.lunarCommand != null) this.getCommand("lunar").setExecutor(lunarCommand);

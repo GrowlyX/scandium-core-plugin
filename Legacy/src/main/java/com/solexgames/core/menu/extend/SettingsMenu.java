@@ -2,11 +2,13 @@ package com.solexgames.core.menu.extend;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
+import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.AbstractInventoryMenu;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.PotPlayer;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -28,88 +30,90 @@ public class SettingsMenu extends AbstractInventoryMenu {
 
     public void update() {
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(this.player);
+        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+
         this.inventory.setItem(2, new ItemBuilder(XMaterial.PAPER.parseMaterial())
                 .addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS)
-                .setDisplayName("&3Global Chat")
+                .setDisplayName(serverType.getMainColor() + ChatColor.BOLD.toString() + "Global Chat")
                 .addLore(
                         "",
-                        "&7Would you like to be",
-                        "&7able to view global",
-                        "&7chat?",
+                        "Would you like to be",
+                        "able to view global",
+                        "chat?",
                         " ",
-                        "" + (potPlayer.isCanSeeGlobalChat() ? "&a&l■ " : "&8&l■ ") + "&fEnabled",
-                        "" + (!potPlayer.isCanSeeGlobalChat() ? "&a&l■ " : "&8&l■ ") + "&fDisabled"
+                        "" + (potPlayer.isCanSeeGlobalChat() ? ChatColor.GREEN + ChatColor.BOLD.toString() + "■ " : ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + "■ ") + "&fEnabled",
+                        "" + (!potPlayer.isCanSeeGlobalChat() ? ChatColor.GREEN + ChatColor.BOLD.toString() + "■ " : ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + "■ ") + "&fDisabled"
                 )
                 .create()
         );
         this.inventory.setItem(3, new ItemBuilder(XMaterial.EXPERIENCE_BOTTLE.parseMaterial())
-                .setDisplayName("&3Server Tips")
+                .setDisplayName(serverType.getMainColor() + ChatColor.BOLD.toString() + "Server Tips")
                 .addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS)
                 .addLore(
                         "",
-                        "&7Would you like to be",
-                        "&7able to view server",
-                        "&7tips?",
+                        ChatColor.GRAY + "Would you like to be",
+                        ChatColor.GRAY + "able to view server",
+                        ChatColor.GRAY + "tips?",
                         " ",
-                        "" + (potPlayer.isCanSeeTips() ? "&a&l■ " : "&8&l■ ") + "&fEnabled",
-                        "" + (!potPlayer.isCanSeeTips() ? "&a&l■ " : "&8&l■ ") + "&fDisabled"
+                        "" + (potPlayer.isCanSeeTips() ? ChatColor.GREEN + ChatColor.BOLD.toString() + "■ " : ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + "■ ") + "&fEnabled",
+                        "" + (!potPlayer.isCanSeeTips() ? ChatColor.GREEN + ChatColor.BOLD.toString() + "■ " : ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + "■ ") + "&fDisabled"
                 )
                 .create()
         );
         this.inventory.setItem(4, new ItemBuilder(XMaterial.EMERALD.parseMaterial())
-                .setDisplayName("&3Receive DMs")
+                .setDisplayName(serverType.getMainColor() + ChatColor.BOLD.toString() + "Receive DMs")
                 .addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS)
                 .addLore(
                         "",
-                        "&7Would you like to be",
-                        "&7able to receive player",
-                        "&7dms?",
+                        ChatColor.GRAY + "Would you like to be",
+                        ChatColor.GRAY + "able to receive player",
+                        ChatColor.GRAY + "dms?",
                         " ",
-                        "" + (potPlayer.isCanReceiveDms() ? "&a&l■ " : "&8&l■ ") + "&fEnabled",
-                        "" + (!potPlayer.isCanReceiveDms() ? "&a&l■ " : "&8&l■ ") + "&fDisabled"
+                        "" + (potPlayer.isCanReceiveDms() ? ChatColor.GREEN + ChatColor.BOLD.toString() + "■ " : ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + "■ ") + "&fEnabled",
+                        "" + (!potPlayer.isCanReceiveDms() ? ChatColor.GREEN + ChatColor.BOLD.toString() + "■ " : ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + "■ ") + "&fDisabled"
                 )
                 .create()
         );
         this.inventory.setItem(5, new ItemBuilder(XMaterial.JUKEBOX.parseMaterial())
-                .setDisplayName("&3DMs Sounds")
+                .setDisplayName(serverType.getMainColor() + ChatColor.BOLD.toString() + "DMs Sounds")
                 .addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS)
                 .addLore(
                         "",
-                        "&7Would you like to be",
-                        "&7able to receive dm",
-                        "&7sounds?",
+                        ChatColor.GRAY + "Would you like to be",
+                        ChatColor.GRAY + "able to receive dm",
+                        ChatColor.GRAY + "sounds?",
                         " ",
-                        "" + (potPlayer.isCanReceiveDmsSounds() ? "&a&l■ " : "&8&l■ ") + "&fEnabled",
-                        "" + (!potPlayer.isCanReceiveDmsSounds() ? "&a&l■ " : "&8&l■ ") + "&fDisabled"
+                        "" + (potPlayer.isCanReceiveDmsSounds() ? ChatColor.GREEN + ChatColor.BOLD.toString() + "■ " : ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + "■ ") + "&fEnabled",
+                        "" + (!potPlayer.isCanReceiveDmsSounds() ? ChatColor.GREEN + ChatColor.BOLD.toString() + "■ " : ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + "■ ") + "&fDisabled"
                 )
                 .create()
         );
         if (player.hasPermission("scandium.staff")) {
             this.inventory.setItem(6, new ItemBuilder(XMaterial.BLAZE_POWDER.parseMaterial())
-                    .setDisplayName("&3Staff Messages")
+                    .setDisplayName(serverType.getMainColor() + ChatColor.BOLD.toString() + "Staff Messages")
                     .addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS)
                     .addLore(
                             "",
-                            "&7Would you like to be",
-                            "&7able to receive staff",
-                            "&7messages?",
+                            ChatColor.GRAY + "Would you like to be",
+                            ChatColor.GRAY + "able to receive staff",
+                            ChatColor.GRAY + "messages?",
                             " ",
-                            "" + (potPlayer.isCanSeeStaffMessages() ? "&a&l■ " : "&8&l■ ") + "&fEnabled",
-                            "" + (!potPlayer.isCanSeeStaffMessages() ? "&a&l■ " : "&8&l■ ") + "&fDisabled"
+                            "" + (potPlayer.isCanSeeStaffMessages() ? ChatColor.GREEN + ChatColor.BOLD.toString() + "■ " : ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + "■ ") + "&fEnabled",
+                            "" + (!potPlayer.isCanSeeStaffMessages() ? ChatColor.GREEN + ChatColor.BOLD.toString() + "■ " : ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + "■ ") + "&fDisabled"
                     )
                     .create()
             );
         } else {
             this.inventory.setItem(6, new ItemBuilder(XMaterial.BLAZE_POWDER.parseMaterial())
-                    .setDisplayName("&3Global Broadcasts")
+                    .setDisplayName(serverType.getMainColor() + ChatColor.BOLD.toString() + "Global Broadcasts")
                     .addLore(
                             "",
-                            "&7Would you like to be",
-                            "&7able to receive global",
-                            "&7broadcasts?",
+                            ChatColor.GRAY + "Would you like to be",
+                            ChatColor.GRAY + "able to receive global",
+                            ChatColor.GRAY + "announcements?",
                             " ",
-                            "" + (potPlayer.isCanSeeBroadcasts() ? "&a&l■ " : "&8&l■ ") + "&fEnabled",
-                            "" + (!potPlayer.isCanSeeBroadcasts() ? "&a&l■ " : "&8&l■ ") + "&fDisabled"
+                            "" + (potPlayer.isCanSeeBroadcasts() ? ChatColor.GREEN + ChatColor.BOLD.toString() + "■ " : ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + "■ ") + "&fEnabled",
+                            "" + (!potPlayer.isCanSeeBroadcasts() ? ChatColor.GREEN + ChatColor.BOLD.toString() + "■ " : ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + "■ ") + "&fDisabled"
                     )
                     .create()
             );
@@ -132,19 +136,15 @@ public class SettingsMenu extends AbstractInventoryMenu {
             switch (event.getRawSlot()) {
                 case 2:
                     potPlayer.setCanSeeGlobalChat(!potPlayer.isCanSeeGlobalChat());
-                    this.update();
                     break;
                 case 3:
                     potPlayer.setCanSeeTips(!potPlayer.isCanSeeTips());
-                    this.update();
                     break;
                 case 4:
                     potPlayer.setCanReceiveDms(!potPlayer.isCanReceiveDms());
-                    this.update();
                     break;
                 case 5:
                     potPlayer.setCanReceiveDmsSounds(!potPlayer.isCanReceiveDmsSounds());
-                    this.update();
                     break;
                 case 6:
                     if (potPlayer.getPlayer().hasPermission("scandium.staff")) {
@@ -152,9 +152,10 @@ public class SettingsMenu extends AbstractInventoryMenu {
                     } else {
                         potPlayer.setCanSeeBroadcasts(!potPlayer.isCanSeeBroadcasts());
                     }
-                    this.update();
                     break;
             }
+
+            this.update();
         }
     }
 }

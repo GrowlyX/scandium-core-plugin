@@ -29,7 +29,7 @@ public class RankImportCommand extends BaseCommand {
         Player player = (Player) sender;
 
         if (player.isOp()) {
-            player.sendMessage(Color.translate("&cThis command is restricted."));
+            player.sendMessage(NO_PERMISSION);
             return false;
         }
 
