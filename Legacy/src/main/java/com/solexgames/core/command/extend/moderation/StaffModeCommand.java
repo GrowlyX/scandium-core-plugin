@@ -23,15 +23,14 @@ public class StaffModeCommand extends BaseCommand {
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
         if (player.hasPermission("scandium.command.modmode")) {
-            if (args.length == 0) {
-                if (potPlayer.isStaffMode()) {
-                    playerManager.unModModePlayer(player);
-                } else {
-                    playerManager.modModePlayer(player);
-                }
-            }
-        } else {
             player.sendMessage(NO_PERMISSION);
+            return false;
+        }
+
+        if (potPlayer.isStaffMode()) {
+            playerManager.unModModePlayer(player);
+        } else {
+            playerManager.modModePlayer(player);
         }
         return false;
     }

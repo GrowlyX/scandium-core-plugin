@@ -16,7 +16,7 @@ public class PingCommand_v1_7 extends AbstractVersionImplementation {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ONLY_PLAYERS);
+            sender.sendMessage("no");
             return false;
         }
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();

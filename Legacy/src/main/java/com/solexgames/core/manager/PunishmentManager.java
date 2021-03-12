@@ -6,9 +6,11 @@ import com.solexgames.core.player.punishment.Punishment;
 import com.solexgames.core.player.punishment.PunishmentStrings;
 import com.solexgames.core.player.punishment.PunishmentType;
 import com.solexgames.core.util.Color;
+import com.solexgames.core.util.RedisUtil;
 import lombok.Getter;
 import org.bson.Document;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -140,5 +142,38 @@ public class PunishmentManager {
                 }
             }
         }) ;
+    }
+
+    public void handleUnpunishment(OfflinePlayer offlinePlayer, String message, Player player, PunishmentType punishmentType) {
+        Punishment.getAllPunishments()
+                .stream()
+                .filter(punishment -> punishment.getTarget().equals(offlinePlayer.getUniqueId()))
+                .filter(Punishment::isActive)
+                .filter(punishment -> punishment.getPunishmentType().equals(punishmentType))
+                .forEach(punishment -> {
+                    punishment.setRemoved(true);
+                    punishment.setRemovalReason(message.replace("-s", ""));
+                    punishment.setRemover(player.getUniqueId());
+                    punishment.setActive(false);
+                    punishment.setRemoverName(player.getName());
+
+                    if (message.endsWith("-s")) {
+                        Bukkit.getOnlinePlayers().forEach(player1 -> {
+                            if (player1.hasPermission("scandium.staff")) {
+                                player1.sendMessage(Color.translate(
+                                        "&7[S] " + offlinePlayer.getName() + " &awas " + "un" + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + player.getDisplayName() + "&a."
+                                ));
+                            }
+                        });
+                    } else {
+                        Bukkit.broadcastMessage(Color.translate(
+                                "&7" + offlinePlayer.getName() + " &awas un" + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + player.getDisplayName() + "&a."
+                        ));
+                    }
+
+                    punishment.savePunishment();
+
+                    RedisUtil.writeAsync(RedisUtil.removePunishment(player, punishment, message));
+                });
     }
 }

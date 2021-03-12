@@ -2,6 +2,7 @@ package com.solexgames.core.command.extend.anticheat;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.punishment.Punishment;
 import com.solexgames.core.player.punishment.PunishmentDuration;
@@ -11,6 +12,7 @@ import com.solexgames.core.util.DateUtil;
 import com.solexgames.core.util.RedisUtil;
 import com.solexgames.core.util.SaltUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -22,9 +24,11 @@ public class AnticheatBanCommand extends BaseCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+
         if (!(sender instanceof Player)) {
             if (args.length == 0) {
-                sender.sendMessage(Color.translate("&cUsage: /acban <player> <duration>."));
+                sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player> <time>."));
             }
             if (args.length > 0) {
                 if (args.length == 1) {

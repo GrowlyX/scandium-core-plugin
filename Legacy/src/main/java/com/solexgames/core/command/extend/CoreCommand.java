@@ -21,7 +21,7 @@ public class CoreCommand extends BukkitCommand {
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ONLY_PLAYERS);
+            sender.sendMessage("");
             return false;
         }
 
@@ -45,7 +45,7 @@ public class CoreCommand extends BukkitCommand {
                         new ScandiumMenu(player).open(player);
                         break;
                     default:
-                        player.sendMessage(Color.translate("&cUsage: /" + label + " <debug|disallow|panel>"));
+                        sender.sendMessage(Color.translate(network.getSecondaryColor() + "Usage: /" + network.getMainColor() + label + ChatColor.WHITE + " <debug|disallow|panel>."));
                         break;
                 }
             }

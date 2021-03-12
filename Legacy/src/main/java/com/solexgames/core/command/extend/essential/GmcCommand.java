@@ -19,26 +19,28 @@ public class GmcCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
-        if (player.hasPermission("scandium.command.gmc")) {
-            if (args.length == 0) {
-                player.setGameMode(GameMode.CREATIVE);
-                player.sendMessage(Color.translate("&aSet your gamemode to Creative."));
 
-                StaffUtil.sendAlert(player, "set gamemode creative");
-            }
-            if (args.length > 0) {
-                Player target = Bukkit.getPlayerExact(args[0]);
-                if (target != null) {
-                    target.setGameMode(GameMode.CREATIVE);
-                    player.sendMessage(Color.translate("&aSet " + target.getDisplayName() + "'s&a gamemode to Creative."));
-
-                    StaffUtil.sendAlert(player, "set gamemode creative for " + target.getName());
-                } else {
-                    player.sendMessage(Color.translate("&cThat player does not exist."));
-                }
-            }
-        } else {
+        if (!player.hasPermission("scandium.command.gmc")) {
             player.sendMessage(NO_PERMISSION);
+            return false;
+        }
+
+        if (args.length == 0) {
+            player.setGameMode(GameMode.CREATIVE);
+            player.sendMessage(Color.translate("&aSet your gamemode to Creative."));
+
+            StaffUtil.sendAlert(player, "set gamemode creative");
+        }
+        if (args.length > 0) {
+            Player target = Bukkit.getPlayerExact(args[0]);
+            if (target != null) {
+                target.setGameMode(GameMode.CREATIVE);
+                player.sendMessage(Color.translate("&aSet " + target.getDisplayName() + "'s&a gamemode to Creative."));
+
+                StaffUtil.sendAlert(player, "set gamemode creative for " + target.getName());
+            } else {
+                player.sendMessage(Color.translate("&cThat player does not exist."));
+            }
         }
         return false;
     }

@@ -4,6 +4,7 @@ import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.util.Color;
+import com.solexgames.core.util.StaffUtil;
 import com.solexgames.core.util.StringUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -15,36 +16,32 @@ public class SudoAllCommand extends BaseCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(ONLY_PLAYERS);
+        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+        ChatColor mainColor = serverType.getMainColor();
+        ChatColor secondColor = serverType.getSecondaryColor();
+
+        if (!sender.hasPermission("scandium.command.sudoall")) {
+            sender.sendMessage(NO_PERMISSION);
             return false;
         }
 
-        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
-        ChatColor mainColor = network.getMainColor();
-        ChatColor secondColor = network.getSecondaryColor();
-        Player player = (Player) sender;
-        if (player.hasPermission("scandium.command.sudoall")) {
-            ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
-            if (args.length == 0) {
-                player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " [c:] [e:] <message>."));
-            }
+        if (args.length == 0) {
+            sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " [c:] [e:] <message>."));
+        }
 
-            if (args.length > 0) {
-                String message = StringUtil.buildMessage(args, 0);
-                if (message.startsWith("c:")) {
-                    Bukkit.getOnlinePlayers().forEach(player1 -> player1.chat(message.replace("c:", "")));
-                    player.sendMessage(Color.translate(secondColor + "Made all online players chat '" + mainColor + message.replace("c:", "") + secondColor + "'."));
-                } else if (message.startsWith("e:")) {
-                    Bukkit.getOnlinePlayers().forEach(player1 -> player1.performCommand(message.replace("e:", "")));
-                    player.sendMessage(Color.translate(secondColor + "Made all online players execute '" + mainColor + message.replace("e:", "") + secondColor + "'."));
-                } else {
-                    Bukkit.getOnlinePlayers().forEach(player1 -> player1.chat(message));
-                    player.sendMessage(Color.translate(secondColor + "Made all online players chat '" + mainColor + message + secondColor + "'."));
-                }
+        if (args.length > 0) {
+            String message = StringUtil.buildMessage(args, 0);
+
+            if (message.startsWith("c:")) {
+                Bukkit.getOnlinePlayers().forEach(player1 -> player1.chat(message.replace("c:", "")));
+                sender.sendMessage(Color.translate(secondColor + "Made all online players chat '" + mainColor + message.replace("c:", "") + secondColor + "'."));
+            } else if (message.startsWith("e:")) {
+                Bukkit.getOnlinePlayers().forEach(player1 -> player1.performCommand(message.replace("e:", "")));
+                sender.sendMessage(Color.translate(secondColor + "Made all online players execute '" + mainColor + message.replace("e:", "") + secondColor + "'."));
+            } else {
+                Bukkit.getOnlinePlayers().forEach(player1 -> player1.chat(message));
+                sender.sendMessage(Color.translate(secondColor + "Made all online players chat '" + mainColor + message + secondColor + "'."));
             }
-        } else {
-            player.sendMessage(NO_PERMISSION);
         }
         return false;
     }

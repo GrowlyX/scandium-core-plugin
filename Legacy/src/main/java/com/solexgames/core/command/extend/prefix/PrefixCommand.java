@@ -23,10 +23,7 @@ public class PrefixCommand extends BaseCommand {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
             ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
-            if (args.length == 0) {
-                sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player> <tag>."));
-            }
-            if (args.length == 1) {
+            if (args.length < 2) {
                 sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player> <tag>."));
             }
             if (args.length == 2) {

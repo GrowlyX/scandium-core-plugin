@@ -20,27 +20,29 @@ public class PunishCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
-        if (player.hasPermission("scandium.command.punish")) {
-            ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
-            if (args.length == 0) {
-                sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player>."));
-            }
-            if (args.length > 0) {
-                String target = args[0];
-                if (target != null) {
-                    if (!target.equals(player.getName())) {
-                        new PunishMainMenu(player, target).open(player);
-                    } else {
-                        player.sendMessage(Color.translate("&cYou cannot punish yourself."));
-                    }
-                } else {
-                    player.sendMessage(Color.translate("&cThat player does not exist."));
-                }
-            }
-        } else {
+        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+
+        if (!player.hasPermission("scandium.command.punish")) {
             player.sendMessage(NO_PERMISSION);
+            return false;
+        }
+
+        if (args.length == 0) {
+            sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player>."));
+        }
+        if (args.length == 1) {
+            String target = args[0];
+
+            if (target != null) {
+                if (!target.equals(player.getName())) {
+                    new PunishMainMenu(player, target).open(player);
+                } else {
+                    player.sendMessage(Color.translate("&cYou cannot punish yourself."));
+                }
+            } else {
+                player.sendMessage(Color.translate("&cThat player does not exist."));
+            }
         }
         return false;
     }
-
 }

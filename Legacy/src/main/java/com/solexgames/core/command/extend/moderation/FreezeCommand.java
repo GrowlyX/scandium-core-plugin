@@ -22,44 +22,47 @@ public class FreezeCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
-        if (player.hasPermission("scandium.command.freeze")) {
-            ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
-            if (args.length == 0) {
-                sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player>."));
-            }
-            if (args.length > 0) {
-                Player target = Bukkit.getPlayerExact(args[0]);
-                if (target != null) {
-                    PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
+        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
 
-                    if (potPlayer.isFrozen()) {
-                        potPlayer.setFrozen(false);
+        if (!player.hasPermission("scandium.command.freeze")) {
+            player.sendMessage(NO_PERMISSION);
+            return false;
+        }
 
-                        RedisUtil.writeAsync(RedisUtil.onUnfreeze(player, target));
+        if (args.length == 0) {
+            sender.sendMessage(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player>.");
+        }
+        if (args.length == 1) {
+            Player target = Bukkit.getPlayerExact(args[0]);
 
-                        player.sendMessage(Color.translate("&aUnfroze " + target.getDisplayName() + "&a."));
-                    } else if (!potPlayer.isFrozen()) {
-                        PotPlayer mainPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-                        PotPlayer targetPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
+            if (target != null) {
+                PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
 
-                        if (mainPotPlayer.getActiveGrant().getRank() != null) {
-                            if ((mainPotPlayer.getActiveGrant().getRank().getWeight() >= targetPotPlayer.getActiveGrant().getRank().getWeight()) || player.isOp()) {
-                                targetPotPlayer.setFrozen(true);
+                if (potPlayer.isFrozen()) {
+                    potPlayer.setFrozen(false);
 
-                                RedisUtil.writeAsync(RedisUtil.onFreeze(player, target));
+                    RedisUtil.writeAsync(RedisUtil.onUnfreeze(player, target));
 
-                                player.sendMessage(Color.translate("&aFroze " + target.getDisplayName() + "&a."));
-                            } else {
-                                player.sendMessage(Color.translate("&cYou cannot freeze this player as their rank weight is higher than yours!"));
-                            }
+                    player.sendMessage(Color.translate("&aUnfroze " + target.getDisplayName() + "&a."));
+                } else if (!potPlayer.isFrozen()) {
+                    PotPlayer mainPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+                    PotPlayer targetPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
+
+                    if (mainPotPlayer.getActiveGrant().getRank() != null) {
+                        if ((mainPotPlayer.getActiveGrant().getRank().getWeight() >= targetPotPlayer.getActiveGrant().getRank().getWeight()) || player.isOp()) {
+                            targetPotPlayer.setFrozen(true);
+
+                            RedisUtil.writeAsync(RedisUtil.onFreeze(player, target));
+
+                            player.sendMessage(Color.translate("&aFroze " + target.getDisplayName() + "&a."));
+                        } else {
+                            player.sendMessage(Color.translate("&cYou cannot freeze this player as their rank weight is higher than yours!"));
                         }
                     }
-                } else {
-                    player.sendMessage(Color.translate("&cThat player does not exist."));
                 }
+            } else {
+                player.sendMessage(Color.translate("&cThat player does not exist."));
             }
-        } else {
-            player.sendMessage(NO_PERMISSION);
         }
         return false;
     }

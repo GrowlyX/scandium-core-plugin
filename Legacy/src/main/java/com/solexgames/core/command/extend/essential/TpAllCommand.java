@@ -1,12 +1,8 @@
 package com.solexgames.core.command.extend.essential;
 
-import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
-import com.solexgames.core.enums.ServerType;
-import com.solexgames.core.util.Color;
 import com.solexgames.core.util.StaffUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -20,18 +16,16 @@ public class TpAllCommand extends BaseCommand {
             return false;
         }
 
-        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
-        ChatColor mainColor = network.getMainColor();
-        ChatColor secondColor = network.getSecondaryColor();
         Player player = (Player) sender;
-        if (player.hasPermission("scandium.command.tp")) {
-            if (args.length == 0) {
-                Bukkit.getOnlinePlayers().forEach(player1 -> player1.teleport(player.getLocation()));
-                StaffUtil.sendAlert(player, "teleported all players");
-            }
-        } else {
+
+        if (player.hasPermission("scandium.command.tpall")) {
             player.sendMessage(NO_PERMISSION);
+            return false;
         }
+
+        Bukkit.getOnlinePlayers().forEach(player1 -> player1.teleport(player.getLocation()));
+        StaffUtil.sendAlert(player, "teleported all players");
+
         return false;
     }
 }

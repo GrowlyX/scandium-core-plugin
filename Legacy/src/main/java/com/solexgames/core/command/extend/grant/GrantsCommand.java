@@ -21,21 +21,23 @@ public class GrantsCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
+        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+
         if (player.hasPermission("scandium.command.grants")) {
-            ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
-            if (args.length == 0) {
-                sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player>."));
-            }
-            if (args.length > 0) {
-                Player target = Bukkit.getPlayerExact(args[0]);
-                if (target != null) {
-                    new GrantViewPaginatedMenu(player, target).openMenu(player);
-                } else {
-                    player.sendMessage(Color.translate("&cThat player does not exist."));
-                }
-            }
-        } else {
             player.sendMessage(NO_PERMISSION);
+            return false;
+        }
+
+        if (args.length == 0) {
+            sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player>."));
+        }
+        if (args.length == 1) {
+            Player target = Bukkit.getPlayerExact(args[0]);
+            if (target != null) {
+                new GrantViewPaginatedMenu(player, target).openMenu(player);
+            } else {
+                player.sendMessage(Color.translate("&cThat player does not exist."));
+            }
         }
         return false;
     }

@@ -11,24 +11,13 @@ public class KickAllCommand extends BaseCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(ONLY_PLAYERS);
+        if (!sender.hasPermission("scandium.punishments.kickall")) {
+            sender.sendMessage(NO_PERMISSION);
             return false;
         }
 
-        Player player = (Player) sender;
-        if (player.hasPermission("scandium.punishments.kickall")) {
-            if (args.length == 0) {
-                Bukkit.getOnlinePlayers().forEach(target -> {
-                    if (target != player) {
-                        target.kickPlayer(Color.translate("&cYou were kicked from the server.\n&cPlease contact administration if this was a mistake."));
-                    }
-                });
-                player.sendMessage(Color.translate("&aKicked all online players."));
-            }
-        } else {
-            player.sendMessage(NO_PERMISSION);
-        }
+        Bukkit.getOnlinePlayers().forEach(target -> target.kickPlayer(Color.translate("&cYou were kicked from the server.\n&7Please contact administration if this was a mistake.")));
+        sender.sendMessage(Color.translate("&aKicked all online players."));
         return false;
     }
 }

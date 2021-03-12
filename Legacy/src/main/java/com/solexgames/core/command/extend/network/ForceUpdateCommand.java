@@ -4,6 +4,7 @@ import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -18,16 +19,13 @@ public class ForceUpdateCommand extends BaseCommand {
             return false;
         }
 
-        Player player = (Player) sender;
-
-        if (player.hasPermission("scandium.command.forceupdate")) {
-            if (args.length == 0) {
-                CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onServerUpdate()));
-                player.sendMessage(Color.translate("&aForce-updated the server."));
-            }
-        } else {
-            player.sendMessage(NO_PERMISSION);
+        if (!sender.hasPermission("scandium.command.forceupdate")) {
+            sender.sendMessage(NO_PERMISSION);
+            return false;
         }
+
+        RedisUtil.writeAsync(RedisUtil.onServerUpdate());
+        sender.sendMessage(ChatColor.GREEN + "Force-updated the server.");
         return false;
     }
 }

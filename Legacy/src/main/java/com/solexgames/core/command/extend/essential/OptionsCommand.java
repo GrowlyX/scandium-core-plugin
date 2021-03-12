@@ -16,9 +16,8 @@ public class OptionsCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
-        if (args.length == 0) {
-            new SettingsMenu(player).open(player);
-        }
+        new SettingsMenu(player).open(player);
+
         return false;
     }
 }

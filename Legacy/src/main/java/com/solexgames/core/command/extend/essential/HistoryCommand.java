@@ -22,21 +22,18 @@ public class HistoryCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
-        if (player.hasPermission("scandium.command.history")) {
-            ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
-            if (args.length == 0) {
-                player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player>."));
-            }
-            if (args.length > 0) {
-                OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[0]);
-                if (offlinePlayer != null) {
-                    new PunishHistoryViewMainMenu(player, offlinePlayer.getName()).open(player);
-                } else {
-                    player.sendMessage(Color.translate("&cThat player does not exist in our databases."));
-                }
-            }
-        } else {
+        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+
+        if (!player.hasPermission("scandium.command.history")) {
             player.sendMessage(NO_PERMISSION);
+            return false;
+        }
+
+        if (args.length == 0) {
+            player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player>."));
+        }
+        if (args.length > 0) {
+            new PunishHistoryViewMainMenu(player, args[0]).open(player);
         }
         return false;
     }

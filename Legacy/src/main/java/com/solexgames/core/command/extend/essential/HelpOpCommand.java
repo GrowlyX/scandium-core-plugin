@@ -25,26 +25,29 @@ public class HelpOpCommand extends BaseCommand {
         Player player = (Player) sender;
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
         ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+
         if (args.length == 0) {
             player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <message>."));
         }
 
         if (args.length > 0) {
             String reason = StringUtil.buildMessage(args, 0);
-            if (potPlayer.isCanRequest()) {
-                CorePlugin.getInstance().getRedisThread().execute(() -> client.write(RedisUtil.onHelpOp(player, reason)));
-                player.sendMessage(Color.translate("&aYour request has been sent to all online staff!"));
 
-                potPlayer.setCanRequest(false);
-                Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> {
-                    PotPlayer newPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-                    if (newPotPlayer != null) {
-                        potPlayer.setCanRequest(true);
-                    }
-                }, 60 * 20L);
-            } else {
+            if (!potPlayer.isCanRequest()) {
                 player.sendMessage(Color.translate("&cYou cannot do that right now."));
+                return false;
             }
+
+            CorePlugin.getInstance().getRedisThread().execute(() -> client.write(RedisUtil.onHelpOp(player, reason)));
+            player.sendMessage(Color.translate("&aYour request has been sent to all online staff!"));
+
+            potPlayer.setCanRequest(false);
+            Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> {
+                PotPlayer newPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+                if (newPotPlayer != null) {
+                    potPlayer.setCanRequest(true);
+                }
+            }, 60 * 20L);
         }
         return false;
     }

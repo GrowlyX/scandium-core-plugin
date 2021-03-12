@@ -277,6 +277,7 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("modmode").setExecutor(new StaffModeCommand());
         this.getCommand("clearchat").setExecutor(new ClearChatCommand());
         this.getCommand("slowchat").setExecutor(new SlowChatCommand());
+        this.getCommand("tpall").setExecutor(new TpAllCommand());
         this.getCommand("managerchat").setExecutor(new ManagerChatCommand());
         this.getCommand("mutechat").setExecutor(new MuteChatCommand());
         this.getCommand("fly").setExecutor(new FlyCommand());
@@ -287,9 +288,6 @@ public final class CorePlugin extends JavaPlugin {
         if (this.getServerManager().getNetwork().equals(ServerType.POTCLUBVIP)) {
             this.getCommand("webannouncementdelete").setExecutor(new WebAnnouncementDeleteCommand());
             this.getCommand("webannouncement").setExecutor(new WebAnnouncementCommand());
-
-            this.getCommand("famous").setExecutor(new FamousCommand());
-            this.getCommand("profile").setExecutor(new ProfileCommand());
         }
 
         this.getCommand("test").setExecutor(new TestCommand());

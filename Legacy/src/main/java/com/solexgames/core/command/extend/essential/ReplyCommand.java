@@ -21,26 +21,47 @@ public class ReplyCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
-        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
         ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+
         if (args.length == 0) {
             player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <message>."));
         }
         if (args.length > 0) {
             String message = StringUtil.buildMessage(args, 0);
-            if (potPlayer.isCanReceiveDms()) {
-                if (potPlayer.getLastRecipient() != null) {
-                    if (potPlayer.getLastRecipient().isOnline()) {
-                        StringUtil.sendPrivateMessage(player, potPlayer.getLastRecipient(), message);
-                    } else {
-                        player.sendMessage(Color.translate("&cThat player is not online."));
-                    }
-                } else {
-                    player.sendMessage(Color.translate("&cYou don't have an ongoing conversation with anyone."));
-                }
-            } else {
-                player.sendMessage(Color.translate("&cYou have your dms disabled."));
+
+            PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+            PotPlayer potTarget = CorePlugin.getInstance().getPlayerManager().getPlayer(potPlayer.getLastRecipient());
+
+            if (!potPlayer.getLastRecipient().isOnline()) {
+                player.sendMessage(Color.translate("&cThat player does not exist."));
+                return false;
             }
+            if (potTarget.isVanished()) {
+                player.sendMessage(Color.translate("&cThat player does not exist."));
+                return false;
+            }
+            if (!potTarget.isIgnoring(potPlayer.getPlayer())) {
+                player.sendMessage(Color.translate("&cThat player is currently ignoring you."));
+                return false;
+            }
+            if (!potPlayer.isIgnoring(potTarget.getPlayer())) {
+                player.sendMessage(Color.translate("&cYou are currently ignoring that player."));
+                return false;
+            }
+            if (!potPlayer.isCanReceiveDms()) {
+                player.sendMessage(Color.translate("&cYou have your dms disabled."));
+                return false;
+            }
+            if (!potTarget.isCanReceiveDms()) {
+                player.sendMessage(Color.translate("&cThat player has their dms disabled."));
+                return false;
+            }
+            if (CorePlugin.getInstance().getFilterManager().isDmFiltered(player, potPlayer.getLastRecipient().getName(), message)) {
+                player.sendMessage(Color.translate("&cYou cannot use censored words in a direct message."));
+                return false;
+            }
+
+            StringUtil.sendPrivateMessage(player, potPlayer.getLastRecipient(), message);
         }
         return false;
     }

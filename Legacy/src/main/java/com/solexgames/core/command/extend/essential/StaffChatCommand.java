@@ -21,23 +21,26 @@ public class StaffChatCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
-        if (player.hasPermission(ChatChannelType.STAFF.getPermission())) {
-            if (args.length == 0) {
-                PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-                if (potPlayer.getChannel() == null || !potPlayer.getChannel().equals(ChatChannelType.STAFF)) {
-                    potPlayer.setChannel(ChatChannelType.STAFF);
-                    player.sendMessage(Color.translate("&aYou have entered the staff chat channel."));
-                } else {
-                    potPlayer.setChannel(null);
-                    player.sendMessage(Color.translate("&cYou have exited the staff chat channel."));
-                }
-            }
-            if (args.length > 0) {
-                String message = StringUtil.buildMessage(args, 0);
-                CorePlugin.getInstance().getRedisThread().execute(() -> client.write(RedisUtil.onChatChannel(ChatChannelType.STAFF, message, player)));
-            }
-        } else {
+        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+
+        if (!player.hasPermission(ChatChannelType.STAFF.getPermission())) {
             player.sendMessage(NO_PERMISSION);
+            return false;
+        }
+
+        if (args.length == 0) {
+            if (potPlayer.getChannel() == null || !potPlayer.getChannel().equals(ChatChannelType.STAFF)) {
+                potPlayer.setChannel(ChatChannelType.STAFF);
+                player.sendMessage(Color.translate("&aYou have entered the staff chat channel."));
+            } else {
+                potPlayer.setChannel(null);
+                player.sendMessage(Color.translate("&cYou have exited the staff chat channel."));
+            }
+        }
+
+        if (args.length > 0) {
+            String message = StringUtil.buildMessage(args, 0);
+            RedisUtil.writeAsync(RedisUtil.onChatChannel(ChatChannelType.STAFF, message, player));
         }
         return false;
     }

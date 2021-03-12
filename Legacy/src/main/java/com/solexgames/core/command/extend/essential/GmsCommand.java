@@ -19,26 +19,28 @@ public class GmsCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
-        if (player.hasPermission("scandium.command.gms")) {
-            if (args.length == 0) {
-                player.setGameMode(GameMode.SURVIVAL);
-                player.sendMessage(Color.translate("&aSet your gamemode to Survival."));
 
-                StaffUtil.sendAlert(player, "set gamemode survival");
-            }
-            if (args.length > 0) {
-                Player target = Bukkit.getPlayerExact(args[0]);
-                if (target != null) {
-                    target.setGameMode(GameMode.SURVIVAL);
-                    player.sendMessage(Color.translate("&aSet " + target.getDisplayName() + "'s&a gamemode to Survival."));
-
-                    StaffUtil.sendAlert(player, "set gamemode survival for " + target.getName());
-                } else {
-                    player.sendMessage(Color.translate("&cThat player does not exist."));
-                }
-            }
-        } else {
+        if (!player.hasPermission("scandium.command.gms")) {
             player.sendMessage(NO_PERMISSION);
+            return false;
+        }
+
+        if (args.length == 0) {
+            player.setGameMode(GameMode.SURVIVAL);
+            player.sendMessage(Color.translate("&aSet your gamemode to Survival."));
+
+            StaffUtil.sendAlert(player, "set gamemode survival");
+        }
+        if (args.length > 0) {
+            Player target = Bukkit.getPlayerExact(args[0]);
+            if (target != null) {
+                target.setGameMode(GameMode.SURVIVAL);
+                player.sendMessage(Color.translate("&aSet " + target.getDisplayName() + "'s&a gamemode to Survival."));
+
+                StaffUtil.sendAlert(player, "set gamemode survival for " + target.getName());
+            } else {
+                player.sendMessage(Color.translate("&cThat player does not exist."));
+            }
         }
         return false;
     }

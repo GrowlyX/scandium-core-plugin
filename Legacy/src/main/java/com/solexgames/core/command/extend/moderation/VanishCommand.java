@@ -24,42 +24,45 @@ public class VanishCommand extends BaseCommand {
         PlayerManager vanishManager = CorePlugin.getInstance().getPlayerManager();
         ServerManager manager = CorePlugin.getInstance().getServerManager();
 
-        if (player.hasPermission("scandium.command.vanish")) {
-            if (args.length == 0) {
-                if (manager.getVanishedPlayers().contains(player)) {
-                    vanishManager.unVanishPlayer(player);
-
-                    StaffUtil.sendAlert(player, "unvanished");
-                } else {
-                    vanishManager.vanishPlayer(player);
-
-                    StaffUtil.sendAlert(player, "vanished");
-                }
-            }
-            if (args.length > 0) {
-                if (player.hasPermission("scandium.command.vanish.other")) {
-                    Player target = Bukkit.getPlayerExact(args[0]);
-                    if (target != null) {
-                        if (manager.getVanishedPlayers().contains(target)) {
-                            vanishManager.unVanishPlayer(target);
-                            player.sendMessage(Color.translate("&aUnvanished " + target.getName() + "."));
-
-                            StaffUtil.sendAlert(player, "unvanished " + target.getName());
-                        } else {
-                            vanishManager.vanishPlayer(target);
-                            player.sendMessage(Color.translate("&aVanished " + target.getName() + "."));
-
-                            StaffUtil.sendAlert(player, "vanished " + target.getName());
-                        }
-                    } else {
-                        player.sendMessage(Color.translate("&cThat player does not exist."));
-                    }
-                } else {
-                    player.sendMessage(NO_PERMISSION);
-                }
-            }
-        } else {
+        if (!player.hasPermission("scandium.command.vanish")) {
             player.sendMessage(NO_PERMISSION);
+            return false;
+        }
+
+        if (args.length == 0) {
+            if (manager.getVanishedPlayers().contains(player)) {
+                vanishManager.unVanishPlayer(player);
+
+                StaffUtil.sendAlert(player, "unvanished");
+            } else {
+                vanishManager.vanishPlayer(player);
+
+                StaffUtil.sendAlert(player, "vanished");
+            }
+        }
+        if (args.length == 1) {
+            if (!player.hasPermission("scandium.command.vanish.other")) {
+                player.sendMessage(NO_PERMISSION);
+                return false;
+            }
+
+            Player target = Bukkit.getPlayerExact(args[0]);
+
+            if (target != null) {
+                if (manager.getVanishedPlayers().contains(target)) {
+                    vanishManager.unVanishPlayer(target);
+                    player.sendMessage(Color.translate("&aUnvanished " + target.getName() + "."));
+
+                    StaffUtil.sendAlert(player, "unvanished " + target.getName());
+                } else {
+                    vanishManager.vanishPlayer(target);
+                    player.sendMessage(Color.translate("&aVanished " + target.getName() + "."));
+
+                    StaffUtil.sendAlert(player, "vanished " + target.getName());
+                }
+            } else {
+                player.sendMessage(Color.translate("&cThat player does not exist."));
+            }
         }
         return false;
     }

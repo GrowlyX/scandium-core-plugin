@@ -25,7 +25,6 @@ public class ListCommand extends BaseCommand {
                     .sorted(Comparator.comparingInt(rank -> -rank.getWeight()))
                     .map(rank -> Color.translate((rank.isHidden() ? "&7*" : "") + rank.getColor() + rank.getName()))
                     .collect(Collectors.joining(ChatColor.WHITE + ", "));
-
             String players = this.getOnlinePlayers(false).stream()
                     .map(player -> CorePlugin.getInstance().getPlayerManager().getPlayer(player.getUniqueId()))
                     .sorted(Comparator.comparingInt(potPlayer -> -potPlayer.getActiveGrant().getRank().getWeight()))
@@ -36,25 +35,26 @@ public class ListCommand extends BaseCommand {
                     ranks,
                     Color.translate("&f(" + this.getOnlinePlayers(false).size() + "/" + Bukkit.getMaxPlayers() + ") ") + players
             });
-        } else {
-            Player player = (Player) sender;
-            String ranks = Rank.getRanks().stream()
-                    .filter(rank -> !rank.isHidden())
-                    .sorted(Comparator.comparingInt(rank -> -rank.getWeight()))
-                    .map(rank -> Color.translate(rank.getColor() + rank.getName()))
-                    .collect(Collectors.joining(ChatColor.WHITE + ", "));
 
-            String players = this.getOnlinePlayers(!player.hasPermission("scandium.staff")).stream()
-                    .map(player1 -> CorePlugin.getInstance().getPlayerManager().getPlayer(player1.getUniqueId()))
-                    .sorted(Comparator.comparingInt(potPlayer -> -potPlayer.getActiveGrant().getRank().getWeight()))
-                    .map(potPlayer -> this.getFormattedName(potPlayer, player))
-                    .collect(Collectors.joining(ChatColor.WHITE + ", "));
-
-            sender.sendMessage(new String[]{
-                    ranks,
-                    Color.translate("&f(" + this.getOnlinePlayers(true).size() + "/" + Bukkit.getMaxPlayers() + ") ") + players
-            });
+            return false;
         }
+
+        Player player = (Player) sender;
+        String ranks = Rank.getRanks().stream()
+                .filter(rank -> !rank.isHidden())
+                .sorted(Comparator.comparingInt(rank -> -rank.getWeight()))
+                .map(rank -> Color.translate(rank.getColor() + rank.getName()))
+                .collect(Collectors.joining(ChatColor.WHITE + ", "));
+        String players = this.getOnlinePlayers(!player.hasPermission("scandium.staff")).stream()
+                .map(player1 -> CorePlugin.getInstance().getPlayerManager().getPlayer(player1.getUniqueId()))
+                .sorted(Comparator.comparingInt(potPlayer -> -potPlayer.getActiveGrant().getRank().getWeight()))
+                .map(potPlayer -> this.getFormattedName(potPlayer, player))
+                .collect(Collectors.joining(ChatColor.WHITE + ", "));
+
+        sender.sendMessage(new String[]{
+                ranks,
+                Color.translate("&f(" + this.getOnlinePlayers(true).size() + "/" + Bukkit.getMaxPlayers() + ") ") + players
+        });
 
         return false;
     }

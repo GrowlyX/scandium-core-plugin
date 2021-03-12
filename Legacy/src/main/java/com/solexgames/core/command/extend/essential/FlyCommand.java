@@ -18,42 +18,45 @@ public class FlyCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
-        if (player.hasPermission("scandium.command.fly")) {
-            if (args.length == 0) {
-                if (player.isFlying()) {
-                    player.setAllowFlight(false);
-                    player.setFlying(false);
-                    player.sendMessage(Color.translate("&cDisabled your flight."));
 
-                    StaffUtil.sendAlert(player, "disabled flight");
-                } else {
-                    player.setAllowFlight(true);
-                    player.setFlying(true);
-                    player.sendMessage(Color.translate("&aEnabled your flight."));
-
-                    StaffUtil.sendAlert(player, "enabled flight");
-                }
-            }
-            if (args.length > 0) {
-                Player target = Bukkit.getPlayerExact(args[0]);
-                if (target != null) {
-                    if (target.isFlying()) {
-                        target.setFlying(false);
-                        target.sendMessage(Color.translate("&cDisabled " + target.getDisplayName() + "&c's flight."));
-
-                        StaffUtil.sendAlert(player, "disabled flight for " + target.getName());
-                    } else {
-                        target.setFlying(true);
-                        target.sendMessage(Color.translate("&aEnabled " + target.getDisplayName() + "&a's flight."));
-
-                        StaffUtil.sendAlert(player, "enabled flight for " + target.getName());
-                    }
-                } else {
-                    player.sendMessage(Color.translate("&cThat player does not exist."));
-                }
-            }
-        } else {
+        if (!player.hasPermission("scandium.command.fly")) {
             player.sendMessage(NO_PERMISSION);
+            return false;
+        }
+
+        if (args.length == 0) {
+            if (player.isFlying()) {
+                player.setAllowFlight(false);
+                player.setFlying(false);
+                player.sendMessage(Color.translate("&cDisabled your flight."));
+
+                StaffUtil.sendAlert(player, "disabled flight");
+            } else {
+                player.setAllowFlight(true);
+                player.setFlying(true);
+                player.sendMessage(Color.translate("&aEnabled your flight."));
+
+                StaffUtil.sendAlert(player, "enabled flight");
+            }
+        }
+        if (args.length > 0) {
+            Player target = Bukkit.getPlayerExact(args[0]);
+
+            if (target == null) {
+                player.sendMessage(Color.translate("&cThat player does not exist."));
+            } else {
+                if (target.isFlying()) {
+                    target.setFlying(false);
+                    target.sendMessage(Color.translate("&cDisabled " + target.getDisplayName() + "&c's flight."));
+
+                    StaffUtil.sendAlert(player, "disabled flight for " + target.getName());
+                } else {
+                    target.setFlying(true);
+                    target.sendMessage(Color.translate("&aEnabled " + target.getDisplayName() + "&a's flight."));
+
+                    StaffUtil.sendAlert(player, "enabled flight for " + target.getName());
+                }
+            }
         }
         return false;
     }

@@ -21,24 +21,26 @@ public class AdminChatCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
-        if (player.hasPermission(ChatChannelType.ADMIN.getPermission())) {
-            if (args.length == 0) {
-                PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-                if (potPlayer.getChannel() == null || !potPlayer.getChannel().equals(ChatChannelType.ADMIN)) {
-                    potPlayer.setChannel(ChatChannelType.ADMIN);
-                    player.sendMessage(Color.translate("&aYou have entered the admin chat channel."));
-                } else {
-                    potPlayer.setChannel(null);
-                    player.sendMessage(Color.translate("&cYou have exited the admin chat channel."));
-                }
-            }
+        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
-            if (args.length > 0) {
-                String message = StringUtil.buildMessage(args, 0);
-                CorePlugin.getInstance().getRedisThread().execute(() -> client.write(RedisUtil.onChatChannel(ChatChannelType.ADMIN, message, player)));
-            }
-        } else {
+        if (!player.hasPermission(ChatChannelType.ADMIN.getPermission())) {
             player.sendMessage(NO_PERMISSION);
+            return false;
+        }
+
+        if (args.length == 0) {
+            if (potPlayer.getChannel() == null || !potPlayer.getChannel().equals(ChatChannelType.ADMIN)) {
+                potPlayer.setChannel(ChatChannelType.ADMIN);
+                player.sendMessage(Color.translate("&aYou have entered the admin chat channel."));
+            } else {
+                potPlayer.setChannel(null);
+                player.sendMessage(Color.translate("&cYou have exited the admin chat channel."));
+            }
+        }
+
+        if (args.length > 0) {
+            String message = StringUtil.buildMessage(args, 0);
+            RedisUtil.writeAsync(RedisUtil.onChatChannel(ChatChannelType.ADMIN, message, player));
         }
         return false;
     }

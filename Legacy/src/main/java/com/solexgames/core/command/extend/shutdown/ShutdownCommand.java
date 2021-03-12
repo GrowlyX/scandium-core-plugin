@@ -21,9 +21,9 @@ public class ShutdownCommand extends BaseCommand {
 
         Player player = (Player) sender;
         ShutdownManager shutdownManager = CorePlugin.getInstance().getShutdownManager();
+        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
         if (player.hasPermission("scandium.command.shutdown")) {
             if (args.length == 0) {
-                ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
                 sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <start|cancel>."));
             }
             if (args.length > 0) {
@@ -45,7 +45,7 @@ public class ShutdownCommand extends BaseCommand {
                         }
                         break;
                     default:
-                        player.sendMessage(Color.translate("&cUsage: /" + label + " <start|cancel>"));
+                        sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <start|cancel>."));
                         break;
                 }
             }

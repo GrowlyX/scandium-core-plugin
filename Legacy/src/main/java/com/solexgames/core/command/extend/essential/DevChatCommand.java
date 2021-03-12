@@ -21,23 +21,26 @@ public class DevChatCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
-        if (player.hasPermission(ChatChannelType.DEV.getPermission())) {
-            if (args.length == 0) {
-                PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-                if (potPlayer.getChannel() == null || !potPlayer.getChannel().equals(ChatChannelType.DEV)) {
-                    potPlayer.setChannel(ChatChannelType.DEV);
-                    player.sendMessage(Color.translate("&aYou have entered the dev chat channel."));
-                } else {
-                    potPlayer.setChannel(null);
-                    player.sendMessage(Color.translate("&cYou have exited the dev chat channel."));
-                }
-            }
-            if (args.length > 0) {
-                String message = StringUtil.buildMessage(args, 0);
-                CorePlugin.getInstance().getRedisThread().execute(() -> client.write(RedisUtil.onChatChannel(ChatChannelType.DEV, message, player)));
-            }
-        } else {
+        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+
+        if (!player.hasPermission(ChatChannelType.DEV.getPermission())) {
             player.sendMessage(NO_PERMISSION);
+            return false;
+        }
+
+        if (args.length == 0) {
+            if (potPlayer.getChannel() == null || !potPlayer.getChannel().equals(ChatChannelType.DEV)) {
+                potPlayer.setChannel(ChatChannelType.DEV);
+                player.sendMessage(Color.translate("&aYou have entered the developer chat channel."));
+            } else {
+                potPlayer.setChannel(null);
+                player.sendMessage(Color.translate("&cYou have exited the developer chat channel."));
+            }
+        }
+
+        if (args.length > 0) {
+            String message = StringUtil.buildMessage(args, 0);
+            RedisUtil.writeAsync(RedisUtil.onChatChannel(ChatChannelType.DEV, message, player));
         }
         return false;
     }

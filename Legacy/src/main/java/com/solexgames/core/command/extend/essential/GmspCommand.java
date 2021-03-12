@@ -19,26 +19,28 @@ public class GmspCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
-        if (player.hasPermission("scandium.command.gmsp")) {
-            if (args.length == 0) {
-                player.setGameMode(GameMode.SPECTATOR);
-                player.sendMessage(Color.translate("&aSet your gamemode to Spectator."));
 
-                StaffUtil.sendAlert(player, "set gamemode spectator");
-            }
-            if (args.length > 0) {
-                Player target = Bukkit.getPlayerExact(args[0]);
-                if (target != null) {
-                    target.setGameMode(GameMode.SPECTATOR);
-                    player.sendMessage(Color.translate("&aSet " + target.getDisplayName() + "'s&a gamemode to Spectator."));
-
-                    StaffUtil.sendAlert(player, "set gamemode spectator for " + target.getName());
-                } else {
-                    player.sendMessage(Color.translate("&cThat player does not exist."));
-                }
-            }
-        } else {
+        if (!player.hasPermission("scandium.command.gmsp")) {
             player.sendMessage(NO_PERMISSION);
+            return false;
+        }
+
+        if (args.length == 0) {
+            player.setGameMode(GameMode.SPECTATOR);
+            player.sendMessage(Color.translate("&aSet your gamemode to Spectator."));
+
+            StaffUtil.sendAlert(player, "set gamemode spectator");
+        }
+        if (args.length > 0) {
+            Player target = Bukkit.getPlayerExact(args[0]);
+            if (target != null) {
+                target.setGameMode(GameMode.SPECTATOR);
+                player.sendMessage(Color.translate("&aSet " + target.getDisplayName() + "'s&a gamemode to Spectator."));
+
+                StaffUtil.sendAlert(player, "set gamemode spectator for " + target.getName());
+            } else {
+                player.sendMessage(Color.translate("&cThat player does not exist."));
+            }
         }
         return false;
     }

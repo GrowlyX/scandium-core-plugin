@@ -19,9 +19,11 @@ public class MediaCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
+
         if (args.length == 0) {
             new MediaMenu(player).open(player);
         }
+
         if (args.length == 1) {
             Player target = Bukkit.getPlayerExact(args[0]);
             if (target != null) {

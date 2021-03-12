@@ -60,7 +60,7 @@ public class PunishSelectPunishTypeMenu extends AbstractInventoryMenu {
                         new PunishSelectReasonMenu(this.player, this.target, PunishmentType.BAN).open(player);
                     } else {
                         this.player.closeInventory();
-                        player.sendMessage(NO_PERMISSION);
+                        player.sendMessage(ChatColor.RED + "I'm sorry, but you do not have permission to perform this action.");
                     }
                     break;
                 case 11:
@@ -68,7 +68,7 @@ public class PunishSelectPunishTypeMenu extends AbstractInventoryMenu {
                         new PunishSelectReasonMenu(this.player, this.target, PunishmentType.KICK).open(player);
                     } else {
                         this.player.closeInventory();
-                        player.sendMessage(NO_PERMISSION);
+                        player.sendMessage(ChatColor.RED + "I'm sorry, but you do not have permission to perform this action.");
                     }
                     break;
                 case 12:
@@ -76,7 +76,7 @@ public class PunishSelectPunishTypeMenu extends AbstractInventoryMenu {
                         new PunishSelectReasonMenu(this.player, this.target, PunishmentType.MUTE).open(player);
                     } else {
                         this.player.closeInventory();
-                        player.sendMessage(NO_PERMISSION);
+                        player.sendMessage(ChatColor.RED + "I'm sorry, but you do not have permission to perform this action.");
                     }
                     break;
                 case 13:
@@ -84,7 +84,7 @@ public class PunishSelectPunishTypeMenu extends AbstractInventoryMenu {
                         new PunishSelectReasonMenu(this.player, this.target, PunishmentType.WARN).open(player);
                     } else {
                         this.player.closeInventory();
-                        player.sendMessage(NO_PERMISSION);
+                        player.sendMessage(ChatColor.RED + "I'm sorry, but you do not have permission to perform this action.");
                     }
                     break;
                 case 14:
@@ -92,7 +92,7 @@ public class PunishSelectPunishTypeMenu extends AbstractInventoryMenu {
                         new PunishSelectReasonMenu(this.player, this.target, PunishmentType.BLACKLIST).open(player);
                     } else {
                         this.player.closeInventory();
-                        player.sendMessage(NO_PERMISSION);
+                        player.sendMessage(ChatColor.RED + "I'm sorry, but you do not have permission to perform this action.");
                     }
                     break;
             }

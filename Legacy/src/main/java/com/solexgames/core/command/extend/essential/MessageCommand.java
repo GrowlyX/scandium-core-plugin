@@ -35,7 +35,7 @@ public class MessageCommand extends BaseCommand implements TabCompleter {
         }
         if (args.length > 0) {
             if (args.length == 1) {
-                player.sendMessage(Color.translate("&cUsage: /" + label + " <player> <message>."));
+                player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player> <message>."));
             }
             if (args.length > 1) {
                 Player target = Bukkit.getPlayerExact(args[0]);
@@ -53,11 +53,11 @@ public class MessageCommand extends BaseCommand implements TabCompleter {
                     player.sendMessage(Color.translate("&cThat player does not exist."));
                     return false;
                 }
-                if (potTarget.isIgnoring(potPlayer.getPlayer())) {
+                if (!potTarget.isIgnoring(potPlayer.getPlayer())) {
                     player.sendMessage(Color.translate("&cThat player is currently ignoring you."));
                     return false;
                 }
-                if (potPlayer.isIgnoring(potTarget.getPlayer())) {
+                if (!potPlayer.isIgnoring(potTarget.getPlayer())) {
                     player.sendMessage(Color.translate("&cYou are currently ignoring that player."));
                     return false;
                 }

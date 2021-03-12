@@ -20,39 +20,30 @@ public class TpPosCommand extends BaseCommand {
             return false;
         }
 
-        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
-        ChatColor mainColor = network.getMainColor();
-        ChatColor secondColor = network.getSecondaryColor();
+        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
         Player player = (Player) sender;
+
         if (player.hasPermission("scandium.command.tppos")) {
-            ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
-            if (args.length == 0) {
-                player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <x> <y> <z>."));
-            }
-            if (args.length > 0) {
-                if (args.length == 1) {
-                    player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <x> <y> <z>."));
-                }
-                if (args.length == 2) {
-                    player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <x> <y> <z>."));
-                }
-                if (args.length == 3) {
-                    try {
-                        int x1 = Integer.parseInt(args[0]);
-                        int y1 = Integer.parseInt(args[1]);
-                        int z1 = Integer.parseInt(args[2]);
-
-                        player.teleport(new Location(player.getWorld(), x1, y1, z1, 0.0F, 0.0F));
-                        player.sendMessage(secondColor + "Teleported you to " + mainColor + x1 + secondColor + ", " + mainColor + y1 + secondColor + ", " + mainColor + z1 + secondColor + ".");
-
-                        StaffUtil.sendAlert(player, "teleported to " + x1 + ", " + y1 + ", " + z1);
-                    } catch (Exception e) {
-                        player.sendMessage(Color.translate("&cOne of those values was not an integer."));
-                    }
-                }
-            }
-        } else {
             player.sendMessage(NO_PERMISSION);
+            return false;
+        }
+
+        if (args.length <= 2) {
+            player.sendMessage(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <x> <y> <z>.");
+        }
+        if (args.length == 3) {
+            try {
+                int x1 = Integer.parseInt(args[0]);
+                int y1 = Integer.parseInt(args[1]);
+                int z1 = Integer.parseInt(args[2]);
+
+                player.teleport(new Location(player.getWorld(), x1, y1, z1, 0.0F, 0.0F));
+                player.sendMessage(serverType.getSecondaryColor() + "Teleported you to " + serverType.getMainColor() + x1 + serverType.getSecondaryColor() + ", " + serverType.getMainColor() + y1 + serverType.getSecondaryColor() + ", " + serverType.getMainColor() + z1 + serverType.getSecondaryColor() + ".");
+
+                StaffUtil.sendAlert(player, "teleported to " + x1 + ", " + y1 + ", " + z1);
+            } catch (Exception e) {
+                player.sendMessage(Color.translate("&cOne of those values was not an integer."));
+            }
         }
         return false;
     }

@@ -32,7 +32,10 @@ public class IgnoreCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
-        if (args.length == 0) this.sendHelp(player);
+
+        if (args.length == 0)
+            this.sendHelp(player);
+
         if (args.length > 0) {
             if (label.equalsIgnoreCase("unignore")) {
                 String value = args[0];

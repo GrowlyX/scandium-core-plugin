@@ -33,7 +33,7 @@ public class SetSlotsCommand extends BaseCommand {
                 ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
                 sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <int>."));
             }
-            if (args.length > 0) {
+            if (args.length == 1) {
                 try {
                     int slots = Integer.parseInt(args[0]);
                     setSlots(slots);

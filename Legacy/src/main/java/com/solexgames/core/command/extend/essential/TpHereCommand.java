@@ -20,32 +20,32 @@ public class TpHereCommand extends BaseCommand {
             return false;
         }
 
-        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
-        ChatColor mainColor = network.getMainColor();
-        ChatColor secondColor = network.getSecondaryColor();
+        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+        ChatColor secondColor = serverType.getSecondaryColor();
         Player player = (Player) sender;
-        if (player.hasPermission("scandium.command.tphere")) {
-            ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
-            if (args.length == 0) {
-                player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player>."));
-            }
-            if (args.length > 0) {
-                if (args.length == 1) {
-                    Player target = Bukkit.getPlayerExact(args[0]);
-                    if (target != null) {
-                        target.teleport(player.getLocation());
-                        player.sendMessage(Color.translate(secondColor + "Teleported " + target.getDisplayName() + secondColor + " to your location."));
-                        target.sendMessage(Color.translate(secondColor + "You have been teleported to " + target.getDisplayName() + secondColor + "."));
 
-                        StaffUtil.sendAlert(player, "teleported " + target.getName() + " to themselves");
-                    } else {
-                        player.sendMessage(Color.translate("&cThat player does not exist."));
-                    }
-                }
-            }
-        } else {
-            player.sendMessage(NO_PERMISSION);
+        if (!sender.hasPermission("scandium.command.tphere")) {
+            sender.sendMessage(NO_PERMISSION);
+            return false;
         }
+
+        if (args.length == 0) {
+            player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player>."));
+        }
+        if (args.length == 1) {
+            Player target = Bukkit.getPlayerExact(args[0]);
+
+            if (target != null) {
+                target.teleport(player.getLocation());
+                player.sendMessage(Color.translate(secondColor + "Teleported " + target.getDisplayName() + secondColor + " to your location."));
+                target.sendMessage(Color.translate(secondColor + "You have been teleported to " + target.getDisplayName() + secondColor + "."));
+
+                StaffUtil.sendAlert(player, "teleported " + target.getName() + " to themselves");
+            } else {
+                player.sendMessage(Color.translate("&cThat player does not exist."));
+            }
+        }
+
         return false;
     }
 }
