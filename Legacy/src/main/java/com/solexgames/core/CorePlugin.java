@@ -2,6 +2,10 @@ package com.solexgames.core;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.solexgames.core.abstraction.access.extend.NMSAccess_v1_8;
+import com.solexgames.core.abstraction.version.extend.PingCommand_v1_16;
+import com.solexgames.core.abstraction.version.extend.PingCommand_v1_7;
+import com.solexgames.core.abstraction.version.extend.PingCommand_v1_8;
 import com.solexgames.core.command.extend.CoreCommand;
 import com.solexgames.core.command.extend.anticheat.AnticheatBanCommand;
 import com.solexgames.core.command.extend.discord.SyncCommand;
@@ -35,10 +39,9 @@ import com.solexgames.core.listener.PlayerListener;
 import com.solexgames.core.abstraction.lunar.AbstractClientInjector;
 import com.solexgames.core.abstraction.lunar.extend.LunarCommand;
 import com.solexgames.core.manager.*;
-import com.solexgames.core.abstraction.nms.AbstractNMSImplementation;
-import com.solexgames.core.abstraction.nms.extend.NMSImplementation_v1_16;
-import com.solexgames.core.abstraction.nms.extend.NMSImplementation_v1_7;
-import com.solexgames.core.abstraction.nms.extend.NMSImplementation_v1_8;
+import com.solexgames.core.abstraction.access.AbstractNMSAccess;
+import com.solexgames.core.abstraction.access.extend.NMSAccess_v1_16;
+import com.solexgames.core.abstraction.access.extend.NMSAccess_v1_7;
 import com.solexgames.core.abstraction.protocol.AbstractChatInterceptor;
 import com.solexgames.core.abstraction.protocol.extend.ProtocolChatInterceptor;
 import com.solexgames.core.redis.RedisManager;
@@ -50,9 +53,6 @@ import com.solexgames.core.util.RedisUtil;
 import com.solexgames.core.util.external.ConfigExternal;
 import com.solexgames.core.util.external.pagination.pagination.PaginationListener;
 import com.solexgames.core.abstraction.version.AbstractVersionImplementation;
-import com.solexgames.core.abstraction.version.extend.PingCommand_v1_16;
-import com.solexgames.core.abstraction.version.extend.PingCommand_v1_7;
-import com.solexgames.core.abstraction.version.extend.PingCommand_v1_8;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
@@ -126,7 +126,7 @@ public final class CorePlugin extends JavaPlugin {
     private AbstractChatInterceptor chatInterceptor;
     private AbstractClientInjector lunarCommand;
     private AbstractVersionImplementation versionImplementation;
-    private AbstractNMSImplementation NMS;
+    private AbstractNMSAccess NMS;
 
     private Executor taskThread;
     private Executor redisThread;
@@ -179,13 +179,13 @@ public final class CorePlugin extends JavaPlugin {
 
         if (this.getServer().getVersion().contains("1.7")) {
             this.versionImplementation = new PingCommand_v1_7();
-            this.NMS = new NMSImplementation_v1_7();
+            this.NMS = new NMSAccess_v1_7();
         } else if (this.getServer().getVersion().contains("1.8")) {
             this.versionImplementation = new PingCommand_v1_8();
-            this.NMS = new NMSImplementation_v1_8();
+            this.NMS = new NMSAccess_v1_8();
         } else if (this.getServer().getVersion().contains("1.16")) {
             this.versionImplementation = new PingCommand_v1_16();
-            this.NMS = new NMSImplementation_v1_16();
+            this.NMS = new NMSAccess_v1_16();
         }
 
         this.getLogger().info("[Bukkit] Hooked into Bukkit version " + this.getServer().getVersion() + "!");

@@ -1,7 +1,7 @@
-package com.solexgames.core.abstraction.nms.extend;
+package com.solexgames.core.abstraction.access.extend;
 
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.abstraction.nms.AbstractNMSImplementation;
+import com.solexgames.core.abstraction.access.AbstractNMSAccess;
 import net.minecraft.server.v1_8_R3.MinecraftServer;
 import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerInfo;
 import org.bukkit.Bukkit;
@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-public class NMSImplementation_v1_8 extends AbstractNMSImplementation {
+public class NMSAccess_v1_8 extends AbstractNMSAccess {
 
     @Override
     public void removeExecute(Player player) {

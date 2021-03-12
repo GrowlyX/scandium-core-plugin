@@ -76,11 +76,12 @@ public class ItemBuilder {
     }
 
     public ItemBuilder addLore(String lore) {
-        Object object = itemMeta.getLore();
-        if (object == null) object = new ArrayList<>();
+        List<String> list = itemMeta.getLore();
+        if (list == null) list = new ArrayList<>();
 
-        ((List) object).add(Color.translate(lore));
-        itemMeta.setLore((List<String>) object);
+        list.add(Color.translate(lore));
+
+        itemMeta.setLore(list);
         return this;
     }
 
@@ -91,9 +92,11 @@ public class ItemBuilder {
 
     public ItemBuilder addLore(String... lore) {
         List<String> strings = new ArrayList<>();
+
         for (String string : lore) {
             strings.add(Color.translate(string));
         }
+
         itemMeta.setLore(strings);
         return this;
     }

@@ -3,7 +3,6 @@ package com.solexgames.core.util.external;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
-import com.solexgames.core.util.RankUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
