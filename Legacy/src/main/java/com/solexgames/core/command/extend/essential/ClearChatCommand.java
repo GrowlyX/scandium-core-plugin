@@ -11,20 +11,16 @@ public class ClearChatCommand extends BaseCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(ONLY_PLAYERS);
+        if (!sender.hasPermission("scandium.command.clearchat")) {
+            sender.sendMessage(NO_PERMISSION);
             return false;
         }
 
-        Player player = (Player) sender;
-        if (player.hasPermission("scandium.command.clearchat")) {
-            if (args.length == 0) {
-                for (int lines = 0; lines < 250; lines++) { Bukkit.broadcastMessage(Color.translate("  ")); }
-                Bukkit.broadcastMessage(Color.translate("&aThe chat has been cleared by " + player.getDisplayName() + "&a."));
-            }
-        } else {
-            player.sendMessage(NO_PERMISSION);
+        for (int lines = 0; lines < 250; lines++) {
+            Bukkit.broadcastMessage(Color.translate("  "));
         }
+
+        Bukkit.broadcastMessage(Color.translate("&aThe chat has been cleared by " + (sender instanceof Player ? sender.getDisplayName() : "&4Console") + "&a."));
         return false;
     }
 }

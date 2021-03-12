@@ -22,24 +22,25 @@ public class BroadcastCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
-        if (player.hasPermission("scandium.command.broadcast")) {
-            ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
-            if (args.length == 0) {
-                player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " [l:] [g:] <message>."));
-            }
+        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
 
-            if (args.length > 0) {
-                String message = StringUtil.buildMessage(args, 0);
-                if (message.startsWith("l:")) {
-                    Bukkit.broadcastMessage(Color.translate(message.replace("l:", "")));
-                } else if (message.startsWith("g:")) {
-                    CorePlugin.getInstance().getRedisThread().execute(() -> client.write(RedisUtil.onGlobalBroadcast(message.replace("g:", ""))));
-                } else {
-                    CorePlugin.getInstance().getRedisThread().execute(() -> client.write(RedisUtil.onGlobalBroadcast(message)));
-                }
-            }
-        } else {
+        if (!player.hasPermission("scandium.command.broadcast")) {
             player.sendMessage(NO_PERMISSION);
+            return false;
+        }
+
+        if (args.length == 0) {
+            player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " [l:] [g:] <message>."));
+        }
+        if (args.length > 0) {
+            String message = StringUtil.buildMessage(args, 0);
+            if (message.startsWith("l:")) {
+                Bukkit.broadcastMessage(Color.translate(message.replace("l:", "")));
+            } else if (message.startsWith("g:")) {
+                CorePlugin.getInstance().getRedisThread().execute(() -> client.write(RedisUtil.onGlobalBroadcast(message.replace("g:", ""))));
+            } else {
+                CorePlugin.getInstance().getRedisThread().execute(() -> client.write(RedisUtil.onGlobalBroadcast(message)));
+            }
         }
         return false;
     }
