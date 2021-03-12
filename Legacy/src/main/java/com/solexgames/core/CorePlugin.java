@@ -3,9 +3,6 @@ package com.solexgames.core;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.solexgames.core.abstraction.access.extend.NMSAccess_v1_8;
-import com.solexgames.core.abstraction.version.extend.PingCommand_v1_16;
-import com.solexgames.core.abstraction.version.extend.PingCommand_v1_7;
-import com.solexgames.core.abstraction.version.extend.PingCommand_v1_8;
 import com.solexgames.core.command.extend.CoreCommand;
 import com.solexgames.core.command.extend.anticheat.AnticheatBanCommand;
 import com.solexgames.core.command.extend.discord.SyncCommand;
@@ -52,7 +49,6 @@ import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
 import com.solexgames.core.util.external.ConfigExternal;
 import com.solexgames.core.util.external.pagination.pagination.PaginationListener;
-import com.solexgames.core.abstraction.version.AbstractVersionImplementation;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
@@ -125,7 +121,6 @@ public final class CorePlugin extends JavaPlugin {
 
     private AbstractChatInterceptor chatInterceptor;
     private AbstractClientInjector lunarCommand;
-    private AbstractVersionImplementation versionImplementation;
     private AbstractNMSAccess NMS;
 
     private Executor taskThread;
@@ -178,13 +173,10 @@ public final class CorePlugin extends JavaPlugin {
         if (this.getServer().getPluginManager().isPluginEnabled("LunarClient-API")) lunarCommand = new LunarCommand(); else this.getLogger().info("[Protocol] Could not find LunarClient-API! The /lunar command will not work without it!");
 
         if (this.getServer().getVersion().contains("1.7")) {
-            this.versionImplementation = new PingCommand_v1_7();
             this.NMS = new NMSAccess_v1_7();
         } else if (this.getServer().getVersion().contains("1.8")) {
-            this.versionImplementation = new PingCommand_v1_8();
             this.NMS = new NMSAccess_v1_8();
         } else if (this.getServer().getVersion().contains("1.16")) {
-            this.versionImplementation = new PingCommand_v1_16();
             this.NMS = new NMSAccess_v1_16();
         }
 
@@ -299,10 +291,10 @@ public final class CorePlugin extends JavaPlugin {
 
         this.getCommand("message").setExecutor(new MessageCommand());
         this.getCommand("list").setExecutor(new ListCommand());
+        this.getCommand("ping").setExecutor(new PingCommand());
 
         if (this.lunarCommand != null) this.getCommand("lunar").setExecutor(lunarCommand);
         if (this.chatInterceptor != null) this.chatInterceptor.initializePacketInterceptor();
-        if (this.versionImplementation != null) this.getCommand("ping").setExecutor(versionImplementation);
 
         this.registerListeners(
                 new PlayerListener(),

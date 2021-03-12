@@ -24,4 +24,16 @@ public final class StaffUtil {
                     .forEach(potPlayer -> potPlayer.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getConfig().getString("settings.staff-command-alerts-format").replace("<playername>", player.getName()).replace("<message>", reason))));
         }
     }
+
+    public static int getPing(Player player) {
+        try {
+            String bukkitVersion = Bukkit.getServer().getClass().getPackage().getName().substring(23);
+            Class<?> craftPlayer = Class.forName("org.bukkit.craftbukkit." + bukkitVersion + ".entity.CraftPlayer");
+            Object handle = craftPlayer.getMethod("getHandle").invoke(player);
+
+            return (Integer) handle.getClass().getDeclaredField("ping").get(handle);
+        } catch (Exception ignored) {
+            return 0;
+        }
+    }
 }

@@ -37,12 +37,12 @@ public class SettingsMenu extends AbstractInventoryMenu {
                 .setDisplayName(serverType.getMainColor() + ChatColor.BOLD.toString() + "Global Chat")
                 .addLore(
                         "",
-                        "Would you like to be",
-                        "able to view global",
-                        "chat?",
+                        ChatColor.GRAY + "Would you like to be",
+                        ChatColor.GRAY + "able to view global",
+                        ChatColor.GRAY + "chat?",
                         " ",
-                        "" + (potPlayer.isCanSeeGlobalChat() ? ChatColor.GREEN + ChatColor.BOLD.toString() + "■ " : ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + "■ ") + "&fEnabled",
-                        "" + (!potPlayer.isCanSeeGlobalChat() ? ChatColor.GREEN + ChatColor.BOLD.toString() + "■ " : ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + "■ ") + "&fDisabled"
+                        (potPlayer.isCanSeeGlobalChat() ? ChatColor.GREEN + ChatColor.BOLD.toString() + "■ " : ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + "■ ") + "&fEnabled",
+                        (!potPlayer.isCanSeeGlobalChat() ? ChatColor.GREEN + ChatColor.BOLD.toString() + "■ " : ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + "■ ") + "&fDisabled"
                 )
                 .create()
         );
@@ -55,8 +55,8 @@ public class SettingsMenu extends AbstractInventoryMenu {
                         ChatColor.GRAY + "able to view server",
                         ChatColor.GRAY + "tips?",
                         " ",
-                        "" + (potPlayer.isCanSeeTips() ? ChatColor.GREEN + ChatColor.BOLD.toString() + "■ " : ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + "■ ") + "&fEnabled",
-                        "" + (!potPlayer.isCanSeeTips() ? ChatColor.GREEN + ChatColor.BOLD.toString() + "■ " : ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + "■ ") + "&fDisabled"
+                        (potPlayer.isCanSeeTips() ? ChatColor.GREEN + ChatColor.BOLD.toString() + "■ " : ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + "■ ") + "&fEnabled",
+                        (!potPlayer.isCanSeeTips() ? ChatColor.GREEN + ChatColor.BOLD.toString() + "■ " : ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + "■ ") + "&fDisabled"
                 )
                 .create()
         );
@@ -69,8 +69,8 @@ public class SettingsMenu extends AbstractInventoryMenu {
                         ChatColor.GRAY + "able to receive player",
                         ChatColor.GRAY + "dms?",
                         " ",
-                        "" + (potPlayer.isCanReceiveDms() ? ChatColor.GREEN + ChatColor.BOLD.toString() + "■ " : ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + "■ ") + "&fEnabled",
-                        "" + (!potPlayer.isCanReceiveDms() ? ChatColor.GREEN + ChatColor.BOLD.toString() + "■ " : ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + "■ ") + "&fDisabled"
+                        (potPlayer.isCanReceiveDms() ? ChatColor.GREEN + ChatColor.BOLD.toString() + "■ " : ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + "■ ") + "&fEnabled",
+                        (!potPlayer.isCanReceiveDms() ? ChatColor.GREEN + ChatColor.BOLD.toString() + "■ " : ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + "■ ") + "&fDisabled"
                 )
                 .create()
         );
@@ -83,8 +83,8 @@ public class SettingsMenu extends AbstractInventoryMenu {
                         ChatColor.GRAY + "able to receive dm",
                         ChatColor.GRAY + "sounds?",
                         " ",
-                        "" + (potPlayer.isCanReceiveDmsSounds() ? ChatColor.GREEN + ChatColor.BOLD.toString() + "■ " : ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + "■ ") + "&fEnabled",
-                        "" + (!potPlayer.isCanReceiveDmsSounds() ? ChatColor.GREEN + ChatColor.BOLD.toString() + "■ " : ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + "■ ") + "&fDisabled"
+                        (potPlayer.isCanReceiveDmsSounds() ? ChatColor.GREEN + ChatColor.BOLD.toString() + "■ " : ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + "■ ") + "&fEnabled",
+                        (!potPlayer.isCanReceiveDmsSounds() ? ChatColor.GREEN + ChatColor.BOLD.toString() + "■ " : ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + "■ ") + "&fDisabled"
                 )
                 .create()
         );
@@ -98,8 +98,8 @@ public class SettingsMenu extends AbstractInventoryMenu {
                             ChatColor.GRAY + "able to receive staff",
                             ChatColor.GRAY + "messages?",
                             " ",
-                            "" + (potPlayer.isCanSeeStaffMessages() ? ChatColor.GREEN + ChatColor.BOLD.toString() + "■ " : ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + "■ ") + "&fEnabled",
-                            "" + (!potPlayer.isCanSeeStaffMessages() ? ChatColor.GREEN + ChatColor.BOLD.toString() + "■ " : ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + "■ ") + "&fDisabled"
+                            (potPlayer.isCanSeeStaffMessages() ? ChatColor.GREEN + ChatColor.BOLD.toString() + "■ " : ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + "■ ") + "&fEnabled",
+                            (!potPlayer.isCanSeeStaffMessages() ? ChatColor.GREEN + ChatColor.BOLD.toString() + "■ " : ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + "■ ") + "&fDisabled"
                     )
                     .create()
             );
@@ -112,8 +112,8 @@ public class SettingsMenu extends AbstractInventoryMenu {
                             ChatColor.GRAY + "able to receive global",
                             ChatColor.GRAY + "announcements?",
                             " ",
-                            "" + (potPlayer.isCanSeeBroadcasts() ? ChatColor.GREEN + ChatColor.BOLD.toString() + "■ " : ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + "■ ") + "&fEnabled",
-                            "" + (!potPlayer.isCanSeeBroadcasts() ? ChatColor.GREEN + ChatColor.BOLD.toString() + "■ " : ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + "■ ") + "&fDisabled"
+                            (potPlayer.isCanSeeBroadcasts() ? ChatColor.GREEN + ChatColor.BOLD.toString() + "■ " : ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + "■ ") + "&fEnabled",
+                            (!potPlayer.isCanSeeBroadcasts() ? ChatColor.GREEN + ChatColor.BOLD.toString() + "■ " : ChatColor.DARK_GRAY + ChatColor.BOLD.toString() + "■ ") + "&fDisabled"
                     )
                     .create()
             );
