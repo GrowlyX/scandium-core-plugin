@@ -20,16 +20,17 @@ public class ToggleAutoVanishCommand extends BaseCommand {
         Player player = (Player) sender;
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
-        if (player.hasPermission("scandium.staff")) {
-            if (potPlayer.isAutoVanish()) {
-                player.sendMessage(Color.translate("&cYou have disabled auto vanish."));
-                potPlayer.setAutoVanish(false);
-            } else {
-                player.sendMessage(Color.translate("&aYou have enabled auto vanish."));
-                potPlayer.setAutoVanish(true);
-            }
-        } else {
+        if (!player.hasPermission("scandium.staff")) {
             player.sendMessage(NO_PERMISSION);
+            return false;
+        }
+
+        if (potPlayer.isAutoVanish()) {
+            player.sendMessage(Color.translate("&cYou have disabled auto vanish."));
+            potPlayer.setAutoVanish(false);
+        } else {
+            player.sendMessage(Color.translate("&aYou have enabled auto vanish."));
+            potPlayer.setAutoVanish(true);
         }
 
         return false;

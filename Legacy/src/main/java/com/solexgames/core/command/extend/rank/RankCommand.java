@@ -40,7 +40,6 @@ public class RankCommand extends BaseCommand {
         player.sendMessage(Color.translate("/rank default &7- Set a rank as a default rank."));
         player.sendMessage(Color.translate("/rank addInher &7- Add an inheritance to a rank."));
         player.sendMessage(Color.translate("/rank delInher &7- Remove an inheritance from a rank."));
-//        player.sendMessage(Color.translate("/rank teamLetter &7- Set the team letter of a rank (For tablist sorting; \"a\" would be highest on tablist, \"z\" would be lowest.) (Don't use)"));
         player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
     }
 

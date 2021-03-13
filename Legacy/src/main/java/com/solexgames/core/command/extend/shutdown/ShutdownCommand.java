@@ -22,35 +22,37 @@ public class ShutdownCommand extends BaseCommand {
         Player player = (Player) sender;
         ShutdownManager shutdownManager = CorePlugin.getInstance().getShutdownManager();
         ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
-        if (player.hasPermission("scandium.command.shutdown")) {
-            if (args.length == 0) {
-                sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <start|cancel>."));
-            }
-            if (args.length > 0) {
-                switch (args[0]) {
-                    case "start":
-                        if (!shutdownManager.isShutdownScheduled()) {
-                            shutdownManager.initiateShutdown(60, player);
-                            player.sendMessage(Color.translate("&aInitiated a shutdown in &660 seconds&a."));
-                        } else {
-                            player.sendMessage(Color.translate("&cThere's already a shutdown initiated!"));
-                        }
-                        break;
-                    case "cancel":
-                        if (shutdownManager.isShutdownScheduled()) {
-                            shutdownManager.stopShutdown(player);
-                            player.sendMessage(Color.translate("&aCancelled the scheduled shutdown."));
-                        } else {
-                            player.sendMessage(Color.translate("&cThere aren't any shutdowns scheduled!"));
-                        }
-                        break;
-                    default:
-                        sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <start|cancel>."));
-                        break;
-                }
-            }
-        } else {
+
+        if (!player.hasPermission("scandium.command.shutdown")) {
             player.sendMessage(NO_PERMISSION);
+            return false;
+        }
+
+        if (args.length == 0) {
+            sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <start|cancel>."));
+        }
+        if (args.length == 1) {
+            switch (args[0]) {
+                case "start":
+                    if (!shutdownManager.isShutdownScheduled()) {
+                        shutdownManager.initiateShutdown(60, player);
+                        player.sendMessage(Color.translate("&aInitiated a shutdown in &660 seconds&a."));
+                    } else {
+                        player.sendMessage(Color.translate("&cThere's already a shutdown initiated!"));
+                    }
+                    break;
+                case "cancel":
+                    if (shutdownManager.isShutdownScheduled()) {
+                        shutdownManager.stopShutdown(player);
+                        player.sendMessage(Color.translate("&aCancelled the scheduled shutdown."));
+                    } else {
+                        player.sendMessage(Color.translate("&cThere aren't any shutdowns scheduled!"));
+                    }
+                    break;
+                default:
+                    sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <start|cancel>."));
+                    break;
+            }
         }
         return false;
     }

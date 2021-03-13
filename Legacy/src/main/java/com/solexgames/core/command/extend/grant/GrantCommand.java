@@ -26,22 +26,24 @@ public class GrantCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
-        if (player.hasPermission("scandium.command.grant")) {
-            ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
-            if (args.length == 0) {
-                sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player>."));
-            }
-            if (args.length > 0) {
-                Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByName(args[0]).orElse(null);
+        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
 
-                if (document != null) {
-                    new GrantMainPaginatedMenu(document, player).openMenu(player);
-                } else {
-                    player.sendMessage(Color.translate("&cThat player does not exist in our databases."));
-                }
-            }
-        } else {
+        if (player.hasPermission("scandium.command.grant")) {
             player.sendMessage(NO_PERMISSION);
+            return false;
+        }
+
+        if (args.length == 0) {
+            sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player>."));
+        }
+        if (args.length > 0) {
+            Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByName(args[0]).orElse(null);
+
+            if (document != null) {
+                new GrantMainPaginatedMenu(document, player).openMenu(player);
+            } else {
+                player.sendMessage(Color.translate("&cThat player does not exist in our databases."));
+            }
         }
         return false;
     }

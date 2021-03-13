@@ -20,16 +20,17 @@ public class ToggleAutoModModeCommand extends BaseCommand {
         Player player = (Player) sender;
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
-        if (player.hasPermission("scandium.staff")) {
-            if (potPlayer.isAutoModMode()) {
-                player.sendMessage(Color.translate("&cYou have disabled auto mod mode."));
-                potPlayer.setAutoModMode(false);
-            } else {
-                player.sendMessage(Color.translate("&aYou have enabled auto mod mode."));
-                potPlayer.setAutoModMode(true);
-            }
-        } else {
+        if (!player.hasPermission("scandium.staff")) {
             player.sendMessage(NO_PERMISSION);
+            return false;
+        }
+
+        if (potPlayer.isAutoModMode()) {
+            player.sendMessage(Color.translate("&cYou have disabled auto mod mode."));
+            potPlayer.setAutoModMode(false);
+        } else {
+            player.sendMessage(Color.translate("&aYou have enabled auto mod mode."));
+            potPlayer.setAutoModMode(true);
         }
 
         return false;

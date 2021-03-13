@@ -28,20 +28,22 @@ public class SetSlotsCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
-        if (player.hasPermission("scandium.command.setslots")) {
-            if (args.length == 0) {
-                ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
-                sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <int>."));
-            }
-            if (args.length == 1) {
-                try {
-                    int slots = Integer.parseInt(args[0]);
-                    setSlots(slots);
-                    player.sendMessage(Color.translate("&aUpdated the max player value to " + slots + " Players."));
-                } catch (NumberFormatException e) { player.sendMessage(Color.translate("&cThat's not a valid integer.")); }
-            }
-        } else {
+
+        if (!player.hasPermission("scandium.command.setslots")) {
             player.sendMessage(NO_PERMISSION);
+            return false;
+        }
+
+        if (args.length == 0) {
+            ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+            sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <int>."));
+        }
+        if (args.length == 1) {
+            try {
+                int slots = Integer.parseInt(args[0]);
+                setSlots(slots);
+                player.sendMessage(Color.translate("&aUpdated the max player value to " + slots + " Players."));
+            } catch (NumberFormatException e) { player.sendMessage(Color.translate("&cThat's not a valid integer.")); }
         }
         return false;
     }
