@@ -46,9 +46,9 @@ public class GrantScopeSelectMenu extends AbstractInventoryMenu {
             this.inventory.setItem(i, new ItemBuilder(XMaterial.GRAY_STAINED_GLASS_PANE.parseMaterial()).setDisplayName(" ").create());
         }
 
-        this.inventory.setItem(3, new ItemBuilder(XMaterial.LIME_TERRACOTTA.parseMaterial()).setDisplayName("&aGlobal Scope").addLore(Arrays.asList("", "&7Click to select the global", "&7scope for this grant.")).create());
-        this.inventory.setItem(4, new ItemBuilder(XMaterial.LIGHT_BLUE_TERRACOTTA.parseMaterial()).setDisplayName("&bScope Selection").addLore(Arrays.asList("", "&7Use the buttons below to", "&7select a server for this", "&7grant to be applied on!")).create());
-        this.inventory.setItem(5, new ItemBuilder(XMaterial.RED_TERRACOTTA.parseMaterial()).setDisplayName("&cReturn to Main").addLore(Arrays.asList("", "&7Click to cancel this grant", "&7and return to the main menu.")).create());
+        this.inventory.setItem(3, new ItemBuilder(XMaterial.LIME_TERRACOTTA.parseMaterial(), 5).setDisplayName("&aGlobal Scope").addLore(Arrays.asList("", "&7Click to select the global", "&7scope for this grant.")).create());
+        this.inventory.setItem(4, new ItemBuilder(XMaterial.LIGHT_BLUE_TERRACOTTA.parseMaterial(), 3).setDisplayName("&bScope Selection").addLore(Arrays.asList("", "&7Use the buttons below to", "&7select a server for this", "&7grant to be applied on!")).create());
+        this.inventory.setItem(5, new ItemBuilder(XMaterial.RED_TERRACOTTA.parseMaterial(), 14).setDisplayName("&cReturn to Main").addLore(Arrays.asList("", "&7Click to cancel this grant", "&7and return to the main menu.")).create());
 
         AtomicInteger i = new AtomicInteger(19);
 

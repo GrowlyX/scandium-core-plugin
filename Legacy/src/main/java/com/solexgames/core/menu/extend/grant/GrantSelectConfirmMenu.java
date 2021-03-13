@@ -82,7 +82,7 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
     }
 
     @Override
-    public void onInventoryClick(InventoryClickEvent event) throws IOException, ParseException {
+    public void onInventoryClick(InventoryClickEvent event) {
         Inventory clickedInventory = event.getClickedInventory();
         Inventory topInventory = event.getView().getTopInventory();
         if (!topInventory.equals(this.inventory)) return;

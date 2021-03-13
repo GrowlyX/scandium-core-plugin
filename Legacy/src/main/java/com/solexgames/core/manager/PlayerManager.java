@@ -134,10 +134,9 @@ public class PlayerManager {
         player.updateInventory();
 
         ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
-        ChatColor mainColor = serverType.getMainColor();
         ChatColor secondColor = serverType.getSecondaryColor();
 
-        player.sendMessage(Color.translate(secondColor + "You are now in moderation mode."));
+        player.sendMessage(secondColor + "You are now in moderation mode.");
 
         StaffUtil.sendAlert(player, "modmoded");
     }

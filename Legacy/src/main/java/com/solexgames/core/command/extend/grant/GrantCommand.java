@@ -32,8 +32,7 @@ public class GrantCommand extends BaseCommand {
                 sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player>."));
             }
             if (args.length > 0) {
-                UUID uuid = UUIDUtil.getId(args[0]);
-                Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByUuid(uuid).orElse(null);
+                Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByName(args[0]).orElse(null);
 
                 if (document != null) {
                     new GrantMainPaginatedMenu(document, player).openMenu(player);
