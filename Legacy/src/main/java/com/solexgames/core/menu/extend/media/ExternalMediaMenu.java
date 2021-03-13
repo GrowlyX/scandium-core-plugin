@@ -26,9 +26,8 @@ public class ExternalMediaMenu extends AbstractInventoryMenu {
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
         this.inventory.setItem(1, new ItemBuilder(XMaterial.INK_SAC.parseMaterial())
                 .setDurability(4)
-                .setDisplayName("&9Discord")
+                .setDisplayName("&9&lDiscord")
                 .addLore(
-                        "",
                         "&7Their discord:",
                         "&f" + potPlayer.getMedia().getDiscord(),
                         ""
@@ -37,9 +36,8 @@ public class ExternalMediaMenu extends AbstractInventoryMenu {
         );
         this.inventory.setItem(3, new ItemBuilder(XMaterial.INK_SAC.parseMaterial())
                 .setDurability(1)
-                .setDisplayName("&cYouTube")
+                .setDisplayName("&c&lYouTube")
                 .addLore(
-                        "",
                         "&7Their youtube:",
                         "&f" + potPlayer.getMedia().getYoutubeLink(),
                         ""
@@ -48,9 +46,8 @@ public class ExternalMediaMenu extends AbstractInventoryMenu {
         );
         this.inventory.setItem(5, new ItemBuilder(XMaterial.INK_SAC.parseMaterial())
                 .setDurability(12)
-                .setDisplayName("&bTwitter")
+                .setDisplayName("&b&lTwitter")
                 .addLore(
-                        "",
                         "&7Their twitter:",
                         "&f" + potPlayer.getMedia().getTwitter(),
                         ""
@@ -59,9 +56,8 @@ public class ExternalMediaMenu extends AbstractInventoryMenu {
         );
         this.inventory.setItem(7, new ItemBuilder(XMaterial.INK_SAC.parseMaterial())
                 .setDurability(14)
-                .setDisplayName("&6Instagram")
+                .setDisplayName("&6&lInstagram")
                 .addLore(
-                        "",
                         "&7Their instagram:",
                         "&f" + potPlayer.getMedia().getInstagram(),
                         ""

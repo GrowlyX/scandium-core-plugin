@@ -1,6 +1,7 @@
 package com.solexgames.core.menu.extend.punish;
 
 import com.cryptomorin.xseries.XMaterial;
+import com.solexgames.core.CorePlugin;
 import com.solexgames.core.menu.AbstractInventoryMenu;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.menu.extend.punish.history.PunishHistoryViewMainMenu;
@@ -8,6 +9,7 @@ import com.solexgames.core.util.Color;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -32,19 +34,6 @@ public class PunishMainMenu extends AbstractInventoryMenu {
     }
 
     public void update() {
-
-        ItemStack playerhead = new ItemStack(XMaterial.SKELETON_SKULL.parseMaterial(), 1, (short) 3);
-        SkullMeta playerheadmeta = (SkullMeta) playerhead.getItemMeta();
-        playerheadmeta.setOwner(target);
-        playerheadmeta.setLore(Arrays.asList(
-                Color.translate("&7  "),
-                Color.translate("&7Welcome to the punishment"),
-                Color.translate("&7menu of " + target + "!"),
-                Color.translate("&7  ")
-        ));
-        playerheadmeta.setDisplayName(Color.translate("&aPunishments"));
-        playerhead.setItemMeta(playerheadmeta);
-
         this.inventory.setItem(12, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 14)
                 .setDisplayName("&6Punish")
                 .addLore(
@@ -55,7 +44,6 @@ public class PunishMainMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-
         this.inventory.setItem(14, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 6)
                 .setDisplayName("&6Punishments")
                 .addLore(
@@ -66,8 +54,15 @@ public class PunishMainMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-
-        this.inventory.setItem(13, playerhead);
+        this.inventory.setItem(13, new ItemBuilder(XMaterial.SKELETON_SKULL.parseMaterial())
+                .setDurability(3)
+                .setOwner(target)
+                .setDisplayName(CorePlugin.getInstance().getServerManager().getNetwork().getMainColor() + ChatColor.BOLD.toString() + "Punishments")
+                .addLore(
+                        "&7Welcome to the punishment main",
+                        "&7menu of " + target + "!"
+                )
+                .create());
     }
 
     @Override

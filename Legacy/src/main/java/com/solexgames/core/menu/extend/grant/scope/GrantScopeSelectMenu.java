@@ -40,9 +40,7 @@ public class GrantScopeSelectMenu extends AbstractInventoryMenu {
 
     @Override
     public void update() {
-        int[] stained = new int[] { 0,1,2,6,7,8 };
-
-        for (int i : stained) {
+        for (int i : new int[] { 0,1,2,6,7,8 }) {
             this.inventory.setItem(i, new ItemBuilder(XMaterial.GRAY_STAINED_GLASS_PANE.parseMaterial()).setDisplayName(" ").create());
         }
 
