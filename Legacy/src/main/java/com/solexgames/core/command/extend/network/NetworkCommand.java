@@ -21,7 +21,7 @@ public class NetworkCommand extends BaseCommand {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
         if (!sender.hasPermission("scandium.command.network")) {
-            sender.sendMessage(ChatColor.RED + "No permission.");
+            sender.sendMessage(NO_PERMISSION);
             return false;
         }
 

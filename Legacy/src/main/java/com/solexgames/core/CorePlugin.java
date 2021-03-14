@@ -135,7 +135,7 @@ public final class CorePlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        instance = this;
+        instance = JavaPlugin.getPlugin(CorePlugin.class);
 
         if (!this.getName().equals("Scandium"))
             this.getServer().shutdown();
