@@ -7,7 +7,7 @@ import com.solexgames.xenon.redis.subscription.AbstractJedisSubscriber;
 public class ProxyRedisSubscriber extends AbstractJedisSubscriber {
 
     public ProxyRedisSubscriber() {
-        super("SCANDIUM_PROXY");
+        super("Scandium:PROXY");
     }
 
     @Override

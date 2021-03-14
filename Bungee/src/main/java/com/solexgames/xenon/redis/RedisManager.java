@@ -70,7 +70,7 @@ public class RedisManager {
     public void write(String json) {
         try (Jedis jedis = this.jedisPool.getResource()) {
             jedis.auth(this.settings.getPassword());
-            jedis.publish("SCANDIUM_PROXY", json);
+            jedis.publish("Scandium:PROXY", json);
         }
     }
 

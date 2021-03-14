@@ -50,9 +50,7 @@ public class RedisManager {
                 jedis.auth(settings.getPassword());
             }
 
-//            this.subscriptions.getSubscriptions().forEach(subscriber -> (new Thread(() -> jedis.subscribe(subscriber, subscriber.getChannelName()))).start());
-
-            (new Thread(() -> jedis.subscribe(new CoreJedisSubscriber(), "SCANDIUM"))).start();
+            (new Thread(() -> jedis.subscribe(new CoreJedisSubscriber(), "Scandium:BUKKIT"))).start();
 
             jedis.connect();
 
@@ -69,7 +67,6 @@ public class RedisManager {
         try {
             jedisPool.destroy();
             this.jedisSubscriber.unsubscribe();
-//            this.subscriptions.getSubscriptions().forEach(JedisPubSub::unsubscribe);
         } catch (Exception e) {
             System.out.println("[Redis] Could not destroy Redis Pool.");
         }
@@ -78,7 +75,7 @@ public class RedisManager {
     public void write(String json) {
         try (Jedis jedis = this.jedisPool.getResource()) {
             jedis.auth(this.settings.getPassword());
-            jedis.publish("SCANDIUM", json);
+            jedis.publish("Scandium:BUKKIT", json);
         }
     }
 
