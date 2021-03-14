@@ -44,7 +44,7 @@ public class FreezeCommand extends BaseCommand {
                     RedisUtil.writeAsync(RedisUtil.onUnfreeze(player, target));
 
                     player.sendMessage(Color.translate("&aUnfroze " + target.getDisplayName() + "&a."));
-                } else if (!potPlayer.isFrozen()) {
+                } else {
                     PotPlayer mainPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
                     PotPlayer targetPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
 

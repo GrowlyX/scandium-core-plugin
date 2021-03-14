@@ -32,6 +32,7 @@ public class StaffModeCommand extends BaseCommand {
         } else {
             playerManager.modModePlayer(player);
         }
+
         return false;
     }
 }

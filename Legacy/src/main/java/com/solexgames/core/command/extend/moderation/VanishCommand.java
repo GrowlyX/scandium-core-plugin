@@ -64,6 +64,7 @@ public class VanishCommand extends BaseCommand {
                 player.sendMessage(Color.translate("&cThat player does not exist."));
             }
         }
+
         return false;
     }
 }

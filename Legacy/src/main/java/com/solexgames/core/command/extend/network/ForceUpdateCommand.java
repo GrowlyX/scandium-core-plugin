@@ -1,13 +1,10 @@
 package com.solexgames.core.command.extend.network;
 
-import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
-import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 public class ForceUpdateCommand extends BaseCommand {
