@@ -15,7 +15,7 @@ public class SlowChatCommand extends BaseCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        String displayName = ((sender instanceof Player) ? sender.getDisplayName() : ChatColor.DARK_RED + "Console");
+        String displayName = ((sender instanceof Player) ? ((Player) sender).getDisplayName() : ChatColor.DARK_RED + "Console");
         ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
 
         if (!sender.hasPermission("scandium.command.slowchat")) {

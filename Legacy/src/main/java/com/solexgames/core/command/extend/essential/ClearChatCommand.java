@@ -20,7 +20,7 @@ public class ClearChatCommand extends BaseCommand {
             Bukkit.broadcastMessage(Color.translate("  "));
         }
 
-        Bukkit.broadcastMessage(Color.translate("&aThe chat has been cleared by " + (sender instanceof Player ? sender.getDisplayName() : "&4Console") + "&a."));
+        Bukkit.broadcastMessage(Color.translate("&aThe chat has been cleared by " + (sender instanceof Player ? ((Player) sender).getDisplayName() : "&4Console") + "&a."));
         return false;
     }
 }
