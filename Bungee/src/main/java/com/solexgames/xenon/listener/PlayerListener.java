@@ -36,7 +36,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onServerConnect(ServerConnectEvent event) {
-        if ((event.getReason() == ServerConnectEvent.Reason.JOIN_PROXY)) {
+        if ((event.getReason().equals(ServerConnectEvent.Reason.JOIN_PROXY))) {
             ServerInfo hub = this.plugin.getBestHub();
 
             if (hub != null && hub != event.getTarget()) {
@@ -48,7 +48,7 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onLogin(PreLoginEvent event) {
         if (plugin.isMaintenance() && !plugin.getWhitelistedPlayers().contains(event.getConnection().getName())) {
-            event.setCancelReason(TextComponent.fromLegacyText(ChatColor.RED + "The network is currently whitelisted.\nWe should be back online shortly."));
+            event.setCancelReason(TextComponent.fromLegacyText(ChatColor.RED + "Sorry, but the server is currently under maintenance.\nWe should be back online shortly."));
             event.setCancelled(true);
         }
     }
@@ -58,6 +58,7 @@ public class PlayerListener implements Listener {
         if (event.getCancelServer() != null && event.getCancelServer().getName() != null && !event.getCancelServer().getName().startsWith("hub")) {
             try {
                 ServerInfo hub = CorePlugin.getInstance().getBestHub();
+
                 if (hub == null) {
                     event.getPlayer().disconnect((new ComponentBuilder("§cCould not find a hub server to connect you to.\n§7Please contact administration if you think this is a bug.")).create());
                     return;
@@ -66,9 +67,9 @@ public class PlayerListener implements Listener {
                 event.setCancelServer(hub);
                 event.setCancelled(true);
                 event.getPlayer().sendMessage(event.getKickReasonComponent());
-            } catch (Exception var3) {
+            } catch (Exception ignored) {
                 CorePlugin.getInstance().getProxy().getConsole().sendMessage((new ComponentBuilder("§cCouldn't find a hub server!")).create());
-                event.getPlayer().disconnect((new ComponentBuilder("§cCould not find a hub server to connect you to.\n&bPlease contact administration if you think this is a bug.")).create());
+                event.getPlayer().disconnect((new ComponentBuilder("§cCould not find a hub server to connect you to.\n&7Please contact administration if you think this is a bug.")).create());
             }
         }
     }
