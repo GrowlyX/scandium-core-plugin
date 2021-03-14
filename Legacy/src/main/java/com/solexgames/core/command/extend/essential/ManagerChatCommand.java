@@ -20,8 +20,8 @@ public class ManagerChatCommand extends BaseCommand {
             return false;
         }
 
-        Player player = (Player) sender;
-        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+        final Player player = (Player) sender;
+        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
         if (!player.hasPermission(ChatChannelType.MANAGER.getPermission())) {
             player.sendMessage(NO_PERMISSION);
@@ -42,6 +42,7 @@ public class ManagerChatCommand extends BaseCommand {
             String message = StringUtil.buildMessage(args, 0);
             RedisUtil.writeAsync(RedisUtil.onChatChannel(ChatChannelType.MANAGER, message, player));
         }
+
         return false;
     }
 }
