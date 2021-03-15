@@ -114,6 +114,7 @@ public class CorePlugin extends Plugin {
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new ProxyStatusCommand());
 
         this.getProxy().getPluginManager().registerListener(this, new PlayerListener());
+        this.getProxy().registerChannel("");
     }
 
     private void createConfig() {
