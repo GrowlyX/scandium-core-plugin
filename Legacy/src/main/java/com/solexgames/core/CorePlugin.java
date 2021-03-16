@@ -8,6 +8,7 @@ import com.solexgames.core.command.extend.anticheat.AnticheatBanCommand;
 import com.solexgames.core.command.extend.discord.SyncCommand;
 import com.solexgames.core.command.extend.discord.UnsyncCommand;
 import com.solexgames.core.command.extend.essential.*;
+import com.solexgames.core.command.extend.experience.ExperienceCommand;
 import com.solexgames.core.command.extend.grant.CGrantCommand;
 import com.solexgames.core.command.extend.grant.GrantCommand;
 import com.solexgames.core.command.extend.grant.GrantsCommand;
@@ -247,6 +248,7 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("media").setExecutor(new MediaCommand());
         this.getCommand("discord").setExecutor(new DiscordCommand());
         this.getCommand("import").setExecutor(new RankImportCommand());
+        this.getCommand("experience").setExecutor(new ExperienceCommand());
         this.getCommand("options").setExecutor(new OptionsCommand());
         this.getCommand("warp").setExecutor(new WarpCommand());
         this.getCommand("history").setExecutor(new HistoryCommand());

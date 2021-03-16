@@ -122,6 +122,8 @@ public class PotPlayer {
     private AchievementData achievementData;
     private PotionMessageType potionMessageType;
 
+    private int experience;
+
     public PotPlayer(UUID uuid) {
         this.uuid = uuid;
         this.player = Bukkit.getPlayer(uuid);
@@ -200,6 +202,7 @@ public class PotPlayer {
         document.put("autoVanish", this.isAutoVanish);
         document.put("autoModMode", this.isAutoModMode);
         document.put("ipAddress", CorePlugin.getInstance().getCryptoManager().encrypt(this.ipAddress));
+        document.put("experience", this.experience);
 
         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true)));
     }
@@ -268,6 +271,7 @@ public class PotPlayer {
         document.put("autoVanish", this.isAutoVanish);
         document.put("autoModMode", this.isAutoModMode);
         document.put("ipAddress", CorePlugin.getInstance().getCryptoManager().encrypt(ipAddress));
+        document.put("experience", this.experience);
 
         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true)));
 
@@ -322,6 +326,11 @@ public class PotPlayer {
             this.language = LanguageType.getByName(document.getString("language"));
         } else {
             this.language = LanguageType.ENGLISH;
+        }
+        if (document.getInteger("experience") != null) {
+            this.experience = document.getInteger("experience");
+        } else {
+            this.experience = 0;
         }
         if (document.getString("customColor") != null) {
             this.customColor = ChatColor.valueOf(document.getString("customColor"));
