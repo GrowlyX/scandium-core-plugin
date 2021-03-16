@@ -30,19 +30,14 @@ public class PunishViewPaginatedMenu extends PaginatedMenu {
     private final String target;
     private final PunishmentType punishmentType;
 
-    private UUID targetUuid;
+    private final UUID targetUuid;
 
     public PunishViewPaginatedMenu(Player player, String target, PunishmentType punishmentType) {
         super(45);
         this.player = player;
         this.target = target;
         this.punishmentType = punishmentType;
-        try {
-            Map.Entry<UUID, String> entry = UUIDUtil.getUUID(this.target);
-            this.targetUuid = entry.getKey();
-        } catch (Exception ignored) {
-
-        }
+        this.targetUuid = UUIDUtil.fetchUUID(target);
     }
 
     @Override
@@ -81,7 +76,7 @@ public class PunishViewPaginatedMenu extends PaginatedMenu {
             lore.add(network.getMainColor() + "&m------------------------------------");
 
             if (punishment.isRemoved()) {
-                lore.add("&eRemoved By: &b" + network.getMainColor() + (punishment.getRemoverName() != null ? (punishment.getRemoverName().equals("Console") ? "&4Console" : UUIDUtil.getName(punishment.getRemover().toString())) : "Not recorded"));
+                lore.add("&eRemoved By: &b" + network.getMainColor() + (punishment.getRemoverName() != null ? (punishment.getRemoverName().equals("Console") ? "&4Console" : UUIDUtil.fetchName(punishment.getRemover())) : "Not recorded"));
                 lore.add("&eRemoved Reason: &b" + network.getMainColor() + punishment.getRemovalReason());
                 lore.add(network.getMainColor() + "&m------------------------------------");
             }

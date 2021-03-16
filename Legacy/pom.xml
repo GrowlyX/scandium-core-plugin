@@ -116,6 +116,12 @@
             <systemPath>${basedir}/lib/Spigot_1_16.jar</systemPath>
         </dependency>
         <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.12</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-1_7-api</artifactId>
             <version>1.7.10-R0.1-SNAPSHOT</version>

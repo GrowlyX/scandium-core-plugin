@@ -247,7 +247,7 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
 
                     if (potPlayer != null) potPlayer.getPunishments().add(punishment);
 
-                    CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, jsonAppender.getParam("ISSUERNAME"), UUIDUtil.getName(jsonAppender.getParam("TARGET")), Boolean.parseBoolean(jsonAppender.getParam("SILENT")));
+                    CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, jsonAppender.getParam("ISSUERNAME"), UUIDUtil.fetchName(UUID.fromString(jsonAppender.getParam("TARGET"))), Boolean.parseBoolean(jsonAppender.getParam("SILENT")));
                     if (potPlayer != null) potPlayer.saveWithoutRemove();
                 }
                 break;
@@ -255,11 +255,7 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                 if (!SERVER_NAME.equals(jsonAppender.getParam("SERVER"))) {
                     Punishment punishment = null;
 
-                    UUID removerUuid = null;
-                    try {
-                        removerUuid = UUID.fromString(jsonAppender.getParam("REMOVERUUID"));
-                    } catch (Exception ignored) {
-                    }
+                    UUID removerUuid = UUID.fromString(jsonAppender.getParam("REMOVERUUID"));
                     String removerName = jsonAppender.getParam("REMOVERNAME");
                     String removerDisplayName = jsonAppender.getParam("REMOVERDISPLAYNAME");
                     String reason = jsonAppender.getParam("REASON");
@@ -270,16 +266,15 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                     }
 
                     Punishment finalPunishment = punishment;
-                    UUID finalRemoverUuid = removerUuid;
 
                     if (finalPunishment != null) {
                         finalPunishment.setRemoved(true);
                         finalPunishment.setRemovalReason(reason.replace("-s", ""));
-                        finalPunishment.setRemover(finalRemoverUuid);
+                        finalPunishment.setRemover(removerUuid);
                         finalPunishment.setActive(false);
                         finalPunishment.setRemoverName(removerName);
 
-                        String punishedName = UUIDUtil.getName(punishment.getTarget().toString());
+                        String punishedName = UUIDUtil.fetchName(punishment.getTarget());
 
                         if (reason.endsWith("-s")) {
                             Bukkit.getOnlinePlayers()

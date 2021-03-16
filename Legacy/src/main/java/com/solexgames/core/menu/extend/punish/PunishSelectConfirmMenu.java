@@ -82,36 +82,36 @@ public class PunishSelectConfirmMenu extends AbstractInventoryMenu {
     }
 
     @Override
-    public void onInventoryClick(InventoryClickEvent event) throws IOException, ParseException {
+    public void onInventoryClick(InventoryClickEvent event) {
         if (!event.getView().getTopInventory().equals(this.inventory)) return;
         if (event.getView().getTopInventory().equals(event.getClickedInventory())) {
             event.setCancelled(true);
             if (event.getCurrentItem() == null || event.getCurrentItem().getType() == XMaterial.AIR.parseMaterial()) return;
             if (event.getCurrentItem().getItemMeta().getDisplayName().contains("Confirm")) {
-                Entry<UUID, String> uuidStringEntry = UUIDUtil.getUUID(this.target);
+                UUID uuidKey = UUIDUtil.fetchUUID(this.target);
+                if (uuidKey != null) {
+                    String nameValue = UUIDUtil.fetchName(uuidKey);
 
-                UUID uuidKey = uuidStringEntry.getKey();
-                String nameValue = uuidStringEntry.getValue();
+                    UUID randomUuid = UUID.randomUUID();
+                    String saltedString = SaltUtil.getRandomSaltedString(7);
+                    Date newDate = new Date();
 
-                UUID randomUuid = UUID.randomUUID();
-                String saltedString = SaltUtil.getRandomSaltedString(7);
-                Date newDate = new Date();
+                    Punishment punishment = new Punishment(this.punishmentType, this.player.getUniqueId(), uuidKey, this.player.getName(), this.reason, new Date(System.currentTimeMillis()), this.punishmentDuration, this.permanent, newDate, randomUuid, saltedString, true);
 
-                Punishment punishment = new Punishment(this.punishmentType, this.player.getUniqueId(), uuidKey, this.player.getName(), this.reason, new Date(System.currentTimeMillis()), this.punishmentDuration, this.permanent, newDate, randomUuid, saltedString, true);
+                    this.player.closeInventory();
 
-                this.player.closeInventory();
+                    PotPlayer potPlayer = null;
+                    try {
+                        potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(nameValue);
+                    } catch (Exception ignored) { }
 
-                PotPlayer potPlayer = null;
-                try {
-                    potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(nameValue);
-                } catch (Exception ignored) { }
+                    if (potPlayer != null) potPlayer.getPunishments().add(punishment);
 
-                if (potPlayer != null) potPlayer.getPunishments().add(punishment);
+                    CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, this.player.getName(), nameValue, this.isSilent);
+                    if (potPlayer != null) potPlayer.saveWithoutRemove();
 
-                CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, this.player.getName(), nameValue, this.isSilent);
-                if (potPlayer != null) potPlayer.saveWithoutRemove();
-
-                RedisUtil.writeAsync(RedisUtil.executePunishment(this.punishmentType, this.player.getUniqueId(), uuidKey, this.player.getName(), this.reason, new Date(System.currentTimeMillis()), this.punishmentDuration, this.permanent, newDate, randomUuid, saltedString, this.isSilent));
+                    RedisUtil.writeAsync(RedisUtil.executePunishment(this.punishmentType, this.player.getUniqueId(), uuidKey, this.player.getName(), this.reason, new Date(System.currentTimeMillis()), this.punishmentDuration, this.permanent, newDate, randomUuid, saltedString, this.isSilent));
+                }
                 return;
             }
 

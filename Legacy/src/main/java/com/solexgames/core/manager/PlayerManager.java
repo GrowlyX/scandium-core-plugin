@@ -190,6 +190,7 @@ public class PlayerManager {
         if (uuid == null) {
             return Optional.empty();
         }
+
         return Optional.ofNullable(CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("uuid", uuid.toString())).first());
     }
 

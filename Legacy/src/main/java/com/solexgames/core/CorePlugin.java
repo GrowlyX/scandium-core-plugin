@@ -51,6 +51,8 @@ import com.solexgames.core.util.external.ConfigExternal;
 import com.solexgames.core.util.external.pagination.pagination.PaginationListener;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
 import org.bukkit.event.Listener;
@@ -109,6 +111,8 @@ public final class CorePlugin extends JavaPlugin {
     private Logger chatLogger;
     private Logger commandLogger;
 
+    private HttpClient httpClient;
+
     private Database coreDatabase;
     private RedisManager redisManager;
 
@@ -153,6 +157,8 @@ public final class CorePlugin extends JavaPlugin {
         this.taskThread = Executors.newFixedThreadPool(1);
         this.redisThread = Executors.newFixedThreadPool(1);
         this.redisSubThread = Executors.newFixedThreadPool(1);
+
+        this.httpClient = new DefaultHttpClient();
 
         this.saveDefaultConfig();
         this.getConfig().options().copyDefaults();

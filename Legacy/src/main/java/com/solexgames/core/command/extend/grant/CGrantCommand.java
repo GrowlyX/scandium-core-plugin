@@ -38,13 +38,14 @@ public class CGrantCommand extends BaseCommand {
             sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player> <rank> <duration> <reason>."));
         }
         if (args.length > 2) {
-            Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByUuid(UUIDUtil.getId(args[0])).orElse(null);
+            Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByUuid(UUIDUtil.fetchUUID(args[0])).orElse(null);
             if (document != null) {
                 Rank rank = Rank.getByName(args[1]);
                 ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
                 if (rank != null) {
-                    UUID uuid = UUIDUtil.getId(args[0]);
+                    UUID uuid = UUIDUtil.fetchUUID(args[0]);
+
                     if (args[2].equalsIgnoreCase("perm") || args[2].equalsIgnoreCase("permanent")) {
                         String reason = StringUtil.buildMessage(args, 3);
                         PotPlayer targetPotPlayer = null;
@@ -82,7 +83,7 @@ public class CGrantCommand extends BaseCommand {
 
                             CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("uuid", uuid), document, new ReplaceOptions().upsert(true)));
 
-                            sender.sendMessage(Color.translate(network.getSecondaryColor() + "You've granted &b" + UUIDUtil.getName(document.getString("uuid")) + network.getSecondaryColor() + " the rank " + rank.getColor() + rank.getName() + network.getSecondaryColor() + " for " + network.getMainColor() + reason + network.getSecondaryColor() + "."));
+                            sender.sendMessage(Color.translate(network.getSecondaryColor() + "You've granted &b" + UUIDUtil.fetchName(UUID.fromString(document.getString("uuid"))) + network.getSecondaryColor() + " the rank " + rank.getColor() + rank.getName() + network.getSecondaryColor() + " for " + network.getMainColor() + reason + network.getSecondaryColor() + "."));
                         }
                     } else {
                         try {
