@@ -38,7 +38,9 @@ public class ExperienceMainMenu extends AbstractInventoryMenu {
                         ChatColor.GRAY + "temporary ranks, and more!",
                         "",
                         ChatColor.GRAY + "You currently have:",
-                        ChatColor.GOLD + String.valueOf(potPlayer.getExperience()) + " Experience"
+                        ChatColor.YELLOW + String.valueOf(potPlayer.getExperience()) + " Experience",
+                        "",
+                        ChatColor.GREEN + "Click to open the shop menu!"
                 )
                 .create());
         this.inventory.setItem(5, new ItemBuilder(XMaterial.INK_SAC.parseMaterial())

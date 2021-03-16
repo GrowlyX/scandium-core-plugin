@@ -36,7 +36,8 @@ public class ExperienceCommand extends BaseCommand {
                         return false;
                     }
 
-                    if (args.length == 2) {
+
+                    if (args.length < 3) {
                         this.sendHelpMessage(sender);
                     }
                     if (args.length == 3) {
@@ -65,7 +66,7 @@ public class ExperienceCommand extends BaseCommand {
                         return false;
                     }
 
-                    if (args.length == 2) {
+                    if (args.length < 3) {
                         this.sendHelpMessage(sender);
                     }
                     if (args.length == 3) {
@@ -94,7 +95,7 @@ public class ExperienceCommand extends BaseCommand {
                         return false;
                     }
 
-                    if (args.length == 2) {
+                    if (args.length < 3) {
                         this.sendHelpMessage(sender);
                     }
                     if (args.length == 3) {

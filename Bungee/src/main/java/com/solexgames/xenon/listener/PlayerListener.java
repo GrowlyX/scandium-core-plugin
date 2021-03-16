@@ -55,7 +55,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onKick(ServerKickEvent event) {
-        if (event.getCancelServer() != null && event.getCancelServer().getName() != null && !event.getCancelServer().getName().startsWith("hub")) {
+        if (event.getCancelServer() != null && event.getCancelServer().getName() != null && !event.getCancelServer().getName().contains("hub")) {
             try {
                 ServerInfo hub = CorePlugin.getInstance().getBestHub();
 

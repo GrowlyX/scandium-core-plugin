@@ -50,12 +50,17 @@ public final class ExperienceUtil {
 
         try (MongoCursor<Document> iterator = CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find().sort(sortingDocument).limit(10).iterator()) {
             while (iterator.hasNext()) {
-                lineInt++;
-
                 Document document = iterator.next();
-                int amountOfSort = document.getInteger("experience");
+                int amountOfSort = 0;
 
-                stringArrayList.add(serverType.getMainColor() + ChatColor.BOLD.toString() + lineInt + "." + ChatColor.WHITE + " - " + document.getString("name") + ChatColor.WHITE + " - " + serverType.getSecondaryColor() + amountOfSort);
+                try {
+                    amountOfSort = document.getInteger("experience");
+                } catch (Exception ignored) {
+                }
+
+
+                lineInt++;
+                stringArrayList.add(serverType.getMainColor() + ChatColor.BOLD.toString() + lineInt + "." + ChatColor.GRAY + " - " + ChatColor.WHITE + document.getString("name") + ChatColor.GRAY + " - " + serverType.getSecondaryColor() + amountOfSort);
             }
         }
 
