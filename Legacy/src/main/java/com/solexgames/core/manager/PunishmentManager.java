@@ -147,7 +147,7 @@ public class PunishmentManager {
     public void handleUnpunishment(OfflinePlayer offlinePlayer, String message, Player player, PunishmentType punishmentType) {
         Punishment.getAllPunishments()
                 .stream()
-                .filter(punishment -> punishment.getTarget().equals(offlinePlayer.getUniqueId()))
+                .filter(punishment -> punishment.getTarget().toString().equals(offlinePlayer.getUniqueId().toString()))
                 .filter(Punishment::isActive)
                 .filter(punishment -> punishment.getPunishmentType().equals(punishmentType))
                 .forEach(punishment -> {

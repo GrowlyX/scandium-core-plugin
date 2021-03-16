@@ -28,10 +28,10 @@ public class UnMuteCommand extends BaseCommand {
             return false;
         }
 
-        if (args.length < 1) {
+        if (args.length < 2) {
             sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player> <reason> &7[-s]."));
         }
-        if (args.length > 1) {
+        if (args.length >= 2) {
             final OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[0]);
             final String message = StringUtil.buildMessage(args, 1);
 

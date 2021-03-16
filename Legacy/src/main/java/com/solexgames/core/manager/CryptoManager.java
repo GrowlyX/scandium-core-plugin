@@ -34,6 +34,7 @@ public class CryptoManager {
     public String encrypt(String plainText) {
         Cipher encryptCipher;
         byte[] out;
+
         try {
             KeySpec keySpec = new PBEKeySpec(this.secretKey.toCharArray(), CryptoManager.SALT, this.iterationCount);
             SecretKey key = SecretKeyFactory.getInstance("PBEWithMD5AndDES").generateSecret(keySpec);
@@ -47,6 +48,7 @@ public class CryptoManager {
         } catch (Exception ignored) {
             return "";
         }
+
         return new String(Base64.getEncoder().encode(out));
     }
 
