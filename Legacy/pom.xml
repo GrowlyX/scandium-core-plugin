@@ -137,7 +137,7 @@
         <dependency>
             <groupId>com.lunarclient</groupId>
             <artifactId>bukkitapi</artifactId>
-            <version>1.0-20200212.020644-1</version>
+            <version>1.0-SNAPSHOT</version>
             <scope>system</scope>
             <systemPath>${basedir}/lib/LunarClientAPI.jar</systemPath>
         </dependency>

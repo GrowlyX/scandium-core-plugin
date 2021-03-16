@@ -2,6 +2,7 @@ package com.solexgames.core.redis.subscription.extend;
 
 import com.mongodb.client.model.Filters;
 import com.solexgames.core.CorePlugin;
+import com.solexgames.core.abstraction.lunar.extend.LunarImplementation;
 import com.solexgames.core.enums.ChatChannelType;
 import com.solexgames.core.enums.NetworkServerStatusType;
 import com.solexgames.core.enums.NetworkServerType;
@@ -118,7 +119,13 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                         .filter(Objects::nonNull)
                         .filter(potPlayer -> potPlayer.getPlayer().hasPermission("scandium.staff"))
                         .filter(PotPlayer::isCanSeeStaffMessages)
-                        .forEach(potPlayer -> potPlayer.getPlayer().sendMessage(Color.translate("&3[S] " + connectingPlayer + " &bconnected to &3" + fromConnectServer + "&b.")));
+                        .forEach(potPlayer -> {
+                            potPlayer.getPlayer().sendMessage(Color.translate("&3[S] " + connectingPlayer + " &bconnected to &3" + fromConnectServer + "&b."));
+
+                            if (CorePlugin.getInstance().getLunar() != null) {
+                                CorePlugin.getInstance().getLunar().sendNotification(potPlayer.getPlayer(), Color.translate("&3[S] " + connectingPlayer + " &bconnected to &3" + fromConnectServer + "&b."));
+                            }
+                        });
                 break;
             case PLAYER_DISCONNECT_UPDATE:
                 String fromDisconnectServer = jsonAppender.getParam("SERVER");
@@ -129,7 +136,13 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                         .filter(Objects::nonNull)
                         .filter(potPlayer -> potPlayer.getPlayer().hasPermission("scandium.staff"))
                         .filter(PotPlayer::isCanSeeStaffMessages)
-                        .forEach(potPlayer -> potPlayer.getPlayer().sendMessage(Color.translate("&3[S] " + disconnectingPlayer + " &bdisconnected from &3" + fromDisconnectServer + "&b.")));
+                        .forEach(potPlayer -> {
+                            potPlayer.getPlayer().sendMessage(Color.translate("&3[S] " + disconnectingPlayer + " &bdisconnected from &3" + fromDisconnectServer + "&b."));
+
+                            if (CorePlugin.getInstance().getLunar() != null) {
+                                CorePlugin.getInstance().getLunar().sendNotification(potPlayer.getPlayer(), Color.translate("&3[S] " + disconnectingPlayer + " &bdisconnected from &3" + fromDisconnectServer + "&b."));
+                            }
+                        });
                 break;
             case PLAYER_SERVER_SWITCH_UPDATE:
                 String newServer = jsonAppender.getParam("NEW_SERVER");

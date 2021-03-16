@@ -31,7 +31,6 @@ public class LanguageMenu extends AbstractInventoryMenu {
         this.inventory.setItem(2, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 11)
                 .setDisplayName("&eEnglish")
                 .addLore(
-                        "",
                         "&7Would you like to see",
                         "&7messages in English?"
                 )
@@ -40,7 +39,6 @@ public class LanguageMenu extends AbstractInventoryMenu {
         this.inventory.setItem(3, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 14)
                 .setDisplayName("&6Español")
                 .addLore(
-                        "",
                         "&7¿Le gustaría ver mensajes",
                         "&7en español?"
                 )
@@ -49,7 +47,6 @@ public class LanguageMenu extends AbstractInventoryMenu {
         this.inventory.setItem(4, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 12)
                 .setDisplayName("&bFrançais")
                 .addLore(
-                        "",
                         "&7Souhaitez-vous voir",
                         "&7les messages en français?"
                 )
@@ -58,7 +55,6 @@ public class LanguageMenu extends AbstractInventoryMenu {
         this.inventory.setItem(5, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 10)
                 .setDisplayName("&aItaliano")
                 .addLore(
-                        "",
                         "&7Vuoi vedere i messaggi",
                         "&7in italiano?"
                 )
@@ -67,7 +63,6 @@ public class LanguageMenu extends AbstractInventoryMenu {
         this.inventory.setItem(6, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 1)
                 .setDisplayName("&cDeutsch")
                 .addLore(
-                        "",
                         "&7Möchten Sie Nachrichten",
                         "&7auf Deutsch sehen?"
                 )
@@ -84,30 +79,29 @@ public class LanguageMenu extends AbstractInventoryMenu {
             event.setCancelled(true);
 
             ItemStack item = event.getCurrentItem();
-            Player player = (Player) event.getWhoClicked();
-            PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+            PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(this.player);
 
             if (item == null || item.getType() == XMaterial.AIR.parseMaterial()) return;
             switch (event.getRawSlot()) {
                 case 2:
                     potPlayer.setLanguage(LanguageType.ENGLISH);
-                    player.sendMessage(Color.translate("&aYour language has been set to &eEnglish&a."));
+                    this.player.sendMessage(Color.translate("&aYour language has been set to &eEnglish&a."));
                     break;
                 case 3:
                     potPlayer.setLanguage(LanguageType.SPANISH);
-                    player.sendMessage(Color.translate("&aYour language has been set to &6Spanish&a."));
+                    this.player.sendMessage(Color.translate("&aYour language has been set to &6Spanish&a."));
                     break;
                 case 4:
                     potPlayer.setLanguage(LanguageType.FRENCH);
-                    player.sendMessage(Color.translate("&aYour language has been set to &bFrench&a."));
+                    this.player.sendMessage(Color.translate("&aYour language has been set to &bFrench&a."));
                     break;
                 case 5:
                     potPlayer.setLanguage(LanguageType.ITALIAN);
-                    player.sendMessage(Color.translate("&aYour language has been set to &aItalian&a."));
+                    this.player.sendMessage(Color.translate("&aYour language has been set to &aItalian&a."));
                     break;
                 case 6:
                     potPlayer.setLanguage(LanguageType.GERMAN);
-                    player.sendMessage(Color.translate("&aYour language has been set to &cGerman&a."));
+                    this.player.sendMessage(Color.translate("&aYour language has been set to &cGerman&a."));
                     break;
             }
             player.closeInventory();

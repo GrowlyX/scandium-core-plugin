@@ -3,6 +3,8 @@ package com.solexgames.core;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.solexgames.core.abstraction.access.extend.NMSAccess_v1_8;
+import com.solexgames.core.abstraction.lunar.AbstractLunar;
+import com.solexgames.core.abstraction.lunar.extend.LunarImplementation;
 import com.solexgames.core.command.extend.CoreCommand;
 import com.solexgames.core.command.extend.anticheat.AnticheatBanCommand;
 import com.solexgames.core.command.extend.discord.SyncCommand;
@@ -34,8 +36,6 @@ import com.solexgames.core.database.Database;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.listener.ModSuiteListener;
 import com.solexgames.core.listener.PlayerListener;
-import com.solexgames.core.abstraction.lunar.AbstractClientInjector;
-import com.solexgames.core.abstraction.lunar.extend.LunarCommand;
 import com.solexgames.core.manager.*;
 import com.solexgames.core.abstraction.access.AbstractNMSAccess;
 import com.solexgames.core.abstraction.access.extend.NMSAccess_v1_16;
@@ -125,7 +125,7 @@ public final class CorePlugin extends JavaPlugin {
     private RedisSubscriptions subscriptions;
 
     private AbstractChatInterceptor chatInterceptor;
-    private AbstractClientInjector lunarCommand;
+    private AbstractLunar lunar;
     private AbstractNMSAccess NMS;
 
     private Executor taskThread;
@@ -177,7 +177,12 @@ public final class CorePlugin extends JavaPlugin {
         STAFF_ALERTS_COMMAND = this.getConfig().getBoolean("settings.staff-command-alerts");
 
         if (this.getServer().getPluginManager().isPluginEnabled("ProtocolLib")) chatInterceptor = new ProtocolChatInterceptor(); else this.getLogger().info("[Protocol] Could not find ProtocolLib! Chat tab block will not work without it!");
-        if (this.getServer().getPluginManager().isPluginEnabled("LunarClient-API")) lunarCommand = new LunarCommand(); else this.getLogger().info("[Protocol] Could not find LunarClient-API! The /lunar command will not work without it!");
+        if (this.getServer().getPluginManager().isPluginEnabled("LunarClient-API")) {
+            this.lunar = new LunarImplementation();
+        } else {
+            this.getLogger().info("[Protocol] Could not find LunarClient-API! The /lunar command will not work without it!");
+        }
+
 
         if (this.getServer().getVersion().contains("1.7")) {
             this.NMS = new NMSAccess_v1_7();
@@ -301,7 +306,7 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("list").setExecutor(new ListCommand());
         this.getCommand("ping").setExecutor(new PingCommand());
 
-        if (this.lunarCommand != null) this.getCommand("lunar").setExecutor(lunarCommand);
+//        if (this.lunarCommand != null) this.getCommand("lunar").setExecutor(lunarCommand);
         if (this.chatInterceptor != null) this.chatInterceptor.initializePacketInterceptor();
 
         this.registerListeners(
