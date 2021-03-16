@@ -4,7 +4,9 @@ import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.AbstractInventoryMenu;
+import com.solexgames.core.menu.extend.experience.buy.PrefixPurchaseMenu;
 import com.solexgames.core.player.PotPlayer;
+import com.solexgames.core.util.Color;
 import com.solexgames.core.util.ExperienceUtil;
 import com.solexgames.core.util.builder.ItemBuilder;
 import lombok.Getter;
@@ -12,6 +14,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 @Getter
 public class ExperienceMainMenu extends AbstractInventoryMenu {
@@ -58,6 +61,16 @@ public class ExperienceMainMenu extends AbstractInventoryMenu {
         if (!topInventory.equals(this.inventory)) return;
         if (topInventory.equals(clickedInventory)) {
             event.setCancelled(true);
+
+            ItemStack item = event.getCurrentItem();
+            Player player = (Player) event.getWhoClicked();
+
+            if (item == null || item.getType() == XMaterial.AIR.parseMaterial()) return;
+            if (event.getRawSlot() == 3) {
+                if (CorePlugin.getInstance().getServerManager().getNetwork().equals(ServerType.POTCLUBVIP)) {
+                    new ExperienceShopMainMenu().open(player);
+                }
+            }
         }
     }
 }
