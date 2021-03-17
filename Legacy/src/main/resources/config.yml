@@ -74,8 +74,8 @@ staff-information:
 server:
   settings:
     server-id: "POTCLUBVIP"
-
 tab-block:
+  return-enabled: true
   enabled: true
   return:
     - "/scandium:who"

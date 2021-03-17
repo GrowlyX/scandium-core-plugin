@@ -30,9 +30,8 @@ public class ExperienceMainMenu extends AbstractInventoryMenu {
     @Override
     public void update() {
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(this.player);
-        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
 
-        this.inventory.setItem(3, new ItemBuilder(XMaterial.BLAZE_POWDER.parseMaterial())
+        this.inventory.setItem(4, new ItemBuilder(XMaterial.BLAZE_POWDER.parseMaterial())
                 .setDisplayName("&6&lExperience")
                 .addLore(
                         ChatColor.GRAY + "Welcome to the experience",
@@ -45,11 +44,6 @@ public class ExperienceMainMenu extends AbstractInventoryMenu {
                         "",
                         ChatColor.GREEN + "Click to open the shop menu!"
                 )
-                .create());
-        this.inventory.setItem(5, new ItemBuilder(XMaterial.INK_SAC.parseMaterial())
-                .setDurability(6)
-                .setDisplayName(serverType.getMainColor() + ChatColor.BOLD.toString() + "Top 10 Experience")
-                .addLore(ExperienceUtil.getLeaderboardList())
                 .create());
     }
 
@@ -66,8 +60,8 @@ public class ExperienceMainMenu extends AbstractInventoryMenu {
             Player player = (Player) event.getWhoClicked();
 
             if (item == null || item.getType() == XMaterial.AIR.parseMaterial()) return;
-            if (event.getRawSlot() == 3) {
-                if (CorePlugin.getInstance().getServerManager().getNetwork().equals(ServerType.POTCLUBVIP)) {
+            if (event.getRawSlot() == 4) {
+                if (CorePlugin.getInstance().getServerManager().getNetwork().equals(ServerType.POTCLUBVIP) || CorePlugin.getInstance().getServerManager().getNetwork().equals(ServerType.EVENTIS)) {
                     new ExperienceShopMainMenu().open(player);
                 }
             }

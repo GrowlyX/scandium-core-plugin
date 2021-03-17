@@ -31,8 +31,8 @@ public class RankManager {
                         document.getInteger("weight")
                 );
 
-                if (document.getBoolean("isHidden") != null) {
-                    rank.setHidden(document.getBoolean("isHidden"));
+                if (document.getBoolean("hidden") != null) {
+                    rank.setHidden(document.getBoolean("hidden"));
                 }
             }
         }
@@ -51,7 +51,7 @@ public class RankManager {
             defaultRank.put("color", "&7");
             defaultRank.put("suffix", "&7");
             defaultRank.put("defaultRank", true);
-            defaultRank.put("isHidden", false);
+            defaultRank.put("hidden", false);
             defaultRank.put("weight", 0);
 
             CorePlugin.getInstance().getCoreDatabase().getRankCollection().insertOne(defaultRank);
@@ -63,6 +63,8 @@ public class RankManager {
     }
 
     public List<Rank> getSortedRanks() {
-        return Rank.getRanks().stream().sorted(Comparator.comparingInt(Rank::getWeight)).collect(Collectors.toList());
+        return Rank.getRanks().stream()
+                .sorted(Comparator.comparingInt(Rank::getWeight))
+                .collect(Collectors.toList());
     }
 }

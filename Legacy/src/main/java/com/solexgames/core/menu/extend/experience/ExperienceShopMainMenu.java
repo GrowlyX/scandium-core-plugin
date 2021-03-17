@@ -50,7 +50,7 @@ public class ExperienceShopMainMenu extends AbstractInventoryMenu {
             if (event.getRawSlot() == 6) {
                 player.closeInventory();
                 player.sendMessage(Color.translate("&cThis shop is coming very soon!"));
-            }
+            }        
         }
     }
 }

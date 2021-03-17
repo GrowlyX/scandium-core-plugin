@@ -42,11 +42,7 @@ public class ProtocolChatInterceptor extends AbstractChatInterceptor {
             public void onPacketSending(PacketEvent e){
                 if (e.getPacketType() == PacketType.Play.Server.TAB_COMPLETE) {
                     if (!e.getPlayer().hasPermission("scandium.tabcomplete.bypass")) {
-                        String message = e.getPacket().getSpecificModifier(String.class).read(0).toLowerCase();
-
-                        if (!(message.startsWith("/") && message.contains(" "))) {
-                            e.getPacket().getStringArrays().write(0, returnString);
-                        }
+                        e.getPacket().getStringArrays().write(0, returnString);
                     }
                 }
             }
@@ -54,6 +50,8 @@ public class ProtocolChatInterceptor extends AbstractChatInterceptor {
 
         if (this.getConfig().getBoolean("tab-block.enabled")) {
             ProtocolLibrary.getProtocolManager().addPacketListener(adapter);
+        }
+        if (this.getConfig().getBoolean("tab-block.return-enabled")) {
             ProtocolLibrary.getProtocolManager().addPacketListener(sendAdapter);
         }
     }
