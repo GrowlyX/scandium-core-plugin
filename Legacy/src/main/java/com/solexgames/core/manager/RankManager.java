@@ -41,9 +41,10 @@ public class RankManager {
     private void createDefaultRanks() {
         if (CorePlugin.getInstance().getCoreDatabase().getRankCollection().find(Filters.eq("name", "Default")).first() == null) {
             List<String> permissions = Collections.singletonList("scandium.default");
-            Document defaultRank = new Document("_id", UUID.randomUUID());
+            UUID uuid = UUID.randomUUID();
+            Document defaultRank = new Document("_id", uuid);
 
-            defaultRank.put("uuid", UUID.randomUUID().toString());
+            defaultRank.put("uuid", uuid.toString());
             defaultRank.put("inheritance", new ArrayList<UUID>());
             defaultRank.put("permissions", permissions);
             defaultRank.put("name", "Default");
@@ -51,8 +52,8 @@ public class RankManager {
             defaultRank.put("color", "&7");
             defaultRank.put("suffix", "&7");
             defaultRank.put("defaultRank", true);
-            defaultRank.put("hidden", false);
             defaultRank.put("weight", 0);
+            defaultRank.put("hidden", false);
 
             CorePlugin.getInstance().getCoreDatabase().getRankCollection().insertOne(defaultRank);
         }

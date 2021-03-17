@@ -99,7 +99,7 @@ public class Punishment {
         document.put("punishmentDuration", this.punishmentDuration);
         document.put("identification", this.punishIdentification);
 
-        CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().replaceOne(Filters.eq("_id", this.id), document, new ReplaceOptions().upsert(true)));
+        CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().replaceOne(Filters.eq("id", this.id.toString()), document, new ReplaceOptions().upsert(true)));
     }
 
     public void saveMainThread() {
@@ -127,7 +127,7 @@ public class Punishment {
         document.put("punishmentDuration", this.punishmentDuration);
         document.put("identification", this.punishIdentification);
 
-        CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().replaceOne(Filters.eq("_id", this.id), document, new ReplaceOptions().upsert(true));
+        CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().replaceOne(Filters.eq("id", this.id.toString()), document, new ReplaceOptions().upsert(true));
     }
 
     public String getDurationString() {

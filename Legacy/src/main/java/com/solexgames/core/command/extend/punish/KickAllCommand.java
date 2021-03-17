@@ -16,7 +16,7 @@ public class KickAllCommand extends BaseCommand {
             return false;
         }
 
-        Bukkit.getOnlinePlayers().forEach(target -> target.kickPlayer(Color.translate("&cYou were kicked from the server.\n&7Please contact administration if this was a mistake.")));
+        Bukkit.getOnlinePlayers().forEach(target -> target.kickPlayer("You were kicked."));
         sender.sendMessage(Color.translate("&aKicked all online players."));
         return false;
     }

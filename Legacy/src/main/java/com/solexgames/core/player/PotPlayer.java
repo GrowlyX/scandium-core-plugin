@@ -470,7 +470,7 @@ public class PotPlayer {
                 .filter(Objects::nonNull)
                 .filter(Grant::isActive)
                 .filter(grant -> !grant.getRank().isHidden())
-                .filter(grant -> (grant.getScope() == null || grant.getScope().equals("global") || (grant.getScope().equals(CorePlugin.getInstance().getServerName()))))
+                .filter(grant -> (grant.getScope() == null || grant.isGlobal() || grant.isApplicable()))
                 .findFirst()
                 .orElseGet(() -> new Grant(null, Objects.requireNonNull(Rank.getDefault()), System.currentTimeMillis(), -1L, "Automatic Grant (Default)", true, true));
     }

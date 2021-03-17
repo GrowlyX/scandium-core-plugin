@@ -1,5 +1,6 @@
 package com.solexgames.core.player.prefixes;
 
+import com.google.gson.annotations.SerializedName;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import com.solexgames.core.CorePlugin;
@@ -18,7 +19,9 @@ public class Prefix {
     @Getter
     private static List<Prefix> prefixes = new ArrayList<>();
 
+    @SerializedName("_id")
     private String id;
+
     private String name;
     private String displayName;
     private String prefix;
@@ -59,10 +62,6 @@ public class Prefix {
         document.put("prefix", this.prefix);
 
         CorePlugin.getInstance().getCoreDatabase().getPrefixCollection().replaceOne(Filters.eq("_id", this.id), document, new ReplaceOptions().upsert(true));
-    }
-
-    public String toJson() {
-        return CorePlugin.GSON.toJson(this);
     }
 
     public static Prefix getByName(String name) {

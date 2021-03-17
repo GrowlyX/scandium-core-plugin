@@ -35,62 +35,70 @@ public class WarpCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
-        if (player.hasPermission("scandium.command.warp")) {
-            if (args.length == 0) sendHelp(player);
-            if (args.length > 0) {
-                if (player.hasPermission("scandium.warp.management")) {
-                    switch (args[0]) {
-                        case "list":
-                            player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
-                            player.sendMessage(Color.translate(NETWORK.getMainColor() + ChatColor.BOLD.toString() + "All Warps:"));
-                            Warp.getWarps().forEach(warp -> {
-                                Clickable chatClickable = new Clickable(ChatColor.GRAY + " * " + ChatColor.YELLOW + warp.getName(), ChatColor.GREEN + "Click to warp to " + ChatColor.RESET + warp.getName() + ChatColor.GREEN + "!", "/warp " + warp.getName());
-                                player.spigot().sendMessage(chatClickable.asComponents());
-                            });
-                            player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
-                            break;
-                        case "create":
-                            if (args.length == 1) player.sendMessage(Color.translate("&cUsage: /warp create <name>."));
-                            if (args.length == 2) {
-                                String value = args[1];
-                                Warp warp = new Warp(value, player.getLocation());
-                                warp.saveWarp();
+        if (!player.hasPermission("scandium.command.warp")) {
+            player.sendMessage(NO_PERMISSION);
+        }
 
-                                player.sendMessage(Color.translate("&aCreated a new warp with the name '" + value + "'."));
-                            }
-                            break;
-                        case "delete":
-                            if (args.length == 1) player.sendMessage(Color.translate("&cUsage: /warp delete <name>."));
-                            if (args.length == 2) {
-                                String value = args[1];
-                                Warp warp = Warp.getByName(value);
+        if (args.length == 0) {
+            this.sendHelp(player);
+        }
+        if (args.length > 0) {
+            switch (args[0]) {
+                case "list":
+                    player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
+                    player.sendMessage(Color.translate(NETWORK.getMainColor() + ChatColor.BOLD.toString() + "All Warps:"));
+                    Warp.getWarps().stream().filter(warp -> warp.getLocation() != null).forEach(warp -> {
+                        Clickable chatClickable = new Clickable(ChatColor.GRAY + " * " + ChatColor.YELLOW + warp.getName(), ChatColor.GREEN + "Click to warp to " + ChatColor.RESET + warp.getName() + ChatColor.GREEN + "!", "/warp " + warp.getName());
+                        player.spigot().sendMessage(chatClickable.asComponents());
+                    });
+                    player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
+                    break;
+                case "create":
+                    if (args.length == 1) player.sendMessage(Color.translate("&cUsage: /warp create <name>."));
+                    if (args.length == 2) {
+                        String value = args[1];
+                        Warp warp = new Warp(value, player.getLocation(), CorePlugin.getInstance().getServerName());
+                        warp.saveWarp();
 
-                                if (warp != null) {
-                                    Warp.getWarps().remove(warp);
-                                    CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getWarpCollection().deleteOne(Filters.eq("_id", warp.getId())));
+                        player.sendMessage(Color.translate("&aCreated a new warp with the name '" + value + "'."));
+                    }
+                    break;
+                case "delete":
+                    if (args.length == 1) player.sendMessage(Color.translate("&cUsage: /warp delete <name>."));
+                    if (args.length == 2) {
+                        String value = args[1];
+                        Warp warp = Warp.getByName(value);
 
-                                    player.sendMessage(Color.translate("&cDeleted the warp '" + value + "'."));
-                                } else {
-                                    player.sendMessage(Color.translate("&cThat warp does not exist!"));
-                                }
-                            }
-                            break;
-                        default:
-                            String value = args[0];
-                            Warp warp = Warp.getByName(value);
+                        if (warp != null) {
+                            Warp.getWarps().remove(warp);
+                            CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getWarpCollection().deleteOne(Filters.eq("_id", warp.getId())));
 
-                            if (warp != null) {
+                            player.sendMessage(Color.translate("&cDeleted the warp '" + value + "'."));
+                        } else {
+                            player.sendMessage(Color.translate("&cThat warp does not exist!"));
+                        }
+                    }
+                    break;
+                default:
+                    String value = args[0];
+                    Warp warp = Warp.getByName(value);
+
+                    if (warp != null) {
+                        if (!warp.getServer().equalsIgnoreCase(CorePlugin.getInstance().getServerName())) {
+                            if (warp.getLocation() != null) {
                                 player.teleport(warp.getLocation());
                                 player.sendMessage(Color.translate("&aWarped you to the &6" + warp.getName() + "&a warp!"));
-                            } else sendHelp(player);
-                            break;
+                            } else {
+                                player.sendMessage(Color.translate("&cThe location for that warp does not exist!"));
+                            }
+                        } else {
+                            player.sendMessage(Color.translate("&cThat warp was created on another server!"));
+                        }
+                    } else {
+                        sendHelp(player);
                     }
-                } else {
-                    player.sendMessage(NO_PERMISSION);
-                }
+                    break;
             }
-        } else {
-            player.sendMessage(NO_PERMISSION);
         }
         return false;
     }

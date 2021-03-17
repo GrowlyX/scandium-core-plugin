@@ -15,9 +15,12 @@ public class WarpManager {
 
     public void loadAllWarps() {
         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getWarpCollection().find().forEach((Block<? super Document>) warpDocument -> {
-            if (Warp.getByName(warpDocument.getString("name")) == null) {
-                new Warp(warpDocument.getString("name"), LocationUtil.getLocationFromString(warpDocument.getString("location")).orElse(null), warpDocument.getString("_id"));
+            if (warpDocument.getString("server") != null) {
+                if (Warp.getByName(warpDocument.getString("name")) == null) {
+                    new Warp(warpDocument.getString("name"), LocationUtil.getLocationFromString(warpDocument.getString("location")).orElse(null), warpDocument.getString("_id"), warpDocument.getString("server"));
+                }
             }
+
         }));
     }
 
