@@ -43,11 +43,14 @@ public class SetSlotsCommand extends BaseCommand {
                 int slots = Integer.parseInt(args[0]);
                 setSlots(slots);
                 player.sendMessage(Color.translate("&aUpdated the max player value to " + slots + " Players."));
-            } catch (NumberFormatException e) { player.sendMessage(Color.translate("&cThat's not a valid integer.")); }
+            } catch (NumberFormatException e) {
+                player.sendMessage(Color.translate("&cThat's not a valid integer."));
+            }
         }
         return false;
     }
 
+    // thanks to bowp for giving the code below:
     private void setSlots(int slots) {
         slots = Math.abs(slots);
 
@@ -71,7 +74,7 @@ public class SetSlotsCommand extends BaseCommand {
             List<String> allLines = Files.readAllLines(resolve);
 
             for (int i = 0; i < allLines.size(); ++i) {
-                if (((String)allLines.get(i)).startsWith("max-players")) {
+                if (allLines.get(i).startsWith("max-players")) {
                     allLines.remove(i);
                 }
             }

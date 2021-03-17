@@ -8,6 +8,9 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.abstraction.protocol.AbstractChatInterceptor;
+import org.bukkit.entity.Player;
+
+import java.lang.reflect.InvocationTargetException;
 
 public class ProtocolChatInterceptor extends AbstractChatInterceptor {
 
@@ -50,5 +53,20 @@ public class ProtocolChatInterceptor extends AbstractChatInterceptor {
         }
 
         ProtocolLibrary.getProtocolManager().addPacketListener(sendAdapter);
+    }
+
+    // Ty to
+    private boolean sendDemoScreen(Player player) {
+        PacketContainer packet = new PacketContainer(PacketType.Play.Server.GAME_STATE_CHANGE);
+
+        packet.getIntegers().write(0, 5);
+        packet.getFloat().write(0, (float) 0);
+
+        try {
+            ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet);
+            return true;
+        } catch (InvocationTargetException ignored) {
+            return false;
+        }
     }
 }

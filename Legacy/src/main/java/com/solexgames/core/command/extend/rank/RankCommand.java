@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -83,7 +84,7 @@ public class RankCommand extends BaseCommand {
                                     rank.permissions.forEach(s -> player.sendMessage(Color.translate(" &7* &f" + s)));
                                     player.sendMessage(Color.translate("  "));
                                     player.sendMessage(Color.translate("&eInheritances:"));
-                                    rank.getInheritance().forEach(s -> player.sendMessage(Color.translate(" &7* &f" + Rank.getByUuid(s).getName())));
+                                    rank.getInheritance().stream().map(Rank::getByUuid).filter(Objects::nonNull).forEach(s -> player.sendMessage(Color.translate(" &7* &f" + s.getName())));
                                     player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
                                 } else {
                                     player.sendMessage(Color.translate("&cThat rank does not exist!"));

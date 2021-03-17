@@ -17,27 +17,25 @@ public class RankManager {
     }
 
     public void loadRanks() {
-        CorePlugin.getInstance().getMongoThread().execute(() -> {
-            for (Document document : CorePlugin.getInstance().getCoreDatabase().getRankCollection().find()) {
-                if (Rank.getByName(document.getString("name")) == null) {
-                    Rank rank = new Rank(
-                            UUID.fromString(document.getString("uuid")),
-                            (ArrayList<UUID>) document.get("inheritance"),
-                            (ArrayList<String>) document.get("permissions"),
-                            document.getString("name"),
-                            document.getString("prefix"),
-                            document.getString("color"),
-                            document.getString("suffix"),
-                            document.getBoolean("defaultRank"),
-                            document.getInteger("weight")
-                    );
+        for (Document document : CorePlugin.getInstance().getCoreDatabase().getRankCollection().find()) {
+            if (Rank.getByName(document.getString("name")) == null) {
+                Rank rank = new Rank(
+                        UUID.fromString(document.getString("uuid")),
+                        (ArrayList<UUID>) document.get("inheritance"),
+                        (ArrayList<String>) document.get("permissions"),
+                        document.getString("name"),
+                        document.getString("prefix"),
+                        document.getString("color"),
+                        document.getString("suffix"),
+                        document.getBoolean("defaultRank"),
+                        document.getInteger("weight")
+                );
 
-                    if (document.getBoolean("isHidden") != null) {
-                        rank.setHidden(document.getBoolean("isHidden"));
-                    }
+                if (document.getBoolean("isHidden") != null) {
+                    rank.setHidden(document.getBoolean("isHidden"));
                 }
             }
-        });
+        }
     }
 
     private void createDefaultRanks() {

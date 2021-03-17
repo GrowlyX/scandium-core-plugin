@@ -308,7 +308,7 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                 break;
             case RANK_SETTINGS_UPDATE:
                 if (!SERVER_NAME.equals(jsonAppender.getParam("SERVER"))) {
-                    Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> Rank.getRanks().clear());
+                    Rank.getRanks().clear();
                     CorePlugin.getInstance().getRankManager().loadRanks();
                     CorePlugin.getInstance().getLogger().info("[Ranks] Synced all ranks.");
                 }
