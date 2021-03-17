@@ -18,7 +18,7 @@ public class TpAllCommand extends BaseCommand {
 
         Player player = (Player) sender;
 
-        if (player.hasPermission("scandium.command.tpall")) {
+        if (!player.hasPermission("scandium.command.tpall")) {
             player.sendMessage(NO_PERMISSION);
             return false;
         }

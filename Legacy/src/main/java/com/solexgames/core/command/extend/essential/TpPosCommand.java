@@ -23,7 +23,7 @@ public class TpPosCommand extends BaseCommand {
         ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
         Player player = (Player) sender;
 
-        if (player.hasPermission("scandium.command.tppos")) {
+        if (!player.hasPermission("scandium.command.tppos")) {
             player.sendMessage(NO_PERMISSION);
             return false;
         }
