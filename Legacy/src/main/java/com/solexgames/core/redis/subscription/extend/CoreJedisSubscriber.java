@@ -308,7 +308,7 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                 break;
             case RANK_SETTINGS_UPDATE:
                 if (!SERVER_NAME.equals(jsonAppender.getParam("SERVER"))) {
-                    Rank.getRanks().clear();
+                    Rank.setRanks(null);
                     CorePlugin.getInstance().getRankManager().loadRanks();
                     CorePlugin.getInstance().getLogger().info("[Ranks] Synced all ranks.");
                 }

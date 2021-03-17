@@ -144,7 +144,7 @@ public class CorePlugin extends Plugin {
     public ServerInfo getBestHub() {
         return this.hubServers.stream()
                 .filter(Objects::nonNull)
-                .min(Comparator.comparingInt(server -> (int) +(long) server.getPlayers().size()))
+                .min(Comparator.comparingInt(server -> (int) + (long) server.getPlayers().size()))
                 .orElse(null);
     }
 

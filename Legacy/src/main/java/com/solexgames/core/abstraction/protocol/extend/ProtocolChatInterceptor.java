@@ -42,7 +42,11 @@ public class ProtocolChatInterceptor extends AbstractChatInterceptor {
             public void onPacketSending(PacketEvent e){
                 if (e.getPacketType() == PacketType.Play.Server.TAB_COMPLETE) {
                     if (!e.getPlayer().hasPermission("scandium.tabcomplete.bypass")) {
-                        e.getPacket().getStringArrays().write(0, returnString);
+                        String message = e.getPacket().getSpecificModifier(String.class).read(0).toLowerCase();
+
+                        if (!(message.startsWith("/") && message.contains(" "))) {
+                            e.getPacket().getStringArrays().write(0, returnString);
+                        }
                     }
                 }
             }
@@ -50,12 +54,11 @@ public class ProtocolChatInterceptor extends AbstractChatInterceptor {
 
         if (this.getConfig().getBoolean("tab-block.enabled")) {
             ProtocolLibrary.getProtocolManager().addPacketListener(adapter);
+            ProtocolLibrary.getProtocolManager().addPacketListener(sendAdapter);
         }
-
-        ProtocolLibrary.getProtocolManager().addPacketListener(sendAdapter);
     }
 
-    // Ty to
+    // Ty to og maker
     private boolean sendDemoScreen(Player player) {
         PacketContainer packet = new PacketContainer(PacketType.Play.Server.GAME_STATE_CHANGE);
 

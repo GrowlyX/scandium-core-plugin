@@ -17,6 +17,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class Rank {
 
     @Getter
+    @Setter
     private static List<Rank> ranks = new ArrayList<>();
 
     public final List<UUID> inheritance;

@@ -153,32 +153,30 @@ public class PlayerListener implements Listener {
             CorePlugin.getInstance().getPlayerManager().modModeRaw(potPlayer.getPlayer());
         }
 
-        Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> {
-            if (MANAGER.isClearChatJoin()) {
-                for (int lines = 0; lines < 250; lines++) {
-                    event.getPlayer().sendMessage("  ");
-                }
+        if (MANAGER.isClearChatJoin()) {
+            for (int lines = 0; lines < 250; lines++) {
+                event.getPlayer().sendMessage("  ");
             }
+        }
 
-            if (MANAGER.isJoinMessageEnabled()) {
-                if (MANAGER.isJoinMessageCentered()) {
-                    MANAGER.getJoinMessage().forEach(s -> event.getPlayer().sendMessage(Color.translate(s.replace("%PLAYER%", event.getPlayer().getDisplayName()))));
-                } else {
-                    StringUtil.sendCenteredMessage(event.getPlayer(), (ArrayList<String>) MANAGER.getJoinMessage());
-                }
+        if (MANAGER.isJoinMessageEnabled()) {
+            if (MANAGER.isJoinMessageCentered()) {
+                MANAGER.getJoinMessage().forEach(s -> event.getPlayer().sendMessage(Color.translate(s.replace("%PLAYER%", event.getPlayer().getDisplayName()))));
+            } else {
+                StringUtil.sendCenteredMessage(event.getPlayer(), (ArrayList<String>) MANAGER.getJoinMessage());
             }
+        }
 
-            if (potPlayer.getPlayer().hasPermission("scandium.staff")) {
-                CorePlugin.getInstance().getServerManager().getStaffInformation().forEach(s -> potPlayer.getPlayer().sendMessage(s
-                        .replace("<nice_char>", Character.toString('»'))
-                        .replace("<channel>", ChatColor.RED + "None")
-                        .replace("<messages>", (potPlayer.isCanSeeStaffMessages() ? ChatColor.GREEN + "Shown" : ChatColor.RED + "Hidden"))
-                        .replace("<filter>", (potPlayer.isCanSeeFiltered() ? ChatColor.GREEN + "Shown" : ChatColor.RED + "Hidden"))
-                        .replace("<modmode>", (potPlayer.isStaffMode() ? ChatColor.GREEN + "Enabled" : ChatColor.RED + "Disabled"))
-                        .replace("<vanish>", (potPlayer.isVanished() ? ChatColor.GREEN + "Enabled" : ChatColor.RED + "Disabled"))
-                ));
-            }
-        });
+        if (potPlayer.getPlayer().hasPermission("scandium.staff")) {
+            CorePlugin.getInstance().getServerManager().getStaffInformation().forEach(s -> potPlayer.getPlayer().sendMessage(s
+                    .replace("<nice_char>", Character.toString('»'))
+                    .replace("<channel>", ChatColor.RED + "None")
+                    .replace("<messages>", (potPlayer.isCanSeeStaffMessages() ? ChatColor.GREEN + "Shown" : ChatColor.RED + "Hidden"))
+                    .replace("<filter>", (potPlayer.isCanSeeFiltered() ? ChatColor.GREEN + "Shown" : ChatColor.RED + "Hidden"))
+                    .replace("<modmode>", (potPlayer.isStaffMode() ? ChatColor.GREEN + "Enabled" : ChatColor.RED + "Disabled"))
+                    .replace("<vanish>", (potPlayer.isVanished() ? ChatColor.GREEN + "Enabled" : ChatColor.RED + "Disabled"))
+            ));
+        }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
