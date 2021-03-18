@@ -8,6 +8,7 @@ load: STARTUP
 api-version: "1.13"
 
 commands:
+  alts:
   experience:
     aliases: [xp]
   test:

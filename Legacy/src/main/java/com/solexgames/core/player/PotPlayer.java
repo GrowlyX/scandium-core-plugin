@@ -463,7 +463,7 @@ public class PotPlayer {
             }
         }
 
-        new NetworkPlayer(uuid, name, this.getActiveGrant().getRank().getName(), CorePlugin.getInstance().getServerName(), this.isCanReceiveDms(), this.ipAddress);
+        new NetworkPlayer(this.uuid, this.name, CorePlugin.getInstance().getServerName(), this.getActiveGrant().getRank().getName(), this.isCanReceiveDms(), this.ipAddress);
 
         RedisUtil.writeAsync(RedisUtil.addGlobalPlayer(this));
     }

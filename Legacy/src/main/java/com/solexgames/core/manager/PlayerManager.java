@@ -7,6 +7,7 @@ import com.solexgames.core.board.extend.ModSuiteBoard;
 import com.solexgames.core.enums.ChatChannelType;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.player.global.NetworkPlayer;
+import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
@@ -20,6 +21,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Getter
 @NoArgsConstructor
@@ -222,6 +225,28 @@ public class PlayerManager {
         for (String string : strings) {
             RedisUtil.writeAsync(RedisUtil.onGlobalBroadcastPermission(Color.translate(string), "scandium.staff"));
         }
+    }
+
+    public int getAlts(NetworkPlayer targetPlayer) {
+        return (int) CorePlugin.getInstance().getPlayerManager().getAllNetworkProfiles().values().stream()
+                .filter(networkPlayer -> !networkPlayer.getName().equalsIgnoreCase(targetPlayer.getName()))
+                .filter(networkPlayer -> networkPlayer.getIpAddress().equalsIgnoreCase(targetPlayer.getIpAddress()))
+                .count();
+    }
+
+    public String getAltsMessage(NetworkPlayer targetPlayer) {
+        final String altMessage = CorePlugin.getInstance().getPlayerManager().getAllNetworkProfiles().values().stream()
+                .filter(networkPlayer -> !networkPlayer.getName().equalsIgnoreCase(targetPlayer.getName()))
+                .filter(networkPlayer -> networkPlayer.getIpAddress().equalsIgnoreCase(targetPlayer.getIpAddress()))
+                .map(networkPlayer -> (Rank.getByName(networkPlayer.getRankName()) != null ? Color.translate(Rank.getByName(networkPlayer.getRankName()).getColor()) : ChatColor.GREEN) + networkPlayer.getName())
+                .collect(Collectors.joining(ChatColor.WHITE + ", "));
+
+        final int altsAmount = (int) CorePlugin.getInstance().getPlayerManager().getAllNetworkProfiles().values().stream()
+                .filter(networkPlayer -> !networkPlayer.getName().equalsIgnoreCase(targetPlayer.getName()))
+                .filter(networkPlayer -> networkPlayer.getIpAddress().equalsIgnoreCase(targetPlayer.getIpAddress()))
+                .count();
+
+        return (altsAmount == 0 ? ChatColor.RED + "That player has no alt accounts!" : altMessage);
     }
 
     public void sendFreezeMessage(Player player) {
