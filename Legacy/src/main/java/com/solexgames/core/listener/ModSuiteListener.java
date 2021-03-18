@@ -106,22 +106,22 @@ public class ModSuiteListener implements Listener {
                                 new StaffViewPaginatedMenu(event.getPlayer()).openMenu(event.getPlayer());
                                 break;
                             case NETHER_STAR:
-                                Collections.singletonList(Bukkit.getOnlinePlayers()).get(CorePlugin.RANDOM.nextInt(Bukkit.getOnlinePlayers().size()))
-                                        .stream()
+                                Bukkit.getOnlinePlayers().stream()
+                                        .filter(player -> !player.hasPermission("scandium.staff"))
+                                        .filter(player -> player != event.getPlayer())
                                         .findAny()
                                         .ifPresent(player -> {
-                                    event.getPlayer().teleport(player.getLocation());
-                                    event.getPlayer().sendMessage(Color.translate("&aTeleported to &b" + player.getDisplayName() + "&a!"));
-                                });
+                                            event.getPlayer().teleport(player.getLocation());
+                                            event.getPlayer().sendMessage(Color.translate("&aTeleported to &6" + player.getDisplayName() + "&a!"));
+                                        });
                                 break;
                             case INK_SAC:
                                 event.getPlayer().performCommand("vanish");
                                 ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
-                                event.getPlayer().getInventory().setItem(8, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), (potPlayer.isVanished() ? 10 : 8)).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + (potPlayer.isVanished() ? "Disable Vanish" : "Enable Vanish")).create());
+                                event.getPlayer().getInventory().setItem(8, new ItemBuilder((potPlayer.isVanished() ? XMaterial.LIME_DYE.parseMaterial() : XMaterial.LIGHT_GRAY_DYE.parseMaterial()), (potPlayer.isVanished() ? 10 : 8)).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + (potPlayer.isVanished() ? "Disable Vanish" : "Enable Vanish")).create());
+                                event.getPlayer().updateInventory();
                                 break;
                         }
-
-                        event.getPlayer().updateInventory();
                     }
                 }
             }
