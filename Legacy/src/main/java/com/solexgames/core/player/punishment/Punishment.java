@@ -18,9 +18,6 @@ import java.util.UUID;
 @Setter
 public class Punishment {
 
-    @Getter
-    public static final DateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-
     private PunishmentType punishmentType;
 
     private UUID id;
@@ -135,7 +132,7 @@ public class Punishment {
     }
 
     public String getExpirationString() {
-        return this.isPermanent() ? "Never" : DATE_FORMAT.format(new Date(this.createdAt.getTime() + this.punishmentDuration));
+        return this.isPermanent() ? "Never" : CorePlugin.FORMAT.format(new Date(this.createdAt.getTime() + this.punishmentDuration));
     }
 
     public boolean checkIfActive() {

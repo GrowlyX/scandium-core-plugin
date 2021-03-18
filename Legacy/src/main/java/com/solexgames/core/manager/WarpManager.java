@@ -20,7 +20,6 @@ public class WarpManager {
                     new Warp(warpDocument.getString("name"), LocationUtil.getLocationFromString(warpDocument.getString("location")).orElse(null), warpDocument.getString("_id"), warpDocument.getString("server"));
                 }
             }
-
         }));
     }
 

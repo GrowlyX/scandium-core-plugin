@@ -1,5 +1,6 @@
 package com.solexgames.core.manager;
 
+import com.mongodb.Block;
 import com.mongodb.client.model.Filters;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.player.prefixes.Prefix;
@@ -19,11 +20,9 @@ public class PrefixManager {
     }
 
     public void loadPrefixes() {
-        CorePlugin.getInstance().getMongoThread().execute(() -> {
-            for (Document document : CorePlugin.getInstance().getCoreDatabase().getPrefixCollection().find()) {
-                if (Prefix.getByName(document.getString("name")) == null) {
-                    new Prefix(document.getString("_id"), document.getString("name"), document.getString("displayName"), document.getString("prefix"));
-                }
+        CorePlugin.getInstance().getCoreDatabase().getPrefixCollection().find().forEach((Block<? super Document>) document -> {
+            if (Prefix.getByName(document.getString("name")) == null) {
+                new Prefix(document.getString("_id"), document.getString("name"), document.getString("displayName"), document.getString("prefix"));
             }
         });
     }

@@ -84,7 +84,7 @@ public class WarpCommand extends BaseCommand {
                     Warp warp = Warp.getByName(value);
 
                     if (warp != null) {
-                        if (!warp.getServer().equalsIgnoreCase(CorePlugin.getInstance().getServerName())) {
+                        if (warp.getServer().equalsIgnoreCase(CorePlugin.getInstance().getServerName())) {
                             if (warp.getLocation() != null) {
                                 player.teleport(warp.getLocation());
                                 player.sendMessage(Color.translate("&aWarped you to the &6" + warp.getName() + "&a warp!"));

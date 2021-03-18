@@ -1,5 +1,6 @@
 package com.solexgames.core.manager;
 
+import com.mongodb.Block;
 import com.mongodb.client.model.Filters;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.player.ranks.Rank;
@@ -17,7 +18,7 @@ public class RankManager {
     }
 
     public void loadRanks() {
-        for (Document document : CorePlugin.getInstance().getCoreDatabase().getRankCollection().find()) {
+        CorePlugin.getInstance().getCoreDatabase().getRankCollection().find().forEach((Block<? super Document>) document -> {
             if (Rank.getByName(document.getString("name")) == null) {
                 Rank rank = new Rank(
                         UUID.fromString(document.getString("uuid")),
@@ -35,7 +36,7 @@ public class RankManager {
                     rank.setHidden(document.getBoolean("hidden"));
                 }
             }
-        }
+        });
     }
 
     private void createDefaultRanks() {

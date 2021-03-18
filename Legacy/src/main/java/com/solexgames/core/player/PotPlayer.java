@@ -499,7 +499,7 @@ public class PotPlayer {
     }
 
     public void setupPlayerList() {
-        player.setPlayerListName(Color.translate(this.getActiveGrant().getRank().getColor() + (this.customColor != null ? this.customColor : "") + this.player.getName()));
+        player.setPlayerListName(Color.translate((this.getActiveGrant().getRank().getColor() == null ? ChatColor.GRAY.toString() : this.getActiveGrant().getRank().getColor()) + (this.customColor != null ? this.customColor : "") + this.player.getName()));
         player.recalculatePermissions();
 
         NameTagExternal.setTabPosition(this);

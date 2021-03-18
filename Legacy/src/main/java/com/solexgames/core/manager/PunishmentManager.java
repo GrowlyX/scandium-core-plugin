@@ -1,5 +1,6 @@
 package com.solexgames.core.manager;
 
+import com.mongodb.Block;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.punishment.Punishment;
@@ -22,39 +23,36 @@ public class PunishmentManager {
     private final ArrayList<Punishment> punishments = new ArrayList<>();
 
     public PunishmentManager() {
+        CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().find().forEach((Block<? super Document>) punishmentDocument -> {
+            Punishment punishment = new Punishment(
+                    PunishmentType.valueOf(punishmentDocument.getString("punishmentType")),
+                    (punishmentDocument.getString("issuer") != null ? UUID.fromString(punishmentDocument.getString("issuer")) : null),
+                    UUID.fromString(punishmentDocument.getString("target")),
+                    punishmentDocument.getString("issuerName"),
+                    punishmentDocument.getString("reason"),
+                    punishmentDocument.getDate("issuingDate"),
+                    punishmentDocument.getLong("punishmentDuration"),
+                    punishmentDocument.getBoolean("permanent"),
+                    punishmentDocument.getDate("createdAt"),
+                    UUID.fromString(punishmentDocument.getString("id")),
+                    punishmentDocument.getString("identification"),
+                    punishmentDocument.getBoolean("active")
+            );
 
-        CorePlugin.getInstance().getMongoThread().execute(() -> {
-            for (Document punishmentDocument : CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().find()) {
-                Punishment punishment = new Punishment(
-                        PunishmentType.valueOf(punishmentDocument.getString("punishmentType")),
-                        (punishmentDocument.getString("issuer") != null ? UUID.fromString(punishmentDocument.getString("issuer")) : null),
-                        UUID.fromString(punishmentDocument.getString("target")),
-                        punishmentDocument.getString("issuerName"),
-                        punishmentDocument.getString("reason"),
-                        punishmentDocument.getDate("issuingDate"),
-                        punishmentDocument.getLong("punishmentDuration"),
-                        punishmentDocument.getBoolean("permanent"),
-                        punishmentDocument.getDate("createdAt"),
-                        UUID.fromString(punishmentDocument.getString("id")),
-                        punishmentDocument.getString("identification"),
-                        punishmentDocument.getBoolean("active")
-                );
+            punishment.setPermanent(punishmentDocument.getBoolean("permanent"));
+            punishment.setRemoved(punishmentDocument.getBoolean("removed"));
 
-                punishment.setPermanent(punishmentDocument.getBoolean("permanent"));
-                punishment.setRemoved(punishmentDocument.getBoolean("removed"));
-
-                if (punishmentDocument.getString("removerName") != null) {
-                    punishment.setRemoverName(punishmentDocument.getString("removerName"));
-                }
-                if (punishmentDocument.getString("removalReason") != null) {
-                    punishment.setRemovalReason(punishmentDocument.getString("removalReason"));
-                }
-                if (punishmentDocument.getString("remover") != null) {
-                    punishment.setRemover(UUID.fromString(punishmentDocument.getString("remover")));
-                }
-
-                this.punishments.add(punishment);
+            if (punishmentDocument.getString("removerName") != null) {
+                punishment.setRemoverName(punishmentDocument.getString("removerName"));
             }
+            if (punishmentDocument.getString("removalReason") != null) {
+                punishment.setRemovalReason(punishmentDocument.getString("removalReason"));
+            }
+            if (punishmentDocument.getString("remover") != null) {
+                punishment.setRemover(UUID.fromString(punishmentDocument.getString("remover")));
+            }
+
+            this.punishments.add(punishment);
         });
 
         CorePlugin.getInstance().getLogger().info("[Punishments] Loaded all punishments.");
