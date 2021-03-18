@@ -76,11 +76,13 @@ public class Punishment {
 
         document.put("punishmentType", this.punishmentType.toString());
         document.put("id", this.id.toString());
+
         if (issuer != null) {
             document.put("issuer", this.issuer.toString());
         } else {
             document.put("issuer", null);
         }
+
         document.put("target", this.target.toString());
         document.put("expirationDate", this.expirationDate);
         document.put("issuingDate", this.issuingDate);
@@ -104,11 +106,13 @@ public class Punishment {
 
         document.put("punishmentType", this.punishmentType.toString());
         document.put("id", this.id.toString());
+
         if (issuer != null) {
             document.put("issuer", this.issuer.toString());
         } else {
             document.put("issuer", null);
         }
+
         document.put("target", this.target.toString());
         document.put("expirationDate", this.expirationDate);
         document.put("issuingDate", this.issuingDate);

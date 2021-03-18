@@ -116,7 +116,7 @@ public class PunishmentManager {
                     case BLACKLIST:
                         if (target != null) {
                             if (finalPotPlayer != null) {
-                                finalPotPlayer.setCurrentlyBanned(true);
+                                finalPotPlayer.setCurrentlyRestricted(true);
                                 finalPotPlayer.getPlayer().kickPlayer(Color.translate(PunishmentStrings.BLACK_LIST_MESSAGE.replace("<reason>", punishment.getReason())));
                             }
                         }
@@ -125,7 +125,7 @@ public class PunishmentManager {
                     case BAN:
                         if (target != null) {
                             if (finalPotPlayer != null) {
-                                finalPotPlayer.setCurrentlyBanned(true);
+                                finalPotPlayer.setCurrentlyRestricted(true);
                                 finalPotPlayer.getPlayer().kickPlayer((punishment.isPermanent() ? Color.translate(PunishmentStrings.BAN_MESSAGE_PERM.replace("<reason>", punishment.getReason())) : Color.translate(PunishmentStrings.BAN_MESSAGE_TEMP.replace("<reason>", punishment.getReason()).replace("<time>", punishment.getDurationString()))));
                             }
                         }

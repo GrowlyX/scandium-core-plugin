@@ -65,22 +65,24 @@ public class PlayerListener implements Listener {
     }
 
     private void allowConnection(AsyncPlayerPreLoginEvent event) {
-        Punishment.getAllPunishments()
-                .stream()
-                .filter(punishment -> punishment.getTarget().equals(event.getUniqueId()))
-                .filter(Punishment::isActive)
-                .filter(punishment -> !punishment.isRemoved())
-                .forEach(punishment -> {
-                    switch (punishment.getPunishmentType()) {
-                        case BLACKLIST:
-                            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Color.translate(PunishmentStrings.BLACK_LIST_MESSAGE.replace("<reason>", punishment.getReason())));
-                            break;
-                        case IPBAN:
-                        case BAN:
-                            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, (punishment.isPermanent() ? Color.translate(PunishmentStrings.BAN_MESSAGE_PERM.replace("<reason>", punishment.getReason())) : Color.translate(PunishmentStrings.BAN_MESSAGE_TEMP.replace("<reason>", punishment.getReason()).replace("<time>", punishment.getDurationString()))));
-                            break;
-                    }
-                });
+        if (!(CorePlugin.getInstance().getServerName().contains("hub") || CorePlugin.getInstance().getServerName().contains("lobby"))) {
+            Punishment.getAllPunishments()
+                    .stream()
+                    .filter(punishment -> punishment.getTarget().equals(event.getUniqueId()))
+                    .filter(Punishment::isActive)
+                    .filter(punishment -> !punishment.isRemoved())
+                    .forEach(punishment -> {
+                        switch (punishment.getPunishmentType()) {
+                            case BLACKLIST:
+                                event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Color.translate(PunishmentStrings.BLACK_LIST_MESSAGE.replace("<reason>", punishment.getReason())));
+                                break;
+                            case IPBAN:
+                            case BAN:
+                                event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, (punishment.isPermanent() ? Color.translate(PunishmentStrings.BAN_MESSAGE_PERM.replace("<reason>", punishment.getReason())) : Color.translate(PunishmentStrings.BAN_MESSAGE_TEMP.replace("<reason>", punishment.getReason()).replace("<time>", punishment.getDurationString()))));
+                                break;
+                        }
+                    });
+        }
     }
 
     @EventHandler
@@ -176,6 +178,10 @@ public class PlayerListener implements Listener {
                     .replace("<modmode>", (potPlayer.isStaffMode() ? ChatColor.GREEN + "Enabled" : ChatColor.RED + "Disabled"))
                     .replace("<vanish>", (potPlayer.isVanished() ? ChatColor.GREEN + "Enabled" : ChatColor.RED + "Disabled"))
             ));
+        }
+
+        if (potPlayer.isCurrentlyRestricted()) {
+            event.getPlayer().sendMessage(potPlayer.getRestrictionMessage());
         }
     }
 
@@ -343,8 +349,8 @@ public class PlayerListener implements Listener {
             }
         }
 
-        if (potPlayer.isCurrentlyBanned()) {
-            player.sendMessage(Color.translate("&cYou cannot chat as you are currently banned."));
+        if (potPlayer.isCurrentlyRestricted()) {
+            player.sendMessage(Color.translate("&cYou cannot chat as you are currently restricted."));
             event.setCancelled(true);
             return;
         }
@@ -424,9 +430,10 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (potPlayer.isCurrentlyBanned() && !event.getMessage().startsWith("/discord")) {
+        if (potPlayer.isCurrentlyRestricted() && !event.getMessage().startsWith("/discord")) {
             event.getPlayer().sendMessage(Color.translate("&cYou cannot execute commands as you are currently banned."));
             event.getPlayer().sendMessage(Color.translate("&cThe only command you can execute is &4/discord&c."));
+
             event.setCancelled(true);
             return;
         }

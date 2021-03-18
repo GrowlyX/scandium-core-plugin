@@ -7,11 +7,13 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class PlayerSaveTask extends BukkitRunnable {
 
     public PlayerSaveTask() {
-        runTaskTimerAsynchronously(CorePlugin.getInstance(), 36000L, 36000L);
+        runTaskTimerAsynchronously(CorePlugin.getInstance(), 20L, 10 * 20L);
     }
 
     @Override
     public void run() {
-        CorePlugin.getInstance().getPlayerManager().getAllProfiles().forEach((uuid, potPlayer) -> potPlayer.saveWithoutRemove());
+        CorePlugin.getInstance().getPlayerManager().getAllProfiles().forEach((uuid, potPlayer) ->
+                potPlayer.saveWithoutRemove()
+        );
     }
 }

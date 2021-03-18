@@ -19,10 +19,7 @@ import com.solexgames.core.command.extend.experience.ExperienceCommand;
 import com.solexgames.core.command.extend.grant.CGrantCommand;
 import com.solexgames.core.command.extend.grant.GrantCommand;
 import com.solexgames.core.command.extend.grant.GrantsCommand;
-import com.solexgames.core.command.extend.moderation.FreezeCommand;
-import com.solexgames.core.command.extend.moderation.StaffAnnounceCommand;
-import com.solexgames.core.command.extend.moderation.StaffModeCommand;
-import com.solexgames.core.command.extend.moderation.VanishCommand;
+import com.solexgames.core.command.extend.moderation.*;
 import com.solexgames.core.command.extend.network.ForceUpdateCommand;
 import com.solexgames.core.command.extend.network.NetworkCommand;
 import com.solexgames.core.command.extend.prefix.PrefixCommand;
@@ -54,6 +51,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
 import org.bukkit.event.Listener;
@@ -91,7 +89,6 @@ public final class CorePlugin extends JavaPlugin {
     public static boolean STAFF_ALERTS_COMMAND = false;
 
     public static Gson GSON;
-    public static GsonBuilder GSONBUILDER;
 
     @Getter
     private static CorePlugin instance;
@@ -142,17 +139,18 @@ public final class CorePlugin extends JavaPlugin {
     public void onEnable() {
         instance = JavaPlugin.getPlugin(CorePlugin.class);
 
-        if (!this.getName().equals("Scandium"))
+        if (!this.getName().equals("Scandium")) {
             this.getServer().shutdown();
+        }
 
         FORMAT = new SimpleDateFormat("MM/dd/yyyy HH:mma");
         FORMAT.setTimeZone(TimeZone.getTimeZone("EST"));
 
         RANDOM = new Random();
-        GSONBUILDER = new GsonBuilder()
+        GSON = new GsonBuilder()
                 .serializeNulls()
-                .setPrettyPrinting();
-        GSON = GSONBUILDER.create();
+                .setPrettyPrinting()
+                .create();
 
         this.mongoThread = Executors.newFixedThreadPool(1);
         this.taskThread = Executors.newFixedThreadPool(1);
@@ -254,6 +252,7 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("discord").setExecutor(new DiscordCommand());
         this.getCommand("import").setExecutor(new RankImportCommand());
         this.getCommand("experience").setExecutor(new ExperienceCommand());
+        this.getCommand("alts").setExecutor(new AltsCommand());
         this.getCommand("options").setExecutor(new OptionsCommand());
         this.getCommand("warp").setExecutor(new WarpCommand());
         this.getCommand("history").setExecutor(new HistoryCommand());

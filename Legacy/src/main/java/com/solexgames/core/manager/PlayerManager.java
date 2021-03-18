@@ -6,7 +6,7 @@ import com.solexgames.core.CorePlugin;
 import com.solexgames.core.board.extend.ModSuiteBoard;
 import com.solexgames.core.enums.ChatChannelType;
 import com.solexgames.core.enums.ServerType;
-import com.solexgames.core.server.NetworkPlayer;
+import com.solexgames.core.player.global.NetworkPlayer;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
@@ -226,6 +226,10 @@ public class PlayerManager {
 
     public void sendFreezeMessage(Player player) {
         freezeMessage.forEach(s -> player.sendMessage(Color.translate(s)));
+    }
+
+    public NetworkPlayer getNetworkPlayer(Player player) {
+        return this.getAllNetworkProfiles().getOrDefault(player.getUniqueId(), null);
     }
 
     public String formatBroadcast(String message) {

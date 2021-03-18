@@ -11,10 +11,11 @@ import com.solexgames.core.player.grant.Grant;
 import com.solexgames.core.player.hook.AchievementData;
 import com.solexgames.core.player.prefixes.Prefix;
 import com.solexgames.core.player.punishment.Punishment;
+import com.solexgames.core.player.punishment.PunishmentStrings;
 import com.solexgames.core.player.punishment.PunishmentType;
 import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.enums.PotionMessageType;
-import com.solexgames.core.server.NetworkPlayer;
+import com.solexgames.core.player.global.NetworkPlayer;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
 import com.solexgames.core.util.SaltUtil;
@@ -105,7 +106,7 @@ public class PotPlayer {
     private String reasonTarget = null;
 
     private boolean currentlyMuted;
-    private boolean currentlyBanned;
+    private boolean currentlyRestricted;
     private boolean currentlyOnline;
 
     private LanguageType language;
@@ -119,6 +120,7 @@ public class PotPlayer {
     private String lastJoin;
     private String firstJoin;
 
+    private Punishment restrictionPunishment;
     private AchievementData achievementData;
     private PotionMessageType potionMessageType;
 
@@ -438,10 +440,13 @@ public class PotPlayer {
 
             this.getPunishments()
                     .stream()
-                    .filter(punishment -> punishment.getPunishmentType().equals(PunishmentType.BAN))
+                    .filter(punishment -> punishment.getPunishmentType().equals(PunishmentType.BAN) || punishment.getPunishmentType().equals(PunishmentType.BLACKLIST) || punishment.getPunishmentType().equals(PunishmentType.IPBAN))
                     .filter(Punishment::isActive)
                     .filter(punishment -> !punishment.isRemoved())
-                    .forEach(punishment -> this.currentlyBanned = true);
+                    .forEach(punishment -> {
+                        this.currentlyRestricted = true;
+                        this.restrictionPunishment = punishment;
+                    });
         });
 
         this.setupPlayer();
@@ -458,8 +463,21 @@ public class PotPlayer {
             }
         }
 
-        new NetworkPlayer(uuid, name, this.getActiveGrant().getRank().getName(), CorePlugin.getInstance().getServerName(), this.isCanReceiveDms());
+        new NetworkPlayer(uuid, name, this.getActiveGrant().getRank().getName(), CorePlugin.getInstance().getServerName(), this.isCanReceiveDms(), this.ipAddress);
+
         RedisUtil.writeAsync(RedisUtil.addGlobalPlayer(this));
+    }
+
+    public String getRestrictionMessage() {
+        switch (this.restrictionPunishment.getPunishmentType()) {
+            case BLACKLIST:
+                return Color.translate(PunishmentStrings.BLACK_LIST_MESSAGE.replace("<reason>", this.restrictionPunishment.getReason()));
+            case IPBAN:
+            case BAN:
+                return (this.restrictionPunishment.isPermanent() ? Color.translate(PunishmentStrings.BAN_MESSAGE_PERM.replace("<reason>", this.restrictionPunishment.getReason())) : Color.translate(PunishmentStrings.BAN_MESSAGE_TEMP.replace("<reason>", this.restrictionPunishment.getReason()).replace("<time>", this.restrictionPunishment.getDurationString())));
+            default:
+                return "";
+        }
     }
 
     public Grant getActiveGrant() {

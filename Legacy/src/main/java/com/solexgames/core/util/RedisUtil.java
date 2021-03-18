@@ -209,6 +209,7 @@ public final class RedisUtil {
                 .put("SERVER", CorePlugin.getInstance().getServerName())
                 .put("RANK", potPlayer.getActiveGrant().getRank().getName())
                 .put("DMS_ENABLED", String.valueOf(potPlayer.isCanReceiveDms()))
+                .put("IP_ADDRESS", potPlayer.getIpAddress())
                 .getAppended();
     }
 

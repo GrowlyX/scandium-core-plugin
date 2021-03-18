@@ -33,6 +33,7 @@ public class GmspCommand extends BaseCommand {
         }
         if (args.length > 0) {
             Player target = Bukkit.getPlayerExact(args[0]);
+
             if (target != null) {
                 target.setGameMode(GameMode.SPECTATOR);
                 player.sendMessage(Color.translate("&aSet " + target.getDisplayName() + "'s&a gamemode to Spectator."));

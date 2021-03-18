@@ -2,7 +2,6 @@ package com.solexgames.core.redis.subscription.extend;
 
 import com.mongodb.client.model.Filters;
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.abstraction.lunar.extend.LunarImplementation;
 import com.solexgames.core.enums.ChatChannelType;
 import com.solexgames.core.enums.NetworkServerStatusType;
 import com.solexgames.core.enums.NetworkServerType;
@@ -13,7 +12,7 @@ import com.solexgames.core.player.punishment.PunishmentType;
 import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.redis.json.JsonAppender;
 import com.solexgames.core.redis.subscription.AbstractJedisSubscriber;
-import com.solexgames.core.server.NetworkPlayer;
+import com.solexgames.core.player.global.NetworkPlayer;
 import com.solexgames.core.server.NetworkServer;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.UUIDUtil;
@@ -52,10 +51,11 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                 String name = jsonAppender.getParam("NAME");
                 Rank rank = Rank.getByName(jsonAppender.getParam("RANK"));
                 String globalServer = jsonAppender.getParam("SERVER");
+                String ipAddress = jsonAppender.getParam("IP_ADDRESS");
                 boolean dmsEnabled = Boolean.parseBoolean(jsonAppender.getParam("DMS_ENABLED"));
 
                 if (!globalServer.equalsIgnoreCase(CorePlugin.getInstance().getServerName())) {
-                    new NetworkPlayer(uuid, name, rank.getName(), globalServer, dmsEnabled);
+                    new NetworkPlayer(uuid, name, rank.getName(), globalServer, dmsEnabled, ipAddress);
                 }
                 break;
             case SERVER_DATA_ONLINE:

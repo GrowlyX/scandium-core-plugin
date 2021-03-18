@@ -26,15 +26,11 @@ public class AutoMessageTask extends BukkitRunnable {
 
         this.allTips.addAll(CorePlugin.getInstance().getConfig().getStringList("tips.messages"));
 
-        runTaskTimerAsynchronously(CorePlugin.getInstance(), 20L, CorePlugin.getInstance().getConfig().getInt("tips.interval") * 20L);
+        this.runTaskTimerAsynchronously(CorePlugin.getInstance(), 20L, CorePlugin.getInstance().getConfig().getInt("tips.interval") * 20L);
     }
 
     @Override
     public void run() {
-        sendToOnline(allTips);
-    }
-
-    private void sendToOnline(List<String> input) {
         Bukkit.getOnlinePlayers()
                 .stream()
                 .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
@@ -42,17 +38,21 @@ public class AutoMessageTask extends BukkitRunnable {
                 .forEach(potPlayer -> {
                     if (padding) {
                         potPlayer.getPlayer().sendMessage("  ");
-                        executeMessage(input, potPlayer);
+                        executeMessage(potPlayer);
                         potPlayer.getPlayer().sendMessage("  ");
                     } else {
-                        executeMessage(input, potPlayer);
+                        executeMessage(potPlayer);
                     }
                 });
     }
 
-    private void executeMessage(List<String> input, PotPlayer potPlayer) {
-        int count = CorePlugin.RANDOM.nextInt(allTips.size());
-        potPlayer.getPlayer().sendMessage(Color.translate((this.prefix ? this.tipPrefix : "") + input.get(this.lastCount == count ? CorePlugin.RANDOM.nextInt(input.size()) : count).replace("<nl>", "\n")));
+    private void executeMessage(PotPlayer potPlayer) {
+        int count = CorePlugin.RANDOM.nextInt(this.allTips.size());
+
+        potPlayer.getPlayer().sendMessage(Color.translate(
+                (this.prefix ? this.tipPrefix : "") + this.allTips.get(this.lastCount == count ? CorePlugin.RANDOM.nextInt(this.allTips.size()) : count).replace("<nl>", "\n")
+        ));
+
         this.lastCount = count;
     }
 }

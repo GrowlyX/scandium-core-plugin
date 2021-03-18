@@ -14,11 +14,15 @@ public class BoardUpdateTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        if (ScoreBoard.getAllBoards().keySet().isEmpty()) return;
+        if (ScoreBoard.getAllBoards().keySet().isEmpty())
+            return;
 
-        Bukkit.getOnlinePlayers().forEach(player -> {
+        for (Player player : Bukkit.getOnlinePlayers()) {
             ScoreBoard scoreBoard = ScoreBoard.getAllBoards().get(player.getUniqueId());
-            if (scoreBoard != null) scoreBoard.update();
-        });
+
+            if (scoreBoard != null) {
+                scoreBoard.update();
+            }
+        }
     }
 }
