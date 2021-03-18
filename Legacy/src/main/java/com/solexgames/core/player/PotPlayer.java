@@ -430,24 +430,22 @@ public class PotPlayer {
             }
         }
 
-        Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> {
-            this.getPunishments()
-                    .stream()
-                    .filter(punishment -> punishment.getPunishmentType().equals(PunishmentType.MUTE))
-                    .filter(Punishment::isActive)
-                    .filter(punishment -> !punishment.isRemoved())
-                    .forEach(punishment -> this.currentlyMuted = true);
+        this.getPunishments()
+                .stream()
+                .filter(punishment -> punishment.getPunishmentType().equals(PunishmentType.MUTE))
+                .filter(Punishment::isActive)
+                .filter(punishment -> !punishment.isRemoved())
+                .forEach(punishment -> this.currentlyMuted = true);
 
-            this.getPunishments()
-                    .stream()
-                    .filter(punishment -> punishment.getPunishmentType().equals(PunishmentType.BAN) || punishment.getPunishmentType().equals(PunishmentType.BLACKLIST) || punishment.getPunishmentType().equals(PunishmentType.IPBAN))
-                    .filter(Punishment::isActive)
-                    .filter(punishment -> !punishment.isRemoved())
-                    .forEach(punishment -> {
-                        this.currentlyRestricted = true;
-                        this.restrictionPunishment = punishment;
-                    });
-        });
+        this.getPunishments()
+                .stream()
+                .filter(punishment -> punishment.getPunishmentType().equals(PunishmentType.BAN) || punishment.getPunishmentType().equals(PunishmentType.BLACKLIST) || punishment.getPunishmentType().equals(PunishmentType.IPBAN))
+                .filter(Punishment::isActive)
+                .filter(punishment -> !punishment.isRemoved())
+                .forEach(punishment -> {
+                    this.currentlyRestricted = true;
+                    this.restrictionPunishment = punishment;
+                });
 
         this.setupPlayer();
 
