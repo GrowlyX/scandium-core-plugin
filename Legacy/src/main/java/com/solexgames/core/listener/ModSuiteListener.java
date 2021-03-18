@@ -67,11 +67,14 @@ public class ModSuiteListener implements Listener {
             if (potPlayer.isStaffMode()) {
                 if (item != null) {
                     if (item.hasItemMeta()) {
-                        switch (item.getType()) {
+                        XMaterial xMaterial = XMaterial.matchXMaterial(item.getType());
+
+                        switch (xMaterial) {
                             case PACKED_ICE:
                                 PotPlayer targetPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
+
                                 if (potPlayer.getActiveGrant().getRank() != null) {
-                                    if (potPlayer.getActiveGrant().getRank().getWeight() >= targetPotPlayer.getActiveGrant().getRank().getWeight()) {
+                                    if (potPlayer.getActiveGrant().getRank().getWeight() >= targetPotPlayer.getActiveGrant().getRank().getWeight() || player.isOp()) {
                                         potPlayer.getPlayer().chat("/freeze " + targetPotPlayer.getPlayer().getName());
                                     } else {
                                         player.sendMessage(Color.translate("&cYou cannot freeze this player as their rank weight is higher than yours!"));
@@ -79,7 +82,7 @@ public class ModSuiteListener implements Listener {
                                 }
                                 break;
                             case BOOK:
-                                player.sendMessage(Color.translate("&cNot finished!"));
+                                player.sendMessage(Color.translate("&cThis feature is coming very soon!"));
                                 break;
                         }
                     }
