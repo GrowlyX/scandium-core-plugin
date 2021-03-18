@@ -31,6 +31,11 @@ public class StaffViewPaginatedMenu extends PaginatedMenu {
     }
 
     @Override
+    public Map<Integer, Button> getGlobalButtons(Player player) {
+        return null;
+    }
+
+    @Override
     public String getPrePaginatedTitle(Player player) {
         return "Online Staff";
     }

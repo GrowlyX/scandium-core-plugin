@@ -34,8 +34,13 @@ public class GrantViewPaginatedMenu extends PaginatedMenu {
     }
 
     @Override
+    public Map<Integer, Button> getGlobalButtons(Player player) {
+        return null;
+    }
+
+    @Override
     public String getPrePaginatedTitle(Player player) {
-        return "Applicable grants of " + target.getDisplayName();
+        return "Applicable grants for: " + target.getDisplayName();
     }
 
     @Override

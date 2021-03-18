@@ -41,6 +41,11 @@ public class PunishViewPaginatedMenu extends PaginatedMenu {
     }
 
     @Override
+    public Map<Integer, Button> getGlobalButtons(Player player) {
+        return null;
+    }
+
+    @Override
     public String getPrePaginatedTitle(Player player) {
         return "Applicable punishments of: " + (Bukkit.getPlayer(target) != null ? Bukkit.getPlayer(target).getDisplayName() : target);
     }

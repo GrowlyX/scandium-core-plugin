@@ -70,22 +70,6 @@ public abstract class PaginatedMenu extends Menu {
         HashMap<Integer, Button> buttons = new HashMap<>();
 
         buttons.put(0, new PageButton(-1, this));
-        if (ChatColor.stripColor(Color.translate(this.getPrePaginatedTitle(player))).contains("Prefix")) {
-            buttons.put(4, new Button() {
-                @Override
-                public ItemStack getButtonItem(Player player) {
-                    return new ItemBuilder(XMaterial.RED_BED.parseMaterial()).setDisplayName("&cReset Prefix").addLore(Arrays.asList("&7Click to reset your", "&7current applied prefix!")).create();
-                }
-
-                @Override
-                public void clicked(Player player, ClickType clickType) {
-                    PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-                    potPlayer.setAppliedPrefix(null);
-                    player.sendMessage(Color.translate("&aReset your prefix to default!"));
-                    player.closeInventory();
-                }
-            });
-        }
         buttons.put(8, new PageButton(1, this));
 
         for (Map.Entry<Integer, Button> entry : getAllPagesButtons(player).entrySet()) {
@@ -112,9 +96,7 @@ public abstract class PaginatedMenu extends Menu {
      * @param player player viewing the inventory
      * @return a Map of button that returns items which will be present on all pages
      */
-    public Map<Integer, Button> getGlobalButtons(Player player) {
-        return null;
-    }
+    public abstract Map<Integer, Button> getGlobalButtons(Player player);
 
     /**
      * @param player player viewing the inventory

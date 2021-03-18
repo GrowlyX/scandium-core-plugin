@@ -4,7 +4,6 @@ import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.extend.grant.GrantSelectDurationMenu;
-import com.solexgames.core.menu.extend.grant.scope.GrantScopeSelectMenu;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.util.Color;
@@ -34,6 +33,11 @@ public class GrantMainPaginatedMenu extends PaginatedMenu {
         super(45);
         this.document = document;
         this.player = player;
+    }
+
+    @Override
+    public Map<Integer, Button> getGlobalButtons(Player player) {
+        return null;
     }
 
     @Override
@@ -78,9 +82,9 @@ public class GrantMainPaginatedMenu extends PaginatedMenu {
                     if (clickType == ClickType.RIGHT) {
                         if (rank != null) {
                             if ((potPlayer.getActiveGrant().getRank().getWeight() >= rank.getWeight()) && !player.isOp()) {
-                                new GrantScopeSelectMenu(player, getDocument(), rank).open(player);
+                                new GrantScopePaginatedMenu(player, document, rank).openMenu(player);
                             } else if ((potPlayer.getActiveGrant().getRank().getWeight() >= rank.getWeight()) && player.isOp()) {
-                                new GrantScopeSelectMenu(player, getDocument(), rank).open(player);
+                                new GrantScopePaginatedMenu(player, document, rank).openMenu(player);
                             } else {
                                 player.sendMessage(Color.translate("&cYou cannot grant a rank weight a weight that is higher than yours."));
                                 player.closeInventory();
