@@ -27,7 +27,7 @@ public class SetMediaMenu extends AbstractInventoryMenu {
     }
 
     public void update() {
-        this.inventory.setItem(2, new ItemBuilder(XMaterial.INK_SAC.parseMaterial())
+        this.inventory.setItem(2, new ItemBuilder(XMaterial.BLUE_DYE.parseMaterial())
                 .setDurability(4)
                 .setDisplayName("&9Discord")
                 .addLore(
@@ -38,7 +38,7 @@ public class SetMediaMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(3, new ItemBuilder(XMaterial.INK_SAC.parseMaterial())
+        this.inventory.setItem(3, new ItemBuilder(XMaterial.RED_DYE.parseMaterial())
                 .setDurability(1)
                 .setDisplayName("&cYouTube")
                 .addLore(
@@ -49,7 +49,7 @@ public class SetMediaMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(4, new ItemBuilder(XMaterial.INK_SAC.parseMaterial())
+        this.inventory.setItem(4, new ItemBuilder(XMaterial.LIGHT_BLUE_DYE.parseMaterial())
                 .setDurability(12)
                 .setDisplayName("&bTwitter")
                 .addLore(
@@ -60,7 +60,7 @@ public class SetMediaMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(5, new ItemBuilder(XMaterial.INK_SAC.parseMaterial())
+        this.inventory.setItem(5, new ItemBuilder(XMaterial.ORANGE_DYE.parseMaterial())
                 .setDurability(14)
                 .setDisplayName("&6Instagram")
                 .addLore(
@@ -71,7 +71,7 @@ public class SetMediaMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(6, new ItemBuilder(XMaterial.INK_SAC.parseMaterial())
+        this.inventory.setItem(6, new ItemBuilder(XMaterial.YELLOW_DYE.parseMaterial())
                 .setDurability(11)
                 .setDisplayName("&e???")
                 .addLore(

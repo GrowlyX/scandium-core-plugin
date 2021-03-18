@@ -24,7 +24,7 @@ public class ExternalMediaMenu extends AbstractInventoryMenu {
 
     public void update() {
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-        this.inventory.setItem(1, new ItemBuilder(XMaterial.INK_SAC.parseMaterial())
+        this.inventory.setItem(1, new ItemBuilder(XMaterial.BLUE_DYE.parseMaterial())
                 .setDurability(4)
                 .setDisplayName("&9&lDiscord")
                 .addLore(
@@ -34,7 +34,7 @@ public class ExternalMediaMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(3, new ItemBuilder(XMaterial.INK_SAC.parseMaterial())
+        this.inventory.setItem(3, new ItemBuilder(XMaterial.RED_DYE.parseMaterial())
                 .setDurability(1)
                 .setDisplayName("&c&lYouTube")
                 .addLore(
@@ -44,7 +44,7 @@ public class ExternalMediaMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(5, new ItemBuilder(XMaterial.INK_SAC.parseMaterial())
+        this.inventory.setItem(5, new ItemBuilder(XMaterial.LIGHT_BLUE_DYE.parseMaterial())
                 .setDurability(12)
                 .setDisplayName("&b&lTwitter")
                 .addLore(
@@ -54,7 +54,7 @@ public class ExternalMediaMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(7, new ItemBuilder(XMaterial.INK_SAC.parseMaterial())
+        this.inventory.setItem(7, new ItemBuilder(XMaterial.ORANGE_DYE.parseMaterial())
                 .setDurability(14)
                 .setDisplayName("&6&lInstagram")
                 .addLore(

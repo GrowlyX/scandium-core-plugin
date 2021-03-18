@@ -28,7 +28,7 @@ public class LanguageMenu extends AbstractInventoryMenu {
     }
 
     public void update() {
-        this.inventory.setItem(2, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 11)
+        this.inventory.setItem(2, new ItemBuilder(XMaterial.YELLOW_DYE.parseMaterial(), 11)
                 .setDisplayName("&eEnglish")
                 .addLore(
                         "&7Would you like to see",
@@ -36,7 +36,7 @@ public class LanguageMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(3, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 14)
+        this.inventory.setItem(3, new ItemBuilder(XMaterial.ORANGE_DYE.parseMaterial(), 14)
                 .setDisplayName("&6Español")
                 .addLore(
                         "&7¿Le gustaría ver mensajes",
@@ -44,7 +44,7 @@ public class LanguageMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(4, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 12)
+        this.inventory.setItem(4, new ItemBuilder(XMaterial.LIGHT_BLUE_DYE.parseMaterial(), 12)
                 .setDisplayName("&bFrançais")
                 .addLore(
                         "&7Souhaitez-vous voir",
@@ -52,7 +52,7 @@ public class LanguageMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(5, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 10)
+        this.inventory.setItem(5, new ItemBuilder(XMaterial.LIME_DYE.parseMaterial(), 10)
                 .setDisplayName("&aItaliano")
                 .addLore(
                         "&7Vuoi vedere i messaggi",
@@ -60,7 +60,7 @@ public class LanguageMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(6, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 1)
+        this.inventory.setItem(6, new ItemBuilder(XMaterial.RED_DYE.parseMaterial(), 1)
                 .setDisplayName("&cDeutsch")
                 .addLore(
                         "&7Möchten Sie Nachrichten",

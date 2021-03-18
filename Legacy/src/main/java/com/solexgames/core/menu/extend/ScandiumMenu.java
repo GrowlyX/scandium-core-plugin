@@ -28,38 +28,35 @@ public class ScandiumMenu extends AbstractInventoryMenu {
     }
 
     public void update() {
-        this.inventory.setItem(2, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 11)
-                .setDisplayName("&eReload Files")
+        this.inventory.setItem(2, new ItemBuilder(XMaterial.YELLOW_DYE.parseMaterial(), 11)
+                .setDisplayName("&6Reload Files")
                 .addLore(
-                        "",
                         "&7Would you like to reload",
                         "&7configurations?",
                         "",
-                        "&eClick to reload files."
+                        "&aClick to reload files."
                 )
                 .create()
         );
 
-        this.inventory.setItem(4, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 6)
+        this.inventory.setItem(4, new ItemBuilder(XMaterial.CYAN_DYE.parseMaterial(), 6)
                 .setDisplayName("&bScandium Core")
                 .addLore(
-                        "",
-                        "&7Thanks for purchasing",
-                        "&7Scandium core!",
+                        "&7You are currently running",
+                        "&7Scandium core by GrowlyX!",
                         "  ",
-                        "&7Support: &bGrowlyX#1337",
-                        "&7Pricing: &b$45",
+                        "&7Support: &6GrowlyX#1337",
+                        "&7Pricing: &b$50",
                         "",
-                        "&eClick to contact GrowlyX."
+                        "&aClick to contact GrowlyX."
                 )
                 .create()
         );
 
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
-        this.inventory.setItem(6, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 14)
-                .setDisplayName("&bNetwork Info &7(" + network.getServerName() + ")")
+        this.inventory.setItem(6, new ItemBuilder(XMaterial.ORANGE_DYE.parseMaterial(), 14)
+                .setDisplayName("&b&lInformation &7(" + network.getServerName() + ")")
                 .addLore(
-                        "",
                         "&7Server Name: &f" + network.getServerName(),
                         "&7Server ID: &f" + network.getServerId(),
                         "&7Primary Color: &f" + network.getMainColor() + "Color One",
@@ -67,8 +64,7 @@ public class ScandiumMenu extends AbstractInventoryMenu {
                         "&7Discord Link: &f" + network.getDiscordLink(),
                         "&7Store Link: &f" + network.getStoreLink(),
                         "&7Twitter Link: &f" + network.getTwitterLink(),
-                        "&7Website Link: &f" + network.getWebsiteLink(),
-                        ""
+                        "&7Website Link: &f" + network.getWebsiteLink()
                 )
                 .create()
         );

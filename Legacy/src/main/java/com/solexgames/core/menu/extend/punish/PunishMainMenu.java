@@ -34,7 +34,7 @@ public class PunishMainMenu extends AbstractInventoryMenu {
     }
 
     public void update() {
-        this.inventory.setItem(12, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 14)
+        this.inventory.setItem(12, new ItemBuilder(XMaterial.ORANGE_DYE.parseMaterial(), 14)
                 .setDisplayName("&6Punish")
                 .addLore(
                         "&7Start the punishment process",
@@ -44,7 +44,7 @@ public class PunishMainMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(14, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 6)
+        this.inventory.setItem(14, new ItemBuilder(XMaterial.CYAN_DYE.parseMaterial(), 6)
                 .setDisplayName("&6Punishments")
                 .addLore(
                         "&7View all punishments",

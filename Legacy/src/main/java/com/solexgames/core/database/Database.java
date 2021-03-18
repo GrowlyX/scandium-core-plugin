@@ -34,5 +34,7 @@ public class Database {
         this.warpCollection = this.database.getCollection("warps");
         this.punishmentCollection = this.database.getCollection("punishment");
         this.webCollection = this.database.getCollection("website");
+
+        CorePlugin.getInstance().getLogger().info("[Mongo] Successfully setup the Mongo Database!");
     }
 }

@@ -96,11 +96,13 @@ public class ModSuiteListener implements Listener {
             if (potPlayer.isStaffMode()) {
                 if (event.getItem() != null) {
                     if (event.getItem().hasItemMeta()) {
-                        switch (event.getMaterial()) {
+                        XMaterial xMaterial = XMaterial.matchXMaterial(event.getItem().getType());
+
+                        switch (xMaterial) {
                             case COMPASS:
                                 event.getPlayer().setVelocity(event.getPlayer().getLocation().getDirection().multiply(2.5F));
                                 break;
-                            case SKULL_ITEM:
+                            case SKELETON_SKULL:
                                 new StaffViewPaginatedMenu(event.getPlayer()).openMenu(event.getPlayer());
                                 break;
                             case NETHER_STAR:
@@ -112,12 +114,13 @@ public class ModSuiteListener implements Listener {
                                     event.getPlayer().sendMessage(Color.translate("&aTeleported to &b" + player.getDisplayName() + "&a!"));
                                 });
                                 break;
-                            case INK_SACK:
+                            case INK_SAC:
                                 event.getPlayer().performCommand("vanish");
                                 ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
                                 event.getPlayer().getInventory().setItem(8, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), (potPlayer.isVanished() ? 10 : 8)).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + (potPlayer.isVanished() ? "Disable Vanish" : "Enable Vanish")).create());
                                 break;
                         }
+
                         event.getPlayer().updateInventory();
                     }
                 }

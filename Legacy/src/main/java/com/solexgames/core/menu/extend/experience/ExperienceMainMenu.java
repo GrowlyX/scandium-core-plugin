@@ -57,12 +57,11 @@ public class ExperienceMainMenu extends AbstractInventoryMenu {
             event.setCancelled(true);
 
             ItemStack item = event.getCurrentItem();
-            Player player = (Player) event.getWhoClicked();
 
             if (item == null || item.getType() == XMaterial.AIR.parseMaterial()) return;
             if (event.getRawSlot() == 4) {
                 if (CorePlugin.getInstance().getServerManager().getNetwork().equals(ServerType.POTCLUBVIP) || CorePlugin.getInstance().getServerManager().getNetwork().equals(ServerType.EVENTIS)) {
-                    new ExperienceShopMainMenu().open(player);
+                    new ExperienceShopMainMenu().open(this.player);
                 }
             }
         }

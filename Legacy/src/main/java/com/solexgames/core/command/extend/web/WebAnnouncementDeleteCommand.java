@@ -4,6 +4,7 @@ import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.util.Color;
+import com.solexgames.core.util.StringUtil;
 import org.bson.Document;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -14,29 +15,28 @@ public class WebAnnouncementDeleteCommand extends BaseCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(ONLY_PLAYERS);
+        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+
+        if (sender.hasPermission("scandium.command.webannouncementdelete")) {
+            sender.sendMessage(NO_PERMISSION);
             return false;
         }
 
-        Player player = (Player) sender;
-        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
-        if (player.hasPermission("scandium.command.webannouncementdelete")) {
-            if (args.length == 0) {
-                sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <title>."));
-            }
+        if (args.length == 0) {
+            sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <title>."));
+        }
+        if (args.length > 0) {
+            try {
+                Document document = new Document("announcementName", StringUtil.buildMessage(args, 0));
 
-            if (args.length > 0) {
-                try {
-                    Document document = new Document("announcementName", args[0].replace("_", " "));
-                    CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getWebCollection().deleteOne(document));
-                    player.sendMessage(Color.translate("&aDeleted that announcement."));
-                } catch (Exception e) {
-                    player.sendMessage(Color.translate("&cSomething went wrong."));
-                }
+                CorePlugin.getInstance().getMongoThread().execute(() ->
+                        CorePlugin.getInstance().getCoreDatabase().getWebCollection().deleteOne(document)
+                );
+
+                sender.sendMessage(Color.translate("&aDeleted that announcement."));
+            } catch (Exception e) {
+                sender.sendMessage(Color.translate("&cSomething went wrong while trying to delete the document!"));
             }
-        } else {
-            player.sendMessage(NO_PERMISSION);
         }
         return false;
     }

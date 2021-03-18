@@ -20,16 +20,17 @@ public class ToggleFilteredMessagesCommand extends BaseCommand {
         Player player = (Player) sender;
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
-        if (player.hasPermission("scandium.staff")) {
-            if (potPlayer.isCanSeeFiltered()) {
-                player.sendMessage(Color.translate("&cYou have disabled filtered messages."));
-                potPlayer.setCanSeeFiltered(false);
-            } else {
-                player.sendMessage(Color.translate("&aYou can now see filtered messages."));
-                potPlayer.setCanSeeFiltered(true);
-            }
-        } else {
+        if (!player.hasPermission("scandium.staff")) {
             player.sendMessage(NO_PERMISSION);
+            return false;
+        }
+
+        if (potPlayer.isCanSeeFiltered()) {
+            player.sendMessage(Color.translate("&cYou have disabled filtered messages."));
+            potPlayer.setCanSeeFiltered(false);
+        } else {
+            player.sendMessage(Color.translate("&aYou can now see filtered messages."));
+            potPlayer.setCanSeeFiltered(true);
         }
 
         return false;

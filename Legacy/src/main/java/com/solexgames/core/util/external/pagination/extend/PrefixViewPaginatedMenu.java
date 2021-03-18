@@ -41,10 +41,10 @@ public class PrefixViewPaginatedMenu extends PaginatedMenu {
 
         Prefix.getPrefixes().forEach(prefix -> {
             ArrayList<String> lore = new ArrayList<>();
-
             boolean hasPrefix = potPlayer.getAllPrefixes().contains(prefix.getName());
 
             lore.add("  ");
+
             if (hasPrefix) {
                 lore.add("&7You own this prefix and it");
                 lore.add("&7can be enabled at any time.");
@@ -52,15 +52,18 @@ public class PrefixViewPaginatedMenu extends PaginatedMenu {
                 lore.add("&7This prefix is currently");
                 lore.add("&7locked as you don't own it.");
             }
+
             lore.add("  ");
             lore.add("&7Appears in chat as:");
             lore.add(prefix.getPrefix());
             lore.add("  ");
             lore.add((hasPrefix ? "&aClick to equip this prefix." : "&cYou don't own this prefix."));
+
             buttons.put(i.getAndIncrement(), new Button() {
+
                 @Override
                 public ItemStack getButtonItem(Player player) {
-                    return new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), (potPlayer.getAllPrefixes().contains(prefix.getName()) ? 10 : 1))
+                    return new ItemBuilder((potPlayer.getAllPrefixes().contains(prefix.getName()) ? XMaterial.LIME_DYE.parseMaterial() : XMaterial.RED_DYE.parseMaterial()), (potPlayer.getAllPrefixes().contains(prefix.getName()) ? 10 : 1))
                             .setDisplayName((hasPrefix ? "&e" : "&c") + prefix.getName())
                             .addLore(Color.translate(lore))
                             .create();

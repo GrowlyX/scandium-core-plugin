@@ -18,6 +18,7 @@ public class WhitelistCommand extends BaseCommand {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+
         if (args.length == 0) {
             sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <toggle|list|add|remove> <player>."));
         }

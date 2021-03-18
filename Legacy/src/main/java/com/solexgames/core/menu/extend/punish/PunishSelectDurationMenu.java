@@ -40,12 +40,12 @@ public class PunishSelectDurationMenu extends AbstractInventoryMenu {
     public void update() {
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
-        this.inventory.setItem(10, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 1).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "1 Day").addLore(Collections.singletonList("&7Click to select this duration.")).create());
-        this.inventory.setItem(11, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 2).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "1 Week").addLore(Collections.singletonList("&7Click to select this duration.")).create());
-        this.inventory.setItem(12, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 3).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "1 Month").addLore(Collections.singletonList("&7Click to select this duration.")).create());
-        this.inventory.setItem(13, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 4).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "3 Months").addLore(Collections.singletonList("&7Click to select this duration.")).create());
-        this.inventory.setItem(14, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 5).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "6 Months").addLore(Collections.singletonList("&7Click to select this duration.")).create());
-        this.inventory.setItem(15, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), 6).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "1 Year").addLore(Collections.singletonList("&7Click to select this duration.")).create());
+        this.inventory.setItem(10, new ItemBuilder(XMaterial.RED_DYE.parseMaterial(), 1).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "1 Day").addLore(Collections.singletonList("&7Click to select this duration.")).create());
+        this.inventory.setItem(11, new ItemBuilder(XMaterial.GREEN_DYE.parseMaterial(), 2).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "1 Week").addLore(Collections.singletonList("&7Click to select this duration.")).create());
+        this.inventory.setItem(12, new ItemBuilder(XMaterial.BROWN_DYE.parseMaterial(), 3).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "1 Month").addLore(Collections.singletonList("&7Click to select this duration.")).create());
+        this.inventory.setItem(13, new ItemBuilder(XMaterial.BLUE_DYE.parseMaterial(), 4).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "3 Months").addLore(Collections.singletonList("&7Click to select this duration.")).create());
+        this.inventory.setItem(14, new ItemBuilder(XMaterial.PURPLE_DYE.parseMaterial(), 5).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "6 Months").addLore(Collections.singletonList("&7Click to select this duration.")).create());
+        this.inventory.setItem(15, new ItemBuilder(XMaterial.CYAN_DYE.parseMaterial(), 6).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "1 Year").addLore(Collections.singletonList("&7Click to select this duration.")).create());
 
         this.inventory.setItem(16, new ItemBuilder(XMaterial.LIME_TERRACOTTA.parseMaterial(), 13).setDisplayName(network.getMainColor() + ChatColor.ITALIC.toString() + "&4&oPermanent").addLore(Collections.singletonList("&7Click to select this duration.")).create());
     }
