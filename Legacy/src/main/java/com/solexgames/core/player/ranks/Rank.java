@@ -20,8 +20,8 @@ public class Rank {
     @Setter
     private static List<Rank> ranks = new ArrayList<>();
 
-    public final List<UUID> inheritance;
-    public final List<String> permissions;
+    public List<UUID> inheritance;
+    public List<String> permissions;
 
     private UUID uuid;
 

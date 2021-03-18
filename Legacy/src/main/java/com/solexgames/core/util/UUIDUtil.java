@@ -61,7 +61,6 @@ public final class UUIDUtil {
      * @param name the name of the player
      */
     public static UUID fetchUUID(String name) {
-
         try {
             HttpPost request = new HttpPost("https://api.mojang.com/profiles/minecraft");
 
@@ -87,7 +86,6 @@ public final class UUIDUtil {
         } catch (Exception exception) {
             return null;
         }
-
     }
 
     /**

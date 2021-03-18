@@ -20,10 +20,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class CoreJedisSubscriber extends AbstractJedisSubscriber {
 
@@ -307,14 +305,31 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                 }
                 break;
             case RANK_SETTINGS_UPDATE:
-                if (!SERVER_NAME.equals(jsonAppender.getParam("SERVER"))) {
-                    Rank.setRanks(null);
-                    CorePlugin.getInstance().getRankManager().loadRanks();
-                    CorePlugin.getInstance().getLogger().info("[Ranks] Synced all ranks.");
+                String rankSettingsServer = jsonAppender.getParam("SERVER");
+                String rankSettingsColor = jsonAppender.getParam("COLOR");
+                String rankSettingsPrefix = jsonAppender.getParam("PREFIX");
+                String rankSettingsSuffix = jsonAppender.getParam("SUFFIX");
+
+                Rank rankSettingsRank = Rank.getByName(jsonAppender.getParam("RANK"));
+                int rankSettingsWeight = Integer.parseInt(jsonAppender.getParam("WEIGHT"));
+
+                List<String> rankSettingsPermissions = Arrays.asList(jsonAppender.getParam("PERMISSIONS").split(" "));
+                List<UUID> rankSettingsInheritance = Arrays.stream(jsonAppender.getParam("INHERITANCE").split(" ")).map(UUID::fromString).collect(Collectors.toList());
+
+                if (!SERVER_NAME.equalsIgnoreCase(rankSettingsServer)) {
+                    if (rankSettingsRank != null) {
+                        rankSettingsRank.setColor(rankSettingsColor);
+                        rankSettingsRank.setPrefix(rankSettingsPrefix);
+                        rankSettingsRank.setSuffix(rankSettingsSuffix);
+                        rankSettingsRank.setWeight(rankSettingsWeight);
+                        rankSettingsRank.setPermissions(rankSettingsPermissions);
+                        rankSettingsRank.setInheritance(rankSettingsInheritance);
+                    }
                 }
+
                 break;
             case PUNISHMENT_F_REMOVE_UPDATE:
-                if (!SERVER_NAME.equals(jsonAppender.getParam("SERVER"))) {
+                if (!SERVER_NAME.equalsIgnoreCase(jsonAppender.getParam("SERVER"))) {
                     String punishmentString = jsonAppender.getParam("ID");
                     Punishment punishment = Punishment.getByIdentification(punishmentString);
                     if (punishment != null) {

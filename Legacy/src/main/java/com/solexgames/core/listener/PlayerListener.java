@@ -446,7 +446,7 @@ public class PlayerListener implements Listener {
         if (CorePlugin.getInstance().getConfig().getBoolean("block-commands.enabled")) {
             if (event.getPlayer().hasPermission("scandium.protocol.bypass")) return;
             CorePlugin.getInstance().getConfig().getStringList("block-commands.list").forEach(s -> {
-                if (event.getMessage().startsWith("/" + s)) {
+                if (event.getMessage().startsWith("/" + s) && (event.getMessage().length() <= ("/" + s).length()) && !event.getMessage().contains(" ")) {
                     event.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getConfig().getString("block-commands.message")));
                     event.setCancelled(true);
                 }
@@ -500,8 +500,16 @@ public class PlayerListener implements Listener {
         event.setQuitMessage(null);
 
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer().getUniqueId());
+        Player player = event.getPlayer();
+
         if (potPlayer.isFrozen())
             CorePlugin.getInstance().getPlayerManager().sendDisconnectFreezeMessage(event.getPlayer());
+
+        if (potPlayer.isStaffMode()) {
+            player.getInventory().clear();
+            player.getInventory().setContents(potPlayer.getItemHistory());
+            player.getInventory().setArmorContents(potPlayer.getArmorHistory());
+        }
 
         CorePlugin.getInstance().getServerManager().getVanishedPlayers().remove(event.getPlayer());
         potPlayer.savePlayerData();

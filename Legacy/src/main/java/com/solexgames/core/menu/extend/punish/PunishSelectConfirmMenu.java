@@ -89,29 +89,29 @@ public class PunishSelectConfirmMenu extends AbstractInventoryMenu {
             if (event.getCurrentItem() == null || event.getCurrentItem().getType() == XMaterial.AIR.parseMaterial()) return;
             if (event.getCurrentItem().getItemMeta().getDisplayName().contains("Confirm")) {
                 UUID uuidKey = UUIDUtil.fetchUUID(this.target);
+
                 if (uuidKey != null) {
                     String nameValue = UUIDUtil.fetchName(uuidKey);
-
                     UUID randomUuid = UUID.randomUUID();
                     String saltedString = SaltUtil.getRandomSaltedString(7);
                     Date newDate = new Date();
 
                     Punishment punishment = new Punishment(this.punishmentType, this.player.getUniqueId(), uuidKey, this.player.getName(), this.reason, new Date(System.currentTimeMillis()), this.punishmentDuration, this.permanent, newDate, randomUuid, saltedString, true);
-
-                    this.player.closeInventory();
-
-                    PotPlayer potPlayer = null;
-                    try {
-                        potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(nameValue);
-                    } catch (Exception ignored) { }
-
-                    if (potPlayer != null) potPlayer.getPunishments().add(punishment);
+                    PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(nameValue);
 
                     CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, this.player.getName(), nameValue, this.isSilent);
-                    if (potPlayer != null) potPlayer.saveWithoutRemove();
+
+                    if (potPlayer != null) {
+                        potPlayer.getPunishments().add(punishment);
+                        potPlayer.saveWithoutRemove();
+                    }
 
                     RedisUtil.writeAsync(RedisUtil.executePunishment(this.punishmentType, this.player.getUniqueId(), uuidKey, this.player.getName(), this.reason, new Date(System.currentTimeMillis()), this.punishmentDuration, this.permanent, newDate, randomUuid, saltedString, this.isSilent));
+                } else {
+                    this.player.sendMessage(Color.translate("&cCould not find that player's UUID!"));
                 }
+
+                this.player.closeInventory();
                 return;
             }
 

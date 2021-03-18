@@ -3,6 +3,7 @@ package com.solexgames.core.util;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ChatChannelType;
 import com.solexgames.core.player.PotPlayer;
+import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.redis.action.RedisAction;
 import com.solexgames.core.enums.StaffUpdateType;
 import com.solexgames.core.player.punishment.Punishment;
@@ -125,9 +126,16 @@ public final class RedisUtil {
                 .getAppended();
     }
 
-    public static String updateRanks() {
+    public static String updateRank(Rank rank) {
         return new JsonAppender(RedisAction.RANK_SETTINGS_UPDATE)
                 .put("SERVER", CorePlugin.getInstance().getServerName())
+                .put("RANK", rank.getName())
+                .put("WEIGHT", String.valueOf(rank.getWeight()))
+                .put("COLOR", rank.getColor())
+                .put("PREFIX", rank.getPrefix())
+                .put("SUFFIX", rank.getSuffix())
+                .put("PERMISSIONS", String.join(" ", rank.getPermissions()))
+                .put("INHERITANCE", String.join(" ", rank.getInheritance().stream().map(UUID::toString).collect(Collectors.toList())))
                 .getAppended();
     }
 

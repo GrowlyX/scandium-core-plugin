@@ -34,7 +34,6 @@ public class RankCommand extends BaseCommand {
         player.sendMessage(Color.translate("/rank suffix &7- Set a rank's suffix."));
         player.sendMessage(Color.translate("/rank color &7- Set a rank's color."));
         player.sendMessage(Color.translate("/rank list &7- List all loaded ranks."));
-        player.sendMessage(Color.translate("/rank save &7- Sync ranks across network & save ranks."));
         player.sendMessage(Color.translate("/rank info &7- Show info of a rank."));
         player.sendMessage(Color.translate("/rank weight &7- Set a rank's weight."));
         player.sendMessage(Color.translate("/rank hidden &7- Set a rank as a hidden rank."));
@@ -81,7 +80,7 @@ public class RankCommand extends BaseCommand {
                                 player.sendMessage(Color.translate("&7Hidden: &f" + rank.isHidden()));
                                 player.sendMessage(Color.translate("&7Prefix: &f" + rank.getPrefix()));
                                 player.sendMessage(Color.translate("&7Suffix: &f" + rank.getSuffix()));
-                                player.sendMessage(Color.translate("&7UUID: &f" + rank.getUuid()));
+                                player.sendMessage(Color.translate("&7UUID: &f" + rank.getUuid().toString()));
                                 player.sendMessage(Color.translate("  "));
                                 player.sendMessage(Color.translate("&ePermissions:"));
                                 rank.permissions.forEach(s -> player.sendMessage(Color.translate(" &7* &f" + s)));
@@ -110,6 +109,9 @@ public class RankCommand extends BaseCommand {
                                     rank.setHidden(true);
                                     player.sendMessage(Color.translate("&aSet the " + displayName + "&a rank hidden mode to true!"));
                                 }
+
+                                RedisUtil.writeAsync(RedisUtil.updateRank(rank));
+                                rank.saveRank();
                             } else {
                                 player.sendMessage(Color.translate("&cThat rank does not exist!"));
                             }
@@ -131,16 +133,13 @@ public class RankCommand extends BaseCommand {
                                     rank.setDefaultRank(true);
                                     player.sendMessage(Color.translate("&aSet the " + displayName + "&a rank default mode to true!"));
                                 }
+
+                                RedisUtil.writeAsync(RedisUtil.updateRank(rank));
+                                rank.saveRank();
                             } else {
                                 player.sendMessage(Color.translate("&cThat rank does not exist!"));
                             }
                         }
-                        break;
-                    case "update":
-                    case "save":
-                        Rank.getRanks().forEach(Rank::saveRank);
-                        player.sendMessage(Color.translate("&aSuccessfully saved all ranks!"));
-                        RedisUtil.writeAsync(RedisUtil.updateRanks());
                         break;
                     case "list":
                         player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
@@ -166,6 +165,9 @@ public class RankCommand extends BaseCommand {
                                 } else {
                                     player.sendMessage(Color.translate("&cThat has to be a letter!"));
                                 }
+
+                                RedisUtil.writeAsync(RedisUtil.updateRank(rank));
+                                rank.saveRank();
                             } else {
                                 player.sendMessage(Color.translate("&cThat rank does not exist!"));
                             }
@@ -185,6 +187,9 @@ public class RankCommand extends BaseCommand {
 
                                 rank.getInheritance().remove(delRank.getUuid());
                                 player.sendMessage(Color.translate("&aRemoved the inheritance '" + delRank.getName() + "&a' from the rank " + displayName + "&a."));
+
+                                RedisUtil.writeAsync(RedisUtil.updateRank(rank));
+                                rank.saveRank();
                             } else {
                                 player.sendMessage(Color.translate("&cThat rank does not exist!"));
                             }
@@ -208,6 +213,9 @@ public class RankCommand extends BaseCommand {
                                 } else {
                                     player.sendMessage(Color.translate("&c" + rank.getName() + " is already inheriting that rank!"));
                                 }
+
+                                RedisUtil.writeAsync(RedisUtil.updateRank(rank));
+                                rank.saveRank();
                             } else {
                                 player.sendMessage(Color.translate("&cThat rank does not exist!"));
                             }
@@ -226,6 +234,9 @@ public class RankCommand extends BaseCommand {
 
                                 rank.permissions.remove(value);
                                 player.sendMessage(Color.translate("&aRemoved the permission '" + value + "&a' from the rank " + displayName + "&a."));
+
+                                RedisUtil.writeAsync(RedisUtil.updateRank(rank));
+                                rank.saveRank();
                             } else {
                                 player.sendMessage(Color.translate("&cThat rank does not exist!"));
                             }
@@ -245,6 +256,9 @@ public class RankCommand extends BaseCommand {
 
                                     rank.permissions.add(value);
                                     player.sendMessage(Color.translate("&aAdded the permission '" + value + "&a' to the rank " + displayName + "&a."));
+
+                                    RedisUtil.writeAsync(RedisUtil.updateRank(rank));
+                                    rank.saveRank();
                                 } else {
                                     player.sendMessage(Color.translate("&cThat rank already has that permission!"));
                                 }
@@ -268,6 +282,9 @@ public class RankCommand extends BaseCommand {
 
                                     rank.setWeight(integer);
                                     player.sendMessage(Color.translate("&aChanged the weight of " + displayName + "&a to &6" + integer + "&a."));
+
+                                    RedisUtil.writeAsync(RedisUtil.updateRank(rank));
+                                    rank.saveRank();
                                 } catch (NumberFormatException exception) {
                                     player.sendMessage(Color.translate("&cThat's not a valid integer!"));
                                 }
@@ -289,6 +306,9 @@ public class RankCommand extends BaseCommand {
 
                                 rank.setColor(Color.translate(value));
                                 player.sendMessage(Color.translate("&aChanged the color of " + displayName + "&a to " + rank.getColor() + "this" + "&a."));
+
+                                RedisUtil.writeAsync(RedisUtil.updateRank(rank));
+                                rank.saveRank();
                             } else {
                                 player.sendMessage(Color.translate("&cThat rank does not exist!"));
                             }
@@ -307,6 +327,9 @@ public class RankCommand extends BaseCommand {
 
                                 rank.setSuffix(Color.translate(value.replace("_", " ")));
                                 player.sendMessage(Color.translate("&aChanged the suffix of " + displayName + "&a to " + rank.getSuffix() + "&a."));
+
+                                RedisUtil.writeAsync(RedisUtil.updateRank(rank));
+                                rank.saveRank();
                             } else {
                                 player.sendMessage(Color.translate("&cThat rank does not exist!"));
                             }
@@ -325,6 +348,9 @@ public class RankCommand extends BaseCommand {
 
                                 rank.setPrefix(Color.translate(value.replace("_", " ")));
                                 player.sendMessage(Color.translate("&aChanged the prefix of " + displayName + "&a to " + rank.getPrefix() + "&a."));
+
+                                RedisUtil.writeAsync(RedisUtil.updateRank(rank));
+                                rank.saveRank();
                             } else {
                                 player.sendMessage(Color.translate("&cThat rank does not exist!"));
                             }
