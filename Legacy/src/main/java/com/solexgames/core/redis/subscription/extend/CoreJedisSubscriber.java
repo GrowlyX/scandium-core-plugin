@@ -248,7 +248,13 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                 break;
             case PUNISHMENT_EXECUTE_UPDATE:
                 if (!SERVER_NAME.equals(jsonAppender.getParam("SERVER"))) {
-                    Punishment punishment = new Punishment(PunishmentType.valueOf(jsonAppender.getParam("TYPE")), UUID.fromString(jsonAppender.getParam("ISSUER")), UUID.fromString(jsonAppender.getParam("TARGET")), jsonAppender.getParam("ISSUERNAME"), jsonAppender.getParam("REASON"), new Date(Long.parseLong(jsonAppender.getParam("DATE"))), Long.parseLong(jsonAppender.getParam("DURATION")), Boolean.parseBoolean(jsonAppender.getParam("PERMANENT")), new Date(Long.parseLong(jsonAppender.getParam("CREATED"))), UUID.fromString(jsonAppender.getParam("UUID")), jsonAppender.getParam("IDENTIFICATION"), true);
+                    UUID uuid1 = null;
+
+                    if (jsonAppender.getParam("ISSUER") != null) {
+                        uuid = UUID.fromString(jsonAppender.getParam("ISSUER"));
+                    }
+
+                    Punishment punishment = new Punishment(PunishmentType.valueOf(jsonAppender.getParam("TYPE")), uuid1, UUID.fromString(jsonAppender.getParam("TARGET")), jsonAppender.getParam("ISSUERNAME"), jsonAppender.getParam("REASON"), new Date(Long.parseLong(jsonAppender.getParam("DATE"))), Long.parseLong(jsonAppender.getParam("DURATION")), Boolean.parseBoolean(jsonAppender.getParam("PERMANENT")), new Date(Long.parseLong(jsonAppender.getParam("CREATED"))), UUID.fromString(jsonAppender.getParam("UUID")), jsonAppender.getParam("IDENTIFICATION"), true);
                     PotPlayer potPlayer = null;
 
                     try {
@@ -256,10 +262,12 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                     } catch (Exception ignored) {
                     }
 
-                    if (potPlayer != null) potPlayer.getPunishments().add(punishment);
+                    if (potPlayer != null) {
+                        potPlayer.getPunishments().add(punishment);
+                        potPlayer.saveWithoutRemove();
+                    }
 
                     CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, jsonAppender.getParam("ISSUERNAME"), UUIDUtil.fetchName(UUID.fromString(jsonAppender.getParam("TARGET"))), Boolean.parseBoolean(jsonAppender.getParam("SILENT")));
-                    if (potPlayer != null) potPlayer.saveWithoutRemove();
                 }
                 break;
             case PUNISHMENT_REMOVE_UPDATE:

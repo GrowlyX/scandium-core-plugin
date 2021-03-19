@@ -23,10 +23,7 @@ import com.solexgames.core.command.extend.network.ForceUpdateCommand;
 import com.solexgames.core.command.extend.network.NetworkCommand;
 import com.solexgames.core.command.extend.prefix.PrefixCommand;
 import com.solexgames.core.command.extend.punish.*;
-import com.solexgames.core.command.extend.punish.manual.BanCommand;
-import com.solexgames.core.command.extend.punish.manual.BlacklistCommand;
-import com.solexgames.core.command.extend.punish.manual.KickCommand;
-import com.solexgames.core.command.extend.punish.manual.WarnCommand;
+import com.solexgames.core.command.extend.punish.manual.*;
 import com.solexgames.core.command.extend.rank.RankCommand;
 import com.solexgames.core.command.extend.rank.RankImportCommand;
 import com.solexgames.core.command.extend.server.SetSlotsCommand;
@@ -309,7 +306,7 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("ban").setExecutor(new BanCommand());
         this.getCommand("blacklist").setExecutor(new BlacklistCommand());
         this.getCommand("kick").setExecutor(new KickCommand());
-        this.getCommand("mute").setExecutor(new MuteChatCommand());
+        this.getCommand("mute").setExecutor(new MuteCommand());
         this.getCommand("warn").setExecutor(new WarnCommand());
 
         if (this.chatInterceptor != null) this.chatInterceptor.initializePacketInterceptor();
