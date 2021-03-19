@@ -8,7 +8,15 @@ load: STARTUP
 api-version: "1.13"
 
 commands:
+  ban:
+    aliases: [tban, tempban]
+  blacklist:
+  kick:
+  mute:
+    aliases: [tmute, tempmute]
+  warn:
   alts:
+    aliases: [alt]
   experience:
     aliases: [xp]
   test:
@@ -87,7 +95,7 @@ commands:
   togglestaffmessages:
     aliases: [tsm]
   punish:
-    aliases: [punishment, ban, kick, mute, warn, ipban, blacklist]
+    aliases: [punishment]
   tphere:
     aliases: [s]
   message:

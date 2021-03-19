@@ -94,12 +94,13 @@ public class PunishmentManager {
                             (finalPotPlayer != null ? finalPotPlayer.getPlayer().getDisplayName() : "&7" + target) + " &awas " + (!punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (finalPlayer != null ? finalPlayer.getDisplayName() : (firstPlayer != null ? firstPlayer : "&4Console")) + "&a."
                     ));
                 }
+
                 switch (punishment.getPunishmentType()) {
                     case WARN:
                         if (target != null) {
                             if (finalPotPlayer != null) {
                                 finalPotPlayer.getPlayer().sendMessage(Color.translate("  "));
-                                finalPotPlayer.getPlayer().sendMessage(Color.translate("&6&l⚠ &c&lYOU WERE WARNED!"));
+                                finalPotPlayer.getPlayer().sendMessage(Color.translate("&4&l⚠ &c&lYOU WERE WARNED!"));
                                 finalPotPlayer.getPlayer().sendMessage(Color.translate("&7Reason: &e" + punishment.getReason()));
                                 finalPotPlayer.getPlayer().sendMessage(Color.translate("  "));
                             }

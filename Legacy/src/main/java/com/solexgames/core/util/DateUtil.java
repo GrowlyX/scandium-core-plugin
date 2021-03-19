@@ -22,6 +22,7 @@ public final class DateUtil {
 
     public static long parseDateDiff(final String time, final boolean future) {
         final Matcher m = DateUtil.timePattern.matcher(time);
+
         int years = 0;
         int months = 0;
         int weeks = 0;
@@ -30,6 +31,7 @@ public final class DateUtil {
         int minutes = 0;
         int seconds = 0;
         boolean found = false;
+
         while (m.find()) {
             if (m.group() != null && !m.group().isEmpty()) {
                 for (int c = 0; c < m.groupCount(); ++c) {

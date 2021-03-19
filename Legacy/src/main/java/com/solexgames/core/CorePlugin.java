@@ -11,7 +11,6 @@ import com.solexgames.core.abstraction.lunar.extend.LunarImplementation;
 import com.solexgames.core.abstraction.protocol.AbstractChatInterceptor;
 import com.solexgames.core.abstraction.protocol.extend.ProtocolChatInterceptor;
 import com.solexgames.core.command.extend.CoreCommand;
-import com.solexgames.core.command.extend.anticheat.AnticheatBanCommand;
 import com.solexgames.core.command.extend.discord.SyncCommand;
 import com.solexgames.core.command.extend.discord.UnsyncCommand;
 import com.solexgames.core.command.extend.essential.*;
@@ -24,6 +23,10 @@ import com.solexgames.core.command.extend.network.ForceUpdateCommand;
 import com.solexgames.core.command.extend.network.NetworkCommand;
 import com.solexgames.core.command.extend.prefix.PrefixCommand;
 import com.solexgames.core.command.extend.punish.*;
+import com.solexgames.core.command.extend.punish.manual.BanCommand;
+import com.solexgames.core.command.extend.punish.manual.BlacklistCommand;
+import com.solexgames.core.command.extend.punish.manual.KickCommand;
+import com.solexgames.core.command.extend.punish.manual.WarnCommand;
 import com.solexgames.core.command.extend.rank.RankCommand;
 import com.solexgames.core.command.extend.rank.RankImportCommand;
 import com.solexgames.core.command.extend.server.SetSlotsCommand;
@@ -51,7 +54,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
 import org.bukkit.event.Listener;
@@ -265,7 +267,6 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("unblacklist").setExecutor(new UnBlacklistCommand());
         this.getCommand("unmute").setExecutor(new UnMuteCommand());
         this.getCommand("kickall").setExecutor(new KickAllCommand());
-        this.getCommand("acban").setExecutor(new AnticheatBanCommand());
         this.getCommand("store").setExecutor(new StoreCommand());
         this.getCommand("sync").setExecutor(new SyncCommand());
         this.getCommand("unsync").setExecutor(new UnsyncCommand());
@@ -305,7 +306,12 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("list").setExecutor(new ListCommand());
         this.getCommand("ping").setExecutor(new PingCommand());
 
-//        if (this.lunarCommand != null) this.getCommand("lunar").setExecutor(lunarCommand);
+        this.getCommand("ban").setExecutor(new BanCommand());
+        this.getCommand("blacklist").setExecutor(new BlacklistCommand());
+        this.getCommand("kick").setExecutor(new KickCommand());
+        this.getCommand("mute").setExecutor(new MuteChatCommand());
+        this.getCommand("warn").setExecutor(new WarnCommand());
+
         if (this.chatInterceptor != null) this.chatInterceptor.initializePacketInterceptor();
 
         this.registerListeners(
