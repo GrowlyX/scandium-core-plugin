@@ -313,6 +313,9 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                 Rank rankSettingsRank = Rank.getByName(jsonAppender.getParam("RANK"));
                 int rankSettingsWeight = Integer.parseInt(jsonAppender.getParam("WEIGHT"));
 
+                boolean rankSettingsHidden = Boolean.parseBoolean(jsonAppender.getParam("HIDDEN"));
+                boolean rankSettingsDefault = Boolean.parseBoolean(jsonAppender.getParam("DEFAULT"));
+
                 List<String> rankSettingsPermissions = Arrays.asList(jsonAppender.getParam("PERMISSIONS").split(" "));
                 List<UUID> rankSettingsInheritance = Arrays.stream(jsonAppender.getParam("INHERITANCE").split(" ")).map(UUID::fromString).collect(Collectors.toList());
 
@@ -322,8 +325,12 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                         rankSettingsRank.setPrefix(rankSettingsPrefix);
                         rankSettingsRank.setSuffix(rankSettingsSuffix);
                         rankSettingsRank.setWeight(rankSettingsWeight);
+
                         rankSettingsRank.setPermissions(rankSettingsPermissions);
                         rankSettingsRank.setInheritance(rankSettingsInheritance);
+
+                        rankSettingsRank.setDefaultRank(rankSettingsDefault);
+                        rankSettingsRank.setHidden(rankSettingsHidden);
                     }
                 }
 

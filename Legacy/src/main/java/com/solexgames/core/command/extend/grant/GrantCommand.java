@@ -34,7 +34,7 @@ public class GrantCommand extends BaseCommand {
         }
 
         if (args.length == 0) {
-            sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player>."));
+            sender.sendMessage(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player>.");
         }
         if (args.length > 0) {
             Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByUuid(UUIDUtil.fetchUUID(args[0])).orElse(null);
@@ -42,7 +42,7 @@ public class GrantCommand extends BaseCommand {
             if (document != null) {
                 new GrantMainPaginatedMenu(document, player).openMenu(player);
             } else {
-                player.sendMessage(Color.translate("&cThat player does not exist in our databases."));
+                player.sendMessage(ChatColor.RED + "That player does not exist in our databases.");
             }
         }
         return false;

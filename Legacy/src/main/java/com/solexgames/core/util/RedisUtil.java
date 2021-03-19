@@ -133,6 +133,8 @@ public final class RedisUtil {
                 .put("WEIGHT", String.valueOf(rank.getWeight()))
                 .put("COLOR", rank.getColor())
                 .put("PREFIX", rank.getPrefix())
+                .put("DEFAULT", String.valueOf(rank.isDefaultRank()))
+                .put("HIDDEN", String.valueOf(rank.isHidden()))
                 .put("SUFFIX", rank.getSuffix())
                 .put("PERMISSIONS", String.join(" ", rank.getPermissions()))
                 .put("INHERITANCE", String.join(" ", rank.getInheritance().stream().map(UUID::toString).collect(Collectors.toList())))
