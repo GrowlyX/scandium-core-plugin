@@ -53,6 +53,7 @@ public class RankCommand extends BaseCommand {
         Player player = (Player) sender;
         if (!player.hasPermission("scandium.command.rank")) {
             player.sendMessage(NO_PERMISSION);
+            return false;
         }
 
         if (args.length == 0)
