@@ -6,11 +6,13 @@ import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.punishment.Punishment;
 import com.solexgames.core.player.punishment.PunishmentStrings;
 import com.solexgames.core.player.punishment.PunishmentType;
+import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
 import lombok.Getter;
 import org.bson.Document;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
@@ -82,13 +84,9 @@ public class PunishmentManager {
                 Player finalPlayer = player;
 
                 if (silent) {
-                    Bukkit.getOnlinePlayers().forEach(player1 -> {
-                        if (player1.hasPermission("scandium.staff")) {
-                            player1.sendMessage(Color.translate(
-                                    "&7[S] " + (finalPotPlayer != null ? finalPotPlayer.getPlayer().getDisplayName() : "&7" + target) + " &awas " + (!punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (finalPlayer != null ? finalPlayer.getDisplayName() : (firstPlayer != null ? firstPlayer : "&4Console")) + "&a."
-                            ));
-                        }
-                    });
+                    Bukkit.getOnlinePlayers().stream().filter(player1 -> player1.hasPermission("scandium.staff")).forEach(player1 -> player1.sendMessage(Color.translate(
+                            "&7[S] " + (finalPotPlayer != null ? finalPotPlayer.getPlayer().getDisplayName() : "&7" + target) + " &awas " + (!punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (finalPlayer != null ? finalPlayer.getDisplayName() : (firstPlayer != null ? firstPlayer : "&4Console")) + "&a."
+                    )));
                 } else {
                     Bukkit.broadcastMessage(Color.translate(
                             (finalPotPlayer != null ? finalPotPlayer.getPlayer().getDisplayName() : "&7" + target) + " &awas " + (!punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (finalPlayer != null ? finalPlayer.getDisplayName() : (firstPlayer != null ? firstPlayer : "&4Console")) + "&a."
@@ -143,10 +141,26 @@ public class PunishmentManager {
         }) ;
     }
 
-    public void handleUnpunishment(OfflinePlayer offlinePlayer, String message, Player player, PunishmentType punishmentType) {
-        Punishment.getAllPunishments()
-                .stream()
-                .filter(punishment -> punishment.getTarget().toString().equals(offlinePlayer.getUniqueId().toString()))
+    public void handleUnPunishment(Document document, String message, Player player, PunishmentType punishmentType) {
+        String uuidString = document.getString("uuid");
+        Rank playerRank = Rank.getByName(document.getString("rank"));
+        String playerName = document.getString("name");
+
+        int punishmentAmount = (int) Punishment.getAllPunishments().stream()
+                .filter(punishment -> punishment.getTarget().toString().equalsIgnoreCase(uuidString))
+                .filter(Punishment::isActive)
+                .filter(punishment -> punishment.getPunishmentType().equals(punishmentType)).count();
+
+        if (punishmentAmount == 0) {
+            if (player != null) {
+                player.sendMessage(ChatColor.RED + "That player is not currently " + punishmentType.getEdName() + "!");
+            } else {
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "That player is not currently " + punishmentType.getEdName() + "!");
+            }
+        }
+
+        Punishment.getAllPunishments().stream()
+                .filter(punishment -> punishment.getTarget().toString().equalsIgnoreCase(uuidString))
                 .filter(Punishment::isActive)
                 .filter(punishment -> punishment.getPunishmentType().equals(punishmentType))
                 .forEach(punishment -> {
@@ -157,16 +171,12 @@ public class PunishmentManager {
                     punishment.setRemoverName((player != null ? player.getName() : null));
 
                     if (message.endsWith("-s")) {
-                        Bukkit.getOnlinePlayers().forEach(player1 -> {
-                            if (player1.hasPermission("scandium.staff")) {
-                                player1.sendMessage(Color.translate(
-                                        "&7[S] " + offlinePlayer.getName() + " &awas " + "un" + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (player != null ? player.getDisplayName() : "Console") + "&a."
-                                ));
-                            }
-                        });
+                        Bukkit.getOnlinePlayers().stream().filter(player1 -> player1.hasPermission("scandium.staff")).forEach(player1 -> player1.sendMessage(Color.translate(
+                                "&7[S] " + (playerRank != null ? playerRank.getColor() : ChatColor.GRAY) + playerName + " &awas " + "un" + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (player != null ? player.getDisplayName() : "Console") + "&a."
+                        )));
                     } else {
                         Bukkit.broadcastMessage(Color.translate(
-                                "&7" + offlinePlayer.getName() + " &awas un" + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (player != null ? player.getDisplayName() : "Console") + "&a."
+                                "&7" + (playerRank != null ? playerRank.getColor() : ChatColor.GRAY) + playerName + " &awas un" + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (player != null ? player.getDisplayName() : "Console") + "&a."
                         ));
                     }
 

@@ -47,14 +47,14 @@ public class BanCommand extends BaseCommand {
 
             String targetName = args[0];
             UUID targetUuid = UUID.fromString(document.getString("uuid"));
-            String reason = StringUtil.buildMessage(args, 2).replace("-s", "");
+            String reason = StringUtil.buildMessage(args, 2);
 
             String issuerName = (sender instanceof Player ? ((Player) sender).getName() : "Console");
             String issuerPlayer = (sender instanceof Player ? ((Player) sender).getName() : null);
             UUID issuerUuid = (sender instanceof Player ? ((Player) sender).getUniqueId() : null);
 
             boolean isPermanent = (args[1].equalsIgnoreCase("perm") || args[1].equalsIgnoreCase("permanent"));
-            boolean isSilent = reason.contains("-s");
+            boolean isSilent = reason.endsWith("-s");
 
             try {
                 Punishment punishment = new Punishment(
@@ -62,7 +62,7 @@ public class BanCommand extends BaseCommand {
                         issuerUuid,
                         targetUuid,
                         issuerName,
-                        reason,
+                        reason.replace("-s", ""),
                         newIssuingDate,
                         newIssuingDate.getTime() - DateUtil.parseDateDiff(args[1], false),
                         isPermanent,
@@ -87,7 +87,7 @@ public class BanCommand extends BaseCommand {
                         issuerUuid,
                         targetUuid,
                         issuerName,
-                        reason,
+                        reason.replace("-s", ""),
                         newIssuingDate,
                         newIssuingDate.getTime() - DateUtil.parseDateDiff(args[1], false),
                         isPermanent,

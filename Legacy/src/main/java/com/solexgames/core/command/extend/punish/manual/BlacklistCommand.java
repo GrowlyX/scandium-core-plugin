@@ -47,13 +47,13 @@ public class BlacklistCommand extends BaseCommand {
 
             String targetName = args[0];
             UUID targetUuid = UUID.fromString(document.getString("uuid"));
-            String reason = StringUtil.buildMessage(args, 1).replace("-s", "");
+            String reason = StringUtil.buildMessage(args, 1);
 
             String issuerName = (sender instanceof Player ? ((Player) sender).getName() : "Console");
             String issuerPlayer = (sender instanceof Player ? ((Player) sender).getName() : null);
             UUID issuerUuid = (sender instanceof Player ? ((Player) sender).getUniqueId() : null);
 
-            boolean isSilent = reason.contains("-s");
+            boolean isSilent = reason.endsWith("-s");
 
             try {
                 Punishment punishment = new Punishment(
@@ -61,7 +61,7 @@ public class BlacklistCommand extends BaseCommand {
                         issuerUuid,
                         targetUuid,
                         issuerName,
-                        reason,
+                        reason.replace("-s", ""),
                         newIssuingDate,
                         newIssuingDate.getTime() - DateUtil.parseDateDiff("1d", false),
                         true,
@@ -86,7 +86,7 @@ public class BlacklistCommand extends BaseCommand {
                         issuerUuid,
                         targetUuid,
                         issuerName,
-                        reason,
+                        reason.replace("-s", ""),
                         newIssuingDate,
                         newIssuingDate.getTime() - DateUtil.parseDateDiff("1d", false),
                         true,
