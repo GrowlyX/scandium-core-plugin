@@ -102,7 +102,7 @@ public class PunishSelectConfirmMenu extends AbstractInventoryMenu {
 
                     Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByUuid(uuidKey).orElse(null);
 
-                    CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, this.player, document, this.isSilent);
+                    CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, this.player.getName(), document, this.isSilent);
 
                     if (potPlayer != null) {
                         potPlayer.getPunishments().add(punishment);
