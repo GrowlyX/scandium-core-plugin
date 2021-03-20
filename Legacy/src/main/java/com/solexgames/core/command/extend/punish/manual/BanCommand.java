@@ -6,18 +6,15 @@ import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.punishment.Punishment;
 import com.solexgames.core.player.punishment.PunishmentType;
-import com.solexgames.core.util.DateUtil;
-import com.solexgames.core.util.RedisUtil;
-import com.solexgames.core.util.SaltUtil;
-import com.solexgames.core.util.StringUtil;
+import com.solexgames.core.util.*;
 import net.md_5.bungee.api.ChatColor;
 import org.bson.Document;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class BanCommand extends BaseCommand {
 
@@ -39,6 +36,19 @@ public class BanCommand extends BaseCommand {
             if (document == null) {
                 sender.sendMessage(ChatColor.RED + "That player does not exist in our database.");
                 return false;
+            }
+
+            UUID playerId = UUIDUtil.fetchUUID(document.getString("name"));
+            List<Punishment> punishmentList = Punishment.getAllPunishments().stream()
+                    .filter(Objects::nonNull)
+                    .filter(Punishment::isActive)
+                    .filter(punishment -> punishment.getPunishmentType().equals(PunishmentType.BAN))
+                    .filter(punishment -> punishment.getTarget().equals(playerId))
+                    .sorted(Comparator.comparingLong(Punishment::getCreatedAtLong).reversed())
+                    .collect(Collectors.toList());
+
+            if (punishmentList.size() > 0) {
+                sender.sendMessage(ChatColor.RED + "That player already has an active ban!");
             }
 
             Date newIssuingDate = new Date();

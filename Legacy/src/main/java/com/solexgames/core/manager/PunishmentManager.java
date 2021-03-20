@@ -152,7 +152,8 @@ public class PunishmentManager {
 
         List<Punishment> punishmentList = Punishment.getAllPunishments().stream()
                 .filter(Objects::nonNull)
-                .filter(punishment -> punishment.getPunishmentType() == punishmentType)
+                .filter(Punishment::isActive)
+                .filter(punishment -> punishment.getPunishmentType().equals(punishmentType))
                 .filter(punishment -> punishment.getTarget().equals(playerId))
                 .sorted(Comparator.comparingLong(Punishment::getCreatedAtLong).reversed())
                 .collect(Collectors.toList());
@@ -169,7 +170,7 @@ public class PunishmentManager {
             return;
         }
 
-        punishmentList.forEach(punishment -> {
+        punishmentList.stream().findFirst().ifPresent(punishment -> {
             punishment.setRemoved(true);
             punishment.setRemovalReason(message.replace("-s", ""));
             punishment.setRemover((player != null ? player.getUniqueId() : null));
