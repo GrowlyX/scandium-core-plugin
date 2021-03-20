@@ -74,13 +74,12 @@ public class WarnCommand extends BaseCommand {
                 punishment.savePunishment();
 
                 PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(targetName);
-
-                CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, issuerPlayer, targetName, isSilent);
-
                 if (potPlayer != null) {
                     potPlayer.getPunishments().add(punishment);
                     potPlayer.saveWithoutRemove();
                 }
+
+                CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, issuerPlayer, targetName, isSilent);
 
                 RedisUtil.writeAsync(RedisUtil.executePunishment(
                         PunishmentType.WARN,

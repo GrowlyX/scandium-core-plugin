@@ -9,6 +9,7 @@ import com.solexgames.core.player.punishment.PunishmentType;
 import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
+import com.solexgames.core.util.UUIDUtil;
 import lombok.Getter;
 import org.bson.Document;
 import org.bukkit.Bukkit;
@@ -16,8 +17,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class PunishmentManager {
 
@@ -65,20 +66,23 @@ public class PunishmentManager {
     }
 
     public void handlePunishment(Punishment punishment, String firstPlayer, String target, boolean silent) {
+        this.punishments.add(punishment);
+
         Bukkit.getScheduler().runTask(CorePlugin.getInstance(), new Runnable() {
             @Override
             public void run() {
-                CorePlugin.getInstance().getPunishmentManager().getPunishments().add(punishment);
 
                 Player player = null;
                 try {
                     player = Bukkit.getPlayerExact(firstPlayer);
-                } catch (Exception ignored) { }
+                } catch (Exception ignored) {
+                }
 
                 PotPlayer potPlayer = null;
                 try {
                     potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
-                } catch (Exception ignored) {}
+                } catch (Exception ignored) {
+                }
 
                 PotPlayer finalPotPlayer = potPlayer;
                 Player finalPlayer = player;
@@ -138,51 +142,52 @@ public class PunishmentManager {
                         break;
                 }
             }
-        }) ;
+        });
     }
 
     public void handleUnPunishment(Document document, String message, Player player, PunishmentType punishmentType) {
-        String uuidString = document.getString("uuid");
-        Rank playerRank = Rank.getByName(document.getString("rank"));
+        Rank playerRank = Rank.getByName(document.getString("rankName"));
         String playerName = document.getString("name");
+        UUID playerId = UUIDUtil.fetchUUID(playerName);
 
-        int punishmentAmount = (int) Punishment.getAllPunishments().stream()
-                .filter(punishment -> punishment.getTarget().toString().equalsIgnoreCase(uuidString))
-                .filter(Punishment::isActive)
-                .filter(punishment -> punishment.getPunishmentType().equals(punishmentType)).count();
+        List<Punishment> punishmentList = Punishment.getAllPunishments().stream()
+                .filter(Objects::nonNull)
+                .filter(punishment -> punishment.getPunishmentType() == punishmentType)
+                .filter(punishment -> punishment.getTarget().equals(playerId))
+                .sorted(Comparator.comparingLong(Punishment::getCreatedAtLong).reversed())
+                .collect(Collectors.toList());
+
+        int punishmentAmount = punishmentList.size();
 
         if (punishmentAmount == 0) {
             if (player != null) {
-                player.sendMessage(ChatColor.RED + "That player is not currently " + punishmentType.getEdName() + "!");
+                player.sendMessage(ChatColor.RED + "That player is not currently " + punishmentType.getEdName().toLowerCase() + "!");
             } else {
-                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "That player is not currently " + punishmentType.getEdName() + "!");
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "That player is not currently " + punishmentType.getEdName().toLowerCase() + "!");
             }
+
+            return;
         }
 
-        Punishment.getAllPunishments().stream()
-                .filter(punishment -> punishment.getTarget().toString().equalsIgnoreCase(uuidString))
-                .filter(Punishment::isActive)
-                .filter(punishment -> punishment.getPunishmentType().equals(punishmentType))
-                .forEach(punishment -> {
-                    punishment.setRemoved(true);
-                    punishment.setRemovalReason(message.replace("-s", ""));
-                    punishment.setRemover((player != null ? player.getUniqueId() : null));
-                    punishment.setActive(false);
-                    punishment.setRemoverName((player != null ? player.getName() : null));
+        punishmentList.forEach(punishment -> {
+            punishment.setRemoved(true);
+            punishment.setRemovalReason(message.replace("-s", ""));
+            punishment.setRemover((player != null ? player.getUniqueId() : null));
+            punishment.setActive(false);
+            punishment.setRemoverName((player != null ? player.getName() : null));
 
-                    if (message.endsWith("-s")) {
-                        Bukkit.getOnlinePlayers().stream().filter(player1 -> player1.hasPermission("scandium.staff")).forEach(player1 -> player1.sendMessage(Color.translate(
-                                "&7[S] " + (playerRank != null ? playerRank.getColor() : ChatColor.GRAY) + playerName + " &awas " + "un" + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (player != null ? player.getDisplayName() : "Console") + "&a."
-                        )));
-                    } else {
-                        Bukkit.broadcastMessage(Color.translate(
-                                "&7" + (playerRank != null ? playerRank.getColor() : ChatColor.GRAY) + playerName + " &awas un" + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (player != null ? player.getDisplayName() : "Console") + "&a."
-                        ));
-                    }
+            if (message.endsWith("-s")) {
+                Bukkit.getOnlinePlayers().stream().filter(player1 -> player1.hasPermission("scandium.staff")).forEach(player1 -> player1.sendMessage(Color.translate(
+                        "&7[S] " + (playerRank != null ? playerRank.getColor() : ChatColor.GRAY) + playerName + " &awas " + "un" + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (player != null ? player.getDisplayName() : "Console") + "&a."
+                )));
+            } else {
+                Bukkit.broadcastMessage(Color.translate(
+                        "&7" + (playerRank != null ? playerRank.getColor() : ChatColor.GRAY) + playerName + " &awas un" + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (player != null ? player.getDisplayName() : "Console") + "&a."
+                ));
+            }
 
-                    punishment.savePunishment();
-
-                    RedisUtil.writeAsync(RedisUtil.removePunishment(player, punishment, message));
-                });
+            punishment.savePunishment();
+            RedisUtil.writeAsync(RedisUtil.removePunishment(player, punishment, message));
+        });
     }
 }
