@@ -57,7 +57,7 @@ public class KickCommand extends BaseCommand {
 
             try {
                 Punishment punishment = new Punishment(
-                        PunishmentType.WARN,
+                        PunishmentType.KICK,
                         issuerUuid,
                         targetUuid,
                         issuerName,
@@ -82,7 +82,7 @@ public class KickCommand extends BaseCommand {
                 }
 
                 RedisUtil.writeAsync(RedisUtil.executePunishment(
-                        PunishmentType.WARN,
+                        PunishmentType.KICK,
                         issuerUuid,
                         targetUuid,
                         issuerName,

@@ -252,24 +252,18 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                     UUID uuid1 = null;
 
                     if (jsonAppender.getParam("ISSUER") != null) {
-                        uuid = UUID.fromString(jsonAppender.getParam("ISSUER"));
+                        uuid1 = UUID.fromString(jsonAppender.getParam("ISSUER"));
                     }
 
                     Punishment punishment = new Punishment(PunishmentType.valueOf(jsonAppender.getParam("TYPE")), uuid1, UUID.fromString(jsonAppender.getParam("TARGET")), jsonAppender.getParam("ISSUERNAME"), jsonAppender.getParam("REASON"), new Date(Long.parseLong(jsonAppender.getParam("DATE"))), Long.parseLong(jsonAppender.getParam("DURATION")), Boolean.parseBoolean(jsonAppender.getParam("PERMANENT")), new Date(Long.parseLong(jsonAppender.getParam("CREATED"))), UUID.fromString(jsonAppender.getParam("UUID")), jsonAppender.getParam("IDENTIFICATION"), true);
-                    PotPlayer potPlayer = null;
-
-                    try {
-                        potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(punishment.getIssuerName());
-                    } catch (Exception ignored) {
-                    }
+                    PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(punishment.getIssuerName());
 
                     if (potPlayer != null) {
                         potPlayer.getPunishments().add(punishment);
                         potPlayer.saveWithoutRemove();
                     }
 
-                    Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByName(jsonAppender.getParam("TARGET")).orElse(null);
-
+                    Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByUuid(UUID.fromString(jsonAppender.getParam("ISSUER"))).orElse(null);
                     CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, jsonAppender.getParam("ISSUERNAME"), document, Boolean.parseBoolean(jsonAppender.getParam("SILENT")));
                 }
                 break;

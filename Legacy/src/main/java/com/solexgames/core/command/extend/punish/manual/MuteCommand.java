@@ -69,7 +69,7 @@ public class MuteCommand extends BaseCommand {
 
             try {
                 Punishment punishment = new Punishment(
-                        PunishmentType.WARN,
+                        PunishmentType.MUTE,
                         issuerUuid,
                         targetUuid,
                         issuerName,
@@ -94,7 +94,7 @@ public class MuteCommand extends BaseCommand {
                 }
 
                 RedisUtil.writeAsync(RedisUtil.executePunishment(
-                        PunishmentType.WARN,
+                        PunishmentType.MUTE,
                         issuerUuid,
                         targetUuid,
                         issuerName,
