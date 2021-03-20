@@ -31,7 +31,10 @@ import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Objects;
 import java.util.regex.Matcher;
+import java.util.stream.Collectors;
 
 public class PlayerListener implements Listener {
 
@@ -66,11 +69,11 @@ public class PlayerListener implements Listener {
 
     private void allowConnection(AsyncPlayerPreLoginEvent event) {
         if (!(CorePlugin.getInstance().getServerName().contains("hub") || CorePlugin.getInstance().getServerName().contains("lobby"))) {
-            Punishment.getAllPunishments()
-                    .stream()
-                    .filter(punishment -> punishment.getTarget().equals(event.getUniqueId()))
+            Punishment.getAllPunishments().stream()
+                    .filter(Objects::nonNull)
                     .filter(Punishment::isActive)
-                    .filter(punishment -> !punishment.isRemoved())
+                    .filter(punishment -> punishment.getTarget().equals(event.getUniqueId()))
+                    .sorted(Comparator.comparingLong(Punishment::getCreatedAtLong).reversed())
                     .forEach(punishment -> {
                         switch (punishment.getPunishmentType()) {
                             case BLACKLIST:

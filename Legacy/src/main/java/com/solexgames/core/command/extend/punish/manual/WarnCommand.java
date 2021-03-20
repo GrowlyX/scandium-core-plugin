@@ -49,6 +49,7 @@ public class WarnCommand extends BaseCommand {
 
             if (punishmentList.size() > 0) {
                 sender.sendMessage(ChatColor.RED + "That player already has an active warn!");
+                return false;
             }
 
             Date newIssuingDate = new Date();
@@ -60,7 +61,7 @@ public class WarnCommand extends BaseCommand {
             String reason = StringUtil.buildMessage(args, 2);
 
             String issuerName = (sender instanceof Player ? ((Player) sender).getName() : "Console");
-            String issuerPlayer = (sender instanceof Player ? ((Player) sender).getName() : null);
+            Player issuerPlayer = (sender instanceof Player ? ((Player) sender) : null);
             UUID issuerUuid = (sender instanceof Player ? ((Player) sender).getUniqueId() : null);
 
             boolean isPermanent = (args[1].equalsIgnoreCase("perm") || args[1].equalsIgnoreCase("permanent"));
@@ -89,7 +90,7 @@ public class WarnCommand extends BaseCommand {
                     potPlayer.saveWithoutRemove();
                 }
 
-                CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, issuerPlayer, targetName, isSilent);
+                CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, issuerPlayer, document, isSilent);
 
                 RedisUtil.writeAsync(RedisUtil.executePunishment(
                         PunishmentType.WARN,

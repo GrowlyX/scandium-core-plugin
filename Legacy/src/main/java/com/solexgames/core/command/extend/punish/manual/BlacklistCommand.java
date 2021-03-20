@@ -49,6 +49,7 @@ public class BlacklistCommand extends BaseCommand {
 
             if (punishmentList.size() > 0) {
                 sender.sendMessage(ChatColor.RED + "That player already has an active blacklist!");
+                return false;
             }
 
             Date newIssuingDate = new Date();
@@ -60,7 +61,7 @@ public class BlacklistCommand extends BaseCommand {
             String reason = StringUtil.buildMessage(args, 1);
 
             String issuerName = (sender instanceof Player ? ((Player) sender).getName() : "Console");
-            String issuerPlayer = (sender instanceof Player ? ((Player) sender).getName() : null);
+            Player issuerPlayer = (sender instanceof Player ? ((Player) sender) : null);
             UUID issuerUuid = (sender instanceof Player ? ((Player) sender).getUniqueId() : null);
 
             boolean isSilent = reason.endsWith("-s");
@@ -84,7 +85,7 @@ public class BlacklistCommand extends BaseCommand {
 
                 PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(targetName);
 
-                CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, issuerPlayer, targetName, isSilent);
+                CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, issuerPlayer, document, isSilent);
 
                 if (potPlayer != null) {
                     potPlayer.getPunishments().add(punishment);

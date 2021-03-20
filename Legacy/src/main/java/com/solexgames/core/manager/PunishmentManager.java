@@ -65,81 +65,52 @@ public class PunishmentManager {
         this.punishments.forEach(Punishment::saveMainThread);
     }
 
-    public void handlePunishment(Punishment punishment, String firstPlayer, String target, boolean silent) {
+    public void handlePunishment(Punishment punishment, Player issuer, Document targetDocument, boolean silent) {
         this.punishments.add(punishment);
 
         Bukkit.getScheduler().runTask(CorePlugin.getInstance(), new Runnable() {
+
             @Override
             public void run() {
-
-                Player player = null;
-                try {
-                    player = Bukkit.getPlayerExact(firstPlayer);
-                } catch (Exception ignored) {
-                }
-
-                PotPlayer potPlayer = null;
-                try {
-                    potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
-                } catch (Exception ignored) {
-                }
-
-                PotPlayer finalPotPlayer = potPlayer;
-                Player finalPlayer = player;
+                String name = targetDocument.getString("name");
+                Rank rank = Rank.getByName(targetDocument.getString("rankName"));
+                PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(name);
 
                 if (silent) {
                     Bukkit.getOnlinePlayers().stream().filter(player1 -> player1.hasPermission("scandium.staff")).forEach(player1 -> player1.sendMessage(Color.translate(
-                            "&7[S] " + (finalPotPlayer != null ? finalPotPlayer.getPlayer().getDisplayName() : "&7" + target) + " &awas " + (!punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (finalPlayer != null ? finalPlayer.getDisplayName() : (firstPlayer != null ? firstPlayer : "&4Console")) + "&a."
+                            "&7[S] " + (rank != null ? rank.getColor() : ChatColor.GRAY) + name + " &awas " + (!punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (issuer != null ? issuer.getDisplayName() : "&4Console") + "&a."
                     )));
                 } else {
                     Bukkit.broadcastMessage(Color.translate(
-                            (finalPotPlayer != null ? finalPotPlayer.getPlayer().getDisplayName() : "&7" + target) + " &awas " + (!punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (finalPlayer != null ? finalPlayer.getDisplayName() : (firstPlayer != null ? firstPlayer : "&4Console")) + "&a."
+                            (rank != null ? rank.getColor() : ChatColor.GRAY) + name + " &awas " + (!punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (issuer != null ? issuer.getDisplayName() : "&4Console") + "&a."
                     ));
                 }
 
-                switch (punishment.getPunishmentType()) {
-                    case WARN:
-                        if (target != null) {
-                            if (finalPotPlayer != null) {
-                                finalPotPlayer.getPlayer().sendMessage(Color.translate("  "));
-                                finalPotPlayer.getPlayer().sendMessage(Color.translate("&4&l⚠ &c&lYOU WERE WARNED!"));
-                                finalPotPlayer.getPlayer().sendMessage(Color.translate("&7Reason: &e" + punishment.getReason()));
-                                finalPotPlayer.getPlayer().sendMessage(Color.translate("  "));
-                            }
-                        }
-                        break;
-                    case MUTE:
-                        if (target != null) {
-                            if (finalPotPlayer != null) {
-                                finalPotPlayer.getPlayer().sendMessage(Color.translate("&cYou were muted by a staff member."));
-                                finalPotPlayer.setCurrentlyMuted(true);
-                            }
-                        }
-                        break;
-                    case BLACKLIST:
-                        if (target != null) {
-                            if (finalPotPlayer != null) {
-                                finalPotPlayer.setCurrentlyRestricted(true);
-                                finalPotPlayer.getPlayer().kickPlayer(Color.translate(PunishmentStrings.BLACK_LIST_MESSAGE.replace("<reason>", punishment.getReason())));
-                            }
-                        }
-                        break;
-                    case IPBAN:
-                    case BAN:
-                        if (target != null) {
-                            if (finalPotPlayer != null) {
-                                finalPotPlayer.setCurrentlyRestricted(true);
-                                finalPotPlayer.getPlayer().kickPlayer((punishment.isPermanent() ? Color.translate(PunishmentStrings.BAN_MESSAGE_PERM.replace("<reason>", punishment.getReason())) : Color.translate(PunishmentStrings.BAN_MESSAGE_TEMP.replace("<reason>", punishment.getReason()).replace("<time>", punishment.getDurationString()))));
-                            }
-                        }
-                        break;
-                    case KICK:
-                        if (target != null) {
-                            if (finalPotPlayer != null) {
-                                finalPotPlayer.getPlayer().kickPlayer(Color.translate(PunishmentStrings.KICK_MESSAGE.replace("<reason>", punishment.getReason())));
-                            }
-                        }
-                        break;
+                if (potPlayer != null) {
+                    switch (punishment.getPunishmentType()) {
+                        case WARN:
+                            potPlayer.getPlayer().sendMessage(Color.translate("  "));
+                            potPlayer.getPlayer().sendMessage(Color.translate("&4&l⚠ &c&lYOU WERE WARNED!"));
+                            potPlayer.getPlayer().sendMessage(Color.translate("&7Reason: &e" + punishment.getReason()));
+                            potPlayer.getPlayer().sendMessage(Color.translate("  "));
+                            break;
+                        case MUTE:
+                            potPlayer.getPlayer().sendMessage(Color.translate("&cYou were muted by a staff member."));
+                            potPlayer.setCurrentlyMuted(true);
+                            break;
+                        case BLACKLIST:
+                            potPlayer.setCurrentlyRestricted(true);
+                            potPlayer.getPlayer().kickPlayer(Color.translate(PunishmentStrings.BLACK_LIST_MESSAGE.replace("<reason>", punishment.getReason())));
+                            break;
+                        case IPBAN:
+                        case BAN:
+                            potPlayer.setCurrentlyRestricted(true);
+                            potPlayer.getPlayer().kickPlayer((punishment.isPermanent() ? Color.translate(PunishmentStrings.BAN_MESSAGE_PERM.replace("<reason>", punishment.getReason())) : Color.translate(PunishmentStrings.BAN_MESSAGE_TEMP.replace("<reason>", punishment.getReason()).replace("<time>", punishment.getDurationString()))));
+                            break;
+                        case KICK:
+                            potPlayer.getPlayer().kickPlayer(Color.translate(PunishmentStrings.KICK_MESSAGE.replace("<reason>", punishment.getReason())));
+                            break;
+                    }
                 }
             }
         });
