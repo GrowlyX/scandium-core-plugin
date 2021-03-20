@@ -15,6 +15,7 @@ import com.solexgames.core.util.UUIDUtil;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.time.DurationFormatUtils;
+import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -99,7 +100,9 @@ public class PunishSelectConfirmMenu extends AbstractInventoryMenu {
                     Punishment punishment = new Punishment(this.punishmentType, this.player.getUniqueId(), uuidKey, this.player.getName(), this.reason, new Date(System.currentTimeMillis()), this.punishmentDuration, this.permanent, newDate, randomUuid, saltedString, true);
                     PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(nameValue);
 
-                    CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, this.player.getName(), nameValue, this.isSilent);
+                    Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByUuid(uuidKey).orElse(null);
+
+                    CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, this.player, document, this.isSilent);
 
                     if (potPlayer != null) {
                         potPlayer.getPunishments().add(punishment);

@@ -65,7 +65,7 @@ public class PunishmentManager {
         this.punishments.forEach(Punishment::saveMainThread);
     }
 
-    public void handlePunishment(Punishment punishment, Player issuer, Document targetDocument, boolean silent) {
+    public void handlePunishment(Punishment punishment, String issuer, Document targetDocument, boolean silent) {
         this.punishments.add(punishment);
 
         Bukkit.getScheduler().runTask(CorePlugin.getInstance(), new Runnable() {
@@ -75,15 +75,31 @@ public class PunishmentManager {
                 String name = targetDocument.getString("name");
                 Rank rank = Rank.getByName(targetDocument.getString("rankName"));
                 PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(name);
+                Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByName(issuer).orElse(null);
 
-                if (silent) {
-                    Bukkit.getOnlinePlayers().stream().filter(player1 -> player1.hasPermission("scandium.staff")).forEach(player1 -> player1.sendMessage(Color.translate(
-                            "&7[S] " + (rank != null ? rank.getColor() : ChatColor.GRAY) + name + " &awas " + (!punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (issuer != null ? issuer.getDisplayName() : "&4Console") + "&a."
-                    )));
+                if (document != null) {
+                    Rank playerRank = Rank.getByName(document.getString("rankName"));
+                    String formattedName = playerRank.getColor() + document.get("name");
+
+                    if (silent) {
+                        Bukkit.getOnlinePlayers().stream().filter(player1 -> player1.hasPermission("scandium.staff")).forEach(player1 -> player1.sendMessage(Color.translate(
+                                "&7[S] " + (rank != null ? rank.getColor() : ChatColor.GRAY) + name + " &awas " + (!punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (issuer != null ? formattedName : "&4Console") + "&a."
+                        )));
+                    } else {
+                        Bukkit.broadcastMessage(Color.translate(
+                                (rank != null ? rank.getColor() : ChatColor.GRAY) + name + " &awas " + (!punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (issuer != null ? formattedName : "&4Console") + "&a."
+                        ));
+                    }
                 } else {
-                    Bukkit.broadcastMessage(Color.translate(
-                            (rank != null ? rank.getColor() : ChatColor.GRAY) + name + " &awas " + (!punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (issuer != null ? issuer.getDisplayName() : "&4Console") + "&a."
-                    ));
+                    if (silent) {
+                        Bukkit.getOnlinePlayers().stream().filter(player1 -> player1.hasPermission("scandium.staff")).forEach(player1 -> player1.sendMessage(Color.translate(
+                                "&7[S] " + (rank != null ? rank.getColor() : ChatColor.GRAY) + name + " &awas " + (!punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4Console&a."
+                        )));
+                    } else {
+                        Bukkit.broadcastMessage(Color.translate(
+                                (rank != null ? rank.getColor() : ChatColor.GRAY) + name + " &awas " + (!punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4Console&a."
+                        ));
+                    }
                 }
 
                 if (potPlayer != null) {

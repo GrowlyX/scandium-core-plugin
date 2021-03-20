@@ -16,6 +16,7 @@ import com.solexgames.core.player.global.NetworkPlayer;
 import com.solexgames.core.server.NetworkServer;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.UUIDUtil;
+import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -267,7 +268,9 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                         potPlayer.saveWithoutRemove();
                     }
 
-                    CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, jsonAppender.getParam("ISSUERNAME"), UUIDUtil.fetchName(UUID.fromString(jsonAppender.getParam("TARGET"))), Boolean.parseBoolean(jsonAppender.getParam("SILENT")));
+                    Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByName(jsonAppender.getParam("TARGET")).orElse(null);
+
+                    CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, jsonAppender.getParam("ISSUERNAME"), document, Boolean.parseBoolean(jsonAppender.getParam("SILENT")));
                 }
                 break;
             case PUNISHMENT_REMOVE_UPDATE:

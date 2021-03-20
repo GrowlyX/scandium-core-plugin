@@ -50,7 +50,7 @@ public class KickCommand extends BaseCommand {
             String reason = StringUtil.buildMessage(args, 1);
 
             String issuerName = (sender instanceof Player ? ((Player) sender).getName() : "Console");
-            Player issuerPlayer = (sender instanceof Player ? ((Player) sender) : null);
+            String issuerNameNull = (sender instanceof Player ? ((Player) sender).getName() : null);
             UUID issuerUuid = (sender instanceof Player ? ((Player) sender).getUniqueId() : null);
 
             boolean isSilent = reason.endsWith("-s");
@@ -74,7 +74,7 @@ public class KickCommand extends BaseCommand {
 
                 PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(targetName);
 
-                CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, issuerPlayer, document, isSilent);
+                CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, issuerNameNull, document, isSilent);
 
                 if (potPlayer != null) {
                     potPlayer.getPunishments().add(punishment);

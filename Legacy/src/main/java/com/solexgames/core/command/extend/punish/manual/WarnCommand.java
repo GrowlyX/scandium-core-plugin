@@ -61,7 +61,7 @@ public class WarnCommand extends BaseCommand {
             String reason = StringUtil.buildMessage(args, 2);
 
             String issuerName = (sender instanceof Player ? ((Player) sender).getName() : "Console");
-            Player issuerPlayer = (sender instanceof Player ? ((Player) sender) : null);
+            String issuerNameNull = (sender instanceof Player ? ((Player) sender).getName() : null);
             UUID issuerUuid = (sender instanceof Player ? ((Player) sender).getUniqueId() : null);
 
             boolean isPermanent = (args[1].equalsIgnoreCase("perm") || args[1].equalsIgnoreCase("permanent"));
@@ -90,7 +90,7 @@ public class WarnCommand extends BaseCommand {
                     potPlayer.saveWithoutRemove();
                 }
 
-                CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, issuerPlayer, document, isSilent);
+                CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, issuerNameNull, document, isSilent);
 
                 RedisUtil.writeAsync(RedisUtil.executePunishment(
                         PunishmentType.WARN,
