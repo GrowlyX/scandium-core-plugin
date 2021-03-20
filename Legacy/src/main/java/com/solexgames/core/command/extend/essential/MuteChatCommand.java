@@ -23,7 +23,7 @@ public class MuteChatCommand extends BaseCommand {
             return false;
         }
 
-        serverManager.setChatEnabled(false);
+        serverManager.setChatEnabled(!serverManager.isChatEnabled());
 
         Bukkit.broadcastMessage(ChatColor.GREEN + "The chat has been " + (serverManager.isChatEnabled() ? "disabled" : "enabled") + " by " + displayName + ".");
         CorePlugin.getInstance().getPlayerManager().sendToNetworkStaff("&3[S] " + "&7[" + CorePlugin.getInstance().getServerName() + "] " + displayName + " &bhas " + (serverManager.isChatEnabled() ? "enabled" : "disabled") + " chat.");

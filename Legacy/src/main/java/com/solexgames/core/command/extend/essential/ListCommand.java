@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class ListCommand extends BaseCommand {
 

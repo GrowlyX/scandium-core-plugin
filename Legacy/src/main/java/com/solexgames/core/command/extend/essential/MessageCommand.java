@@ -46,7 +46,16 @@ public class MessageCommand extends BaseCommand {
             PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
             PotPlayer potTarget = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
 
-            if (potTarget.isVanished() && !(potPlayer.getActiveGrant().getRank().getWeight() < potTarget.getActiveGrant().getRank().getWeight())) {
+            if (potTarget != null) {
+                player.sendMessage(Color.translate("&cThat player does not exist."));
+                return false;
+            }
+
+            if (!potPlayer.getLastRecipient().isOnline()) {
+                player.sendMessage(Color.translate("&cThat player does not exist."));
+                return false;
+            }
+            if (potTarget.isVanished() && (potPlayer.getActiveGrant().getRank().getWeight() < potTarget.getActiveGrant().getRank().getWeight())) {
                 player.sendMessage(Color.translate("&cThat player does not exist."));
                 return false;
             }
@@ -62,11 +71,19 @@ public class MessageCommand extends BaseCommand {
                 player.sendMessage(Color.translate("&cYou have your dms disabled."));
                 return false;
             }
+            if (potTarget.isCurrentlyRestricted()) {
+                player.sendMessage(Color.translate("&cYou cannot message this player right now."));
+                return false;
+            }
+            if (potTarget.isCurrentlyMuted()) {
+                player.sendMessage(Color.translate("&cYou cannot message this player right now."));
+                return false;
+            }
             if (!potTarget.isCanReceiveDms()) {
                 player.sendMessage(Color.translate("&cThat player has their dms disabled."));
                 return false;
             }
-            if (CorePlugin.getInstance().getFilterManager().isDmFiltered(player, target.getName(), message)) {
+            if (CorePlugin.getInstance().getFilterManager().isDmFiltered(player, potPlayer.getLastRecipient().getName(), message)) {
                 player.sendMessage(Color.translate("&cYou cannot use censored words in a direct message."));
                 return false;
             }

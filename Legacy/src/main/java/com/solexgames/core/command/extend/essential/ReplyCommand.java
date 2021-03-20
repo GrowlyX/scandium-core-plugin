@@ -41,7 +41,7 @@ public class ReplyCommand extends BaseCommand {
                 player.sendMessage(Color.translate("&cThat player does not exist."));
                 return false;
             }
-            if (potTarget.isVanished() && !(potPlayer.getActiveGrant().getRank().getWeight() < potTarget.getActiveGrant().getRank().getWeight())) {
+            if (potTarget.isVanished() && (potPlayer.getActiveGrant().getRank().getWeight() < potTarget.getActiveGrant().getRank().getWeight())) {
                 player.sendMessage(Color.translate("&cThat player does not exist."));
                 return false;
             }
@@ -55,6 +55,14 @@ public class ReplyCommand extends BaseCommand {
             }
             if (!potPlayer.isCanReceiveDms()) {
                 player.sendMessage(Color.translate("&cYou have your dms disabled."));
+                return false;
+            }
+            if (potTarget.isCurrentlyRestricted()) {
+                player.sendMessage(Color.translate("&cYou cannot message this player right now."));
+                return false;
+            }
+            if (potTarget.isCurrentlyMuted()) {
+                player.sendMessage(Color.translate("&cYou cannot message this player right now."));
                 return false;
             }
             if (!potTarget.isCanReceiveDms()) {
