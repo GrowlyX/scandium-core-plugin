@@ -61,6 +61,11 @@ public class ModSuiteListener implements Listener {
 
         if (event.getRightClicked() instanceof Player) {
             Player target = (Player) event.getRightClicked();
+
+            if (target == null) {
+                return;
+            }
+
             Player player = event.getPlayer();
             ItemStack item = event.getPlayer().getItemInHand();
 
@@ -136,8 +141,10 @@ public class ModSuiteListener implements Listener {
         if (event.getEntityType().equals(EntityType.PLAYER)) {
             PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer((Player) event.getEntity());
 
-            if (potPlayer.isStaffMode()) {
-                event.setCancelled(true);
+            if (potPlayer != null) {
+                if (potPlayer.isStaffMode()) {
+                    event.setCancelled(true);
+                }
             }
         }
     }
