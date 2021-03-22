@@ -342,16 +342,6 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (CorePlugin.getInstance().getServerManager().getNetwork().equals(ServerType.EVENTIS)) {
-            if (CorePlugin.getInstance().getServerName().contains("hub")) {
-                if (!player.hasPermission("scandium.staff")) {
-                    event.setCancelled(true);
-                    player.sendMessage(Color.translate("&cYou cannot chat on the hub."));
-                    return;
-                }
-            }
-        }
-
         if (potPlayer.isCurrentlyRestricted()) {
             player.sendMessage(Color.translate("&cYou cannot chat as you are currently restricted."));
             event.setCancelled(true);

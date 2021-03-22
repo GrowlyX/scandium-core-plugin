@@ -13,10 +13,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class RankCommand extends BaseCommand {
@@ -84,7 +81,7 @@ public class RankCommand extends BaseCommand {
                                 player.sendMessage(Color.translate("&7UUID: &f" + rank.getUuid().toString()));
                                 player.sendMessage(Color.translate("  "));
                                 player.sendMessage(Color.translate("&ePermissions:"));
-                                rank.permissions.forEach(s -> player.sendMessage(Color.translate(" &7* &f" + s)));
+                                rank.getPermissions().forEach(s -> player.sendMessage(Color.translate(" &7* &f" + s)));
                                 player.sendMessage(Color.translate("  "));
                                 player.sendMessage(Color.translate("&eInheritances:"));
                                 rank.getInheritance().stream().map(Rank::getByUuid).filter(Objects::nonNull).forEach(s -> player.sendMessage(Color.translate(" &7* &f" + s.getName())));
@@ -232,8 +229,11 @@ public class RankCommand extends BaseCommand {
 
                             if (rank != null) {
                                 String displayName = Color.translate(rank.getColor() + rank.getName());
+                                List<String> finalList = new ArrayList<>(rank.getPermissions());
 
-                                rank.permissions.remove(value);
+                                finalList.remove(value);
+
+                                rank.setPermissions(finalList);
                                 player.sendMessage(Color.translate("&aRemoved the permission '" + value + "&a' from the rank " + displayName + "&a."));
 
                                 RedisUtil.writeAsync(RedisUtil.updateRank(rank));
@@ -252,10 +252,13 @@ public class RankCommand extends BaseCommand {
                             Rank rank = Rank.getByName(name);
 
                             if (rank != null) {
-                                if (!rank.permissions.contains(value)) {
+                                if (!rank.getPermissions().contains(value)) {
                                     String displayName = Color.translate(rank.getColor() + rank.getName());
+                                    List<String> finalList = new ArrayList<>(rank.getPermissions());
 
-                                    rank.permissions.add(value);
+                                    finalList.add(value.toLowerCase());
+
+                                    rank.setPermissions(finalList);
                                     player.sendMessage(Color.translate("&aAdded the permission '" + value + "&a' to the rank " + displayName + "&a."));
 
                                     RedisUtil.writeAsync(RedisUtil.updateRank(rank));

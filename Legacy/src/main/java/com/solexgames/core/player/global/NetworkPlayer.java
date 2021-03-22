@@ -1,5 +1,6 @@
 package com.solexgames.core.player.global;
 
+import com.google.gson.annotations.SerializedName;
 import com.solexgames.core.CorePlugin;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,6 +11,7 @@ import java.util.UUID;
 @Setter
 public class NetworkPlayer {
 
+    @SerializedName("_id")
     private UUID uuid;
 
     private String ipAddress;

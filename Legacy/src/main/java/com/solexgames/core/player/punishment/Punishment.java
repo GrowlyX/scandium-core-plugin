@@ -1,5 +1,6 @@
 package com.solexgames.core.player.punishment;
 
+import com.google.gson.annotations.SerializedName;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import com.solexgames.core.CorePlugin;
@@ -20,6 +21,7 @@ public class Punishment {
 
     private PunishmentType punishmentType;
 
+    @SerializedName("_id")
     private UUID id;
     private UUID issuer;
     private UUID target;

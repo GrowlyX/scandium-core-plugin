@@ -1,5 +1,6 @@
 package com.solexgames.core.player.ranks;
 
+import com.google.gson.annotations.SerializedName;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import com.solexgames.core.CorePlugin;
@@ -17,12 +18,12 @@ import java.util.concurrent.atomic.AtomicReference;
 public class Rank {
 
     @Getter
-    @Setter
-    private static List<Rank> ranks = new ArrayList<>();
+    private static final List<Rank> ranks = new ArrayList<>();
 
-    public List<UUID> inheritance;
-    public List<String> permissions;
+    private List<UUID> inheritance;
+    private List<String> permissions;
 
+    @SerializedName("_id")
     private UUID uuid;
 
     private String name;
@@ -47,6 +48,20 @@ public class Rank {
         this.suffix = suffix;
         this.defaultRank = defaultRank;
         this.weight = weight;
+
+        ranks.add(this);
+    }
+
+    public Rank(String name) {
+        this.uuid = UUID.randomUUID();
+        this.inheritance = new ArrayList<>();
+        this.permissions = new ArrayList<>();
+        this.name = name;
+        this.prefix = "&7";
+        this.color = "&7";
+        this.suffix = "";
+        this.defaultRank = true;
+        this.weight = 0;
 
         ranks.add(this);
     }
@@ -77,15 +92,10 @@ public class Rank {
     }
 
     public static Rank getDefault() {
-        AtomicReference<Rank> rankAtomicReference = new AtomicReference<>();
-
-        Rank.getRanks().forEach(rank -> {
-            if (rank.isDefaultRank()) {
-                rankAtomicReference.set(rank);
-            }
-        });
-
-        return rankAtomicReference.get();
+        return Rank.getRanks().stream()
+                .filter(Rank::isDefaultRank)
+                .findFirst()
+                .orElseGet(() -> new Rank("Default"));
     }
 
     public static Rank getByName(String name) {

@@ -60,7 +60,7 @@ public class ExperienceMainMenu extends AbstractInventoryMenu {
 
             if (item == null || item.getType() == XMaterial.AIR.parseMaterial()) return;
             if (event.getRawSlot() == 4) {
-                if (CorePlugin.getInstance().getServerManager().getNetwork().equals(ServerType.POTCLUBVIP) || CorePlugin.getInstance().getServerManager().getNetwork().equals(ServerType.EVENTIS)) {
+                if (CorePlugin.getInstance().getServerManager().getNetwork().equals(ServerType.POTCLUBVIP) || CorePlugin.getInstance().getServerManager().getNetwork().equals(ServerType.MINEARCADE)) {
                     new ExperienceShopMainMenu().open(this.player);
                 }
             }

@@ -1,5 +1,6 @@
 package com.solexgames.core.player;
 
+import com.google.gson.annotations.SerializedName;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import com.solexgames.core.CorePlugin;
@@ -45,6 +46,7 @@ public class PotPlayer {
     private List<String> userPermissions = new ArrayList<>();
     private List<PotionMessageType> allPurchasedMessages = new ArrayList<>();
 
+    @SerializedName("_id")
     private UUID uuid;
     private Player player;
     private String ipAddress;
@@ -479,16 +481,17 @@ public class PotPlayer {
     }
 
     public Grant getActiveGrant() {
-        return this.getAllGrants()
-                .stream()
-                .sorted(Comparator.comparingLong(Grant::getDateAdded).reversed()).collect(Collectors.toList())
-                .stream()
+        return this.getAllGrants().stream()
+                .sorted(Comparator.comparingLong(Grant::getDateAdded).reversed())
+                .collect(Collectors.toList()).stream()
                 .filter(Objects::nonNull)
-                .filter(Grant::isActive)
-                .filter(grant -> !grant.getRank().isHidden())
-                .filter(grant -> (grant.getScope() == null || grant.isGlobal() || grant.isApplicable()))
+                .filter(grant -> grant.isActive() && !grant.getRank().isHidden() && (grant.getScope() == null || grant.isGlobal() || grant.isApplicable()))
                 .findFirst()
-                .orElseGet(() -> new Grant(null, Objects.requireNonNull(Rank.getDefault()), System.currentTimeMillis(), -1L, "Automatic Grant (Default)", true, true));
+                .orElseGet(this::getDefaultGrant);
+    }
+
+    public Grant getDefaultGrant() {
+        return new Grant(null, Objects.requireNonNull(Rank.getDefault()), System.currentTimeMillis(), -1L, "Automatic Grant (Default)", true, true);
     }
 
     public void setupPlayer() {

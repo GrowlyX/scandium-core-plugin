@@ -22,8 +22,7 @@ public class PunishExpireTask extends BukkitRunnable {
         Punishment.getAllPunishments()
                 .stream()
                 .filter(Objects::nonNull)
-                .filter(Punishment::isActive)
-                .filter(Punishment::checkIfActive)
+                .filter(punishment -> punishment.isActive() && punishment.checkIfActive())
                 .forEach(punishment -> {
                     punishment.setActive(false);
 

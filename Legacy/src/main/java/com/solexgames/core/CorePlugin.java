@@ -180,7 +180,6 @@ public final class CorePlugin extends JavaPlugin {
             this.getLogger().info("[Protocol] Could not find LunarClient-API! The /lunar command will not work without it!");
         }
 
-
         if (this.getServer().getVersion().contains("1.7")) {
             this.NMS = new NMSAccess_v1_7();
         } else if (this.getServer().getVersion().contains("1.8")) {
@@ -309,7 +308,8 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("mute").setExecutor(new MuteCommand());
         this.getCommand("warn").setExecutor(new WarnCommand());
 
-        if (this.chatInterceptor != null) this.chatInterceptor.initializePacketInterceptor();
+        if (this.chatInterceptor != null)
+            this.chatInterceptor.initializePacketInterceptor();
 
         this.registerListeners(
                 new PlayerListener(),
