@@ -128,6 +128,8 @@ public class PotPlayer {
 
     private int experience;
 
+    private boolean hasLoaded;
+
     public PotPlayer(UUID uuid) {
         this.uuid = uuid;
         this.player = Bukkit.getPlayer(uuid);
@@ -142,7 +144,9 @@ public class PotPlayer {
 
         CorePlugin.getInstance().getPlayerManager().getAllProfiles().put(uuid, this);
 
+        this.hasLoaded = false;
         this.loadPlayerData();
+        this.hasLoaded = true;
     }
 
     public void saveWithoutRemove() {

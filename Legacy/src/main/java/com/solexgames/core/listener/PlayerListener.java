@@ -50,9 +50,9 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
-    public void onConnect(AsyncPlayerPreLoginEvent event) {
+    public void onConnect(PlayerPreLoginEvent event) {
         if (!CorePlugin.CAN_JOIN) {
-            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.RED + "The server is currently booting...\n" + ChatColor.GRAY + "Please try reconnecting in a few minutes.");
+            event.disallow(PlayerPreLoginEvent.Result.KICK_OTHER, PunishmentStrings.PLAYER_DATA_LOAD);
             return;
         }
         if (!CorePlugin.getInstance().getConfig().getBoolean("whitelist")) {
@@ -64,10 +64,17 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Color.translate(CorePlugin.getInstance().getConfig().getString("whitelisted-msg").replace("<nl>", "\n")));
+        event.disallow(PlayerPreLoginEvent.Result.KICK_OTHER, Color.translate(CorePlugin.getInstance().getConfig().getString("whitelisted-msg").replace("<nl>", "\n")));
     }
 
-    private void allowConnection(AsyncPlayerPreLoginEvent event) {
+    private void allowConnection(PlayerPreLoginEvent event) {
+        PotPlayer potPlayer = new PotPlayer(event.getUniqueId());
+
+        if (!potPlayer.isHasLoaded()) {
+            event.disallow(PlayerPreLoginEvent.Result.KICK_OTHER, PunishmentStrings.PLAYER_DATA_LOAD);
+            return;
+        }
+
         if (!(CorePlugin.getInstance().getServerName().contains("hub") || CorePlugin.getInstance().getServerName().contains("lobby"))) {
             Punishment.getAllPunishments().stream()
                     .filter(Objects::nonNull)
@@ -77,11 +84,11 @@ public class PlayerListener implements Listener {
                     .forEach(punishment -> {
                         switch (punishment.getPunishmentType()) {
                             case BLACKLIST:
-                                event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Color.translate(PunishmentStrings.BLACK_LIST_MESSAGE.replace("<reason>", punishment.getReason())));
+                                event.disallow(PlayerPreLoginEvent.Result.KICK_OTHER, Color.translate(PunishmentStrings.BLACK_LIST_MESSAGE.replace("<reason>", punishment.getReason())));
                                 break;
                             case IPBAN:
                             case BAN:
-                                event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, (punishment.isPermanent() ? Color.translate(PunishmentStrings.BAN_MESSAGE_PERM.replace("<reason>", punishment.getReason())) : Color.translate(PunishmentStrings.BAN_MESSAGE_TEMP.replace("<reason>", punishment.getReason()).replace("<time>", punishment.getDurationString()))));
+                                event.disallow(PlayerPreLoginEvent.Result.KICK_OTHER, (punishment.isPermanent() ? Color.translate(PunishmentStrings.BAN_MESSAGE_PERM.replace("<reason>", punishment.getReason())) : Color.translate(PunishmentStrings.BAN_MESSAGE_TEMP.replace("<reason>", punishment.getReason()).replace("<time>", punishment.getDurationString()))));
                                 break;
                         }
                     });
@@ -137,14 +144,22 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onConnect(PlayerJoinEvent event) {
-        PotPlayer potPlayer = new PotPlayer(event.getPlayer().getUniqueId());
+        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer());
 
-        CorePlugin.getInstance().getServerManager().getVanishedPlayers().forEach(player -> {
-            PotPlayer potPlayer1 = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-            if (potPlayer.getActiveGrant().getRank().getWeight() < potPlayer1.getActiveGrant().getRank().getWeight()) {
-                event.getPlayer().hidePlayer(player);
-            }
-        });
+        if (potPlayer == null) {
+            event.getPlayer().kickPlayer(PunishmentStrings.PLAYER_DATA_LOAD);
+            return;
+        }
+
+        if (!potPlayer.isHasLoaded()) {
+            event.getPlayer().kickPlayer(PunishmentStrings.PLAYER_DATA_LOAD);
+            return;
+        }
+
+        CorePlugin.getInstance().getServerManager().getVanishedPlayers().stream()
+                .map(player -> CorePlugin.getInstance().getPlayerManager().getPlayer(player))
+                .filter(potPlayer1 -> potPlayer.getActiveGrant().getRank().getWeight() < potPlayer1.getActiveGrant().getRank().getWeight())
+                .forEach(player -> event.getPlayer().hidePlayer(player.getPlayer()));
 
         if (potPlayer.isAutoVanish()) {
             potPlayer.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getServerManager().getAutomaticallyPutInto().replace("<value>", "vanish")));
@@ -494,6 +509,10 @@ public class PlayerListener implements Listener {
 
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer().getUniqueId());
         Player player = event.getPlayer();
+
+        if (potPlayer == null) {
+            return;
+        }
 
         if (potPlayer.isFrozen())
             CorePlugin.getInstance().getPlayerManager().sendDisconnectFreezeMessage(event.getPlayer());
