@@ -1,5 +1,6 @@
 package com.solexgames.core;
 
+import cc.outlast.tablist.OutlastTab;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.solexgames.core.abstraction.access.AbstractNMSAccess;
@@ -37,7 +38,6 @@ import com.solexgames.core.command.extend.web.WebAnnouncementDeleteCommand;
 import com.solexgames.core.command.extend.whitelist.WhitelistCommand;
 import com.solexgames.core.database.Database;
 import com.solexgames.core.enums.ServerType;
-import com.solexgames.core.internal.tablist.OutlastTab;
 import com.solexgames.core.listener.ModSuiteListener;
 import com.solexgames.core.listener.PlayerListener;
 import com.solexgames.core.manager.*;
@@ -332,7 +332,7 @@ public final class CorePlugin extends JavaPlugin {
 
         this.registerBukkitCommand();
 
-//        new OutlastTab(this, new TablistAdapter());
+        new OutlastTab(this, new TablistAdapter());
 
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, this.tpsRunnable, 0L, 1L);
     }

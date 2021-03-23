@@ -1,8 +1,8 @@
 package com.solexgames.core.abstraction.tablist;
 
+import cc.outlast.tablist.ITablist;
+import cc.outlast.tablist.TablistElement;
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.internal.tablist.ITablist;
-import com.solexgames.core.internal.tablist.TablistElement;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -20,7 +20,7 @@ public class TablistAdapter implements ITablist {
         List<TablistElement> elements = new ArrayList<>();
         AtomicInteger integer = new AtomicInteger();
 
-        this.getOnlinePlayers(false).stream()
+        this.getOnlinePlayers(!player.hasPermission("scandium.staff")).stream()
                 .map(player1 -> CorePlugin.getInstance().getPlayerManager().getPlayer(player1.getUniqueId()))
                 .sorted(Comparator.comparingInt(potPlayer -> -potPlayer.getActiveGrant().getRank().getWeight()))
                 .forEach(potPlayer -> elements.add(
