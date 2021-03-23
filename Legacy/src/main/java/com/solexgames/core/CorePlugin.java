@@ -10,6 +10,7 @@ import com.solexgames.core.abstraction.lunar.AbstractLunar;
 import com.solexgames.core.abstraction.lunar.extend.LunarImplementation;
 import com.solexgames.core.abstraction.protocol.AbstractChatInterceptor;
 import com.solexgames.core.abstraction.protocol.extend.ProtocolChatInterceptor;
+import com.solexgames.core.abstraction.tablist.TablistAdapter;
 import com.solexgames.core.command.extend.CoreCommand;
 import com.solexgames.core.command.extend.discord.SyncCommand;
 import com.solexgames.core.command.extend.discord.UnsyncCommand;
@@ -36,6 +37,7 @@ import com.solexgames.core.command.extend.web.WebAnnouncementDeleteCommand;
 import com.solexgames.core.command.extend.whitelist.WhitelistCommand;
 import com.solexgames.core.database.Database;
 import com.solexgames.core.enums.ServerType;
+import com.solexgames.core.internal.tablist.OutlastTab;
 import com.solexgames.core.listener.ModSuiteListener;
 import com.solexgames.core.listener.PlayerListener;
 import com.solexgames.core.manager.*;
@@ -329,6 +331,8 @@ public final class CorePlugin extends JavaPlugin {
         new BoardUpdateTask();
 
         this.registerBukkitCommand();
+
+//        new OutlastTab(this, new TablistAdapter());
 
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, this.tpsRunnable, 0L, 1L);
     }

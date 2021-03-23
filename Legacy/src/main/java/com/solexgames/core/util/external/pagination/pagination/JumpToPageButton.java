@@ -25,7 +25,7 @@ public class JumpToPageButton extends Button {
     public ItemStack getButtonItem(Player player) {
         List<String> stringList = new ArrayList<>();
 
-        stringList.add(Color.translate("&7Click to jump to this menu!"));
+        stringList.add(Color.translate("&7Click to switch to this menu!"));
         if (this.current) {
             stringList.add("  ");
             stringList.add(Color.translate("&aThis is the current page."));

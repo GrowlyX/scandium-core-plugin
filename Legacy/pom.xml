@@ -82,6 +82,44 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.mojang</groupId>
+            <artifactId>authlib</artifactId>
+            <version>1.5.22</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/Mojang_Auth.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.8.8-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>4.0.23.Final</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.comphenix.protocol</groupId>
+            <artifactId>ProtocolLib-API</artifactId>
+            <version>4.4.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>us.myles</groupId>
+            <artifactId>viaversion</artifactId>
+            <version>3.2.1</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/ViaVersion.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.github.ProtocolSupport</groupId>
+            <artifactId>ProtocolSupport</artifactId>
+            <version>64ab29864f</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>club.minnced</groupId>
             <artifactId>discord-webhooks</artifactId>
             <version>0.3.0</version>
@@ -152,7 +190,7 @@
             <version>7.8.0</version>
         </dependency>
         <dependency>
-            <groupId>com.comphenix.protocol</groupId>
+            <groupId>com.solexgames.core.internal.protocol</groupId>
             <artifactId>ProtocolLib</artifactId>
             <version>4.6.0</version>
             <scope>system</scope>

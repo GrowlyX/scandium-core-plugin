@@ -68,13 +68,6 @@ public class PlayerListener implements Listener {
     }
 
     private void allowConnection(PlayerPreLoginEvent event) {
-        PotPlayer potPlayer = new PotPlayer(event.getUniqueId());
-
-        if (!potPlayer.isHasLoaded()) {
-            event.disallow(PlayerPreLoginEvent.Result.KICK_OTHER, PunishmentStrings.PLAYER_DATA_LOAD);
-            return;
-        }
-
         if (!(CorePlugin.getInstance().getServerName().contains("hub") || CorePlugin.getInstance().getServerName().contains("lobby"))) {
             Punishment.getAllPunishments().stream()
                     .filter(Objects::nonNull)
@@ -144,12 +137,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onConnect(PlayerJoinEvent event) {
-        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer());
-
-        if (potPlayer == null) {
-            event.getPlayer().kickPlayer(PunishmentStrings.PLAYER_DATA_LOAD);
-            return;
-        }
+        PotPlayer potPlayer = new PotPlayer(event.getPlayer().getUniqueId());
 
         if (!potPlayer.isHasLoaded()) {
             event.getPlayer().kickPlayer(PunishmentStrings.PLAYER_DATA_LOAD);
