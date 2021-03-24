@@ -1,6 +1,5 @@
 package com.solexgames.core;
 
-import cc.outlast.tablist.OutlastTab;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.solexgames.core.abstraction.access.AbstractNMSAccess;
@@ -11,7 +10,6 @@ import com.solexgames.core.abstraction.lunar.AbstractLunar;
 import com.solexgames.core.abstraction.lunar.extend.LunarImplementation;
 import com.solexgames.core.abstraction.protocol.AbstractChatInterceptor;
 import com.solexgames.core.abstraction.protocol.extend.ProtocolChatInterceptor;
-import com.solexgames.core.abstraction.tablist.TablistAdapter;
 import com.solexgames.core.command.extend.CoreCommand;
 import com.solexgames.core.command.extend.discord.SyncCommand;
 import com.solexgames.core.command.extend.discord.UnsyncCommand;
@@ -38,6 +36,10 @@ import com.solexgames.core.command.extend.web.WebAnnouncementDeleteCommand;
 import com.solexgames.core.command.extend.whitelist.WhitelistCommand;
 import com.solexgames.core.database.Database;
 import com.solexgames.core.enums.ServerType;
+import com.solexgames.core.internal.impl.TablistAdapter;
+import com.solexgames.core.internal.shared.TabHandler;
+import com.solexgames.core.internal.v1_7_r4.v1_7_R4TabAdapter;
+import com.solexgames.core.internal.v1_8_r3.v1_8_R3TabAdapter;
 import com.solexgames.core.listener.ModSuiteListener;
 import com.solexgames.core.listener.PlayerListener;
 import com.solexgames.core.manager.*;
@@ -184,8 +186,12 @@ public final class CorePlugin extends JavaPlugin {
 
         if (this.getServer().getVersion().contains("1.7")) {
             this.NMS = new NMSAccess_v1_7();
+
+            new TabHandler(new v1_7_R4TabAdapter(), new TablistAdapter(), this, 20L);
         } else if (this.getServer().getVersion().contains("1.8")) {
             this.NMS = new NMSAccess_v1_8();
+
+            new TabHandler(new v1_8_R3TabAdapter(), new TablistAdapter(), this, 20L);
         } else if (this.getServer().getVersion().contains("1.16")) {
             this.NMS = new NMSAccess_v1_16();
         }
@@ -331,8 +337,6 @@ public final class CorePlugin extends JavaPlugin {
         new BoardUpdateTask();
 
         this.registerBukkitCommand();
-
-        new OutlastTab(this, new TablistAdapter());
 
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, this.tpsRunnable, 0L, 1L);
     }

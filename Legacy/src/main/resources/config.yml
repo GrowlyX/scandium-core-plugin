@@ -6,6 +6,11 @@ server-type: "PRACTICE"
 server-id: "eu-practice"
 refresh-time: 5
 
+tablist:
+  enabled: true
+  header: ""
+  footer: ""
+
 discord:
   enabled: false
   webhook: ""
@@ -57,6 +62,8 @@ settings:
 
   mod-mode-tag: "&7[S] "
   vanish-tag: "&7[V] "
+
+  punish-gui-enabled: false
 
   chat-format: "<prefix><rank_prefix><rank_color><custom_color><player_name> &7» &f<message>"
 
