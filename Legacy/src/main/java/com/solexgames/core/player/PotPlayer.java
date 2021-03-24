@@ -140,8 +140,6 @@ public class PotPlayer {
         this.lastJoined = new Date();
         this.syncCode = SaltUtil.getRandomSaltedString(6);
 
-        this.attachment = this.player.addAttachment(CorePlugin.getInstance());
-
         CorePlugin.getInstance().getPlayerManager().getAllProfiles().put(uuid, this);
 
         this.hasLoaded = false;
@@ -453,6 +451,8 @@ public class PotPlayer {
                     this.restrictionPunishment = punishment;
                 });
 
+        this.attachment = this.player.addAttachment(CorePlugin.getInstance());
+
         this.setupPlayer();
 
         if (CorePlugin.NAME_MC_REWARDS) this.checkVoting();
@@ -507,29 +507,30 @@ public class PotPlayer {
     }
 
     public void setupDisplay() {
-        if (this.player != null) {
-            Grant grant;
+        Grant grant = this.getActiveGrant();
 
-            try {
-                grant = this.getActiveGrant();
-            } catch (Exception ignored) {
-                grant = new Grant(null, Objects.requireNonNull(Rank.getDefault()), System.currentTimeMillis(), -1L, "Automatic Grant (Default)", true, true);
-                this.getAllGrants().add(grant);
-            }
+        if (grant == null) {
+            Grant newGrant = this.getDefaultGrant();
 
-            this.player.setDisplayName(Color.translate(grant.getRank().getColor() + player.getName()));
+            this.getAllGrants().add(newGrant);
+            this.player.setDisplayName(Color.translate(newGrant.getRank().getColor() + player.getName()));
+
+            return;
         }
+
+        this.player.setDisplayName(Color.translate(grant.getRank().getColor()) + player.getName());
     }
 
     public void setupPlayerList() {
         player.setPlayerListName(Color.translate((this.getActiveGrant().getRank().getColor() == null ? ChatColor.GRAY.toString() : this.getActiveGrant().getRank().getColor()) + (this.customColor != null ? this.customColor : "") + this.player.getName()));
-        player.recalculatePermissions();
 
         NameTagExternal.setTabPosition(this);
     }
 
     public void resetPermissions() {
-        if (!this.attachment.getPermissions().isEmpty()) this.attachment.getPermissions().keySet().forEach(s -> this.attachment.unsetPermission(s));
+        if (!this.attachment.getPermissions().isEmpty()) {
+            this.attachment.getPermissions().keySet().forEach(s -> this.attachment.unsetPermission(s));
+        }
     }
 
     public void setupPermissions() {
@@ -546,6 +547,8 @@ public class PotPlayer {
                                 .forEach(rank -> rank.getPermissions().forEach(permission -> this.attachment.setPermission(permission.replace("-", ""), !permission.startsWith("-"))));
                     });
             this.getUserPermissions().forEach(permission -> this.attachment.setPermission(permission.replace("-", ""), !permission.startsWith("-")));
+
+            player.recalculatePermissions();
         });
     }
 
