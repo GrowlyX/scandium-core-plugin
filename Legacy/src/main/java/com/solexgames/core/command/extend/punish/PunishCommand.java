@@ -27,6 +27,10 @@ public class PunishCommand extends BaseCommand {
             return false;
         }
 
+        if (!CorePlugin.getInstance().getConfig().getBoolean("settings.punish-gui-enabled")) {
+            return false;
+        }
+
         if (args.length == 0) {
             sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player>."));
         }
