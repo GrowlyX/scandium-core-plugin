@@ -36,10 +36,6 @@ import com.solexgames.core.command.extend.web.WebAnnouncementDeleteCommand;
 import com.solexgames.core.command.extend.whitelist.WhitelistCommand;
 import com.solexgames.core.database.Database;
 import com.solexgames.core.enums.ServerType;
-import com.solexgames.core.internal.impl.TablistAdapter;
-import com.solexgames.core.internal.shared.TabHandler;
-import com.solexgames.core.internal.v1_7_r4.v1_7_R4TabAdapter;
-import com.solexgames.core.internal.v1_8_r3.v1_8_R3TabAdapter;
 import com.solexgames.core.listener.ModSuiteListener;
 import com.solexgames.core.listener.PlayerListener;
 import com.solexgames.core.manager.*;
@@ -188,22 +184,10 @@ public final class CorePlugin extends JavaPlugin {
 
         if (this.getServer().getVersion().contains("1.7")) {
             this.NMS = new NMSAccess_v1_7();
-
-            if (tabEnabled) {
-                new TabHandler(new v1_7_R4TabAdapter(), new TablistAdapter(), this, 20L);
-            }
         } else if (this.getServer().getVersion().contains("1.8")) {
             this.NMS = new NMSAccess_v1_8();
-
-            if (tabEnabled) {
-                new TabHandler(new v1_8_R3TabAdapter(), new TablistAdapter(), this, 20L);
-            }
         } else if (this.getServer().getVersion().contains("1.16")) {
             this.NMS = new NMSAccess_v1_16();
-
-            if (tabEnabled) {
-                System.out.println("Tablist support for this version is going to come very soon!");
-            }
         }
 
         this.getLogger().info("[Bukkit] Hooked into Bukkit version " + this.getServer().getVersion() + "!");

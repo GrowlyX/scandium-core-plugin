@@ -1,6 +1,7 @@
 package com.solexgames.core.player;
 
 import com.google.gson.annotations.SerializedName;
+import com.mojang.authlib.GameProfile;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import com.solexgames.core.CorePlugin;
@@ -113,6 +114,7 @@ public class PotPlayer {
 
     private LanguageType language;
     private PermissionAttachment attachment;
+    private GameProfile gameProfile;
 
     private long chatCooldown = 1L;
     private long commandCooldown = 1L;
@@ -293,6 +295,8 @@ public class PotPlayer {
         }
 
         this.name = this.getPlayer().getName();
+        this.gameProfile = CorePlugin.getInstance().getPlayerManager().getGameProfile(this.player);
+
         if (document.getBoolean("canSeeStaffMessages") != null) {
             this.canSeeStaffMessages = document.getBoolean("canSeeStaffMessages");
         }
@@ -524,7 +528,7 @@ public class PotPlayer {
     public void setupPlayerList() {
         player.setPlayerListName(Color.translate((this.getActiveGrant().getRank().getColor() == null ? ChatColor.GRAY.toString() : this.getActiveGrant().getRank().getColor()) + (this.customColor != null ? this.customColor : "") + this.player.getName()));
 
-        NameTagExternal.setTabPosition(this);
+        CorePlugin.getInstance().getNMS().updateTablist();
     }
 
     public void resetPermissions() {

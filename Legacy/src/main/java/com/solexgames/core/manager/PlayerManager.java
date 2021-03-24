@@ -1,6 +1,7 @@
 package com.solexgames.core.manager;
 
 import com.cryptomorin.xseries.XMaterial;
+import com.mojang.authlib.GameProfile;
 import com.mongodb.client.model.Filters;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.board.extend.ModSuiteBoard;
@@ -50,6 +51,27 @@ public class PlayerManager {
                 .filter(networkPlayer -> networkPlayer.getName().equalsIgnoreCase(player))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public GameProfile getGameProfile(Player player) {
+        try {
+            Class<?> strClass = Class.forName("org.bukkit.craftbukkit." + this.getServerVersion() + ".entity.CraftPlayer");
+            return (GameProfile) strClass.cast(player).getClass().getMethod("getProfile").invoke(strClass.cast(player));
+        } catch (Exception ignored) {
+            return null;
+        }
+    }
+
+    public String getServerVersion() {
+        String version;
+
+        try {
+            version = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
+        } catch (Exception exception) {
+            return null;
+        }
+
+        return version;
     }
 
     public boolean isOnline(String player) {
