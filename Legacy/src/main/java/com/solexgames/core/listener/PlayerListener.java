@@ -3,12 +3,12 @@ package com.solexgames.core.listener;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ChatChannelType;
 import com.solexgames.core.manager.ServerManager;
-import com.solexgames.core.player.media.MediaConstants;
 import com.solexgames.core.menu.IMenu;
 import com.solexgames.core.menu.impl.grant.GrantSelectConfirmMenu;
 import com.solexgames.core.menu.impl.grant.GrantSelectReasonMenu;
 import com.solexgames.core.menu.impl.punish.PunishSelectDurationMenu;
 import com.solexgames.core.player.PotPlayer;
+import com.solexgames.core.player.media.MediaConstants;
 import com.solexgames.core.player.punishment.Punishment;
 import com.solexgames.core.player.punishment.PunishmentStrings;
 import com.solexgames.core.util.*;
@@ -31,7 +31,6 @@ import org.json.simple.parser.ParseException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Objects;
 import java.util.regex.Matcher;
 
 public class PlayerListener implements Listener {
@@ -48,11 +47,14 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
-    public void onConnect(PlayerPreLoginEvent event) {
+    public void onConnect(AsyncPlayerPreLoginEvent event) {
         if (!CorePlugin.CAN_JOIN) {
-            event.disallow(PlayerPreLoginEvent.Result.KICK_OTHER, PunishmentStrings.PLAYER_DATA_LOAD);
+            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, PunishmentStrings.PLAYER_DATA_LOAD);
             return;
         }
+
+        new PotPlayer(event.getUniqueId(), event.getName(), event.getAddress());
+
         if (!CorePlugin.getInstance().getConfig().getBoolean("whitelist")) {
             allowConnection(event);
             return;
@@ -62,12 +64,10 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        event.disallow(PlayerPreLoginEvent.Result.KICK_OTHER, Color.translate(CorePlugin.getInstance().getConfig().getString("whitelisted-msg").replace("<nl>", "\n")));
+        event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Color.translate(CorePlugin.getInstance().getConfig().getString("whitelisted-msg").replace("<nl>", "\n")));
     }
 
-    private void allowConnection(PlayerPreLoginEvent event) {
-        new PotPlayer(event.getUniqueId(), event.getName(), event.getAddress());
-
+    private void allowConnection(AsyncPlayerPreLoginEvent event) {
         if (!(CorePlugin.getInstance().getServerName().contains("hub") || CorePlugin.getInstance().getServerName().contains("lobby"))) {
             Punishment.getAllPunishments().stream()
                     .filter(punishment -> punishment != null && punishment.isActive() & punishment.getTarget().equals(event.getUniqueId()))
@@ -75,11 +75,11 @@ public class PlayerListener implements Listener {
                     .forEach(punishment -> {
                         switch (punishment.getPunishmentType()) {
                             case BLACKLIST:
-                                event.disallow(PlayerPreLoginEvent.Result.KICK_OTHER, Color.translate(PunishmentStrings.BLACK_LIST_MESSAGE.replace("<reason>", punishment.getReason())));
+                                event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Color.translate(PunishmentStrings.BLACK_LIST_MESSAGE.replace("<reason>", punishment.getReason())));
                                 break;
                             case IPBAN:
                             case BAN:
-                                event.disallow(PlayerPreLoginEvent.Result.KICK_OTHER, (punishment.isPermanent() ? Color.translate(PunishmentStrings.BAN_MESSAGE_PERM.replace("<reason>", punishment.getReason())) : Color.translate(PunishmentStrings.BAN_MESSAGE_TEMP.replace("<reason>", punishment.getReason()).replace("<time>", punishment.getDurationString()))));
+                                event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, (punishment.isPermanent() ? Color.translate(PunishmentStrings.BAN_MESSAGE_PERM.replace("<reason>", punishment.getReason())) : Color.translate(PunishmentStrings.BAN_MESSAGE_TEMP.replace("<reason>", punishment.getReason()).replace("<time>", punishment.getDurationString()))));
                                 break;
                         }
                     });
@@ -137,12 +137,12 @@ public class PlayerListener implements Listener {
     public void onConnect(PlayerJoinEvent event) {
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer());
 
+        potPlayer.postLoginLoad();
+
         if (!potPlayer.isHasLoaded()) {
             event.getPlayer().kickPlayer(PunishmentStrings.PLAYER_DATA_LOAD);
             return;
         }
-
-        potPlayer.postLoginLoad();
 
         CorePlugin.getInstance().getServerManager().getVanishedPlayers().stream()
                 .map(player -> CorePlugin.getInstance().getPlayerManager().getPlayer(player))

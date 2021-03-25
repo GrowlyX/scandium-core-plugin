@@ -138,7 +138,6 @@ public class PotPlayer {
 
     public PotPlayer(UUID uuid, String name, InetAddress inetAddress) {
         this.uuid = uuid;
-        this.player = Bukkit.getPlayer(uuid);
         this.ipAddress = inetAddress.toString();
         this.name = name;
 
@@ -482,6 +481,7 @@ public class PotPlayer {
     }
 
     public void postLoginLoad() {
+        this.player = Bukkit.getPlayer(uuid);
         this.attachment = this.player.addAttachment(CorePlugin.getInstance());
         this.gameProfile = CorePlugin.getInstance().getPlayerManager().getGameProfile(this.player);
 
