@@ -6,8 +6,8 @@ import com.solexgames.core.abstraction.access.AbstractNMSAccess;
 import com.solexgames.core.abstraction.access.extend.NMSAccess_v1_16;
 import com.solexgames.core.abstraction.access.extend.NMSAccess_v1_7;
 import com.solexgames.core.abstraction.access.extend.NMSAccess_v1_8;
-import com.solexgames.core.abstraction.lunar.AbstractLunar;
-import com.solexgames.core.abstraction.lunar.extend.LunarImplementation;
+import com.solexgames.core.abstraction.lunar.AbstractClientHook;
+import com.solexgames.core.abstraction.lunar.extend.LunarClientHook;
 import com.solexgames.core.abstraction.protocol.AbstractChatInterceptor;
 import com.solexgames.core.abstraction.protocol.extend.ProtocolChatInterceptor;
 import com.solexgames.core.command.extend.CoreCommand;
@@ -121,7 +121,7 @@ public final class CorePlugin extends JavaPlugin {
     private RedisSubscriptions subscriptions;
 
     private AbstractChatInterceptor chatInterceptor;
-    private AbstractLunar lunar;
+    private AbstractClientHook lunar;
     private AbstractNMSAccess NMS;
 
     private Executor taskThread;
@@ -175,7 +175,7 @@ public final class CorePlugin extends JavaPlugin {
 
         if (this.getServer().getPluginManager().isPluginEnabled("ProtocolLib")) chatInterceptor = new ProtocolChatInterceptor(); else this.getLogger().info("[Protocol] Could not find ProtocolLib! Chat tab block will not work without it!");
         if (this.getServer().getPluginManager().isPluginEnabled("LunarClient-API")) {
-            this.lunar = new LunarImplementation();
+            this.lunar = new LunarClientHook();
         } else {
             this.getLogger().info("[Protocol] Could not find LunarClient-API! The /lunar command will not work without it!");
         }

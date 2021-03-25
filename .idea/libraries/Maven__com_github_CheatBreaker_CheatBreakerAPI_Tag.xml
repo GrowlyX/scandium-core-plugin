@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.github.CheatBreaker:CheatBreakerAPI:Tag">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/CheatBreaker/CheatBreakerAPI/Tag/CheatBreakerAPI-Tag.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/CheatBreaker/CheatBreakerAPI/Tag/CheatBreakerAPI-Tag-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/CheatBreaker/CheatBreakerAPI/Tag/CheatBreakerAPI-Tag-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
