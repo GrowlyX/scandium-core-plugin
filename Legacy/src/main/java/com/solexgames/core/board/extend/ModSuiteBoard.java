@@ -26,6 +26,25 @@ public class ModSuiteBoard extends ScoreBoard {
         this.network = CorePlugin.getInstance().getServerManager().getNetwork();
     }
 
+    @Override
+    public List<String> getLines() {
+        List<String> lines = new ArrayList<>();
+
+        lines.add(ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + "--------------------");
+        lines.add((!potPlayer.isVanished() ? ChatColor.GREEN + "Visible (Showing staff)" : ChatColor.RED + "Hidden (Showing staff)"));
+        lines.add(network.getSecondaryColor() + "Channel: " + network.getMainColor() + (potPlayer.getChannel() != null ? Color.translate(getChannel(potPlayer.getChannel())) : "Regular"));
+        lines.add(network.getSecondaryColor() + "Players: " + network.getMainColor() + Bukkit.getOnlinePlayers().size());
+        lines.add(network.getSecondaryColor() + "TPS: " + RedisUtil.getTicksPerSecondFormatted());
+        lines.add(ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + "--------------------");
+
+        return lines;
+    }
+
+    @Override
+    public String getTitle() {
+        return network.getSecondaryColor() + ChatColor.BOLD.toString() + "Mod Mode";
+    }
+
     public String getChannel(ChatChannelType chatChannelType) {
         switch (chatChannelType) {
             case DEV:
@@ -41,21 +60,5 @@ public class ModSuiteBoard extends ScoreBoard {
             default:
                 return "Normal";
         }
-    }
-
-    @Override
-    public void update() {
-        List<String> lines = new ArrayList<>();
-
-        this.setTitle(network.getSecondaryColor() + ChatColor.BOLD.toString() + "Mod Mode");
-
-        lines.add(ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + "--------------------");
-        lines.add((!potPlayer.isVanished() ? ChatColor.GREEN + "Visible (Showing staff)" : ChatColor.RED + "Hidden (Showing staff)"));
-        lines.add(network.getSecondaryColor() + "Channel: " + network.getMainColor() + (potPlayer.getChannel() != null ? Color.translate(getChannel(potPlayer.getChannel())) : "Regular"));
-        lines.add(network.getSecondaryColor() + "Players: " + network.getMainColor() + Bukkit.getOnlinePlayers().size());
-        lines.add(network.getSecondaryColor() + "TPS: " + RedisUtil.getTicksPerSecondFormatted());
-        lines.add(ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + "--------------------");
-
-        this.setSlotsFromList(lines);
     }
 }

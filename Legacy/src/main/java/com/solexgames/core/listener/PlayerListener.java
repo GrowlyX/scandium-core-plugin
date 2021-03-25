@@ -66,11 +66,11 @@ public class PlayerListener implements Listener {
     }
 
     private void allowConnection(PlayerPreLoginEvent event) {
+        new PotPlayer(event.getUniqueId(), event.getName(), event.getAddress());
+
         if (!(CorePlugin.getInstance().getServerName().contains("hub") || CorePlugin.getInstance().getServerName().contains("lobby"))) {
             Punishment.getAllPunishments().stream()
-                    .filter(Objects::nonNull)
-                    .filter(Punishment::isActive)
-                    .filter(punishment -> punishment.getTarget().equals(event.getUniqueId()))
+                    .filter(punishment -> punishment != null && punishment.isActive() & punishment.getTarget().equals(event.getUniqueId()))
                     .sorted(Comparator.comparingLong(Punishment::getCreatedAtLong).reversed())
                     .forEach(punishment -> {
                         switch (punishment.getPunishmentType()) {
@@ -135,12 +135,14 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onConnect(PlayerJoinEvent event) {
-        PotPlayer potPlayer = new PotPlayer(event.getPlayer().getUniqueId());
+        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer());
 
         if (!potPlayer.isHasLoaded()) {
             event.getPlayer().kickPlayer(PunishmentStrings.PLAYER_DATA_LOAD);
             return;
         }
+
+        potPlayer.postLoginLoad();
 
         CorePlugin.getInstance().getServerManager().getVanishedPlayers().stream()
                 .map(player -> CorePlugin.getInstance().getPlayerManager().getPlayer(player))

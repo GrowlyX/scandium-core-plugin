@@ -32,6 +32,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.PermissionAttachment;
 
+import java.net.InetAddress;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -44,6 +45,7 @@ public class PotPlayer {
     private List<String> allPrefixes = new ArrayList<>();
     private List<String> allIgnoring = new ArrayList<>();
     private List<String> allFriends = new ArrayList<>();
+    private List<String> allPermissions = new ArrayList<>();
     private List<String> userPermissions = new ArrayList<>();
     private List<PotionMessageType> allPurchasedMessages = new ArrayList<>();
 
@@ -62,6 +64,8 @@ public class PotPlayer {
     private String syncCode;
     private String syncDiscord;
     private String name;
+
+    private Document document;
 
     private boolean canSeeStaffMessages = true;
     private boolean canSeeGlobalChat = true;
@@ -132,27 +136,26 @@ public class PotPlayer {
 
     private boolean hasLoaded;
 
-    public PotPlayer(UUID uuid) {
+    public PotPlayer(UUID uuid, String name, InetAddress inetAddress) {
         this.uuid = uuid;
         this.player = Bukkit.getPlayer(uuid);
-        this.ipAddress = player.getAddress().getAddress().toString();
-        this.name = player.getName();
+        this.ipAddress = inetAddress.toString();
+        this.name = name;
 
         this.media = new Media();
         this.lastJoined = new Date();
         this.syncCode = SaltUtil.getRandomSaltedString(6);
+        this.hasLoaded = false;
 
         CorePlugin.getInstance().getPlayerManager().getAllProfiles().put(uuid, this);
 
-        this.hasLoaded = false;
         this.loadPlayerData();
-        this.hasLoaded = true;
     }
 
     public void saveWithoutRemove() {
         Document document = new Document("_id", this.uuid);
 
-        document.put("name", this.getPlayer().getName());
+        document.put("name", this.getName());
         document.put("uuid", this.uuid.toString());
         document.put("canSeeStaffMessages", this.canSeeStaffMessages);
         document.put("canSeeTips", this.canSeeTips);
@@ -221,7 +224,7 @@ public class PotPlayer {
 
         Document document = new Document("_id", this.uuid);
 
-        document.put("name", this.getPlayer().getName());
+        document.put("name", this.getName());
         document.put("uuid", this.uuid.toString());
         document.put("canSeeStaffMessages", this.canSeeStaffMessages);
         document.put("canSeeTips", this.canSeeTips);
@@ -294,8 +297,8 @@ public class PotPlayer {
             return;
         }
 
-        this.name = this.getPlayer().getName();
-        this.gameProfile = CorePlugin.getInstance().getPlayerManager().getGameProfile(this.player);
+        this.name = this.getName();
+        this.document = document;
 
         if (document.getBoolean("canSeeStaffMessages") != null) {
             this.canSeeStaffMessages = document.getBoolean("canSeeStaffMessages");
@@ -425,18 +428,7 @@ public class PotPlayer {
                 .filter(punishment -> punishment.getTarget().equals(this.uuid))
                 .forEach(punishment -> this.punishments.add(punishment));
 
-        CorePlugin.getInstance().getPlayerManager().getAllSyncCodes().put(this.syncCode, this.player.getName());
-
-        if (document.get("allPrefixes") != null) {
-            if (player.hasPermission("scandium.prefixes.all")) {
-                List<String> prefixes = new ArrayList<>();
-                Prefix.getPrefixes().forEach(prefix -> prefixes.add(prefix.getName()));
-                this.getAllPrefixes().addAll(prefixes);
-            } else if (!player.hasPermission("scandium.prefixes.all")) {
-                List<String> prefixes = ((List<String>) document.get("allPrefixes"));
-                this.allPrefixes.addAll(prefixes);
-            }
-        }
+        CorePlugin.getInstance().getPlayerManager().getAllSyncCodes().put(this.syncCode, this.getName());
 
         this.getPunishments()
                 .stream()
@@ -455,15 +447,43 @@ public class PotPlayer {
                     this.restrictionPunishment = punishment;
                 });
 
-        this.attachment = this.player.addAttachment(CorePlugin.getInstance());
+        this.getAllGrants().stream()
+                .filter(Objects::nonNull)
+                .filter(grant -> !grant.isExpired() && (grant.getScope() == null || (grant.getScope().equals("global") || (grant.getScope().equals(CorePlugin.getInstance().getServerName())))))
+                .forEach(grant -> {
+                    grant.getRank().getPermissions().forEach(s -> {
+                        if (!this.allPermissions.contains(s.replace("-", ""))) {
+                            this.allPermissions.add(s.replace("-", ""));
+                        }
+                    });
+                    grant.getRank().getInheritance().stream()
+                            .map(Rank::getByUuid)
+                            .filter(Objects::nonNull)
+                            .forEach(rank -> rank.getPermissions().forEach(permission -> {
+                                if (!this.allPermissions.contains(permission.replace("-", ""))) {
+                                    this.allPermissions.add(permission.replace("-", ""));
+                                }
+                            }));
+                });
 
-        this.setupPlayer();
-
-        if (CorePlugin.NAME_MC_REWARDS) this.checkVoting();
+        this.getUserPermissions().forEach(permission -> {
+            if (!this.allPermissions.contains(permission.replace("-", ""))) {
+                this.allPermissions.add(permission.replace("-", ""));
+            }
+        });
 
         this.currentlyOnline = true;
+        this.hasLoaded = true;
+
+        new NetworkPlayer(this.uuid, this.name, CorePlugin.getInstance().getServerName(), this.getActiveGrant().getRank().getName(), this.isCanReceiveDms(), this.ipAddress);
 
         Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), this::saveWithoutRemove, 10 * 20L);
+        RedisUtil.writeAsync(RedisUtil.addGlobalPlayer(this));
+    }
+
+    public void postLoginLoad() {
+        this.attachment = this.player.addAttachment(CorePlugin.getInstance());
+        this.gameProfile = CorePlugin.getInstance().getPlayerManager().getGameProfile(this.player);
 
         if (this.getPlayer().hasPermission("scandium.staff")) {
             if (!CorePlugin.getInstance().getPlayerManager().isOnline(this.getPlayer().getName())) {
@@ -471,9 +491,22 @@ public class PotPlayer {
             }
         }
 
-        new NetworkPlayer(this.uuid, this.name, CorePlugin.getInstance().getServerName(), this.getActiveGrant().getRank().getName(), this.isCanReceiveDms(), this.ipAddress);
+        if (document.get("allPrefixes") != null) {
+            if (player.hasPermission("scandium.prefixes.all")) {
+                List<String> prefixes = new ArrayList<>();
+                Prefix.getPrefixes().forEach(prefix -> prefixes.add(prefix.getName()));
+                this.getAllPrefixes().addAll(prefixes);
+            } else if (!player.hasPermission("scandium.prefixes.all")) {
+                List<String> prefixes = ((List<String>) this.document.get("allPrefixes"));
+                this.allPrefixes.addAll(prefixes);
+            }
+        }
 
-        RedisUtil.writeAsync(RedisUtil.addGlobalPlayer(this));
+        if (CorePlugin.NAME_MC_REWARDS) {
+            this.checkVoting();
+        }
+
+        this.setupPlayer();
     }
 
     public String getRestrictionMessage() {
@@ -538,22 +571,8 @@ public class PotPlayer {
     }
 
     public void setupPermissions() {
-        Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> {
-            this.getAllGrants().stream()
-                    .filter(Objects::nonNull)
-                    .filter(grant -> !grant.isExpired())
-                    .filter(grant -> (grant.getScope() == null || (grant.getScope().equals("global") || (grant.getScope().equals(CorePlugin.getInstance().getServerName())))))
-                    .forEach(grant -> {
-                        grant.getRank().getPermissions().forEach(s -> this.attachment.setPermission(s.replace("-", ""), !s.startsWith("-")));
-                        grant.getRank().getInheritance().stream()
-                                .map(Rank::getByUuid)
-                                .filter(Objects::nonNull)
-                                .forEach(rank -> rank.getPermissions().forEach(permission -> this.attachment.setPermission(permission.replace("-", ""), !permission.startsWith("-"))));
-                    });
-            this.getUserPermissions().forEach(permission -> this.attachment.setPermission(permission.replace("-", ""), !permission.startsWith("-")));
-
-            player.recalculatePermissions();
-        });
+        this.allPermissions.forEach(permission -> this.attachment.setPermission(permission, true));
+        this.player.recalculatePermissions();
     }
 
     public void setupPlayerTag() {

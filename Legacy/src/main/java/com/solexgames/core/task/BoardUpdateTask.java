@@ -6,6 +6,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Objects;
+
 public class BoardUpdateTask extends BukkitRunnable {
 
     public BoardUpdateTask() {
@@ -14,15 +16,11 @@ public class BoardUpdateTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        if (ScoreBoard.getAllBoards().keySet().isEmpty())
-            return;
-
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            ScoreBoard scoreBoard = ScoreBoard.getAllBoards().get(player.getUniqueId());
-
-            if (scoreBoard != null) {
-                scoreBoard.update();
-            }
+        if (!ScoreBoard.getAllBoards().keySet().isEmpty()) {
+            Bukkit.getOnlinePlayers().stream()
+                    .map(player -> ScoreBoard.getAllBoards().get(player.getUniqueId()))
+                    .filter(Objects::nonNull)
+                    .forEach(ScoreBoard::updateForPlayer);
         }
     }
 }

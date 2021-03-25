@@ -18,6 +18,7 @@ public class ProtocolChatInterceptor extends AbstractChatInterceptor {
     protected PacketAdapter adapter;
     protected PacketAdapter sendAdapter;
     protected PacketAdapter outPlay;
+
     protected String[] returnString;
 
     @Override

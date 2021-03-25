@@ -7,7 +7,7 @@ import lombok.Getter;
 import org.bukkit.configuration.file.FileConfiguration;
 
 @Getter
-public abstract class AbstractChatInterceptor implements IChatInterceptor {
+public abstract class AbstractChatInterceptor {
 
     protected ProtocolManager protocolManager;
     protected FileConfiguration config;

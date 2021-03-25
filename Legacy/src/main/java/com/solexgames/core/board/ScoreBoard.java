@@ -29,34 +29,35 @@ public abstract class ScoreBoard {
     public ScoreBoard(Player player) {
         this.player = player;
 
-        scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-        sidebar = scoreboard.registerNewObjective("sidebar", "dummy");
-        sidebar.setDisplaySlot(DisplaySlot.SIDEBAR);
+        this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
+        this.sidebar = this.scoreboard.registerNewObjective("sidebar", "dummy");
+        this.sidebar.setDisplaySlot(DisplaySlot.SIDEBAR);
 
-        player.setScoreboard(scoreboard);
+        player.setScoreboard(this.scoreboard);
 
         for (int i = 1; i <= 15; i++) {
-            Team team = scoreboard.registerNewTeam("SLOT_" + i);
+            Team team = this.scoreboard.registerNewTeam("SLOT_" + i);
             team.addEntry(genEntry(i));
         }
 
         ScoreBoard.getAllBoards().put(player.getUniqueId(), this);
     }
 
-    public void setTitle(String title) {
+    public void setTitle() {
+        String title = this.getTitle();
         title = Color.translate(title);
 
         if (title.length() > 32) title = title.substring(0, 32);
-        if (!sidebar.getDisplayName().equals(title)) sidebar.setDisplayName(title);
+        if (!this.sidebar.getDisplayName().equals(title)) this.sidebar.setDisplayName(title);
     }
 
     private void setSlot(int slot, String text) {
         if (slot > 15) return;
 
-        Team team = scoreboard.getTeam("SLOT_" + slot);
+        Team team = this.scoreboard.getTeam("SLOT_" + slot);
         String entry = genEntry(slot);
 
-        if (!scoreboard.getEntries().contains(entry)) sidebar.getScore(entry).setScore(slot);
+        if (!this.scoreboard.getEntries().contains(entry)) this.sidebar.getScore(entry).setScore(slot);
 
         String prefix = getFirstSplit(text);
 
@@ -73,17 +74,22 @@ public abstract class ScoreBoard {
 
     private void removeSlot(int slot) {
         String entry = genEntry(slot);
-        if (scoreboard.getEntries().contains(entry)) scoreboard.resetScores(entry);
+        if (this.scoreboard.getEntries().contains(entry)) this.scoreboard.resetScores(entry);
     }
 
-    public void setSlotsFromList(List<String> list) {
-        int slot = list.size();
+    public void setSlotsFromList() {
+        int slot = this.getLines().size();
         if (slot < 15) for (int i = (slot + 1); i <= 15; i++) removeSlot(i);
 
-        for (String line : list) {
+        for (String line : this.getLines()) {
             setSlot(slot, line);
             slot--;
         }
+    }
+
+    public void updateForPlayer() {
+        this.setSlotsFromList();
+        this.setTitle();
     }
 
     private String genEntry(int slot) {
@@ -104,5 +110,6 @@ public abstract class ScoreBoard {
         ScoreBoard.getAllBoards().remove(this.getPlayer().getUniqueId());
     }
 
-    public abstract void update();
+    public abstract List<String> getLines();
+    public abstract String getTitle();
 }
