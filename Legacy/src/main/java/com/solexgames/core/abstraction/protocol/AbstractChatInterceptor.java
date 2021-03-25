@@ -18,4 +18,7 @@ public abstract class AbstractChatInterceptor implements IChatInterceptor {
         this.config = CorePlugin.getInstance().getConfig();
         this.coreInstance = CorePlugin.getInstance();
     }
+
+    public abstract void initializePacketInterceptor();
+
 }

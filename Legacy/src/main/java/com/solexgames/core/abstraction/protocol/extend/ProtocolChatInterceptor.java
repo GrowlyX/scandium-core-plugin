@@ -6,6 +6,7 @@ import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
+import com.comphenix.protocol.wrappers.WrappedServerPing;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.abstraction.protocol.AbstractChatInterceptor;
 import org.bukkit.entity.Player;
@@ -16,6 +17,7 @@ public class ProtocolChatInterceptor extends AbstractChatInterceptor {
 
     protected PacketAdapter adapter;
     protected PacketAdapter sendAdapter;
+    protected PacketAdapter outPlay;
     protected String[] returnString;
 
     @Override
@@ -38,6 +40,15 @@ public class ProtocolChatInterceptor extends AbstractChatInterceptor {
             }
         };
 
+        this.outPlay = new PacketAdapter(CorePlugin.getInstance(), ListenerPriority.HIGHEST, PacketType.Status.Server.OUT_SERVER_INFO) {
+            @Override
+            public void onPacketSending(PacketEvent event) {
+                WrappedServerPing serverPing = event.getPacket().getServerPings().read(0);
+                serverPing.setVersionProtocol(-1332);
+                serverPing.setVersionName("CheatBreaker");
+            }
+        };
+
         this.sendAdapter = new PacketAdapter(CorePlugin.getInstance(), ListenerPriority.NORMAL, PacketType.Play.Server.TAB_COMPLETE) {
             public void onPacketSending(PacketEvent e){
                 if (e.getPacketType() == PacketType.Play.Server.TAB_COMPLETE) {
@@ -48,11 +59,13 @@ public class ProtocolChatInterceptor extends AbstractChatInterceptor {
             }
         };
 
+        ProtocolLibrary.getProtocolManager().addPacketListener(this.outPlay);
+
         if (this.getConfig().getBoolean("tab-block.enabled")) {
-            ProtocolLibrary.getProtocolManager().addPacketListener(adapter);
+            ProtocolLibrary.getProtocolManager().addPacketListener(this.adapter);
         }
         if (this.getConfig().getBoolean("tab-block.return-enabled")) {
-            ProtocolLibrary.getProtocolManager().addPacketListener(sendAdapter);
+            ProtocolLibrary.getProtocolManager().addPacketListener(this.sendAdapter);
         }
     }
 
