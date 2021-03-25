@@ -136,7 +136,7 @@ public final class CorePlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        instance = JavaPlugin.getPlugin(CorePlugin.class);
+        instance = this;
 
         if (!this.getName().equals("Scandium")) {
             this.getServer().shutdown();
@@ -179,8 +179,6 @@ public final class CorePlugin extends JavaPlugin {
         } else {
             this.getLogger().info("[Protocol] Could not find LunarClient-API! The /lunar command will not work without it!");
         }
-
-        boolean tabEnabled = this.getConfig().getBoolean("tablist.enabled");
 
         if (this.getServer().getVersion().contains("1.7")) {
             this.NMS = new NMSAccess_v1_7();

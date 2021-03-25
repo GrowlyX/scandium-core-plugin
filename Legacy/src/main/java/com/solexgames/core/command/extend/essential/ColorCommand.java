@@ -1,7 +1,7 @@
 package com.solexgames.core.command.extend.essential;
 
 import com.solexgames.core.command.BaseCommand;
-import com.solexgames.core.menu.extend.color.NameColorSelectMenu;
+import com.solexgames.core.menu.impl.color.NameColorSelectMenu;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

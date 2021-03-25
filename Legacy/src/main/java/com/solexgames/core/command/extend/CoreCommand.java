@@ -2,9 +2,8 @@ package com.solexgames.core.command.extend;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
-import com.solexgames.core.menu.extend.ScandiumMenu;
+import com.solexgames.core.menu.impl.ScandiumMenu;
 import com.solexgames.core.util.Color;
-import com.solexgames.core.util.StringUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.defaults.BukkitCommand;

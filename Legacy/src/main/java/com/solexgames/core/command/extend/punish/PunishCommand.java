@@ -3,7 +3,7 @@ package com.solexgames.core.command.extend.punish;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.enums.ServerType;
-import com.solexgames.core.menu.extend.punish.PunishMainMenu;
+import com.solexgames.core.menu.impl.punish.PunishMainMenu;
 import com.solexgames.core.util.Color;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.Command;

@@ -3,7 +3,7 @@ package com.solexgames.core.util.external.pagination.extend;
 import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
-import com.solexgames.core.menu.extend.grant.remove.GrantRemoveConfirmMenu;
+import com.solexgames.core.menu.impl.grant.remove.GrantRemoveConfirmMenu;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.grant.Grant;
 import com.solexgames.core.util.builder.ItemBuilder;

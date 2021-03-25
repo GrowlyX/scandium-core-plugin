@@ -3,7 +3,7 @@ package com.solexgames.core.command.extend.experience;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.enums.ServerType;
-import com.solexgames.core.menu.extend.experience.ExperienceMainMenu;
+import com.solexgames.core.menu.impl.experience.ExperienceMainMenu;
 import com.solexgames.core.util.ExperienceUtil;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;

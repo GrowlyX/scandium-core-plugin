@@ -3,7 +3,7 @@ package com.solexgames.core.util.external.pagination.extend;
 import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
-import com.solexgames.core.menu.extend.punish.remove.PunishRemoveConfirmMenu;
+import com.solexgames.core.menu.impl.punish.remove.PunishRemoveConfirmMenu;
 import com.solexgames.core.player.punishment.Punishment;
 import com.solexgames.core.player.punishment.PunishmentType;
 import com.solexgames.core.util.Color;

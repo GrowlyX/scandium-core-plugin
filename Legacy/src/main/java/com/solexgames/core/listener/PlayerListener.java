@@ -2,13 +2,12 @@ package com.solexgames.core.listener;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ChatChannelType;
-import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.manager.ServerManager;
 import com.solexgames.core.player.media.MediaConstants;
 import com.solexgames.core.menu.IMenu;
-import com.solexgames.core.menu.extend.grant.GrantSelectConfirmMenu;
-import com.solexgames.core.menu.extend.grant.GrantSelectReasonMenu;
-import com.solexgames.core.menu.extend.punish.PunishSelectDurationMenu;
+import com.solexgames.core.menu.impl.grant.GrantSelectConfirmMenu;
+import com.solexgames.core.menu.impl.grant.GrantSelectReasonMenu;
+import com.solexgames.core.menu.impl.punish.PunishSelectDurationMenu;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.punishment.Punishment;
 import com.solexgames.core.player.punishment.PunishmentStrings;
@@ -34,7 +33,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.regex.Matcher;
-import java.util.stream.Collectors;
 
 public class PlayerListener implements Listener {
 

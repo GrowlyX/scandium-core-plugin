@@ -57,27 +57,6 @@ public final class NameTagExternal {
         player.setScoreboard(scoreboard);
     }
 
-    public static void setTabPosition(PotPlayer potPlayer) {
-        Player player = potPlayer.getPlayer();
-        Scoreboard scoreboard = player.getScoreboard();
-
-        String teamName;
-        if (potPlayer.getActiveGrant().getRank().getTeamLetter() != null) {
-            teamName = potPlayer.getActiveGrant().getRank().getTeamLetter() + potPlayer.getActiveGrant().getRank().getName().toUpperCase();
-        } else {
-            teamName = "a" + potPlayer.getActiveGrant().getRank().getName().toUpperCase();
-        }
-
-        if (scoreboard.equals(Bukkit.getServer().getScoreboardManager().getMainScoreboard()))
-            scoreboard = Bukkit.getServer().getScoreboardManager().getNewScoreboard();
-
-        Team team = player.getScoreboard().getTeam(teamName);
-        if (team == null)
-            team = player.getScoreboard().registerNewTeam(teamName);
-
-        player.setScoreboard(scoreboard);
-    }
-
     public static void setupStaffModeTag(Player player, Player other) {
         Scoreboard scoreboard = player.getScoreboard();
 

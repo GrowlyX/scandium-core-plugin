@@ -306,6 +306,26 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                         }
 
                         finalPunishment.savePunishment();
+
+                        Player targetPlayer = Bukkit.getPlayer(finalPunishment.getTarget());
+
+                        if (targetPlayer != null) {
+                            PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(targetPlayer);
+
+                            switch (punishment.getPunishmentType()) {
+                                case MUTE:
+                                    potPlayer.setCurrentlyMuted(false);
+                                    break;
+                                case WARN:
+                                    targetPlayer.sendMessage(ChatColor.RED + "Your current warning has now expired.");
+                                    break;
+                                case BLACKLIST:
+                                case IPBAN:
+                                case BAN:
+                                    potPlayer.setCurrentlyRestricted(false);
+                                    break;
+                            }
+                        }
                     }
                 }
                 break;

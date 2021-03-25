@@ -48,11 +48,4 @@ public class NMSAccess_v1_8 extends AbstractNMSAccess {
         } catch (Exception ignored) {
         }
     }
-
-    private Collection<Player> getOnlinePlayers() {
-        return Bukkit.getOnlinePlayers().stream()
-                .filter(player -> !CorePlugin.getInstance().getPlayerManager().getPlayer(player).isVanished())
-                .filter(player -> !CorePlugin.getInstance().getPlayerManager().getPlayer(player).isStaffMode())
-                .collect(Collectors.toList());
-    }
 }

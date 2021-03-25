@@ -1,8 +1,8 @@
 package com.solexgames.core.command.extend.essential;
 
 import com.solexgames.core.command.BaseCommand;
-import com.solexgames.core.menu.extend.media.ExternalMediaMenu;
-import com.solexgames.core.menu.extend.media.MediaMenu;
+import com.solexgames.core.menu.impl.media.ExternalMediaMenu;
+import com.solexgames.core.menu.impl.media.MediaMenu;
 import com.solexgames.core.util.Color;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;

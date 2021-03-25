@@ -1,7 +1,7 @@
 package com.solexgames.core.command.extend.essential;
 
 import com.solexgames.core.command.BaseCommand;
-import com.solexgames.core.menu.extend.SettingsMenu;
+import com.solexgames.core.menu.impl.SettingsMenu;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
