@@ -282,17 +282,19 @@ public class PotPlayer {
         document.put("ipAddress", CorePlugin.getInstance().getCryptoManager().encrypt(ipAddress));
         document.put("experience", this.experience);
 
-        CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true)));
+        CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("uuid", uuid.toString()), document, new ReplaceOptions().upsert(true)));
 
         CorePlugin.getInstance().getPlayerManager().getAllSyncCodes().remove(this.syncCode);
         CorePlugin.getInstance().getPlayerManager().getAllProfiles().remove(this.uuid);
     }
 
     public void loadPlayerData() {
-        Document document = CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("_id", this.uuid)).first();
+        Document document = CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("uuid", uuid.toString())).first();
+
         if (document == null) {
             this.saveWithoutRemove();
             this.hasLoaded = true;
+
             return;
         }
 
@@ -465,7 +467,7 @@ public class PotPlayer {
             }
         }
 
-        if (document.get("allPrefixes") != null) {
+        if (document != null && document.get("allPrefixes") != null) {
             if (player.hasPermission("scandium.prefixes.all")) {
                 List<String> prefixes = new ArrayList<>();
                 Prefix.getPrefixes().forEach(prefix -> prefixes.add(prefix.getName()));

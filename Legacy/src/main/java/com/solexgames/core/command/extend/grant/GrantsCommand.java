@@ -33,10 +33,10 @@ public class GrantsCommand extends BaseCommand {
             sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player>."));
         }
         if (args.length == 1) {
-            Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByName(args[0]).orElse(null);
+            Player target = Bukkit.getPlayerExact(args[0]);
 
-            if (document != null) {
-                new GrantViewPaginatedMenu(player, document).openMenu(player);
+            if (target != null) {
+                new GrantViewPaginatedMenu(player, target).openMenu(player);
             } else {
                 player.sendMessage(Color.translate("&cThat player does not exist."));
             }

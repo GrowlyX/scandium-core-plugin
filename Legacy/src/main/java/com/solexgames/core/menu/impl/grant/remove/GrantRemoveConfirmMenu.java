@@ -22,6 +22,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author GrowlyX
@@ -32,18 +33,14 @@ import java.util.List;
 public class GrantRemoveConfirmMenu extends AbstractInventoryMenu {
 
     public Player player;
-    public Document target;
+    public Player target;
     public Grant grant;
-    public List<Grant> allGrants;
 
-    public GrantRemoveConfirmMenu(Player player, Document target, Grant grant, List<Grant> allGrants) {
-        super("Grant removal for: " + (Rank.getByName(target.getString("rankName")) != null ? Rank.getByName(target.getString("rankName")).getColor() : ChatColor.GRAY) + target.getString("name"), 9*5);
-
+    public GrantRemoveConfirmMenu(Player player, Player target, Grant grant) {
+        super("Grant removal for: " + target.getDisplayName(), 9*5);
         this.grant = grant;
         this.player = player;
         this.target = target;
-        this.allGrants = allGrants;
-
         this.update();
     }
 
@@ -57,7 +54,7 @@ public class GrantRemoveConfirmMenu extends AbstractInventoryMenu {
                     .setDisplayName("&aConfirm Remove")
                     .addLore(
                             "&7Would you like to remove:",
-                            "&b#" + grant.getId() + "&7 from " + (Rank.getByName(target.getString("rankName")) != null ? Rank.getByName(target.getString("rankName")).getColor() : ChatColor.GRAY) + target.getString("name") + "&7?",
+                            "&b#" + grant.getId() + "&7 from " + target.getDisplayName() + "&7?",
                             "",
                             "&aClick to confirm grant removal."
                     )
@@ -82,27 +79,14 @@ public class GrantRemoveConfirmMenu extends AbstractInventoryMenu {
             event.setCancelled(true);
 
             ItemStack item = event.getCurrentItem();
-            PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target.getString("name"));
+            Player player = (Player) event.getWhoClicked();
+            PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(this.target);
 
             if (item == null || item.getType() == XMaterial.AIR.parseMaterial()) return;
             if (ChatColor.stripColor(Color.translate(item.getItemMeta().getDisplayName())).contains("Confirm")) {
-                if (potPlayer != null) {
-                    potPlayer.getAllGrants().remove(grant);
-                    potPlayer.setupPlayer();
-                } else {
-                    this.allGrants.remove(grant);
-
-                    List<String> grantStrings = new ArrayList<>();
-                    this.getAllGrants().forEach(grant -> grantStrings.add(grant.toJson()));
-
-                    this.target.put("allGrants", grantStrings);
-
-                    CorePlugin.getInstance().getMongoThread().execute(() ->
-                            CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("uuid", this.target.getString("uuid")), this.target, new ReplaceOptions().upsert(true))
-                    );
-                }
-
-                player.sendMessage(Color.translate("&aRemoved the grant from &b" + (Rank.getByName(target.getString("rankName")) != null ? Rank.getByName(target.getString("rankName")).getColor() : ChatColor.GRAY) + target.getString("name") + "'s &ahistory!"));
+                potPlayer.getAllGrants().remove(grant);
+                potPlayer.setupPlayer();
+                player.sendMessage(Color.translate("&aRemoved the grant from &b" + potPlayer.getName() + "'s &ahistory!"));
                 player.closeInventory();
 
                 new GrantViewPaginatedMenu(this.player, this.target).openMenu(this.player);

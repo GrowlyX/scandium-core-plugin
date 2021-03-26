@@ -9,6 +9,7 @@ import com.solexgames.core.player.grant.Grant;
 import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.util.external.pagination.Button;
+import com.solexgames.core.util.external.pagination.Menu;
 import com.solexgames.core.util.external.pagination.pagination.PaginatedMenu;
 import lombok.Getter;
 import org.apache.commons.lang3.time.DurationFormatUtils;
@@ -26,11 +27,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class GrantViewPaginatedMenu extends PaginatedMenu {
 
     private final Player player;
-    private final Document target;
+    private final Player target;
 
-    private List<Grant> allGrants;
-
-    public GrantViewPaginatedMenu(Player player, Document target) {
+    public GrantViewPaginatedMenu(Player player, Player target) {
         super(45);
 
         this.player = player;
@@ -44,7 +43,7 @@ public class GrantViewPaginatedMenu extends PaginatedMenu {
 
     @Override
     public String getPrePaginatedTitle(Player player) {
-        return "Applicable grants for: " + (Rank.getByName(target.getString("rankName")) != null ? Rank.getByName(target.getString("rankName")).getColor() : ChatColor.GRAY) + target.getString("name");
+        return "Applicable grants for: " + target.getDisplayName();
     }
 
     @Override
@@ -52,21 +51,15 @@ public class GrantViewPaginatedMenu extends PaginatedMenu {
         HashMap<Integer, Button> buttons = new HashMap<>();
         AtomicInteger i = new AtomicInteger(0);
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
+        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
 
-        if ((((List<String>) target.get("allGrants")).isEmpty()) || (target.get("allGrants") == null)) {
-            allGrants.add(new Grant(null, Objects.requireNonNull(Rank.getDefault()), new Date().getTime(), -1L, "Automatic Grant (Default)", true, true));
-        } else {
-            List<String> allGrants = ((List<String>) target.get("allGrants"));
-            allGrants.forEach(s -> this.allGrants.add(CorePlugin.GSON.fromJson(s, Grant.class)));
-        }
-
-        this.allGrants.stream().sorted(Comparator.comparingLong(Grant::getDateAdded).reversed()).forEach(grant -> buttons.put(i.getAndIncrement(), new Button() {
+        potPlayer.getAllGrants().forEach(grant -> buttons.put(i.getAndIncrement(), new Button() {
             @Override
             public ItemStack getButtonItem(Player player) {
                 List<String> arrayList = new ArrayList<>();
 
                 arrayList.add(network.getMainColor() + "&m------------------------------------");
-                arrayList.add("&eTarget&7: " + network.getMainColor() + target.getString("name"));
+                arrayList.add("&eTarget&7: " + network.getMainColor() + target.getDisplayName());
                 arrayList.add("&eRank&7: " + network.getMainColor() + grant.getRank().getColor() + grant.getRank().getName());
                 arrayList.add("&eDuration&7: " + network.getMainColor() + (grant.isPermanent() ? "&4Forever" : DurationFormatUtils.formatDurationWords(grant.getDuration(), true, true)));
                 arrayList.add(network.getMainColor() + "&m------------------------------------");
@@ -90,9 +83,11 @@ public class GrantViewPaginatedMenu extends PaginatedMenu {
                 if (clickType.equals(ClickType.RIGHT)) {
                     String display = ChatColor.stripColor(getButtonItem(player).getItemMeta().getDisplayName());
                     String id = display.replace("#", "");
+                    Grant grant = potPlayer.getById(id);
 
-                    allGrants.stream().filter(grant1 -> grant1.getId().equalsIgnoreCase(id)).findFirst()
-                            .ifPresent(grant -> new GrantRemoveConfirmMenu(player, target, grant, allGrants).open(player));
+                    if (grant != null) {
+                        new GrantRemoveConfirmMenu(player, target, grant).open(player);
+                    }
                 }
             }
         }));

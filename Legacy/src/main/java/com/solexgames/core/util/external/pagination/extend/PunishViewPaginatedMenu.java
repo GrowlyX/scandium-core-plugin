@@ -104,6 +104,7 @@ public class PunishViewPaginatedMenu extends PaginatedMenu {
 
                         if (punishment != null) {
                             new PunishRemoveConfirmMenu(player, target, punishment).open(player);
+                            setClosedByMenu(true);
                         }
                     }
                 }
