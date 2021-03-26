@@ -19,6 +19,8 @@ public class SyncCommand extends BaseCommand {
 
         Player player = (Player) sender;
 
+        player.getEffectivePermissions().forEach(permissionAttachmentInfo -> player.sendMessage(permissionAttachmentInfo.getPermission()));
+
         ChatColor MC = CorePlugin.getInstance().getServerManager().getNetwork().getMainColor();
         String MCB = CorePlugin.getInstance().getServerManager().getNetwork().getMainColor() + ChatColor.BOLD.toString();
         ChatColor SC = CorePlugin.getInstance().getServerManager().getNetwork().getSecondaryColor();

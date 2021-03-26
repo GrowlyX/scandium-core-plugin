@@ -53,10 +53,18 @@ public class Grant {
     }
 
     public boolean isGlobal() {
-        return this.scope.equals("global");
+        if (this.scope == null) {
+            return true;
+        }
+
+        return this.scope.equals("global") || this.scope.equals("");
     }
 
     public boolean isApplicable() {
+        if (this.scope == null) {
+            return true;
+        }
+
         return this.scope.equals(CorePlugin.getInstance().getServerName());
     }
 

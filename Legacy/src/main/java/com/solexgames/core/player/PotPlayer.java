@@ -45,7 +45,6 @@ public class PotPlayer {
     private List<String> allPrefixes = new ArrayList<>();
     private List<String> allIgnoring = new ArrayList<>();
     private List<String> allFriends = new ArrayList<>();
-    private List<String> allPermissions = new ArrayList<>();
     private List<String> userPermissions = new ArrayList<>();
     private List<PotionMessageType> allPurchasedMessages = new ArrayList<>();
 
@@ -446,31 +445,6 @@ public class PotPlayer {
                     this.restrictionPunishment = punishment;
                 });
 
-        this.getAllGrants().stream()
-                .filter(Objects::nonNull)
-                .filter(grant -> !grant.isExpired() && (grant.getScope() == null || (grant.getScope().equals("global") || (grant.getScope().equals(CorePlugin.getInstance().getServerName())))))
-                .forEach(grant -> {
-                    grant.getRank().getPermissions().forEach(s -> {
-                        if (!this.allPermissions.contains(s.replace("-", ""))) {
-                            this.allPermissions.add(s.replace("-", ""));
-                        }
-                    });
-                    grant.getRank().getInheritance().stream()
-                            .map(Rank::getByUuid)
-                            .filter(Objects::nonNull)
-                            .forEach(rank -> rank.getPermissions().forEach(permission -> {
-                                if (!this.allPermissions.contains(permission.replace("-", ""))) {
-                                    this.allPermissions.add(permission.replace("-", ""));
-                                }
-                            }));
-                });
-
-        this.getUserPermissions().forEach(permission -> {
-            if (!this.allPermissions.contains(permission.replace("-", ""))) {
-                this.allPermissions.add(permission.replace("-", ""));
-            }
-        });
-
         this.currentlyOnline = true;
         this.hasLoaded = true;
 
@@ -482,7 +456,6 @@ public class PotPlayer {
 
     public void postLoginLoad() {
         this.player = Bukkit.getPlayer(uuid);
-        this.attachment = this.player.addAttachment(CorePlugin.getInstance());
         this.gameProfile = CorePlugin.getInstance().getPlayerManager().getGameProfile(this.player);
 
         if (this.getPlayer().hasPermission("scandium.staff")) {
@@ -536,9 +509,11 @@ public class PotPlayer {
     }
 
     public void setupPlayer() {
-        this.setupDisplay();
+        this.attachment = this.player.addAttachment(CorePlugin.getPlugin(CorePlugin.class));
         this.resetPermissions();
+
         this.setupPermissions();
+        this.setupDisplay();
         this.setupPlayerTag();
         this.setupPlayerList();
     }
@@ -571,7 +546,14 @@ public class PotPlayer {
     }
 
     public void setupPermissions() {
-        this.allPermissions.forEach(permission -> this.attachment.setPermission(permission, true));
+        this.getAllGrants().stream()
+                .filter(grant -> grant != null && grant.isActive() && (grant.isApplicable() || grant.isGlobal()))
+                .forEach(grant -> {
+                    grant.getRank().getPermissions().forEach(s -> this.attachment.setPermission(s.replace("*", ""), !s.startsWith("*")));
+                    grant.getRank().getInheritance().stream().map(Rank::getByUuid).filter(Objects::nonNull).forEach(rank -> rank.getPermissions().forEach(s -> this.attachment.setPermission(s.replace("*", ""), !s.startsWith("*"))));
+                });
+        this.getUserPermissions().forEach(s -> this.attachment.setPermission(s.replace("*", ""), !s.startsWith("*")));
+
         this.player.recalculatePermissions();
     }
 

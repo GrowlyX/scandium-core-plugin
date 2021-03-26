@@ -52,9 +52,6 @@ public class PlayerListener implements Listener {
             event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, PunishmentStrings.PLAYER_DATA_LOAD);
             return;
         }
-
-        new PotPlayer(event.getUniqueId(), event.getName(), event.getAddress());
-
         if (!CorePlugin.getInstance().getConfig().getBoolean("whitelist")) {
             allowConnection(event);
             return;
@@ -135,14 +132,14 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onConnect(PlayerJoinEvent event) {
-        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer());
-
-        potPlayer.postLoginLoad();
+        PotPlayer potPlayer = new PotPlayer(event.getPlayer().getUniqueId(), event.getPlayer().getName(), event.getPlayer().getAddress().getAddress());
 
         if (!potPlayer.isHasLoaded()) {
             event.getPlayer().kickPlayer(PunishmentStrings.PLAYER_DATA_LOAD);
             return;
         }
+
+        potPlayer.postLoginLoad();
 
         CorePlugin.getInstance().getServerManager().getVanishedPlayers().stream()
                 .map(player -> CorePlugin.getInstance().getPlayerManager().getPlayer(player))
