@@ -371,6 +371,25 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                         }
                     }
                     break;
+                case DISCORD_SYNC_UPDATE:
+                    PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(jsonAppender.getParam("NAME"));
+
+                    if (potPlayer != null) {
+                        String discord = jsonAppender.getParam("DISCORD");
+
+                        potPlayer.setSynced(true);
+                        potPlayer.setSyncDiscord(discord);
+                        potPlayer.getMedia().setDiscord(discord);
+                        potPlayer.getAllPrefixes().add("Verified");
+
+                        potPlayer.getPlayer().sendMessage(new String[] {
+                                "  ",
+                                Color.translate("&aThanks for syncing your account! You have been given the &2✔ &7(Verified) &atag!"),
+                                Color.translate("&aYour account has been synced to &b" + discord + "&a."),
+                                "  "
+                        });
+                    }
+                    break;
                 case NETWORK_BROADCAST_UPDATE:
                     String broadcastMessage = jsonAppender.getParam("MESSAGE");
                     Bukkit.broadcastMessage(CorePlugin.getInstance().getPlayerManager().formatBroadcast(broadcastMessage));

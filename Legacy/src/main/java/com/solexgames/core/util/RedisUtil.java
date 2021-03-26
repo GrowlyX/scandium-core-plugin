@@ -231,6 +231,13 @@ public final class RedisUtil {
                 .getAppended();
     }
 
+    public static String syncDiscord(String discord, String name) {
+        return new JsonAppender(RedisAction.DISCORD_SYNC_UPDATE)
+                .put("DISCORD", discord)
+                .put("NAME", name)
+                .getAppended();
+    }
+
     public static void writeAsync(String message) {
         CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(message));
     }
