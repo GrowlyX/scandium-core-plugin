@@ -22,8 +22,9 @@ public class NetworkPlayer {
     private String discordCode;
 
     private boolean receivingDms;
+    private boolean synced;
 
-    public NetworkPlayer(UUID uuid, String name, String serverName, String rankName, boolean receivingDms, String ipAddress, String discordCode) {
+    public NetworkPlayer(UUID uuid, String name, String serverName, String rankName, boolean receivingDms, String ipAddress, String discordCode, boolean synced) {
         this.uuid = uuid;
         this.name = name;
         this.serverName = serverName;
@@ -31,6 +32,7 @@ public class NetworkPlayer {
         this.receivingDms = receivingDms;
         this.ipAddress = ipAddress;
         this.discordCode = discordCode;
+        this.synced = synced;
 
         CorePlugin.getInstance().getPlayerManager().getAllNetworkProfiles().put(this.uuid, this);
     }

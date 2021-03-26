@@ -54,9 +54,10 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                     String ipAddress = jsonAppender.getParam("IP_ADDRESS");
                     String syncCode = jsonAppender.getParam("SYNC_CODE");
                     boolean dmsEnabled = Boolean.parseBoolean(jsonAppender.getParam("DMS_ENABLED"));
+                    boolean isSynced = Boolean.parseBoolean(jsonAppender.getParam("IS_SYNCED"));
 
                     if (!globalServer.equalsIgnoreCase(CorePlugin.getInstance().getServerName())) {
-                        new NetworkPlayer(uuid, name, rank.getName(), globalServer, dmsEnabled, ipAddress, syncCode);
+                        new NetworkPlayer(uuid, name, rank.getName(), globalServer, dmsEnabled, ipAddress, syncCode, isSynced);
                     }
                     break;
                 case SERVER_DATA_ONLINE:
