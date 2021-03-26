@@ -3,6 +3,7 @@ package com.solexgames.core.command.extend.discord;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.util.Color;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -12,14 +13,16 @@ public class SyncCommand extends BaseCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (!Bukkit.getPluginManager().isPluginEnabled("dRobot")) {
+            return false;
+        }
+
         if (!(sender instanceof Player)) {
             sender.sendMessage(ONLY_PLAYERS);
             return false;
         }
 
         Player player = (Player) sender;
-
-        player.getEffectivePermissions().forEach(permissionAttachmentInfo -> player.sendMessage(permissionAttachmentInfo.getPermission()));
 
         ChatColor MC = CorePlugin.getInstance().getServerManager().getNetwork().getMainColor();
         String MCB = CorePlugin.getInstance().getServerManager().getNetwork().getMainColor() + ChatColor.BOLD.toString();

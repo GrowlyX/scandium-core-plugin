@@ -292,6 +292,7 @@ public class PotPlayer {
         Document document = CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("_id", this.uuid)).first();
         if (document == null) {
             this.saveWithoutRemove();
+            this.hasLoaded = true;
             return;
         }
 
