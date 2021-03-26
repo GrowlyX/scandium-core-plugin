@@ -220,6 +220,7 @@ public final class RedisUtil {
                 .put("RANK", potPlayer.getActiveGrant().getRank().getName())
                 .put("DMS_ENABLED", String.valueOf(potPlayer.isCanReceiveDms()))
                 .put("IP_ADDRESS", potPlayer.getIpAddress())
+                .put("SYNC_CODE", potPlayer.getSyncCode())
                 .getAppended();
     }
 

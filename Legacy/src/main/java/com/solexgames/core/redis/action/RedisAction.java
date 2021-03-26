@@ -33,9 +33,11 @@ public enum RedisAction {
     RANK_CREATE_UPDATE("RankCreateUpdate"),
     RANK_DELETE_UPDATE("RankDeleteUpdate"),
 
-    PREFIX_CREATE_UPDATE(""),
-    PREFIX_DELETE_UPDATE(""),
-    PREFIX_SETTINGS_UPDATE("");
+    PREFIX_CREATE_UPDATE("PrefixCreateUpdate"),
+    PREFIX_DELETE_UPDATE("PrefixDeleteUpdate"),
+    PREFIX_SETTINGS_UPDATE("PrefixSettingsUpdate"),
+
+    DISCORD_SYNC_UPDATE("PrefixSettingsUpdate");
 
     private final String packetDataName;
 

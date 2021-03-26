@@ -287,7 +287,6 @@ public class PotPlayer {
 
         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("uuid", uuid.toString()), document, new ReplaceOptions().upsert(true)));
 
-        CorePlugin.getInstance().getPlayerManager().getAllSyncCodes().remove(this.syncCode);
         CorePlugin.getInstance().getPlayerManager().getAllProfiles().remove(this.uuid);
     }
 
@@ -470,7 +469,7 @@ public class PotPlayer {
         this.currentlyOnline = true;
         this.hasLoaded = true;
 
-        new NetworkPlayer(this.uuid, this.name, CorePlugin.getInstance().getServerName(), this.getActiveGrant().getRank().getName(), this.isCanReceiveDms(), this.ipAddress);
+        new NetworkPlayer(this.uuid, this.name, CorePlugin.getInstance().getServerName(), this.getActiveGrant().getRank().getName(), this.isCanReceiveDms(), this.ipAddress, this.syncCode);
 
         Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), this::saveWithoutRemove, 10 * 20L);
         RedisUtil.writeAsync(RedisUtil.addGlobalPlayer(this));

@@ -2,11 +2,13 @@ package com.solexgames.core.manager;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.mojang.authlib.GameProfile;
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.board.extend.ModSuiteBoard;
 import com.solexgames.core.enums.ChatChannelType;
 import com.solexgames.core.enums.ServerType;
+import com.solexgames.core.player.callback.FetchCallback;
 import com.solexgames.core.player.global.NetworkPlayer;
 import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.util.builder.ItemBuilder;
@@ -17,6 +19,7 @@ import com.solexgames.core.util.StaffUtil;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -207,16 +210,35 @@ public class PlayerManager {
         StaffUtil.sendAlert(player, "unmodmoded");
     }
 
+    public NetworkPlayer getPlayerFromSyncCode(String syncCode) {
+        return this.allNetworkProfiles.values().stream()
+                .filter(networkPlayer -> networkPlayer.getDiscordCode().equalsIgnoreCase(syncCode))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public void fetchDocument(MongoCollection<Document> collection, Bson bson, FetchCallback callback) {
+        Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> {
+            final Document result = collection.find(bson).first();
+
+            Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () -> callback.onCompletion(result));
+        });
+    }
+
     public Optional<Document> getDocumentByName(String name) {
-        return Optional.ofNullable(CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("name", name)).first());
+        final Document[] document = { null };
+
+        this.fetchDocument(CorePlugin.getInstance().getCoreDatabase().getPlayerCollection(), Filters.eq("name", name), result -> document[0] = result);
+
+        return Optional.of(document[0]);
     }
 
     public Optional<Document> getDocumentByUuid(UUID uuid) {
-        if (uuid == null) {
-            return Optional.empty();
-        }
+        final Document[] document = { null };
 
-        return Optional.ofNullable(CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("uuid", uuid.toString())).first());
+        this.fetchDocument(CorePlugin.getInstance().getCoreDatabase().getPlayerCollection(), Filters.eq("uuid", uuid.toString()), result -> document[0] = result);
+
+        return Optional.of(document[0]);
     }
 
     public void unVanishPlayer(Player player) {

@@ -19,16 +19,18 @@ public class NetworkPlayer {
     private String name;
     private String serverName;
     private String rankName;
+    private String discordCode;
 
     private boolean receivingDms;
 
-    public NetworkPlayer(UUID uuid, String name, String serverName, String rankName, boolean receivingDms, String ipAddress) {
+    public NetworkPlayer(UUID uuid, String name, String serverName, String rankName, boolean receivingDms, String ipAddress, String discordCode) {
         this.uuid = uuid;
         this.name = name;
         this.serverName = serverName;
         this.rankName = rankName;
         this.receivingDms = receivingDms;
         this.ipAddress = ipAddress;
+        this.discordCode = discordCode;
 
         CorePlugin.getInstance().getPlayerManager().getAllNetworkProfiles().put(this.uuid, this);
     }
