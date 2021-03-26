@@ -4,12 +4,15 @@ import com.mongodb.client.MongoCursor;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.player.PotPlayer;
+import com.solexgames.core.player.callback.XPFetchCallback;
 import org.bson.Document;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public final class ExperienceUtil {
 
@@ -40,31 +43,43 @@ public final class ExperienceUtil {
      *
      * @return The string list.
      */
-    public static List<String> getLeaderboardList() {
+    public static List<String> getLeaderboardList(String sortingString) {
         List<String> stringArrayList = new ArrayList<>();
         Document sortingDocument = new Document();
         ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
-        int lineInt = 0;
+        AtomicInteger lineInt = new AtomicInteger();
 
-        sortingDocument.put("experience", -1);
+        sortingDocument.put(sortingString, -1);
 
-        try (MongoCursor<Document> iterator = CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find().sort(sortingDocument).limit(10).iterator()) {
-            while (iterator.hasNext()) {
-                Document document = iterator.next();
+        ExperienceUtil.fetchDocument(sortingDocument, result -> {
+            while (result.hasNext()) {
+                Document document = result.next();
                 int amountOfSort = 0;
 
                 try {
-                    amountOfSort = document.getInteger("experience");
-                } catch (Exception ignored) {
-                }
+                    amountOfSort = document.getInteger(sortingString);
+                } catch (Exception ignored) { }
 
-
-                lineInt++;
-                stringArrayList.add(serverType.getMainColor() + ChatColor.BOLD.toString() + lineInt + "." + ChatColor.GRAY + " - " + ChatColor.WHITE + document.getString("name") + ChatColor.GRAY + " - " + serverType.getSecondaryColor() + amountOfSort);
+                stringArrayList.add(serverType.getMainColor() + ChatColor.BOLD.toString() + lineInt.getAndIncrement() + "." + ChatColor.GRAY + " - " + ChatColor.WHITE + document.getString("name") + ChatColor.GRAY + " - " + serverType.getSecondaryColor() + amountOfSort);
             }
-        }
+        });
 
         return stringArrayList;
+    }
+
+    /**
+     * Fetches a document then executes the callback Async
+     * <p>
+     *
+     * @param sorting Sorting document
+     * @param callback {@link XPFetchCallback} callback
+     */
+    public static void fetchDocument(Document sorting, XPFetchCallback callback) {
+        Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> {
+            final MongoCursor<Document> result = CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find().sort(sorting).limit(10).iterator();
+
+            Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () -> callback.onCompletion(result));
+        });
     }
 
     /**

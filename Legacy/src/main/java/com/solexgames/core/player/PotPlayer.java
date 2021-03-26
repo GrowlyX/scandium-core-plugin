@@ -2,12 +2,14 @@ package com.solexgames.core.player;
 
 import com.google.gson.annotations.SerializedName;
 import com.mojang.authlib.GameProfile;
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.board.ScoreBoard;
 import com.solexgames.core.enums.ChatChannelType;
 import com.solexgames.core.enums.LanguageType;
+import com.solexgames.core.player.callback.FetchCallback;
 import com.solexgames.core.player.media.Media;
 import com.solexgames.core.player.grant.Grant;
 import com.solexgames.core.player.hook.AchievementData;
@@ -26,6 +28,7 @@ import com.solexgames.core.util.external.NameTagExternal;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -288,8 +291,24 @@ public class PotPlayer {
         CorePlugin.getInstance().getPlayerManager().getAllProfiles().remove(this.uuid);
     }
 
+    public void fetchDocument(MongoCollection<Document> collection, Bson bson, FetchCallback callback) {
+        Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> {
+            final Document result = collection.find(bson).first();
+
+            Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () -> callback.onCompletion(result));
+        });
+    }
+
+    public Document getDocument() {
+        final Document[] document = { null };
+
+        this.fetchDocument(CorePlugin.getInstance().getCoreDatabase().getPlayerCollection(), Filters.eq("uuid", uuid.toString()), result -> document[0] = result);
+
+        return document[0];
+    }
+
     public void loadPlayerData() {
-        Document document = CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("uuid", uuid.toString())).first();
+        Document document = this.getDocument();
 
         if (document == null) {
             this.saveWithoutRemove();

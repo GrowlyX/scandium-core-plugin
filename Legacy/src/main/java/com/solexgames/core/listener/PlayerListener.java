@@ -1,5 +1,6 @@
 package com.solexgames.core.listener;
 
+import com.jcabi.aspects.Async;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ChatChannelType;
 import com.solexgames.core.manager.ServerManager;
@@ -31,6 +32,7 @@ import org.json.simple.parser.ParseException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
 
 public class PlayerListener implements Listener {
@@ -139,53 +141,55 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        potPlayer.postLoginLoad();
+        CompletableFuture.runAsync(() -> {
+            potPlayer.postLoginLoad();
 
-        CorePlugin.getInstance().getServerManager().getVanishedPlayers().stream()
-                .map(player -> CorePlugin.getInstance().getPlayerManager().getPlayer(player))
-                .filter(potPlayer1 -> potPlayer.getActiveGrant().getRank().getWeight() < potPlayer1.getActiveGrant().getRank().getWeight())
-                .forEach(player -> event.getPlayer().hidePlayer(player.getPlayer()));
+            CorePlugin.getInstance().getServerManager().getVanishedPlayers().stream()
+                    .map(player -> CorePlugin.getInstance().getPlayerManager().getPlayer(player))
+                    .filter(potPlayer1 -> potPlayer.getActiveGrant().getRank().getWeight() < potPlayer1.getActiveGrant().getRank().getWeight())
+                    .forEach(player -> event.getPlayer().hidePlayer(player.getPlayer()));
 
-        if (potPlayer.isAutoVanish()) {
-            potPlayer.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getServerManager().getAutomaticallyPutInto().replace("<value>", "vanish")));
+            if (potPlayer.isAutoVanish()) {
+                potPlayer.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getServerManager().getAutomaticallyPutInto().replace("<value>", "vanish")));
 
-            CorePlugin.getInstance().getPlayerManager().vanishPlayerRaw(potPlayer.getPlayer());
-        }
-
-        if (potPlayer.isAutoModMode()) {
-            potPlayer.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getServerManager().getAutomaticallyPutInto().replace("<value>", "mod mode")));
-
-            CorePlugin.getInstance().getPlayerManager().modModeRaw(potPlayer.getPlayer());
-        }
-
-        if (MANAGER.isClearChatJoin()) {
-            for (int lines = 0; lines < 250; lines++) {
-                event.getPlayer().sendMessage("  ");
+                CorePlugin.getInstance().getPlayerManager().vanishPlayerRaw(potPlayer.getPlayer());
             }
-        }
 
-        if (MANAGER.isJoinMessageEnabled()) {
-            if (MANAGER.isJoinMessageCentered()) {
-                MANAGER.getJoinMessage().forEach(s -> event.getPlayer().sendMessage(Color.translate(s.replace("%PLAYER%", event.getPlayer().getDisplayName()))));
-            } else {
-                StringUtil.sendCenteredMessage(event.getPlayer(), (ArrayList<String>) MANAGER.getJoinMessage());
+            if (potPlayer.isAutoModMode()) {
+                potPlayer.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getServerManager().getAutomaticallyPutInto().replace("<value>", "mod mode")));
+
+                CorePlugin.getInstance().getPlayerManager().modModeRaw(potPlayer.getPlayer());
             }
-        }
 
-        if (potPlayer.getPlayer().hasPermission("scandium.staff")) {
-            CorePlugin.getInstance().getServerManager().getStaffInformation().forEach(s -> potPlayer.getPlayer().sendMessage(s
-                    .replace("<nice_char>", Character.toString('»'))
-                    .replace("<channel>", ChatColor.RED + "None")
-                    .replace("<messages>", (potPlayer.isCanSeeStaffMessages() ? ChatColor.GREEN + "Shown" : ChatColor.RED + "Hidden"))
-                    .replace("<filter>", (potPlayer.isCanSeeFiltered() ? ChatColor.GREEN + "Shown" : ChatColor.RED + "Hidden"))
-                    .replace("<modmode>", (potPlayer.isStaffMode() ? ChatColor.GREEN + "Enabled" : ChatColor.RED + "Disabled"))
-                    .replace("<vanish>", (potPlayer.isVanished() ? ChatColor.GREEN + "Enabled" : ChatColor.RED + "Disabled"))
-            ));
-        }
+            if (MANAGER.isClearChatJoin()) {
+                for (int lines = 0; lines < 250; lines++) {
+                    event.getPlayer().sendMessage("  ");
+                }
+            }
 
-        if (potPlayer.isCurrentlyRestricted()) {
-            event.getPlayer().sendMessage(potPlayer.getRestrictionMessage());
-        }
+            if (MANAGER.isJoinMessageEnabled()) {
+                if (MANAGER.isJoinMessageCentered()) {
+                    MANAGER.getJoinMessage().forEach(s -> event.getPlayer().sendMessage(Color.translate(s.replace("%PLAYER%", event.getPlayer().getDisplayName()))));
+                } else {
+                    StringUtil.sendCenteredMessage(event.getPlayer(), (ArrayList<String>) MANAGER.getJoinMessage());
+                }
+            }
+
+            if (potPlayer.getPlayer().hasPermission("scandium.staff")) {
+                CorePlugin.getInstance().getServerManager().getStaffInformation().forEach(s -> potPlayer.getPlayer().sendMessage(s
+                        .replace("<nice_char>", Character.toString('»'))
+                        .replace("<channel>", ChatColor.RED + "None")
+                        .replace("<messages>", (potPlayer.isCanSeeStaffMessages() ? ChatColor.GREEN + "Shown" : ChatColor.RED + "Hidden"))
+                        .replace("<filter>", (potPlayer.isCanSeeFiltered() ? ChatColor.GREEN + "Shown" : ChatColor.RED + "Hidden"))
+                        .replace("<modmode>", (potPlayer.isStaffMode() ? ChatColor.GREEN + "Enabled" : ChatColor.RED + "Disabled"))
+                        .replace("<vanish>", (potPlayer.isVanished() ? ChatColor.GREEN + "Enabled" : ChatColor.RED + "Disabled"))
+                ));
+            }
+
+            if (potPlayer.isCurrentlyRestricted()) {
+                event.getPlayer().sendMessage(potPlayer.getRestrictionMessage());
+            }
+        });
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
