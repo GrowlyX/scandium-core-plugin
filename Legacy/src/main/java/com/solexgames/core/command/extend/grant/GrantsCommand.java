@@ -5,6 +5,7 @@ import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.external.pagination.extend.GrantViewPaginatedMenu;
+import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -32,9 +33,10 @@ public class GrantsCommand extends BaseCommand {
             sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player>."));
         }
         if (args.length == 1) {
-            Player target = Bukkit.getPlayerExact(args[0]);
-            if (target != null) {
-                new GrantViewPaginatedMenu(player, target).openMenu(player);
+            Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByName(args[0]).orElse(null);
+
+            if (document != null) {
+                new GrantViewPaginatedMenu(player, document).openMenu(player);
             } else {
                 player.sendMessage(Color.translate("&cThat player does not exist."));
             }

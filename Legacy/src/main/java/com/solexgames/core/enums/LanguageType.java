@@ -24,7 +24,9 @@ public enum LanguageType {
     }
 
     public static LanguageType getByName(String name) {
-        return Arrays.stream(LanguageType.values()).filter(languageType -> name.equals(languageType.getLanguageName())).findFirst().orElse(null);
+        return Arrays.stream(LanguageType.values())
+                .filter(languageType -> name.equals(languageType.getLanguageName()))
+                .findFirst().orElse(null);
     }
 
     public static LanguageType getById(String id) {
