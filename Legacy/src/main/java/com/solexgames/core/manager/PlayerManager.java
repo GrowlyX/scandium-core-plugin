@@ -25,8 +25,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Getter
 @NoArgsConstructor
@@ -217,28 +218,31 @@ public class PlayerManager {
                 .orElse(null);
     }
 
-    public void fetchDocument(MongoCollection<Document> collection, Bson bson, FetchCallback callback) {
-        Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> {
-            final Document result = collection.find(bson).first();
+    public CompletableFuture<Document> fetchDocument(MongoCollection<Document> collection, Bson bson) {
+        CompletableFuture<Document> completableFuture = new CompletableFuture<>();
 
-            Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () -> callback.onCompletion(result));
+        CorePlugin.getInstance().getMongoThread().execute(() -> {
+            Document document = collection.find(bson).first();
+            completableFuture.complete(document);
         });
+
+        return completableFuture;
     }
 
     public Optional<Document> getDocumentByName(String name) {
-        final Document[] document = { null };
+        AtomicReference<Document> document = new AtomicReference<>();
 
-        this.fetchDocument(CorePlugin.getInstance().getCoreDatabase().getPlayerCollection(), Filters.eq("name", name), result -> document[0] = result);
+        this.fetchDocument(CorePlugin.getInstance().getCoreDatabase().getPlayerCollection(), Filters.eq("name", name)).thenAccept(document::set);
 
-        return Optional.of(document[0]);
+        return Optional.ofNullable(document.get());
     }
 
     public Optional<Document> getDocumentByUuid(UUID uuid) {
-        final Document[] document = { null };
+        AtomicReference<Document> document = new AtomicReference<>();
 
-        this.fetchDocument(CorePlugin.getInstance().getCoreDatabase().getPlayerCollection(), Filters.eq("uuid", uuid.toString()), result -> document[0] = result);
+        this.fetchDocument(CorePlugin.getInstance().getCoreDatabase().getPlayerCollection(), Filters.eq("uuid", uuid.toString())).thenAccept(document::set);
 
-        return Optional.of(document[0]);
+        return Optional.ofNullable(document.get());
     }
 
     public void unVanishPlayer(Player player) {

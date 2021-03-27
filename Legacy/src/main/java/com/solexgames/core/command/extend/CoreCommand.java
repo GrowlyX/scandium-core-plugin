@@ -35,6 +35,7 @@ public class CoreCommand extends BukkitCommand {
                     network.getSecondaryColor() + "This server is running " + network.getMainColor() + CorePlugin.getInstance().getConfig().getString("core-settings.name") + network.getSecondaryColor() + ".",
                     ChatColor.GRAY + "Created by SolexGames."
             });
+            return false;
         }
 
         if (args.length == 0) {

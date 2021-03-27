@@ -38,14 +38,20 @@ public class CGrantCommand extends BaseCommand {
             sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player> <rank> <duration> <reason>."));
         }
         if (args.length > 2) {
-            Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByUuid(UUIDUtil.fetchUUID(args[0])).orElse(null);
+            UUID uuid = UUIDUtil.fetchUUID(args[0]);
+
+            if (uuid == null) {
+                sender.sendMessage(ChatColor.RED + "That uuid is not valid.");
+                return false;
+            }
+
+            Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByUuid(uuid).orElse(null);
+
             if (document != null) {
                 Rank rank = Rank.getByName(args[1]);
                 ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
                 if (rank != null) {
-                    UUID uuid = UUIDUtil.fetchUUID(args[0]);
-
                     if (args[2].equalsIgnoreCase("perm") || args[2].equalsIgnoreCase("permanent")) {
                         String reason = StringUtil.buildMessage(args, 3);
                         PotPlayer targetPotPlayer = null;
