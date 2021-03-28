@@ -42,8 +42,6 @@ public class FindCommand extends BaseCommand {
                 if (networkPlayer == null) {
                     sender.sendMessage(ChatColor.RED + "I'm sorry, but we could not find that player on the network.");
                 } else {
-                    sender.sendMessage(ChatColor.GREEN + "We found " + networkPlayer.getName() + ":");
-
                     Rank rank = Rank.getByName(networkPlayer.getRankName());
                     String displayName = Color.translate((rank != null ? rank.getColor() : ChatColor.GRAY) + networkPlayer.getName());
 

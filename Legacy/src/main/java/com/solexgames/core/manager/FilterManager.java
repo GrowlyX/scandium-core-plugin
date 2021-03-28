@@ -20,6 +20,7 @@ public class FilterManager {
 
     private static final Pattern URL_REGEX = Pattern.compile("^(http://www\\.|https://www\\.|http://|https://)?[a-z0-9]+([\\-.][a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(/.*)?$");
     private static final Pattern IP_REGEX = Pattern.compile("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])([.,])){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$");
+    private static final Pattern OTHER_IP_REGEX = Pattern.compile("(\\d{1,2}|(0|1)\\" + "d{2}|2[0-4]\\d|25[0-5])" + "\\." + "(\\d{1,2}|(0|1)\\" + "d{2}|2[0-4]\\d|25[0-5])" + "\\." + "(\\d{1,2}|(0|1)\\" + "d{2}|2[0-4]\\d|25[0-5])" + "\\." + "(\\d{1,2}|(0|1)\\" + "d{2}|2[0-4]\\d|25[0-5])");
 
     private final CorePlugin plugin;
     private final List<String> filteredMessages;
@@ -59,6 +60,11 @@ public class FilterManager {
             Arrays.asList(words).forEach(word -> {
                 Matcher ipMatcher = FilterManager.IP_REGEX.matcher(word);
                 if (ipMatcher.matches()) {
+                    atomicBoolean.set(true);
+                }
+
+                Matcher otherIpMatcher = FilterManager.OTHER_IP_REGEX.matcher(word);
+                if (otherIpMatcher.matches()) {
                     atomicBoolean.set(true);
                 }
 
