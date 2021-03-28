@@ -3,18 +3,17 @@ package com.solexgames.core.command.extend.grant;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.enums.ServerType;
-import com.solexgames.core.util.Color;
 import com.solexgames.core.util.UUIDUtil;
 import com.solexgames.core.util.external.pagination.extend.GrantMainPaginatedMenu;
-import lombok.SneakyThrows;
 import org.bson.Document;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class GrantCommand extends BaseCommand {
 
@@ -44,13 +43,21 @@ public class GrantCommand extends BaseCommand {
                 return false;
             }
 
-            Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByUuid(uuid).orElse(null);
+            AtomicReference<Document> document = new AtomicReference<>();
+            CompletableFuture<Boolean> completableFuture = new CompletableFuture<>();
 
-            if (document != null) {
-                new GrantMainPaginatedMenu(document, player).openMenu(player);
-            } else {
-                player.sendMessage(ChatColor.RED + "That player does not exist in our databasesw.");
-            }
+            CompletableFuture.runAsync(() -> {
+                document.set(CorePlugin.getInstance().getPlayerManager().getDocumentByUuid(uuid).orElse(null));
+                completableFuture.complete(true);
+            });
+
+            completableFuture.thenRun(() -> {
+                if (document.get() != null) {
+                    new GrantMainPaginatedMenu(document.get(), player).openMenu(player);
+                } else {
+                    player.sendMessage(ChatColor.RED + "That player does not exist in our databasesw.");
+                }
+            });
         }
         return false;
     }

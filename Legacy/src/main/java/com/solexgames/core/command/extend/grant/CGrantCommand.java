@@ -12,6 +12,7 @@ import com.solexgames.core.util.Color;
 import com.solexgames.core.util.DateUtil;
 import com.solexgames.core.util.StringUtil;
 import com.solexgames.core.util.UUIDUtil;
+import com.solexgames.core.util.external.pagination.extend.GrantMainPaginatedMenu;
 import lombok.SneakyThrows;
 import org.bson.Document;
 import org.bukkit.ChatColor;
@@ -22,6 +23,8 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class CGrantCommand extends BaseCommand {
 
@@ -45,63 +48,31 @@ public class CGrantCommand extends BaseCommand {
                 return false;
             }
 
-            Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByUuid(uuid).orElse(null);
+            AtomicReference<Document> document = new AtomicReference<>();
+            CompletableFuture<Boolean> completableFuture = new CompletableFuture<>();
 
-            if (document != null) {
-                Rank rank = Rank.getByName(args[1]);
-                ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
+            CompletableFuture.runAsync(() -> {
+                document.set(CorePlugin.getInstance().getPlayerManager().getDocumentByUuid(uuid).orElse(null));
+                completableFuture.complete(true);
+            });
 
-                if (rank != null) {
-                    if (args[2].equalsIgnoreCase("perm") || args[2].equalsIgnoreCase("permanent")) {
-                        String reason = StringUtil.buildMessage(args, 3);
-                        PotPlayer targetPotPlayer = null;
+            completableFuture.thenRun(() -> {
+                if (document.get() != null) {
+                    Rank rank = Rank.getByName(args[1]);
+                    ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
-                        try {
-                            targetPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(document.getString("name"));
-                        } catch (Exception ignored) {
-                        }
-
-                        Grant newGrant = new Grant(null, rank, System.currentTimeMillis(), -1L, reason, true, true, "global");
-                        newGrant.setPermanent(true);
-                        newGrant.setIssuedServer(CorePlugin.getInstance().getServerName());
-
-                        if (targetPotPlayer != null) {
-                            targetPotPlayer.getAllGrants().add(newGrant);
-                            targetPotPlayer.setupPlayer();
-                            targetPotPlayer.saveWithoutRemove();
-
-                            targetPotPlayer.getPlayer().sendMessage(ChatColor.GREEN + Color.translate("Your rank has been set to " + newGrant.getRank().getColor() + newGrant.getRank().getName() + ChatColor.GREEN + "."));
-                            sender.sendMessage(Color.translate(network.getSecondaryColor() + "You've granted " + targetPotPlayer.getPlayer().getDisplayName() + network.getSecondaryColor() + " the rank " + rank.getColor() + rank.getName() + network.getSecondaryColor() + " for " + network.getMainColor() + reason + network.getSecondaryColor() + "."));
-                        } else {
-                            List<Grant> allGrants = new ArrayList<>();
-
-                            if ((!((List<String>) document.get("allGrants")).isEmpty()) || ((document.get("allGrants") != null))) {
-                                List<String> allStringGrants = ((List<String>) document.get("allGrants"));
-                                allStringGrants.forEach(s -> allGrants.add(CorePlugin.GSON.fromJson(s, Grant.class)));
-                            }
-
-                            allGrants.add(newGrant);
-
-                            List<String> grantStrings = new ArrayList<>();
-                            allGrants.forEach(grant -> grantStrings.add(grant.toJson()));
-
-                            document.put("allGrants", grantStrings);
-
-                            CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("uuid", uuid), document, new ReplaceOptions().upsert(true)));
-
-                            sender.sendMessage(Color.translate(network.getSecondaryColor() + "You've granted &b" + UUIDUtil.fetchName(UUID.fromString(document.getString("uuid"))) + network.getSecondaryColor() + " the rank " + rank.getColor() + rank.getName() + network.getSecondaryColor() + " for " + network.getMainColor() + reason + network.getSecondaryColor() + "."));
-                        }
-                    } else {
-                        try {
+                    if (rank != null) {
+                        if (args[2].equalsIgnoreCase("perm") || args[2].equalsIgnoreCase("permanent")) {
                             String reason = StringUtil.buildMessage(args, 3);
                             PotPlayer targetPotPlayer = null;
 
                             try {
-                                targetPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(document.getString("name"));
+                                targetPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(document.get().getString("name"));
                             } catch (Exception ignored) {
                             }
 
-                            Grant newGrant = new Grant(null, rank, System.currentTimeMillis(), System.currentTimeMillis() - DateUtil.parseDateDiff(args[2], false), reason, true, false, "global");
+                            Grant newGrant = new Grant(null, rank, System.currentTimeMillis(), -1L, reason, true, true, "global");
+                            newGrant.setPermanent(true);
                             newGrant.setIssuedServer(CorePlugin.getInstance().getServerName());
 
                             if (targetPotPlayer != null) {
@@ -114,8 +85,8 @@ public class CGrantCommand extends BaseCommand {
                             } else {
                                 List<Grant> allGrants = new ArrayList<>();
 
-                                if ((!((List<String>) document.get("allGrants")).isEmpty()) || ((document.get("allGrants") != null))) {
-                                    List<String> allStringGrants = ((List<String>) document.get("allGrants"));
+                                if ((!((List<String>) document.get().get("allGrants")).isEmpty()) || ((document.get().get("allGrants") != null))) {
+                                    List<String> allStringGrants = ((List<String>) document.get().get("allGrants"));
                                     allStringGrants.forEach(s -> allGrants.add(CorePlugin.GSON.fromJson(s, Grant.class)));
                                 }
 
@@ -124,22 +95,62 @@ public class CGrantCommand extends BaseCommand {
                                 List<String> grantStrings = new ArrayList<>();
                                 allGrants.forEach(grant -> grantStrings.add(grant.toJson()));
 
-                                document.put("allGrants", grantStrings);
+                                document.get().put("allGrants", grantStrings);
 
-                                CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("uuid", uuid), document, new ReplaceOptions().upsert(true)));
+                                CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("uuid", uuid), document.get(), new ReplaceOptions().upsert(true)));
 
-                                sender.sendMessage(Color.translate(network.getSecondaryColor() + "You've granted " + args[0] + network.getSecondaryColor() + " the rank " + rank.getColor() + rank.getName() + network.getSecondaryColor() + " for " + network.getMainColor() + reason + network.getSecondaryColor() + "."));
+                                sender.sendMessage(Color.translate(network.getSecondaryColor() + "You've granted &b" + UUIDUtil.fetchName(UUID.fromString(document.get().getString("uuid"))) + network.getSecondaryColor() + " the rank " + rank.getColor() + rank.getName() + network.getSecondaryColor() + " for " + network.getMainColor() + reason + network.getSecondaryColor() + "."));
                             }
-                        } catch (Exception exception) {
-                            sender.sendMessage(ChatColor.RED + "Invalid duration.");
+                        } else {
+                            try {
+                                String reason = StringUtil.buildMessage(args, 3);
+                                PotPlayer targetPotPlayer = null;
+
+                                try {
+                                    targetPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(document.get().getString("name"));
+                                } catch (Exception ignored) {
+                                }
+
+                                Grant newGrant = new Grant(null, rank, System.currentTimeMillis(), System.currentTimeMillis() - DateUtil.parseDateDiff(args[2], false), reason, true, false, "global");
+                                newGrant.setIssuedServer(CorePlugin.getInstance().getServerName());
+
+                                if (targetPotPlayer != null) {
+                                    targetPotPlayer.getAllGrants().add(newGrant);
+                                    targetPotPlayer.setupPlayer();
+                                    targetPotPlayer.saveWithoutRemove();
+
+                                    targetPotPlayer.getPlayer().sendMessage(ChatColor.GREEN + Color.translate("Your rank has been set to " + newGrant.getRank().getColor() + newGrant.getRank().getName() + ChatColor.GREEN + "."));
+                                    sender.sendMessage(Color.translate(network.getSecondaryColor() + "You've granted " + targetPotPlayer.getPlayer().getDisplayName() + network.getSecondaryColor() + " the rank " + rank.getColor() + rank.getName() + network.getSecondaryColor() + " for " + network.getMainColor() + reason + network.getSecondaryColor() + "."));
+                                } else {
+                                    List<Grant> allGrants = new ArrayList<>();
+
+                                    if ((!((List<String>) document.get().get("allGrants")).isEmpty()) || ((document.get().get("allGrants") != null))) {
+                                        List<String> allStringGrants = ((List<String>) document.get().get("allGrants"));
+                                        allStringGrants.forEach(s -> allGrants.add(CorePlugin.GSON.fromJson(s, Grant.class)));
+                                    }
+
+                                    allGrants.add(newGrant);
+
+                                    List<String> grantStrings = new ArrayList<>();
+                                    allGrants.forEach(grant -> grantStrings.add(grant.toJson()));
+
+                                    document.get().put("allGrants", grantStrings);
+
+                                    CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("uuid", uuid), document.get(), new ReplaceOptions().upsert(true)));
+
+                                    sender.sendMessage(Color.translate(network.getSecondaryColor() + "You've granted " + args[0] + network.getSecondaryColor() + " the rank " + rank.getColor() + rank.getName() + network.getSecondaryColor() + " for " + network.getMainColor() + reason + network.getSecondaryColor() + "."));
+                                }
+                            } catch (Exception exception) {
+                                sender.sendMessage(ChatColor.RED + "Invalid duration.");
+                            }
                         }
+                    } else {
+                        sender.sendMessage(Color.translate("&cThat rank does not exist."));
                     }
                 } else {
-                    sender.sendMessage(Color.translate("&cThat rank does not exist."));
+                    sender.sendMessage(Color.translate("&cThat player does not exist in our databases."));
                 }
-            } else {
-                sender.sendMessage(Color.translate("&cThat player does not exist in our databases."));
-            }
+            });
         }
         return false;
     }

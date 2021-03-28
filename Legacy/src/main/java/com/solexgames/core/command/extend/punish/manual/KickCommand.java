@@ -18,6 +18,8 @@ import org.bukkit.entity.Player;
 
 import java.util.Date;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class KickCommand extends BaseCommand {
 
@@ -34,70 +36,78 @@ public class KickCommand extends BaseCommand {
             sender.sendMessage(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player> <reason> " + ChatColor.GRAY + "[-s]" + ChatColor.WHITE + ".");
         }
         if (args.length >= 2) {
-            Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByName(args[0]).orElse(null);
+            AtomicReference<Document> document = new AtomicReference<>(CorePlugin.getInstance().getPlayerManager().getDocumentByName(args[0]).orElse(null));
+            CompletableFuture<Boolean> completableFuture = new CompletableFuture<>();
 
-            if (document == null) {
-                sender.sendMessage(ChatColor.RED + "That player does not exist in our database.");
-                return false;
-            }
+            CompletableFuture.runAsync(() -> {
+                document.set(CorePlugin.getInstance().getPlayerManager().getDocumentByName(args[0]).orElse(null));
+                completableFuture.complete(true);
+            });
 
-            Date newIssuingDate = new Date();
-            UUID newPunishmentUuid = UUID.randomUUID();
-            String newPunishmentId = SaltUtil.getRandomSaltedString(7);
 
-            String targetName = args[0];
-            UUID targetUuid = UUID.fromString(document.getString("uuid"));
-            String reason = StringUtil.buildMessage(args, 1);
+            completableFuture.thenRun(() -> {
+                if (document.get() == null) {
+                    sender.sendMessage(ChatColor.RED + "That player does not exist in our database.");
+                } else {
+                    Date newIssuingDate = new Date();
+                    UUID newPunishmentUuid = UUID.randomUUID();
+                    String newPunishmentId = SaltUtil.getRandomSaltedString(7);
 
-            String issuerName = (sender instanceof Player ? ((Player) sender).getName() : "Console");
-            String issuerNameNull = (sender instanceof Player ? ((Player) sender).getName() : null);
-            UUID issuerUuid = (sender instanceof Player ? ((Player) sender).getUniqueId() : null);
+                    String targetName = args[0];
+                    UUID targetUuid = UUID.fromString(document.get().getString("uuid"));
+                    String reason = StringUtil.buildMessage(args, 1);
 
-            boolean isSilent = reason.endsWith("-s");
+                    String issuerName = (sender instanceof Player ? ((Player) sender).getName() : "Console");
+                    String issuerNameNull = (sender instanceof Player ? ((Player) sender).getName() : null);
+                    UUID issuerUuid = (sender instanceof Player ? ((Player) sender).getUniqueId() : null);
 
-            try {
-                Punishment punishment = new Punishment(
-                        PunishmentType.KICK,
-                        issuerUuid,
-                        targetUuid,
-                        issuerName,
-                        reason.replace("-s", ""),
-                        newIssuingDate,
-                        newIssuingDate.getTime() - DateUtil.parseDateDiff("1d", false),
-                        false,
-                        newIssuingDate,
-                        newPunishmentUuid,
-                        newPunishmentId,
-                        true
-                );
-                punishment.savePunishment();
+                    boolean isSilent = reason.endsWith("-s");
 
-                PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(targetName);
+                    try {
+                        Punishment punishment = new Punishment(
+                                PunishmentType.KICK,
+                                issuerUuid,
+                                targetUuid,
+                                issuerName,
+                                reason.replace("-s", ""),
+                                newIssuingDate,
+                                newIssuingDate.getTime() - DateUtil.parseDateDiff("1d", false),
+                                false,
+                                newIssuingDate,
+                                newPunishmentUuid,
+                                newPunishmentId,
+                                true
+                        );
+                        punishment.savePunishment();
 
-                CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, issuerNameNull, document, isSilent);
+                        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(targetName);
 
-                if (potPlayer != null) {
-                    potPlayer.getPunishments().add(punishment);
-                    potPlayer.saveWithoutRemove();
+                        CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, issuerNameNull, document.get(), isSilent);
+
+                        if (potPlayer != null) {
+                            potPlayer.getPunishments().add(punishment);
+                            potPlayer.saveWithoutRemove();
+                        }
+
+                        RedisUtil.writeAsync(RedisUtil.executePunishment(
+                                PunishmentType.KICK,
+                                issuerUuid,
+                                targetUuid,
+                                issuerName,
+                                reason.replace("-s", ""),
+                                newIssuingDate,
+                                newIssuingDate.getTime() - DateUtil.parseDateDiff("1d", false),
+                                false,
+                                newIssuingDate,
+                                newPunishmentUuid,
+                                newPunishmentId,
+                                false
+                        ));
+                    } catch (Exception ignored) {
+                        sender.sendMessage(ChatColor.RED + "That's not a valid duration!");
+                    }
                 }
-
-                RedisUtil.writeAsync(RedisUtil.executePunishment(
-                        PunishmentType.KICK,
-                        issuerUuid,
-                        targetUuid,
-                        issuerName,
-                        reason.replace("-s", ""),
-                        newIssuingDate,
-                        newIssuingDate.getTime() - DateUtil.parseDateDiff("1d", false),
-                        false,
-                        newIssuingDate,
-                        newPunishmentUuid,
-                        newPunishmentId,
-                        false
-                ));
-            } catch (Exception ignored) {
-                sender.sendMessage(ChatColor.RED + "That's not a valid duration!");
-            }
+            });
         }
 
         return false;
