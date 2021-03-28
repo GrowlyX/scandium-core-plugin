@@ -60,11 +60,13 @@ public final class ExperienceUtil {
         cursorCompletableFuture.thenAccept(documentMongoCursor -> {
             while (documentMongoCursor.hasNext()) {
                 Document document = documentMongoCursor.next();
-                int amountOfSort = 0;
+                int amountOfSort;
 
                 try {
                     amountOfSort = document.getInteger(sortingString);
-                } catch (Exception ignored) { }
+                } catch (Exception ignored) {
+                    continue;
+                }
 
                 stringArrayList.add(serverType.getMainColor() + ChatColor.BOLD.toString() + lineInt.getAndIncrement() + "." + ChatColor.GRAY + " - " + ChatColor.WHITE + document.getString("name") + ChatColor.GRAY + " - " + serverType.getSecondaryColor() + amountOfSort);
             }
