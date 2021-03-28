@@ -8,6 +8,8 @@ load: STARTUP
 api-version: "1.13"
 
 commands:
+  find:
+    aliases: [search, lookup]
   permissions:
     aliases: [perms]
   ban:

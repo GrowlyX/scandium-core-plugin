@@ -45,8 +45,7 @@ public class PlayerManager {
     }
 
     public NetworkPlayer getNetworkPlayer(String player) {
-        return this.allNetworkProfiles.values()
-                .stream()
+        return this.allNetworkProfiles.values().stream()
                 .filter(networkPlayer -> networkPlayer.getName().equalsIgnoreCase(player))
                 .findFirst()
                 .orElse(null);
