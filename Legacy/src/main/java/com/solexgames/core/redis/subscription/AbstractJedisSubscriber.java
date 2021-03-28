@@ -14,6 +14,6 @@ public abstract class AbstractJedisSubscriber extends JedisPubSub {
         this.channelName = channel;
 
         CorePlugin.getInstance().getSubscriptions().getSubscriptions().add(this);
-        CorePlugin.getInstance().getLogger().info("[Redis] Now listening on jedis channel '" + channelName.toLowerCase() + "'.");
+        CorePlugin.getInstance().logConsole("&6[Redis] &eNow listening on jedis channel &6'" + channelName.toLowerCase() + "'&e.");
     }
 }

@@ -49,7 +49,7 @@ public class ServerManager {
         this.staffInformation = Color.translate(CorePlugin.getInstance().getConfig().getStringList("staff-information"));
 
         setupServerType();
-        CorePlugin.getInstance().getLogger().info("[ServerType] Loaded server type: " + this.network.getServerName() + ".");
+        CorePlugin.getInstance().logConsole("&6[Network] &eLoaded the server type &6" + this.network.getServerName());
     }
 
     public void removeNetworkServer(NetworkServer networkServer) {
@@ -75,8 +75,8 @@ public class ServerManager {
     public void setupServerType() {
         try {
             this.network = ServerType.valueOf(CorePlugin.getInstance().getConfig().getString("server.settings.server-id"));
-        } catch (IllegalArgumentException e) {
-            CorePlugin.getInstance().getLogger().info("Please double check your configuration! The server ID is not correct.");
+        } catch (Exception e) {
+            CorePlugin.getInstance().logConsole("&cYour Server ID is not correct! &7Please check your config and try again.");
             CorePlugin.getInstance().getServer().shutdown();
         }
     }

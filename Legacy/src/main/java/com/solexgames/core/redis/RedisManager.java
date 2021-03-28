@@ -56,9 +56,9 @@ public class RedisManager {
 
             this.active = true;
 
-            CorePlugin.getInstance().getLogger().info("[Redis] Connected to Redis backend.");
+            CorePlugin.getInstance().logConsole("&6[Redis] &eConnected to redis backend!");
         } catch (Exception ignored) {
-            CorePlugin.getInstance().getLogger().severe("[Redis] Could not connect to Redis backend.");
+            CorePlugin.getInstance().logConsole("&c[Redis] Could not connect to redis backend!");
             this.setActive(false);
         }
     }

@@ -10,7 +10,7 @@ public class WarpManager {
 
     public WarpManager() {
         this.loadAllWarps();
-        CorePlugin.getInstance().getLogger().info("[Warps] Loaded all warps.");
+        CorePlugin.getInstance().logConsole("&6[Warps] &eLoaded all available warps!");
     }
 
     public void loadAllWarps() {

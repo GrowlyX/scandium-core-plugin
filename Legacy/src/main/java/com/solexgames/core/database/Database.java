@@ -35,6 +35,6 @@ public class Database {
         this.punishmentCollection = this.database.getCollection("punishment");
         this.webCollection = this.database.getCollection("website");
 
-        CorePlugin.getInstance().getLogger().info("[Mongo] Successfully setup the Mongo Database!");
+        CorePlugin.getInstance().logConsole("&6[Mongo] &eSetup the MongoDB Database!");
     }
 }

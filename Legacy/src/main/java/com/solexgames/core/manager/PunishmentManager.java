@@ -58,7 +58,7 @@ public class PunishmentManager {
             this.punishments.add(punishment);
         });
 
-        CorePlugin.getInstance().getLogger().info("[Punishments] Loaded all punishments.");
+        CorePlugin.getInstance().logConsole("&6[Punishments] &eLoaded all available punishments!");
     }
 
     public void savePunishments() {

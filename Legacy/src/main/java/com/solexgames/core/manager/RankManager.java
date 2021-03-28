@@ -14,7 +14,7 @@ public class RankManager {
     public RankManager() {
         this.createDefaultRanks();
         this.loadRanks();
-        CorePlugin.getInstance().getLogger().info("[Ranks] Loaded all ranks.");
+        CorePlugin.getInstance().logConsole("&6[Ranks] &eLoaded all available ranks!");
     }
 
     public void loadRanks() {

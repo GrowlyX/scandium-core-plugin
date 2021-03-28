@@ -24,11 +24,12 @@ public class CryptoManager {
     };
 
     private final String secretKey;
-
-    private int iterationCount = 19;
+    private final int iterationCount = 19;
 
     public CryptoManager() {
         this.secretKey = CorePlugin.getInstance().getConfig().getString("crypto.key");
+
+        CorePlugin.getInstance().logConsole("&6[Crypto] &eLoaded encryption manager!");
     }
 
     public String encrypt(String plainText) {
@@ -68,6 +69,7 @@ public class CryptoManager {
         } catch (Exception ignored) {
             return "";
         }
+
         return new String(utf8, StandardCharsets.UTF_8);
     }
 }

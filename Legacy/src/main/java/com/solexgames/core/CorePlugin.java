@@ -360,6 +360,10 @@ public final class CorePlugin extends JavaPlugin {
         }
     }
 
+    public void logConsole(String message) {
+        Bukkit.getConsoleSender().sendMessage(Color.translate(message));
+    }
+
     @Override
     public void onDisable() {
         CAN_JOIN = false;
