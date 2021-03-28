@@ -138,6 +138,7 @@ public class PotPlayer {
 
     public PotPlayer(UUID uuid, String name, InetAddress inetAddress) {
         this.uuid = uuid;
+        this.player = Bukkit.getPlayer(uuid);
         this.ipAddress = inetAddress.toString();
         this.name = name;
 
@@ -465,7 +466,6 @@ public class PotPlayer {
             Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), this::saveWithoutRemove, 10 * 20L);
             RedisUtil.writeAsync(RedisUtil.addGlobalPlayer(this));
 
-            this.player = Bukkit.getPlayer(uuid);
             this.gameProfile = CorePlugin.getInstance().getPlayerManager().getGameProfile(this.player);
 
             if (this.getPlayer().hasPermission("scandium.staff")) {

@@ -38,12 +38,11 @@ public class PermissionsCommand extends BaseCommand {
                 .collect(Collectors.toList());
         int permissionsCount = permissions.size();
 
-        player.sendMessage("&7&m" + StringUtils.repeat("-", 53));
+        player.sendMessage(ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 53));
         StringUtil.sendCenteredMessage(player, serverType.getSecondaryColor() + "You currently have " + serverType.getMainColor() + "" + permissionsCount + serverType.getSecondaryColor() + " permissions!");
         player.sendMessage("  ");
         permissions.forEach(s -> player.sendMessage(ChatColor.GRAY + " * " + serverType.getMainColor() + s));
-        player.sendMessage("&7&m" + StringUtils.repeat("-", 53));
-
+        player.sendMessage(ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 53));
 
         return false;
     }

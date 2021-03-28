@@ -155,34 +155,34 @@ public class PlayerListener implements Listener {
                     StringUtil.sendCenteredMessage(event.getPlayer(), (ArrayList<String>) MANAGER.getJoinMessage());
                 }
             }
+
+            if (event.getPlayer().hasPermission("scandium.staff")) {
+                CorePlugin.getInstance().getServerManager().getStaffInformation().forEach(s -> event.getPlayer().sendMessage(s
+                        .replace("<nice_char>", Character.toString('»'))
+                        .replace("<channel>", ChatColor.RED + "None")
+                        .replace("<messages>", (potPlayer.isCanSeeStaffMessages() ? ChatColor.GREEN + "Shown" : ChatColor.RED + "Hidden"))
+                        .replace("<filter>", (potPlayer.isCanSeeFiltered() ? ChatColor.GREEN + "Shown" : ChatColor.RED + "Hidden"))
+                        .replace("<modmode>", (potPlayer.isStaffMode() ? ChatColor.GREEN + "Enabled" : ChatColor.RED + "Disabled"))
+                        .replace("<vanish>", (potPlayer.isVanished() ? ChatColor.GREEN + "Enabled" : ChatColor.RED + "Disabled"))
+                ));
+            }
+
+            if (potPlayer.isAutoVanish()) {
+                potPlayer.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getServerManager().getAutomaticallyPutInto().replace("<value>", "vanish")));
+
+                CorePlugin.getInstance().getPlayerManager().vanishPlayerRaw(potPlayer.getPlayer());
+            }
+
+            if (potPlayer.isAutoModMode()) {
+                potPlayer.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getServerManager().getAutomaticallyPutInto().replace("<value>", "mod mode")));
+
+                CorePlugin.getInstance().getPlayerManager().modModeRaw(potPlayer.getPlayer());
+            }
+
+            if (potPlayer.isCurrentlyRestricted()) {
+                event.getPlayer().sendMessage(potPlayer.getRestrictionMessage());
+            }
         });
-
-        if (event.getPlayer().hasPermission("scandium.staff")) {
-            CorePlugin.getInstance().getServerManager().getStaffInformation().forEach(s -> potPlayer.getPlayer().sendMessage(s
-                    .replace("<nice_char>", Character.toString('»'))
-                    .replace("<channel>", ChatColor.RED + "None")
-                    .replace("<messages>", (potPlayer.isCanSeeStaffMessages() ? ChatColor.GREEN + "Shown" : ChatColor.RED + "Hidden"))
-                    .replace("<filter>", (potPlayer.isCanSeeFiltered() ? ChatColor.GREEN + "Shown" : ChatColor.RED + "Hidden"))
-                    .replace("<modmode>", (potPlayer.isStaffMode() ? ChatColor.GREEN + "Enabled" : ChatColor.RED + "Disabled"))
-                    .replace("<vanish>", (potPlayer.isVanished() ? ChatColor.GREEN + "Enabled" : ChatColor.RED + "Disabled"))
-            ));
-        }
-
-        if (potPlayer.isAutoVanish()) {
-            potPlayer.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getServerManager().getAutomaticallyPutInto().replace("<value>", "vanish")));
-
-            CorePlugin.getInstance().getPlayerManager().vanishPlayerRaw(potPlayer.getPlayer());
-        }
-
-        if (potPlayer.isAutoModMode()) {
-            potPlayer.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getServerManager().getAutomaticallyPutInto().replace("<value>", "mod mode")));
-
-            CorePlugin.getInstance().getPlayerManager().modModeRaw(potPlayer.getPlayer());
-        }
-
-        if (potPlayer.isCurrentlyRestricted()) {
-            event.getPlayer().sendMessage(potPlayer.getRestrictionMessage());
-        }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
