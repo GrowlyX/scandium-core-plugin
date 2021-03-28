@@ -4,14 +4,13 @@ import com.mongodb.client.MongoCursor;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.player.PotPlayer;
-import com.solexgames.core.player.callback.XPFetchCallback;
 import org.bson.Document;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public final class ExperienceUtil {
@@ -51,9 +50,16 @@ public final class ExperienceUtil {
 
         sortingDocument.put(sortingString, -1);
 
-        ExperienceUtil.fetchDocument(sortingDocument, result -> {
-            while (result.hasNext()) {
-                Document document = result.next();
+        CompletableFuture<MongoCursor<Document>> cursorCompletableFuture = new CompletableFuture<>();
+
+        CompletableFuture.runAsync(() -> {
+            MongoCursor<Document> cursor = CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find().sort(sortingDocument).limit(10).iterator();
+            cursorCompletableFuture.complete(cursor);
+        });
+
+        cursorCompletableFuture.thenAccept(documentMongoCursor -> {
+            while (documentMongoCursor.hasNext()) {
+                Document document = documentMongoCursor.next();
                 int amountOfSort = 0;
 
                 try {
@@ -65,21 +71,6 @@ public final class ExperienceUtil {
         });
 
         return stringArrayList;
-    }
-
-    /**
-     * Fetches a document then executes the callback Async
-     * <p>
-     *
-     * @param sorting Sorting document
-     * @param callback {@link XPFetchCallback} callback
-     */
-    public static void fetchDocument(Document sorting, XPFetchCallback callback) {
-        Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> {
-            final MongoCursor<Document> result = CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find().sort(sorting).limit(10).iterator();
-
-            Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () -> callback.onCompletion(result));
-        });
     }
 
     /**
