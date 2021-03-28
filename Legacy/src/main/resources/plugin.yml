@@ -1,6 +1,6 @@
 
 name: Scandium
-version: 1.0-${git.commit.id.abbrev}
+version: ${git.commit.id.abbrev}-STABLE
 main: com.solexgames.core.CorePlugin
 
 softdepend: [ProtocolLib, dRobot, ScandiumPAPI]

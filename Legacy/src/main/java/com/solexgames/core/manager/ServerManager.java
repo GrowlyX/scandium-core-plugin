@@ -49,7 +49,6 @@ public class ServerManager {
         this.staffInformation = Color.translate(CorePlugin.getInstance().getConfig().getStringList("staff-information"));
 
         setupServerType();
-        CorePlugin.getInstance().logConsole("&6[Network] &eLoaded the server type &6" + this.network.getServerName());
     }
 
     public void removeNetworkServer(NetworkServer networkServer) {

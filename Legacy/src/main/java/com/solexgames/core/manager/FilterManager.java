@@ -28,8 +28,6 @@ public class FilterManager {
     public FilterManager() {
         this.plugin = CorePlugin.getInstance();
         this.filteredMessages = this.plugin.getFilterConfig().getStringList("messages");
-
-        CorePlugin.getInstance().logConsole("&6[Filter] &eLoaded the Chat Filter!");
     }
 
     public boolean isDmFiltered(Player player, String target, String message) {

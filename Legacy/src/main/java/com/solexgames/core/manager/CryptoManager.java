@@ -28,8 +28,6 @@ public class CryptoManager {
 
     public CryptoManager() {
         this.secretKey = CorePlugin.getInstance().getConfig().getString("crypto.key");
-
-        CorePlugin.getInstance().logConsole("&6[Crypto] &eLoaded encryption manager!");
     }
 
     public String encrypt(String plainText) {

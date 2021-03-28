@@ -219,6 +219,8 @@ public final class CorePlugin extends JavaPlugin {
 
         this.getRedisThread().execute(() -> this.getRedisManager().write(RedisUtil.onServerOnline()));
         Bukkit.getScheduler().runTaskLater(this, () -> CAN_JOIN = true, 5 * 20L);
+
+        this.logInformation();
     }
 
     public void setupExtra() {
@@ -333,6 +335,19 @@ public final class CorePlugin extends JavaPlugin {
         this.registerBukkitCommand();
 
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, this.tpsRunnable, 0L, 1L);
+    }
+
+    private void logInformation() {
+        String version = this.getDescription().getVersion();
+
+        boolean beta = (version.contains("BETA"));
+        boolean stable = (version.contains("STABLE"));
+        boolean dev = (version.contains("DEV"));
+
+        String extra = (beta ? " (Beta)" : "") + (dev ? " (Experimental)" : "") + (stable ? " (Stable)" : "");
+
+        this.logConsole("&bScandium &ahas loaded and players will be able to join in &65 seconds&a...");
+        this.logConsole("&a&oYou are currently running version " + version + extra + ".");
     }
 
     private void registerBukkitCommand() {

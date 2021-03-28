@@ -11,8 +11,6 @@ public class PrefixManager {
     public PrefixManager() {
         this.createDefaultPrefixes();
         this.loadPrefixes();
-
-        CorePlugin.getInstance().logConsole("&6[Prefixes] &eLoaded all available prefixes!");
     }
 
     private void createDefaultPrefixes() {
