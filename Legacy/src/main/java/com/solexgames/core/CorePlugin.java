@@ -347,7 +347,13 @@ public final class CorePlugin extends JavaPlugin {
         String extra = (beta ? " (Beta)" : "") + (dev ? " (Experimental)" : "") + (stable ? " (Stable)" : "");
 
         this.logConsole("&bScandium &ahas loaded and players will be able to join in &65 seconds&a...");
-        this.logConsole("&a&oYou are currently running version " + version + extra + ".");
+
+        this.logConsole("&7You are currently running version &e" + version
+                .replace("-BETA", "")
+                .replace("-STABLE", "")
+                .replace("-DEV", "")
+                + extra + "&7."
+        );
     }
 
     private void registerBukkitCommand() {
