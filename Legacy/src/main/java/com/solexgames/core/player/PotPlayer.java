@@ -416,7 +416,6 @@ public class PotPlayer {
                     allMessages.forEach(s -> this.allPurchasedMessages.add(PotionMessageType.valueOf(s)));
                 }
             }
-
             if (profile.getBoolean("isSynced") != null) {
                 this.setSynced(profile.getBoolean("isSynced"));
             }
