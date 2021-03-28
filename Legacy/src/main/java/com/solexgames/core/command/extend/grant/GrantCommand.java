@@ -49,7 +49,7 @@ public class GrantCommand extends BaseCommand {
             if (document != null) {
                 new GrantMainPaginatedMenu(document, player).openMenu(player);
             } else {
-                player.sendMessage(ChatColor.RED + "That player does not exist in our databases.");
+                player.sendMessage(ChatColor.RED + "That player does not exist in our databasesw.");
             }
         }
         return false;

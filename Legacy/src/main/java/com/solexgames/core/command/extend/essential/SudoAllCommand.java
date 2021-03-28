@@ -32,6 +32,11 @@ public class SudoAllCommand extends BaseCommand {
         if (args.length > 0) {
             String message = StringUtil.buildMessage(args, 0);
 
+            if (message.contains("/sudoall") || message.contains("/scandium:sudoall")) {
+                sender.sendMessage(ChatColor.RED + "You cannot perform this action right now.");
+                return false;
+            }
+
             if (message.startsWith("c:")) {
                 Bukkit.getOnlinePlayers().forEach(player1 -> player1.chat(message.replace("c:", "")));
                 sender.sendMessage(Color.translate(secondColor + "Made all online players chat '" + mainColor + message.replace("c:", "") + secondColor + "'."));
