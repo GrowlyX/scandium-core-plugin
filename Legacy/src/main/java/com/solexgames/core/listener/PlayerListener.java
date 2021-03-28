@@ -157,7 +157,7 @@ public class PlayerListener implements Listener {
             }
         });
 
-        if (potPlayer.getPlayer().hasPermission("scandium.staff")) {
+        if (event.getPlayer().hasPermission("scandium.staff")) {
             CorePlugin.getInstance().getServerManager().getStaffInformation().forEach(s -> potPlayer.getPlayer().sendMessage(s
                     .replace("<nice_char>", Character.toString('»'))
                     .replace("<channel>", ChatColor.RED + "None")
