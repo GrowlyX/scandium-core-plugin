@@ -20,13 +20,14 @@ public class ConfigExternal {
 
     public ConfigExternal(String name) {
         this.file = new File(CorePlugin.getInstance().getDataFolder(), name + ".yml");
+
         if (!this.file.getParentFile().exists()) {
             if (this.file.getParentFile().mkdir()) {
                 CorePlugin.getInstance().getLogger().info("Created the file '" + name + ".yml" + "'!");
+                CorePlugin.getInstance().saveResource(name + ".yml", false);
             }
         }
 
-        CorePlugin.getInstance().saveResource(name + ".yml", false);
         this.configuration = YamlConfiguration.loadConfiguration(this.file);
     }
 
