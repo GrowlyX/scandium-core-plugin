@@ -136,14 +136,7 @@ public class PlayerListener implements Listener {
     public void onConnect(PlayerJoinEvent event) {
         PotPlayer potPlayer = new PotPlayer(event.getPlayer().getUniqueId(), event.getPlayer().getName(), event.getPlayer().getAddress().getAddress());
 
-        if (!potPlayer.isHasLoaded()) {
-            event.getPlayer().kickPlayer(PunishmentStrings.PLAYER_DATA_LOAD);
-            return;
-        }
-
         CompletableFuture.runAsync(() -> {
-            potPlayer.postLoginLoad();
-
             CorePlugin.getInstance().getServerManager().getVanishedPlayers().stream()
                     .map(player -> CorePlugin.getInstance().getPlayerManager().getPlayer(player))
                     .filter(potPlayer1 -> potPlayer.getActiveGrant().getRank().getWeight() < potPlayer1.getActiveGrant().getRank().getWeight())

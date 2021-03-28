@@ -2,6 +2,7 @@ package com.solexgames.core.manager;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.mojang.authlib.GameProfile;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.solexgames.core.CorePlugin;
@@ -218,31 +219,12 @@ public class PlayerManager {
                 .orElse(null);
     }
 
-    public CompletableFuture<Document> fetchDocument(MongoCollection<Document> collection, Bson bson) {
-        CompletableFuture<Document> completableFuture = new CompletableFuture<>();
-
-        CorePlugin.getInstance().getMongoThread().execute(() -> {
-            Document document = collection.find(bson).first();
-            completableFuture.complete(document);
-        });
-
-        return completableFuture;
-    }
-
     public Optional<Document> getDocumentByName(String name) {
-        AtomicReference<Document> document = new AtomicReference<>();
-
-        this.fetchDocument(CorePlugin.getInstance().getCoreDatabase().getPlayerCollection(), Filters.eq("name", name)).thenAccept(document::set);
-
-        return Optional.ofNullable(document.get());
+        return Optional.ofNullable(CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("name", name)).first());
     }
 
     public Optional<Document> getDocumentByUuid(UUID uuid) {
-        AtomicReference<Document> document = new AtomicReference<>();
-
-        this.fetchDocument(CorePlugin.getInstance().getCoreDatabase().getPlayerCollection(), Filters.eq("uuid", uuid.toString())).thenAccept(document::set);
-
-        return Optional.ofNullable(document.get());
+        return Optional.ofNullable(CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("uuid", uuid.toString())).first());
     }
 
     public void unVanishPlayer(Player player) {

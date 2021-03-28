@@ -283,7 +283,7 @@ public class PotPlayer {
         document.put("ipAddress", CorePlugin.getInstance().getCryptoManager().encrypt(ipAddress));
         document.put("experience", this.experience);
 
-        CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("uuid", uuid.toString()), document, new ReplaceOptions().upsert(true)));
+        CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true)));
         CorePlugin.getInstance().getPlayerManager().getAllProfiles().remove(this.uuid);
     }
 
@@ -291,7 +291,7 @@ public class PotPlayer {
         CompletableFuture<Document> completableFuture = new CompletableFuture<>();
 
         CorePlugin.getInstance().getMongoThread().execute(() -> {
-            Document document = CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("uuid", uuid.toString())).first();
+            Document document = CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("_id", uuid)).first();
             setProfile(document);
             completableFuture.complete(document);
         });
@@ -304,6 +304,8 @@ public class PotPlayer {
             if (this.profile == null) {
                 this.saveWithoutRemove();
                 this.hasLoaded = true;
+
+                System.out.println("[Debug] A document was null.");
 
                 return;
             }
@@ -463,35 +465,33 @@ public class PotPlayer {
 
             Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), this::saveWithoutRemove, 10 * 20L);
             RedisUtil.writeAsync(RedisUtil.addGlobalPlayer(this));
+
+            this.player = Bukkit.getPlayer(uuid);
+            this.gameProfile = CorePlugin.getInstance().getPlayerManager().getGameProfile(this.player);
+
+            if (this.getPlayer().hasPermission("scandium.staff")) {
+                if (!CorePlugin.getInstance().getPlayerManager().isOnline(this.getPlayer().getName())) {
+                    CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onConnect(this.getPlayer())));
+                }
+            }
+
+            if (profile != null && profile.get("allPrefixes") != null) {
+                if (player.hasPermission("scandium.prefixes.all")) {
+                    List<String> prefixes = new ArrayList<>();
+                    Prefix.getPrefixes().forEach(prefix -> prefixes.add(prefix.getName()));
+                    this.getAllPrefixes().addAll(prefixes);
+                } else if (!player.hasPermission("scandium.prefixes.all")) {
+                    List<String> prefixes = ((List<String>) this.profile.get("allPrefixes"));
+                    this.allPrefixes.addAll(prefixes);
+                }
+            }
+
+            if (CorePlugin.NAME_MC_REWARDS) {
+                this.checkVoting();
+            }
+
+            this.setupPlayer();
         });
-    }
-
-    public void postLoginLoad() {
-        this.player = Bukkit.getPlayer(uuid);
-        this.gameProfile = CorePlugin.getInstance().getPlayerManager().getGameProfile(this.player);
-
-        if (this.getPlayer().hasPermission("scandium.staff")) {
-            if (!CorePlugin.getInstance().getPlayerManager().isOnline(this.getPlayer().getName())) {
-                CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onConnect(this.getPlayer())));
-            }
-        }
-
-        if (profile != null && profile.get("allPrefixes") != null) {
-            if (player.hasPermission("scandium.prefixes.all")) {
-                List<String> prefixes = new ArrayList<>();
-                Prefix.getPrefixes().forEach(prefix -> prefixes.add(prefix.getName()));
-                this.getAllPrefixes().addAll(prefixes);
-            } else if (!player.hasPermission("scandium.prefixes.all")) {
-                List<String> prefixes = ((List<String>) this.profile.get("allPrefixes"));
-                this.allPrefixes.addAll(prefixes);
-            }
-        }
-
-        if (CorePlugin.NAME_MC_REWARDS) {
-            this.checkVoting();
-        }
-
-        this.setupPlayer();
     }
 
     public String getRestrictionMessage() {
