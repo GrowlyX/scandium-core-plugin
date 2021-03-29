@@ -1,6 +1,5 @@
 package com.solexgames.core.listener;
 
-import com.jcabi.aspects.Async;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ChatChannelType;
 import com.solexgames.core.manager.ServerManager;
@@ -34,6 +33,11 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
+
+/**
+ * @author GrowlyX
+ * @since 2021
+ */
 
 public class PlayerListener implements Listener {
 
@@ -341,6 +345,11 @@ public class PlayerListener implements Listener {
 
         if (potPlayer.isCurrentlyRestricted()) {
             player.sendMessage(Color.translate("&cYou cannot chat as you are currently restricted."));
+            event.setCancelled(true);
+            return;
+        }
+
+        if (player.hasMetadata("spectator")) {
             event.setCancelled(true);
             return;
         }

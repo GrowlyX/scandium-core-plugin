@@ -105,9 +105,6 @@ public final class CorePlugin extends JavaPlugin {
 
     private String serverName;
 
-    private Logger chatLogger;
-    private Logger commandLogger;
-
     private HttpClient httpClient;
 
     private Database coreDatabase;
@@ -124,9 +121,7 @@ public final class CorePlugin extends JavaPlugin {
     private AbstractClientHook lunar;
     private AbstractNMSAccess NMS;
 
-    private Executor taskThread;
     private Executor redisThread;
-    private Executor redisSubThread;
     private Executor mongoThread;
 
     private boolean debugging;
@@ -152,9 +147,7 @@ public final class CorePlugin extends JavaPlugin {
                 .create();
 
         this.mongoThread = Executors.newFixedThreadPool(1);
-        this.taskThread = Executors.newFixedThreadPool(1);
         this.redisThread = Executors.newFixedThreadPool(1);
-        this.redisSubThread = Executors.newFixedThreadPool(1);
 
         this.httpClient = new DefaultHttpClient();
 

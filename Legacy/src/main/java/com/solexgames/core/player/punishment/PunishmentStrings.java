@@ -3,6 +3,11 @@ package com.solexgames.core.player.punishment;
 import com.solexgames.core.CorePlugin;
 import org.bukkit.ChatColor;
 
+/**
+ * @author GrowlyX
+ * @since 2021
+ */
+
 public final class PunishmentStrings {
 
     private final static String SERVER_NAME = CorePlugin.getInstance().getServerManager().getNetwork().getServerName();
@@ -32,5 +37,7 @@ public final class PunishmentStrings {
     public static String COOL_DOWN_MESSAGE = "&cPlease wait before chatting again.";
 
     public static String PLAYER_DATA_LOAD = ChatColor.RED + "An error occurred while trying to load your data.\n" + ChatColor.RED + "Please try again later or contact a staff member.";
+
+
 
 }

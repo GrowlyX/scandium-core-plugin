@@ -31,33 +31,41 @@ public class AutoMessageTask extends BukkitRunnable {
 
         this.allTips.addAll(CorePlugin.getInstance().getConfig().getStringList("tips.messages"));
 
-        this.runTaskTimerAsynchronously(CorePlugin.getInstance(), 20L, CorePlugin.getInstance().getConfig().getInt("tips.interval") * 20L);
+        this.runTaskTimerAsynchronously(
+                CorePlugin.getInstance(),
+                20L,
+                CorePlugin.getInstance().getConfig().getInt("tips.interval") * 20L
+        );
     }
 
     @Override
     public void run() {
-        Bukkit.getOnlinePlayers()
-                .stream()
+        Bukkit.getOnlinePlayers().stream()
                 .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
                 .filter(PotPlayer::isCanSeeTips)
                 .forEach(potPlayer -> {
                     if (padding) {
                         potPlayer.getPlayer().sendMessage("  ");
-                        executeMessage(potPlayer);
+                        this.executeMessage(potPlayer);
                         potPlayer.getPlayer().sendMessage("  ");
+
                     } else {
-                        executeMessage(potPlayer);
+                        this.executeMessage(potPlayer);
                     }
                 });
     }
 
     private void executeMessage(PotPlayer potPlayer) {
-        int count = CorePlugin.RANDOM.nextInt(this.allTips.size());
+        String prefix = (this.prefix ? this.tipPrefix : "");
+        String tipString = this.allTips.get(this.lastCount).replace("<nl>", "\n");
+        String newMessage = Color.translate(prefix + tipString);
 
-        potPlayer.getPlayer().sendMessage(Color.translate(
-                (this.prefix ? this.tipPrefix : "") + this.allTips.get(this.lastCount == count ? CorePlugin.RANDOM.nextInt(this.allTips.size()) : count).replace("<nl>", "\n")
-        ));
+        potPlayer.getPlayer().sendMessage(newMessage);
 
-        this.lastCount = count;
+        if (this.lastCount == this.allTips.size()) {
+            this.lastCount = 0;
+        } else {
+            this.lastCount++;
+        }
     }
 }

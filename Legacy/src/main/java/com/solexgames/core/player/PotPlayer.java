@@ -284,7 +284,10 @@ public class PotPlayer {
         document.put("ipAddress", CorePlugin.getInstance().getCryptoManager().encrypt(ipAddress));
         document.put("experience", this.experience);
 
-        CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true)));
+        CorePlugin.getInstance().getMongoThread().execute(() ->
+                CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true))
+        );
+
         CorePlugin.getInstance().getPlayerManager().getAllProfiles().remove(this.uuid);
     }
 
@@ -293,7 +296,7 @@ public class PotPlayer {
 
         CompletableFuture.runAsync(() -> {
             Document document = CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("_id", uuid)).first();
-            setProfile(document);
+            this.setProfile(document);
             completableFuture.complete(document);
         });
 
