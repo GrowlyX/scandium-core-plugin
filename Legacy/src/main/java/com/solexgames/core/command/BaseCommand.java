@@ -11,6 +11,14 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
+/**
+ * @author GrowlyX
+ * @since 2021
+ *
+ * @see CommandExecutor
+ * @see CorePlugin
+ */
+
 public abstract class BaseCommand implements CommandExecutor {
 
     protected final String ONLY_PLAYERS = ChatColor.RED + "Only players can execute this command.";
@@ -20,6 +28,9 @@ public abstract class BaseCommand implements CommandExecutor {
     protected RedisManager client;
     protected Database database;
 
+    /**
+     * Created a new instance of BaseCommand.
+     */
     protected BaseCommand() {
         this.playerManager = CorePlugin.getInstance().getPlayerManager();
         this.database = CorePlugin.getInstance().getCoreDatabase();
