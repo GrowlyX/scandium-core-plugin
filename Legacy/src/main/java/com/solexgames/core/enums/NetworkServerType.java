@@ -17,7 +17,7 @@ public enum NetworkServerType {
     UHC_GAMES("UHC Games"),
     UHC("UHC"),
     HUB("Lobby"),
-    HORSE_RACE("Horse Racing"),
+    EVENT("Event"),
     NOT_DEFINED("Booting..."),
     POTSG("PotSG");
 

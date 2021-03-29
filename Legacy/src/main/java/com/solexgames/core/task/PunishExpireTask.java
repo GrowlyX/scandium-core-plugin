@@ -11,6 +11,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * @author GrowlyX
+ * @since March 2021
+ */
+
 public class PunishExpireTask extends BukkitRunnable {
 
     public PunishExpireTask() {

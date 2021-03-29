@@ -8,6 +8,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Objects;
 
+/**
+ * @author GrowlyX
+ * @since March 2021
+ */
+
 public class GrantExpireTask extends BukkitRunnable {
 
     public GrantExpireTask() {

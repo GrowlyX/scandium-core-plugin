@@ -1,4 +1,4 @@
-package com.solexgames.core.abstraction.lunar;
+package com.solexgames.core.abstraction.client;
 
 import org.bukkit.entity.Player;
 

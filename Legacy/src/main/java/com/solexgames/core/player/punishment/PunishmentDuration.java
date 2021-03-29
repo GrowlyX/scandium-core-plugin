@@ -4,6 +4,11 @@ import lombok.Getter;
 
 import java.beans.ConstructorProperties;
 
+/**
+ * @author GrowlyX
+ * @since March 2021
+ */
+
 @Getter
 public enum PunishmentDuration {
 

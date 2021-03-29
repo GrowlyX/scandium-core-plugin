@@ -8,10 +8,15 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Objects;
 
+/**
+ * @author GrowlyX
+ * @since March 2021
+ */
+
 public class BoardUpdateTask extends BukkitRunnable {
 
     public BoardUpdateTask() {
-        runTaskTimerAsynchronously(CorePlugin.getInstance(), 0L, 2L);
+        this.runTaskTimerAsynchronously(CorePlugin.getInstance(), 0, 2);
     }
 
     @Override

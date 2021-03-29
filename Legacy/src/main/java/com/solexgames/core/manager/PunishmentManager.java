@@ -66,65 +66,61 @@ public class PunishmentManager {
     public void handlePunishment(Punishment punishment, String issuer, Document targetDocument, boolean silent) {
         this.punishments.add(punishment);
 
-        Bukkit.getScheduler().runTask(CorePlugin.getInstance(), new Runnable() {
+        Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () -> {
+            String name = targetDocument.getString("name");
+            Rank rank = Rank.getByName(targetDocument.getString("rankName"));
+            PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(name);
+            Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByName(issuer).orElse(null);
 
-            @Override
-            public void run() {
-                String name = targetDocument.getString("name");
-                Rank rank = Rank.getByName(targetDocument.getString("rankName"));
-                PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(name);
-                Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByName(issuer).orElse(null);
+            if (document != null) {
+                Rank playerRank = Rank.getByName(document.getString("rankName"));
+                String formattedName = playerRank.getColor() + document.get("name");
 
-                if (document != null) {
-                    Rank playerRank = Rank.getByName(document.getString("rankName"));
-                    String formattedName = playerRank.getColor() + document.get("name");
-
-                    if (silent) {
-                        Bukkit.getOnlinePlayers().stream().filter(player1 -> player1.hasPermission("scandium.staff")).forEach(player1 -> player1.sendMessage(Color.translate(
-                                "&7[S] " + (rank != null ? rank.getColor() : ChatColor.GRAY) + name + " &awas " + (!punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (issuer != null ? formattedName : "&4Console") + "&a."
-                        )));
-                    } else {
-                        Bukkit.broadcastMessage(Color.translate(
-                                (rank != null ? rank.getColor() : ChatColor.GRAY) + name + " &awas " + (!punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (issuer != null ? formattedName : "&4Console") + "&a."
-                        ));
-                    }
+                if (silent) {
+                    Bukkit.getOnlinePlayers().stream().filter(player1 -> player1.hasPermission("scandium.staff")).forEach(player1 -> player1.sendMessage(Color.translate(
+                            "&7[S] " + (rank != null ? rank.getColor() : ChatColor.GRAY) + name + " &awas " + (!punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (issuer != null ? formattedName : "&4Console") + "&a."
+                    )));
                 } else {
-                    if (silent) {
-                        Bukkit.getOnlinePlayers().stream().filter(player1 -> player1.hasPermission("scandium.staff")).forEach(player1 -> player1.sendMessage(Color.translate(
-                                "&7[S] " + (rank != null ? rank.getColor() : ChatColor.GRAY) + name + " &awas " + (!punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4Console&a."
-                        )));
-                    } else {
-                        Bukkit.broadcastMessage(Color.translate(
-                                (rank != null ? rank.getColor() : ChatColor.GRAY) + name + " &awas " + (!punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4Console&a."
-                        ));
-                    }
+                    Bukkit.broadcastMessage(Color.translate(
+                            (rank != null ? rank.getColor() : ChatColor.GRAY) + name + " &awas " + (!punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (issuer != null ? formattedName : "&4Console") + "&a."
+                    ));
                 }
+            } else {
+                if (silent) {
+                    Bukkit.getOnlinePlayers().stream().filter(player1 -> player1.hasPermission("scandium.staff")).forEach(player1 -> player1.sendMessage(Color.translate(
+                            "&7[S] " + (rank != null ? rank.getColor() : ChatColor.GRAY) + name + " &awas " + (!punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4Console&a."
+                    )));
+                } else {
+                    Bukkit.broadcastMessage(Color.translate(
+                            (rank != null ? rank.getColor() : ChatColor.GRAY) + name + " &awas " + (!punishment.isPermanent() ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4Console&a."
+                    ));
+                }
+            }
 
-                if (potPlayer != null) {
-                    switch (punishment.getPunishmentType()) {
-                        case WARN:
-                            potPlayer.getPlayer().sendMessage(Color.translate("  "));
-                            potPlayer.getPlayer().sendMessage(Color.translate("&4&l⚠ &c&lYOU WERE WARNED!"));
-                            potPlayer.getPlayer().sendMessage(Color.translate("&7Reason: &e" + punishment.getReason()));
-                            potPlayer.getPlayer().sendMessage(Color.translate("  "));
-                            break;
-                        case MUTE:
-                            potPlayer.getPlayer().sendMessage(Color.translate("&cYou were muted by a staff member."));
-                            potPlayer.setCurrentlyMuted(true);
-                            break;
-                        case BLACKLIST:
-                            potPlayer.setCurrentlyRestricted(true);
-                            potPlayer.getPlayer().kickPlayer(Color.translate(PunishmentStrings.BLACK_LIST_MESSAGE.replace("<reason>", punishment.getReason())));
-                            break;
-                        case IPBAN:
-                        case BAN:
-                            potPlayer.setCurrentlyRestricted(true);
-                            potPlayer.getPlayer().kickPlayer((punishment.isPermanent() ? Color.translate(PunishmentStrings.BAN_MESSAGE_PERM.replace("<reason>", punishment.getReason())) : Color.translate(PunishmentStrings.BAN_MESSAGE_TEMP.replace("<reason>", punishment.getReason()).replace("<time>", punishment.getDurationString()))));
-                            break;
-                        case KICK:
-                            potPlayer.getPlayer().kickPlayer(Color.translate(PunishmentStrings.KICK_MESSAGE.replace("<reason>", punishment.getReason())));
-                            break;
-                    }
+            if (potPlayer != null) {
+                switch (punishment.getPunishmentType()) {
+                    case WARN:
+                        potPlayer.getPlayer().sendMessage(Color.translate("  "));
+                        potPlayer.getPlayer().sendMessage(Color.translate("&4&l⚠ &c&lYOU WERE WARNED!"));
+                        potPlayer.getPlayer().sendMessage(Color.translate("&7Reason: &e" + punishment.getReason()));
+                        potPlayer.getPlayer().sendMessage(Color.translate("  "));
+                        break;
+                    case MUTE:
+                        potPlayer.getPlayer().sendMessage(Color.translate("&cYou were muted by a staff member."));
+                        potPlayer.setCurrentlyMuted(true);
+                        break;
+                    case BLACKLIST:
+                        potPlayer.setCurrentlyRestricted(true);
+                        potPlayer.getPlayer().kickPlayer(Color.translate(PunishmentStrings.BLACK_LIST_MESSAGE.replace("<reason>", punishment.getReason())));
+                        break;
+                    case IPBAN:
+                    case BAN:
+                        potPlayer.setCurrentlyRestricted(true);
+                        potPlayer.getPlayer().kickPlayer((punishment.isPermanent() ? Color.translate(PunishmentStrings.BAN_MESSAGE_PERM.replace("<reason>", punishment.getReason())) : Color.translate(PunishmentStrings.BAN_MESSAGE_TEMP.replace("<reason>", punishment.getReason()).replace("<time>", punishment.getDurationString()))));
+                        break;
+                    case KICK:
+                        potPlayer.getPlayer().kickPlayer(Color.translate(PunishmentStrings.KICK_MESSAGE.replace("<reason>", punishment.getReason())));
+                        break;
                 }
             }
         });
@@ -185,7 +181,7 @@ public class PunishmentManager {
                         potPlayer.setCurrentlyMuted(false);
                         break;
                     case WARN:
-                        targetPlayer.sendMessage(ChatColor.RED + "Your current warning has now expired.");
+                        targetPlayer.sendMessage(ChatColor.RED + "Your current warning has expired.");
                         break;
                     case BLACKLIST:
                     case IPBAN:

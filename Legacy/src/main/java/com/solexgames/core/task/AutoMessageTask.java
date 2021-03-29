@@ -9,6 +9,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author GrowlyX
+ * @since March 2021
+ */
+
 public class AutoMessageTask extends BukkitRunnable {
 
     private final List<String> allTips = new ArrayList<>();

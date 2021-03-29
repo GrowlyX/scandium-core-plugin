@@ -5,6 +5,11 @@ import com.solexgames.core.redis.RedisManager;
 import lombok.Getter;
 import redis.clients.jedis.JedisPubSub;
 
+/**
+ * @author GrowlyX
+ * @since March 2021
+ */
+
 @Getter
 public abstract class AbstractJedisSubscriber extends JedisPubSub {
 

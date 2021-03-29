@@ -1,5 +1,10 @@
 package com.solexgames.core.task;
 
+/**
+ * @author GitHub
+ * @since March 2021
+ */
+
 public class TPSUpdateTask implements Runnable {
 
     public int TICK_COUNT = 0;

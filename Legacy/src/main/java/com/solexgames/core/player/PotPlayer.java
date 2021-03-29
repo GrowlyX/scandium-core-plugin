@@ -291,7 +291,7 @@ public class PotPlayer {
     public CompletableFuture<Document> fetchDocument() {
         CompletableFuture<Document> completableFuture = new CompletableFuture<>();
 
-        CorePlugin.getInstance().getMongoThread().execute(() -> {
+        CompletableFuture.runAsync(() -> {
             Document document = CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("_id", uuid)).first();
             setProfile(document);
             completableFuture.complete(document);

@@ -13,6 +13,11 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
+/**
+ * @author GrowlyX
+ * @since March 2021
+ */
+
 @Getter
 @Setter
 public class Rank {

@@ -15,6 +15,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
 
+/**
+ * @author GrowlyX
+ * @since March 2021
+ */
+
 @Getter
 @Setter
 public class Punishment {

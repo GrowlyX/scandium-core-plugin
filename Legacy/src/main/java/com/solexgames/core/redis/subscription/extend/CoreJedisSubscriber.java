@@ -24,6 +24,11 @@ import org.bukkit.entity.Player;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * @author GrowlyX
+ * @since March 2021
+ */
+
 public class CoreJedisSubscriber extends AbstractJedisSubscriber {
 
     private final String SERVER_NAME = CorePlugin.getInstance().getServerName();

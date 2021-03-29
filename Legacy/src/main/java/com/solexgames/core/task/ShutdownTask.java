@@ -8,6 +8,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.scheduler.BukkitRunnable;
 
+/**
+ * @author GrowlyX
+ * @since March 2021
+ */
+
 @Getter
 public class ShutdownTask extends BukkitRunnable {
 

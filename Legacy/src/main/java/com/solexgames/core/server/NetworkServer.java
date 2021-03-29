@@ -11,6 +11,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * @author GrowlyX
+ * @since March 2021
+ */
+
 @Getter
 @Setter
 public class NetworkServer {

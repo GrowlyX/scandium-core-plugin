@@ -4,6 +4,11 @@ import com.solexgames.core.CorePlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
+/**
+ * @author GrowlyX
+ * @since March 2021
+ */
+
 public class FrozenMessageTask extends BukkitRunnable {
 
     public FrozenMessageTask() {

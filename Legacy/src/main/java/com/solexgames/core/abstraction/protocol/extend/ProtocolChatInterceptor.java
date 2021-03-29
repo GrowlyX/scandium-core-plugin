@@ -60,7 +60,7 @@ public class ProtocolChatInterceptor extends AbstractChatInterceptor {
             }
         };
 
-        ProtocolLibrary.getProtocolManager().addPacketListener(this.outPlay);
+//        ProtocolLibrary.getProtocolManager().addPacketListener(this.outPlay);
 
         if (this.getConfig().getBoolean("tab-block.enabled")) {
             ProtocolLibrary.getProtocolManager().addPacketListener(this.adapter);
@@ -70,7 +70,6 @@ public class ProtocolChatInterceptor extends AbstractChatInterceptor {
         }
     }
 
-    // Ty to og maker
     private boolean sendDemoScreen(Player player) {
         PacketContainer packet = new PacketContainer(PacketType.Play.Server.GAME_STATE_CHANGE);
 
