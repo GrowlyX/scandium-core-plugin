@@ -39,6 +39,7 @@ import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.listener.ModSuiteListener;
 import com.solexgames.core.listener.PlayerListener;
 import com.solexgames.core.manager.*;
+import com.solexgames.core.player.punishment.PunishmentStrings;
 import com.solexgames.core.redis.RedisManager;
 import com.solexgames.core.redis.RedisSettings;
 import com.solexgames.core.redis.RedisSubscriptions;
@@ -307,6 +308,8 @@ public final class CorePlugin extends JavaPlugin {
 
         if (this.chatInterceptor != null)
             this.chatInterceptor.initializePacketInterceptor();
+
+        new PunishmentStrings().setupMessages();
 
         this.registerListeners(
                 new PlayerListener(),

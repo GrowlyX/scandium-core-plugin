@@ -1,7 +1,10 @@
 package com.solexgames.core.player.punishment;
 
 import com.solexgames.core.CorePlugin;
+import com.solexgames.core.util.Color;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * @author GrowlyX
@@ -38,6 +41,17 @@ public final class PunishmentStrings {
 
     public static String PLAYER_DATA_LOAD = ChatColor.RED + "An error occurred while trying to load your data.\n" + ChatColor.RED + "Please try again later or contact a staff member.";
 
+    /**
+     * Setups customized messages through the config.
+     */
+    public void setupMessages() {
+        FileConfiguration configuration = JavaPlugin.getPlugin(CorePlugin.class).getConfig();
 
-
+        PLAYER_DATA_LOAD = Color.translate(configuration.getString("messages.load-error").replace("<nl>", "\n"));
+        SLOW_CHAT_MESSAGE = Color.translate(configuration.getString("messages.chat-cooldown").replace("<nl>", "\n"));
+        CMD_CHAT_MESSAGE = Color.translate(configuration.getString("messages.command-cooldown").replace("<nl>", "\n"));
+        COOL_DOWN_MESSAGE = Color.translate(configuration.getString("messages.chat-delay-cooldown").replace("<nl>", "\n"));
+        KICK_MESSAGE = Color.translate(configuration.getString("messages.kick-message").replace("<nl>", "\n"));
+        MUTE_MESSAGE = Color.translate(configuration.getString("messages.mute-restricted").replace("<nl>", "\n"));
+    }
 }

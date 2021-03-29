@@ -6,6 +6,14 @@ server-type: "PRACTICE"
 server-id: "eu-practice"
 refresh-time: 5
 
+messages:
+  load-error: "&cAn error occurred while trying to load your data.<nl>&cPlease try again later or contact a staff member."
+  chat-cooldown: "&cPlease wait another <amount> before chatting again."
+  command-cooldown: "&cYou're on command cooldown, please wait <amount>."
+  chat-delay-cooldown: "&cPlease wait before chatting again."
+  kick-message: "&cYou were kicked for: &7<reason>"
+  mute-restricted: "&cYou cannot speak as you are currently muted."
+
 tablist:
   enabled: true
   header: ""
