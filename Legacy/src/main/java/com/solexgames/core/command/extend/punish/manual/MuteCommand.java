@@ -74,7 +74,7 @@ public class MuteCommand extends BaseCommand {
 
                         try {
                             Punishment punishment = new Punishment(
-                                    PunishmentType.WARN,
+                                    PunishmentType.MUTE,
                                     issuerUuid,
                                     targetUuid,
                                     issuerName,
