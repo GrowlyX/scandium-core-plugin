@@ -56,16 +56,12 @@ public class AutoMessageTask extends BukkitRunnable {
     }
 
     private void executeMessage(PotPlayer potPlayer) {
-        String prefix = (this.prefix ? this.tipPrefix : "");
-        String tipString = this.allTips.get(this.lastCount).replace("<nl>", "\n");
-        String newMessage = Color.translate(prefix + tipString);
+        int count = CorePlugin.RANDOM.nextInt(this.allTips.size());
 
-        potPlayer.getPlayer().sendMessage(newMessage);
+        potPlayer.getPlayer().sendMessage(Color.translate(
+                (this.prefix ? this.tipPrefix : "") + this.allTips.get(this.lastCount == count ? CorePlugin.RANDOM.nextInt(this.allTips.size()) : count).replace("<nl>", "\n")
+        ));
 
-        if (this.lastCount == this.allTips.size()) {
-            this.lastCount = 0;
-        } else {
-            this.lastCount++;
-        }
+        this.lastCount = count;
     }
 }
