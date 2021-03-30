@@ -8,8 +8,6 @@ import com.solexgames.core.CorePlugin;
 import lombok.Getter;
 import org.bson.Document;
 
-import java.util.HashSet;
-
 @Getter
 public class Database {
 
