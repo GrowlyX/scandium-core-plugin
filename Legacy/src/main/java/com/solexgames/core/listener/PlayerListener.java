@@ -457,6 +457,11 @@ public class PlayerListener implements Listener {
                     event.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getConfig().getString("block-commands.message")));
                     event.setCancelled(true);
                 }
+
+                if (event.getMessage().startsWith("/" + s) && event.getMessage().contains(" ")) {
+                    event.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getConfig().getString("block-commands.message")));
+                    event.setCancelled(true);
+                }
             });
         }
 
@@ -465,8 +470,6 @@ public class PlayerListener implements Listener {
             if (!event.getPlayer().hasPermission("scandium.command.cooldown.bypass")) {
                 event.getPlayer().sendMessage(Color.translate(PunishmentStrings.CMD_CHAT_MESSAGE.replace("<amount>", DurationFormatUtils.formatDurationWords(commandCoolDown, true, true))));
                 event.setCancelled(true);
-
-                return;
             }
         }
 

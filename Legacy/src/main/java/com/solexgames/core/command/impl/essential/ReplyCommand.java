@@ -30,9 +30,15 @@ public class ReplyCommand extends BaseCommand {
             String message = StringUtil.buildMessage(args, 0);
 
             PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+
+            if (potPlayer.getLastRecipient() == null) {
+                player.sendMessage(Color.translate("&cYou aren't in a conversation with anyone."));
+                return false;
+            }
+
             PotPlayer potTarget = CorePlugin.getInstance().getPlayerManager().getPlayer(potPlayer.getLastRecipient());
 
-            if (potTarget != null) {
+            if (potTarget == null) {
                 player.sendMessage(Color.translate("&cThat player does not exist."));
                 return false;
             }

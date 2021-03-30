@@ -28,7 +28,7 @@ public class MessageCommand extends BaseCommand {
             player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player> <message>."));
         }
         if (args.length > 1) {
-            Player target = Bukkit.getPlayerExact(args[0]);
+            Player target = Bukkit.getPlayer(args[0]);
             String message = StringUtil.buildMessage(args, 1);
 
             if (target == null) {
@@ -39,12 +39,7 @@ public class MessageCommand extends BaseCommand {
             PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
             PotPlayer potTarget = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
 
-            if (potTarget != null) {
-                player.sendMessage(Color.translate("&cThat player does not exist."));
-                return false;
-            }
-
-            if (!potPlayer.getLastRecipient().isOnline()) {
+            if (potTarget == null) {
                 player.sendMessage(Color.translate("&cThat player does not exist."));
                 return false;
             }

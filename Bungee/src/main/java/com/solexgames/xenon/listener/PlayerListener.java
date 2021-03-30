@@ -17,10 +17,12 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onProxyPing(ProxyPingEvent event) {
-        if (event.getResponse() == null)
+        if (event.getResponse() == null) {
             return;
+        }
 
         ServerPing.Protocol responseProtocol = event.getResponse().getVersion();
+
         if (this.plugin.isMaintenance()) {
             responseProtocol.setName("Maintenance");
             responseProtocol.setProtocol(-1);
@@ -31,6 +33,7 @@ public class PlayerListener implements Listener {
             event.getResponse().setDescription(this.plugin.getNormalMotd());
             event.getResponse().setPlayers(new ServerPing.Players(this.plugin.getProxyManager().getOnlineAllProxies(), 1, new ServerPing.PlayerInfo[]{}));
         }
+
         event.getResponse().setVersion(responseProtocol);
     }
 
