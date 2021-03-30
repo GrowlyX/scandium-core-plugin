@@ -47,11 +47,11 @@ public class MessageCommand extends BaseCommand {
                 player.sendMessage(Color.translate("&cThat player does not exist."));
                 return false;
             }
-            if (potTarget.isIgnoring(potPlayer.getPlayer())) {
+            if (!potTarget.isIgnoring(potPlayer.getPlayer())) {
                 player.sendMessage(Color.translate("&cThat player is currently ignoring you."));
                 return false;
             }
-            if (potPlayer.isIgnoring(potTarget.getPlayer())) {
+            if (!potPlayer.isIgnoring(potTarget.getPlayer())) {
                 player.sendMessage(Color.translate("&cYou are currently ignoring that player."));
                 return false;
             }
