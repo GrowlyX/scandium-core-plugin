@@ -84,6 +84,7 @@ public final class CorePlugin extends JavaPlugin {
     public static boolean CAN_JOIN = false;
     public static boolean COLOR_ENABLED = true;
     public static boolean NAME_MC_REWARDS = true;
+    public static boolean CHAT_FORMAT_ENABLED = true;
     public static boolean ANTI_CHAT_SPAM = true;
     public static boolean ANTI_CMD_SPAM = true;
     public static boolean STAFF_ALERTS_COMMAND = false;
@@ -161,6 +162,7 @@ public final class CorePlugin extends JavaPlugin {
         this.filterConfig = new ConfigExternal("filtered");
 
         CHAT_FORMAT = this.getConfig().getString("settings.chat-format");
+        CHAT_FORMAT_ENABLED = this.getConfig().getBoolean("settings.chat-format-enabled");
         NAME_MC_REWARDS = this.getConfig().getBoolean("settings.namemc-rewards");
 
         ANTI_CHAT_SPAM = this.getConfig().getBoolean("settings.anti-chat-spam");

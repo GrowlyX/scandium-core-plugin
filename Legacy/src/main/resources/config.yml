@@ -53,37 +53,31 @@ beta-whitelist: true
 beta-whitelisted-can-join: false
 beta-whitelisted-msg: '&cThis server is currently whitelisted.\n&cPlease check our discord for more information.'
 
-
 settings:
   color-gui: true
   namemc-rewards: true
   namemc-ip: "eu.potclub.vip"
   anti-chat-spam: true
   anti-command-spam: true
-
   automatic-string: "&e&lYou've been automatically put into <value>."
-
-  # Whenever a player executes a command such as /heal, all online server staff will receive "[GrowlyX: healed]"
   staff-command-alerts: true
   staff-command-alerts-format: "&7&o[<playername>: &e<message>&7&o]"
   staff-command-alerts-permission: "scandium.staff"
-
   mod-mode-tag: "&7[S] "
   vanish-tag: "&7[V] "
-
   punish-gui-enabled: false
-
+  chat-format-enabled: true
   chat-format: "<prefix><rank_prefix><rank_color><custom_color><player_name> &7» &f<message>"
 
 # Sends to staff on join
 staff-information:
   - " "
   - "&b&lStaff Information:"
-  - "  &7<nice_char> &3Channel: <channel>"
-  - "  &7<nice_char> &3Messages: <messages> &7(/tsm)"
-  - "  &7<nice_char> &3Filter: <filter> &7(/tfm)"
-  - "  &7<nice_char> &3Mod Mode: <modmode> &7(/mod)"
-  - "  &7<nice_char> &3Vanish: <vanish> &7(/vanish)"
+  - " &7<nice_char> &3Channel: <channel>"
+  - " &7<nice_char> &3Messages: <messages> &7(/tsm)"
+  - " &7<nice_char> &3Filter: <filter> &7(/tfm)"
+  - " &7<nice_char> &3Mod Mode: <modmode> &7(/mod)"
+  - " &7<nice_char> &3Vanish: <vanish> &7(/vanish)"
   - " "
 
 server:

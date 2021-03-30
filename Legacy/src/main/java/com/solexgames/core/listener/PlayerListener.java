@@ -356,6 +356,10 @@ public class PlayerListener implements Listener {
 
         if (CorePlugin.getInstance().getServerManager().isChatEnabled()) {
             if (!potPlayer.isCurrentlyMuted()) {
+                if (!CorePlugin.CHAT_FORMAT_ENABLED) {
+                    return;
+                }
+
                 checkChannel(event, player, potPlayer);
             } else {
                 event.setCancelled(true);
@@ -364,6 +368,10 @@ public class PlayerListener implements Listener {
         } else {
             if (player.hasPermission("scandium.chat.bypass")) {
                 if (!potPlayer.isCurrentlyMuted()) {
+                    if (!CorePlugin.CHAT_FORMAT_ENABLED) {
+                        return;
+                    }
+
                     checkChannel(event, player, potPlayer);
                 } else {
                     event.setCancelled(true);
