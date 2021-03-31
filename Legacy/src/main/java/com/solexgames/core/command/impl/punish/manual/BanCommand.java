@@ -74,7 +74,7 @@ public class BanCommand extends BaseCommand {
 
                         try {
                             Punishment punishment = new Punishment(
-                                    PunishmentType.WARN,
+                                    PunishmentType.BAN,
                                     issuerUuid,
                                     targetUuid,
                                     issuerName,
