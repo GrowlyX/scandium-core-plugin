@@ -136,12 +136,19 @@ public class UserCommand extends BaseCommand {
 
                             if (rank != null) {
                                 potPlayer.setDisguiseRank(rank);
-                                sender.sendMessage(ChatColor.GREEN + "You've disguised " + potPlayer.getColorByRankColor() + potPlayer.getName() + " as " + Color.translate(rank.getColor()) + rank.getName() + ChatColor.GREEN + "!");
+
+                                sender.sendMessage(ChatColor.GREEN + "You've disguised " + potPlayer.getColorByRankColor() + potPlayer.getName() + ChatColor.GREEN + " as " + Color.translate(rank.getColor()) + rank.getName() + ChatColor.GREEN + "!");
+                                potPlayer.setupPlayerList();
+
                                 CorePlugin.getInstance().getNMS().updateTablist();
                             } else {
                                 if (args[2].equalsIgnoreCase("reset")) {
                                     potPlayer.setDisguiseRank(null);
+
                                     sender.sendMessage(ChatColor.GREEN + "You've undisguised " + potPlayer.getColorByRankColor() + potPlayer.getPlayer().getName());
+                                    potPlayer.setupPlayerList();
+
+                                    CorePlugin.getInstance().getNMS().updateTablist();
                                 } else {
                                     sender.sendMessage(Color.translate("&cThat rank does not exist."));
                                 }
