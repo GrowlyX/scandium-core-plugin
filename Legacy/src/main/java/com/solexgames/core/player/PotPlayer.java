@@ -144,6 +144,8 @@ public class PotPlayer {
         this.ipAddress = inetAddress.toString();
         this.name = name;
 
+        this.attachment = this.player.addAttachment(CorePlugin.getPlugin(CorePlugin.class));
+
         this.media = new Media();
         this.lastJoined = new Date();
         this.syncCode = SaltUtil.getRandomSaltedString(6);
@@ -168,6 +170,7 @@ public class PotPlayer {
         document.put("canSeeBroadcasts", this.canSeeBroadcasts);
         document.put("lastJoined", CorePlugin.FORMAT.format(new Date()));
         document.put("firstJoined", this.firstJoin);
+        document.put("disguiseRank", this.disguiseRank.getName());
 
         List<String> grantStrings = new ArrayList<>();
         this.getAllGrants().forEach(grant -> grantStrings.add(grant.toJson()));
@@ -237,6 +240,7 @@ public class PotPlayer {
         document.put("canSeeBroadcasts", this.canSeeBroadcasts);
         document.put("lastJoined", CorePlugin.FORMAT.format(new Date()));
         document.put("firstJoined", this.firstJoin);
+        document.put("disguiseRank", this.disguiseRank.getName());
 
         List<String> grantStrings = new ArrayList<>();
         this.getAllGrants().forEach(grant -> grantStrings.add(grant.toJson()));
@@ -351,6 +355,13 @@ public class PotPlayer {
                 this.firstJoin = profile.getString("firstJoined");
             } else {
                 this.firstJoin = CorePlugin.FORMAT.format(new Date());
+            }
+            if (profile.getString("disguiseRank") != null) {
+                Rank rank = Rank.getByName(profile.getString("disguiseRank"));
+
+                if (rank != null) {
+                    this.disguiseRank = rank;
+                }
             }
             if (profile.getString("language") != null) {
                 this.language = LanguageType.getByName(profile.getString("language"));
@@ -525,9 +536,7 @@ public class PotPlayer {
     }
 
     public void setupPlayer() {
-        this.attachment = this.player.addAttachment(CorePlugin.getPlugin(CorePlugin.class));
         this.resetPermissions();
-
         this.setupPermissions();
         this.setupDisplay();
         this.setupPlayerTag();
@@ -601,7 +610,7 @@ public class PotPlayer {
         if (this.disguiseRank != null) {
             return ChatColor.getByChar(this.getDisguiseRank().getColor().replace("&", "").replace("§", ""));
         }
-        
+
         if (this.getActiveGrant().getRank().getColor() != null) {
             return ChatColor.getByChar(this.getActiveGrant().getRank().getColor().replace("&", "").replace("§", ""));
         } else {

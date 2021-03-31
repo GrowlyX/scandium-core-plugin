@@ -31,6 +31,7 @@ import org.json.simple.parser.ParseException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
 
@@ -185,6 +186,10 @@ public class PlayerListener implements Listener {
 
             if (potPlayer.isCurrentlyRestricted()) {
                 event.getPlayer().sendMessage(potPlayer.getRestrictionMessage());
+            }
+
+            if (potPlayer.getDisguiseRank() != null) {
+                event.getPlayer().sendMessage(ChatColor.GREEN + "You've been automatically disguised as " + potPlayer.getColorByRankColor() + potPlayer.getDisguiseRank().getName() + ChatColor.GREEN + "!");
             }
         });
     }
@@ -485,8 +490,8 @@ public class PlayerListener implements Listener {
 
         Bukkit.getOnlinePlayers().stream()
                 .map(player1 -> CorePlugin.getInstance().getPlayerManager().getPlayer(player1))
-                .filter(PotPlayer::isCanSeeGlobalChat)
-                .filter(potPlayer1 -> potPlayer1.isIgnoring(potPlayer.getPlayer()))
+                .filter(Objects::nonNull)
+                .filter(potPlayer1 -> potPlayer1.isIgnoring(potPlayer.getPlayer()) && potPlayer.isCanSeeGlobalChat())
                 .forEach(potPlayer1 -> potPlayer1.getPlayer().sendMessage(Color.translate(CorePlugin.CHAT_FORMAT
                         .replace("<prefix>", (potPlayer.getAppliedPrefix() != null ? potPlayer.getAppliedPrefix().getPrefix() + " " : ""))
                         .replace("<rank_prefix>", (potPlayer.getDisguiseRank() != null ? potPlayer.getDisguiseRank().getPrefix() : potPlayer.getActiveGrant().getRank().getPrefix()))
