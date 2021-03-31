@@ -26,7 +26,7 @@ public class ListCommand extends BaseCommand {
                     .collect(Collectors.joining(ChatColor.WHITE + ", "));
             String players = this.getOnlinePlayers(false).stream()
                     .map(player -> CorePlugin.getInstance().getPlayerManager().getPlayer(player.getUniqueId()))
-                    .sorted(Comparator.comparingInt(potPlayer -> -potPlayer.getActiveGrant().getRank().getWeight()))
+                    .sorted(Comparator.comparingInt(potPlayer -> -(potPlayer.getDisguiseRank() != null ? potPlayer.getDisguiseRank().getWeight() : potPlayer.getActiveGrant().getRank().getWeight())))
                     .map(potPlayer -> Color.translate((potPlayer.isStaffMode() ? "&7[Mod Mode] " : "") + (potPlayer.isVanished() ? "&7[V] " : "") + potPlayer.getActiveGrant().getRank().getColor() + potPlayer.getName()))
                     .collect(Collectors.joining(ChatColor.WHITE + ", "));
 
@@ -46,7 +46,7 @@ public class ListCommand extends BaseCommand {
                 .collect(Collectors.joining(ChatColor.WHITE + ", "));
         String players = this.getOnlinePlayers(!player.hasPermission("scandium.staff")).stream()
                 .map(player1 -> CorePlugin.getInstance().getPlayerManager().getPlayer(player1.getUniqueId()))
-                .sorted(Comparator.comparingInt(potPlayer -> -potPlayer.getActiveGrant().getRank().getWeight()))
+                .sorted(Comparator.comparingInt(potPlayer -> -(potPlayer.getDisguiseRank() != null ? potPlayer.getDisguiseRank().getWeight() : potPlayer.getActiveGrant().getRank().getWeight())))
                 .map(potPlayer -> this.getFormattedName(potPlayer, player))
                 .collect(Collectors.joining(ChatColor.WHITE + ", "));
 
@@ -59,7 +59,7 @@ public class ListCommand extends BaseCommand {
     }
 
     private String getFormattedName(PotPlayer potPlayer, Player viewer) {
-        return Color.translate((viewer.hasPermission("scandium.staff") ? (potPlayer.isStaffMode() ? "&7[Mod Mode] " : "") + (potPlayer.isVanished() ? "&7[V] " : "") : "") + potPlayer.getActiveGrant().getRank().getColor() + potPlayer.getName());
+        return Color.translate((viewer.hasPermission("scandium.staff") ? (potPlayer.isStaffMode() ? "&7[Mod Mode] " : "") + (potPlayer.isVanished() ? "&7[V] " : "") : "") + (potPlayer.getDisguiseRank() != null ? potPlayer.getDisguiseRank().getColor() : potPlayer.getActiveGrant().getRank().getColor()) + potPlayer.getName());
     }
 
     private Collection<Player> getOnlinePlayers(boolean filter) {
