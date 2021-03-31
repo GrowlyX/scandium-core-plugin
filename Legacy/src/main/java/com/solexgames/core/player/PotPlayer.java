@@ -476,42 +476,35 @@ public class PotPlayer {
 
             this.currentlyOnline = true;
             this.hasLoaded = true;
-
-            Bukkit.getScheduler().runTask(CorePlugin.getInstance(), new Runnable() {
-                @Override
-                public void run() {
-                    new NetworkPlayer(uuid, name, CorePlugin.getInstance().getServerName(), getActiveGrant().getRank().getName(), isCanReceiveDms(), ipAddress, syncCode, isSynced);
-                }
-            });
-
-            Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), this::saveWithoutRemove, 10 * 20L);
-            RedisUtil.writeAsync(RedisUtil.addGlobalPlayer(this));
-
-            this.gameProfile = CorePlugin.getInstance().getPlayerManager().getGameProfile(this.player);
-
-            if (this.getPlayer().hasPermission("scandium.staff")) {
-                if (!CorePlugin.getInstance().getPlayerManager().isOnline(this.getPlayer().getName())) {
-                    RedisUtil.writeAsync(RedisUtil.onConnect(this.getPlayer()));
-                }
-            }
-
-            if (profile != null && profile.get("allPrefixes") != null) {
-                if (player.hasPermission("scandium.prefixes.all")) {
-                    List<String> prefixes = new ArrayList<>();
-                    Prefix.getPrefixes().forEach(prefix -> prefixes.add(prefix.getName()));
-                    this.getAllPrefixes().addAll(prefixes);
-                } else if (!player.hasPermission("scandium.prefixes.all")) {
-                    List<String> prefixes = ((List<String>) this.profile.get("allPrefixes"));
-                    this.allPrefixes.addAll(prefixes);
-                }
-            }
-
-            if (CorePlugin.NAME_MC_REWARDS) {
-                this.checkVoting();
-            }
-
-            this.setupPlayer();
         });
+
+        new NetworkPlayer(uuid, name, CorePlugin.getInstance().getServerName(), getActiveGrant().getRank().getName(), isCanReceiveDms(), ipAddress, syncCode, isSynced);
+
+        Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), this::saveWithoutRemove, 10 * 20L);
+        RedisUtil.writeAsync(RedisUtil.addGlobalPlayer(this));
+
+        this.gameProfile = CorePlugin.getInstance().getPlayerManager().getGameProfile(this.player);
+
+        if (this.getPlayer().hasPermission("scandium.staff") && !CorePlugin.getInstance().getPlayerManager().isOnline(this.getPlayer().getName())) {
+            RedisUtil.writeAsync(RedisUtil.onConnect(this.getPlayer()));
+        }
+
+        if (profile != null && profile.get("allPrefixes") != null) {
+            if (player.hasPermission("scandium.prefixes.all")) {
+                List<String> prefixes = new ArrayList<>();
+                Prefix.getPrefixes().forEach(prefix -> prefixes.add(prefix.getName()));
+                this.getAllPrefixes().addAll(prefixes);
+            } else if (!player.hasPermission("scandium.prefixes.all")) {
+                List<String> prefixes = ((List<String>) this.profile.get("allPrefixes"));
+                this.allPrefixes.addAll(prefixes);
+            }
+        }
+
+        if (CorePlugin.NAME_MC_REWARDS) {
+            this.checkVoting();
+        }
+
+        this.setupPlayer();
     }
 
     public String getRestrictionMessage() {

@@ -22,6 +22,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
@@ -41,7 +42,7 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
     public void onMessage(String channel, String message) {
         JsonAppender jsonAppender = CorePlugin.GSON.fromJson(message, JsonAppender.class);
 
-        Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> {
+        CompletableFuture.runAsync(() -> {
             switch (jsonAppender.getPacket()) {
                 case GLOBAL_PLAYER_REMOVE:
                     UUID removingPlayer = UUID.fromString(jsonAppender.getParam("UUID"));
