@@ -170,7 +170,7 @@ public class PotPlayer {
         document.put("canSeeBroadcasts", this.canSeeBroadcasts);
         document.put("lastJoined", CorePlugin.FORMAT.format(new Date()));
         document.put("firstJoined", this.firstJoin);
-        document.put("disguiseRank", this.disguiseRank.getName());
+        document.put("disguiseRank", (this.disguiseRank == null ? null : this.disguiseRank.getName()));
 
         List<String> grantStrings = new ArrayList<>();
         this.getAllGrants().forEach(grant -> grantStrings.add(grant.toJson()));
@@ -240,7 +240,7 @@ public class PotPlayer {
         document.put("canSeeBroadcasts", this.canSeeBroadcasts);
         document.put("lastJoined", CorePlugin.FORMAT.format(new Date()));
         document.put("firstJoined", this.firstJoin);
-        document.put("disguiseRank", this.disguiseRank.getName());
+        document.put("disguiseRank", (this.disguiseRank == null ? null : this.disguiseRank.getName()));
 
         List<String> grantStrings = new ArrayList<>();
         this.getAllGrants().forEach(grant -> grantStrings.add(grant.toJson()));
@@ -632,33 +632,23 @@ public class PotPlayer {
 
     public void checkVoting() {
         if (!hasVoted) {
-            try {
-                if (NameMCExternal.hasVoted(this.uuid.toString())) {
-                    this.hasVoted = true;
-                    this.getAllPrefixes().add("Liked");
+            if (NameMCExternal.hasVoted(this.uuid.toString())) {
+                this.hasVoted = true;
+                this.getAllPrefixes().add("Liked");
 
-                    if (this.getAppliedPrefix() == null) this.appliedPrefix = Prefix.getByName("Liked");
-                    if (player != null) {
-                        player.sendMessage(Color.translate("&aThanks for voting for us on &6NameMC&a!"));
-                        player.sendMessage(Color.translate("&aYou have received the &b✔ &7(Liked)&a prefix!"));
-                    }
+                if (this.getAppliedPrefix() == null) this.appliedPrefix = Prefix.getByName("Liked");
+                if (player != null) {
+                    player.sendMessage(Color.translate("&aThanks for voting for us on &6NameMC&a!"));
+                    player.sendMessage(Color.translate("&aYou have been granted the &b✔ &7(Liked)&a prefix!"));
                 }
-            } catch (Exception exception) {
-                CorePlugin.getInstance().getLogger().warning("[NameMC] Could not check " + player.getName() + "'s voting status!");
-                CorePlugin.getInstance().getLogger().warning("[NameMC] Is your server on NameMC? Exception: " + exception.getMessage());
             }
         } else {
-            try {
-                if (!NameMCExternal.hasVoted(this.uuid.toString())) {
-                    this.hasVoted = false;
-                    this.getAllPrefixes().remove("Liked");
+            if (!NameMCExternal.hasVoted(this.uuid.toString())) {
+                this.hasVoted = false;
+                this.getAllPrefixes().remove("Liked");
 
-                    player.sendMessage(Color.translate("&cYour &b✔ &7(Liked) &ctag has been revoked as you have unliked our server on NameMC!"));
-                    player.sendMessage(Color.translate("&cTo gain your tag back, like us on NameMC again!"));
-                }
-            } catch (Exception exception) {
-                CorePlugin.getInstance().getLogger().warning("[NameMC] Could not check " + player.getName() + "'s voting status!");
-                CorePlugin.getInstance().getLogger().warning("[NameMC] Is your server on NameMC? Exception: " + exception.getMessage());
+                player.sendMessage(Color.translate("&cYour permission to access the &b✔ &7(Liked) &ctag has been revoked as you have unliked our server on NameMC!"));
+                player.sendMessage(Color.translate("&cTo gain your tag back, like us on NameMC again!"));
             }
         }
     }
