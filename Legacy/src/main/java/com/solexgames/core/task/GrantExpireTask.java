@@ -16,7 +16,7 @@ import java.util.Objects;
 public class GrantExpireTask extends BukkitRunnable {
 
     public GrantExpireTask() {
-        runTaskTimerAsynchronously(CorePlugin.getInstance(), 20L, 20L);
+        this.runTaskTimerAsynchronously(CorePlugin.getInstance(), 20L, 20L);
     }
 
     @Override

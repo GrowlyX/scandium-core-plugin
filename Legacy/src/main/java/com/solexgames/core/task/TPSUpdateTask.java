@@ -11,7 +11,7 @@ public class TPSUpdateTask implements Runnable {
     public long[] TICKS = new long[600];
 
     public double getTPS() {
-        return getTPS(20);
+        return this.getTPS(20);
     }
 
     public double getTPS(int ticks) {

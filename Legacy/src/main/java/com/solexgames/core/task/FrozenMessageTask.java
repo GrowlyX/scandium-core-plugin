@@ -12,7 +12,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class FrozenMessageTask extends BukkitRunnable {
 
     public FrozenMessageTask() {
-        runTaskTimerAsynchronously(CorePlugin.getInstance(), 20L, 5 * 20L);
+        this.runTaskTimerAsynchronously(CorePlugin.getInstance(), 20L, 5 * 20L);
     }
 
     @Override

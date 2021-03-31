@@ -77,6 +77,7 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                         server.setMaxPlayerLimit(0);
                         server.setTicksPerSecond("&a0.0&7, &a0.0&7, &a0.0");
                         server.setServerType(NetworkServerType.NOT_DEFINED);
+                        server.setLastUpdate(System.currentTimeMillis());
                     }
 
                     Bukkit.getOnlinePlayers().stream().filter(player -> player.hasPermission("scandium.network.alerts")).forEach(player -> player.sendMessage(Color.translate("&3[S] &e" + bootingServerName + " &bhas just &6booted&b and will be joinable in 5 seconds.")));
@@ -103,15 +104,20 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                         server.setTicksPerSecondSimplified(ticksPerSecondSimple);
 
                     }
-                    NetworkServer.getByName(serverName).update(onlinePlayers, ticksPerSecond, maxPlayerLimit, whitelistEnabled, ticksPerSecondSimple, true, splitPlayers);
-                    NetworkServer.getByName(serverName).setServerType(NetworkServerType.valueOf(serverType));
+
+                    NetworkServer updatedServer = NetworkServer.getByName(serverName);
+
+                    updatedServer.update(onlinePlayers, ticksPerSecond, maxPlayerLimit, whitelistEnabled, ticksPerSecondSimple, true, splitPlayers);
+                    updatedServer.setServerType(NetworkServerType.valueOf(serverType));
+
+                    updatedServer.setLastUpdate(System.currentTimeMillis());
 
                     break;
                 case SERVER_DATA_OFFLINE:
                     String offlineServerName = jsonAppender.getParam("SERVER");
+                    NetworkServer networkServer = NetworkServer.getByName(offlineServerName);
 
-                    if (NetworkServer.getByName(offlineServerName) != null) {
-                        NetworkServer.getByName(offlineServerName).update(0, "0.0", 100, false, "0.0", false, " ");
+                    if (networkServer != null) {
                         CorePlugin.getInstance().getServerManager().removeNetworkServer(NetworkServer.getByName(offlineServerName));
                     }
 

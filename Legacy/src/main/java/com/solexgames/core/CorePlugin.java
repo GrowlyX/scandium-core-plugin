@@ -323,7 +323,7 @@ public final class CorePlugin extends JavaPlugin {
 
         new PunishExpireTask();
         new GrantExpireTask();
-        new PlayerSaveTask();
+//        new PlayerSaveTask();
         new ServerUpdateTask();
         new PunishSaveTask();
         new FrozenMessageTask();
@@ -331,7 +331,7 @@ public final class CorePlugin extends JavaPlugin {
 
         this.registerBukkitCommand();
 
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, this.tpsRunnable, 0L, 1L);
+        this.getServer().getScheduler().scheduleSyncRepeatingTask(this, this.tpsRunnable, 0L, 1L);
     }
 
     private void logInformation() {

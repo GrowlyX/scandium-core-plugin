@@ -22,7 +22,7 @@ public class ShutdownTask extends BukkitRunnable {
     public ShutdownTask(int seconds) {
         this.seconds = seconds;
 
-        this.runTaskTimerAsynchronously(CorePlugin.getInstance(), this.seconds, 20L);
+        this.runTaskTimerAsynchronously(CorePlugin.getInstance(), 20L, this.seconds * 20L);
     }
 
     @Override

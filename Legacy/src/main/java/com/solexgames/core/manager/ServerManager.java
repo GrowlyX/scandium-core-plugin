@@ -15,6 +15,8 @@ import java.util.List;
 @Setter
 public class ServerManager {
 
+    private final long HEARTBEAT_CHECK_TIMEOUT = 15_000L;
+
     private List<String> whitelistedPlayers;
     private List<String> betaWhitelistedPlayers;
     private List<String> joinMessage;

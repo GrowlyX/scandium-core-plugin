@@ -12,7 +12,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class PunishSaveTask extends BukkitRunnable {
 
     public PunishSaveTask() {
-        runTaskTimerAsynchronously(CorePlugin.getInstance(), 20L, 30 * 20L);
+        this.runTaskTimerAsynchronously(CorePlugin.getInstance(), 20L, 30 * 20L);
     }
 
     @Override

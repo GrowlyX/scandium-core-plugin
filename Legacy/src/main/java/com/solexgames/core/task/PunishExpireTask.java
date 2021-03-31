@@ -19,7 +19,7 @@ import java.util.UUID;
 public class PunishExpireTask extends BukkitRunnable {
 
     public PunishExpireTask() {
-        runTaskTimerAsynchronously(CorePlugin.getInstance(), 20L, 10 * 20L);
+        this.runTaskTimerAsynchronously(CorePlugin.getInstance(), 20L, 10 * 20L);
     }
 
     @Override

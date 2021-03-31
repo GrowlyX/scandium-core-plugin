@@ -491,7 +491,7 @@ public class PotPlayer {
 
             if (this.getPlayer().hasPermission("scandium.staff")) {
                 if (!CorePlugin.getInstance().getPlayerManager().isOnline(this.getPlayer().getName())) {
-                    CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onConnect(this.getPlayer())));
+                    RedisUtil.writeAsync(RedisUtil.onConnect(this.getPlayer()));
                 }
             }
 

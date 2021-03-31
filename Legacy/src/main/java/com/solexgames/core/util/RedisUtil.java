@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
@@ -240,7 +241,7 @@ public final class RedisUtil {
     }
 
     public static void writeAsync(String message) {
-        CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(message));
+        CompletableFuture.runAsync(() -> CorePlugin.getInstance().getRedisManager().write(message));
     }
 
     public static void write(String message) {

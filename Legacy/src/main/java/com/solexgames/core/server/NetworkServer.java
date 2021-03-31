@@ -34,6 +34,8 @@ public class NetworkServer {
 
     private boolean whitelistEnabled;
 
+    private long lastUpdate;
+
     /**
      * Create a new instance of {@link NetworkServer}
      *
