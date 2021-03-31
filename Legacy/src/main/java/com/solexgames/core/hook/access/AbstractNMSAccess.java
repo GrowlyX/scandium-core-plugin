@@ -1,4 +1,4 @@
-package com.solexgames.core.abstraction.access;
+package com.solexgames.core.hook.access;
 
 public abstract class AbstractNMSAccess implements INMS {
 }

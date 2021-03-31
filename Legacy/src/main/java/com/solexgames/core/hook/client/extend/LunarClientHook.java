@@ -1,8 +1,8 @@
-package com.solexgames.core.abstraction.client.extend;
+package com.solexgames.core.hook.client.extend;
 
 import com.lunarclient.bukkitapi.LunarClientAPI;
 import com.lunarclient.bukkitapi.object.LCNotification;
-import com.solexgames.core.abstraction.client.AbstractClientHook;
+import com.solexgames.core.hook.client.AbstractClientHook;
 import org.bukkit.entity.Player;
 
 import java.time.Duration;

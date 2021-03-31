@@ -1,4 +1,4 @@
-package com.solexgames.core.abstraction.client;
+package com.solexgames.core.hook.client;
 
 import org.bukkit.entity.Player;
 

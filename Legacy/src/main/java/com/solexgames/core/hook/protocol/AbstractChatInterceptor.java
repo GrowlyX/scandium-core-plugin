@@ -1,4 +1,4 @@
-package com.solexgames.core.abstraction.protocol;
+package com.solexgames.core.hook.protocol;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;

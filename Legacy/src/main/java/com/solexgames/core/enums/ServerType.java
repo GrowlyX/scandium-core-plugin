@@ -5,6 +5,10 @@ import org.bukkit.ChatColor;
 
 import java.beans.ConstructorProperties;
 
+/**
+ * Stores all servers which Scandium is used on.
+ */
+
 @Getter
 public enum ServerType {
 

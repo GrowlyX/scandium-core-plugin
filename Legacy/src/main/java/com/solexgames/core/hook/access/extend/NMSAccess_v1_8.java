@@ -1,7 +1,7 @@
-package com.solexgames.core.abstraction.access.extend;
+package com.solexgames.core.hook.access.extend;
 
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.abstraction.access.AbstractNMSAccess;
+import com.solexgames.core.hook.access.AbstractNMSAccess;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.MinecraftServer;
 import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerInfo;
