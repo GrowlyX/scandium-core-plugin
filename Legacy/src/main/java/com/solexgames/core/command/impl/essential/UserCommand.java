@@ -124,21 +124,27 @@ public class UserCommand extends BaseCommand {
                     }
                     break;
                 case "disguise":
-                    if (args.length == 1) {
-                        sendHelp(sender);
-                    }
-                    if (args.length == 2) {
+                    if (args.length < 3) {
                         sendHelp(sender);
                     }
                     if (args.length == 3) {
                         Player target = Bukkit.getPlayerExact(args[1]);
                         Rank rank = Rank.getByName(args[2]);
+
                         if (target != null) {
                             PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
+
                             if (rank != null) {
-                                sender.sendMessage(Color.translate("&cSorry! This feature is coming very soon!"));
+                                potPlayer.setDisguiseRank(rank);
+                                sender.sendMessage(ChatColor.GREEN + "You've disguised " + potPlayer.getColorByRankColor() + potPlayer.getName() + " as " + Color.translate(rank.getColor()) + rank.getName() + ChatColor.GREEN + "!");
+                                CorePlugin.getInstance().getNMS().updateTablist();
                             } else {
-                                sender.sendMessage(Color.translate("&cThat rank does not exist."));
+                                if (args[2].equalsIgnoreCase("reset")) {
+                                    potPlayer.setDisguiseRank(null);
+                                    sender.sendMessage(ChatColor.GREEN + "You've undisguised " + potPlayer.getColorByRankColor() + potPlayer.getPlayer().getName());
+                                } else {
+                                    sender.sendMessage(Color.translate("&cThat rank does not exist."));
+                                }
                             }
                         } else {
                             sender.sendMessage(Color.translate("&cThat player does not exist."));

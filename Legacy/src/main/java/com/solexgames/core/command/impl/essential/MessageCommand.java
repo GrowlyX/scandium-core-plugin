@@ -43,6 +43,10 @@ public class MessageCommand extends BaseCommand {
                 player.sendMessage(Color.translate("&cThat player does not exist."));
                 return false;
             }
+            if (potTarget == potPlayer) {
+                player.sendMessage(Color.translate("&cYou cannot message yourself."));
+                return false;
+            }
             if (potTarget.isVanished() && (potPlayer.getActiveGrant().getRank().getWeight() < potTarget.getActiveGrant().getRank().getWeight())) {
                 player.sendMessage(Color.translate("&cThat player does not exist."));
                 return false;
@@ -71,7 +75,7 @@ public class MessageCommand extends BaseCommand {
                 player.sendMessage(Color.translate("&cThat player has their dms disabled."));
                 return false;
             }
-            if (CorePlugin.getInstance().getFilterManager().isDmFiltered(player, potPlayer.getLastRecipient().getName(), message)) {
+            if (CorePlugin.getInstance().getFilterManager().isDmFiltered(player, potTarget.getName(), message)) {
                 player.sendMessage(Color.translate("&cYou cannot use censored words in a direct message."));
                 return false;
             }

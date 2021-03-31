@@ -132,6 +132,8 @@ public class PotPlayer {
     private AchievementData achievementData;
     private PotionMessageType potionMessageType;
 
+    private Rank disguiseRank;
+
     private int experience;
 
     private boolean hasLoaded;
@@ -596,6 +598,10 @@ public class PotPlayer {
     }
 
     public ChatColor getColorByRankColor() {
+        if (this.disguiseRank != null) {
+            return ChatColor.getByChar(this.getDisguiseRank().getColor().replace("&", "").replace("§", ""));
+        }
+        
         if (this.getActiveGrant().getRank().getColor() != null) {
             return ChatColor.getByChar(this.getActiveGrant().getRank().getColor().replace("&", "").replace("§", ""));
         } else {

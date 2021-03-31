@@ -75,12 +75,12 @@ public class ReplyCommand extends BaseCommand {
                 player.sendMessage(Color.translate("&cThat player has their dms disabled."));
                 return false;
             }
-            if (CorePlugin.getInstance().getFilterManager().isDmFiltered(player, potPlayer.getLastRecipient().getName(), message)) {
+            if (CorePlugin.getInstance().getFilterManager().isDmFiltered(player, potTarget.getName(), message)) {
                 player.sendMessage(Color.translate("&cYou cannot use censored words in a direct message."));
                 return false;
             }
 
-            StringUtil.sendPrivateMessage(player, potPlayer.getLastRecipient(), message);
+            StringUtil.sendPrivateMessage(player, potTarget.getPlayer(), message);
         }
         return false;
     }

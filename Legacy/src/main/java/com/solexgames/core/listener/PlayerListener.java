@@ -483,22 +483,19 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        Bukkit.getOnlinePlayers().forEach(player1 -> {
-            PotPlayer potPlayer1 = CorePlugin.getInstance().getPlayerManager().getPlayer(player1);
-            if (potPlayer1.isIgnoring(potPlayer.getPlayer())) {
-                if (potPlayer1.isCanSeeGlobalChat()) {
-                    player1.sendMessage(Color.translate(CorePlugin.CHAT_FORMAT
-                            .replace("<prefix>", (potPlayer.getAppliedPrefix() != null ? potPlayer.getAppliedPrefix().getPrefix() + " " : ""))
-                            .replace("<rank_prefix>", potPlayer.getActiveGrant().getRank().getPrefix())
-                            .replace("<rank_suffix>", potPlayer.getActiveGrant().getRank().getSuffix())
-                            .replace("<rank_color>", potPlayer.getActiveGrant().getRank().getColor())
-                            .replace("<custom_color>", (potPlayer.getCustomColor() != null ? potPlayer.getCustomColor().toString() : ""))
-                            .replace("<player_name>", player.getName())
-                            .replace("<message>", ChatColor.stripColor(Color.translate(event.getMessage())))
-                    ));
-                }
-            }
-        });
+        Bukkit.getOnlinePlayers().stream()
+                .map(player1 -> CorePlugin.getInstance().getPlayerManager().getPlayer(player1))
+                .filter(PotPlayer::isCanSeeGlobalChat)
+                .filter(potPlayer1 -> potPlayer1.isIgnoring(potPlayer.getPlayer()))
+                .forEach(potPlayer1 -> potPlayer1.getPlayer().sendMessage(Color.translate(CorePlugin.CHAT_FORMAT
+                        .replace("<prefix>", (potPlayer.getAppliedPrefix() != null ? potPlayer.getAppliedPrefix().getPrefix() + " " : ""))
+                        .replace("<rank_prefix>", (potPlayer.getDisguiseRank() != null ? potPlayer.getDisguiseRank().getPrefix() : potPlayer.getActiveGrant().getRank().getPrefix()))
+                        .replace("<rank_suffix>", (potPlayer.getDisguiseRank() != null ? potPlayer.getDisguiseRank().getSuffix() : potPlayer.getActiveGrant().getRank().getSuffix()))
+                        .replace("<rank_color>", (potPlayer.getDisguiseRank() != null ? potPlayer.getDisguiseRank().getColor() : potPlayer.getActiveGrant().getRank().getColor()))
+                        .replace("<custom_color>", (potPlayer.getCustomColor() != null ? potPlayer.getCustomColor().toString() : ""))
+                        .replace("<player_name>", player.getName()))
+                        .replace("<message>", event.getMessage())
+                ));
 
         if (CorePlugin.ANTI_CHAT_SPAM)
             CorePlugin.getInstance().getPlayerManager().getPlayer(player).setChatCooldown(System.currentTimeMillis() + (slowChat > 0L ? slowChat : 3000L));
