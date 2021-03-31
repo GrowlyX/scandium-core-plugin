@@ -477,7 +477,12 @@ public class PotPlayer {
             this.currentlyOnline = true;
             this.hasLoaded = true;
 
-            new NetworkPlayer(this.uuid, this.name, CorePlugin.getInstance().getServerName(), this.getActiveGrant().getRank().getName(), this.isCanReceiveDms(), this.ipAddress, this.syncCode, this.isSynced);
+            Bukkit.getScheduler().runTask(CorePlugin.getInstance(), new Runnable() {
+                @Override
+                public void run() {
+                    new NetworkPlayer(uuid, name, CorePlugin.getInstance().getServerName(), getActiveGrant().getRank().getName(), isCanReceiveDms(), ipAddress, syncCode, isSynced);
+                }
+            });
 
             Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), this::saveWithoutRemove, 10 * 20L);
             RedisUtil.writeAsync(RedisUtil.addGlobalPlayer(this));
