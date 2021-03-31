@@ -25,7 +25,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
- * @author GrowlyX
+ * @author GrowlyX & Some github person
  * @since 3/4/2021
  */
 

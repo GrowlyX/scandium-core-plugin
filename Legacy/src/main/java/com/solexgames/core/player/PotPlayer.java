@@ -21,7 +21,7 @@ import com.solexgames.core.player.global.NetworkPlayer;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
 import com.solexgames.core.util.SaltUtil;
-import com.solexgames.core.util.external.NameMCExternal;
+import com.solexgames.core.util.VotingUtil;
 import com.solexgames.core.util.external.NameTagExternal;
 import lombok.Getter;
 import lombok.Setter;
@@ -637,7 +637,7 @@ public class PotPlayer {
 
     public void checkVoting() {
         if (!hasVoted) {
-            if (NameMCExternal.hasVoted(this.uuid.toString())) {
+            if (VotingUtil.hasVoted(this.uuid.toString())) {
                 this.hasVoted = true;
                 this.getAllPrefixes().add("Liked");
 
@@ -648,7 +648,7 @@ public class PotPlayer {
                 }
             }
         } else {
-            if (!NameMCExternal.hasVoted(this.uuid.toString())) {
+            if (!VotingUtil.hasVoted(this.uuid.toString())) {
                 this.hasVoted = false;
                 this.getAllPrefixes().remove("Liked");
 

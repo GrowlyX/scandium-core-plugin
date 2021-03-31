@@ -323,11 +323,11 @@ public final class CorePlugin extends JavaPlugin {
 
         new PunishExpireTask();
         new GrantExpireTask();
-//        new PlayerSaveTask();
         new ServerUpdateTask();
         new PunishSaveTask();
         new FrozenMessageTask();
         new BoardUpdateTask();
+        new ServerTimeoutTask();
 
         this.registerBukkitCommand();
 
@@ -386,6 +386,8 @@ public final class CorePlugin extends JavaPlugin {
     public void onDisable() {
         CAN_JOIN = false;
 
+        RedisUtil.write(RedisUtil.onServerOffline());
+
         this.getConfig().set("whitelisted", this.getServerManager().getWhitelistedPlayers());
         this.getConfig().set("beta-whitelisted", this.getServerManager().getBetaWhitelistedPlayers());
 
@@ -393,9 +395,8 @@ public final class CorePlugin extends JavaPlugin {
 
         this.punishmentManager.savePunishments();
         this.prefixManager.savePrefixes();
-        this.warpManager.saveWarps();
 
-        RedisUtil.write(RedisUtil.onServerOffline());
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> System.out.println("\\u001B[31m com.solexgames.core.CorePlugin has been shutdown.")));
 
         if (this.redisManager.isActive()) this.redisManager.unsubscribe();
     }

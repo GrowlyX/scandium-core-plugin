@@ -8,6 +8,11 @@ import net.md_5.bungee.api.chat.TextComponent;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author VISUAL_
+ * @since March 2021
+ */
+
 public class Clickable {
 
     private final List<TextComponent> components = new ArrayList<>();
