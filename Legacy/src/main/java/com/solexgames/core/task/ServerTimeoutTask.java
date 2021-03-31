@@ -23,7 +23,7 @@ public class ServerTimeoutTask extends BukkitRunnable {
         final ServerManager serverManager = plugin.getServerManager();
 
         serverManager.getNetworkServers().stream()
-                .filter(server -> server != null && (System.currentTimeMillis() - server.getLastUpdate()) > this.TIME_OUT_DELAY)
+                .filter(server -> server != null && !server.getServerName().equals(CorePlugin.getInstance().getServerName()) && (System.currentTimeMillis() - server.getLastUpdate()) > this.TIME_OUT_DELAY)
                 .forEach(server -> {
                     plugin.getServerManager().getNetworkServers().remove(server);
                     plugin.logConsole("&cThe server with the name &4'" + server.getServerName() + "'&c has been removed as it's last update was longer than &415 seconds&c ago.");
