@@ -1,3 +1,4 @@
-name: xLib
-version: ${project.version}
-main: com.solexgames.library.Library
+
+name: PremiereLib
+version: 0.0.1
+main: com.solexgames.library.PremierePlugin

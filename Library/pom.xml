@@ -9,9 +9,9 @@
         <artifactId>Scandium-parent</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <artifactId>Scandium-library</artifactId>
+    <artifactId>PremiereLib</artifactId>
 
-    <name>xLib</name>
+    <name>PremiereLib</name>
 
     <properties>
         <java.version>1.8</java.version>
