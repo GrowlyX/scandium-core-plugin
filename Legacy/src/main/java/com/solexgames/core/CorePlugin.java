@@ -2,6 +2,7 @@ package com.solexgames.core;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.solexgames.core.command.impl.library.CheckDisguiseCommand;
 import com.solexgames.core.hook.access.AbstractNMSAccess;
 import com.solexgames.core.hook.access.extend.NMSAccess_v1_16;
 import com.solexgames.core.hook.access.extend.NMSAccess_v1_7;
@@ -242,6 +243,7 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("shutdown").setExecutor(new ShutdownCommand());
         this.getCommand("freeze").setExecutor(new FreezeCommand());
         this.getCommand("ignore").setExecutor(new IgnoreCommand());
+        this.getCommand("checkdisguise").setExecutor(new CheckDisguiseCommand());
         this.getCommand("rank").setExecutor(new RankCommand());
         this.getCommand("media").setExecutor(new MediaCommand());
         this.getCommand("discord").setExecutor(new DiscordCommand());

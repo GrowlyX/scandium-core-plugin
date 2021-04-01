@@ -33,10 +33,10 @@ public class AltsCommand extends BaseCommand {
             sender.sendMessage(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player>.");
         }
         if (args.length == 1) {
-            final Player target = Bukkit.getPlayerExact(args[0]);
+            final String target = args[0];
+            final NetworkPlayer targetPlayer = CorePlugin.getInstance().getPlayerManager().getNetworkPlayer(target);
 
-            if (target != null) {
-                final NetworkPlayer targetPlayer = CorePlugin.getInstance().getPlayerManager().getNetworkPlayer(target);
+            if (targetPlayer != null) {
                 final String playerFormattedDisplay = (Rank.getByName(targetPlayer.getRankName()) != null ? Color.translate(Rank.getByName(targetPlayer.getRankName()).getColor()) : ChatColor.GREEN.toString()) + targetPlayer.getName();
                 final PlayerManager manager = CorePlugin.getInstance().getPlayerManager();
 
@@ -47,8 +47,10 @@ public class AltsCommand extends BaseCommand {
                         ""
                 });
             } else {
-                sender.sendMessage(ChatColor.RED + "That player does not exist.");
+                sender.sendMessage(ChatColor.RED + "That player is not online the network right now.");
             }
+
+
         }
         return false;
     }

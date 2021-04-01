@@ -2,6 +2,8 @@ package com.solexgames.core.menu.impl;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
+import com.solexgames.core.enums.ReportType;
+import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.AbstractInventoryMenu;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.PotPlayer;
@@ -10,18 +12,27 @@ import com.solexgames.core.util.RedisUtil;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+
+/**
+ * @author GrowlyX
+ * @since 4/1/2021
+ */
+
 @Getter
-@Setter
 public class ReportMenu extends AbstractInventoryMenu {
 
-    private Player player;
-    private Player target;
+    private final Player player;
+    private final Player target;
 
     public ReportMenu(Player player, Player target) {
         super("Report", 9);
@@ -31,61 +42,16 @@ public class ReportMenu extends AbstractInventoryMenu {
     }
 
     public void update() {
-        this.inventory.setItem(2, new ItemBuilder(XMaterial.DIAMOND_SWORD.parseMaterial())
-                .setDisplayName("&3Combat Hacks")
+        AtomicInteger integer = new AtomicInteger();
+        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+
+        Arrays.asList(ReportType.values()).forEach(reportType -> this.inventory.setItem(integer.getAndIncrement(), new ItemBuilder(reportType.getXMaterial().parseMaterial())
+                .setDisplayName(serverType.getMainColor() + reportType.getName())
                 .addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS)
-                .addLore(
-                        "",
-                        "&8&l■ &fKillAura",
-                        "&8&l■ &fReach",
-                        "&8&l■ &fAim Assist"
-                )
+                .addLore(reportType.getExamples().stream().map(s -> ChatColor.GRAY + " * " + serverType.getSecondaryColor() + s).collect(Collectors.toList()))
+                .setDurability(reportType.getDurability())
                 .create()
-        );
-        this.inventory.setItem(3, new ItemBuilder(XMaterial.DIAMOND_BOOTS.parseMaterial())
-                .setDisplayName("&3Movement Hacks")
-                .addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS)
-                .addLore(
-                        "",
-                        "&8&l■ &fSpeed",
-                        "&8&l■ &fBunny Hop",
-                        "&8&l■ &fFly"
-                )
-                .create()
-        );
-        this.inventory.setItem(4, new ItemBuilder(XMaterial.SLIME_BALL.parseMaterial())
-                .setDisplayName("&3Velocity Hacks")
-                .addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS)
-                .addLore(
-                        "",
-                        "&8&l■ &fVelocity",
-                        "&8&l■ &fReduced KB",
-                        "&8&l■ &fAnti KB"
-                )
-                .create()
-        );
-        this.inventory.setItem(5, new ItemBuilder(XMaterial.RED_BED.parseMaterial())
-                .setDisplayName("&3Gameplay Sabotage")
-                .addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS)
-                .addLore(
-                        "",
-                        "&8&l■ &fCamping",
-                        "&8&l■ &fRunning",
-                        "&8&l■ &fStalling"
-                )
-                .create()
-        );
-        this.inventory.setItem(6, new ItemBuilder(XMaterial.NAME_TAG.parseMaterial())
-                .setDisplayName("&3Chat Violation")
-                .addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS)
-                .addLore(
-                        "",
-                        "&8&l■ &fToxicity",
-                        "&8&l■ &fSpam",
-                        "&8&l■ &fAbuse"
-                )
-                .create()
-        );
+        ));
     }
 
     @Override
@@ -97,73 +63,32 @@ public class ReportMenu extends AbstractInventoryMenu {
             event.setCancelled(true);
 
             ItemStack item = event.getCurrentItem();
-            Player player = (Player) event.getWhoClicked();
-            PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
             if (item == null || item.getType() == XMaterial.AIR.parseMaterial()) return;
-            switch (event.getRawSlot()) {
-                case 2:
-                    player.closeInventory();
-                    if (potPlayer.isCanReport()) {
-                        CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onReport(player, target, "Combat Hacks")));
-                        player.sendMessage(Color.translate("&aYour report has been sent to all online staff!"));
-                        potPlayer.setCanReport(false);
-                    } else {
-                        player.closeInventory();
-                        player.sendMessage(Color.translate("&cYou cannot do that right now."));
+
+            PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(this.player);
+            ReportType reportType = Arrays.stream(ReportType.values()).filter(reportType1 -> reportType1.getName().equalsIgnoreCase(ChatColor.stripColor(item.getItemMeta().getDisplayName()))).findFirst().orElse(null);
+
+            if (reportType != null && potPlayer.isCanReport()) {
+                RedisUtil.writeAsync(RedisUtil.onReport(this.player, this.target, reportType.getName()));
+                CorePlugin.getInstance().getDiscordManager().sendReport(player, target, reportType.getName());
+
+                potPlayer.setCanReport(false);
+
+                Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> {
+                    PotPlayer updatedPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(this.player);
+
+                    if (updatedPotPlayer != null) {
+                        updatedPotPlayer.setCanReport(true);
                     }
-                    break;
-                case 3:
-                    player.closeInventory();
-                    if (potPlayer.isCanReport()) {
-                        CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onReport(this.player, this.target, "Movement Hacks")));
-                        player.sendMessage(Color.translate("&aYour report has been sent to all online staff!"));
-                        potPlayer.setCanReport(false);
-                    } else {
-                        player.closeInventory();
-                        player.sendMessage(Color.translate("&cYou cannot do that right now."));
-                    }
-                    break;
-                case 4:
-                    player.closeInventory();
-                    if (potPlayer.isCanReport()) {
-                        CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onReport(this.player, this.target, "Velocity Hacks")));
-                        player.sendMessage(Color.translate("&aYour report has been sent to all online staff!"));
-                        potPlayer.setCanReport(false);
-                    } else {
-                        player.closeInventory();
-                        player.sendMessage(Color.translate("&cYou cannot do that right now."));
-                    }
-                    break;
-                case 5:
-                    player.closeInventory();
-                    if (potPlayer.isCanReport()) {
-                        CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onReport(this.player, this.target, "Gameplay Sabotage")));
-                        player.sendMessage(Color.translate("&aYour report has been sent to all online staff!"));
-                        potPlayer.setCanReport(false);
-                    } else {
-                        player.closeInventory();
-                        player.sendMessage(Color.translate("&cYou cannot do that right now."));
-                    }
-                    break;
-                case 6:
-                    player.closeInventory();
-                    if (potPlayer.isCanReport()) {
-                        CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onReport(this.player, this.target, "Chat Violation")));
-                        player.sendMessage(Color.translate("&aYour report has been sent to all online staff!"));
-                        potPlayer.setCanReport(false);
-                    } else {
-                        player.closeInventory();
-                        player.sendMessage(Color.translate("&cYou cannot do that right now."));
-                    }
-                    break;
+                }, 60 * 20L);
+
+                this.player.sendMessage(ChatColor.GREEN + "Your report has been sent to all online staff!");
+            } else {
+                this.player.sendMessage(ChatColor.RED + "You cannot perform this action right now.");
             }
 
-            Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> {
-                if (potPlayer != null) {
-                    potPlayer.setCanReport(true);
-                }
-            }, 60 * 20L);
+            this.player.closeInventory();
         }
     }
 }

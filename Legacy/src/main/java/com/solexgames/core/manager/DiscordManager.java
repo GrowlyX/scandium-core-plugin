@@ -28,7 +28,7 @@ public class DiscordManager {
 
         WebhookClientBuilder builder = new WebhookClientBuilder(CorePlugin.getInstance().getConfig().getString("discord.webhook"));
 
-        builder.setThreadFactory((job) -> {
+        builder.setThreadFactory(job -> {
             Thread thread = new Thread(job);
 
             thread.setName(CorePlugin.getInstance().getServerManager().getNetwork().getServerName());
