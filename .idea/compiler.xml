@@ -9,11 +9,13 @@
         <outputRelativeToContentRoot value="true" />
         <module name="Bungee" />
         <module name="Legacy" />
+        <module name="Library" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="Bungee" target="1.8" />
       <module name="Legacy" target="1.8" />
+      <module name="Library" target="1.8" />
       <module name="Non-Legacy" target="1.8" />
       <module name="Scandium" target="1.8" />
     </bytecodeTargetLevel>

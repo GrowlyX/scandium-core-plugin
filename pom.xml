@@ -13,6 +13,7 @@
     <modules>
         <module>Legacy</module>
         <module>Bungee</module>
+        <module>Library</module>
     </modules>
 
     <properties>

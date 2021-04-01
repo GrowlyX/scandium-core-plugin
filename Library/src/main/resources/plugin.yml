@@ -1,0 +1,3 @@
+name: xLib
+version: ${project.version}
+main: com.solexgames.library.Library
