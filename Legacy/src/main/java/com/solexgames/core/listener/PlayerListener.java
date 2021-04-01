@@ -45,15 +45,6 @@ public class PlayerListener implements Listener {
     public ServerManager MANAGER = CorePlugin.getInstance().getServerManager();
 
     @EventHandler
-    public void onServerListPing(ServerListPingEvent event) {
-        if (CorePlugin.getInstance().getConfig().getBoolean("whitelist")) {
-            event.setMotd(MOTDUtil.getWhitelistedMotd());
-        } else {
-            event.setMotd(MOTDUtil.getNormalMotd());
-        }
-    }
-
-    @EventHandler
     public void onConnect(AsyncPlayerPreLoginEvent event) {
         if (!CorePlugin.CAN_JOIN) {
             event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, PunishmentStrings.PLAYER_DATA_LOAD);

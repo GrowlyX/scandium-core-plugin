@@ -1,7 +1,7 @@
 package com.solexgames.core.task;
 
 /**
- * @author GitHub
+ * @author SpigotMC
  * @since March 2021
  */
 

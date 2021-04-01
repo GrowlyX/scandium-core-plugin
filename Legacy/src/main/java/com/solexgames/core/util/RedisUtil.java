@@ -2,18 +2,17 @@ package com.solexgames.core.util;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ChatChannelType;
-import com.solexgames.core.player.PotPlayer;
-import com.solexgames.core.player.ranks.Rank;
-import com.solexgames.core.redis.action.RedisAction;
 import com.solexgames.core.enums.StaffUpdateType;
+import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.punishment.Punishment;
 import com.solexgames.core.player.punishment.PunishmentType;
+import com.solexgames.core.player.ranks.Rank;
+import com.solexgames.core.redis.action.RedisAction;
 import com.solexgames.core.redis.json.JsonAppender;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -138,7 +137,7 @@ public final class RedisUtil {
                 .put("HIDDEN", String.valueOf(rank.isHidden()))
                 .put("SUFFIX", rank.getSuffix())
                 .put("PERMISSIONS", String.join(" ", rank.getPermissions()))
-                .put("INHERITANCE", String.join(" ", rank.getInheritance().stream().map(UUID::toString).collect(Collectors.toList())))
+                .put("INHERITANCE", rank.getInheritance().stream().map(UUID::toString).collect(Collectors.joining(" ")))
                 .getAppended();
     }
 

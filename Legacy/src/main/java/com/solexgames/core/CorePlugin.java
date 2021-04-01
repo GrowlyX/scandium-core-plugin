@@ -396,7 +396,7 @@ public final class CorePlugin extends JavaPlugin {
         this.punishmentManager.savePunishments();
         this.prefixManager.savePrefixes();
 
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> System.out.println("\\u001B[31m com.solexgames.core.CorePlugin has been shutdown.")));
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> System.out.println("com.solexgames.core.CorePlugin has been shutdown.")));
 
         if (this.redisManager.isActive()) this.redisManager.unsubscribe();
     }
