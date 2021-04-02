@@ -9,9 +9,11 @@ import com.solexgames.core.menu.impl.grant.GrantSelectReasonMenu;
 import com.solexgames.core.menu.impl.punish.PunishSelectDurationMenu;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.media.MediaConstants;
-import com.solexgames.core.player.punishment.Punishment;
 import com.solexgames.core.player.punishment.PunishmentStrings;
-import com.solexgames.core.util.*;
+import com.solexgames.core.util.Color;
+import com.solexgames.core.util.DateUtil;
+import com.solexgames.core.util.RedisUtil;
+import com.solexgames.core.util.StringUtil;
 import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -25,12 +27,10 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.*;
-import org.bukkit.event.server.ServerListPingEvent;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
@@ -44,93 +44,42 @@ public class PlayerListener implements Listener {
 
     public ServerManager MANAGER = CorePlugin.getInstance().getServerManager();
 
-    @EventHandler
-    public void onConnect(AsyncPlayerPreLoginEvent event) {
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPreLogin(AsyncPlayerPreLoginEvent event) {
         if (!CorePlugin.CAN_JOIN) {
-            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, PunishmentStrings.PLAYER_DATA_LOAD);
-            return;
-        }
-        if (!CorePlugin.getInstance().getConfig().getBoolean("whitelist")) {
-            allowConnection(event);
-            return;
-        }
-        if (CorePlugin.getInstance().getServerManager().getWhitelistedPlayers().contains(event.getName())) {
-            allowConnection(event);
+            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, PunishmentStrings.SERVER_NOT_LOADED);
             return;
         }
 
-        event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Color.translate(CorePlugin.getInstance().getConfig().getString("whitelisted-msg").replace("<nl>", "\n")));
+        CorePlugin.getInstance().getPlayerManager().setupPlayer(event);
     }
 
-    private void allowConnection(AsyncPlayerPreLoginEvent event) {
-        if (!(CorePlugin.getInstance().getServerName().contains("hub") || CorePlugin.getInstance().getServerName().contains("lobby"))) {
-            Punishment.getAllPunishments().stream()
-                    .filter(punishment -> punishment != null && punishment.isActive() & punishment.getTarget().equals(event.getUniqueId()))
-                    .sorted(Comparator.comparingLong(Punishment::getCreatedAtLong).reversed())
-                    .forEach(punishment -> {
-                        switch (punishment.getPunishmentType()) {
-                            case BLACKLIST:
-                                event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Color.translate(PunishmentStrings.BLACK_LIST_MESSAGE.replace("<reason>", punishment.getReason())));
-                                break;
-                            case IPBAN:
-                            case BAN:
-                                event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, (punishment.isPermanent() ? Color.translate(PunishmentStrings.BAN_MESSAGE_PERM.replace("<reason>", punishment.getReason())) : Color.translate(PunishmentStrings.BAN_MESSAGE_TEMP.replace("<reason>", punishment.getReason()).replace("<time>", punishment.getDurationString()))));
-                                break;
-                        }
-                    });
-        }
-    }
-
-    @EventHandler
-    public void onMove(PlayerMoveEvent event) {
-        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer());
-
-        if (potPlayer != null) {
-            if (potPlayer.isFrozen()) {
-                event.setCancelled(true);
-                event.getPlayer().teleport(event.getFrom());
-            }
-        }
-    }
-
-    @EventHandler
-    public void onDamaged(EntityDamageEvent event) {
-        if (event.getEntityType().equals(EntityType.PLAYER)) {
-            Player player = (Player) event.getEntity();
-            PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onPreLoginCheck(AsyncPlayerPreLoginEvent event) {
+        if (event.getLoginResult().equals(AsyncPlayerPreLoginEvent.Result.ALLOWED)) {
+            PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getUniqueId());
+            boolean isHub = CorePlugin.getInstance().getServerName().toLowerCase().contains("hub") || CorePlugin.getInstance().getServerName().toLowerCase().contains("lobby");
 
             if (potPlayer != null) {
-                if (potPlayer.isFrozen()) {
-                    event.setCancelled(true);
+                if (potPlayer.isCurrentlyRestricted() && !isHub) {
+                    event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, potPlayer.getRestrictionMessage());
                 }
+            } else {
+                event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, PunishmentStrings.PLAYER_DATA_LOAD);
             }
         }
     }
 
     @EventHandler
-    public void onInventoryClick(InventoryClickEvent event) throws IOException, ParseException {
-        if (event.getInventory().getHolder() instanceof IMenu) {
-            ((IMenu) event.getInventory().getHolder()).onInventoryClick(event);
-        }
-    }
+    public void onJoin(PlayerJoinEvent event) {
+        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer());
 
-    @EventHandler
-    public void onInventoryDrag(InventoryDragEvent event) {
-        if (event.getInventory().getHolder() instanceof IMenu) {
-            ((IMenu) event.getInventory().getHolder()).onInventoryDrag(event);
+        if (potPlayer == null) {
+            event.getPlayer().kickPlayer(PunishmentStrings.PLAYER_DATA_LOAD);
+            return;
         }
-    }
 
-    @EventHandler
-    public void onInventoryClose(InventoryCloseEvent event) {
-        if (event.getInventory().getHolder() instanceof IMenu) {
-            ((IMenu) event.getInventory().getHolder()).onInventoryClose(event);
-        }
-    }
-
-    @EventHandler
-    public void onConnect(PlayerJoinEvent event) {
-        PotPlayer potPlayer = new PotPlayer(event.getPlayer().getUniqueId(), event.getPlayer().getName(), event.getPlayer().getAddress().getAddress());
+        potPlayer.onAfterDataLoad();
 
         CompletableFuture.runAsync(() -> {
             CorePlugin.getInstance().getServerManager().getVanishedPlayers().stream()
@@ -183,6 +132,53 @@ public class PlayerListener implements Listener {
                 event.getPlayer().sendMessage(ChatColor.GREEN + "You've been automatically disguised as " + potPlayer.getColorByRankColor() + potPlayer.getDisguiseRank().getName() + ChatColor.GREEN + "!");
             }
         });
+    }
+
+    @EventHandler
+    public void onMove(PlayerMoveEvent event) {
+        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer());
+
+        if (potPlayer != null) {
+            if (potPlayer.isFrozen()) {
+                event.setCancelled(true);
+                event.getPlayer().teleport(event.getFrom());
+            }
+        }
+    }
+
+    @EventHandler
+    public void onDamaged(EntityDamageEvent event) {
+        if (event.getEntityType().equals(EntityType.PLAYER)) {
+            Player player = (Player) event.getEntity();
+            PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+
+            if (potPlayer != null) {
+                if (potPlayer.isFrozen()) {
+                    event.setCancelled(true);
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent event) throws IOException, ParseException {
+        if (event.getInventory().getHolder() instanceof IMenu) {
+            ((IMenu) event.getInventory().getHolder()).onInventoryClick(event);
+        }
+    }
+
+    @EventHandler
+    public void onInventoryDrag(InventoryDragEvent event) {
+        if (event.getInventory().getHolder() instanceof IMenu) {
+            ((IMenu) event.getInventory().getHolder()).onInventoryDrag(event);
+        }
+    }
+
+    @EventHandler
+    public void onInventoryClose(InventoryCloseEvent event) {
+        if (event.getInventory().getHolder() instanceof IMenu) {
+            ((IMenu) event.getInventory().getHolder()).onInventoryClose(event);
+        }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

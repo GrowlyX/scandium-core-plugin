@@ -20,6 +20,7 @@ import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -70,6 +71,10 @@ public class PlayerManager {
         }
 
         return version;
+    }
+
+    public void setupPlayer(AsyncPlayerPreLoginEvent event) {
+        new PotPlayer(event.getUniqueId(), event.getName(), event.getAddress());
     }
 
     public boolean isOnline(String player) {

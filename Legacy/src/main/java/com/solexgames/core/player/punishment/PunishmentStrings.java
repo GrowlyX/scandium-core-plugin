@@ -40,6 +40,7 @@ public final class PunishmentStrings {
     public static String COOL_DOWN_MESSAGE = "&cPlease wait before chatting again.";
 
     public static String PLAYER_DATA_LOAD = ChatColor.RED + "An error occurred while trying to load your data.\n" + ChatColor.RED + "Please try again later or contact a staff member.";
+    public static String SERVER_NOT_LOADED = ChatColor.RED + "The server you've tried to connect to has not loaded.\n" + ChatColor.RED + "Please try again in a few seconds or contact staff.";
 
     /**
      * Setups customized messages through the config.
@@ -48,6 +49,7 @@ public final class PunishmentStrings {
         FileConfiguration configuration = JavaPlugin.getPlugin(CorePlugin.class).getConfig();
 
         PLAYER_DATA_LOAD = Color.translate(configuration.getString("messages.load-error").replace("<nl>", "\n"));
+        SERVER_NOT_LOADED = Color.translate(configuration.getString("messages.server-not-loaded").replace("<nl>", "\n"));
         SLOW_CHAT_MESSAGE = Color.translate(configuration.getString("messages.chat-cooldown").replace("<nl>", "\n"));
         CMD_CHAT_MESSAGE = Color.translate(configuration.getString("messages.command-cooldown").replace("<nl>", "\n"));
         COOL_DOWN_MESSAGE = Color.translate(configuration.getString("messages.chat-delay-cooldown").replace("<nl>", "\n"));

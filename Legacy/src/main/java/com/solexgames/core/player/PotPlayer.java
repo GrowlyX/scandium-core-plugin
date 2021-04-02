@@ -114,6 +114,7 @@ public class PotPlayer {
 
     private boolean currentlyMuted;
     private boolean currentlyRestricted;
+    private boolean currentlyBlacklisted;
     private boolean currentlyOnline;
 
     private LanguageType language;
@@ -140,11 +141,8 @@ public class PotPlayer {
 
     public PotPlayer(UUID uuid, String name, InetAddress inetAddress) {
         this.uuid = uuid;
-        this.player = Bukkit.getPlayer(uuid);
         this.ipAddress = inetAddress.toString();
         this.name = name;
-
-        this.attachment = this.player.addAttachment(CorePlugin.getPlugin(CorePlugin.class));
 
         this.media = new Media();
         this.lastJoined = new Date();
@@ -321,130 +319,186 @@ public class PotPlayer {
             }
 
             this.name = this.getName();
-            this.disguiseRank = null;
-            if (profile.getBoolean("canSeeStaffMessages") != null) {
-                this.canSeeStaffMessages = profile.getBoolean("canSeeStaffMessages");
-            }
-            if (profile.getBoolean("canSeeTips") != null) {
-                this.canSeeTips = profile.getBoolean("canSeeTips");
-            }
-            if (profile.getBoolean("canReceiveDms") != null) {
-                this.canReceiveDms = profile.getBoolean("canReceiveDms");
-            }
-            if (profile.getBoolean("canSeeFiltered") != null) {
-                this.canSeeFiltered = profile.getBoolean("canSeeFiltered");
-            }
-            if (profile.getBoolean("canSeeBroadcasts") != null) {
-                this.canSeeBroadcasts = profile.getBoolean("canSeeBroadcasts");
-            }
-            if (profile.getBoolean("canSeeGlobalChat") != null) {
-                this.canSeeGlobalChat = profile.getBoolean("canSeeGlobalChat");
-            }
-            if (profile.getBoolean("hasVoted") != null) {
-                this.hasVoted = profile.getBoolean("hasVoted");
-            }
-            if (profile.getBoolean("autoModMode") != null) {
-                this.isAutoModMode = profile.getBoolean("autoModMode");
-            }
-            if (profile.getBoolean("autoVanish") != null) {
-                this.isAutoVanish = profile.getBoolean("autoVanish");
-            }
-            if (profile.getBoolean("canReceiveDmsSounds") != null) {
-                this.canReceiveDmsSounds = profile.getBoolean("canReceiveDmsSounds");
-            }
-            if (profile.getString("firstJoined") != null) {
-                this.firstJoin = profile.getString("firstJoined");
-            } else {
-                this.firstJoin = CorePlugin.FORMAT.format(new Date());
-            }
-            if (profile.getString("language") != null) {
-                this.language = LanguageType.getByName(profile.getString("language"));
-            } else {
-                this.language = LanguageType.ENGLISH;
-            }
-            if (profile.getInteger("experience") != null) {
-                this.experience = profile.getInteger("experience");
-            } else {
-                this.experience = 0;
-            }
-            if (profile.getString("customColor") != null) {
-                this.customColor = ChatColor.valueOf(profile.getString("customColor"));
-            }
-            if (profile.getString("discord") != null) {
-                this.media.setDiscord(profile.getString("discord"));
-            } else {
-                this.media.setDiscord("N/A");
-            }
-            if (profile.getString("potionMessageType") != null) {
-                this.potionMessageType = PotionMessageType.valueOf(profile.getString("potionMessageType"));
-            } else {
-                this.potionMessageType = PotionMessageType.NORMAL;
-            }
-            if (profile.getString("twitter") != null) {
-                this.media.setTwitter(profile.getString("twitter"));
-            } else {
-                this.media.setTwitter("N/A");
-            }
-            if (profile.getString("youtube") != null) {
-                this.media.setYoutubeLink(profile.getString("youtube"));
-            } else {
-                this.media.setYoutubeLink("N/A");
-            }
-            if (profile.getString("instagram") != null) {
-                this.media.setInstagram(profile.getString("instagram"));
-            } else {
-                this.media.setInstagram("N/A");
-            }
+            CompletableFuture.runAsync(() -> {
+                if (profile.getBoolean("canSeeStaffMessages") != null) {
+                    this.canSeeStaffMessages = profile.getBoolean("canSeeStaffMessages");
+                }
+                if (profile.getBoolean("canSeeTips") != null) {
+                    this.canSeeTips = profile.getBoolean("canSeeTips");
+                }
+                if (profile.getBoolean("canReceiveDms") != null) {
+                    this.canReceiveDms = profile.getBoolean("canReceiveDms");
+                }
+                if (profile.getBoolean("canSeeFiltered") != null) {
+                    this.canSeeFiltered = profile.getBoolean("canSeeFiltered");
+                }
+                if (profile.getBoolean("canSeeBroadcasts") != null) {
+                    this.canSeeBroadcasts = profile.getBoolean("canSeeBroadcasts");
+                }
+                if (profile.getBoolean("canSeeGlobalChat") != null) {
+                    this.canSeeGlobalChat = profile.getBoolean("canSeeGlobalChat");
+                }
+                if (profile.getBoolean("hasVoted") != null) {
+                    this.hasVoted = profile.getBoolean("hasVoted");
+                }
+                if (profile.getBoolean("autoModMode") != null) {
+                    this.isAutoModMode = profile.getBoolean("autoModMode");
+                }
+                if (profile.getBoolean("autoVanish") != null) {
+                    this.isAutoVanish = profile.getBoolean("autoVanish");
+                }
+                if (profile.getBoolean("canReceiveDmsSounds") != null) {
+                    this.canReceiveDmsSounds = profile.getBoolean("canReceiveDmsSounds");
+                }
+                if (profile.getString("firstJoined") != null) {
+                    this.firstJoin = profile.getString("firstJoined");
+                } else {
+                    this.firstJoin = CorePlugin.FORMAT.format(new Date());
+                }
+                if (profile.getString("language") != null) {
+                    this.language = LanguageType.getByName(profile.getString("language"));
+                } else {
+                    this.language = LanguageType.ENGLISH;
+                }
+                if (profile.getInteger("experience") != null) {
+                    this.experience = profile.getInteger("experience");
+                } else {
+                    this.experience = 0;
+                }
+                if (profile.getString("customColor") != null) {
+                    this.customColor = ChatColor.valueOf(profile.getString("customColor"));
+                }
+                if (profile.getString("discord") != null) {
+                    this.media.setDiscord(profile.getString("discord"));
+                } else {
+                    this.media.setDiscord("N/A");
+                }
+                if (profile.getString("potionMessageType") != null) {
+                    this.potionMessageType = PotionMessageType.valueOf(profile.getString("potionMessageType"));
+                } else {
+                    this.potionMessageType = PotionMessageType.NORMAL;
+                }
+                if (profile.getString("twitter") != null) {
+                    this.media.setTwitter(profile.getString("twitter"));
+                } else {
+                    this.media.setTwitter("N/A");
+                }
+                if (profile.getString("youtube") != null) {
+                    this.media.setYoutubeLink(profile.getString("youtube"));
+                } else {
+                    this.media.setYoutubeLink("N/A");
+                }
+                if (profile.getString("instagram") != null) {
+                    this.media.setInstagram(profile.getString("instagram"));
+                } else {
+                    this.media.setInstagram("N/A");
+                }
+                if ((((List<String>) profile.get("allGrants")).isEmpty()) || (profile.get("allGrants") == null)) {
+                    this.allGrants.add(new Grant(null, Objects.requireNonNull(Rank.getDefault()), new Date().getTime(), -1L, "Automatic Grant (Default)", true, true));
+                } else {
+                    List<String> allGrants = ((List<String>) profile.get("allGrants"));
+                    allGrants.forEach(s -> this.allGrants.add(CorePlugin.GSON.fromJson(s, Grant.class)));
+                }
+                if ((profile.getString("appliedPrefix") != null) && !profile.getString("appliedPrefix").equals("Default")) {
+                    this.appliedPrefix = Prefix.getByName(profile.getString("appliedPrefix"));
+                } else {
+                    this.appliedPrefix = null;
+                }
+                if (profile.get("allIgnored") != null) {
+                    List<String> ignoring = ((List<String>) profile.get("allIgnored"));
+                    if (!ignoring.isEmpty()) {
+                        this.allIgnoring.addAll(ignoring);
+                    }
+                }
+                if (profile.get("allPermissions") != null) {
+                    List<String> permissions = ((List<String>) profile.get("allPermissions"));
+                    if (!permissions.isEmpty()) {
+                        this.userPermissions.addAll(permissions);
+                    }
+                }
+                if (profile.get("allMessages") != null) {
+                    List<String> allMessages = ((List<String>) profile.get("allMessages"));
+                    if (!allMessages.isEmpty()) {
+                        allMessages.forEach(s -> this.allPurchasedMessages.add(PotionMessageType.valueOf(s)));
+                    }
+                }
+                if (profile.getBoolean("isSynced") != null) {
+                    this.setSynced(profile.getBoolean("isSynced"));
+                }
+                if (profile.getString("syncDiscord") != null) {
+                    this.setSyncDiscord(profile.getString("syncDiscord"));
+                }
+                if (profile.getString("discordSyncCode") != null) {
+                    this.setSyncCode(profile.getString("discordSyncCode"));
+                } else {
+                    this.setSyncCode(SaltUtil.getRandomSaltedString());
+                }
+                if (profile.getString("achievementData") != null) {
+                    this.achievementData = CorePlugin.GSON.fromJson(profile.getString("achievementData"), AchievementData.class);
+                } else {
+                    this.achievementData = new AchievementData();
+                }
+            });
 
-            if ((((List<String>) profile.get("allGrants")).isEmpty()) || (profile.get("allGrants") == null)) {
-                this.allGrants.add(new Grant(null, Objects.requireNonNull(Rank.getDefault()), new Date().getTime(), -1L, "Automatic Grant (Default)", true, true));
-            } else {
-                List<String> allGrants = ((List<String>) profile.get("allGrants"));
-                allGrants.forEach(s -> this.allGrants.add(CorePlugin.GSON.fromJson(s, Grant.class)));
-            }
+            new NetworkPlayer(this.uuid, this.name, CorePlugin.getInstance().getServerName(), this.getActiveGrant().getRank().getName(), this.isCanReceiveDms(), this.ipAddress, this.syncCode, this.isSynced);
+            Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), this::saveWithoutRemove, 10 * 20L);
+            RedisUtil.writeAsync(RedisUtil.addGlobalPlayer(this));
 
-            if ((profile.getString("appliedPrefix") != null) && !profile.getString("appliedPrefix").equals("Default")) {
-                this.appliedPrefix = Prefix.getByName(profile.getString("appliedPrefix"));
-            } else {
-                this.appliedPrefix = null;
-            }
+            CorePlugin.getInstance().getPlayerManager().getAllSyncCodes().put(this.syncCode, this.getName());
 
-            if (profile.get("allIgnored") != null) {
-                List<String> ignoring = ((List<String>) profile.get("allIgnored"));
-                if (!ignoring.isEmpty()) {
-                    this.allIgnoring.addAll(ignoring);
+            CompletableFuture.runAsync(() -> {
+                CorePlugin.getInstance().getPunishmentManager().getPunishments()
+                        .stream()
+                        .filter(punishment -> punishment.getTarget().equals(this.uuid))
+                        .forEach(punishment -> this.punishments.add(punishment));
+
+                this.getPunishments()
+                        .stream()
+                        .filter(Punishment::isActive)
+                        .filter(punishment -> !punishment.isRemoved())
+                        .forEach(punishment -> {
+                            switch (punishment.getPunishmentType()) {
+                                case MUTE:
+                                    this.currentlyMuted = true;
+                                    break;
+                                case BLACKLIST:
+                                    this.restrictionPunishment = punishment;
+                                    this.currentlyBlacklisted = true;
+                                    this.currentlyRestricted = true;
+                                    break;
+                                case IPBAN:
+                                case BAN:
+                                    this.currentlyRestricted = true;
+                                    this.restrictionPunishment = punishment;
+                                    break;
+                            }
+                        });
+            });
+
+            this.currentlyOnline = true;
+            this.hasLoaded = true;
+        });
+    }
+
+    public void onAfterDataLoad() {
+        CompletableFuture.runAsync(() -> {
+            this.player = Bukkit.getPlayer(uuid);
+            this.attachment = this.player.addAttachment(CorePlugin.getPlugin(CorePlugin.class));
+            this.gameProfile = CorePlugin.getInstance().getPlayerManager().getGameProfile(this.player);
+
+            if (this.player.hasPermission("scandium.staff")) {
+                if (!CorePlugin.getInstance().getPlayerManager().isOnline(this.player.getName())) {
+                    RedisUtil.writeAsync(RedisUtil.onConnect(this.getPlayer()));
                 }
             }
-            if (profile.get("allPermissions") != null) {
-                List<String> permissions = ((List<String>) profile.get("allPermissions"));
-                if (!permissions.isEmpty()) {
-                    this.userPermissions.addAll(permissions);
-                }
-            }
-            if (profile.get("allMessages") != null) {
-                List<String> allMessages = ((List<String>) profile.get("allMessages"));
-                if (!allMessages.isEmpty()) {
-                    allMessages.forEach(s -> this.allPurchasedMessages.add(PotionMessageType.valueOf(s)));
-                }
-            }
-            if (profile.getBoolean("isSynced") != null) {
-                this.setSynced(profile.getBoolean("isSynced"));
-            }
-            if (profile.getString("syncDiscord") != null) {
-                this.setSyncDiscord(profile.getString("syncDiscord"));
-            }
-            if (profile.getString("discordSyncCode") != null) {
-                this.setSyncCode(profile.getString("discordSyncCode"));
-            } else {
-                this.setSyncCode(SaltUtil.getRandomSaltedString());
-            }
-            if (profile.getString("achievementData") != null) {
-                this.achievementData = CorePlugin.GSON.fromJson(profile.getString("achievementData"), AchievementData.class);
-            } else {
-                this.achievementData = new AchievementData();
+
+            if (CorePlugin.NAME_MC_REWARDS) {
+                this.checkVoting();
             }
 
-            if (profile != null && profile.get("allPrefixes") != null) {
+            this.setupPlayer();
+
+            if (profile.get("allPrefixes") != null) {
                 if (player.hasPermission("scandium.prefixes.all")) {
                     List<String> prefixes = new ArrayList<>();
                     Prefix.getPrefixes().forEach(prefix -> prefixes.add(prefix.getName()));
@@ -455,47 +509,6 @@ public class PotPlayer {
                 }
             }
         });
-
-        CorePlugin.getInstance().getPunishmentManager().getPunishments()
-                .stream()
-                .filter(punishment -> punishment.getTarget().equals(this.uuid))
-                .forEach(punishment -> this.punishments.add(punishment));
-
-        CorePlugin.getInstance().getPlayerManager().getAllSyncCodes().put(this.syncCode, this.getName());
-
-        this.getPunishments()
-                .stream()
-                .filter(punishment -> punishment.getPunishmentType().equals(PunishmentType.MUTE))
-                .filter(Punishment::isActive)
-                .filter(punishment -> !punishment.isRemoved())
-                .forEach(punishment -> this.currentlyMuted = true);
-
-        this.getPunishments()
-                .stream()
-                .filter(punishment -> punishment.getPunishmentType().equals(PunishmentType.BAN) || punishment.getPunishmentType().equals(PunishmentType.BLACKLIST) || punishment.getPunishmentType().equals(PunishmentType.IPBAN))
-                .filter(Punishment::isActive)
-                .filter(punishment -> !punishment.isRemoved())
-                .forEach(punishment -> {
-                    this.currentlyRestricted = true;
-                    this.restrictionPunishment = punishment;
-                });
-
-        new NetworkPlayer(this.uuid, this.name, CorePlugin.getInstance().getServerName(), getActiveGrant().getRank().getName(), this.canReceiveDms, this.ipAddress, this.syncCode, this.isSynced);
-        RedisUtil.writeAsync(RedisUtil.addGlobalPlayer(this));
-
-        this.currentlyOnline = true;
-        this.hasLoaded = true;
-        this.gameProfile = CorePlugin.getInstance().getPlayerManager().getGameProfile(this.player);
-
-        if (this.getPlayer().hasPermission("scandium.staff") && !CorePlugin.getInstance().getPlayerManager().isOnline(this.getPlayer().getName())) {
-            RedisUtil.writeAsync(RedisUtil.onConnect(this.getPlayer()));
-        }
-
-        if (CorePlugin.NAME_MC_REWARDS) {
-            this.checkVoting();
-        }
-
-        this.setupPlayer();
     }
 
     public String getRestrictionMessage() {
@@ -533,18 +546,7 @@ public class PotPlayer {
     }
 
     public void setupDisplay() {
-        Grant grant = this.getActiveGrant();
-
-        if (grant == null) {
-            Grant newGrant = this.getDefaultGrant();
-
-            this.getAllGrants().add(newGrant);
-            this.player.setDisplayName(Color.translate(newGrant.getRank().getColor() + player.getName()));
-
-            return;
-        }
-
-        this.player.setDisplayName(Color.translate(grant.getRank().getColor()) + player.getName());
+        this.player.setDisplayName(Color.translate(this.getActiveGrant().getRank().getColor()) + player.getName());
     }
 
     public void setupPlayerList() {
@@ -573,24 +575,20 @@ public class PotPlayer {
 
     public void setupPlayerTag() {
         Bukkit.getOnlinePlayers().forEach(player -> {
-            if (this.getActiveGrant().getRank().getColor() != null) {
-                if (this.isStaffMode()) {
-                    if (player.hasPermission("scandium.staff")) {
-                        NameTagExternal.setupStaffModeTag(player, this.player);
-                    } else {
-                        NameTagExternal.setupNameTag(player, this.player, this.getColorByRankColor());
-                    }
-                } else if (this.isVanished()) {
-                    if (player.hasPermission("scandium.staff")) {
-                        NameTagExternal.setupVanishTag(player, this.player);
-                    } else {
-                        NameTagExternal.setupNameTag(player, this.player, this.getColorByRankColor());
-                    }
+            if (this.isStaffMode()) {
+                if (player.hasPermission("scandium.staff")) {
+                    NameTagExternal.setupStaffModeTag(player, this.player);
+                } else {
+                    NameTagExternal.setupNameTag(player, this.player, this.getColorByRankColor());
+                }
+            } else if (this.isVanished()) {
+                if (player.hasPermission("scandium.staff")) {
+                    NameTagExternal.setupVanishTag(player, this.player);
                 } else {
                     NameTagExternal.setupNameTag(player, this.player, this.getColorByRankColor());
                 }
             } else {
-                NameTagExternal.setupNameTag(player, this.player, ChatColor.GRAY);
+                NameTagExternal.setupNameTag(player, this.player, this.getColorByRankColor());
             }
         });
     }
@@ -598,9 +596,9 @@ public class PotPlayer {
     public ChatColor getColorByRankColor() {
         if (this.disguiseRank != null) {
             return ChatColor.getByChar(this.getDisguiseRank().getColor().replace("&", "").replace("§", ""));
+        } else {
+            return ChatColor.getByChar(this.getActiveGrant().getRank().getColor().replace("&", "").replace("§", ""));
         }
-
-        return ChatColor.getByChar(this.getActiveGrant().getRank().getColor().replace("&", "").replace("§", ""));
     }
 
     public Grant getByDate(long date) {
@@ -616,25 +614,27 @@ public class PotPlayer {
     }
 
     public void checkVoting() {
-        if (!hasVoted) {
-            if (VotingUtil.hasVoted(this.uuid.toString())) {
-                this.hasVoted = true;
-                this.getAllPrefixes().add("Liked");
+        CompletableFuture.runAsync(() -> {
+            if (!hasVoted) {
+                if (VotingUtil.hasVoted(this.uuid.toString())) {
+                    this.hasVoted = true;
+                    this.getAllPrefixes().add("Liked");
 
-                if (this.getAppliedPrefix() == null) this.appliedPrefix = Prefix.getByName("Liked");
-                if (player != null) {
-                    player.sendMessage(Color.translate("&aThanks for voting for us on &6NameMC&a!"));
-                    player.sendMessage(Color.translate("&aYou have been granted the &b✔ &7(Liked)&a prefix!"));
+                    if (this.getAppliedPrefix() == null) this.appliedPrefix = Prefix.getByName("Liked");
+                    if (player != null) {
+                        player.sendMessage(Color.translate("&aThanks for voting for us on &6NameMC&a!"));
+                        player.sendMessage(Color.translate("&aYou have been granted the &b✔ &7(Liked)&a prefix!"));
+                    }
+                }
+            } else {
+                if (!VotingUtil.hasVoted(this.uuid.toString())) {
+                    this.hasVoted = false;
+                    this.getAllPrefixes().remove("Liked");
+
+                    player.sendMessage(Color.translate("&cYour permission to access the &b✔ &7(Liked) &ctag has been revoked as you have unliked our server on NameMC!"));
+                    player.sendMessage(Color.translate("&cTo gain your tag back, like us on NameMC again!"));
                 }
             }
-        } else {
-            if (!VotingUtil.hasVoted(this.uuid.toString())) {
-                this.hasVoted = false;
-                this.getAllPrefixes().remove("Liked");
-
-                player.sendMessage(Color.translate("&cYour permission to access the &b✔ &7(Liked) &ctag has been revoked as you have unliked our server on NameMC!"));
-                player.sendMessage(Color.translate("&cTo gain your tag back, like us on NameMC again!"));
-            }
-        }
+        });
     }
 }

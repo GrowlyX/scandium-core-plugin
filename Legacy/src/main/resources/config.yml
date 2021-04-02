@@ -8,6 +8,7 @@ refresh-time: 5
 
 messages:
   load-error: "&cAn error occurred while trying to load your data.<nl>&cPlease try again later or contact a staff member."
+  server-not-loaded: "&cThe server you've tried to connect to has not loaded.<nl>&cPlease try again in a few seconds or contact staff."
   chat-cooldown: "&cPlease wait another <amount> before chatting again."
   command-cooldown: "&cYou're on command cooldown, please wait <amount>."
   chat-delay-cooldown: "&cPlease wait before chatting again."
