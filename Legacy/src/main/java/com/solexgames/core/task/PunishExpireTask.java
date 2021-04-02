@@ -26,7 +26,7 @@ public class PunishExpireTask extends BukkitRunnable {
     @Override
     public void run() {
         CompletableFuture.runAsync(() -> Punishment.getAllPunishments().stream()
-                .filter(punishment -> punishment != null && punishment.checkIfActive())
+                .filter(punishment -> punishment != null && !punishment.isRemoved() && punishment.isActive() && (System.currentTimeMillis() <= punishment.getCreatedAt().getTime() + punishment.getPunishmentDuration()) && !punishment.isPermanent())
                 .forEach(punishment -> {
                     punishment.setActive(false);
 
@@ -38,14 +38,18 @@ public class PunishExpireTask extends BukkitRunnable {
                         switch (punishment.getPunishmentType()) {
                             case MUTE:
                                 potPlayer.setCurrentlyMuted(false);
+                                player.sendMessage(ChatColor.RED + "Your current mute has expired.");
                                 break;
                             case WARN:
-                                player.sendMessage(ChatColor.RED + "Your current warning has now expired.");
+                                potPlayer.setHasActiveWarning(false);
+                                potPlayer.setWarningPunishment(null);
+                                player.sendMessage(ChatColor.RED + "Your current warning has expired.");
                                 break;
                             case BLACKLIST:
                             case IPBAN:
                             case BAN:
                                 potPlayer.setCurrentlyRestricted(false);
+                                player.sendMessage(ChatColor.RED + "Your current ban has expired.");
                                 break;
                         }
                     }

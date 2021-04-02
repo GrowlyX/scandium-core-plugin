@@ -80,6 +80,7 @@ public class PotPlayer {
     private boolean canReport = true;
     private boolean canRequest = true;
     private boolean hasVoted = false;
+    private boolean hasActiveWarning = false;
     private boolean isVanished = false;
     private boolean isStaffMode = false;
     private boolean isFrozen = false;
@@ -132,6 +133,7 @@ public class PotPlayer {
     private String lastJoin;
     private String firstJoin;
 
+    private Punishment warningPunishment;
     private Punishment restrictionPunishment;
     private AchievementData achievementData;
     private PotionMessageType potionMessageType;
@@ -328,9 +330,13 @@ public class PotPlayer {
                     .forEach(this.punishments::add);
 
             this.getPunishments().stream()
-                    .filter(Punishment::checkIfActive)
+                    .filter(punishment -> punishment != null && punishment.isActive() && (System.currentTimeMillis() >= punishment.getCreatedAt().getTime() + punishment.getPunishmentDuration() || punishment.isPermanent()) && !punishment.isRemoved())
                     .forEach(punishment -> {
                         switch (punishment.getPunishmentType()) {
+                            case WARN:
+                                this.hasActiveWarning = true;
+                                this.warningPunishment = punishment;
+                                break;
                             case MUTE:
                                 this.currentlyMuted = true;
                                 break;
@@ -508,6 +514,10 @@ public class PotPlayer {
                 }
             }
         });
+    }
+
+    public String getWarningMessage() {
+        return ChatColor.RED + "You currently have an active warning for " + this.warningPunishment.getReason() + ".\n" + ChatColor.RED + "This warning will expire in " + ChatColor.RED + ChatColor.BOLD.toString() + this.warningPunishment.getExpirationString() + ChatColor.RED + ".";
     }
 
     public String getRestrictionMessage() {

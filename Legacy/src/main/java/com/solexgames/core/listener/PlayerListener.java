@@ -65,6 +65,8 @@ public class PlayerListener implements Listener {
             if (potPlayer != null) {
                 if (potPlayer.isCurrentlyRestricted() && !isHub) {
                     event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, potPlayer.getRestrictionMessage());
+                } else {
+                    event.allow();
                 }
             } else {
                 event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, PunishmentStrings.PLAYER_DATA_LOAD);
@@ -128,6 +130,10 @@ public class PlayerListener implements Listener {
 
             if (potPlayer.isCurrentlyRestricted()) {
                 event.getPlayer().sendMessage(potPlayer.getRestrictionMessage());
+            }
+
+            if (potPlayer.isHasActiveWarning()) {
+                event.getPlayer().sendMessage(potPlayer.getWarningMessage());
             }
 
             if (potPlayer.getDisguiseRank() != null) {
