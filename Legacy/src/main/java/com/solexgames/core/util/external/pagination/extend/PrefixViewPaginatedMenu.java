@@ -95,7 +95,7 @@ public class PrefixViewPaginatedMenu extends PaginatedMenu {
                     Prefix prefix = Prefix.getByName(ChatColor.stripColor(getButtonItem(player).getItemMeta().getDisplayName()));
                     if (potPlayer.getAllPrefixes().contains(prefix.getName())) {
                         potPlayer.setAppliedPrefix(prefix);
-                        player.sendMessage(Color.translate("&aYou have updated your prefix to &6" + prefix.getName() + "&a!"));
+                        player.sendMessage(Color.translate("&aYou've updated your prefix to &6" + prefix.getName() + "&a!"));
                     } else {
                         player.sendMessage(Color.translate("&cYou do not own this prefix!"));
                         player.sendMessage(Color.translate("&cYou can purchase this prefix at " + CorePlugin.getInstance().getServerManager().getNetwork().getStoreLink() + "!"));

@@ -21,7 +21,7 @@ public class TogglePrivateMessagesCommand extends BaseCommand {
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
         if (potPlayer.isCanReceiveDms()) {
-            player.sendMessage(Color.translate("&cYou have disabled private messages."));
+            player.sendMessage(Color.translate("&cYou've disabled private messages."));
             potPlayer.setCanSeeStaffMessages(false);
         } else {
             player.sendMessage(Color.translate("&aYou can now see private messages."));

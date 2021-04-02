@@ -60,7 +60,7 @@ public class ReplyCommand extends BaseCommand {
                 return false;
             }
             if (!potPlayer.isCanReceiveDms()) {
-                player.sendMessage(Color.translate("&cYou have your dms disabled."));
+                player.sendMessage(Color.translate("&cYou've your dms disabled."));
                 return false;
             }
             if (potTarget.isCurrentlyRestricted()) {

@@ -78,7 +78,7 @@ public class StaffViewPaginatedMenu extends PaginatedMenu {
                             PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(clickedUser);
 
                             player.teleport(clickedUser.getLocation());
-                            player.sendMessage(Color.translate("&aYou have been teleported to " + potPlayer.getColorByRankColor() + potPlayer.getPlayer().getName() + "&a!"));
+                            player.sendMessage(Color.translate("&aYou've been teleported to " + potPlayer.getColorByRankColor() + potPlayer.getPlayer().getName() + "&a!"));
                         }
                     }
                 }));

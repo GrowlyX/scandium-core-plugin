@@ -84,7 +84,7 @@ public class PrefixPurchaseMenu extends PaginatedMenu {
                 } else {
                     if (potPlayer.getExperience() >= 500) {
                         potPlayer.setExperience(potPlayer.getExperience() - 500);
-                        player.sendMessage(ChatColor.GREEN + "You have successfully purchased the " + ChatColor.GOLD + prefix.getName() + ChatColor.GRAY + " (" + Color.translate(prefix.getPrefix()) + ChatColor.GRAY + ")" + ChatColor.GREEN + " prefix!");
+                        player.sendMessage(ChatColor.GREEN + "You've successfully purchased the " + ChatColor.GOLD + prefix.getName() + ChatColor.GRAY + " (" + Color.translate(prefix.getPrefix()) + ChatColor.GRAY + ")" + ChatColor.GREEN + " prefix!");
 
                         potPlayer.setAppliedPrefix(prefix);
                         potPlayer.getAllPrefixes().add(prefix.getName());

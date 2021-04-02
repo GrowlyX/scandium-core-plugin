@@ -26,10 +26,10 @@ public class ToggleAutoVanishCommand extends BaseCommand {
         }
 
         if (potPlayer.isAutoVanish()) {
-            player.sendMessage(Color.translate("&cYou have disabled auto vanish."));
+            player.sendMessage(Color.translate("&cYou've disabled auto vanish."));
             potPlayer.setAutoVanish(false);
         } else {
-            player.sendMessage(Color.translate("&aYou have enabled auto vanish."));
+            player.sendMessage(Color.translate("&aYou've enabled auto vanish."));
             potPlayer.setAutoVanish(true);
         }
 

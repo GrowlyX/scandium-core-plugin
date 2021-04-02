@@ -31,10 +31,10 @@ public class ManagerChatCommand extends BaseCommand {
         if (args.length == 0) {
             if (potPlayer.getChannel() == null || !potPlayer.getChannel().equals(ChatChannelType.MANAGER)) {
                 potPlayer.setChannel(ChatChannelType.MANAGER);
-                player.sendMessage(Color.translate("&aYou have entered the manager chat channel."));
+                player.sendMessage(Color.translate("&aYou've entered the manager chat channel."));
             } else {
                 potPlayer.setChannel(null);
-                player.sendMessage(Color.translate("&cYou have exited the manager chat channel."));
+                player.sendMessage(Color.translate("&cYou've exited the manager chat channel."));
             }
         }
 

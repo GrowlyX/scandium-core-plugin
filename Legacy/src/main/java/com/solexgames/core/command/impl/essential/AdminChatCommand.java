@@ -31,10 +31,10 @@ public class AdminChatCommand extends BaseCommand {
         if (args.length == 0) {
             if (potPlayer.getChannel() == null || !potPlayer.getChannel().equals(ChatChannelType.ADMIN)) {
                 potPlayer.setChannel(ChatChannelType.ADMIN);
-                player.sendMessage(Color.translate("&aYou have entered the admin chat channel."));
+                player.sendMessage(Color.translate("&aYou've entered the admin chat channel."));
             } else {
                 potPlayer.setChannel(null);
-                player.sendMessage(Color.translate("&cYou have exited the admin chat channel."));
+                player.sendMessage(Color.translate("&cYou've exited the admin chat channel."));
             }
         }
 

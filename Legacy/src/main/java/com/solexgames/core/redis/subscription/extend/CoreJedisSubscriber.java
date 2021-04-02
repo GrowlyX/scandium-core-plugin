@@ -397,7 +397,7 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
 
                         potPlayer.getPlayer().sendMessage(new String[] {
                                 "  ",
-                                Color.translate("&aThanks for syncing your account! You have been given the &2✔ &7(Verified) &atag!"),
+                                Color.translate("&aThanks for syncing your account! You've been given the &2✔ &7(Verified) &atag!"),
                                 Color.translate("&aYour account has been synced to &b" + discord + "&a."),
                                 "  "
                         });

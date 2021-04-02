@@ -26,7 +26,7 @@ public class ToggleStaffMessagesCommand extends BaseCommand {
         }
 
         if (potPlayer.isCanSeeStaffMessages()) {
-            player.sendMessage(Color.translate("&cYou have disabled staff messages."));
+            player.sendMessage(Color.translate("&cYou've disabled staff messages."));
             potPlayer.setCanSeeStaffMessages(false);
         } else {
             player.sendMessage(Color.translate("&aYou can now see staff messages."));

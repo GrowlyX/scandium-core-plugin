@@ -23,6 +23,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @Getter
@@ -98,18 +99,21 @@ public class PlayerManager {
     public void vanishPlayer(Player player) {
         PotPlayer vanishedPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
-        Bukkit.getOnlinePlayers()
-                .stream()
-                .filter(player1 -> player1 != player)
-                .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
-                .filter(Objects::nonNull)
-                .filter(potPlayer -> potPlayer.getActiveGrant().getRank().getWeight() < vanishedPotPlayer.getActiveGrant().getRank().getWeight())
-                .forEach(potPlayer -> potPlayer.getPlayer().hidePlayer(player));
+        CompletableFuture.runAsync(() -> {
+            Bukkit.getOnlinePlayers()
+                    .stream()
+                    .filter(player1 -> player1 != player)
+                    .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
+                    .filter(Objects::nonNull)
+                    .filter(potPlayer -> potPlayer.getActiveGrant().getRank().getWeight() < vanishedPotPlayer.getActiveGrant().getRank().getWeight())
+                    .forEach(potPlayer -> potPlayer.getPlayer().hidePlayer(player));
+        });
 
         CorePlugin.getInstance().getNMS().removeExecute(player);
 
         vanishedPotPlayer.setVanished(true);
         vanishedPotPlayer.setupPlayerTag();
+        vanishedPotPlayer.setupPlayerList();
 
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
         ChatColor mainColor = network.getMainColor();
@@ -122,18 +126,21 @@ public class PlayerManager {
     public void vanishPlayerRaw(Player player) {
         PotPlayer vanishedPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
-        Bukkit.getOnlinePlayers()
-                .stream()
-                .filter(player1 -> player1 != player)
-                .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
-                .filter(Objects::nonNull)
-                .filter(potPlayer -> potPlayer.getActiveGrant().getRank().getWeight() < vanishedPotPlayer.getActiveGrant().getRank().getWeight())
-                .forEach(potPlayer -> potPlayer.getPlayer().hidePlayer(player));
+        CompletableFuture.runAsync(() -> {
+            Bukkit.getOnlinePlayers()
+                    .stream()
+                    .filter(player1 -> player1 != player)
+                    .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
+                    .filter(Objects::nonNull)
+                    .filter(potPlayer -> potPlayer.getActiveGrant().getRank().getWeight() < vanishedPotPlayer.getActiveGrant().getRank().getWeight())
+                    .forEach(potPlayer -> potPlayer.getPlayer().hidePlayer(player));
+        });
 
         CorePlugin.getInstance().getNMS().removeExecute(player);
 
         vanishedPotPlayer.setVanished(true);
         vanishedPotPlayer.setupPlayerTag();
+        vanishedPotPlayer.setupPlayerList();
 
         CorePlugin.getInstance().getServerManager().getVanishedPlayers().add(player);
     }
@@ -205,7 +212,7 @@ public class PlayerManager {
         potPlayer.getModModeBoard().deleteBoard();
         potPlayer.setModModeBoard(null);
 
-        player.sendMessage(Color.translate(ChatColor.RED + "You have exited in moderation mode."));
+        player.sendMessage(Color.translate(ChatColor.RED + "You've exited moderation mode."));
 
         StaffUtil.sendAlert(player, "unmodmoded");
     }

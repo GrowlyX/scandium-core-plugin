@@ -26,10 +26,10 @@ public class ToggleAutoModModeCommand extends BaseCommand {
         }
 
         if (potPlayer.isAutoModMode()) {
-            player.sendMessage(Color.translate("&cYou have disabled auto mod mode."));
+            player.sendMessage(Color.translate("&cYou've disabled auto mod mode."));
             potPlayer.setAutoModMode(false);
         } else {
-            player.sendMessage(Color.translate("&aYou have enabled auto mod mode."));
+            player.sendMessage(Color.translate("&aYou've enabled auto mod mode."));
             potPlayer.setAutoModMode(true);
         }
 

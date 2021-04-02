@@ -21,7 +21,7 @@ public class ToggleTipsCommand extends BaseCommand {
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
         if (potPlayer.isCanSeeTips()) {
-            player.sendMessage(Color.translate("&cYou have disabled tip broadcasts."));
+            player.sendMessage(Color.translate("&cYou've disabled tip broadcasts."));
             potPlayer.setCanSeeTips(false);
         } else {
             player.sendMessage(Color.translate("&aYou can now see tip broadcasts."));

@@ -32,7 +32,7 @@ public final class ExperienceUtil {
 
         if (potPlayer != null) {
             potPlayer.setExperience(potPlayer.getExperience() + amount);
-            player.sendMessage(serverType.getSecondaryColor() + "You have received " + serverType.getMainColor() + amount + serverType.getSecondaryColor() + " Experience!");
+            player.sendMessage(serverType.getSecondaryColor() + "You've received " + serverType.getMainColor() + amount + serverType.getSecondaryColor() + " Experience!");
         }
     }
 

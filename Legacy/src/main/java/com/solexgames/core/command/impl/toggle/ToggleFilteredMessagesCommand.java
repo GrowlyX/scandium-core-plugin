@@ -26,7 +26,7 @@ public class ToggleFilteredMessagesCommand extends BaseCommand {
         }
 
         if (potPlayer.isCanSeeFiltered()) {
-            player.sendMessage(Color.translate("&cYou have disabled filtered messages."));
+            player.sendMessage(Color.translate("&cYou've disabled filtered messages."));
             potPlayer.setCanSeeFiltered(false);
         } else {
             player.sendMessage(Color.translate("&aYou can now see filtered messages."));

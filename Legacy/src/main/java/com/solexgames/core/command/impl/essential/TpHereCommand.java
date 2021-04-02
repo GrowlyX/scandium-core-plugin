@@ -38,7 +38,7 @@ public class TpHereCommand extends BaseCommand {
             if (target != null) {
                 target.teleport(player.getLocation());
                 player.sendMessage(Color.translate(secondColor + "Teleported " + target.getDisplayName() + secondColor + " to your location."));
-                target.sendMessage(Color.translate(secondColor + "You have been teleported to " + target.getDisplayName() + secondColor + "."));
+                target.sendMessage(Color.translate(secondColor + "You've been teleported to " + target.getDisplayName() + secondColor + "."));
 
                 StaffUtil.sendAlert(player, "teleported " + target.getName() + " to themselves");
             } else {

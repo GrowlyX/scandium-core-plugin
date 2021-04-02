@@ -31,10 +31,10 @@ public class StaffChatCommand extends BaseCommand {
         if (args.length == 0) {
             if (potPlayer.getChannel() == null || !potPlayer.getChannel().equals(ChatChannelType.STAFF)) {
                 potPlayer.setChannel(ChatChannelType.STAFF);
-                player.sendMessage(Color.translate("&aYou have entered the staff chat channel."));
+                player.sendMessage(Color.translate("&aYou've entered the staff chat channel."));
             } else {
                 potPlayer.setChannel(null);
-                player.sendMessage(Color.translate("&cYou have exited the staff chat channel."));
+                player.sendMessage(Color.translate("&cYou've exited the staff chat channel."));
             }
         }
 

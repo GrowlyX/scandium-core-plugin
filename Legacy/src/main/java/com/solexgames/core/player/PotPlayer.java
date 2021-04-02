@@ -87,13 +87,9 @@ public class PotPlayer {
     private boolean isFrozen = false;
     private boolean isSynced = false;
     private boolean isLoaded = false;
-    private boolean isSocialSpy = false;
+
     private boolean isAutoVanish = false;
     private boolean isAutoModMode = false;
-    private boolean currentlyMuted;
-    private boolean currentlyRestricted;
-    private boolean currentlyBlacklisted;
-    private boolean currentlyOnline;
 
     private ScoreBoard modModeBoard;
 
@@ -115,6 +111,11 @@ public class PotPlayer {
     private boolean isReasonEditing = false;
     private PunishmentType reasonType = null;
     private String reasonTarget = null;
+
+    private boolean currentlyMuted;
+    private boolean currentlyRestricted;
+    private boolean currentlyBlacklisted;
+    private boolean currentlyOnline;
 
     private LanguageType language;
     private PermissionAttachment attachment;
@@ -319,13 +320,6 @@ public class PotPlayer {
 
             this.name = this.getName();
             CompletableFuture.runAsync(() -> {
-                if ((((List<String>) profile.get("allGrants")).isEmpty()) || (profile.get("allGrants") == null)) {
-                    this.allGrants.add(new Grant(null, Objects.requireNonNull(Rank.getDefault()), new Date().getTime(), -1L, "Automatic Grant (Default)", true, true));
-                } else {
-                    List<String> allGrants = ((List<String>) profile.get("allGrants"));
-                    allGrants.forEach(s -> this.allGrants.add(CorePlugin.GSON.fromJson(s, Grant.class)));
-                }
-
                 if (profile.getBoolean("canSeeStaffMessages") != null) {
                     this.canSeeStaffMessages = profile.getBoolean("canSeeStaffMessages");
                 }
@@ -398,6 +392,12 @@ public class PotPlayer {
                     this.media.setInstagram(profile.getString("instagram"));
                 } else {
                     this.media.setInstagram("N/A");
+                }
+                if ((((List<String>) profile.get("allGrants")).isEmpty()) || (profile.get("allGrants") == null)) {
+                    this.allGrants.add(new Grant(null, Objects.requireNonNull(Rank.getDefault()), new Date().getTime(), -1L, "Automatic Grant (Default)", true, true));
+                } else {
+                    List<String> allGrants = ((List<String>) profile.get("allGrants"));
+                    allGrants.forEach(s -> this.allGrants.add(CorePlugin.GSON.fromJson(s, Grant.class)));
                 }
                 if ((profile.getString("appliedPrefix") != null) && !profile.getString("appliedPrefix").equals("Default")) {
                     this.appliedPrefix = Prefix.getByName(profile.getString("appliedPrefix"));
@@ -540,8 +540,11 @@ public class PotPlayer {
         this.resetPermissions();
         this.setupPermissions();
         this.setupDisplay();
-        this.setupPlayerTag();
-        this.setupPlayerList();
+
+        Bukkit.getScheduler().runTaskLaterAsynchronously(CorePlugin.getInstance(), () -> {
+            this.setupPlayerTag();
+            this.setupPlayerList();
+        }, 38L);
     }
 
     public void setupDisplay() {
@@ -561,13 +564,15 @@ public class PotPlayer {
     }
 
     public void setupPermissions() {
-        this.getAllGrants().stream()
-                .filter(grant -> grant != null && grant.isActive() && (grant.isApplicable() || grant.isGlobal()))
-                .forEach(grant -> {
-                    grant.getRank().getPermissions().forEach(s -> this.attachment.setPermission(s.replace("*", ""), !s.startsWith("*")));
-                    grant.getRank().getInheritance().stream().map(Rank::getByUuid).filter(Objects::nonNull).forEach(rank -> rank.getPermissions().forEach(s -> this.attachment.setPermission(s.replace("*", ""), !s.startsWith("*"))));
-                });
-        this.getUserPermissions().forEach(s -> this.attachment.setPermission(s.replace("*", ""), !s.startsWith("*")));
+        CompletableFuture.runAsync(() -> {
+            this.getAllGrants().stream()
+                    .filter(grant -> grant != null && grant.isActive() && (grant.isApplicable() || grant.isGlobal()))
+                    .forEach(grant -> {
+                        grant.getRank().getPermissions().forEach(s -> this.attachment.setPermission(s.replace("*", ""), !s.startsWith("*")));
+                        grant.getRank().getInheritance().stream().map(Rank::getByUuid).filter(Objects::nonNull).forEach(rank -> rank.getPermissions().forEach(s -> this.attachment.setPermission(s.replace("*", ""), !s.startsWith("*"))));
+                    });
+            this.getUserPermissions().forEach(s -> this.attachment.setPermission(s.replace("*", ""), !s.startsWith("*")));
+        });
 
         this.player.recalculatePermissions();
     }
@@ -622,7 +627,7 @@ public class PotPlayer {
                     if (this.getAppliedPrefix() == null) this.appliedPrefix = Prefix.getByName("Liked");
                     if (player != null) {
                         player.sendMessage(Color.translate("&aThanks for voting for us on &6NameMC&a!"));
-                        player.sendMessage(Color.translate("&aYou have been granted the &b✔ &7(Liked)&a prefix!"));
+                        player.sendMessage(Color.translate("&aYou've been granted the &b✔ &7(Liked)&a prefix!"));
                     }
                 }
             } else {
@@ -630,7 +635,7 @@ public class PotPlayer {
                     this.hasVoted = false;
                     this.getAllPrefixes().remove("Liked");
 
-                    player.sendMessage(Color.translate("&cYour permission to access the &b✔ &7(Liked) &ctag has been revoked as you have unliked our server on NameMC!"));
+                    player.sendMessage(Color.translate("&cYour permission to access the &b✔ &7(Liked) &ctag has been revoked as You've unliked our server on NameMC!"));
                     player.sendMessage(Color.translate("&cTo gain your tag back, like us on NameMC again!"));
                 }
             }
