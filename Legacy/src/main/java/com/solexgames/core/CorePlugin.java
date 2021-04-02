@@ -169,29 +169,13 @@ public final class CorePlugin extends JavaPlugin {
         ANTI_CMD_SPAM = this.getConfig().getBoolean("settings.anti-command-spam");
         STAFF_ALERTS_COMMAND = this.getConfig().getBoolean("settings.staff-command-alerts");
 
-        if (this.getServer().getPluginManager().isPluginEnabled("ProtocolLib")) chatInterceptor = new ProtocolChatInterceptor(); else this.getLogger().info("[Protocol] Could not find ProtocolLib! Chat tab block will not work without it!");
-        if (this.getServer().getPluginManager().isPluginEnabled("LunarClient-API")) {
-            this.lunar = new LunarClientHook();
-        } else {
-            this.getLogger().info("[Protocol] Could not find LunarClient-API! The /lunar command will not work without it!");
-        }
-
-        if (this.getServer().getVersion().contains("1.7")) {
-            this.NMS = new NMSAccess_v1_7();
-        } else if (this.getServer().getVersion().contains("1.8")) {
-            this.NMS = new NMSAccess_v1_8();
-        } else if (this.getServer().getVersion().contains("1.16")) {
-            this.NMS = new NMSAccess_v1_16();
-        }
-
-        this.getLogger().info("[Bukkit] Hooked into Bukkit version " + this.getServer().getVersion() + "!");
+        this.setupHooks();
 
         this.serverName = this.getConfig().getString("server-id");
         this.debugging = false;
         this.disallow = false;
 
         this.subscriptions = new RedisSubscriptions();
-
         this.coreDatabase = new Database();
         this.redisManager = new RedisManager(new RedisSettings(
                 this.databaseConfig.getString("redis.host"),
@@ -213,10 +197,29 @@ public final class CorePlugin extends JavaPlugin {
 
         this.setupExtra();
 
-        this.getRedisThread().execute(() -> this.getRedisManager().write(RedisUtil.onServerOnline()));
+        RedisUtil.writeAsync(RedisUtil.onServerOnline());
         Bukkit.getScheduler().runTaskLater(this, () -> CAN_JOIN = true, 5 * 20L);
 
         this.logInformation();
+    }
+
+    private void setupHooks() {
+        if (this.getServer().getPluginManager().isPluginEnabled("ProtocolLib")) chatInterceptor = new ProtocolChatInterceptor(); else this.getLogger().info("[Protocol] Could not find ProtocolLib! Chat tab block will not work without it!");
+        if (this.getServer().getPluginManager().isPluginEnabled("LunarClient-API")) {
+            this.lunar = new LunarClientHook();
+        } else {
+            this.getLogger().info("[Protocol] Could not find LunarClient-API! The /lunar command will not work without it!");
+        }
+
+        if (this.getServer().getVersion().contains("1.7")) {
+            this.NMS = new NMSAccess_v1_7();
+        } else if (this.getServer().getVersion().contains("1.8")) {
+            this.NMS = new NMSAccess_v1_8();
+        } else if (this.getServer().getVersion().contains("1.16")) {
+            this.NMS = new NMSAccess_v1_16();
+        }
+
+        this.getLogger().info("[Bukkit] Hooked into Bukkit version " + this.getServer().getVersion() + "!");
     }
 
     public void setupExtra() {
@@ -230,6 +233,7 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("feed").setExecutor(new FeedCommand());
         this.getCommand("heal").setExecutor(new HealCommand());
         this.getCommand("tppos").setExecutor(new TpPosCommand());
+        this.getCommand("socialspy").setExecutor(new SocialSpyCommand());
         this.getCommand("sudo").setExecutor(new SudoCommand());
         this.getCommand("sudoall").setExecutor(new SudoAllCommand());
         this.getCommand("tphere").setExecutor(new TpHereCommand());

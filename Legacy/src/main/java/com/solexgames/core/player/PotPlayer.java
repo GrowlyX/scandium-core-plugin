@@ -76,9 +76,6 @@ public class PotPlayer {
     private boolean canSeeTips = true;
     private boolean canAcceptingFriendRequests = true;
 
-    private ItemStack[] itemHistory;
-    private ItemStack[] armorHistory;
-
     private boolean canReport = true;
     private boolean canRequest = true;
     private boolean hasVoted = false;
@@ -87,9 +84,18 @@ public class PotPlayer {
     private boolean isFrozen = false;
     private boolean isSynced = false;
     private boolean isLoaded = false;
+    private boolean isSocialSpy = false;
 
     private boolean isAutoVanish = false;
     private boolean isAutoModMode = false;
+
+    private boolean currentlyMuted;
+    private boolean currentlyRestricted;
+    private boolean currentlyBlacklisted;
+    private boolean currentlyOnline;
+
+    private ItemStack[] itemHistory;
+    private ItemStack[] armorHistory;
 
     private ScoreBoard modModeBoard;
 
@@ -111,11 +117,6 @@ public class PotPlayer {
     private boolean isReasonEditing = false;
     private PunishmentType reasonType = null;
     private String reasonTarget = null;
-
-    private boolean currentlyMuted;
-    private boolean currentlyRestricted;
-    private boolean currentlyBlacklisted;
-    private boolean currentlyOnline;
 
     private LanguageType language;
     private PermissionAttachment attachment;

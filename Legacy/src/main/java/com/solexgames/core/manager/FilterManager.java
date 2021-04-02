@@ -75,6 +75,10 @@ public class FilterManager {
             });
         }
 
+        if (!atomicBoolean.get()) {
+            this.handleSocialSpy(player, target, message);
+        }
+
         return atomicBoolean.get();
     }
 
@@ -111,6 +115,11 @@ public class FilterManager {
                     atomicBoolean.set(true);
                 }
 
+                Matcher otherIpMatcher = FilterManager.OTHER_IP_REGEX.matcher(word);
+                if (otherIpMatcher.matches()) {
+                    atomicBoolean.set(true);
+                }
+
                 Matcher urlMatcher = FilterManager.URL_REGEX.matcher(word);
                 if (urlMatcher.matches()) {
                     atomicBoolean.set(true);
@@ -122,26 +131,32 @@ public class FilterManager {
     }
 
     private void handleAlert(Player player, String message) {
+        PotPlayer targetPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+
         Bukkit.getOnlinePlayers()
                 .stream()
                 .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
-                .filter(PotPlayer::isCanSeeFiltered)
-                .filter(potPlayer -> potPlayer.getPlayer().hasPermission("scandium.staff"))
-                .forEach(potPlayer -> {
-                    PotPlayer targetPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-                    potPlayer.getPlayer().sendMessage(Color.translate("&c[Filtered] &e" + targetPlayer.getColorByRankColor() + targetPlayer.getName() + "&7: &e" + message));
-                });
+                .filter(potPlayer -> potPlayer.isCanSeeFiltered() && potPlayer.getPlayer().hasPermission("scandium.staff"))
+                .forEach(potPlayer -> potPlayer.getPlayer().sendMessage(Color.translate("&c[Filtered] &e" + targetPlayer.getColorByRankColor() + targetPlayer.getName() + "&7: &e") + message));
+    }
+
+    private void handleSocialSpy(Player player, String target, String message) {
+        PotPlayer targetPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+
+        Bukkit.getOnlinePlayers()
+                .stream()
+                .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
+                .filter(potPlayer -> potPlayer.isSocialSpy() && potPlayer.getPlayer().hasPermission("scandium.socialspy"))
+                .forEach(potPlayer -> potPlayer.getPlayer().sendMessage(Color.translate("&c[Social Spy] &7(" + targetPlayer.getName() + " -> " + target + ")" + "&7: &e") + message));
     }
 
     private void handleDmAlert(Player player, String target, String message) {
+        PotPlayer targetPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+
         Bukkit.getOnlinePlayers()
                 .stream()
                 .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
-                .filter(PotPlayer::isCanSeeFiltered)
-                .filter(potPlayer -> potPlayer.getPlayer().hasPermission("scandium.staff"))
-                .forEach(potPlayer -> {
-                    PotPlayer targetPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-                    potPlayer.getPlayer().sendMessage(Color.translate("&c[Filtered] &7(" + targetPlayer.getName() + " -> " + target + ")" + "&7: &e" + message));
-                });
+                .filter(potPlayer -> potPlayer.isCanSeeFiltered() && potPlayer.getPlayer().hasPermission("scandium.staff"))
+                .forEach(potPlayer -> potPlayer.getPlayer().sendMessage(Color.translate("&c[Filtered] &7(" + targetPlayer.getName() + " -> " + target + ")" + "&7: &e") + message));
     }
 }
