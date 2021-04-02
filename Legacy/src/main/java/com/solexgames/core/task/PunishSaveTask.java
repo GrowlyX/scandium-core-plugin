@@ -4,6 +4,8 @@ import com.solexgames.core.CorePlugin;
 import com.solexgames.core.player.punishment.Punishment;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.concurrent.CompletableFuture;
+
 /**
  * @author GrowlyX
  * @since March 2021
@@ -17,6 +19,6 @@ public class PunishSaveTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        Punishment.getAllPunishments().forEach(Punishment::savePunishment);
+        CompletableFuture.runAsync(() -> Punishment.getAllPunishments().forEach(Punishment::savePunishment));
     }
 }

@@ -21,12 +21,8 @@ public class GrantExpireTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        CorePlugin.getInstance().getPlayerManager().getAllProfiles().forEach((uuid, potPlayer) -> potPlayer.getAllGrants()
-                .stream()
-                .filter(Objects::nonNull)
-                .filter(Grant::isExpired)
-                .filter(Grant::isActive)
-                .filter(grant -> !grant.isPermanent())
+        CorePlugin.getInstance().getPlayerManager().getAllProfiles().forEach((uuid, potPlayer) -> potPlayer.getAllGrants().stream()
+                .filter(grant -> grant != null && grant.isExpired() && grant.isActive() && !grant.isPermanent())
                 .forEach(grant -> {
                     grant.setActive(false);
                     potPlayer.setupPlayer();

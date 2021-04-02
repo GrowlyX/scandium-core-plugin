@@ -31,6 +31,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.PermissionAttachment;
+import org.bukkit.scoreboard.Scoreboard;
 
 import java.net.InetAddress;
 import java.util.*;
@@ -97,6 +98,7 @@ public class PotPlayer {
     private ItemStack[] itemHistory;
     private ItemStack[] armorHistory;
 
+    private Scoreboard previousBoard;
     private ScoreBoard modModeBoard;
 
     private boolean isGrantEditing = false;
@@ -320,6 +322,31 @@ public class PotPlayer {
             }
 
             this.name = this.getName();
+
+            CorePlugin.getInstance().getPunishmentManager().getPunishments().stream()
+                    .filter(punishment -> punishment.getTarget().toString().equals(this.uuid.toString()))
+                    .forEach(this.punishments::add);
+
+            this.getPunishments().stream()
+                    .filter(Punishment::checkIfActive)
+                    .forEach(punishment -> {
+                        switch (punishment.getPunishmentType()) {
+                            case MUTE:
+                                this.currentlyMuted = true;
+                                break;
+                            case BLACKLIST:
+                                this.restrictionPunishment = punishment;
+                                this.currentlyBlacklisted = true;
+                                this.currentlyRestricted = true;
+                                break;
+                            case IPBAN:
+                            case BAN:
+                                this.currentlyRestricted = true;
+                                this.restrictionPunishment = punishment;
+                                break;
+                        }
+                    });
+
             CompletableFuture.runAsync(() -> {
                 if (profile.getBoolean("canSeeStaffMessages") != null) {
                     this.canSeeStaffMessages = profile.getBoolean("canSeeStaffMessages");
@@ -446,35 +473,6 @@ public class PotPlayer {
             RedisUtil.writeAsync(RedisUtil.addGlobalPlayer(this));
 
             CorePlugin.getInstance().getPlayerManager().getAllSyncCodes().put(this.syncCode, this.getName());
-
-            CompletableFuture.runAsync(() -> {
-                CorePlugin.getInstance().getPunishmentManager().getPunishments()
-                        .stream()
-                        .filter(punishment -> punishment.getTarget().equals(this.uuid))
-                        .forEach(punishment -> this.punishments.add(punishment));
-
-                this.getPunishments()
-                        .stream()
-                        .filter(Punishment::isActive)
-                        .filter(punishment -> !punishment.isRemoved())
-                        .forEach(punishment -> {
-                            switch (punishment.getPunishmentType()) {
-                                case MUTE:
-                                    this.currentlyMuted = true;
-                                    break;
-                                case BLACKLIST:
-                                    this.restrictionPunishment = punishment;
-                                    this.currentlyBlacklisted = true;
-                                    this.currentlyRestricted = true;
-                                    break;
-                                case IPBAN:
-                                case BAN:
-                                    this.currentlyRestricted = true;
-                                    this.restrictionPunishment = punishment;
-                                    break;
-                            }
-                        });
-            });
 
             this.currentlyOnline = true;
             this.hasLoaded = true;

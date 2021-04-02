@@ -10,6 +10,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * @author GrowlyX
@@ -19,15 +20,13 @@ import java.util.UUID;
 public class PunishExpireTask extends BukkitRunnable {
 
     public PunishExpireTask() {
-        this.runTaskTimerAsynchronously(CorePlugin.getInstance(), 20L, 10 * 20L);
+        this.runTaskTimerAsynchronously(CorePlugin.getInstance(), 20L, 20L);
     }
 
     @Override
     public void run() {
-        Punishment.getAllPunishments()
-                .stream()
-                .filter(Objects::nonNull)
-                .filter(punishment -> punishment.isActive() && punishment.checkIfActive())
+        CompletableFuture.runAsync(() -> Punishment.getAllPunishments().stream()
+                .filter(punishment -> punishment != null && punishment.checkIfActive())
                 .forEach(punishment -> {
                     punishment.setActive(false);
 
@@ -50,6 +49,6 @@ public class PunishExpireTask extends BukkitRunnable {
                                 break;
                         }
                     }
-                });
+                }));
     }
 }

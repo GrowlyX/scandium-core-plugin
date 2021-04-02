@@ -52,6 +52,8 @@ public class PlayerListener implements Listener {
         }
 
         CorePlugin.getInstance().getPlayerManager().setupPlayer(event);
+
+        event.allow();
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -82,10 +84,10 @@ public class PlayerListener implements Listener {
         potPlayer.onAfterDataLoad();
 
         CompletableFuture.runAsync(() -> {
-            CorePlugin.getInstance().getServerManager().getVanishedPlayers().stream()
+            Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getServerManager().getVanishedPlayers().stream()
                     .map(player -> CorePlugin.getInstance().getPlayerManager().getPlayer(player))
                     .filter(potPlayer1 -> potPlayer.getActiveGrant().getRank().getWeight() < potPlayer1.getActiveGrant().getRank().getWeight())
-                    .forEach(player -> event.getPlayer().hidePlayer(player.getPlayer()));
+                    .forEach(player -> event.getPlayer().hidePlayer(player.getPlayer())), 35L);
 
             if (MANAGER.isClearChatJoin()) {
                 for (int lines = 0; lines < 250; lines++) {
@@ -524,7 +526,7 @@ public class PlayerListener implements Listener {
                 } else {
                     RedisUtil.writeAsync(RedisUtil.onDisconnect(event.getPlayer().getDisplayName()));
                 }
-            }, 60);
+            }, 49L);
         }
     }
 }

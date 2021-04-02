@@ -25,7 +25,7 @@ public class SocialSpyCommand extends BaseCommand {
             return false;
         }
 
-        if (potPlayer.isAutoVanish()) {
+        if (potPlayer.isSocialSpy()) {
             player.sendMessage(Color.translate("&cYou've disabled social spy."));
             potPlayer.setSocialSpy(false);
         } else {

@@ -72,23 +72,20 @@ public class ModSuiteListener implements Listener {
             if (potPlayer.isStaffMode()) {
                 if (item != null) {
                     if (item.hasItemMeta()) {
-                        XMaterial xMaterial = XMaterial.matchXMaterial(item.getType());
+                        String materialName = item.getType().name().toLowerCase();
 
-                        switch (xMaterial) {
-                            case PACKED_ICE:
-                                PotPlayer targetPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
+                        if (materialName.contains("packed")) {
+                            PotPlayer targetPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
 
-                                if (potPlayer.getActiveGrant().getRank() != null) {
-                                    if (potPlayer.getActiveGrant().getRank().getWeight() >= targetPotPlayer.getActiveGrant().getRank().getWeight() || player.isOp()) {
-                                        potPlayer.getPlayer().chat("/freeze " + targetPotPlayer.getPlayer().getName());
-                                    } else {
-                                        player.sendMessage(Color.translate("&cYou cannot freeze this player as their rank weight is higher than yours!"));
-                                    }
+                            if (potPlayer.getActiveGrant().getRank() != null) {
+                                if (potPlayer.getActiveGrant().getRank().getWeight() >= targetPotPlayer.getActiveGrant().getRank().getWeight() || player.isOp()) {
+                                    potPlayer.getPlayer().chat("/freeze " + targetPotPlayer.getPlayer().getName());
+                                } else {
+                                    player.sendMessage(Color.translate("&cYou cannot freeze this player as their rank weight is higher than yours!"));
                                 }
-                                break;
-                            case BOOK:
-                                player.sendMessage(Color.translate("&cThis feature is coming very soon!"));
-                                break;
+                            }
+                        } else if (materialName.contains("book")) {
+                            player.sendMessage(ChatColor.RED + "The feature you've just tried to perform is disabled.");
                         }
                     }
                 }
@@ -104,31 +101,27 @@ public class ModSuiteListener implements Listener {
             if (potPlayer.isStaffMode()) {
                 if (event.getItem() != null) {
                     if (event.getItem().hasItemMeta()) {
-                        XMaterial xMaterial = XMaterial.matchXMaterial(event.getItem().getType());
+                        String materialName = event.getItem().getType().name().toLowerCase();
 
-                        switch (xMaterial) {
-                            case COMPASS:
-                                event.getPlayer().setVelocity(event.getPlayer().getLocation().getDirection().multiply(2.5F));
-                                break;
-                            case SKELETON_SKULL:
-                                new StaffViewPaginatedMenu(event.getPlayer()).openMenu(event.getPlayer());
-                                break;
-                            case NETHER_STAR:
-                                Bukkit.getOnlinePlayers().stream()
-                                        .filter(player -> !player.hasPermission("scandium.staff"))
-                                        .filter(player -> player != event.getPlayer())
-                                        .findAny()
-                                        .ifPresent(player -> {
-                                            event.getPlayer().teleport(player.getLocation());
-                                            event.getPlayer().sendMessage(Color.translate("&aTeleported to &6" + player.getDisplayName() + "&a!"));
-                                        });
-                                break;
-                            case INK_SAC:
-                                event.getPlayer().performCommand("vanish");
-                                ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
-                                event.getPlayer().getInventory().setItem(8, new ItemBuilder((potPlayer.isVanished() ? XMaterial.LIME_DYE.parseMaterial() : XMaterial.LIGHT_GRAY_DYE.parseMaterial()), (potPlayer.isVanished() ? 10 : 8)).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + (potPlayer.isVanished() ? "Disable Vanish" : "Enable Vanish")).create());
-                                event.getPlayer().updateInventory();
-                                break;
+                        if (materialName.contains("compass")) {
+                            event.getPlayer().setVelocity(event.getPlayer().getLocation().getDirection().multiply(2.5F));
+                        } else if (materialName.contains("skull")) {
+                            new StaffViewPaginatedMenu(event.getPlayer()).openMenu(event.getPlayer());
+                        } else if (materialName.contains("star")) {
+                            Bukkit.getOnlinePlayers().stream()
+                                    .filter(player -> !player.hasPermission("scandium.staff") && player != event.getPlayer())
+                                    .findAny()
+                                    .ifPresent(player -> {
+                                        event.getPlayer().teleport(player.getLocation());
+                                        event.getPlayer().sendMessage(Color.translate("&aTeleported to &6" + player.getDisplayName() + "&a!"));
+                                    });
+                        } else if (materialName.contains("ink")) {
+                            event.getPlayer().performCommand("vanish");
+
+                            ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
+                            event.getPlayer().getInventory().setItem(8, new ItemBuilder((potPlayer.isVanished() ? XMaterial.LIME_DYE.parseMaterial() : XMaterial.LIGHT_GRAY_DYE.parseMaterial()), (potPlayer.isVanished() ? 10 : 8)).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + (potPlayer.isVanished() ? "Disable Vanish" : "Enable Vanish")).create());
+
+                            event.getPlayer().updateInventory();
                         }
                     }
                 }

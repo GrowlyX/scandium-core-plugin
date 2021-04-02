@@ -149,6 +149,8 @@ public class Punishment {
     public boolean checkIfActive() {
         if (this.isRemoved()) {
             return false;
+        } else if (this.isActive()) {
+            return true;
         } else if (this.isPermanent()) {
             return true;
         } else {
