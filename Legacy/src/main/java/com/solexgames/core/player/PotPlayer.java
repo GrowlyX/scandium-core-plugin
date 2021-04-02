@@ -517,7 +517,7 @@ public class PotPlayer {
     }
 
     public String getWarningMessage() {
-        return ChatColor.RED + "You currently have an active warning for " + this.warningPunishment.getReason() + ".\n" + ChatColor.RED + "This warning will expire in " + ChatColor.RED + ChatColor.BOLD.toString() + this.warningPunishment.getExpirationString() + ChatColor.RED + ".";
+        return ChatColor.RED + "You currently have an active warning for " + this.warningPunishment.getReason() + ".\n" + ChatColor.RED + "This warning will expire in " + ChatColor.RED + ChatColor.BOLD.toString() + this.warningPunishment.getDurationString() + ChatColor.RED + ".";
     }
 
     public String getRestrictionMessage() {

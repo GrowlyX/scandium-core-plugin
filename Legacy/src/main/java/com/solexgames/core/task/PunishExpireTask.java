@@ -26,7 +26,7 @@ public class PunishExpireTask extends BukkitRunnable {
     @Override
     public void run() {
         CompletableFuture.runAsync(() -> Punishment.getAllPunishments().stream()
-                .filter(punishment -> punishment != null && !punishment.isRemoved() && punishment.isActive() && (System.currentTimeMillis() <= punishment.getCreatedAt().getTime() + punishment.getPunishmentDuration()) && !punishment.isPermanent())
+                .filter(punishment -> punishment != null && !punishment.isRemoved() && punishment.isActive() && (System.currentTimeMillis() >= punishment.getCreatedAt().getTime() + punishment.getPunishmentDuration()) && !punishment.isPermanent())
                 .forEach(punishment -> {
                     punishment.setActive(false);
 
