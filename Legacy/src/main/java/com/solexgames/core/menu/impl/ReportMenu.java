@@ -71,7 +71,10 @@ public class ReportMenu extends AbstractInventoryMenu {
 
             if (reportType != null && potPlayer.isCanReport()) {
                 RedisUtil.writeAsync(RedisUtil.onReport(this.player, this.target, reportType.getName()));
-                CorePlugin.getInstance().getDiscordManager().sendReport(player, target, reportType.getName());
+
+                if (CorePlugin.getInstance().getDiscordManager().getClient() != null) {
+                    CorePlugin.getInstance().getDiscordManager().sendReport(player, target, reportType.getName());
+                }
 
                 potPlayer.setCanReport(false);
 
