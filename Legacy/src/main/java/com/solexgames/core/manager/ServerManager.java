@@ -17,8 +17,6 @@ public class ServerManager {
 
     private final long HEARTBEAT_CHECK_TIMEOUT = 15_000L;
 
-    private List<String> whitelistedPlayers;
-    private List<String> betaWhitelistedPlayers;
     private List<String> joinMessage;
     private List<String> staffInformation;
 
@@ -38,10 +36,6 @@ public class ServerManager {
     private long chatSlow;
 
     public ServerManager() {
-        this.whitelistedPlayers = CorePlugin.getInstance().getConfig().getStringList("whitelisted");
-
-        this.betaWhitelistedPlayers = CorePlugin.getInstance().getConfig().getStringList("beta-whitelisted");
-
         this.joinMessage = CorePlugin.getInstance().getConfig().getStringList("player-join.join-message.message");
         this.clearChatJoin = CorePlugin.getInstance().getConfig().getBoolean("player-join.clear-chat");
         this.joinMessageEnabled = CorePlugin.getInstance().getConfig().getBoolean("player-join.join-message.enabled");
@@ -76,7 +70,7 @@ public class ServerManager {
     public void setupServerType() {
         try {
             this.network = ServerType.valueOf(CorePlugin.getInstance().getConfig().getString("server.settings.server-id"));
-        } catch (Exception e) {
+        } catch (Exception ignored) {
             CorePlugin.getInstance().logConsole("&cYour Server ID is not correct! &7Please check your config and try again.");
             CorePlugin.getInstance().getServer().shutdown();
         }

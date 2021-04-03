@@ -24,12 +24,6 @@ public final class StringUtil {
         return start >= args.length ? "" : String.join(" ", Arrays.copyOfRange(args, start, args.length));
     }
 
-    public static void sendStaffAlert(Player player, String value) {
-        if (CorePlugin.getInstance().getConfig().getBoolean("operator-alerts")) {
-            CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onGlobalBroadcastPermission(Color.translate("&7&o[" + player.getName() + ": &e&o" + value + "&7&o]"), "scandium.operator.alerts")));
-        }
-    }
-
     public static void sendPrivateMessage(Player sender, Player target, String message) {
         String toMessage = ChatColor.GRAY + "(To " + target.getDisplayName() + ChatColor.GRAY + ") " + message;
         String fromMessage = ChatColor.GRAY + "(From " + sender.getDisplayName() + ChatColor.GRAY + ") " + message;
