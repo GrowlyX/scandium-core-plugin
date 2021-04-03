@@ -89,7 +89,8 @@
             <groupId>me.clip</groupId>
             <artifactId>placeholderapi</artifactId>
             <version>2.10.9</version>
-            <scope>provided</scope>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/PlaceholderAPI.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>club.minnced</groupId>
@@ -144,14 +145,6 @@
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/com.jcabi/jcabi-aspects -->
-        <dependency>
-            <groupId>com.jcabi</groupId>
-            <artifactId>jcabi-aspects</artifactId>
-            <version>0.22.6</version>
-        </dependency>
-
 
         <!-- Spigot maven dependencies -->
         <dependency>

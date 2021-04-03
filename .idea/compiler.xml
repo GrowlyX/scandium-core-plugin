@@ -8,11 +8,13 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="Bungee" />
-        <module name="Legacy" />
+        <module name="API" />
         <module name="Library" />
+        <module name="Legacy" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="API" target="1.8" />
       <module name="Bungee" target="1.8" />
       <module name="Legacy" target="1.8" />
       <module name="Library" target="1.8" />

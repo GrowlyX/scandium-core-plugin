@@ -2,11 +2,10 @@ package com.solexgames.core.hook.placeholder;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.player.PotPlayer;
-import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 
-public class PlaceholderAdapter extends PlaceholderExpansion {
+public class PlaceholderAdapter extends AbstractExpansion {
 
     @Override
     public @NotNull String getIdentifier() {

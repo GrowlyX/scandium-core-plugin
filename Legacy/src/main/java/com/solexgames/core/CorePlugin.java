@@ -9,6 +9,7 @@ import com.solexgames.core.hook.access.extend.NMSAccess_v1_7;
 import com.solexgames.core.hook.access.extend.NMSAccess_v1_8;
 import com.solexgames.core.hook.client.AbstractClientHook;
 import com.solexgames.core.hook.client.extend.LunarClientHook;
+import com.solexgames.core.hook.placeholder.AbstractExpansion;
 import com.solexgames.core.hook.placeholder.PlaceholderAdapter;
 import com.solexgames.core.hook.protocol.AbstractChatInterceptor;
 import com.solexgames.core.hook.protocol.extend.ProtocolChatInterceptor;
@@ -319,7 +320,7 @@ public final class CorePlugin extends JavaPlugin {
 
         new PunishmentStrings().setupMessages();
 
-        PlaceholderAdapter placeholderAdapter = new PlaceholderAdapter();
+        AbstractExpansion placeholderAdapter = new PlaceholderAdapter();
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             placeholderAdapter.register();
 
