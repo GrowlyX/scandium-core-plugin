@@ -322,7 +322,7 @@ public final class CorePlugin extends JavaPlugin {
 
         AbstractExpansion placeholderAdapter = new PlaceholderAdapter();
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-            placeholderAdapter.register();
+//            placeholderAdapter.register();
 
             this.logConsole("&a[PAPI] &eSetup the &6ScandiumPAPI &ePlaceholderAPI Hook!");
         }

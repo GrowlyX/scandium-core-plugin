@@ -1,13 +1,13 @@
 package com.solexgames.core.hook.placeholder;
 
-import com.solexgames.core.CorePlugin;
+/*import com.solexgames.core.CorePlugin;
 import com.solexgames.core.player.PotPlayer;
 import org.bukkit.OfflinePlayer;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;*/
 
 public class PlaceholderAdapter extends AbstractExpansion {
 
-    @Override
+    /*@Override
     public @NotNull String getIdentifier() {
         return "scandium";
     }
@@ -84,5 +84,5 @@ public class PlaceholderAdapter extends AbstractExpansion {
         }
 
         return null;
-    }
+    }*/
 }
