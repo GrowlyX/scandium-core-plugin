@@ -48,7 +48,7 @@ import com.solexgames.core.task.*;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
 import com.solexgames.core.util.external.ConfigExternal;
-import com.solexgames.core.util.external.pagination.pagination.PaginationListener;
+import com.solexgames.core.listener.PaginationListener;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.http.client.HttpClient;

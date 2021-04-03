@@ -1,4 +1,4 @@
-package com.solexgames.core.util.external.pagination.pagination;
+package com.solexgames.core.listener;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.util.external.pagination.Button;

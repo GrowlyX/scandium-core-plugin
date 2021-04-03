@@ -83,12 +83,12 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        potPlayer.onAfterDataLoad();
-
         CompletableFuture.runAsync(() -> {
-            Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getServerManager().getVanishedPlayers().stream()
+            potPlayer.onAfterDataLoad();
+
+            Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> Bukkit.getOnlinePlayers().stream()
                     .map(player -> CorePlugin.getInstance().getPlayerManager().getPlayer(player))
-                    .filter(potPlayer1 -> potPlayer.getActiveGrant().getRank().getWeight() < potPlayer1.getActiveGrant().getRank().getWeight())
+                    .filter(potPlayer1 -> potPlayer1.isVanished() && potPlayer.getActiveGrant().getRank().getWeight() < potPlayer1.getActiveGrant().getRank().getWeight())
                     .forEach(player -> event.getPlayer().hidePlayer(player.getPlayer())), 35L);
 
             if (MANAGER.isClearChatJoin()) {
@@ -485,8 +485,7 @@ public class PlayerListener implements Listener {
 
         Bukkit.getOnlinePlayers().stream()
                 .map(player1 -> CorePlugin.getInstance().getPlayerManager().getPlayer(player1))
-                .filter(Objects::nonNull)
-                .filter(potPlayer1 -> potPlayer1.isIgnoring(potPlayer.getPlayer()) && potPlayer.isCanSeeGlobalChat())
+                .filter(potPlayer1 -> potPlayer1 != null && potPlayer1.isIgnoring(potPlayer.getPlayer()) && potPlayer.isCanSeeGlobalChat())
                 .forEach(potPlayer1 -> potPlayer1.getPlayer().sendMessage(Color.translate(CorePlugin.CHAT_FORMAT
                         .replace("<prefix>", (potPlayer.getAppliedPrefix() != null ? potPlayer.getAppliedPrefix().getPrefix() + " " : ""))
                         .replace("<rank_prefix>", (potPlayer.getDisguiseRank() != null ? potPlayer.getDisguiseRank().getPrefix() : potPlayer.getActiveGrant().getRank().getPrefix()))
@@ -513,26 +512,28 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (potPlayer.isFrozen())
-            CorePlugin.getInstance().getPlayerManager().sendDisconnectFreezeMessage(event.getPlayer());
+        CompletableFuture.runAsync(() -> {
+            if (potPlayer.isFrozen())
+                CorePlugin.getInstance().getPlayerManager().sendDisconnectFreezeMessage(event.getPlayer());
 
-        if (potPlayer.isStaffMode()) {
-            player.getInventory().clear();
-            player.getInventory().setContents(potPlayer.getItemHistory());
-            player.getInventory().setArmorContents(potPlayer.getArmorHistory());
-        }
+            if (potPlayer.isStaffMode()) {
+                player.getInventory().clear();
+                player.getInventory().setContents(potPlayer.getItemHistory());
+                player.getInventory().setArmorContents(potPlayer.getArmorHistory());
+            }
 
-        CorePlugin.getInstance().getServerManager().getVanishedPlayers().remove(event.getPlayer());
-        potPlayer.savePlayerData();
+            CorePlugin.getInstance().getServerManager().getVanishedPlayers().remove(event.getPlayer());
+            potPlayer.savePlayerData();
 
-        if (event.getPlayer().hasPermission("scandium.staff")) {
-            Bukkit.getScheduler().runTaskLaterAsynchronously(CorePlugin.getInstance(), () -> {
-                if (CorePlugin.getInstance().getServerManager().getServer(event.getPlayer().getName()) != null) {
-                    RedisUtil.writeAsync(RedisUtil.onSwitchServer(event.getPlayer().getDisplayName(), CorePlugin.getInstance().getServerManager().getServer(event.getPlayer().getName()).getServerName()));
-                } else {
-                    RedisUtil.writeAsync(RedisUtil.onDisconnect(event.getPlayer().getDisplayName()));
-                }
-            }, 49L);
-        }
+            if (event.getPlayer().hasPermission("scandium.staff")) {
+                Bukkit.getScheduler().runTaskLaterAsynchronously(CorePlugin.getInstance(), () -> {
+                    if (CorePlugin.getInstance().getServerManager().getServer(event.getPlayer().getName()) != null) {
+                        RedisUtil.writeAsync(RedisUtil.onSwitchServer(event.getPlayer().getDisplayName(), CorePlugin.getInstance().getServerManager().getServer(event.getPlayer().getName()).getServerName()));
+                    } else {
+                        RedisUtil.writeAsync(RedisUtil.onDisconnect(event.getPlayer().getDisplayName()));
+                    }
+                }, 40L);
+            }
+        });
     }
 }

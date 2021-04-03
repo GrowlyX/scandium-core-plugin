@@ -31,6 +31,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.PermissionAttachment;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Scoreboard;
 
 import java.net.InetAddress;
@@ -154,12 +155,12 @@ public class PotPlayer {
         this.syncCode = SaltUtil.getRandomSaltedString(6);
         this.hasLoaded = false;
 
-        CorePlugin.getInstance().getPlayerManager().getAllProfiles().put(uuid, this);
+        CompletableFuture.runAsync(this::loadPlayerData);
 
-        this.loadPlayerData();
+        CorePlugin.getInstance().getPlayerManager().getAllProfiles().put(uuid, this);
     }
 
-    public void saveWithoutRemove() {
+    public Document getDocument(boolean removing) {
         Document document = new Document("_id", this.uuid);
 
         document.put("name", this.getName());
@@ -204,7 +205,7 @@ public class PotPlayer {
         document.put("isSynced", this.isSynced);
         document.put("hasVoted", this.hasVoted);
         document.put("language", (this.language != null ? this.language.getLanguageName() : LanguageType.ENGLISH.getLanguageName()));
-        document.put("currentlyOnline", this.currentlyOnline);
+        document.put("currentlyOnline", !removing);
 
         document.put("discord", this.media.getDiscord());
         document.put("twitter", this.media.getTwitter());
@@ -223,81 +224,20 @@ public class PotPlayer {
         document.put("ipAddress", CorePlugin.getInstance().getCryptoManager().encrypt(this.ipAddress));
         document.put("experience", this.experience);
 
-        CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true)));
+        return document;
+    }
+
+    public void saveWithoutRemove() {
+        CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), this.getDocument(false), new ReplaceOptions().upsert(true)));
     }
 
     public void savePlayerData() {
-        CorePlugin.getInstance().getPlayerManager().getAllNetworkProfiles().remove(this.uuid);
         RedisUtil.writeAsync(RedisUtil.removeGlobalPlayer(this.uuid));
 
-        Document document = new Document("_id", this.uuid);
-
-        document.put("name", this.getName());
-        document.put("uuid", this.uuid.toString());
-        document.put("canSeeStaffMessages", this.canSeeStaffMessages);
-        document.put("canSeeTips", this.canSeeTips);
-        document.put("canReceiveDms", this.canReceiveDms);
-        document.put("canSeeGlobalChat", this.canSeeGlobalChat);
-        document.put("canSeeFiltered", this.canSeeFiltered);
-        document.put("canReceiveDmsSounds", this.canReceiveDmsSounds);
-        document.put("canSeeBroadcasts", this.canSeeBroadcasts);
-        document.put("lastJoined", CorePlugin.FORMAT.format(new Date()));
-        document.put("firstJoined", this.firstJoin);
-        document.put("disguiseRank", (this.disguiseRank == null ? null : this.disguiseRank.getName()));
-
-        List<String> grantStrings = new ArrayList<>();
-        this.getAllGrants().forEach(grant -> grantStrings.add(grant.toJson()));
-
-        List<String> messages = new ArrayList<>();
-        this.getAllPurchasedMessages().forEach(grant -> messages.add(grant.typeName));
-
-        List<String> prefixStrings = new ArrayList<>(this.getAllPrefixes());
-
-        document.put("allGrants", grantStrings);
-        document.put("allMessages", messages);
-        document.put("allPrefixes", prefixStrings);
-        document.put("allPermissions", userPermissions);
-        document.put("allIgnored", this.allIgnoring);
-        if (this.appliedPrefix != null) {
-            document.put("appliedPrefix", this.appliedPrefix.getName());
-        } else {
-            document.put("appliedPrefix", "Default");
-        }
-        document.put("rankName", this.getActiveGrant().getRank().getName());
-        if (this.customColor != null) {
-            document.put("customColor", this.customColor.name());
-        } else {
-            document.put("customColor", null);
-        }
-        document.put("discordSyncCode", this.syncCode);
-        document.put("syncDiscord", this.syncDiscord);
-        document.put("isSynced", this.isSynced);
-        document.put("hasVoted", this.hasVoted);
-        document.put("language", (this.language != null ? this.language.getLanguageName() : LanguageType.ENGLISH.getLanguageName()));
-        document.put("currentlyOnline", false);
-
-        document.put("discord", this.media.getDiscord());
-        document.put("twitter", this.media.getTwitter());
-        document.put("instagram", this.media.getInstagram());
-        document.put("youtube", this.media.getYoutubeLink());
-
-        document.put("achievementData", CorePlugin.GSON.toJson(this.achievementData));
-        if (this.potionMessageType != null) {
-            document.put("potionMessageType", this.potionMessageType.getTypeName());
-        } else {
-            document.put("potionMessageType", "NORMAL");
-        }
-
-        document.put("autoVanish", this.isAutoVanish);
-        document.put("autoModMode", this.isAutoModMode);
-        document.put("ipAddress", CorePlugin.getInstance().getCryptoManager().encrypt(ipAddress));
-        document.put("experience", this.experience);
-
-        CorePlugin.getInstance().getMongoThread().execute(() ->
-                CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), document, new ReplaceOptions().upsert(true))
-        );
-
+        CorePlugin.getInstance().getPlayerManager().getAllNetworkProfiles().remove(this.uuid);
         CorePlugin.getInstance().getPlayerManager().getAllProfiles().remove(this.uuid);
+
+        CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), this.getDocument(true), new ReplaceOptions().upsert(true)));
     }
 
     public CompletableFuture<Document> fetchDocument() {
@@ -486,17 +426,15 @@ public class PotPlayer {
     }
 
     public void onAfterDataLoad() {
+        this.player = Bukkit.getPlayer(uuid);
+        this.attachment = this.player.addAttachment(JavaPlugin.getPlugin(CorePlugin.class));
+        this.gameProfile = CorePlugin.getInstance().getPlayerManager().getGameProfile(this.player);
+
+        if (this.player.hasPermission("scandium.staff") && !CorePlugin.getInstance().getPlayerManager().isOnline(this.player.getName())) {
+            RedisUtil.writeAsync(RedisUtil.onConnect(this.player));
+        }
+
         CompletableFuture.runAsync(() -> {
-            this.player = Bukkit.getPlayer(uuid);
-            this.attachment = this.player.addAttachment(CorePlugin.getPlugin(CorePlugin.class));
-            this.gameProfile = CorePlugin.getInstance().getPlayerManager().getGameProfile(this.player);
-
-            if (this.player.hasPermission("scandium.staff")) {
-                if (!CorePlugin.getInstance().getPlayerManager().isOnline(this.player.getName())) {
-                    RedisUtil.writeAsync(RedisUtil.onConnect(this.getPlayer()));
-                }
-            }
-
             if (CorePlugin.NAME_MC_REWARDS) {
                 this.checkVoting();
             }

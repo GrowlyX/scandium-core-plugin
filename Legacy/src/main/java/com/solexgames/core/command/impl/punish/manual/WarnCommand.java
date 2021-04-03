@@ -113,6 +113,7 @@ public class WarnCommand extends BaseCommand {
                             ));
                         } catch (Exception ignored) {
                             sender.sendMessage(ChatColor.RED + "That's not a valid duration!");
+                            ignored.printStackTrace();
                         }
                     }
                 }

@@ -103,31 +103,33 @@ public class PunishmentManager {
 
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(name);
 
-        if (potPlayer != null) {
-            switch (punishment.getPunishmentType()) {
-                case WARN:
-                    potPlayer.getPlayer().sendMessage(ChatColor.RED + "You were warned by a staff member for " + punishment.getReason() + ".");
-                    potPlayer.getPlayer().sendMessage(ChatColor.RED + "This punishment will expire in " + ChatColor.RED + ChatColor.BOLD.toString() + punishment.getDurationString() + ChatColor.RED + ".");
-                    break;
-                case MUTE:
-                    potPlayer.getPlayer().sendMessage(ChatColor.RED + "You were muted by a staff member for " + punishment.getReason() + ".");
-                    potPlayer.getPlayer().sendMessage(ChatColor.RED + "This punishment will expire in " + ChatColor.RED + ChatColor.BOLD.toString() + punishment.getDurationString() + ChatColor.RED + ".");
-                    potPlayer.setCurrentlyMuted(true);
-                    break;
-                case BLACKLIST:
-                    potPlayer.setCurrentlyRestricted(true);
-                    potPlayer.getPlayer().kickPlayer(Color.translate(PunishmentStrings.BLACK_LIST_MESSAGE.replace("<reason>", punishment.getReason())));
-                    break;
-                case IPBAN:
-                case BAN:
-                    potPlayer.setCurrentlyRestricted(true);
-                    potPlayer.getPlayer().kickPlayer((punishment.isPermanent() ? Color.translate(PunishmentStrings.BAN_MESSAGE_PERM.replace("<reason>", punishment.getReason())) : Color.translate(PunishmentStrings.BAN_MESSAGE_TEMP.replace("<reason>", punishment.getReason()).replace("<time>", punishment.getDurationString()))));
-                    break;
-                case KICK:
-                    potPlayer.getPlayer().kickPlayer(Color.translate(PunishmentStrings.KICK_MESSAGE.replace("<reason>", punishment.getReason())));
-                    break;
+        Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () -> {
+            if (potPlayer != null) {
+                switch (punishment.getPunishmentType()) {
+                    case WARN:
+                        potPlayer.getPlayer().sendMessage(ChatColor.RED + "You were warned by a staff member for " + punishment.getReason() + ".");
+                        potPlayer.getPlayer().sendMessage(ChatColor.RED + "This punishment will expire in " + ChatColor.RED + ChatColor.BOLD.toString() + punishment.getDurationString() + ChatColor.RED + ".");
+                        break;
+                    case MUTE:
+                        potPlayer.getPlayer().sendMessage(ChatColor.RED + "You were muted by a staff member for " + punishment.getReason() + ".");
+                        potPlayer.getPlayer().sendMessage(ChatColor.RED + "This punishment will expire in " + ChatColor.RED + ChatColor.BOLD.toString() + punishment.getDurationString() + ChatColor.RED + ".");
+                        potPlayer.setCurrentlyMuted(true);
+                        break;
+                    case BLACKLIST:
+                        potPlayer.setCurrentlyRestricted(true);
+                        potPlayer.getPlayer().kickPlayer(Color.translate(PunishmentStrings.BLACK_LIST_MESSAGE.replace("<reason>", punishment.getReason())));
+                        break;
+                    case IPBAN:
+                    case BAN:
+                        potPlayer.setCurrentlyRestricted(true);
+                        potPlayer.getPlayer().kickPlayer((punishment.isPermanent() ? Color.translate(PunishmentStrings.BAN_MESSAGE_PERM.replace("<reason>", punishment.getReason())) : Color.translate(PunishmentStrings.BAN_MESSAGE_TEMP.replace("<reason>", punishment.getReason()).replace("<time>", punishment.getDurationString()))));
+                        break;
+                    case KICK:
+                        potPlayer.getPlayer().kickPlayer(Color.translate(PunishmentStrings.KICK_MESSAGE.replace("<reason>", punishment.getReason())));
+                        break;
+                }
             }
-        }
+        });
     }
 
     public void handleUnPunishment(Document document, String message, Player player, PunishmentType punishmentType) {
@@ -190,14 +192,16 @@ public class PunishmentManager {
 
                     switch (punishment.getPunishmentType()) {
                         case MUTE:
+                            targetPlayer.sendMessage(ChatColor.RED + "You've been unmuted by a staff member.");
                             potPlayer.setCurrentlyMuted(false);
                             break;
                         case WARN:
-                            targetPlayer.sendMessage(ChatColor.RED + "Your current warning has been removed by Staff.");
+                            targetPlayer.sendMessage(ChatColor.RED + "Your warning has been removed by a staff member.");
                             break;
                         case BLACKLIST:
                         case IPBAN:
                         case BAN:
+                            targetPlayer.sendMessage(ChatColor.RED + "You've been unrestricted by a staff member.");
                             potPlayer.setCurrentlyRestricted(false);
                             break;
                     }

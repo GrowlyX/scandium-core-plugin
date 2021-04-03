@@ -72,7 +72,7 @@ public class GrantViewPaginatedMenu extends PaginatedMenu {
                 arrayList.add("&eIssued Reason&7: " + network.getMainColor() + grant.getReason());
                 arrayList.add(network.getMainColor() + "&m------------------------------------");
 
-                return new ItemBuilder(XMaterial.LIME_WOOL.parseMaterial(), (grant.isActive() ? 5 : (grant.isExpired() ? 8 : 14)))
+                return new ItemBuilder(XMaterial.LIME_WOOL.parseMaterial(), (grant.isActive() ? 5 : (grant.isExpired() ? 1 : 14)))
                         .setDisplayName(ChatColor.RED + "#" + grant.getId())
                         .addLore(arrayList)
                         .create();
