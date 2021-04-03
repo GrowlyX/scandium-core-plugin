@@ -1,0 +1,4 @@
+name: Placeholders
+version: ${project.version}
+main: com.solexgames.papi.PlaceholderHook
+api-version: 1.16

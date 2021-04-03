@@ -34,8 +34,6 @@ import com.solexgames.core.command.impl.shutdown.ShutdownCommand;
 import com.solexgames.core.command.impl.test.TestCommand;
 import com.solexgames.core.command.impl.toggle.*;
 import com.solexgames.core.command.impl.warps.WarpCommand;
-import com.solexgames.core.command.impl.web.WebAnnouncementCommand;
-import com.solexgames.core.command.impl.web.WebAnnouncementDeleteCommand;
 import com.solexgames.core.database.Database;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.listener.ModSuiteListener;
@@ -290,13 +288,8 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("fly").setExecutor(new FlyCommand());
         this.getCommand("user").setExecutor(new UserCommand());
         this.getCommand("language").setExecutor(new LanguageCommand());
-
-        if (this.getServerManager().getNetwork().equals(ServerType.POTCLUBVIP)) {
-            this.getCommand("webannouncementdelete").setExecutor(new WebAnnouncementDeleteCommand());
-            this.getCommand("webannouncement").setExecutor(new WebAnnouncementCommand());
-        }
-
         this.getCommand("test").setExecutor(new TestCommand());
+
         this.getCommand("toggletips").setExecutor(new ToggleTipsCommand());
         this.getCommand("togglestaffmessages").setExecutor(new ToggleStaffMessagesCommand());
         this.getCommand("toggleautomodmode").setExecutor(new ToggleAutoModModeCommand());
@@ -400,9 +393,6 @@ public final class CorePlugin extends JavaPlugin {
         CAN_JOIN = false;
 
         RedisUtil.write(RedisUtil.onServerOffline());
-
-        this.getConfig().set("whitelisted", this.getServerManager().getWhitelistedPlayers());
-        this.getConfig().set("beta-whitelisted", this.getServerManager().getBetaWhitelistedPlayers());
 
         this.getServer().getOnlinePlayers().forEach(player -> player.kickPlayer(Color.translate("&cThe server is currently rebooting.\n&cPlease reconnect in a few minutes, or check discord for more information.")));
 
