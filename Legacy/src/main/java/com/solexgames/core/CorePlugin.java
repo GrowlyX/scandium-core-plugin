@@ -320,7 +320,7 @@ public final class CorePlugin extends JavaPlugin {
         new PunishmentStrings().setupMessages();
 
         PlaceholderAdapter placeholderAdapter = new PlaceholderAdapter();
-        if (placeholderAdapter.canRegister()) {
+        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             placeholderAdapter.register();
 
             this.logConsole("&a[PAPI] &eSetup the &6ScandiumPAPI &ePlaceholderAPI Hook!");
