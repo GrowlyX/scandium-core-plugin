@@ -7,6 +7,9 @@ softdepend: [ProtocolLib, dRobot, ScandiumPAPI]
 load: STARTUP
 api-version: "1.13"
 
+author: SolexGames
+website: https://www.solexgames.com
+
 commands:
   socialspy:
   checkdisguise:

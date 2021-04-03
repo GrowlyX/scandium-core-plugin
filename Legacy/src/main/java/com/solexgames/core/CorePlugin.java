@@ -9,6 +9,7 @@ import com.solexgames.core.hook.access.extend.NMSAccess_v1_7;
 import com.solexgames.core.hook.access.extend.NMSAccess_v1_8;
 import com.solexgames.core.hook.client.AbstractClientHook;
 import com.solexgames.core.hook.client.extend.LunarClientHook;
+import com.solexgames.core.hook.placeholder.PlaceholderAdapter;
 import com.solexgames.core.hook.protocol.AbstractChatInterceptor;
 import com.solexgames.core.hook.protocol.extend.ProtocolChatInterceptor;
 import com.solexgames.core.command.impl.CoreCommand;
@@ -317,6 +318,13 @@ public final class CorePlugin extends JavaPlugin {
             this.chatInterceptor.initializePacketInterceptor();
 
         new PunishmentStrings().setupMessages();
+
+        PlaceholderAdapter placeholderAdapter = new PlaceholderAdapter();
+        if (placeholderAdapter.canRegister()) {
+            placeholderAdapter.register();
+
+            this.logConsole("&a[PAPI] &eSetup the &6ScandiumPAPI &ePlaceholderAPI Hook!");
+        }
 
         this.registerListeners(
                 new PlayerListener(),
