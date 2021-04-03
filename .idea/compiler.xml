@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="Bungee" />
+        <module name="Placeholder" />
         <module name="API" />
         <module name="Library" />
         <module name="Legacy" />
@@ -19,6 +20,7 @@
       <module name="Legacy" target="1.8" />
       <module name="Library" target="1.8" />
       <module name="Non-Legacy" target="1.8" />
+      <module name="Placeholder" target="1.8" />
       <module name="Scandium" target="1.8" />
     </bytecodeTargetLevel>
   </component>

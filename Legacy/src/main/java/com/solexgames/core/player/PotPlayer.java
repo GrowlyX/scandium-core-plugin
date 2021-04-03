@@ -488,7 +488,7 @@ public class PotPlayer {
         this.setupPermissions();
         this.setupDisplay();
 
-        Bukkit.getScheduler().runTaskLaterAsynchronously(CorePlugin.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> {
             this.setupPlayerTag();
             this.setupPlayerList();
         }, 38L);

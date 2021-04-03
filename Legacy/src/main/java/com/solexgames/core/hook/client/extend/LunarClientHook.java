@@ -22,7 +22,7 @@ public class LunarClientHook extends AbstractClientHook {
 
     @Override
     public void sendNotification(Player player, String message) {
-        LunarClientAPI.getInstance().sendNotification(player, new LCNotification(message, Duration.ofSeconds(10), LCNotification.Level.INFO));
+        LunarClientAPI.getInstance().sendNotification(player, new LCNotification(message, Duration.ofSeconds(5), LCNotification.Level.INFO));
     }
 
     @Override
