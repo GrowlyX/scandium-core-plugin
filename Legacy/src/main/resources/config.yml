@@ -55,6 +55,7 @@ beta-whitelisted-can-join: false
 beta-whitelisted-msg: '&cThis server is currently whitelisted.\n&cPlease check our discord for more information.'
 
 settings:
+  license: ""
   color-gui: true
   namemc-rewards: true
   namemc-ip: "eu.potclub.vip"

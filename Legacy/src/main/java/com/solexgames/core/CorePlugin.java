@@ -36,7 +36,6 @@ import com.solexgames.core.command.impl.test.TestCommand;
 import com.solexgames.core.command.impl.toggle.*;
 import com.solexgames.core.command.impl.warps.WarpCommand;
 import com.solexgames.core.database.Database;
-import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.listener.ModSuiteListener;
 import com.solexgames.core.listener.PlayerListener;
 import com.solexgames.core.manager.*;
@@ -49,6 +48,7 @@ import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
 import com.solexgames.core.util.external.ConfigExternal;
 import com.solexgames.core.listener.PaginationListener;
+import com.solexgames.core.util.external.license.License;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.http.client.HttpClient;
@@ -131,6 +131,7 @@ public final class CorePlugin extends JavaPlugin {
 
     private final TPSUpdateTask tpsRunnable = new TPSUpdateTask();
 
+
     @Override
     public void onEnable() {
         instance = this;
@@ -138,6 +139,13 @@ public final class CorePlugin extends JavaPlugin {
         if (!this.getName().equals("Scandium")) {
             this.getServer().shutdown();
         }
+
+        /*
+        if (!(new License(this, this.getConfig().getString("settings.license"), "", "").verify())) {
+            this.getServer().shutdown();
+            return;
+        }
+        */
 
         FORMAT = new SimpleDateFormat("MM/dd/yyyy HH:mma");
         FORMAT.setTimeZone(TimeZone.getTimeZone("EST"));
@@ -316,8 +324,6 @@ public final class CorePlugin extends JavaPlugin {
 
         AbstractExpansion placeholderAdapter = new PlaceholderAdapter();
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-//            placeholderAdapter.register();
-
             this.logConsole("&a[PAPI] &eSetup the &6ScandiumPAPI &ePlaceholderAPI Hook!");
         }
 

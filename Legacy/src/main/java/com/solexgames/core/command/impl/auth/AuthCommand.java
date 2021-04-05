@@ -33,7 +33,7 @@ public class AuthCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
-        PotPlayer playerData = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
         if (!player.hasPermission("scandium.2fa")) {
             player.sendMessage(NO_PERMISSION);
@@ -41,7 +41,7 @@ public class AuthCommand extends BaseCommand {
         }
 
         CompletableFuture.runAsync(() -> {
-            if (playerData.isSetupSecurity() && !playerData.isVerify()) {
+            if (potPlayer.isSetupSecurity() && !potPlayer.isVerify()) {
                 GoogleAuthenticator authenticator = new GoogleAuthenticator();
                 GoogleAuthenticatorKey key = authenticator.createCredentials();
 
@@ -58,13 +58,14 @@ public class AuthCommand extends BaseCommand {
 
                     item.setDurability(view.getId());
 
-                    playerData.setLastItem(player.getItemInHand());
-                    playerData.setLastItemSlot(AuthUtil.getHotbarSlotOfItem(player.getItemInHand(), player));
+                    potPlayer.setLastItem(player.getItemInHand());
+                    potPlayer.setLastItemSlot(AuthUtil.getHotbarSlotOfItem(player.getItemInHand(), player));
                     player.setItemInHand(item.create());
 
-                    playerData.setVerify(true);
-                    playerData.setKey(key.getKey());
-                    playerData.saveWithoutRemove();
+                    potPlayer.setVerify(true);
+                    potPlayer.setHasSetup2FA(true);
+                    potPlayer.setKey(key.getKey());
+                    potPlayer.saveWithoutRemove();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -72,13 +73,13 @@ public class AuthCommand extends BaseCommand {
                 return;
             }
 
-            if (!playerData.isVerify()) {
+            if (!potPlayer.isVerify()) {
                 player.sendMessage(ChatColor.RED + "You've already verified yourself.");
                 return;
             }
 
             if (args.length == 0) {
-                player.sendMessage(Color.SECONDARY_COLOR + "Usage: /" + Color.MAIN_COLOR + label + ChatColor.WHITE + " <code>.");
+                player.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <code>.");
                 return;
             }
 
@@ -91,29 +92,29 @@ public class AuthCommand extends BaseCommand {
                 return;
             }
 
-            if (!AuthUtil.checkCode(playerData.getKey(), code)) {
+            if (!AuthUtil.checkCode(potPlayer.getKey(), code)) {
                 player.sendMessage(ChatColor.RED + "That's not a valid auth code.");
                 return;
             }
 
-            if (playerData.isSetupSecurity()) {
-                if (playerData.getLastItemSlot() != -1) {
-                    player.getInventory().setItem(playerData.getLastItemSlot(), playerData.getLastItem());
+            if (potPlayer.isSetupSecurity()) {
+                if (potPlayer.getLastItemSlot() != -1) {
+                    player.getInventory().setItem(potPlayer.getLastItemSlot(), potPlayer.getLastItem());
                 }
             }
 
             Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () -> AuthUtil.removeQrMapFromInventory(player));
 
-            playerData.setSetupSecurity(false);
-            playerData.setVerify(false);
+            potPlayer.setSetupSecurity(false);
+            potPlayer.setVerify(false);
 
-            player.sendMessage(ChatColor.GREEN + "You've successfully setup 2FA!");
-            player.sendMessage(ChatColor.GREEN + "Thanks for keeping your account secure!");
+            player.sendMessage(ChatColor.GREEN + "You've successfully verified yourself.");
+            player.sendMessage(ChatColor.GRAY + "Thanks for keeping your account secure!");
 
             long next = AuthUtil.parseTime("5h");
 
-            playerData.setNextAuth(next + System.currentTimeMillis());
-            playerData.saveWithoutRemove();
+            potPlayer.setNextAuth(next + System.currentTimeMillis());
+            potPlayer.saveWithoutRemove();
         });
 
         return false;

@@ -13,6 +13,8 @@ website: https://www.solexgames.com
 commands:
   auth:
     aliases: [2fa]
+  2fareset:
+    aliases: [reset2fa, resetauth]
   socialspy:
   checkdisguise:
   find:
@@ -77,10 +79,6 @@ commands:
     aliases: [chatslow]
   list:
     aliases: [who, online]
-  webannouncementdelete:
-    aliases: [wad]
-  webannouncement:
-    aliases: [walert]
   staffchat:
     aliases: [sc]
   options:
@@ -116,8 +114,6 @@ commands:
     aliases: [r]
   clearchat:
     aliases: [cc]
-  whitelist:
-    aliases: [wl, maintenance]
   mutechat:
     aliases: [mc]
   tppos:
