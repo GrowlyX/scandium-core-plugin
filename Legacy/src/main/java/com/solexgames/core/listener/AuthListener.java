@@ -23,7 +23,7 @@ public class AuthListener implements Listener {
     private boolean isAuth(Player player) {
         PotPlayer playerData = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
-        return playerData != null && (playerData.isVerify() || playerData.isSetupSecurity());
+        return playerData != null && (playerData.isVerify() || playerData.isSetupSecurity()) && player.hasPermission("scandium.2fa");
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

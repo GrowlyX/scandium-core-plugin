@@ -65,12 +65,10 @@ public class PlayerListener implements Listener {
                 if (potPlayer.isCurrentlyRestricted() && !isHub) {
                     event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, potPlayer.getRestrictionMessage());
                 } else {
-                    if (potPlayer.getPreviousIpAddress() == null) {
+                    if (potPlayer.getKey() == null) {
                         potPlayer.setSetupSecurity(true);
                     } else {
-                        if (potPlayer.getPreviousIpAddress().equals("")) {
-                            potPlayer.setSetupSecurity(true);
-                        } else if (System.currentTimeMillis() >= potPlayer.getNextAuth() || !potPlayer.getPreviousIpAddress().equals(event.getAddress().getHostAddress())) {
+                        if (System.currentTimeMillis() >= potPlayer.getNextAuth()) {
                             potPlayer.setVerify(true);
                         }
                     }
@@ -95,7 +93,7 @@ public class PlayerListener implements Listener {
         CompletableFuture.runAsync(() -> {
             potPlayer.onAfterDataLoad();
 
-            if (!potPlayer.isVerify() && potPlayer.getNextAuth() != -1) {
+            if (!potPlayer.isVerify() && potPlayer.getNextAuth() != -1 && potPlayer.getPlayer().hasPermission("scandium.2fa")) {
                 potPlayer.getPlayer().sendMessage("  ");
                 StringUtil.sendCenteredMessage(potPlayer.getPlayer(), Color.SECONDARY_COLOR + "Your next " + Color.MAIN_COLOR + ChatColor.BOLD.toString() + "2FA" + Color.SECONDARY_COLOR + " auth will be in:");
                 StringUtil.sendCenteredMessage(potPlayer.getPlayer(), ChatColor.DARK_AQUA + ChatColor.BOLD.toString() + DurationFormatUtils.formatDurationWords(potPlayer.getNextAuth() - System.currentTimeMillis(), true, true));
@@ -211,7 +209,7 @@ public class PlayerListener implements Listener {
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
         String message = event.getMessage();
 
-        if ((potPlayer.isVerify() || potPlayer.isSetupSecurity())) {
+        if ((potPlayer.isVerify() || potPlayer.isSetupSecurity()) && potPlayer.getPlayer().hasPermission("scandium.2fa")) {
             event.getPlayer().sendMessage(ChatColor.RED + "You cannot perform this action right now!");
             event.getPlayer().sendMessage(ChatColor.RED + "The only action you can perform is " + ChatColor.DARK_RED + "/2fa" + ChatColor.RED + "!");
 

@@ -35,7 +35,6 @@ public class CryptoManager {
     public String encrypt(String plainText) {
         Cipher encryptCipher;
         byte[] out;
-        
 
         try {
             KeySpec keySpec = new PBEKeySpec(this.secretKey.toCharArray(), CryptoManager.SALT, this.iterationCount);
@@ -57,6 +56,7 @@ public class CryptoManager {
     public String decrypt(String encryptedText) {
         Cipher decryptCipher;
         byte[] utf8;
+
         try {
             KeySpec keySpec = new PBEKeySpec(this.secretKey.toCharArray(), CryptoManager.SALT, this.iterationCount);
             SecretKey key = SecretKeyFactory.getInstance("PBEWithMD5AndDES").generateSecret(keySpec);

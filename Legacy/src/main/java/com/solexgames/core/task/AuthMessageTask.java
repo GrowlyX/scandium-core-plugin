@@ -43,6 +43,7 @@ public class AuthMessageTask extends BukkitRunnable {
         Bukkit.getOnlinePlayers().stream()
                 .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
                 .filter(Objects::nonNull)
+                .filter(potPlayer -> potPlayer.getPlayer().hasPermission("scandium.2fa"))
                 .forEach(this::sendAuthMessage);
     }
 

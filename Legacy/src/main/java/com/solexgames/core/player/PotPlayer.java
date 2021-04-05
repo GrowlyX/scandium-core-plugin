@@ -157,7 +157,7 @@ public class PotPlayer {
 
     public PotPlayer(UUID uuid, String name, InetAddress inetAddress) {
         this.uuid = uuid;
-        this.ipAddress = inetAddress.toString();
+        this.ipAddress = inetAddress.getHostAddress();
         this.name = name;
 
         this.media = new Media();
@@ -235,7 +235,7 @@ public class PotPlayer {
 
         document.put("autoVanish", this.isAutoVanish);
         document.put("autoModMode", this.isAutoModMode);
-        document.put("ipAddress", CorePlugin.getInstance().getCryptoManager().encrypt(this.ipAddress));
+        document.put("previousIpAddress", CorePlugin.getInstance().getCryptoManager().encrypt(this.ipAddress));
         document.put("experience", this.experience);
 
         return document;
@@ -332,8 +332,8 @@ public class PotPlayer {
                 if (profile.getBoolean("autoModMode") != null) {
                     this.isAutoModMode = profile.getBoolean("autoModMode");
                 }
-                if (profile.getString("ipAddress") != null) {
-                    this.previousIpAddress = CorePlugin.getInstance().getCryptoManager().decrypt(profile.getString("ipAddress"));
+                if (profile.getString("previousIpAddress") != null) {
+                    this.previousIpAddress = CorePlugin.getInstance().getCryptoManager().decrypt(profile.getString("previousIpAddress"));
                 } else {
                     this.previousIpAddress = "";
                 }

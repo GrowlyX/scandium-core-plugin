@@ -2,6 +2,7 @@ package com.solexgames.core.util;
 
 import com.solexgames.core.CorePlugin;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -28,7 +29,7 @@ public class AuthUtil {
         for (int i = 0; i < 9; i++) {
             ItemStack item = player.getInventory().getItem(i);
 
-            if (item != null && item.hasItemMeta() && item.getItemMeta().hasLore() && item.getItemMeta().getLore().get(0).contains("QR")) {
+            if (item != null && item.hasItemMeta() && item.getItemMeta().hasLore() && ChatColor.stripColor(item.getItemMeta().getDisplayName()).contains("QR")) {
                 player.getInventory().remove(item);
             }
         }
