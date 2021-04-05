@@ -310,6 +310,7 @@ public final class CorePlugin extends JavaPlugin {
             this.chatInterceptor.initializePacketInterceptor();
 
         new PunishmentStrings().setupMessages();
+        new Color().setupMessages();
 
         AbstractExpansion placeholderAdapter = new PlaceholderAdapter();
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {

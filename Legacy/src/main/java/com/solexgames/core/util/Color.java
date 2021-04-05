@@ -13,8 +13,8 @@ import java.util.stream.Collectors;
 
 public final class Color {
 
-/*    public static final ChatColor MAIN_COLOR = CorePlugin.getInstance().getServerManager().getNetwork().getMainColor();
-    public static final ChatColor SECONDARY_COLOR = CorePlugin.getInstance().getServerManager().getNetwork().getSecondaryColor();*/
+    public static ChatColor MAIN_COLOR;
+    public static ChatColor SECONDARY_COLOR;
 
     public static String translate(String text) {
         return ChatColor.translateAlternateColorCodes('&', text);
@@ -22,5 +22,10 @@ public final class Color {
 
     public static List<String> translate(List<String> text) {
         return text.stream().map(Color::translate).collect(Collectors.toList());
+    }
+
+    public void setupMessages() {
+        MAIN_COLOR = CorePlugin.getInstance().getServerManager().getNetwork().getMainColor();
+        SECONDARY_COLOR = CorePlugin.getInstance().getServerManager().getNetwork().getSecondaryColor();
     }
 }

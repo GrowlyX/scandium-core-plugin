@@ -89,6 +89,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="Maven: com.warrenstrange:googleauth:0.4.3" level="project" />
     <orderEntry type="module-library">
       <library name="Maven: org.spigotmc:spigot-1_16-api:1.16.5-R0.1-SNAPSHOT">
         <CLASSES>

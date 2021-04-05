@@ -1,8 +1,10 @@
 package com.solexgames.core.manager;
 
 import com.solexgames.core.CorePlugin;
+import com.solexgames.core.util.builder.ItemBuilder;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.Material;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -33,6 +35,7 @@ public class CryptoManager {
     public String encrypt(String plainText) {
         Cipher encryptCipher;
         byte[] out;
+        
 
         try {
             KeySpec keySpec = new PBEKeySpec(this.secretKey.toCharArray(), CryptoManager.SALT, this.iterationCount);

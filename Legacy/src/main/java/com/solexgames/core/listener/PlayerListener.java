@@ -10,11 +10,10 @@ import com.solexgames.core.menu.impl.punish.PunishSelectDurationMenu;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.media.MediaConstants;
 import com.solexgames.core.player.punishment.PunishmentStrings;
-import com.solexgames.core.util.Color;
-import com.solexgames.core.util.DateUtil;
-import com.solexgames.core.util.RedisUtil;
-import com.solexgames.core.util.StringUtil;
+import com.solexgames.core.util.*;
+import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.lang.time.DurationFormatUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.EntityType;
@@ -66,6 +65,14 @@ public class PlayerListener implements Listener {
                 if (potPlayer.isCurrentlyRestricted() && !isHub) {
                     event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, potPlayer.getRestrictionMessage());
                 } else {
+                    if (potPlayer.getPreviousIpAddress().equals("")) {
+                        potPlayer.setSetupSecurity(true);
+                    } else {
+                        if (System.currentTimeMillis() >= potPlayer.getNextAuth() || !potPlayer.getPreviousIpAddress().equals(event.getAddress().getHostAddress())) {
+                            potPlayer.setVerify(true);
+                        }
+                    }
+
                     event.allow();
                 }
             } else {
@@ -85,6 +92,13 @@ public class PlayerListener implements Listener {
 
         CompletableFuture.runAsync(() -> {
             potPlayer.onAfterDataLoad();
+
+            if (!potPlayer.isVerify() && potPlayer.getNextAuth() != -1) {
+                potPlayer.getPlayer().sendMessage("  ");
+                StringUtil.sendCenteredMessage(potPlayer.getPlayer(), Color.SECONDARY_COLOR + "Your next " + Color.MAIN_COLOR + ChatColor.BOLD.toString() + "2FA" + Color.SECONDARY_COLOR + " auth will be in:");
+                StringUtil.sendCenteredMessage(potPlayer.getPlayer(), ChatColor.DARK_AQUA + ChatColor.BOLD.toString() + DurationFormatUtils.formatDurationWords(potPlayer.getNextAuth() - System.currentTimeMillis(), true, true));
+                potPlayer.getPlayer().sendMessage("  ");
+            }
 
             Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> Bukkit.getOnlinePlayers().stream()
                     .map(player -> CorePlugin.getInstance().getPlayerManager().getPlayer(player))
@@ -194,6 +208,13 @@ public class PlayerListener implements Listener {
         Player player = event.getPlayer();
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
         String message = event.getMessage();
+
+        if ((potPlayer.isVerify() || potPlayer.isSetupSecurity())) {
+            event.getPlayer().sendMessage(ChatColor.RED + "You cannot perform this action right now!");
+            event.getPlayer().sendMessage(ChatColor.RED + "The only action you can perform is " + ChatColor.DARK_RED + "/2fa" + ChatColor.RED + "!");
+
+            event.setCancelled(true);
+        }
 
         boolean filtered = CorePlugin.getInstance().getFilterManager().isMessageFiltered(player, message);
         if (filtered) {
@@ -401,20 +422,25 @@ public class PlayerListener implements Listener {
     }
 
     private void checkChannel(AsyncPlayerChatEvent event, Player player, PotPlayer potPlayer) {
-        if (event.getMessage().startsWith("!") && event.getPlayer().hasPermission(ChatChannelType.STAFF.getPermission())) {
+        if (event.getMessage().startsWith("! ") && event.getPlayer().hasPermission(ChatChannelType.STAFF.getPermission())) {
             event.setCancelled(true);
-            CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onChatChannel(ChatChannelType.STAFF, event.getMessage().replace("!", ""), event.getPlayer())));
-        } else if (event.getMessage().startsWith("#") && event.getPlayer().hasPermission(ChatChannelType.ADMIN.getPermission())) {
+
+            RedisUtil.writeAsync(RedisUtil.onChatChannel(ChatChannelType.STAFF, event.getMessage().replace("! ", ""), event.getPlayer()));
+        } else if (event.getMessage().startsWith("# ") && event.getPlayer().hasPermission(ChatChannelType.ADMIN.getPermission())) {
             event.setCancelled(true);
-            CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onChatChannel(ChatChannelType.ADMIN, event.getMessage().replace("#", ""), event.getPlayer())));
-        } else if (event.getMessage().startsWith("$") && event.getPlayer().hasPermission(ChatChannelType.DEV.getPermission())) {
+
+            RedisUtil.writeAsync(RedisUtil.onChatChannel(ChatChannelType.ADMIN, event.getMessage().replace("# ", ""), event.getPlayer()));
+        } else if (event.getMessage().startsWith("$ ") && event.getPlayer().hasPermission(ChatChannelType.DEV.getPermission())) {
             event.setCancelled(true);
-            CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onChatChannel(ChatChannelType.DEV, event.getMessage().replace("$", ""), event.getPlayer())));
-        } else if (event.getMessage().startsWith("@") && event.getPlayer().hasPermission(ChatChannelType.HOST.getPermission())) {
+
+            RedisUtil.writeAsync(RedisUtil.onChatChannel(ChatChannelType.DEV, event.getMessage().replace("$ ", ""), event.getPlayer()));
+        } else if (event.getMessage().startsWith("@ ") && event.getPlayer().hasPermission(ChatChannelType.HOST.getPermission())) {
             event.setCancelled(true);
-            CorePlugin.getInstance().getRedisThread().execute(() -> CorePlugin.getInstance().getRedisManager().write(RedisUtil.onChatChannel(ChatChannelType.HOST, event.getMessage().replace("@", ""), event.getPlayer())));
+
+            RedisUtil.writeAsync(RedisUtil.onChatChannel(ChatChannelType.HOST, event.getMessage().replace("@ ", ""), event.getPlayer()));
         } else {
             long slowChat = CorePlugin.getInstance().getServerManager().getChatSlow();
+
             if ((System.currentTimeMillis() < CorePlugin.getInstance().getPlayerManager().getPlayer(player).getChatCooldown())) {
                 if (player.hasPermission("scandium.chat.cooldown.bypass")) {
                     checkThenSend(event, player, potPlayer, slowChat);
@@ -432,6 +458,18 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onCommand(PlayerCommandPreprocessEvent event) {
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer());
+
+        if (potPlayer == null) {
+            return;
+        }
+
+        if ((potPlayer.isVerify() || potPlayer.isSetupSecurity()) && !event.getMessage().startsWith("/2fa")) {
+            event.getPlayer().sendMessage(ChatColor.RED + "You cannot perform this action right now!");
+            event.getPlayer().sendMessage(ChatColor.RED + "The only action you can perform is " + ChatColor.DARK_RED + "/2fa" + ChatColor.RED + "!");
+
+            event.setCancelled(true);
+        }
+
         if (potPlayer.isFrozen()) {
             event.setCancelled(true);
             return;
@@ -507,6 +545,8 @@ public class PlayerListener implements Listener {
 
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer().getUniqueId());
         Player player = event.getPlayer();
+
+        AuthUtil.removeQrMapFromInventory(player);
 
         if (potPlayer == null) {
             return;

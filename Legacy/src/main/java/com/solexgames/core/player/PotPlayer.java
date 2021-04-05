@@ -55,6 +55,7 @@ public class PotPlayer {
     private UUID uuid;
     private Player player;
     private String ipAddress;
+    private String previousIpAddress;
     private Media media;
     private Prefix appliedPrefix;
 
@@ -66,6 +67,9 @@ public class PotPlayer {
     private String syncCode;
     private String syncDiscord;
     private String name;
+
+    private String key;
+    private long nextAuth;
 
     private Document profile;
 
@@ -129,6 +133,12 @@ public class PotPlayer {
     private long chatCooldown = 1L;
     private long commandCooldown = 1L;
 
+    public boolean setupSecurity = false;
+    public boolean verify = false;
+
+    private int lastItemSlot;
+    private ItemStack lastItem;
+
     private Date lastJoined;
 
     private String lastJoin;
@@ -165,6 +175,8 @@ public class PotPlayer {
 
         document.put("name", this.getName());
         document.put("uuid", this.uuid.toString());
+        document.put("nextAuth", this.nextAuth);
+        document.put("securityKey", this.key);
         document.put("canSeeStaffMessages", this.canSeeStaffMessages);
         document.put("canSeeTips", this.canSeeTips);
         document.put("canReceiveDms", this.canReceiveDms);
@@ -319,6 +331,17 @@ public class PotPlayer {
                 }
                 if (profile.getBoolean("autoModMode") != null) {
                     this.isAutoModMode = profile.getBoolean("autoModMode");
+                }
+                if (profile.getString("ipAddress") != null) {
+                    this.previousIpAddress = CorePlugin.getInstance().getCryptoManager().decrypt(profile.getString("ipAddress"));
+                } else {
+                    this.previousIpAddress = "";
+                }
+                if (profile.getString("privateKey") != null) {
+                    this.key = profile.getString("privateKey");
+                }
+                if (profile.getLong("nextAuth") != null) {
+                    this.nextAuth = profile.getLong("nextAuth");
                 }
                 if (profile.getBoolean("autoVanish") != null) {
                     this.isAutoVanish = profile.getBoolean("autoVanish");
