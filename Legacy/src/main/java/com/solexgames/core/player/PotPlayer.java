@@ -177,6 +177,7 @@ public class PotPlayer {
         document.put("name", this.getName());
         document.put("uuid", this.uuid.toString());
         document.put("nextAuth", this.nextAuth);
+        document.put("hasSetup2FA", this.hasSetup2FA);
         document.put("securityKey", this.key);
         document.put("canSeeStaffMessages", this.canSeeStaffMessages);
         document.put("canSeeTips", this.canSeeTips);

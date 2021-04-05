@@ -324,7 +324,6 @@ public final class CorePlugin extends JavaPlugin {
         new PunishmentStrings().setupMessages();
         new Color().setupMessages();
 
-        AbstractExpansion placeholderAdapter = new PlaceholderAdapter();
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             this.logConsole("&a[PAPI] &eSetup the &6ScandiumPAPI &ePlaceholderAPI Hook!");
         }
