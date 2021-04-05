@@ -3,6 +3,7 @@ package com.solexgames.core;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.solexgames.core.command.impl.auth.AuthCommand;
+import com.solexgames.core.command.impl.auth.ResetAuthCommand;
 import com.solexgames.core.command.impl.library.CheckDisguiseCommand;
 import com.solexgames.core.hook.access.AbstractNMSAccess;
 import com.solexgames.core.hook.access.extend.NMSAccess_v1_16;
@@ -297,6 +298,7 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("mutechat").setExecutor(new MuteChatCommand());
         this.getCommand("fly").setExecutor(new FlyCommand());
         this.getCommand("user").setExecutor(new UserCommand());
+        this.getCommand("2fareset").setExecutor(new ResetAuthCommand());
         this.getCommand("language").setExecutor(new LanguageCommand());
         this.getCommand("test").setExecutor(new TestCommand());
 
