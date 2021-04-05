@@ -43,21 +43,13 @@ public class GrantCommand extends BaseCommand {
                 return false;
             }
 
-            AtomicReference<Document> document = new AtomicReference<>();
-            CompletableFuture<Boolean> completableFuture = new CompletableFuture<>();
+            Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByUuid(uuid).orElse(null);
 
-            CompletableFuture.runAsync(() -> {
-                document.set(CorePlugin.getInstance().getPlayerManager().getDocumentByUuid(uuid).orElse(null));
-                completableFuture.complete(true);
-            });
-
-            completableFuture.thenRun(() -> {
-                if (document.get() != null) {
-                    new GrantMainPaginatedMenu(document.get(), player).openMenu(player);
-                } else {
-                    player.sendMessage(ChatColor.RED + "That player does not exist in our databasesw.");
-                }
-            });
+            if (document != null) {
+                new GrantMainPaginatedMenu(document, player).openMenu(player);
+            } else {
+                player.sendMessage(ChatColor.RED + "That player does not exist in our databases.");
+            }
         }
         return false;
     }

@@ -237,7 +237,7 @@ public class PlayerManager {
     }
 
     public Optional<Document> getDocumentByUuid(UUID uuid) {
-        return Optional.ofNullable(CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("uuid", uuid.toString())).first());
+        return Optional.ofNullable(CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("_id", uuid)).first());
     }
 
     public void unVanishPlayer(Player player) {

@@ -35,7 +35,7 @@ public class HealCommand extends BaseCommand {
             player.setHealth(20);
             player.sendMessage(Color.translate(secondColor + "Set your health level to " + mainColor + "20" + secondColor +"."));
 
-            StaffUtil.sendAlert(player, "fed");
+            StaffUtil.sendAlert(player, "healed");
         }
         if (args.length > 0) {
             Player target = Bukkit.getPlayerExact(args[0]);
@@ -43,7 +43,7 @@ public class HealCommand extends BaseCommand {
                 target.setHealth(20);
                 player.sendMessage(Color.translate(secondColor + "Set " + target.getDisplayName() + " health level to " + mainColor + "20" + secondColor +"."));
 
-                StaffUtil.sendAlert(player, "fed " + target.getName());
+                StaffUtil.sendAlert(player, "healed " + target.getName());
             } else {
                 player.sendMessage(Color.translate("&cThat player does not exist."));
             }

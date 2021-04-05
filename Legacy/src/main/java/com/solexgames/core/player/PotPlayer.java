@@ -77,18 +77,18 @@ public class PotPlayer {
     private boolean canSeeFiltered = true;
     private boolean canSeeTips = true;
     private boolean canAcceptingFriendRequests = true;
-
     private boolean canReport = true;
     private boolean canRequest = true;
+
     private boolean hasVoted = false;
     private boolean hasActiveWarning = false;
+
     private boolean isVanished = false;
     private boolean isStaffMode = false;
     private boolean isFrozen = false;
     private boolean isSynced = false;
     private boolean isLoaded = false;
     private boolean isSocialSpy = false;
-
     private boolean isAutoVanish = false;
     private boolean isAutoModMode = false;
 
@@ -180,7 +180,7 @@ public class PotPlayer {
         this.getAllGrants().forEach(grant -> grantStrings.add(grant.toJson()));
 
         List<String> messages = new ArrayList<>();
-        this.getAllPurchasedMessages().forEach(grant -> messages.add(grant.typeName));
+        this.getAllPurchasedMessages().forEach(message -> messages.add(message.getTypeName()));
 
         List<String> prefixStrings = new ArrayList<>(this.getAllPrefixes());
 
@@ -189,6 +189,7 @@ public class PotPlayer {
         document.put("allPrefixes", prefixStrings);
         document.put("allPermissions", userPermissions);
         document.put("allIgnored", this.allIgnoring);
+
         if (this.appliedPrefix != null) {
             document.put("appliedPrefix", this.appliedPrefix.getName());
         } else {
@@ -200,6 +201,7 @@ public class PotPlayer {
         } else {
             document.put("customColor", null);
         }
+
         document.put("discordSyncCode", this.syncCode);
         document.put("syncDiscord", this.syncDiscord);
         document.put("isSynced", this.isSynced);

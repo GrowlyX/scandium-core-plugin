@@ -61,6 +61,7 @@ public class CorePlugin extends Plugin {
 
     private String maintenanceMotd;
     private String normalMotd;
+    private String maintenanceMessage;
 
     private Executor redisExecutor;
 
@@ -96,6 +97,9 @@ public class CorePlugin extends Plugin {
         this.whitelistedPlayers.addAll(this.configuration.getStringList("whitelistedPlayers"));
 
         this.maintenanceMotd = Color.translate(this.configuration.getString("motd.maintenance")
+                .replace("<bar>", Character.toString('⎜'))
+                .replace("<nl>", "\n"));
+        this.maintenanceMessage = Color.translate(this.configuration.getString("maintenance-string")
                 .replace("<bar>", Character.toString('⎜'))
                 .replace("<nl>", "\n"));
         this.normalMotd = Color.translate(this.configuration.getString("motd.normal")

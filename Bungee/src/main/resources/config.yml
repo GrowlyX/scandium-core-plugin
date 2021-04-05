@@ -8,3 +8,4 @@ whitelistedPlayers:
 motd:
   maintenance: "&3&lPvPLounge &7<bar> &fNorth America<nl>&bMore information at &3discord.pvplounge.com&b."
   normal: "&3&lPvPLounge &7<bar> &fNorth America<nl> &7* &3Season 1 &bof &3Practice &bis now &a&lLIVE&b!"
+maintenance-string: ""

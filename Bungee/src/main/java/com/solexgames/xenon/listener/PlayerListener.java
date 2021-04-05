@@ -51,7 +51,7 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onLogin(PreLoginEvent event) {
         if (plugin.isMaintenance() && !plugin.getWhitelistedPlayers().contains(event.getConnection().getName())) {
-            event.setCancelReason(TextComponent.fromLegacyText(ChatColor.RED + "Sorry, but the server is currently under maintenance.\nWe should be back online shortly."));
+            event.setCancelReason(TextComponent.fromLegacyText(CorePlugin.getInstance().getMaintenanceMessage()));
             event.setCancelled(true);
         }
     }
