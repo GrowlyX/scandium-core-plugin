@@ -65,7 +65,7 @@ public class PlayerListener implements Listener {
                 if (potPlayer.isCurrentlyRestricted() && !isHub) {
                     event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, potPlayer.getRestrictionMessage());
                 } else {
-                    if (!potPlayer.isHasSetup2FA()) {
+                    if (potPlayer.getKey() != null) {
                         potPlayer.setSetupSecurity(true);
                     } else {
                         if (System.currentTimeMillis() >= potPlayer.getNextAuth() || !potPlayer.getPreviousIpAddress().equals(event.getAddress().getHostAddress())) {
@@ -209,7 +209,7 @@ public class PlayerListener implements Listener {
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
         String message = event.getMessage();
 
-        if ((potPlayer.isVerify() || potPlayer.isSetupSecurity()) && potPlayer.getPlayer().hasPermission("scandium.2fa")) {
+        if ((potPlayer.isVerify() || potPlayer.getKey() == null) && potPlayer.getPlayer().hasPermission("scandium.2fa")) {
             event.getPlayer().sendMessage(ChatColor.RED + "You cannot perform this action right now!");
             event.getPlayer().sendMessage(ChatColor.RED + "The only action you can perform is " + ChatColor.DARK_RED + "/2fa" + ChatColor.RED + "!");
 
@@ -219,10 +219,11 @@ public class PlayerListener implements Listener {
         boolean filtered = CorePlugin.getInstance().getFilterManager().isMessageFiltered(player, message);
         if (filtered) {
             if (player.hasPermission("scandium.filter.bypass")) {
-                player.sendMessage(Color.translate("&cBe careful, that message would have been filtered!"));
+                player.sendMessage(ChatColor.RED + "Be careful, that message would have been filtered!");
             } else {
                 event.setCancelled(true);
-                player.sendMessage(Color.translate("&cThat message is not allowed!"));
+
+                player.sendMessage(ChatColor.RED + "That message has been filtered as it has a blocked term in it.");
                 return;
             }
         }
@@ -359,13 +360,15 @@ public class PlayerListener implements Listener {
         }
 
         if (potPlayer.getChannel() != null) {
-            event.setCancelled(true);
             RedisUtil.writeAsync(RedisUtil.onChatChannel(potPlayer.getChannel(), message, player));
+
+            event.setCancelled(true);
             return;
         }
 
         if (potPlayer.isCurrentlyRestricted()) {
-            player.sendMessage(Color.translate("&cYou cannot chat as you are currently restricted."));
+            player.sendMessage(ChatColor.RED + "You cannot chat as you are currently restricted.");
+
             event.setCancelled(true);
             return;
         }
@@ -402,19 +405,19 @@ public class PlayerListener implements Listener {
                 event.setCancelled(true);
                 switch (potPlayer.getLanguage()) {
                     case ENGLISH:
-                        player.sendMessage(Color.translate("&cThe chat is currently muted. Please try chatting again later."));
+                        player.sendMessage(ChatColor.RED + "The chat is currently muted. Please try chatting again later.");
                         break;
                     case FRENCH:
-                        player.sendMessage(Color.translate("&cLe chat est actuellement désactivé. Veuillez réessayer plus tard."));
+                        player.sendMessage(ChatColor.RED + "Le chat est actuellement désactivé. Veuillez réessayer plus tard.");
                         break;
                     case ITALIAN:
-                        player.sendMessage(Color.translate("&cLa chat è attualmente disattivata. Prova a chattare di nuovo più tardi."));
+                        player.sendMessage(ChatColor.RED + "La chat è attualmente disattivata. Prova a chattare di nuovo più tardi.");
                         break;
                     case GERMAN:
-                        player.sendMessage(Color.translate("&cDer Chat ist derzeit stummgeschaltet. Bitte versuchen Sie es später noch einmal."));
+                        player.sendMessage(ChatColor.RED + "Der Chat ist derzeit stummgeschaltet. Bitte versuchen Sie es später noch einmal.");
                         break;
                     case SPANISH:
-                        player.sendMessage(Color.translate("&cEl chat está silenciado actualmente. Intenta chatear de nuevo más tarde."));
+                        player.sendMessage(ChatColor.RED + "El chat está silenciado actualmente. Intenta chatear de nuevo más tarde.");
                         break;
                 }
             }
@@ -463,7 +466,7 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if ((potPlayer.isVerify() || potPlayer.isSetupSecurity()) && !event.getMessage().startsWith("/2fa")) {
+        if ((potPlayer.isVerify() || potPlayer.getKey() == null) && !event.getMessage().startsWith("/2fa") && !event.getMessage().startsWith("/auth")) {
             event.getPlayer().sendMessage(ChatColor.RED + "You cannot perform this action right now!");
             event.getPlayer().sendMessage(ChatColor.RED + "The only action you can perform is " + ChatColor.DARK_RED + "/2fa" + ChatColor.RED + "!");
 
@@ -476,16 +479,17 @@ public class PlayerListener implements Listener {
         }
 
         if (potPlayer.isCurrentlyRestricted() && !event.getMessage().startsWith("/discord")) {
-            event.getPlayer().sendMessage(Color.translate("&cYou cannot execute commands as you are currently banned."));
-            event.getPlayer().sendMessage(Color.translate("&cThe only command you can execute is &4/discord&c."));
+            event.getPlayer().sendMessage(ChatColor.RED + "You cannot perform this command as you are currently banned.");
+            event.getPlayer().sendMessage(ChatColor.RED + "The only command you can perform is " + ChatColor.DARK_RED + "/2fa" + ChatColor.RED + "!");
 
             event.setCancelled(true);
             return;
         }
 
         if (event.getMessage().contains(":") && !event.getPlayer().isOp()) {
+            event.getPlayer().sendMessage(ChatColor.RED + "You cannot execute commands with semi-colons.");
+
             event.setCancelled(true);
-            event.getPlayer().sendMessage(Color.translate("&cThat syntax is not accepted."));
         }
 
         if (CorePlugin.getInstance().getConfig().getBoolean("block-commands.enabled")) {
@@ -572,7 +576,7 @@ public class PlayerListener implements Listener {
                     } else {
                         RedisUtil.writeAsync(RedisUtil.onDisconnect(event.getPlayer().getDisplayName()));
                     }
-                }, 40L);
+                }, 47L);
             }
         });
     }

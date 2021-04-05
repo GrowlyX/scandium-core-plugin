@@ -41,7 +41,7 @@ public class AuthCommand extends BaseCommand {
         }
 
         CompletableFuture.runAsync(() -> {
-            if (potPlayer.isSetupSecurity() && !potPlayer.isVerify()) {
+            if (potPlayer.getKey() == null && !potPlayer.isVerify()) {
                 GoogleAuthenticator authenticator = new GoogleAuthenticator();
                 GoogleAuthenticatorKey key = authenticator.createCredentials();
 
