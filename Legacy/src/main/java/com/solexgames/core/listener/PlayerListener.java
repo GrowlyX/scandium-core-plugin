@@ -65,10 +65,12 @@ public class PlayerListener implements Listener {
                 if (potPlayer.isCurrentlyRestricted() && !isHub) {
                     event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, potPlayer.getRestrictionMessage());
                 } else {
-                    if (potPlayer.getPreviousIpAddress().equals("")) {
+                    if (potPlayer.getPreviousIpAddress() == null) {
                         potPlayer.setSetupSecurity(true);
                     } else {
-                        if (System.currentTimeMillis() >= potPlayer.getNextAuth() || !potPlayer.getPreviousIpAddress().equals(event.getAddress().getHostAddress())) {
+                        if (potPlayer.getPreviousIpAddress().equals("")) {
+                            potPlayer.setSetupSecurity(true);
+                        } else if (System.currentTimeMillis() >= potPlayer.getNextAuth() || !potPlayer.getPreviousIpAddress().equals(event.getAddress().getHostAddress())) {
                             potPlayer.setVerify(true);
                         }
                     }

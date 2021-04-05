@@ -11,6 +11,8 @@ author: SolexGames
 website: https://www.solexgames.com
 
 commands:
+  auth:
+    aliases: [2fa]
   socialspy:
   checkdisguise:
   find:

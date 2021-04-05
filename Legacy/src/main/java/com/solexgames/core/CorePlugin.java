@@ -2,6 +2,7 @@ package com.solexgames.core;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.solexgames.core.command.impl.auth.AuthCommand;
 import com.solexgames.core.command.impl.library.CheckDisguiseCommand;
 import com.solexgames.core.hook.access.AbstractNMSAccess;
 import com.solexgames.core.hook.access.extend.NMSAccess_v1_16;
@@ -232,6 +233,7 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("feed").setExecutor(new FeedCommand());
         this.getCommand("heal").setExecutor(new HealCommand());
         this.getCommand("tppos").setExecutor(new TpPosCommand());
+        this.getCommand("auth").setExecutor(new AuthCommand());
         this.getCommand("socialspy").setExecutor(new SocialSpyCommand());
         this.getCommand("sudo").setExecutor(new SudoCommand());
         this.getCommand("sudoall").setExecutor(new SudoAllCommand());
@@ -334,6 +336,7 @@ public final class CorePlugin extends JavaPlugin {
         new PunishSaveTask();
         new FrozenMessageTask();
         new BoardUpdateTask();
+        new AuthMessageTask();
         new ServerTimeoutTask();
 
         this.registerBukkitCommand();
