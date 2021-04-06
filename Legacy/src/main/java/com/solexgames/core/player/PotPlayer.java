@@ -70,7 +70,6 @@ public class PotPlayer {
 
     private String key;
     private long nextAuth;
-    private boolean hasSetup2FA;
 
     private Document profile;
 
@@ -87,6 +86,7 @@ public class PotPlayer {
 
     private boolean hasVoted = false;
     private boolean hasActiveWarning = false;
+    private boolean hasSetup2FA = false;
 
     private boolean isVanished = false;
     private boolean isStaffMode = false;

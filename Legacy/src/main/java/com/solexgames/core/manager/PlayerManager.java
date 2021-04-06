@@ -173,11 +173,18 @@ public class PlayerManager {
 
         player.updateInventory();
 
-        player.setAllowFlight(true);
-        player.setFlying(true);
-
         ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
         ChatColor secondColor = serverType.getSecondaryColor();
+
+        double pitch = (double) (player.getLocation().getPitch() + 90.0F) * 3.141592653589793D / 180.0D;
+        double yaw = (double) (player.getLocation().getYaw() + 90.0F) * 3.141592653589793D / 180.0D;
+
+        double xCoordinate = Math.sin(pitch) * Math.cos(yaw);
+        double yCoordinate = Math.sin(pitch) * Math.sin(yaw);
+        double zCoordinate = Math.cos(pitch) * 100.0D;
+
+        org.bukkit.util.Vector vector = new org.bukkit.util.Vector(xCoordinate, zCoordinate, yCoordinate);
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 1000000, 3));
 
         player.sendMessage(secondColor + "You are now in moderation mode.");
 
@@ -279,12 +286,12 @@ public class PlayerManager {
     public void unVanishPlayer(Player player) {
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
-        CompletableFuture.runAsync(() -> {
-            Bukkit.getOnlinePlayers()
-                    .stream()
-                    .filter(player1 -> player1 != player)
-                    .forEach(p -> p.showPlayer(player));
+        Bukkit.getOnlinePlayers()
+                .stream()
+                .filter(player1 -> player1 != player)
+                .forEach(p -> p.showPlayer(player));
 
+        CompletableFuture.runAsync(() -> {
             CorePlugin.getInstance().getNMS().addExecute(player);
 
             potPlayer.setVanished(false);
@@ -301,7 +308,7 @@ public class PlayerManager {
     }
 
     public void sendDisconnectFreezeMessage(Player target) {
-        this.sendToNetworkStaff("&3[S] &7[" + CorePlugin.getInstance().getServerName() + "&7] &3" + target.getDisplayName() + " &cdisconnected while frozen!");
+        this.sendToNetworkStaff("&3[S] &7[" + CorePlugin.getInstance().getServerName() + "&7] &3" + target.getDisplayName() + " &cdisconnected whilst being frozen!");
     }
 
     public void sendToNetworkStaff(String... strings) {
@@ -333,7 +340,7 @@ public class PlayerManager {
     }
 
     public void sendFreezeMessage(Player player) {
-        freezeMessage.forEach(s -> player.sendMessage(Color.translate(s)));
+        this.freezeMessage.forEach(s -> player.sendMessage(Color.translate(s)));
     }
 
     public NetworkPlayer getNetworkPlayer(Player player) {
