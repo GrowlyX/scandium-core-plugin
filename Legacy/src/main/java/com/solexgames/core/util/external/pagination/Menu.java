@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,16 +20,19 @@ import java.util.Map;
 @Setter
 public abstract class Menu {
 
+    @Getter
     public static Map<String, Menu> currentlyOpenedMenus = new HashMap<>();
 
     @Getter
-    protected CorePlugin instance = CorePlugin.getInstance();
+    protected CorePlugin plugin = JavaPlugin.getPlugin(CorePlugin.class);
 
     private Map<Integer, Button> buttons = new HashMap<>();
+
     private boolean autoUpdate = false;
     private boolean updateAfterClick = true;
     private boolean closedByMenu = false;
     private boolean placeholder = false;
+
     private Button placeholderButton = Button.placeholder(XMaterial.GLASS_PANE.parseMaterial(), (byte) 15, " ");
 
     private ItemStack createItemStack(Player player, Button button) {
@@ -131,7 +135,7 @@ public abstract class Menu {
 
     public abstract Map<Integer, Button> getButtons(Player player);
 
-    public void onOpen(Player player) {
+    void onOpen(Player player) {
     }
 
     public void onClose(Player player) {

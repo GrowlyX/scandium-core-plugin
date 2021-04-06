@@ -16,12 +16,16 @@ public class AuthUtil {
     }
 
     public static int getHotbarSlotOfItem(ItemStack item, Player player) {
-        if (item == null) return -1;
+        if (item == null) {
+            return -1;
+        }
+
         for (int i = 0; i < 9; i++) {
             if (player.getInventory().getItem(i) != null && player.getInventory().getItem(i).equals(item)) {
                 return i;
             }
         }
+
         return 0;
     }
 
@@ -29,7 +33,7 @@ public class AuthUtil {
         for (int i = 0; i < 9; i++) {
             ItemStack item = player.getInventory().getItem(i);
 
-            if (item != null && item.hasItemMeta() && item.getItemMeta().hasLore() && ChatColor.stripColor(item.getItemMeta().getDisplayName()).contains("QR")) {
+            if (item != null && item.hasItemMeta() && ChatColor.stripColor(item.getItemMeta().getDisplayName()).contains("QR Code")) {
                 player.getInventory().remove(item);
             }
         }

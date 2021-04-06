@@ -1,35 +1,24 @@
 package com.solexgames.core.util.external.pagination.pagination;
 
-import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.player.PotPlayer;
-import com.solexgames.core.util.Color;
-import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.util.external.pagination.Button;
 import com.solexgames.core.util.external.pagination.Menu;
 import lombok.Getter;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.inventory.ItemStack;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 @Getter
+@RequiredArgsConstructor
 public abstract class PaginatedMenu extends Menu {
 
-    private int maxPerPage = 45;
-
-    public PaginatedMenu(int maxPerPage) {
-        this.maxPerPage = maxPerPage;
-    }
+    private final int maxPerPage;
 
     @Getter
-    private int page = 1; {
-        setUpdateAfterClick(false);
+    private int page; {
+        this.setUpdateAfterClick(false);
     }
 
     @Override
@@ -45,8 +34,9 @@ public abstract class PaginatedMenu extends Menu {
      */
     public final void modPage(Player player, int mod) {
         page += mod;
-        getButtons().clear();
-        openMenu(player);
+
+        this.getButtons().clear();
+        this.openMenu(player);
     }
 
     /**
@@ -72,7 +62,7 @@ public abstract class PaginatedMenu extends Menu {
         buttons.put(0, new PageButton(-1, this));
         buttons.put(8, new PageButton(1, this));
 
-        for (Map.Entry<Integer, Button> entry : getAllPagesButtons(player).entrySet()) {
+        for (Map.Entry<Integer, Button> entry : this.getAllPagesButtons(player).entrySet()) {
             int ind = entry.getKey();
 
             if (ind >= minIndex && ind < maxIndex) {
@@ -81,7 +71,7 @@ public abstract class PaginatedMenu extends Menu {
             }
         }
 
-        Map<Integer, Button> global = getGlobalButtons(player);
+        Map<Integer, Button> global = this.getGlobalButtons(player);
 
         if (global != null) {
             for (Map.Entry<Integer, Button> gent : global.entrySet()) {

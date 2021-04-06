@@ -20,7 +20,7 @@ public class BackButton extends Button {
 
     @Override
     public ItemStack getButtonItem(Player player) {
-        return new ItemBuilder(XMaterial.GLISTERING_MELON_SLICE.parseMaterial())
+        return new ItemBuilder(XMaterial.MELON_SLICE.parseMaterial())
                 .setDisplayName(ChatColor.RED + "Back")
                 .addLore(Arrays.asList(
                         ChatColor.GRAY + "Click here to return to",

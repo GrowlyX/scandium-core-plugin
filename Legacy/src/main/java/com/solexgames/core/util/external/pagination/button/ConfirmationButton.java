@@ -1,6 +1,7 @@
 package com.solexgames.core.util.external.pagination.button;
 
 import com.cryptomorin.xseries.XMaterial;
+import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.util.external.pagination.Button;
 import com.solexgames.core.util.external.pagination.Menu;
 import com.solexgames.core.util.external.pagination.callback.TypeCallback;
@@ -22,13 +23,10 @@ public class ConfirmationButton extends Button {
 
     @Override
     public ItemStack getButtonItem(Player player) {
-        ItemStack itemStack = new ItemStack(XMaterial.WHITE_WOOL.parseMaterial(), this.confirm ? 5 : 14);
-        ItemMeta itemMeta = itemStack.getItemMeta();
-
-        itemMeta.setDisplayName(this.confirm ? ChatColor.GREEN + "Confirm" : ChatColor.RED + "Cancel");
-        itemStack.setItemMeta(itemMeta);
-
-        return itemStack;
+        return new ItemBuilder(XMaterial.WHITE_WOOL.parseMaterial())
+                .setDurability(this.confirm ? 5 : 14)
+                .setDisplayName(this.confirm ? ChatColor.GREEN + "Confirm" : ChatColor.RED + "Cancel")
+                .create();
     }
 
     @Override

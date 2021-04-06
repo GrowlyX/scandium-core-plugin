@@ -18,8 +18,8 @@ public class PageButton extends Button {
 
     @Override
     public ItemStack getButtonItem(Player player) {
-        return new ItemBuilder(XMaterial.GLISTERING_MELON_SLICE.parseMaterial())
-                .setDisplayName(this.mod > 0 ? ChatColor.GREEN + "Next page" : ChatColor.RED + "Previous page")
+        return new ItemBuilder(this.mod > 0 ? XMaterial.GLISTERING_MELON_SLICE.parseMaterial() : XMaterial.MELON_SLICE.parseMaterial())
+                .setDisplayName(this.mod > 0 ? ChatColor.GREEN + "Next page" : ChatColor.RED + "Return")
                 .addLore(
                         "&7Click to go to the " + (this.mod > 0 ? "next" : "previous"),
                         "&7page."
@@ -30,13 +30,9 @@ public class PageButton extends Button {
     public void clicked(Player player, ClickType clickType) {
         if (clickType == ClickType.RIGHT) {
             new ViewAllPagesMenu(this.menu).openMenu(player);
-            playNeutral(player);
         } else {
-            if (hasNext(player)) {
+            if (this.hasNext(player)) {
                 this.menu.modPage(player, this.mod);
-                Button.playNeutral(player);
-            } else {
-                Button.playFail(player);
             }
         }
     }

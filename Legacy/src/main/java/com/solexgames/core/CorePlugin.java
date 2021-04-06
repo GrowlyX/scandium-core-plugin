@@ -37,6 +37,7 @@ import com.solexgames.core.command.impl.test.TestCommand;
 import com.solexgames.core.command.impl.toggle.*;
 import com.solexgames.core.command.impl.warps.WarpCommand;
 import com.solexgames.core.database.Database;
+import com.solexgames.core.listener.AuthListener;
 import com.solexgames.core.listener.ModSuiteListener;
 import com.solexgames.core.listener.PlayerListener;
 import com.solexgames.core.manager.*;
@@ -331,7 +332,8 @@ public final class CorePlugin extends JavaPlugin {
         this.registerListeners(
                 new PlayerListener(),
                 new PaginationListener(),
-                new ModSuiteListener()
+                new ModSuiteListener(),
+                new AuthListener()
         );
 
         if (this.getConfig().getBoolean("settings.color-gui")) this.getCommand("color").setExecutor(new ColorCommand());

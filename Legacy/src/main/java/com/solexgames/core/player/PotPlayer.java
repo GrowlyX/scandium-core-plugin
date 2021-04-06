@@ -279,35 +279,6 @@ public class PotPlayer {
             }
 
             this.name = this.getName();
-
-            CorePlugin.getInstance().getPunishmentManager().getPunishments().stream()
-                    .filter(punishment -> punishment.getTarget().toString().equals(this.uuid.toString()))
-                    .forEach(this.punishments::add);
-
-            this.getPunishments().stream()
-                    .filter(punishment -> punishment != null && punishment.isActive() && (System.currentTimeMillis() >= punishment.getCreatedAt().getTime() + punishment.getPunishmentDuration() || punishment.isPermanent()) && !punishment.isRemoved())
-                    .forEach(punishment -> {
-                        switch (punishment.getPunishmentType()) {
-                            case WARN:
-                                this.hasActiveWarning = true;
-                                this.warningPunishment = punishment;
-                                break;
-                            case MUTE:
-                                this.currentlyMuted = true;
-                                break;
-                            case BLACKLIST:
-                                this.restrictionPunishment = punishment;
-                                this.currentlyBlacklisted = true;
-                                this.currentlyRestricted = true;
-                                break;
-                            case IPBAN:
-                            case BAN:
-                                this.currentlyRestricted = true;
-                                this.restrictionPunishment = punishment;
-                                break;
-                        }
-                    });
-
             if (profile.getBoolean("canSeeStaffMessages") != null) {
                 this.canSeeStaffMessages = profile.getBoolean("canSeeStaffMessages");
             }
@@ -443,8 +414,37 @@ public class PotPlayer {
                 this.achievementData = new AchievementData();
             }
 
-            new NetworkPlayer(this.uuid, this.name, CorePlugin.getInstance().getServerName(), this.getActiveGrant().getRank().getName(), this.isCanReceiveDms(), this.ipAddress, this.syncCode, this.isSynced);
+            CorePlugin.getInstance().getPunishmentManager().getPunishments().stream()
+                    .filter(punishment -> punishment.getTarget().toString().equals(this.uuid.toString()))
+                    .forEach(this.punishments::add);
+
+            this.getPunishments().stream()
+                    .filter(punishment -> punishment != null && punishment.isActive() && (System.currentTimeMillis() >= punishment.getCreatedAt().getTime() + punishment.getPunishmentDuration() || punishment.isPermanent()) && !punishment.isRemoved())
+                    .forEach(punishment -> {
+                        switch (punishment.getPunishmentType()) {
+                            case WARN:
+                                this.hasActiveWarning = true;
+                                this.warningPunishment = punishment;
+                                break;
+                            case MUTE:
+                                this.currentlyMuted = true;
+                                break;
+                            case BLACKLIST:
+                                this.restrictionPunishment = punishment;
+                                this.currentlyBlacklisted = true;
+                                this.currentlyRestricted = true;
+                                break;
+                            case IPBAN:
+                            case BAN:
+                                this.currentlyRestricted = true;
+                                this.restrictionPunishment = punishment;
+                                break;
+                        }
+                    });
+
+            Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () -> new NetworkPlayer(this.uuid, this.name, CorePlugin.getInstance().getServerName(), this.getActiveGrant().getRank().getName(), this.isCanReceiveDms(), this.ipAddress, this.syncCode, this.isSynced));
             Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), this::saveWithoutRemove, 10 * 20L);
+
             RedisUtil.writeAsync(RedisUtil.addGlobalPlayer(this));
 
             CorePlugin.getInstance().getPlayerManager().getAllSyncCodes().put(this.syncCode, this.getName());
