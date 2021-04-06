@@ -18,6 +18,18 @@ public class PageButton extends Button {
 
     @Override
     public ItemStack getButtonItem(Player player) {
+        if (!this.hasNext(player)) {
+            return new ItemBuilder(XMaterial.RED_DYE.parseMaterial())
+                    .setDurability(1)
+                    .setDisplayName(ChatColor.RED + "Last page")
+                    .addLore(
+                            "&7You're at the last page!",
+                            "",
+                            "&7Click this button to",
+                            "&7return to the first page."
+                    ).create();
+        }
+
         return new ItemBuilder(this.mod > 0 ? XMaterial.GLISTERING_MELON_SLICE.parseMaterial() : XMaterial.MELON_SLICE.parseMaterial())
                 .setDisplayName(this.mod > 0 ? ChatColor.GREEN + "Next page" : ChatColor.RED + "Return")
                 .addLore(
@@ -33,6 +45,8 @@ public class PageButton extends Button {
         } else {
             if (this.hasNext(player)) {
                 this.menu.modPage(player, this.mod);
+            } else {
+                this.menu.modPage(player, 1);
             }
         }
     }
