@@ -18,10 +18,7 @@ import com.solexgames.core.player.punishment.PunishmentType;
 import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.enums.PotionMessageType;
 import com.solexgames.core.player.global.NetworkPlayer;
-import com.solexgames.core.util.Color;
-import com.solexgames.core.util.RedisUtil;
-import com.solexgames.core.util.SaltUtil;
-import com.solexgames.core.util.VotingUtil;
+import com.solexgames.core.util.*;
 import com.solexgames.core.util.external.NameTagExternal;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,6 +26,7 @@ import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -37,6 +35,7 @@ import org.bukkit.scoreboard.Scoreboard;
 import java.net.InetAddress;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 @Getter
@@ -55,6 +54,7 @@ public class PotPlayer {
     private UUID uuid;
     private Player player;
     private String ipAddress;
+    private String encryptedIpAddress;
     private String previousIpAddress;
     private Media media;
     private Prefix appliedPrefix;
@@ -101,6 +101,9 @@ public class PotPlayer {
     private boolean currentlyRestricted;
     private boolean currentlyBlacklisted;
     private boolean currentlyOnline;
+
+    private boolean relatedToBlacklist;
+    private String relatedTo;
 
     private ItemStack[] itemHistory;
     private ItemStack[] armorHistory;
@@ -167,6 +170,7 @@ public class PotPlayer {
         this.hasLoaded = false;
 
         CompletableFuture.runAsync(this::loadPlayerData);
+        CompletableFuture.runAsync(() -> this.encryptedIpAddress = CorePlugin.getInstance().getCryptoManager().encrypt(this.ipAddress));
 
         CorePlugin.getInstance().getPlayerManager().getAllProfiles().put(uuid, this);
     }
@@ -237,8 +241,9 @@ public class PotPlayer {
 
         document.put("autoVanish", this.isAutoVanish);
         document.put("autoModMode", this.isAutoModMode);
-        document.put("previousIpAddress", CorePlugin.getInstance().getCryptoManager().encrypt(this.ipAddress));
+        document.put("previousIpAddress", this.encryptedIpAddress);
         document.put("experience", this.experience);
+        document.put("blacklisted", this.currentlyBlacklisted);
 
         return document;
     }
@@ -449,6 +454,56 @@ public class PotPlayer {
         });
     }
 
+    public boolean findIpRelative(AsyncPlayerPreLoginEvent loginEvent, boolean hub) {
+        CompletableFuture<Iterator<Document>> completableFuture = new CompletableFuture<>();
+        CompletableFuture.runAsync(() -> completableFuture.complete(CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("previousIpAddress", this.encryptedIpAddress)).iterator()));
+        AtomicBoolean atomicBoolean = new AtomicBoolean(false);
+
+        completableFuture.thenAccept(documentIterator -> CompletableFuture.runAsync(() -> {
+            while (documentIterator.hasNext()) {
+                Document document = documentIterator.next();
+
+                if (document.getBoolean("blacklisted") != null && document.getBoolean("blacklisted") && !this.currentlyBlacklisted) {
+                    this.currentlyBlacklisted = true;
+                    this.currentlyRestricted = true;
+                    this.relatedToBlacklist = true;
+                    this.relatedTo = document.getString("name");
+
+                    Date date = new Date();
+
+                    Punishment punishment = new Punishment(
+                            PunishmentType.BLACKLIST,
+                            null,
+                            this.uuid,
+                            this.name,
+                            "Related to Blacklisted Player (" + this.relatedTo + ")",
+                            date,
+                            date.getTime() - DateUtil.parseDateDiff("1d", false),
+                            true,
+                            date,
+                            UUID.randomUUID(),
+                            SaltUtil.getRandomSaltedString(7),
+                            true
+                    );
+
+                    punishment.savePunishment();
+
+                    this.restrictionPunishment = punishment;
+
+                    if (!hub) {
+                        loginEvent.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, Color.translate(PunishmentStrings.BLACK_LIST_RELATION_MESSAGE.replace("<player>", document.getString("name"))));
+                    }
+
+                    atomicBoolean.set(true);
+
+                    return;
+                }
+            }
+        }));
+
+        return atomicBoolean.get();
+    }
+
     public void onAfterDataLoad() {
         this.player = Bukkit.getPlayer(uuid);
         this.attachment = this.player.addAttachment(JavaPlugin.getPlugin(CorePlugin.class));
@@ -483,6 +538,10 @@ public class PotPlayer {
     }
 
     public String getRestrictionMessage() {
+        if (this.relatedToBlacklist) {
+            return Color.translate(PunishmentStrings.BLACK_LIST_RELATION_MESSAGE.replace("<player>", this.relatedTo));
+        }
+
         switch (this.restrictionPunishment.getPunishmentType()) {
             case BLACKLIST:
                 return Color.translate(PunishmentStrings.BLACK_LIST_MESSAGE.replace("<reason>", this.restrictionPunishment.getReason()));

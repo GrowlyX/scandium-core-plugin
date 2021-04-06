@@ -21,6 +21,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -211,8 +213,22 @@ public class PlayerManager {
 
         player.updateInventory();
 
+        double pitch = (double) (player.getLocation().getPitch() + 90.0F) * 3.141592653589793D / 180.0D;
+        double yaw = (double) (player.getLocation().getYaw() + 90.0F) * 3.141592653589793D / 180.0D;
+
+        double xCoordinate = Math.sin(pitch) * Math.cos(yaw);
+        double yCoordinate = Math.sin(pitch) * Math.sin(yaw);
+        double zCoordinate = Math.cos(pitch) * 100.0D;
+
+        org.bukkit.util.Vector vector = new org.bukkit.util.Vector(xCoordinate, zCoordinate, yCoordinate);
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 1000000, 3));
+
+        if (player.isSprinting()) {
+            player.setVelocity(vector.multiply(50));
+        }
+
         if (CorePlugin.getInstance().getLunar() != null) {
-            CorePlugin.getInstance().getLunar().d(player);
+            CorePlugin.getInstance().getLunar().enableStaffModules(player);
         }
     }
 
@@ -237,7 +253,9 @@ public class PlayerManager {
         potPlayer.setPreviousBoard(null);
 
         StaffUtil.sendAlert(player, "unmodmoded");
-        
+
+        player.removePotionEffect(PotionEffectType.SPEED);
+
         if (CorePlugin.getInstance().getLunar() != null) {
             CorePlugin.getInstance().getLunar().disableStaffModules(player);
         }

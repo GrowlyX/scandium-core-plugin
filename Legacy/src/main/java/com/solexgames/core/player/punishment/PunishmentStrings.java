@@ -31,6 +31,10 @@ public final class PunishmentStrings {
             "&4You are blacklisted from " + SERVER_NAME + ".&7" +
                     "\n&cYou were blacklisted for: &7<reason>" +
                     "\n&7This punishment cannot be appealed or purchased.";
+    public static String BLACK_LIST_RELATION_MESSAGE =
+            "&4You are blacklisted from " + SERVER_NAME + ".&7" +
+                    "\n&cYou were blacklisted for being in relation with &7<player>" +
+                    "\n&7This punishment cannot be appealed or purchased.";
 
     public static String MUTE_MESSAGE = "&cYou cannot speak as you are currently muted.";
     public static String KICK_MESSAGE = "&cYou were kicked for: &7<reason>";
