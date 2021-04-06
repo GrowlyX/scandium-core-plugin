@@ -6,7 +6,7 @@ import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.builder.ItemBuilder;
-import com.solexgames.core.util.external.pagination.extend.StaffViewPaginatedMenu;
+import com.solexgames.core.util.external.pagination.impl.StaffViewPaginatedMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.EntityType;
@@ -21,8 +21,6 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.Collections;
 
 public class ModSuiteListener implements Listener {
 

@@ -1,7 +1,7 @@
 package com.solexgames.core.command.impl.test;
 
 import com.solexgames.core.command.BaseCommand;
-import com.solexgames.core.util.external.pagination.extend.PaginationTestingMenu;
+import com.solexgames.core.util.external.pagination.impl.PaginationTestingMenu;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

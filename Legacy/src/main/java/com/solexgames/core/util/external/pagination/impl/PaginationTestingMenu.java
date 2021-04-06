@@ -1,4 +1,4 @@
-package com.solexgames.core.util.external.pagination.extend;
+package com.solexgames.core.util.external.pagination.impl;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
@@ -8,23 +8,20 @@ import com.solexgames.core.util.Color;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.util.external.pagination.Button;
 import com.solexgames.core.util.external.pagination.pagination.PaginatedMenu;
-import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@Getter
-public class PrefixViewPaginatedMenu extends PaginatedMenu {
+public class PaginationTestingMenu extends PaginatedMenu {
 
-    private final Player player;
-
-    public PrefixViewPaginatedMenu(Player player) {
+    public PaginationTestingMenu() {
         super(27);
-        this.player = player;
     }
 
     @Override
@@ -34,7 +31,13 @@ public class PrefixViewPaginatedMenu extends PaginatedMenu {
         buttons.put(4, new Button() {
             @Override
             public ItemStack getButtonItem(Player player) {
-                return new ItemBuilder(XMaterial.RED_BED.parseMaterial()).setDisplayName("&cReset Prefix").addLore(Arrays.asList("&7Click to reset your", "&7current applied prefix!")).create();
+                return new ItemBuilder(XMaterial.RED_DYE.parseMaterial(), 1)
+                        .setDisplayName("&cReset Prefix")
+                        .addLore(
+                                "&7Click to reset your",
+                                "&7current applied prefix!"
+                        )
+                        .create();
             }
 
             @Override
@@ -48,9 +51,10 @@ public class PrefixViewPaginatedMenu extends PaginatedMenu {
 
         return buttons;
     }
+
     @Override
     public String getPrePaginatedTitle(Player player) {
-        return "Prefixes";
+        return "Dev";
     }
 
     @Override

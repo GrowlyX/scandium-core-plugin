@@ -6,7 +6,7 @@ import com.solexgames.core.player.punishment.Punishment;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
 import com.solexgames.core.util.builder.ItemBuilder;
-import com.solexgames.core.util.external.pagination.extend.PunishViewPaginatedMenu;
+import com.solexgames.core.util.external.pagination.impl.PunishViewPaginatedMenu;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

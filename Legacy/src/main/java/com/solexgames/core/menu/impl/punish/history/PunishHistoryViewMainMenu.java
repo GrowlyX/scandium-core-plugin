@@ -4,7 +4,7 @@ import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.menu.AbstractInventoryMenu;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.punishment.PunishmentType;
-import com.solexgames.core.util.external.pagination.extend.PunishViewPaginatedMenu;
+import com.solexgames.core.util.external.pagination.impl.PunishViewPaginatedMenu;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;

@@ -9,7 +9,8 @@ public enum ChatChannelType {
     ADMIN("&c[A] ", "ADMIN", "scandium.channels.admin"),
     HOST("&2[H] ", "HOST", "scandium.channels.host"),
     MANAGER("&4[M] ", "MANAGER", "scandium.channels.manager"),
-    DEV("&c[D] ", "DEV", "scandium.channels.dev");
+    DEV("&c[D] ", "DEV", "scandium.channels.dev"),
+    OWNER("&9[O] ", "OWNER", "scandium.channels.owner");
 
     private final String prefix;
     private final String name;

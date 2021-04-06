@@ -1,4 +1,4 @@
-package com.solexgames.core.util.external.pagination.extend;
+package com.solexgames.core.util.external.pagination.impl;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;

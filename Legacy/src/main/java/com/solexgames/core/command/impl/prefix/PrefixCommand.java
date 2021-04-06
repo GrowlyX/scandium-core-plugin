@@ -8,7 +8,7 @@ import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.prefixes.Prefix;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.StringUtil;
-import com.solexgames.core.util.external.pagination.extend.PrefixViewPaginatedMenu;
+import com.solexgames.core.util.external.pagination.impl.PrefixViewPaginatedMenu;
 import org.apache.commons.lang.StringUtils;
 import org.bson.Document;
 import org.bukkit.Bukkit;

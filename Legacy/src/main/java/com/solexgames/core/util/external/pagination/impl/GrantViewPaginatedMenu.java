@@ -1,4 +1,4 @@
-package com.solexgames.core.util.external.pagination.extend;
+package com.solexgames.core.util.external.pagination.impl;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
@@ -6,14 +6,11 @@ import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.impl.grant.remove.GrantRemoveConfirmMenu;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.grant.Grant;
-import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.util.external.pagination.Button;
-import com.solexgames.core.util.external.pagination.Menu;
 import com.solexgames.core.util.external.pagination.pagination.PaginatedMenu;
 import lombok.Getter;
 import org.apache.commons.lang3.time.DurationFormatUtils;
-import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
