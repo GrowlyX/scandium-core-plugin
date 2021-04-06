@@ -171,12 +171,19 @@ public class PlayerManager {
 
         player.updateInventory();
 
+        player.setAllowFlight(true);
+        player.setFlying(true);
+
         ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
         ChatColor secondColor = serverType.getSecondaryColor();
 
         player.sendMessage(secondColor + "You are now in moderation mode.");
 
         StaffUtil.sendAlert(player, "modmoded");
+
+        if (CorePlugin.getInstance().getLunar() != null) {
+            CorePlugin.getInstance().getLunar().enableStaffModules(player);
+        }
     }
 
     public void modModeRaw(Player player) {
@@ -203,6 +210,10 @@ public class PlayerManager {
         player.getInventory().setItem(8, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), (potPlayer.isVanished() ? 10 : 8)).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + (potPlayer.isVanished() ? "Disable Vanish" : "Enable Vanish")).create());
 
         player.updateInventory();
+
+        if (CorePlugin.getInstance().getLunar() != null) {
+            CorePlugin.getInstance().getLunar().d(player);
+        }
     }
 
     public void unModModePlayer(Player player) {
@@ -220,9 +231,16 @@ public class PlayerManager {
         player.setScoreboard(potPlayer.getPreviousBoard());
         player.sendMessage(Color.translate(ChatColor.RED + "You've exited moderation mode."));
 
+        player.setAllowFlight(false);
+        player.setFlying(false);
+
         potPlayer.setPreviousBoard(null);
 
         StaffUtil.sendAlert(player, "unmodmoded");
+        
+        if (CorePlugin.getInstance().getLunar() != null) {
+            CorePlugin.getInstance().getLunar().disableStaffModules(player);
+        }
     }
 
     public NetworkPlayer getPlayerFromSyncCode(String syncCode) {
