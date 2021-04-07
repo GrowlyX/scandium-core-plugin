@@ -1,5 +1,6 @@
 package com.solexgames.core.command.impl.essential;
 
+import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.StaffUtil;
@@ -25,13 +26,17 @@ public class GmspCommand extends BaseCommand {
             return false;
         }
 
+        if (Bukkit.getServer().getVersion().contains("1.7")) {
+            return false;
+        }
+
         if (args.length == 0) {
             player.setGameMode(GameMode.SPECTATOR);
             player.sendMessage(Color.translate("&aSet your gamemode to Spectator."));
 
             StaffUtil.sendAlert(player, "set gamemode spectator");
         }
-        if (args.length > 0) {
+        if (args.length == 1) {
             Player target = Bukkit.getPlayerExact(args[0]);
 
             if (target != null) {
@@ -43,6 +48,7 @@ public class GmspCommand extends BaseCommand {
                 player.sendMessage(Color.translate("&cThat player does not exist."));
             }
         }
+
         return false;
     }
 }
