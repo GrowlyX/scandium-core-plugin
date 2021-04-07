@@ -46,7 +46,7 @@ public class PageButton extends Button {
             if (this.hasNext(player)) {
                 this.menu.modPage(player, this.mod);
             } else {
-                this.menu.modPage(player, 1);
+                this.menu.reset(player);
             }
         }
     }

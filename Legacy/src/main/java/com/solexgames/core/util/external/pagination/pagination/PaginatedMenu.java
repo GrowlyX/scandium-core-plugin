@@ -17,7 +17,7 @@ public abstract class PaginatedMenu extends Menu {
     private final int maxPerPage;
 
     @Getter
-    private int page; {
+    private int page = 1; {
         this.setUpdateAfterClick(false);
     }
 
@@ -38,6 +38,17 @@ public abstract class PaginatedMenu extends Menu {
         this.getButtons().clear();
         this.openMenu(player);
     }
+
+    /**
+     * Changes the page number to 1
+     */
+    public final void reset(Player player) {
+        page = 1;
+
+        this.getButtons().clear();
+        this.openMenu(player);
+    }
+
 
     /**
      * @param player player viewing the inventory

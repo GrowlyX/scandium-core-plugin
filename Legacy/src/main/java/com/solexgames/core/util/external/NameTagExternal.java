@@ -82,6 +82,7 @@ public final class NameTagExternal {
             Objective objective = player.getScoreboard().getObjective(DisplaySlot.BELOW_NAME);
 
             if (objective != null) objective.unregister();
+
             Arrays.asList(ChatColor.values()).forEach(chatColor -> {
                 Team team = player.getScoreboard().getTeam(getTeamName(chatColor));
                 if (team != null) team.removeEntry(other.getName());

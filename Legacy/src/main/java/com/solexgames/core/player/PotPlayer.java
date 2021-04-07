@@ -605,18 +605,19 @@ public class PotPlayer {
             if (this.isStaffMode()) {
                 if (player.hasPermission("scandium.staff")) {
                     NameTagExternal.setupStaffModeTag(player, this.player);
-                } else {
-                    NameTagExternal.setupNameTag(player, this.player, this.getColorByRankColor());
+                    return;
                 }
             } else if (this.isVanished()) {
                 if (player.hasPermission("scandium.staff")) {
                     NameTagExternal.setupVanishTag(player, this.player);
-                } else {
-                    NameTagExternal.setupNameTag(player, this.player, this.getColorByRankColor());
+                    return;
                 }
-            } else {
-                NameTagExternal.setupNameTag(player, this.player, this.getColorByRankColor());
             }
+
+            NameTagExternal.setupNameTag(player, this.player, this.getColorByRankColor());
+
+            PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+            NameTagExternal.setupNameTag(this.player, player, potPlayer.getColorByRankColor());
         });
     }
 
