@@ -11,10 +11,18 @@ author: SolexGames
 website: https://www.solexgames.com
 
 commands:
-  auth:
-    aliases: [2fa]
-  2fareset:
-    aliases: [reset2fa, resetauth]
+  enderchest:
+    aliases: [echest]
+  maxitem:
+    aliases: [more]
+  setspawn:
+  spawn:
+  enchant:
+    aliases: [enchanting]
+  craft:
+    aliases: [crafting]
+  ownerchat:
+    aliases: [oc]
   socialspy:
   checkdisguise:
   find:

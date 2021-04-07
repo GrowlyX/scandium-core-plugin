@@ -68,9 +68,7 @@ public class PotPlayer {
     private String syncDiscord;
     private String name;
 
-    private String key;
-    private long nextAuth;
-
+    private String authSecret;
     private Document profile;
 
     private boolean canSeeStaffMessages = true;
@@ -137,9 +135,6 @@ public class PotPlayer {
     private long chatCooldown = 1L;
     private long commandCooldown = 1L;
 
-    public boolean setupSecurity = false;
-    public boolean verify = false;
-
     private int lastItemSlot;
     private ItemStack lastItem;
 
@@ -180,9 +175,8 @@ public class PotPlayer {
 
         document.put("name", this.getName());
         document.put("uuid", this.uuid.toString());
-        document.put("nextAuth", this.nextAuth);
         document.put("hasSetup2FA", this.hasSetup2FA);
-        document.put("securityKey", this.key);
+        document.put("securityKey", this.authSecret);
         document.put("canSeeStaffMessages", this.canSeeStaffMessages);
         document.put("canSeeTips", this.canSeeTips);
         document.put("canReceiveDms", this.canReceiveDms);
@@ -309,10 +303,7 @@ public class PotPlayer {
                 this.previousIpAddress = "";
             }
             if (profile.getString("privateKey") != null) {
-                this.key = profile.getString("privateKey");
-            }
-            if (profile.getLong("nextAuth") != null) {
-                this.nextAuth = profile.getLong("nextAuth");
+                this.authSecret = profile.getString("privateKey");
             }
             if (profile.getBoolean("autoVanish") != null) {
                 this.isAutoVanish = profile.getBoolean("autoVanish");
@@ -625,6 +616,38 @@ public class PotPlayer {
                 NameTagExternal.setupNameTag(player, this.player, this.getColorByRankColor());
             }
         });
+    }
+
+    public boolean isAuthValid(int code) {
+        if (this.authSecret == null) {
+            return false;
+        }
+
+        if (this.authSecret.equals("")) {
+            return false;
+        }
+
+        try {
+            return TotpUtil.validateCurrentNumber(this.authSecret, code, 250);
+        } catch (Exception ignored) {
+            return false;
+        }
+    }
+
+    public boolean isAuthValid(String secret, int code) {
+        if (secret == null) {
+            return false;
+        }
+
+        if (secret.equals("")) {
+            return false;
+        }
+
+        try {
+            return TotpUtil.validateCurrentNumber(secret, code, 250);
+        } catch (Exception ignored) {
+            return false;
+        }
     }
 
     public ChatColor getColorByRankColor() {

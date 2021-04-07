@@ -16,6 +16,7 @@ import org.apache.commons.lang.time.DurationFormatUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,10 +27,12 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.inventory.ItemStack;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
@@ -65,14 +68,6 @@ public class PlayerListener implements Listener {
                 if (potPlayer.isCurrentlyRestricted() && !isHub) {
                     event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, potPlayer.getRestrictionMessage());
                 } else if (!potPlayer.findIpRelative(event, isHub)) {
-                    if (!potPlayer.isHasSetup2FA()) {
-                        potPlayer.setSetupSecurity(true);
-                    } else {
-                        if (System.currentTimeMillis() >= potPlayer.getNextAuth() || !potPlayer.getPreviousIpAddress().equals(event.getAddress().getHostAddress())) {
-                            potPlayer.setVerify(true);
-                        }
-                    }
-
                     event.allow();
                 }
             } else {
@@ -80,6 +75,8 @@ public class PlayerListener implements Listener {
             }
         }
     }
+
+    
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
@@ -92,13 +89,6 @@ public class PlayerListener implements Listener {
 
         CompletableFuture.runAsync(() -> {
             potPlayer.onAfterDataLoad();
-
-            if (!potPlayer.isVerify() && potPlayer.getNextAuth() != -1 && potPlayer.getPlayer().hasPermission("scandium.2fa")) {
-                potPlayer.getPlayer().sendMessage("  ");
-                StringUtil.sendCenteredMessage(potPlayer.getPlayer(), Color.SECONDARY_COLOR + "Your next " + Color.MAIN_COLOR + ChatColor.BOLD.toString() + "2FA" + Color.SECONDARY_COLOR + " auth will be in:");
-                StringUtil.sendCenteredMessage(potPlayer.getPlayer(), ChatColor.DARK_AQUA + ChatColor.BOLD.toString() + DurationFormatUtils.formatDurationWords(potPlayer.getNextAuth() - System.currentTimeMillis(), true, true));
-                potPlayer.getPlayer().sendMessage("  ");
-            }
 
             Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> Bukkit.getOnlinePlayers().stream()
                     .map(player -> CorePlugin.getInstance().getPlayerManager().getPlayer(player))
@@ -209,7 +199,7 @@ public class PlayerListener implements Listener {
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
         String message = event.getMessage();
 
-        if ((potPlayer.isVerify() || potPlayer.getKey() == null) && potPlayer.getPlayer().hasPermission("scandium.2fa")) {
+        if (LockedState.isLocked(player)) {
             event.getPlayer().sendMessage(ChatColor.RED + "You cannot perform this action right now!");
             event.getPlayer().sendMessage(ChatColor.RED + "The only action you can perform is " + ChatColor.DARK_RED + "/2fa" + ChatColor.RED + "!");
 
@@ -466,7 +456,7 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if ((potPlayer.isVerify() || potPlayer.getKey() == null) && !event.getMessage().startsWith("/2fa") && !event.getMessage().startsWith("/auth")) {
+        if (LockedState.isLocked(event.getPlayer())) {
             event.getPlayer().sendMessage(ChatColor.RED + "You cannot perform this action right now!");
             event.getPlayer().sendMessage(ChatColor.RED + "The only action you can perform is " + ChatColor.DARK_RED + "/2fa" + ChatColor.RED + "!");
 
@@ -550,7 +540,18 @@ public class PlayerListener implements Listener {
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer().getUniqueId());
         Player player = event.getPlayer();
 
-        AuthUtil.removeQrMapFromInventory(player);
+        if (LockedState.isLocked(player)) {
+            for (ItemStack itemStack : player.getInventory().getContents()) {
+                if (itemStack.getType() == Material.MAP && itemStack.getItemMeta().hasLore()) {
+                    final List<String> lore = itemStack.getItemMeta().getLore();
+
+                    if (!lore.isEmpty() && lore.get(0).equalsIgnoreCase("QR Code Map")) {
+                        player.getInventory().remove(itemStack);
+                        player.updateInventory();
+                    }
+                }
+            }
+        }
 
         if (potPlayer == null) {
             return;

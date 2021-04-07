@@ -2,19 +2,6 @@ package com.solexgames.core;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.solexgames.core.command.impl.auth.AuthCommand;
-import com.solexgames.core.command.impl.auth.ResetAuthCommand;
-import com.solexgames.core.command.impl.library.CheckDisguiseCommand;
-import com.solexgames.core.hook.access.AbstractNMSAccess;
-import com.solexgames.core.hook.access.extend.NMSAccess_v1_16;
-import com.solexgames.core.hook.access.extend.NMSAccess_v1_7;
-import com.solexgames.core.hook.access.extend.NMSAccess_v1_8;
-import com.solexgames.core.hook.client.AbstractClientHook;
-import com.solexgames.core.hook.client.extend.LunarClientHook;
-import com.solexgames.core.hook.placeholder.AbstractExpansion;
-import com.solexgames.core.hook.placeholder.PlaceholderAdapter;
-import com.solexgames.core.hook.protocol.AbstractChatInterceptor;
-import com.solexgames.core.hook.protocol.extend.ProtocolChatInterceptor;
 import com.solexgames.core.command.impl.CoreCommand;
 import com.solexgames.core.command.impl.discord.SyncCommand;
 import com.solexgames.core.command.impl.discord.UnsyncCommand;
@@ -23,6 +10,7 @@ import com.solexgames.core.command.impl.experience.ExperienceCommand;
 import com.solexgames.core.command.impl.grant.CGrantCommand;
 import com.solexgames.core.command.impl.grant.GrantCommand;
 import com.solexgames.core.command.impl.grant.GrantsCommand;
+import com.solexgames.core.command.impl.library.CheckDisguiseCommand;
 import com.solexgames.core.command.impl.moderation.*;
 import com.solexgames.core.command.impl.network.ForceUpdateCommand;
 import com.solexgames.core.command.impl.network.NetworkCommand;
@@ -37,8 +25,16 @@ import com.solexgames.core.command.impl.test.TestCommand;
 import com.solexgames.core.command.impl.toggle.*;
 import com.solexgames.core.command.impl.warps.WarpCommand;
 import com.solexgames.core.database.Database;
-import com.solexgames.core.listener.AuthListener;
+import com.solexgames.core.hook.access.AbstractNMSAccess;
+import com.solexgames.core.hook.access.extend.NMSAccess_v1_16;
+import com.solexgames.core.hook.access.extend.NMSAccess_v1_7;
+import com.solexgames.core.hook.access.extend.NMSAccess_v1_8;
+import com.solexgames.core.hook.client.AbstractClientHook;
+import com.solexgames.core.hook.client.extend.LunarClientHook;
+import com.solexgames.core.hook.protocol.AbstractChatInterceptor;
+import com.solexgames.core.hook.protocol.extend.ProtocolChatInterceptor;
 import com.solexgames.core.listener.ModSuiteListener;
+import com.solexgames.core.listener.PaginationListener;
 import com.solexgames.core.listener.PlayerListener;
 import com.solexgames.core.manager.*;
 import com.solexgames.core.player.punishment.PunishmentStrings;
@@ -49,8 +45,6 @@ import com.solexgames.core.task.*;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
 import com.solexgames.core.util.external.ConfigExternal;
-import com.solexgames.core.listener.PaginationListener;
-import com.solexgames.core.util.external.license.License;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.http.client.HttpClient;
@@ -243,7 +237,6 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("feed").setExecutor(new FeedCommand());
         this.getCommand("heal").setExecutor(new HealCommand());
         this.getCommand("tppos").setExecutor(new TpPosCommand());
-        this.getCommand("auth").setExecutor(new AuthCommand());
         this.getCommand("socialspy").setExecutor(new SocialSpyCommand());
         this.getCommand("sudo").setExecutor(new SudoCommand());
         this.getCommand("sudoall").setExecutor(new SudoAllCommand());
@@ -300,8 +293,13 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("mutechat").setExecutor(new MuteChatCommand());
         this.getCommand("fly").setExecutor(new FlyCommand());
         this.getCommand("user").setExecutor(new UserCommand());
-        this.getCommand("2fareset").setExecutor(new ResetAuthCommand());
         this.getCommand("language").setExecutor(new LanguageCommand());
+        this.getCommand("craft").setExecutor(new CraftingCommand());
+        this.getCommand("enchant").setExecutor(new EnchantCommand());
+        this.getCommand("enderchest").setExecutor(new EnderChestCommand());
+        this.getCommand("maxitem").setExecutor(new MaxItemCommand());
+        this.getCommand("setspawn").setExecutor(new SetSpawnCommand());
+        this.getCommand("spawn").setExecutor(new SpawnCommand());
         this.getCommand("test").setExecutor(new TestCommand());
 
         this.getCommand("toggletips").setExecutor(new ToggleTipsCommand());
@@ -333,8 +331,7 @@ public final class CorePlugin extends JavaPlugin {
         this.registerListeners(
                 new PlayerListener(),
                 new PaginationListener(),
-                new ModSuiteListener(),
-                new AuthListener()
+                new ModSuiteListener()
         );
 
         if (this.getConfig().getBoolean("settings.color-gui")) this.getCommand("color").setExecutor(new ColorCommand());
@@ -346,7 +343,6 @@ public final class CorePlugin extends JavaPlugin {
         new PunishSaveTask();
         new FrozenMessageTask();
         new BoardUpdateTask();
-        new AuthMessageTask();
         new ServerTimeoutTask();
 
         this.registerBukkitCommand();

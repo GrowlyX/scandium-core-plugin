@@ -6,6 +6,7 @@ import com.solexgames.core.server.NetworkServer;
 import com.solexgames.core.util.Color;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -33,6 +34,8 @@ public class ServerManager {
     private boolean joinMessageEnabled;
     private boolean joinMessageCentered;
 
+    private Location spawnLocation;
+
     private long chatSlow;
 
     public ServerManager() {
@@ -43,6 +46,8 @@ public class ServerManager {
         this.automaticallyPutInto = CorePlugin.getInstance().getConfig().getString("settings.automatic-string");
 
         this.staffInformation = Color.translate(CorePlugin.getInstance().getConfig().getStringList("staff-information"));
+
+        this.spawnLocation = (Location) CorePlugin.getInstance().getConfig().get("location.spawn");
 
         setupServerType();
     }
