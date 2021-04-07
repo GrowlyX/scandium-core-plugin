@@ -2,9 +2,7 @@ package com.solexgames.core.hook.access.extend;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.hook.access.AbstractNMSAccess;
-import net.minecraft.server.v1_7_R4.EntityPlayer;
-import net.minecraft.server.v1_7_R4.MinecraftServer;
-import net.minecraft.server.v1_7_R4.PacketPlayOutPlayerInfo;
+import net.minecraft.server.v1_7_R4.*;
 import org.bukkit.craftbukkit.v1_7_R4.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
@@ -43,5 +41,10 @@ public class NMSAccess_v1_7 extends AbstractNMSAccess {
             declaredField.set(list, finalList);
         } catch (Exception ignored) {
         }
+    }
+
+    @Override
+    public void setupTablist(Player player) {
+        // nothing
     }
 }

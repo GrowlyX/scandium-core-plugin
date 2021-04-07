@@ -575,7 +575,9 @@ public class PotPlayer {
     public void setupPlayerList() {
         player.setPlayerListName(Color.translate((this.getActiveGrant().getRank().getColor() == null ? ChatColor.GRAY.toString() : this.getActiveGrant().getRank().getColor()) + (this.customColor != null ? this.customColor : "") + this.player.getName()));
 
-        CorePlugin.getInstance().getNMS().updateTablist();
+        if (CorePlugin.TAB_ENABLED) {
+            CorePlugin.getInstance().getNMS().updateTablist();
+        }
     }
 
     public void resetPermissions() {

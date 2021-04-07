@@ -8,5 +8,6 @@ public interface INMS {
     void addExecute(Player player);
 
     void updateTablist();
+    void setupTablist(Player player);
 
 }

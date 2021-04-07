@@ -76,7 +76,7 @@ public class PlayerListener implements Listener {
         }
     }
 
-    
+
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
@@ -144,6 +144,8 @@ public class PlayerListener implements Listener {
                 event.getPlayer().sendMessage(ChatColor.GREEN + "You've been automatically disguised as " + potPlayer.getColorByRankColor() + potPlayer.getDisguiseRank().getName() + ChatColor.GREEN + "!");
             }
         });
+
+        CorePlugin.getInstance().getNMS().setupTablist(event.getPlayer());
     }
 
     @EventHandler

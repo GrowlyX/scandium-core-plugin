@@ -75,8 +75,12 @@ public final class CorePlugin extends JavaPlugin {
 
     public static SimpleDateFormat FORMAT;
     public static Random RANDOM;
+
+    public static String TAB_HEADER;
+    public static String TAB_FOOTER;
     public static String CHAT_FORMAT;
 
+    public static boolean TAB_ENABLED = true;
     public static boolean CAN_JOIN = false;
     public static boolean COLOR_ENABLED = true;
     public static boolean NAME_MC_REWARDS = true;
@@ -90,6 +94,8 @@ public final class CorePlugin extends JavaPlugin {
     @Getter
     private static CorePlugin instance;
 
+    private final TPSUpdateTask tpsRunnable = new TPSUpdateTask();
+
     private ServerManager serverManager;
     private WarpManager warpManager;
     private PlayerManager playerManager;
@@ -102,9 +108,7 @@ public final class CorePlugin extends JavaPlugin {
     private PunishmentManager punishmentManager;
 
     private String serverName;
-
     private HttpClient httpClient;
-
     private Database coreDatabase;
     private RedisManager redisManager;
 
@@ -125,9 +129,6 @@ public final class CorePlugin extends JavaPlugin {
     private boolean debugging;
     private boolean disallow;
 
-    private final TPSUpdateTask tpsRunnable = new TPSUpdateTask();
-
-
     @Override
     public void onEnable() {
         instance = this;
@@ -136,12 +137,22 @@ public final class CorePlugin extends JavaPlugin {
             this.getServer().shutdown();
         }
 
-        /*
-        if (!(new License(this, this.getConfig().getString("settings.license"), "", "").verify())) {
-            this.getServer().shutdown();
-            return;
-        }
-        */
+        /*try {
+            URL url = new URL("http://104.237.8.85:1920/check?apikey=rT4bM8lQ5cP8gM1cA2jO6bX4vW6nQ0vN&id=" + this.getConfig().getString("license") + "&plugin=Scandium");
+            URLConnection urlConnection = url.openConnection();
+            InputStream inputStream = urlConnection.getInputStream();
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                if (!line.equalsIgnoreCase("VALID")) {
+                    Bukkit.getPluginManager().disablePlugin(Bukkit.getPluginManager().getPlugin("Scandium"));
+                    Bukkit.getLogger().info("License key not found!");
+                }
+            }
+        } catch (Exception ex) {
+            Bukkit.getPluginManager().disablePlugin(Bukkit.getPluginManager().getPlugin("Scandium"));
+            Bukkit.getLogger().info("License key not found!");
+        }*/
 
         FORMAT = new SimpleDateFormat("MM/dd/yyyy HH:mma");
         FORMAT.setTimeZone(TimeZone.getTimeZone("EST"));
@@ -165,6 +176,9 @@ public final class CorePlugin extends JavaPlugin {
         this.motdConfig = new ConfigExternal("motd");
         this.filterConfig = new ConfigExternal("filtered");
 
+        TAB_ENABLED = this.getConfig().getBoolean("tablist.enabled");
+        TAB_HEADER = Color.translate(this.getConfig().getString("tablist.header").replace("<nl>", "\n").replace("<server-name>", this.getConfig().getString("server-id")));
+        TAB_FOOTER = Color.translate(this.getConfig().getString("tablist.footer").replace("<nl>", "\n").replace("<server-name>", this.getConfig().getString("server-id")));
         CHAT_FORMAT = this.getConfig().getString("settings.chat-format");
         CHAT_FORMAT_ENABLED = this.getConfig().getBoolean("settings.chat-format-enabled");
         NAME_MC_REWARDS = this.getConfig().getBoolean("settings.namemc-rewards");
@@ -208,7 +222,9 @@ public final class CorePlugin extends JavaPlugin {
     }
 
     private void setupHooks() {
-        if (this.getServer().getPluginManager().isPluginEnabled("ProtocolLib")) chatInterceptor = new ProtocolChatInterceptor(); else this.getLogger().info("[Protocol] Could not find ProtocolLib! Chat tab block will not work without it!");
+        if (this.getServer().getPluginManager().isPluginEnabled("ProtocolLib"))
+            chatInterceptor = new ProtocolChatInterceptor();
+        else this.getLogger().info("[Protocol] Could not find ProtocolLib! Chat tab block will not work without it!");
         if (this.getServer().getPluginManager().isPluginEnabled("LunarClient-API")) {
             this.lunar = new LunarClientHook();
         } else {

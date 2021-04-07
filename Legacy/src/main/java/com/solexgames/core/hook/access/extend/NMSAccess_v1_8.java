@@ -2,9 +2,7 @@ package com.solexgames.core.hook.access.extend;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.hook.access.AbstractNMSAccess;
-import net.minecraft.server.v1_8_R3.EntityPlayer;
-import net.minecraft.server.v1_8_R3.MinecraftServer;
-import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerInfo;
+import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
@@ -44,6 +42,30 @@ public class NMSAccess_v1_8 extends AbstractNMSAccess {
 
             declaredField.set(list, finalList);
         } catch (Exception ignored) {
+        }
+    }
+
+    @Override
+    public void setupTablist(Player player) {
+        if (CorePlugin.TAB_ENABLED) {
+            IChatBaseComponent tabHeader = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + CorePlugin.TAB_HEADER + "\"}");
+            IChatBaseComponent tabFooter = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + CorePlugin.TAB_FOOTER + "\"}");
+            PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter();
+
+            try {
+                Field headerField = packet.getClass().getDeclaredField("a");
+                headerField.setAccessible(true);
+                headerField.set(packet, tabHeader);
+                headerField.setAccessible(false);
+
+                Field footerField = packet.getClass().getDeclaredField("b");
+                footerField.setAccessible(true);
+                footerField.set(packet, tabFooter);
+                footerField.setAccessible(false);
+            } catch (Exception ignored) {
+            }
+
+            ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
         }
     }
 }
