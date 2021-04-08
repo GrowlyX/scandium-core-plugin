@@ -8,6 +8,7 @@
       <module fileurl="file://$PROJECT_DIR$/Library/Library.iml" filepath="$PROJECT_DIR$/Library/Library.iml" />
       <module fileurl="file://$PROJECT_DIR$/Placeholder/Placeholder.iml" filepath="$PROJECT_DIR$/Placeholder/Placeholder.iml" />
       <module fileurl="file://$PROJECT_DIR$/Scandium.iml" filepath="$PROJECT_DIR$/Scandium.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ScandiumL/ScandiumL.iml" filepath="$PROJECT_DIR$/ScandiumL/ScandiumL.iml" />
     </modules>
   </component>
 </project>

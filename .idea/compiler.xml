@@ -10,6 +10,7 @@
         <module name="Bungee" />
         <module name="Placeholder" />
         <module name="API" />
+        <module name="ScandiumL" />
         <module name="Library" />
         <module name="Legacy" />
       </profile>
@@ -22,6 +23,7 @@
       <module name="Non-Legacy" target="1.8" />
       <module name="Placeholder" target="1.8" />
       <module name="Scandium" target="1.8" />
+      <module name="ScandiumL" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
