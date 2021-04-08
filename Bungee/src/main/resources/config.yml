@@ -6,6 +6,10 @@ maintenance: true
 whitelistedPlayers:
   - "GrowlyX"
 motd:
-  maintenance: "&3&lPvPLounge &7<bar> &fNorth America<nl>&bMore information at &3discord.pvplounge.com&b."
-  normal: "&3&lPvPLounge &7<bar> &fNorth America<nl> &7* &3Season 1 &bof &3Practice &bis now &a&lLIVE&b!"
-maintenance-string: ""
+  maintenance:
+    line-1: "&e&lMine&3&lArcade &7[1.8-1.16]"
+    line-2: "&cWe're currently in maintenance mode!"
+  normal:
+    line-1: "&e&lMine&3&lArcade &7[1.8-1.16]"
+    line-2: "&fEvent &7will be starting in &f???&7!"
+maintenance-string: "&cSorry, but the server's in maintenance.<nl>&cPlease try logging back in later!"

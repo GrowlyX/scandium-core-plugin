@@ -8,6 +8,8 @@ import com.solexgames.xenon.proxy.ProxyManager;
 import com.solexgames.xenon.redis.RedisManager;
 import com.solexgames.xenon.redis.RedisSettings;
 import com.solexgames.xenon.util.Color;
+import com.solexgames.xenon.util.MOTDUtil;
+import com.sun.deploy.util.StringUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
@@ -96,13 +98,13 @@ public class CorePlugin extends Plugin {
         this.maintenance = this.configuration.getBoolean("maintenance");
         this.whitelistedPlayers.addAll(this.configuration.getStringList("whitelistedPlayers"));
 
-        this.maintenanceMotd = Color.translate(this.configuration.getString("motd.maintenance")
+        this.maintenanceMotd = Color.translate(MOTDUtil.getCenteredMotd(this.configuration.getString("motd.maintenance.line-1")) + "<nl>" + MOTDUtil.getCenteredMotd(this.configuration.getString("motd.maintenance.line-1"))
                 .replace("<bar>", Character.toString('⎜'))
                 .replace("<nl>", "\n"));
         this.maintenanceMessage = Color.translate(this.configuration.getString("maintenance-string")
                 .replace("<bar>", Character.toString('⎜'))
                 .replace("<nl>", "\n"));
-        this.normalMotd = Color.translate(this.configuration.getString("motd.normal")
+        this.normalMotd = Color.translate(MOTDUtil.getCenteredMotd(this.configuration.getString("motd.normal.line-1")) + "<nl>" + MOTDUtil.getCenteredMotd(this.configuration.getString("motd.normal.line-1"))
                 .replace("<bar>", Character.toString('⎜'))
                 .replace("<nl>", "\n"));
 
@@ -164,6 +166,6 @@ public class CorePlugin extends Plugin {
         this.configuration.set("whitelistedPlayers", whitelistedPlayers);
         this.configuration.set("maintenance", maintenance);
 
-        ConfigurationProvider.getProvider(YamlConfiguration.class).save(configuration, configurationFile);
+        ConfigurationProvider.getProvider(YamlConfiguration.class).save(this.configuration, this.configurationFile);
     }
 }
