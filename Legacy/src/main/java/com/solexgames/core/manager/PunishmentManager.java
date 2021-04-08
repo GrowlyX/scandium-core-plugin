@@ -129,6 +129,10 @@ public class PunishmentManager {
                         break;
                 }
             }
+
+            if (CorePlugin.getInstance().getDiscordManager().getClient() != null) {
+                CorePlugin.getInstance().getDiscordManager().sendPunishment(punishment);
+            }
         });
     }
 
