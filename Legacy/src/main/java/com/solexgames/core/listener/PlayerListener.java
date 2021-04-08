@@ -76,8 +76,6 @@ public class PlayerListener implements Listener {
         }
     }
 
-
-
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer());
@@ -90,7 +88,7 @@ public class PlayerListener implements Listener {
         CompletableFuture.runAsync(() -> {
             potPlayer.onAfterDataLoad();
 
-            Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> Bukkit.getOnlinePlayers().stream()
+            Bukkit.getScheduler().runTaskLaterAsynchronously(CorePlugin.getInstance(), () -> Bukkit.getOnlinePlayers().stream()
                     .map(player -> CorePlugin.getInstance().getPlayerManager().getPlayer(player))
                     .filter(potPlayer1 -> potPlayer1.isVanished() && potPlayer.getActiveGrant().getRank().getWeight() < potPlayer1.getActiveGrant().getRank().getWeight())
                     .forEach(player -> event.getPlayer().hidePlayer(player.getPlayer())), 35L);
