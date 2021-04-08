@@ -38,12 +38,18 @@ public class HelpOpCommand extends BaseCommand {
                 return false;
             }
 
-            CorePlugin.getInstance().getRedisThread().execute(() -> client.write(RedisUtil.onHelpOp(player, reason)));
+            RedisUtil.writeAsync(RedisUtil.onHelpOp(player, reason));
             player.sendMessage(Color.translate("&aYour request has been sent to all online staff!"));
 
             potPlayer.setCanRequest(false);
+
+            if (CorePlugin.getInstance().getDiscordManager().getClient() != null) {
+                CorePlugin.getInstance().getDiscordManager().sendRequest(player, reason);
+            }
+
             Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> {
                 PotPlayer newPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+
                 if (newPotPlayer != null) {
                     potPlayer.setCanRequest(true);
                 }

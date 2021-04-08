@@ -9,6 +9,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.entity.Player;
 
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.time.temporal.TemporalAccessor;
 
 @Getter
@@ -44,6 +47,8 @@ public class DiscordManager {
     public void sendReport(Player player, Player target, String reason) {
         WebhookEmbedBuilder embedBuilder = new WebhookEmbedBuilder();
 
+        embedBuilder.setTitle(new WebhookEmbed.EmbedTitle("New Report", null));
+
         embedBuilder.addField(new WebhookEmbed.EmbedField(true, "Player", player.getName()));
         embedBuilder.addField(new WebhookEmbed.EmbedField(true, "Target", target.getName()));
         embedBuilder.addField(new WebhookEmbed.EmbedField(true, "Reason", reason));
@@ -56,6 +61,8 @@ public class DiscordManager {
 
     public void sendRequest(Player player, String reason) {
         WebhookEmbedBuilder embedBuilder = new WebhookEmbedBuilder();
+
+        embedBuilder.setTitle(new WebhookEmbed.EmbedTitle("New Request", null));
 
         embedBuilder.addField(new WebhookEmbed.EmbedField(true, "Player", player.getName()));
         embedBuilder.addField(new WebhookEmbed.EmbedField(true, "Request", reason));

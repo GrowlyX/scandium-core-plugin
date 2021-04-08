@@ -579,7 +579,7 @@ public class PlayerListener implements Listener {
                     } else {
                         RedisUtil.writeAsync(RedisUtil.onDisconnect(event.getPlayer().getDisplayName()));
                     }
-                }, 47L);
+                }, 55L);
             }
         });
     }
