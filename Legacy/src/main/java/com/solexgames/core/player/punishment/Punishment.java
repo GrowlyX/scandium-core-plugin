@@ -146,7 +146,7 @@ public class Punishment {
         return this.isPermanent() ? "Never" : CorePlugin.FORMAT.format(new Date(this.createdAt.getTime() + this.punishmentDuration));
     }
 
-    public boolean checkIfActive() {
+    public boolean isValid() {
         if (this.isRemoved()) {
             return false;
         } else if (this.isActive()) {

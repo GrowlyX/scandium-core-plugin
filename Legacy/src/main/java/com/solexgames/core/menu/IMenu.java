@@ -23,6 +23,7 @@ public interface IMenu extends InventoryHolder {
     void update();
     void onInventoryClick(InventoryClickEvent event) throws IOException, ParseException;
 
-    default void onInventoryClose(InventoryCloseEvent event) { }
+    default void onInventoryClose(InventoryCloseEvent event) {
 
+    }
 }

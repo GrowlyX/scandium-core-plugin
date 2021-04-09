@@ -86,13 +86,13 @@ public class CorePlugin extends Plugin {
         this.configuration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(configurationFile);
         this.redisConfig = ConfigurationProvider.getProvider(YamlConfiguration.class).load(redisConfigFile);
 
-        this.proxyManager = new ProxyManager();
+/*        this.proxyManager = new ProxyManager();
         this.redisManager = new RedisManager(new RedisSettings(
                 this.redisConfig.getString("redis.host"),
                 this.redisConfig.getInt("redis.port"),
                 this.redisConfig.getBoolean("redis.authentication.enabled"),
                 this.redisConfig.getString("redis.authentication.password")
-        ));
+        ));*/
 
         this.maintenance = this.configuration.getBoolean("maintenance");
         this.whitelistedPlayers.addAll(this.configuration.getStringList("whitelistedPlayers"));

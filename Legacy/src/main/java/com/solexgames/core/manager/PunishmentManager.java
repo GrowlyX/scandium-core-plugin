@@ -14,7 +14,6 @@ import lombok.Getter;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -153,7 +152,7 @@ public class PunishmentManager {
             }
 
             List<Punishment> punishmentList = Punishment.getAllPunishments().stream()
-                    .filter(punishment -> punishment != null && punishment.getPunishmentType().equals(punishmentType) && punishment.getTarget().toString().equals(playerId.toString()) && punishment.checkIfActive())
+                    .filter(punishment -> punishment != null && punishment.getPunishmentType().equals(punishmentType) && punishment.getTarget().toString().equals(playerId.toString()) && punishment.isValid())
                     .sorted(Comparator.comparingLong(Punishment::getCreatedAtLong).reversed())
                     .collect(Collectors.toList());
 
