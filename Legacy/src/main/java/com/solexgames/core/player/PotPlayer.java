@@ -238,6 +238,7 @@ public class PotPlayer {
         document.put("previousIpAddress", this.encryptedIpAddress);
         document.put("experience", this.experience);
         document.put("blacklisted", this.currentlyBlacklisted);
+        document.put("restricted", this.currentlyRestricted);
 
         return document;
     }

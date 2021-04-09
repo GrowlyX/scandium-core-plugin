@@ -317,28 +317,6 @@ public class PlayerManager {
         }
     }
 
-    public int getAlts(NetworkPlayer targetPlayer) {
-        return (int) CorePlugin.getInstance().getPlayerManager().getAllNetworkProfiles().values().stream()
-                .filter(networkPlayer -> !networkPlayer.getName().equalsIgnoreCase(targetPlayer.getName()))
-                .filter(networkPlayer -> networkPlayer.getIpAddress().equalsIgnoreCase(targetPlayer.getIpAddress()))
-                .count();
-    }
-
-    public String getAltsMessage(NetworkPlayer targetPlayer) {
-        final String altMessage = CorePlugin.getInstance().getPlayerManager().getAllNetworkProfiles().values().stream()
-                .filter(networkPlayer -> !networkPlayer.getName().equalsIgnoreCase(targetPlayer.getName()))
-                .filter(networkPlayer -> networkPlayer.getIpAddress().equalsIgnoreCase(targetPlayer.getIpAddress()))
-                .map(networkPlayer -> (Rank.getByName(networkPlayer.getRankName()) != null ? Color.translate(Rank.getByName(networkPlayer.getRankName()).getColor()) : ChatColor.GREEN) + networkPlayer.getName())
-                .collect(Collectors.joining(ChatColor.WHITE + ", "));
-
-        final int altsAmount = (int) CorePlugin.getInstance().getPlayerManager().getAllNetworkProfiles().values().stream()
-                .filter(networkPlayer -> !networkPlayer.getName().equalsIgnoreCase(targetPlayer.getName()))
-                .filter(networkPlayer -> networkPlayer.getIpAddress().equalsIgnoreCase(targetPlayer.getIpAddress()))
-                .count();
-
-        return (altsAmount == 0 ? ChatColor.RED + "That player has no alt accounts!" : altMessage);
-    }
-
     public void sendFreezeMessage(Player player) {
         this.freezeMessage.forEach(s -> player.sendMessage(Color.translate(s)));
     }
