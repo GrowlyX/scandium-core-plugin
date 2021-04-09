@@ -137,7 +137,8 @@ public final class CorePlugin extends JavaPlugin {
             this.getServer().shutdown();
         }
 
-/*        try {
+        /*
+        try {
             URL url = new URL("http://104.237.8.85:1920/check?apikey=rT4bM8lQ5cP8gM1cA2jO6bX4vW6nQ0vN&id=" + this.getConfig().getString("license") + "&plugin=Scandium");
             URLConnection urlConnection = url.openConnection();
             InputStream inputStream = urlConnection.getInputStream();

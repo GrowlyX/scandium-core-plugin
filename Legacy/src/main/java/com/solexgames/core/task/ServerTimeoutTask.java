@@ -1,11 +1,13 @@
 package com.solexgames.core.task;
 
 import com.solexgames.core.CorePlugin;
+import com.solexgames.core.listener.custom.ServerDeleteEvent;
+import com.solexgames.core.listener.custom.ServerRetrieveEvent;
 import com.solexgames.core.manager.ServerManager;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
- * @author VISUAL_ & GrowlyX
+ * @author GrowlyX
  * @since March 2021
  */
 
@@ -28,6 +30,9 @@ public class ServerTimeoutTask extends BukkitRunnable {
                     .forEach(server -> {
                         this.plugin.getServerManager().getNetworkServers().remove(server);
                         this.plugin.logConsole("&cThe server with the name &4'" + server.getServerName() + "'&c has been removed as it's last update was longer than &415 seconds&c ago.");
+
+                        ServerDeleteEvent deleteEvent = new ServerDeleteEvent(server);
+                        CorePlugin.getInstance().getServer().getPluginManager().callEvent(deleteEvent);
                     });
         } catch (Exception ignored) {
         }

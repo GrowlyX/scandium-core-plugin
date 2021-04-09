@@ -6,6 +6,7 @@ import com.solexgames.core.enums.ChatChannelType;
 import com.solexgames.core.enums.NetworkServerStatusType;
 import com.solexgames.core.enums.NetworkServerType;
 import com.solexgames.core.enums.StaffUpdateType;
+import com.solexgames.core.listener.custom.ServerRetrieveEvent;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.punishment.Punishment;
 import com.solexgames.core.player.punishment.PunishmentType;
@@ -79,6 +80,9 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                         server.setTicksPerSecond("&a0.0&7, &a0.0&7, &a0.0");
                         server.setServerType(NetworkServerType.NOT_DEFINED);
                         server.setLastUpdate(System.currentTimeMillis());
+
+                        ServerRetrieveEvent retrieveEvent = new ServerRetrieveEvent(server);
+                        CorePlugin.getInstance().getServer().getPluginManager().callEvent(retrieveEvent);
                     }
 
                     Bukkit.getOnlinePlayers().stream().filter(player -> player.hasPermission("scandium.network.alerts")).forEach(player -> player.sendMessage(Color.translate("&3[S] &e" + bootingServerName + " &bhas just &6booted&b and will be joinable in 5 seconds.")));
@@ -104,6 +108,8 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                         server.setWhitelistEnabled(whitelistEnabled);
                         server.setTicksPerSecondSimplified(ticksPerSecondSimple);
 
+                        ServerRetrieveEvent retrieveEvent = new ServerRetrieveEvent(server);
+                        CorePlugin.getInstance().getServer().getPluginManager().callEvent(retrieveEvent);
                     }
 
                     NetworkServer updatedServer = NetworkServer.getByName(serverName);
@@ -112,7 +118,6 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                     updatedServer.setServerType(NetworkServerType.valueOf(serverType));
 
                     updatedServer.setLastUpdate(System.currentTimeMillis());
-
                     break;
                 case SERVER_DATA_OFFLINE:
                     String offlineServerName = jsonAppender.getParam("SERVER");

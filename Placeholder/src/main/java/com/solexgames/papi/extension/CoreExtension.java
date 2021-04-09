@@ -1,4 +1,4 @@
-package com.solexgames.papi;
+package com.solexgames.papi.extension;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.player.PotPlayer;
@@ -6,7 +6,7 @@ import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 
-public class CorePlaceholder extends PlaceholderExpansion {
+public class CoreExtension extends PlaceholderExpansion {
 
     @Override
     public @NotNull String getIdentifier() {
@@ -20,18 +20,14 @@ public class CorePlaceholder extends PlaceholderExpansion {
 
     @Override
     public @NotNull String getVersion() {
-        return "1.1";
+        return "1.0";
     }
 
     @Override
-    public String onRequest(OfflinePlayer player, String params) {
+    public String onRequest(OfflinePlayer player, @NotNull String params) {
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player.getPlayer());
 
         if (potPlayer == null) {
-            return null;
-        }
-
-        if (params == null) {
             return null;
         }
 
@@ -86,8 +82,8 @@ public class CorePlaceholder extends PlaceholderExpansion {
                 } else {
                     return "English";
                 }
+            default:
+                return null;
         }
-
-        return null;
     }
 }
