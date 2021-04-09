@@ -5,17 +5,20 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>Scandium-parent</artifactId>
         <groupId>com.solexgames</groupId>
+        <artifactId>Scandium-parent</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <artifactId>API</artifactId>
+
+    <name>API</name>
 
     <dependencies>
         <dependency>
             <groupId>com.solexgames</groupId>
             <artifactId>Scandium-legacy</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

@@ -10,6 +10,7 @@ import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.global.NetworkPlayer;
 import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.util.Color;
+import org.apache.commons.lang3.StringUtils;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -62,10 +63,13 @@ public class AltsCommand extends BaseCommand {
                     int altsAmount = potentialAlts.size();
 
                     sender.sendMessage(new String[]{
+                            ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 53),
+                            playerFormattedDisplay + Color.SECONDARY_COLOR + "'s Alt Accounts " + ChatColor.GRAY + "(x" + altsAmount + "):",
                             "",
-                            playerFormattedDisplay + Color.SECONDARY_COLOR + "'s Alt Accounts " + ChatColor.GRAY + "(x" + altsAmount + ")" + Color.SECONDARY_COLOR + ":",
                             altsMessage,
-                            ""
+                            "",
+                            ChatColor.GRAY + "(" + ChatColor.GREEN + "Online" + ChatColor.GRAY + ")" + ChatColor.GRAY + " (" + ChatColor.RED + "Offline" + ChatColor.GRAY + ")" + ChatColor.GRAY + " (" + ChatColor.GOLD + "Banned" + ChatColor.GRAY + ")" + ChatColor.GRAY + " (" + ChatColor.DARK_RED + "Blacklisted" + ChatColor.GRAY + ")",
+                            ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 53)
                     });
                 });
             } else {

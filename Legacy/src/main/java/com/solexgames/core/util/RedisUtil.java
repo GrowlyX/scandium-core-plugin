@@ -56,7 +56,7 @@ public final class RedisUtil {
 
     public static String onChatChannel(ChatChannelType chatChannel, String message, Player player) {
         return new JsonAppender(RedisAction.CHAT_CHANNEL_UPDATE)
-                .put("CHANNEL", chatChannel.getName())
+                .put("CHANNEL", chatChannel.name())
                 .put("MESSAGE", message)
                 .put("SERVER", CorePlugin.getInstance().getServerName())
                 .put("PLAYER", player.getDisplayName())
