@@ -67,7 +67,7 @@ public class PunishViewPaginatedMenu extends PaginatedMenu {
             OfflinePlayer targetOfflinePlayer = Bukkit.getOfflinePlayer(punishment.getTarget());
             ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
             List<String> lore = new ArrayList<>();
-            String statusLore = punishment.isRemoved() ? ChatColor.RED + "Removed" : (punishment.isActive() ? ChatColor.GREEN + "Active" : ChatColor.GOLD + "Expired");
+            String statusLore = punishment.isRemoved() ? ChatColor.RED + "[Removed]" : (punishment.isActive() ? ChatColor.GREEN + "[Active]" : ChatColor.GOLD + "[Expired]");
 
             lore.add(network.getMainColor() + "&m------------------------------------");
             lore.add("&ePunish By: &b" + network.getMainColor() + (issuerOfflinePlayer != null ? issuerOfflinePlayer.getName() : "&4Console"));
@@ -76,7 +76,6 @@ public class PunishViewPaginatedMenu extends PaginatedMenu {
             lore.add("&ePunish Reason: &b" + network.getMainColor() + punishment.getReason());
             lore.add(network.getMainColor() + "&m------------------------------------");
             lore.add("&ePunish Type: &b" + network.getMainColor() + punishment.getPunishmentType().getName());
-            lore.add("&ePunish Status: &b" + network.getMainColor() + statusLore);
             lore.add("&ePunish Expiring: &b" + network.getMainColor() + punishment.getExpirationString());
             lore.add(network.getMainColor() + "&m------------------------------------");
 
@@ -90,7 +89,7 @@ public class PunishViewPaginatedMenu extends PaginatedMenu {
                 @Override
                 public ItemStack getButtonItem(Player player) {
                     return new ItemBuilder(XMaterial.LIME_WOOL.parseMaterial(), (punishment.isActive() ? 5 : (punishment.isRemoved() ? 1 : 14)))
-                            .setDisplayName(ChatColor.RED + "#" + punishment.getPunishIdentification())
+                            .setDisplayName(ChatColor.DARK_GRAY + "#" + punishment.getPunishIdentification() + " " + statusLore)
                             .addLore(Color.translate(lore))
                             .create();
                 }
@@ -98,14 +97,8 @@ public class PunishViewPaginatedMenu extends PaginatedMenu {
                 @Override
                 public void clicked(Player player, ClickType clickType) {
                     if (clickType.equals(ClickType.RIGHT)) {
-                        String display = ChatColor.stripColor(Color.translate(getButtonItem(player).getItemMeta().getDisplayName()));
-                        String id = display.replace("#", "");
-                        Punishment punishment = Punishment.getByIdentification(id);
-
-                        if (punishment != null) {
-                            new PunishRemoveConfirmMenu(player, target, punishment).open(player);
-                            setClosedByMenu(true);
-                        }
+                        new PunishRemoveConfirmMenu(player, target, punishment).open(player);
+                        setClosedByMenu(true);
                     }
                 }
             });

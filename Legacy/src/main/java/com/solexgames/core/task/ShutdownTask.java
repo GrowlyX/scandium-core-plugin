@@ -31,7 +31,7 @@ public class ShutdownTask extends BukkitRunnable {
         ChatColor mainColor = network.getMainColor();
         ChatColor secondaryColor = network.getSecondaryColor();
 
-        int finalSeconds = seconds - ticks;
+        int finalSeconds = this.seconds - this.ticks;
 
         switch (finalSeconds) {
             case 40:

@@ -41,7 +41,7 @@ public class GrantScopePaginatedMenu extends PaginatedMenu {
             @Override
             public ItemStack getButtonItem(Player player) {
                 return new ItemBuilder(XMaterial.LIME_TERRACOTTA.parseMaterial(), 5)
-                        .setDisplayName("&aGlobal Scope")
+                        .setDisplayName("&a&lGlobal Scope")
                         .addLore(
                                 "&7Click to select the global",
                                 "&7scope for this grant."
@@ -59,7 +59,7 @@ public class GrantScopePaginatedMenu extends PaginatedMenu {
             @Override
             public ItemStack getButtonItem(Player player) {
                 return new ItemBuilder(XMaterial.LIGHT_BLUE_TERRACOTTA.parseMaterial(), 3)
-                        .setDisplayName("&bScope Selection")
+                        .setDisplayName("&b&lScope Selection")
                         .addLore(
                                 "&7Use the buttons below to",
                                 "&7select a server for this",
@@ -73,7 +73,7 @@ public class GrantScopePaginatedMenu extends PaginatedMenu {
             @Override
             public ItemStack getButtonItem(Player player) {
                 return new ItemBuilder(XMaterial.RED_TERRACOTTA.parseMaterial(), 14)
-                        .setDisplayName("&cReturn to Main")
+                        .setDisplayName("&c&lReturn to Main")
                         .addLore(
                                 "&7Click to cancel this grant",
                                 "&7and return to the main menu."

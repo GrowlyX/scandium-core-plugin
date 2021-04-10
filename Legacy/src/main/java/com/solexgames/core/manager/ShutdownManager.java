@@ -10,8 +10,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-@NoArgsConstructor
 @Getter
+@NoArgsConstructor
 public class ShutdownManager {
 
     private ShutdownTask shutdownTask;
@@ -23,7 +23,7 @@ public class ShutdownManager {
         ChatColor mainColor = network.getMainColor();
         ChatColor secondaryColor = network.getSecondaryColor();
 
-        Bukkit.broadcastMessage(Color.translate(secondaryColor + "The server will be shutting down in " + mainColor + seconds + " seconds" + secondaryColor + "."));
+        Bukkit.broadcastMessage(secondaryColor + "The server will be shutting down in " + mainColor + seconds + " seconds" + secondaryColor + ".");
         CorePlugin.getInstance().getPlayerManager().sendToNetworkStaff("&3[S] " + "&7[" + CorePlugin.getInstance().getServerName() + "] " + initiator.getDisplayName() + " &bhas initiated a shutdown on &6" + CorePlugin.getInstance().getServerName() + "&b.");
 
         this.shutdownTask = new ShutdownTask(seconds);

@@ -54,6 +54,7 @@ public class GrantViewPaginatedMenu extends PaginatedMenu {
             @Override
             public ItemStack getButtonItem(Player player) {
                 List<String> arrayList = new ArrayList<>();
+                String statusLore = grant.isActive() ? ChatColor.GREEN + "[Active]" : (grant.isExpired() ? ChatColor.GOLD + "[Expired]" : ChatColor.RED + "[Removed]");
 
                 arrayList.add(network.getMainColor() + "&m------------------------------------");
                 arrayList.add("&eTarget&7: " + network.getMainColor() + target.getDisplayName());
@@ -70,7 +71,7 @@ public class GrantViewPaginatedMenu extends PaginatedMenu {
                 arrayList.add(network.getMainColor() + "&m------------------------------------");
 
                 return new ItemBuilder(XMaterial.LIME_WOOL.parseMaterial(), (grant.isActive() ? 5 : (grant.isExpired() ? 1 : 14)))
-                        .setDisplayName(ChatColor.RED + "#" + grant.getId())
+                        .setDisplayName(ChatColor.DARK_GRAY + "#" + grant.getId() + " " + statusLore)
                         .addLore(arrayList)
                         .create();
             }
@@ -78,13 +79,8 @@ public class GrantViewPaginatedMenu extends PaginatedMenu {
             @Override
             public void clicked(Player player, ClickType clickType) {
                 if (clickType.equals(ClickType.RIGHT)) {
-                    String display = ChatColor.stripColor(getButtonItem(player).getItemMeta().getDisplayName());
-                    String id = display.replace("#", "");
-                    Grant grant = potPlayer.getById(id);
-
-                    if (grant != null) {
-                        new GrantRemoveConfirmMenu(player, target, grant).open(player);
-                    }
+                    new GrantRemoveConfirmMenu(player, target, grant).open(player);
+                    setClosedByMenu(true);
                 }
             }
         }));

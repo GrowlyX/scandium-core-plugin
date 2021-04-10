@@ -47,9 +47,9 @@ public class ServerManager {
 
         this.staffInformation = Color.translate(CorePlugin.getInstance().getConfig().getStringList("staff-information"));
 
-        this.spawnLocation = (Location) CorePlugin.getInstance().getConfig().get("location.spawn");
+        this.spawnLocation = (Location) CorePlugin.getInstance().getConfig().get("location.spawn", null);
 
-        setupServerType();
+        this.setupServerType();
     }
 
     public void removeNetworkServer(NetworkServer networkServer) {

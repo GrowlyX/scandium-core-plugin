@@ -1,11 +1,16 @@
 package com.solexgames.core.util.external.pagination.pagination;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
+import com.solexgames.core.util.Color;
+import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.util.external.pagination.Button;
 import com.solexgames.core.util.external.pagination.Menu;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +28,7 @@ public abstract class PaginatedMenu extends Menu {
 
     @Override
     public String getTitle(Player player) {
-        return getPrePaginatedTitle(player) + " &7(" + CorePlugin.getInstance().getServerManager().getNetwork().getMainColor() + page + "/" + this.getPages(player) + "&7)";
+        return getPrePaginatedTitle(player) + ChatColor.GRAY + " (" + Color.MAIN_COLOR + page + ChatColor.GRAY + "/" + Color.MAIN_COLOR + this.getPages(player) + ChatColor.GRAY + ")";
     }
 
     /**
@@ -69,6 +74,18 @@ public abstract class PaginatedMenu extends Menu {
         int maxIndex = (int) ((double) (page) * maxPerPage);
 
         HashMap<Integer, Button> buttons = new HashMap<>();
+
+        for (int i = 0; i <= 8; i++) {
+            buttons.put(i, new Button() {
+                @Override
+                public ItemStack getButtonItem(Player player) {
+                    return new ItemBuilder(XMaterial.GRAY_STAINED_GLASS_PANE.parseMaterial())
+                            .setDurability(7)
+                            .setDisplayName("")
+                            .create();
+                }
+            });
+        }
 
         buttons.put(0, new PageButton(-1, this));
         buttons.put(8, new PageButton(1, this));

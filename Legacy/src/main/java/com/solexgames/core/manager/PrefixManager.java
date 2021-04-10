@@ -6,6 +6,8 @@ import com.solexgames.core.CorePlugin;
 import com.solexgames.core.player.prefixes.Prefix;
 import org.bson.Document;
 
+import java.util.concurrent.CompletableFuture;
+
 public class PrefixManager {
 
     public PrefixManager() {
@@ -19,10 +21,12 @@ public class PrefixManager {
     }
 
     public void loadPrefixes() {
-        CorePlugin.getInstance().getCoreDatabase().getPrefixCollection().find().forEach((Block<? super Document>) document -> {
-            if (Prefix.getByName(document.getString("name")) == null) {
-                new Prefix(document.getString("_id"), document.getString("name"), document.getString("displayName"), document.getString("prefix"));
-            }
+        CompletableFuture.runAsync(() -> {
+            CorePlugin.getInstance().getCoreDatabase().getPrefixCollection().find().forEach((Block<? super Document>) document -> {
+                if (Prefix.getByName(document.getString("name")) == null) {
+                    new Prefix(document.getString("_id"), document.getString("name"), document.getString("displayName"), document.getString("prefix"));
+                }
+            });
         });
     }
 

@@ -50,6 +50,8 @@ public class NameColorSelectMenu extends PaginatedMenu {
 
                 potPlayer.setCustomColor(null);
                 player.sendMessage(ChatColor.GREEN + "Your custom name color has been reset!");
+
+                player.closeInventory();
             }
         });
 
@@ -95,6 +97,8 @@ public class NameColorSelectMenu extends PaginatedMenu {
 
             potPlayer.setCustomColor(this.chatColor);
             player.sendMessage(ChatColor.GREEN + "Modified your chat name color to " + this.chatColor + this.chatColorFancyName + ChatColor.GREEN + "!");
+
+            player.closeInventory();
         }
     }
 }

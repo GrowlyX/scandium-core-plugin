@@ -225,7 +225,7 @@ public final class CorePlugin extends JavaPlugin {
 
     private void setupHooks() {
         if (this.getServer().getPluginManager().isPluginEnabled("ProtocolLib"))
-            chatInterceptor = new ProtocolChatInterceptor();
+            this.chatInterceptor = new ProtocolChatInterceptor();
         else this.getLogger().info("[Protocol] Could not find ProtocolLib! Chat tab block will not work without it!");
         if (this.getServer().getPluginManager().isPluginEnabled("LunarClient-API")) {
             this.lunar = new LunarClientHook();

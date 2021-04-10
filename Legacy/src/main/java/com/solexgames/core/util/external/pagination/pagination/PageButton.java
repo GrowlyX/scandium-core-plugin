@@ -1,6 +1,7 @@
 package com.solexgames.core.util.external.pagination.pagination;
 
 import com.cryptomorin.xseries.XMaterial;
+import com.solexgames.core.util.Color;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.util.external.pagination.Button;
 import lombok.AllArgsConstructor;
@@ -19,22 +20,13 @@ public class PageButton extends Button {
     @Override
     public ItemStack getButtonItem(Player player) {
         if (!this.hasNext(player)) {
-            return new ItemBuilder(XMaterial.RED_DYE.parseMaterial())
-                    .setDurability(1)
-                    .setDisplayName(ChatColor.RED + "Last page")
-                    .addLore(
-                            "&7You're at the last page!",
-                            "",
-                            "&7Click this button to",
-                            "&7return to the first page."
-                    ).create();
+            return new ItemBuilder(Material.AIR).create();
         }
 
         return new ItemBuilder(this.mod > 0 ? XMaterial.GLISTERING_MELON_SLICE.parseMaterial() : XMaterial.MELON_SLICE.parseMaterial())
-                .setDisplayName(this.mod > 0 ? ChatColor.GREEN + "Next page" : ChatColor.RED + "Return")
+                .setDisplayName(this.mod > 0 ? ChatColor.GREEN + "Next page" : ChatColor.RED + "Previous page" + ChatColor.GRAY + " (" + Color.MAIN_COLOR + (this.mod > 0 ? menu.getPage() + mod : menu.getPage() - mod) + ChatColor.GRAY + "/" + Color.MAIN_COLOR + menu.getPages(player) + ChatColor.GRAY + ")")
                 .addLore(
-                        "&7Click to go to the " + (this.mod > 0 ? "next" : "previous"),
-                        "&7page."
+                        "&7Right Click to view all pages!"
                 ).create();
     }
 
