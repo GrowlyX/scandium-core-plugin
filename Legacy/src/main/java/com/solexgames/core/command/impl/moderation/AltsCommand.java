@@ -10,6 +10,7 @@ import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.global.NetworkPlayer;
 import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.util.Color;
+import com.solexgames.core.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.bson.Document;
 import org.bukkit.Bukkit;
@@ -47,7 +48,7 @@ public class AltsCommand extends BaseCommand {
             final PotPlayer targetPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
 
             if (targetPlayer != null) {
-                final String playerFormattedDisplay = (Rank.getByName(targetPlayer.getRankName()) != null ? Color.translate(Rank.getByName(targetPlayer.getRankName()).getColor()) : ChatColor.GREEN.toString()) + targetPlayer.getName();
+                final String playerFormattedDisplay = Color.translate(targetPlayer.getActiveGrant().getRank().getColor() + targetPlayer.getName());
 
                 CompletableFuture<List<Document>> documents = new CompletableFuture<>();
                 CompletableFuture.runAsync(() -> {
@@ -63,13 +64,13 @@ public class AltsCommand extends BaseCommand {
                     int altsAmount = potentialAlts.size();
 
                     sender.sendMessage(new String[]{
-                            ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 53),
-                            playerFormattedDisplay + Color.SECONDARY_COLOR + "'s Alt Accounts " + ChatColor.GRAY + "(x" + altsAmount + "):",
                             "",
-                            altsMessage,
+                            StringUtil.getCentered(playerFormattedDisplay + Color.SECONDARY_COLOR + "'s Alt Accounts " + ChatColor.GRAY + "(x" + altsAmount + "):"),
                             "",
-                            ChatColor.GRAY + "(" + ChatColor.GREEN + "Online" + ChatColor.GRAY + ")" + ChatColor.GRAY + " (" + ChatColor.RED + "Offline" + ChatColor.GRAY + ")" + ChatColor.GRAY + " (" + ChatColor.GOLD + "Banned" + ChatColor.GRAY + ")" + ChatColor.GRAY + " (" + ChatColor.DARK_RED + "Blacklisted" + ChatColor.GRAY + ")",
-                            ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 53)
+                            StringUtil.getCentered(altsMessage),
+                            "",
+                            StringUtil.getCentered(ChatColor.GRAY + "[" + ChatColor.GREEN + "Online" + ChatColor.GRAY + "]" + ChatColor.GRAY + " [" + ChatColor.RED + "Offline" + ChatColor.GRAY + "]" + ChatColor.GRAY + " [" + ChatColor.GOLD + "Banned" + ChatColor.GRAY + "]" + ChatColor.GRAY + " [" + ChatColor.DARK_RED + "Blacklisted" + ChatColor.GRAY + "]"),
+                            "",
                     });
                 });
             } else {
