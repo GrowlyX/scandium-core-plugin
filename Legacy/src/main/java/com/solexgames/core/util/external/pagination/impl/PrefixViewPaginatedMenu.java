@@ -48,6 +48,7 @@ public class PrefixViewPaginatedMenu extends PaginatedMenu {
 
         return buttons;
     }
+
     @Override
     public String getPrePaginatedTitle(Player player) {
         return "Prefixes";

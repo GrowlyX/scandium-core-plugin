@@ -6,7 +6,9 @@ import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.prefixes.Prefix;
+import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.util.Color;
+import com.solexgames.core.util.RedisUtil;
 import com.solexgames.core.util.StringUtil;
 import com.solexgames.core.util.external.pagination.impl.PrefixViewPaginatedMenu;
 import org.apache.commons.lang.StringUtils;
@@ -52,11 +54,31 @@ public class PrefixCommand extends BaseCommand {
             }
             if (args.length > 0) {
                 switch (args[0]) {
-                    case "create":
-                        if (args.length == 1) {
-                            this.sendHelp(player);
-                        }
+                    case "purchasable":
+                        if (args.length == 1) player.sendMessage(Color.translate("&cUsage: /prefix purchasable <name>."));
                         if (args.length == 2) {
+                            String name = args[1];
+                            Prefix rank = Prefix.getByName(name);
+
+                            if (rank != null) {
+                                String displayName = Color.translate(rank.getName());
+
+                                if (rank.isPurchasable()) {
+                                    rank.setPurchasable(false);
+                                    player.sendMessage(Color.translate("&aSet the " + displayName + "&a prefix purchasable mode to false!"));
+                                } else {
+                                    rank.setPurchasable(true);
+                                    player.sendMessage(Color.translate("&aSet the " + displayName + "&a prefix purchasable mode to true!"));
+                                }
+
+                                rank.savePrefix();
+                            } else {
+                                player.sendMessage(Color.translate("&cThat rank does not exist!"));
+                            }
+                        }
+                        break;
+                    case "create":
+                        if (args.length < 3) {
                             this.sendHelp(player);
                         }
                         if (args.length >= 3) {
@@ -70,10 +92,7 @@ public class PrefixCommand extends BaseCommand {
                         }
                         break;
                     case "add":
-                        if (args.length == 1) {
-                            this.sendHelp(player);
-                        }
-                        if (args.length == 2) {
+                        if (args.length < 3) {
                             this.sendHelp(player);
                         }
                         if (args.length >= 3) {
@@ -93,10 +112,7 @@ public class PrefixCommand extends BaseCommand {
                         }
                         break;
                     case "remove":
-                        if (args.length == 1) {
-                            this.sendHelp(player);
-                        }
-                        if (args.length == 2) {
+                        if (args.length < 3) {
                             this.sendHelp(player);
                         }
                         if (args.length >= 3) {
@@ -161,6 +177,7 @@ public class PrefixCommand extends BaseCommand {
         player.sendMessage(Color.translate("&f/prefix add <player> <prefix> &7- Add a prefix to a player."));
         player.sendMessage(Color.translate("&f/prefix remove <player> <prefix> &7- Remove a prefix from a player."));
         player.sendMessage(Color.translate("&f/prefix list &7- List all prefixes."));
+        player.sendMessage(Color.translate("&f/prefix purchasable &7- Set a prefix purchasable."));
         player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
     }
 }

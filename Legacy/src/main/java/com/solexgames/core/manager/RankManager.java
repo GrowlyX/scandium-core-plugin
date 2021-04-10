@@ -36,6 +36,9 @@ public class RankManager {
                     if (document.getBoolean("hidden") != null) {
                         rank.setHidden(document.getBoolean("hidden"));
                     }
+                    if (document.getBoolean("purchasable") != null) {
+                        rank.setPurchasable(document.getBoolean("purchasable"));
+                    }
                 }
             });
         });
@@ -57,6 +60,8 @@ public class RankManager {
             defaultRank.put("defaultRank", true);
             defaultRank.put("weight", 0);
             defaultRank.put("hidden", false);
+
+            defaultRank.put("purchasable", false);
 
             CorePlugin.getInstance().getCoreDatabase().getRankCollection().insertOne(defaultRank);
         }

@@ -37,6 +37,7 @@ public class RankCommand extends BaseCommand {
         player.sendMessage(Color.translate("/rank default &7- Set a rank as a default rank."));
         player.sendMessage(Color.translate("/rank addInher &7- Add an inheritance to a rank."));
         player.sendMessage(Color.translate("/rank delInher &7- Remove an inheritance from a rank."));
+        player.sendMessage(Color.translate("/rank purchasable &7- Set a rank purchasable."));
         player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
     }
 
@@ -130,6 +131,30 @@ public class RankCommand extends BaseCommand {
                                 } else {
                                     rank.setDefaultRank(true);
                                     player.sendMessage(Color.translate("&aSet the " + displayName + "&a rank default mode to true!"));
+                                }
+
+                                RedisUtil.writeAsync(RedisUtil.updateRank(rank));
+                                rank.saveRank();
+                            } else {
+                                player.sendMessage(Color.translate("&cThat rank does not exist!"));
+                            }
+                        }
+                        break;
+                    case "purchasable":
+                        if (args.length == 1) player.sendMessage(Color.translate("&cUsage: /rank purchasable <name>."));
+                        if (args.length == 2) {
+                            String name = args[1];
+                            Rank rank = Rank.getByName(name);
+
+                            if (rank != null) {
+                                String displayName = Color.translate(rank.getColor() + rank.getName());
+
+                                if (rank.isPurchasable()) {
+                                    rank.setPurchasable(false);
+                                    player.sendMessage(Color.translate("&aSet the " + displayName + "&a rank purchasable mode to false!"));
+                                } else {
+                                    rank.setPurchasable(true);
+                                    player.sendMessage(Color.translate("&aSet the " + displayName + "&a rank purchasable mode to true!"));
                                 }
 
                                 RedisUtil.writeAsync(RedisUtil.updateRank(rank));

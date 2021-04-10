@@ -34,7 +34,7 @@ public class ExperienceMainMenu extends AbstractInventoryMenu {
                         ChatColor.GRAY + "Welcome to the experience",
                         ChatColor.GRAY + "menu! With experience, you",
                         ChatColor.GRAY + "can purchase prefixes,",
-                        ChatColor.GRAY + "temporary ranks, and more!",
+                        ChatColor.GRAY + "ranks and more!",
                         "",
                         ChatColor.GRAY + "You currently have:",
                         ChatColor.YELLOW + String.valueOf(potPlayer.getExperience()) + " Experience",
@@ -57,9 +57,7 @@ public class ExperienceMainMenu extends AbstractInventoryMenu {
 
             if (item == null || item.getType() == XMaterial.AIR.parseMaterial()) return;
             if (event.getRawSlot() == 4) {
-                if (CorePlugin.getInstance().getServerManager().getNetwork().equals(ServerType.POTCLUBVIP) || CorePlugin.getInstance().getServerManager().getNetwork().equals(ServerType.MINEARCADE)) {
-                    new ExperienceShopMainMenu().open(this.player);
-                }
+                new ExperienceShopMainMenu().open(this.player);
             }
         }
     }

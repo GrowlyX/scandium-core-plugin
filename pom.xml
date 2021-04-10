@@ -16,6 +16,7 @@
         <module>Library</module>
         <module>Placeholder</module>
         <module>API</module>
+        <module>Velocity</module>
     </modules>
 
     <properties>

@@ -39,7 +39,9 @@ public class Rank {
     private String color;
 
     private boolean defaultRank;
+
     private boolean hidden = false;
+    private boolean purchasable = false;
 
     private int weight;
 
@@ -92,6 +94,8 @@ public class Rank {
         document.put("defaultRank", this.defaultRank);
         document.put("weight", this.weight);
         document.put("hidden", this.hidden);
+
+        document.put("purchasable", this.purchasable);
 
         return document;
     }

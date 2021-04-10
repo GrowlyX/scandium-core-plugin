@@ -2,21 +2,20 @@ package com.solexgames.core.menu.impl.experience.buy;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
+import com.solexgames.core.menu.impl.experience.ExperienceShopMainMenu;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.prefixes.Prefix;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.util.external.pagination.Button;
+import com.solexgames.core.util.external.pagination.Menu;
 import com.solexgames.core.util.external.pagination.pagination.PaginatedMenu;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class PrefixPurchaseMenu extends PaginatedMenu {
@@ -27,12 +26,28 @@ public class PrefixPurchaseMenu extends PaginatedMenu {
 
     @Override
     public Map<Integer, Button> getGlobalButtons(Player player) {
-        return null;
+        HashMap<Integer, Button> buttons = new HashMap<>();
+
+        buttons.put(4, new Button() {
+            @Override
+            public ItemStack getButtonItem(Player player) {
+                return new ItemBuilder(XMaterial.RED_BED.parseMaterial()).setDisplayName("&cReturn").addLore("&7Click to return to the", "&7main shop menu!").create();
+            }
+
+            @Override
+            public void clicked(Player player, ClickType clickType) {
+                setClosedByMenu(true);
+
+                new ExperienceShopMainMenu().open(player);
+            }
+        });
+
+        return buttons;
     }
 
     @Override
     public String getPrePaginatedTitle(Player player) {
-        return "Prefixes";
+        return "Prefix Shop";
     }
 
     @Override
@@ -41,7 +56,22 @@ public class PrefixPurchaseMenu extends PaginatedMenu {
         final AtomicInteger integer = new AtomicInteger(0);
         final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
-        Prefix.getPrefixes().forEach(prefix -> buttonMap.put(integer.getAndIncrement(), new Button() {
+        if (Prefix.getPrefixes().stream().noneMatch(Prefix::isPurchasable)) {
+            for (int i = 0; i < 8; i++) {
+                buttonMap.put(i, new Button() {
+                    @Override
+                    public ItemStack getButtonItem(Player player) {
+                        return new ItemBuilder(XMaterial.INK_SAC.parseMaterial())
+                                .setDisplayName(ChatColor.RED + "No purchasable prefixes!")
+                                .create();
+                    }
+                });
+            }
+
+            return buttonMap;
+        }
+
+        Prefix.getPrefixes().stream().filter(Prefix::isPurchasable).forEach(prefix -> buttonMap.put(integer.getAndIncrement(), new Button() {
 
             @Override
             public ItemStack getButtonItem(Player player) {
@@ -62,7 +92,7 @@ public class PrefixPurchaseMenu extends PaginatedMenu {
                         lore.add("&aClick to purchase this prefix");
                         lore.add("&afor 500 Experience!");
                     } else {
-                        lore.add("&cYou need " + (500 - potPlayer.getExperience()) + " more");
+                        lore.add("&cYou need " + ChatColor.BOLD.toString() + (500 - potPlayer.getExperience()) + ChatColor.RED + " more");
                         lore.add("&cexperience to purchase this!");
                     }
                 }

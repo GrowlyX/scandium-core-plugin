@@ -9,6 +9,7 @@
       <module fileurl="file://$PROJECT_DIR$/Placeholder/Placeholder.iml" filepath="$PROJECT_DIR$/Placeholder/Placeholder.iml" />
       <module fileurl="file://$PROJECT_DIR$/Scandium.iml" filepath="$PROJECT_DIR$/Scandium.iml" />
       <module fileurl="file://$PROJECT_DIR$/ScandiumL/ScandiumL.iml" filepath="$PROJECT_DIR$/ScandiumL/ScandiumL.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Velocity/Velocity.iml" filepath="$PROJECT_DIR$/Velocity/Velocity.iml" />
     </modules>
   </component>
 </project>

@@ -26,6 +26,8 @@ public class Prefix {
     private String displayName;
     private String prefix;
 
+    private boolean purchasable = false;
+
     public Prefix(String id, String name, String displayName, String prefix) {
         this.id = id;
         this.name = name;
@@ -51,6 +53,8 @@ public class Prefix {
         document.put("displayName", this.displayName);
         document.put("prefix", this.prefix);
 
+        document.put("purchasable", this.purchasable);
+
         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPrefixCollection().replaceOne(Filters.eq("_id", this.id), document, new ReplaceOptions().upsert(true)));
     }
 
@@ -60,6 +64,8 @@ public class Prefix {
         document.put("name", this.name);
         document.put("displayName", this.displayName);
         document.put("prefix", this.prefix);
+
+        document.put("purchasable", this.purchasable);
 
         CorePlugin.getInstance().getCoreDatabase().getPrefixCollection().replaceOne(Filters.eq("_id", this.id), document, new ReplaceOptions().upsert(true));
     }

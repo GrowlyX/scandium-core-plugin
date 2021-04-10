@@ -13,6 +13,7 @@
         <module name="API" />
         <module name="ScandiumL" />
         <module name="Library" />
+        <module name="Velocity" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -25,6 +26,7 @@
       <module name="Scandium" target="1.8" />
       <module name="ScandiumL" target="1.8" />
       <module name="Systems" target="1.8" />
+      <module name="Velocity" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

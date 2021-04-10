@@ -24,9 +24,8 @@ public class ExperienceShopMainMenu extends AbstractInventoryMenu {
                 .setDisplayName("&3&lPrefixes")
                 .addLore(ChatColor.GRAY + "Click to view all purchasable prefixes!")
                 .create());
-        this.inventory.setItem(5, new ItemBuilder(XMaterial.LIME_WOOL.parseMaterial())
-                .setDurability(5)
-                .setDisplayName("&a&lRanks")
+        this.inventory.setItem(5, new ItemBuilder(XMaterial.BLAZE_POWDER.parseMaterial())
+                .setDisplayName("&6&lRanks")
                 .addLore(ChatColor.GRAY + "Click to view all purchasable ranks!")
                 .create());
     }
@@ -49,7 +48,7 @@ public class ExperienceShopMainMenu extends AbstractInventoryMenu {
             }
             if (event.getRawSlot() == 6) {
                 player.closeInventory();
-                player.sendMessage(Color.translate("&cThis shop is coming very soon!"));
+                player.sendMessage(ChatColor.RED + "I'm sorry, but this shop is currently disabled.");
             }
         }
     }
