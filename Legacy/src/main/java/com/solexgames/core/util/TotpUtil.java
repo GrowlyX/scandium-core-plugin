@@ -40,7 +40,7 @@ import javax.crypto.spec.SecretKeySpec;
  *
  * @author graywatson
  */
-public class TotpUtil {
+public final class TotpUtil {
 
     /** default time-step which is part of the spec, 30 seconds is default */
     public static final int DEFAULT_TIME_STEP_SECONDS = 30;

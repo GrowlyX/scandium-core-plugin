@@ -81,7 +81,7 @@ public abstract class PaginatedMenu extends Menu {
                 public ItemStack getButtonItem(Player player) {
                     return new ItemBuilder(XMaterial.GRAY_STAINED_GLASS_PANE.parseMaterial())
                             .setDurability(7)
-                            .setDisplayName("")
+                            .setDisplayName(" ")
                             .create();
                 }
             });

@@ -4,7 +4,7 @@ import com.solexgames.core.CorePlugin;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 
-public class LockedState {
+public final class LockedState {
 
     private static final String METADATA_KEY = "LOCKED";
 

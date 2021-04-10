@@ -20,11 +20,14 @@ public class PageButton extends Button {
     @Override
     public ItemStack getButtonItem(Player player) {
         if (!this.hasNext(player)) {
-            return new ItemBuilder(Material.AIR).create();
+            return new ItemBuilder(XMaterial.GRAY_STAINED_GLASS_PANE.parseMaterial())
+                    .setDurability(7)
+                    .setDisplayName(" ")
+                    .create();
         }
 
         return new ItemBuilder(this.mod > 0 ? XMaterial.GLISTERING_MELON_SLICE.parseMaterial() : XMaterial.MELON_SLICE.parseMaterial())
-                .setDisplayName(this.mod > 0 ? ChatColor.GREEN + "Next page" : ChatColor.RED + "Previous page" + ChatColor.GRAY + " (" + Color.MAIN_COLOR + (this.mod > 0 ? menu.getPage() + mod : menu.getPage() - mod) + ChatColor.GRAY + "/" + Color.MAIN_COLOR + menu.getPages(player) + ChatColor.GRAY + ")")
+                .setDisplayName(this.mod > 0 ? ChatColor.GREEN + "Next page" : ChatColor.RED + "Previous page" + ChatColor.GRAY + " (" + Color.MAIN_COLOR + (menu.getPage() + mod) + ChatColor.GRAY + "/" + Color.MAIN_COLOR + menu.getPages(player) + ChatColor.GRAY + ")")
                 .addLore(
                         "&7Right Click to view all pages!"
                 ).create();
