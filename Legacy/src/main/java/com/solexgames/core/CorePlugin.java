@@ -97,6 +97,7 @@ public final class CorePlugin extends JavaPlugin {
     private final TPSUpdateTask tpsRunnable = new TPSUpdateTask();
 
     private ServerManager serverManager;
+    private ReportManager reportManager;
     private WarpManager warpManager;
     private PlayerManager playerManager;
     private RankManager rankManager;
@@ -205,6 +206,7 @@ public final class CorePlugin extends JavaPlugin {
         ));
 
         this.cryptoManager = new CryptoManager();
+        this.reportManager = new ReportManager();
         this.serverManager = new ServerManager();
         this.rankManager = new RankManager();
         this.prefixManager = new PrefixManager();
