@@ -13,6 +13,8 @@ author: SolexGames
 website: https://www.solexgames.com
 
 commands:
+  reports:
+    aliases: [viewreports]
   enderchest:
     aliases: [echest]
   maxitem:

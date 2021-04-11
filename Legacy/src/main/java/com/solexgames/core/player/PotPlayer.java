@@ -257,8 +257,37 @@ public class PotPlayer {
     }
 
     public void loadPlayerData() {
-        CompletableFuture<Document> completableFuture = new CompletableFuture<>();
+        CompletableFuture.runAsync(() -> {
+            CorePlugin.getInstance().getPunishmentManager().getPunishments().stream()
+                    .filter(punishment -> punishment.getTarget().equals(this.uuid.toString()))
+                    .forEach(this.punishments::add);
 
+            this.getPunishments().stream()
+                    .filter(punishment -> punishment != null && punishment.isActive() && (System.currentTimeMillis() >= punishment.getCreatedAt().getTime() + punishment.getPunishmentDuration() || punishment.isPermanent()) && !punishment.isRemoved())
+                    .forEach(punishment -> {
+                        switch (punishment.getPunishmentType()) {
+                            case WARN:
+                                this.hasActiveWarning = true;
+                                this.warningPunishment = punishment;
+                                break;
+                            case MUTE:
+                                this.currentlyMuted = true;
+                                break;
+                            case BLACKLIST:
+                                this.restrictionPunishment = punishment;
+                                this.currentlyBlacklisted = true;
+                                this.currentlyRestricted = true;
+                                break;
+                            case IPBAN:
+                            case BAN:
+                                this.currentlyRestricted = true;
+                                this.restrictionPunishment = punishment;
+                                break;
+                        }
+                    });
+        });
+
+        CompletableFuture<Document> completableFuture = new CompletableFuture<>();
         CompletableFuture.runAsync(() -> completableFuture.complete(CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("_id", this.uuid)).first()));
 
         completableFuture.thenAcceptAsync(document -> {
@@ -409,34 +438,6 @@ public class PotPlayer {
             Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () ->
                     new NetworkPlayer(this.uuid, this.name, CorePlugin.getInstance().getServerName(), this.getActiveGrant().getRank().getName(), this.isCanReceiveDms(), this.ipAddress, this.syncCode, this.isSynced)
             );
-
-            CorePlugin.getInstance().getPunishmentManager().getPunishments().stream()
-                    .filter(punishment -> punishment.getTarget().toString().equals(this.uuid.toString()))
-                    .forEach(this.punishments::add);
-
-            this.getPunishments().stream()
-                    .filter(punishment -> punishment != null && punishment.isActive() && (System.currentTimeMillis() >= punishment.getCreatedAt().getTime() + punishment.getPunishmentDuration() || punishment.isPermanent()) && !punishment.isRemoved())
-                    .forEach(punishment -> {
-                        switch (punishment.getPunishmentType()) {
-                            case WARN:
-                                this.hasActiveWarning = true;
-                                this.warningPunishment = punishment;
-                                break;
-                            case MUTE:
-                                this.currentlyMuted = true;
-                                break;
-                            case BLACKLIST:
-                                this.restrictionPunishment = punishment;
-                                this.currentlyBlacklisted = true;
-                                this.currentlyRestricted = true;
-                                break;
-                            case IPBAN:
-                            case BAN:
-                                this.currentlyRestricted = true;
-                                this.restrictionPunishment = punishment;
-                                break;
-                        }
-                    });
 
             RedisUtil.writeAsync(RedisUtil.addGlobalPlayer(this));
             CorePlugin.getInstance().getPlayerManager().getAllSyncCodes().put(this.syncCode, this.getName());

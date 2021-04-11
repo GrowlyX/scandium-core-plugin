@@ -80,7 +80,7 @@ public class GrantRemoveConfirmMenu extends AbstractInventoryMenu {
                 potPlayer.getAllGrants().remove(grant);
                 potPlayer.setupPlayer();
 
-                player.sendMessage(ChatColor.GREEN + Color.translate("Removed the grant from " + potPlayer.getPlayer().getDisplayName() + ChatColor.GREEN + "'s history!"));
+                player.sendMessage(Color.SECONDARY_COLOR + "You've removed the grant with the ID: " + Color.MAIN_COLOR + "#" + grant.getId() + Color.SECONDARY_COLOR + " from " + potPlayer.getPlayer().getDisplayName() + Color.SECONDARY_COLOR + "'s history!");
 
                 new GrantViewPaginatedMenu(this.player, this.target).openMenu(this.player);
             } else if (ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()).contains("Cancel")) {

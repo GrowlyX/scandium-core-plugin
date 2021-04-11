@@ -83,19 +83,19 @@ public class PunishHistoryViewMainMenu extends AbstractInventoryMenu {
             if (item == null || item.getType() == XMaterial.AIR.parseMaterial()) return;
             switch (event.getRawSlot()) {
                 case 2:
-                    new PunishViewPaginatedMenu(player, this.target, PunishmentType.WARN).openMenu(this.player);
+                    new PunishViewPaginatedMenu(this.player, this.target, PunishmentType.WARN).openMenu(this.player);
                     break;
                 case 3:
-                    new PunishViewPaginatedMenu(player, this.target, PunishmentType.KICK).openMenu(this.player);
+                    new PunishViewPaginatedMenu(this.player, this.target, PunishmentType.KICK).openMenu(this.player);
                     break;
                 case 4:
-                    new PunishViewPaginatedMenu(player, this.target, PunishmentType.MUTE).openMenu(this.player);
+                    new PunishViewPaginatedMenu(this.player, this.target, PunishmentType.MUTE).openMenu(this.player);
                     break;
                 case 5:
-                    new PunishViewPaginatedMenu(player, this.target, PunishmentType.BAN).openMenu(this.player);
+                    new PunishViewPaginatedMenu(this.player, this.target, PunishmentType.BAN).openMenu(this.player);
                     break;
                 case 6:
-                    new PunishViewPaginatedMenu(player, this.target, PunishmentType.BLACKLIST).openMenu(this.player);
+                    new PunishViewPaginatedMenu(this.player, this.target, PunishmentType.BLACKLIST).openMenu(this.player);
                     break;
             }
         }

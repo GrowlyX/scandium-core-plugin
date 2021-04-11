@@ -5,6 +5,7 @@ import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ReportType;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.AbstractInventoryMenu;
+import com.solexgames.core.player.report.Report;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
@@ -77,6 +78,8 @@ public class ReportMenu extends AbstractInventoryMenu {
                 }
 
                 potPlayer.setCanReport(false);
+
+                new Report(reportType.getName(), this.player, this.target);
 
                 Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> {
                     PotPlayer updatedPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(this.player);

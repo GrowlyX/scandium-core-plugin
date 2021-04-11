@@ -2,8 +2,7 @@ package com.solexgames.core.player.report;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.util.SaltUtil;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -13,8 +12,7 @@ import java.util.UUID;
  * @since 4/10/2021
  */
 
-@Getter
-@Setter
+@Data
 public class Report {
 
     private final String id;

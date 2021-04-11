@@ -31,11 +31,7 @@ public class ReportCommand extends BaseCommand {
             Player target = Bukkit.getPlayerExact(args[0]);
 
             if (target != null) {
-                if (target.getUniqueId() != player.getUniqueId()) {
-                    new ReportMenu(player, target).open(player);
-                } else {
-                    player.sendMessage(ChatColor.RED + ("You cannot report yourself!"));
-                }
+                new ReportMenu(player, target).open(player);
             } else {
                 player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
             }

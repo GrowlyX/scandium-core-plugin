@@ -2,8 +2,6 @@ package com.solexgames.core.util.external.pagination.impl;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.player.PotPlayer;
-import com.solexgames.core.player.prefixes.Prefix;
 import com.solexgames.core.player.report.Report;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.builder.ItemBuilder;
@@ -16,8 +14,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -37,13 +33,21 @@ public class ReportViewPaginatedMenu extends PaginatedMenu {
         buttons.put(4, new Button() {
             @Override
             public ItemStack getButtonItem(Player player) {
-                return new ItemBuilder(XMaterial.EMERALD.parseMaterial()).setDisplayName("&a&lReport View").addLore("&7Would you like to see", "&7all reports or only resolved", "&7reports?", "", "&7Current: &6" + (onlyResolved ? "Only Resolved": "All")).create();
+                return new ItemBuilder(XMaterial.LEVER.parseMaterial())
+                        .setDisplayName("&a&lReport View")
+                        .addLore(
+                                "&7Would you like to see all",
+                                "&7reports or only resolved",
+                                "&7reports?",
+                                "",
+                                "&7Current: &6" + (onlyResolved ? "Only Resolved": "All")
+                        ).create();
             }
 
             @Override
             public void clicked(Player player, ClickType clickType) {
                 onlyResolved = !onlyResolved;
-                setUpdateAfterClick(true);
+                player.updateInventory();
             }
         });
 
@@ -58,7 +62,6 @@ public class ReportViewPaginatedMenu extends PaginatedMenu {
     @Override
     public Map<Integer, Button> getAllPagesButtons(Player player) {
         HashMap<Integer, Button> buttons = new HashMap<>();
-
         AtomicInteger i = new AtomicInteger(0);
 
         if (onlyResolved) {
@@ -77,11 +80,35 @@ public class ReportViewPaginatedMenu extends PaginatedMenu {
 
         @Override
         public ItemStack getButtonItem(Player player) {
-            return new ItemBuilder(Material.PAPER).create();
+            return new ItemBuilder(Material.PAPER)
+                    .setDisplayName(ChatColor.DARK_GRAY + "#" + report.getId() + " " + (report.isResolved() ? ChatColor.GREEN + "[Resolved]" : ChatColor.GOLD + "[Pending]"))
+                    .addLore(
+                            Color.MAIN_COLOR + "&m------------------------------------",
+                            Color.SECONDARY_COLOR + "Reporter: " + Color.MAIN_COLOR + report.getReporterName(),
+                            Color.SECONDARY_COLOR + "Target: " + Color.MAIN_COLOR + report.getTargetName(),
+                            Color.SECONDARY_COLOR + "Reason: " + Color.MAIN_COLOR + report.getReason(),
+                            "",
+                            ChatColor.GREEN + "Left Shift-Click to resolve this report.",
+                            Color.MAIN_COLOR + "&m------------------------------------"
+
+                    )
+                    .create();
         }
 
         @Override
         public void clicked(Player player, ClickType clickType) {
+            if (report.isResolved()) {
+                return;
+            }
+
+            if (clickType.equals(ClickType.SHIFT_LEFT)) {
+                report.setResolverName(player.getName());
+                report.setResolverUuid(player.getUniqueId());
+                report.setResolved(true);
+
+                player.sendMessage(Color.SECONDARY_COLOR + "You've resolved the report with the ID: " + Color.MAIN_COLOR + "#" + report.getId() + Color.SECONDARY_COLOR + "!");
+                player.closeInventory();
+            }
         }
     }
 }

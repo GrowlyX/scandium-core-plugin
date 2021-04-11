@@ -321,6 +321,7 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("setspawn").setExecutor(new SetSpawnCommand());
         this.getCommand("spawn").setExecutor(new SpawnCommand());
         this.getCommand("test").setExecutor(new TestCommand());
+        this.getCommand("reports").setExecutor(new ReportsCommand());
 
         this.getCommand("toggletips").setExecutor(new ToggleTipsCommand());
         this.getCommand("togglestaffmessages").setExecutor(new ToggleStaffMessagesCommand());
