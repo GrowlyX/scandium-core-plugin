@@ -42,6 +42,7 @@ public class BroadcastCommand extends BaseCommand {
                 CorePlugin.getInstance().getRedisThread().execute(() -> client.write(RedisUtil.onGlobalBroadcast(message)));
             }
         }
+
         return false;
     }
 }

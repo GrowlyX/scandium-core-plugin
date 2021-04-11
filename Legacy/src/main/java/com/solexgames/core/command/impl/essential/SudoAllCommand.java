@@ -31,7 +31,7 @@ public class SudoAllCommand extends BaseCommand {
             String message = StringUtil.buildMessage(args, 0);
 
             if (message.contains("/sudoall") || message.contains("/scandium:sudoall")) {
-                sender.sendMessage(ChatColor.RED + "You cannot perform this action right now.");
+                sender.sendMessage(ChatColor.RED + "Error: That message contains a blacklisted phrase.");
                 return false;
             }
 

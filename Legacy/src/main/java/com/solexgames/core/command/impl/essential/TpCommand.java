@@ -38,11 +38,12 @@ public class TpCommand extends BaseCommand {
 
             if (target != null) {
                 player.teleport(target.getLocation());
-                player.sendMessage(Color.translate(secondColor + "Teleported you to " + target.getDisplayName() + secondColor + "."));
+
+                player.sendMessage(secondColor + "You've been teleported to " + target.getDisplayName() + secondColor + ".");
 
                 StaffUtil.sendAlert(player, "teleported to " + target.getName());
             } else {
-                player.sendMessage(Color.translate("&cThat player does not exist."));
+                player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
             }
         }
         return false;

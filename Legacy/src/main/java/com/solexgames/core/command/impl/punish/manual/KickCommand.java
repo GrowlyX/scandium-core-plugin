@@ -47,7 +47,7 @@ public class KickCommand extends BaseCommand {
 
             completableFuture.thenRun(() -> {
                 if (document.get() == null) {
-                    sender.sendMessage(ChatColor.RED + "That player does not exist in our database.");
+                    sender.sendMessage(ChatColor.RED + "Error: That player does not exist in our database.");
                 } else {
                     Date newIssuingDate = new Date();
                     UUID newPunishmentUuid = UUID.randomUUID();
@@ -104,7 +104,7 @@ public class KickCommand extends BaseCommand {
                                 false
                         ));
                     } catch (Exception ignored) {
-                        sender.sendMessage(ChatColor.RED + "That's not a valid duration!");
+                        sender.sendMessage(ChatColor.RED + "Error: That is not a valid duration!");
                         ignored.printStackTrace();
                     }
                 }

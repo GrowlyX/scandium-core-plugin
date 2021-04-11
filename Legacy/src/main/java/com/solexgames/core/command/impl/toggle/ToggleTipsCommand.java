@@ -4,6 +4,7 @@ import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -21,10 +22,10 @@ public class ToggleTipsCommand extends BaseCommand {
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
         if (potPlayer.isCanSeeTips()) {
-            player.sendMessage(Color.translate("&cYou've disabled tip broadcasts."));
+            player.sendMessage(ChatColor.RED + ("You've disabled tip broadcasts."));
             potPlayer.setCanSeeTips(false);
         } else {
-            player.sendMessage(Color.translate("&aYou can now see tip broadcasts."));
+            player.sendMessage(ChatColor.GREEN + Color.translate("You can now see tip broadcasts."));
             potPlayer.setCanSeeTips(true);
         }
 

@@ -5,6 +5,7 @@ import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -29,9 +30,9 @@ public class UnsyncCommand extends BaseCommand {
                 potPlayer.setSynced(false);
                 potPlayer.setSyncDiscord(null);
 
-                player.sendMessage(Color.translate("&aUn-synced your account!"));
+                player.sendMessage(ChatColor.GREEN + Color.translate("Un-synced your account!"));
             } else {
-                player.sendMessage(Color.translate("&cYou are not synced to a discord account."));
+                player.sendMessage(ChatColor.RED + ("Error: You are not synced to a discord account."));
             }
         }
         return false;

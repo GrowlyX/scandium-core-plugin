@@ -57,11 +57,12 @@ public class PrefixPurchaseMenu extends PaginatedMenu {
         final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
         if (Prefix.getPrefixes().stream().noneMatch(Prefix::isPurchasable)) {
-            for (int i = 0; i < 8; i++) {
+            for (int i = 0; i <= 8; i++) {
                 buttonMap.put(i, new Button() {
                     @Override
                     public ItemStack getButtonItem(Player player) {
                         return new ItemBuilder(XMaterial.INK_SAC.parseMaterial())
+                                .setDurability(1)
                                 .setDisplayName(ChatColor.RED + "No purchasable prefixes!")
                                 .create();
                     }

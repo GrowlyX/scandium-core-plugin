@@ -41,16 +41,17 @@ public class SetSlotsCommand extends BaseCommand {
         if (args.length == 1) {
             try {
                 int slots = Integer.parseInt(args[0]);
-                setSlots(slots);
-                player.sendMessage(Color.translate("&aUpdated the max player value to " + slots + " Players."));
+
+                this.setSlots(slots);
+
+                player.sendMessage(Color.SECONDARY_COLOR + "You've set the max players value to " + Color.MAIN_COLOR + slots + " players" + Color.SECONDARY_COLOR + ".");
             } catch (NumberFormatException e) {
-                player.sendMessage(Color.translate("&cThat's not a valid integer."));
+                player.sendMessage(ChatColor.RED + ("Error: That's not a valid integer."));
             }
         }
         return false;
     }
 
-    // thanks to bowp for giving the code below:
     private void setSlots(int slots) {
         slots = Math.abs(slots);
 
@@ -80,6 +81,7 @@ public class SetSlotsCommand extends BaseCommand {
             }
 
             allLines.add("max-players=" + slots);
+
             Files.write(resolve, allLines, StandardOpenOption.TRUNCATE_EXISTING);
         } catch (IOException exception) {
             System.out.println("[Error] While setting slots of server. " + exception.getMessage());

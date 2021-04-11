@@ -261,7 +261,7 @@ public class PotPlayer {
 
         CompletableFuture.runAsync(() -> completableFuture.complete(CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("_id", this.uuid)).first()));
 
-        completableFuture.thenAccept(document -> {
+        completableFuture.thenAcceptAsync(document -> {
             this.profile = document;
 
             if (this.profile == null) {
@@ -406,6 +406,10 @@ public class PotPlayer {
                 this.achievementData = new AchievementData();
             }
 
+            Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () ->
+                    new NetworkPlayer(this.uuid, this.name, CorePlugin.getInstance().getServerName(), this.getActiveGrant().getRank().getName(), this.isCanReceiveDms(), this.ipAddress, this.syncCode, this.isSynced)
+            );
+
             CorePlugin.getInstance().getPunishmentManager().getPunishments().stream()
                     .filter(punishment -> punishment.getTarget().toString().equals(this.uuid.toString()))
                     .forEach(this.punishments::add);
@@ -434,16 +438,14 @@ public class PotPlayer {
                         }
                     });
 
-            Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () -> new NetworkPlayer(this.uuid, this.name, CorePlugin.getInstance().getServerName(), this.getActiveGrant().getRank().getName(), this.isCanReceiveDms(), this.ipAddress, this.syncCode, this.isSynced));
-            Bukkit.getScheduler().runTaskLaterAsynchronously(CorePlugin.getInstance(), this::saveWithoutRemove, 3 * 20L);
-
             RedisUtil.writeAsync(RedisUtil.addGlobalPlayer(this));
-
             CorePlugin.getInstance().getPlayerManager().getAllSyncCodes().put(this.syncCode, this.getName());
 
             this.currentlyOnline = true;
             this.hasLoaded = true;
         });
+
+        Bukkit.getScheduler().runTaskLaterAsynchronously(CorePlugin.getInstance(), this::saveWithoutRemove, 60L);
     }
 
     public boolean findIpRelative(AsyncPlayerPreLoginEvent loginEvent, boolean hub) {
@@ -683,8 +685,8 @@ public class PotPlayer {
 
                     if (this.getAppliedPrefix() == null) this.appliedPrefix = Prefix.getByName("Liked");
                     if (player != null) {
-                        player.sendMessage(Color.translate("&aThanks for voting for us on &6NameMC&a!"));
-                        player.sendMessage(Color.translate("&aYou've been granted the &b✔ &7(Liked)&a prefix!"));
+                        player.sendMessage(ChatColor.GREEN + Color.translate("Thanks for voting for us on &6NameMC&a!"));
+                        player.sendMessage(ChatColor.GREEN + Color.translate("You've been granted the &b✔ &7(Liked)&a prefix!"));
                     }
                 }
             } else {
@@ -692,8 +694,8 @@ public class PotPlayer {
                     this.hasVoted = false;
                     this.getAllPrefixes().remove("Liked");
 
-                    player.sendMessage(Color.translate("&cYour permission to access the &b✔ &7(Liked) &ctag has been revoked as You've unliked our server on NameMC!"));
-                    player.sendMessage(Color.translate("&cTo gain your tag back, like us on NameMC again!"));
+                    player.sendMessage(ChatColor.RED + Color.translate("Your permission to access the &b✔ &7(Liked) &ctag has been revoked as You've unliked our server on NameMC!"));
+                    player.sendMessage(ChatColor.RED + Color.translate("To gain your tag back, like us on NameMC again!"));
                 }
             }
         });

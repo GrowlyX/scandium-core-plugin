@@ -44,7 +44,7 @@ public class XenonCommand extends Command {
                             CorePlugin.getInstance().getConfiguration().set("motd.normal", message);
 
                             sender.sendMessage(Color.translate("  "));
-                            sender.sendMessage(Color.translate("&a&lSet the Normal MOTD to:"));
+                            sender.sendMessage(ChatColor.GREEN + Color.translate("&lSet the Normal MOTD to:"));
                             sender.sendMessage(Color.translate(CorePlugin.getInstance().getNormalMotd()));
                             sender.sendMessage(Color.translate("  "));
                         }

@@ -24,22 +24,20 @@ public class HelpOpCommand extends BaseCommand {
 
         Player player = (Player) sender;
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
-
         if (args.length == 0) {
-            player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <message>."));
+            player.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <message>.");
         }
 
         if (args.length > 0) {
             String reason = StringUtil.buildMessage(args, 0);
 
             if (!potPlayer.isCanRequest()) {
-                player.sendMessage(Color.translate("&cYou cannot do that right now."));
+                player.sendMessage(ChatColor.RED + ("You cannot perform this action right now."));
                 return false;
             }
 
             RedisUtil.writeAsync(RedisUtil.onHelpOp(player, reason));
-            player.sendMessage(Color.translate("&aYour request has been sent to all online staff!"));
+            player.sendMessage(ChatColor.GREEN + Color.translate("Your request has been sent to all online staff!"));
 
             potPlayer.setCanRequest(false);
 

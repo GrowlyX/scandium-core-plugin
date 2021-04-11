@@ -4,6 +4,7 @@ import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -26,10 +27,10 @@ public class ToggleAutoModModeCommand extends BaseCommand {
         }
 
         if (potPlayer.isAutoModMode()) {
-            player.sendMessage(Color.translate("&cYou've disabled auto mod mode."));
+            player.sendMessage(ChatColor.RED + ("You've disabled auto mod mode."));
             potPlayer.setAutoModMode(false);
         } else {
-            player.sendMessage(Color.translate("&aYou've enabled auto mod mode."));
+            player.sendMessage(ChatColor.GREEN + Color.translate("You've enabled auto mod mode."));
             potPlayer.setAutoModMode(true);
         }
 

@@ -4,6 +4,7 @@ import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -26,10 +27,10 @@ public class SocialSpyCommand extends BaseCommand {
         }
 
         if (potPlayer.isSocialSpy()) {
-            player.sendMessage(Color.translate("&cYou've disabled social spy."));
+            player.sendMessage(ChatColor.RED + ("You've disabled social spy."));
             potPlayer.setSocialSpy(false);
         } else {
-            player.sendMessage(Color.translate("&aYou've enabled social spy."));
+            player.sendMessage(ChatColor.GREEN + Color.translate("You've enabled social spy."));
             potPlayer.setSocialSpy(true);
         }
 

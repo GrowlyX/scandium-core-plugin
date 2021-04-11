@@ -7,6 +7,7 @@ import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
 import com.solexgames.core.util.StringUtil;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -31,10 +32,10 @@ public class StaffChatCommand extends BaseCommand {
         if (args.length == 0) {
             if (potPlayer.getChannel() == null || !potPlayer.getChannel().equals(ChatChannelType.STAFF)) {
                 potPlayer.setChannel(ChatChannelType.STAFF);
-                player.sendMessage(Color.translate("&aYou've entered the staff chat channel."));
+                player.sendMessage(ChatColor.GREEN + Color.translate("You've entered the staff chat channel."));
             } else {
                 potPlayer.setChannel(null);
-                player.sendMessage(Color.translate("&cYou've exited the staff chat channel."));
+                player.sendMessage(ChatColor.RED + ("You've exited the staff chat channel."));
             }
         }
 
@@ -42,6 +43,7 @@ public class StaffChatCommand extends BaseCommand {
             String message = StringUtil.buildMessage(args, 0);
             RedisUtil.writeAsync(RedisUtil.onChatChannel(ChatChannelType.STAFF, message, player));
         }
+
         return false;
     }
 }

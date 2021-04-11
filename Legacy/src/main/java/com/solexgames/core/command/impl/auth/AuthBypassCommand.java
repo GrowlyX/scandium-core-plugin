@@ -14,7 +14,7 @@ public class AuthBypassCommand extends BaseCommand {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
-            sender.sendMessage(ChatColor.RED + "I'm sorry, but this command can only be executed via console.");
+            sender.sendMessage(ChatColor.RED + "Only players can execute this command.");
             return true;
         }
 
@@ -26,12 +26,12 @@ public class AuthBypassCommand extends BaseCommand {
         Player target = Bukkit.getPlayer(args[0]);
 
         if (target == null) {
-            sender.sendMessage(ChatColor.RED + "A player by that name couldn't be found.");
+            sender.sendMessage(ChatColor.RED + "Error: A player by that name couldn't be found.");
             return true;
         }
 
         if (!LockedState.isLocked(target)) {
-            sender.sendMessage(ChatColor.RED + "That player does not have to by bypassed.");
+            sender.sendMessage(ChatColor.RED + "Error: That player does not have to by bypassed.");
             return true;
         }
 

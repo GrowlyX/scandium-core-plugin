@@ -44,16 +44,21 @@ public class IgnoreCommand extends BaseCommand {
                 if (!potPlayer.getName().equalsIgnoreCase(value)) {
                     if (potPlayer.getAllIgnoring().contains(value)) {
                         potPlayer.getAllIgnoring().remove(value);
-                        player.sendMessage(Color.translate("&aRemoved " + value + " from your ignore list."));
+                        player.sendMessage(ChatColor.GREEN + Color.translate("Removed " + value + " from your ignore list."));
                     } else {
-                        player.sendMessage(Color.translate("&cYou don't have that player on your ignore list."));
+                        player.sendMessage(ChatColor.RED + ("You don't have that player on your ignore list."));
                     }
                 } else {
-                    player.sendMessage(Color.translate("&cYou cannot remove yourself to your ignore list!"));
+                    player.sendMessage(ChatColor.RED + ("You cannot remove yourself to your ignore list!"));
                 }
             } else if (label.equalsIgnoreCase("ignore")) {
                 PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
                 if ("list".equals(args[0])) {
+                    if (potPlayer.getAllIgnoring().isEmpty()) {
+                        player.sendMessage(ChatColor.RED + ("Error: You do not have anyone added to your ignore list."));
+                        return false;
+                    }
+
                     player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
                     player.sendMessage(Color.translate(NETWORK.getMainColor() + ChatColor.BOLD.toString() + "Currently Ignoring:"));
                     potPlayer.getAllIgnoring().forEach(s -> player.sendMessage(Color.translate(" &7* &e" + s)));
@@ -64,12 +69,12 @@ public class IgnoreCommand extends BaseCommand {
                     if (!potPlayer.getName().equalsIgnoreCase(value)) {
                         if (!potPlayer.getAllIgnoring().contains(value)) {
                             potPlayer.getAllIgnoring().add(value);
-                            player.sendMessage(Color.translate("&aAdded " + value + " to your ignore list."));
+                            player.sendMessage(ChatColor.GREEN + Color.translate("Added " + value + " to your ignore list."));
                         } else {
-                            player.sendMessage(Color.translate("&cThat player is already on your ignore list."));
+                            player.sendMessage(ChatColor.RED + ("Error: That player is already on your ignore list."));
                         }
                     } else {
-                        player.sendMessage(Color.translate("&cYou cannot add yourself to your ignore list!"));
+                        player.sendMessage(ChatColor.RED + ("You cannot add yourself to your ignore list!"));
                     }
                 }
             }

@@ -39,7 +39,7 @@ public class NetworkCommand extends BaseCommand {
             final NetworkServer server = NetworkServer.getByName(serverName);
 
             if (server == null) {
-                sender.sendMessage(ChatColor.RED + "No server with name \"" + serverName + "\" is online.");
+                sender.sendMessage(ChatColor.RED + "Error: No server with name \"" + serverName + "\" is online.");
                 return false;
             }
 

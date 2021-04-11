@@ -3,6 +3,7 @@ package com.solexgames.core.command.impl.punish;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.util.Color;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
@@ -16,7 +17,8 @@ public class KickAllCommand extends BaseCommand {
         }
 
         Bukkit.getOnlinePlayers().forEach(target -> target.kickPlayer("You were kicked."));
-        sender.sendMessage(Color.translate("&aKicked all online players."));
+        sender.sendMessage(ChatColor.GREEN + Color.translate("Kicked all online players."));
+
         return false;
     }
 }

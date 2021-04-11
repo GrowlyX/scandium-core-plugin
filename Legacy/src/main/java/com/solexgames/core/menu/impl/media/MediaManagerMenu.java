@@ -7,6 +7,7 @@ import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.PotPlayer;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
@@ -14,69 +15,58 @@ import org.bukkit.inventory.ItemStack;
 
 @Getter
 @Setter
-public class MediaMenu extends AbstractInventoryMenu {
+public class MediaManagerMenu extends AbstractInventoryMenu {
 
     private Player player;
 
-    public MediaMenu(Player player) {
-        super("Media", 9);
+    public MediaManagerMenu(Player player) {
+        super("Social Media", 9);
         this.player = player;
         this.update();
     }
 
     public void update() {
-        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(this.player);
+
         this.inventory.setItem(0, new ItemBuilder(XMaterial.BLUE_DYE.parseMaterial())
                 .setDurability(4)
-                .setDisplayName("&9Discord")
+                .setDisplayName("&9&lDiscord")
                 .addLore(
-                        "",
-                        "&7Your discord:",
-                        "&f" + potPlayer.getMedia().getDiscord(),
-                        ""
+                        ChatColor.GRAY + potPlayer.getMedia().getDiscord()
                 )
                 .create()
         );
         this.inventory.setItem(1, new ItemBuilder(XMaterial.RED_DYE.parseMaterial())
                 .setDurability(1)
-                .setDisplayName("&cYouTube")
+                .setDisplayName("&c&lYouTube")
                 .addLore(
-                        "",
-                        "&7Your youtube:",
-                        "&f" + potPlayer.getMedia().getYoutubeLink(),
-                        ""
+                        ChatColor.GRAY + potPlayer.getMedia().getYoutubeLink()
                 )
                 .create()
         );
         this.inventory.setItem(2, new ItemBuilder(XMaterial.LIGHT_BLUE_DYE.parseMaterial())
                 .setDurability(12)
-                .setDisplayName("&bTwitter")
+                .setDisplayName("&b&lTwitter")
                 .addLore(
-                        "",
-                        "&7Your twitter:",
-                        "&f" + potPlayer.getMedia().getTwitter(),
-                        ""
+                        ChatColor.GRAY + potPlayer.getMedia().getTwitter()
                 )
                 .create()
         );
         this.inventory.setItem(3, new ItemBuilder(XMaterial.ORANGE_DYE.parseMaterial())
                 .setDurability(14)
-                .setDisplayName("&6Instagram")
+                .setDisplayName("&6&lInstagram")
                 .addLore(
-                        "",
-                        "&7Your instagram:",
-                        "&f" + potPlayer.getMedia().getInstagram(),
-                        ""
+                        ChatColor.GRAY + potPlayer.getMedia().getInstagram()
                 )
                 .create()
         );
-        this.inventory.setItem(8, new ItemBuilder(XMaterial.NETHER_STAR.parseMaterial())
-                .setDisplayName("&eModify Values")
+        this.inventory.setItem(8, new ItemBuilder(XMaterial.RED_BED.parseMaterial())
+                .setDisplayName("&a&lModify Values")
                 .addLore(
+                        "&7Modify your social media",
+                        "&7values for your profile!",
                         "",
-                        "&7Click to modify your",
-                        "&7social media!",
-                        ""
+                        "&e[Click to open menu]"
                 )
                 .create()
         );
@@ -95,7 +85,7 @@ public class MediaMenu extends AbstractInventoryMenu {
 
             if (item == null || item.getType() == XMaterial.AIR.parseMaterial()) return;
             if (event.getRawSlot() == 8) {
-                new SetMediaMenu(player).open(player);
+                new MediaSetMenu(player).open(player);
             }
         }
     }

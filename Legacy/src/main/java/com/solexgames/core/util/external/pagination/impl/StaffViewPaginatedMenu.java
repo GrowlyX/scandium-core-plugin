@@ -63,7 +63,7 @@ public class StaffViewPaginatedMenu extends PaginatedMenu {
                                         network.getSecondaryColor() + "Vanish: " + (potPlayer.isVanished() ? "&aEnabled" : "&cDisabled"),
                                         network.getSecondaryColor() + "Discord: " + (potPlayer.getSyncDiscord() != null ? network.getMainColor() + potPlayer.getSyncDiscord() : "&cNot Synced"),
                                         "",
-                                        "&aClick to teleport to " + potPlayer.getColorByRankColor() + potPlayer.getPlayer().getName() + "&a!",
+                                        "&aClick to teleport to " + potPlayer.getColorByRankColor() + potPlayer.getPlayer().getName() + ChatColor.GREEN + "!",
                                         network.getMainColor() + "&m------------------------"
                                 )
                                 .create();
@@ -78,7 +78,7 @@ public class StaffViewPaginatedMenu extends PaginatedMenu {
                             PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(clickedUser);
 
                             player.teleport(clickedUser.getLocation());
-                            player.sendMessage(Color.translate("&aYou've been teleported to " + potPlayer.getColorByRankColor() + potPlayer.getPlayer().getName() + "&a!"));
+                            player.sendMessage(ChatColor.GREEN + Color.translate("You've been teleported to " + potPlayer.getColorByRankColor() + potPlayer.getPlayer().getName() + ChatColor.GREEN + "!"));
                         }
                     }
                 }));

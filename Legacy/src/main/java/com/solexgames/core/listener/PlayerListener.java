@@ -213,7 +213,7 @@ public class PlayerListener implements Listener {
             } else {
                 event.setCancelled(true);
 
-                player.sendMessage(ChatColor.RED + "That message has been filtered as it has a blocked term in it.");
+                player.sendMessage(ChatColor.RED + "Error: That message has been filtered as it has a blocked term in it.");
                 return;
             }
         }
@@ -240,7 +240,7 @@ public class PlayerListener implements Listener {
             event.setCancelled(true);
 
             if (event.getMessage().equalsIgnoreCase("cancel")) {
-                player.sendMessage(Color.translate("&cCancelled the granting process."));
+                player.sendMessage(ChatColor.RED + ("Cancelled the granting process."));
 
                 potPlayer.setGrantDurationRank(null);
                 potPlayer.setGrantDurationTarget(null);
@@ -270,12 +270,12 @@ public class PlayerListener implements Listener {
             event.setCancelled(true);
 
             if (event.getMessage().equalsIgnoreCase("cancel")) {
-                player.sendMessage(Color.translate("&cCancelled the granting process."));
+                player.sendMessage(ChatColor.RED + ("Cancelled the granting process."));
                 potPlayer.setGrantTarget(null);
                 potPlayer.setGrantRank(null);
                 potPlayer.setGrantPerm(false);
             } else {
-                player.sendMessage(Color.translate("&aSet the grant reason to &6'" + message + "'&a."));
+                player.sendMessage(ChatColor.GREEN + Color.translate("Set the grant reason to &6'" + message + "'&a."));
                 new GrantSelectConfirmMenu(potPlayer.getPlayer(), potPlayer.getGrantTarget(), potPlayer.getGrantRank(), potPlayer.getGrantDuration(), message, potPlayer.isGrantPerm(), potPlayer.getGrantScope()).open(player);
             }
             potPlayer.setGrantEditing(false);
@@ -286,11 +286,11 @@ public class PlayerListener implements Listener {
             event.setCancelled(true);
 
             if (event.getMessage().equalsIgnoreCase("cancel")) {
-                player.sendMessage(Color.translate("&cCancelled the punishment process."));
+                player.sendMessage(ChatColor.RED + ("Cancelled the punishment process."));
                 potPlayer.setReasonTarget(null);
                 potPlayer.setReasonType(null);
             } else {
-                player.sendMessage(Color.translate("&aSet the punishment reason to &6'" + message + "'&a."));
+                player.sendMessage(ChatColor.GREEN + Color.translate("Set the punishment reason to &6'" + message + "'&a."));
                 new PunishSelectDurationMenu(potPlayer.getPlayer(), potPlayer.getReasonTarget(), message, potPlayer.getReasonType()).open(player);
             }
             potPlayer.setReasonEditing(false);
@@ -300,11 +300,11 @@ public class PlayerListener implements Listener {
         if (potPlayer.getMedia().getMediaData().isModifyingDiscordData()) {
             if (discordMatcher.matches()) {
                 potPlayer.getMedia().setDiscord(event.getMessage());
-                player.sendMessage(Color.translate("&aUpdated your discord to &e" + event.getMessage() + "&a!"));
+                player.sendMessage(ChatColor.GREEN + Color.translate("Updated your discord to &e" + event.getMessage() + ChatColor.GREEN + "!"));
                 potPlayer.getMedia().getMediaData().setModifyingDiscordData(false);
             } else {
-                player.sendMessage(Color.translate("&cThat's an invalid discord username!"));
-                player.sendMessage(Color.translate("&cExample: Wumpus#1234"));
+                player.sendMessage(ChatColor.RED + ("Error: That's an invalid discord username!"));
+                player.sendMessage(ChatColor.RED + ("Example: Wumpus#1234"));
             }
             event.setCancelled(true);
             return;
@@ -313,11 +313,11 @@ public class PlayerListener implements Listener {
         if (CorePlugin.getInstance().getPlayerManager().getPlayer(player).getMedia().getMediaData().isModifyingInstaData()) {
             if (instaMatcher.matches()) {
                 potPlayer.getMedia().setInstagram(event.getMessage());
-                player.sendMessage(Color.translate("&aUpdated your instagram to &6" + event.getMessage() + "&a!"));
+                player.sendMessage(ChatColor.GREEN + Color.translate("Updated your instagram to &6" + event.getMessage() + ChatColor.GREEN + "!"));
                 potPlayer.getMedia().getMediaData().setModifyingInstaData(false);
             } else {
-                player.sendMessage(Color.translate("&cThat's an invalid instagram username!"));
-                player.sendMessage(Color.translate("&cExample: @SolexGames"));
+                player.sendMessage(ChatColor.RED + ("Error: That's an invalid instagram username!"));
+                player.sendMessage(ChatColor.RED + ("Example: @SolexGames"));
             }
             event.setCancelled(true);
             return;
@@ -326,11 +326,11 @@ public class PlayerListener implements Listener {
         if (CorePlugin.getInstance().getPlayerManager().getPlayer(player).getMedia().getMediaData().isModifyingYoutubeData()) {
             if (youtubeMatcher.matches()) {
                 potPlayer.getMedia().setYoutubeLink(event.getMessage());
-                player.sendMessage(Color.translate("&aUpdated your youtube to &6" + event.getMessage() + "&a!"));
+                player.sendMessage(ChatColor.GREEN + Color.translate("Updated your youtube to &6" + event.getMessage() + ChatColor.GREEN + "!"));
                 potPlayer.getMedia().getMediaData().setModifyingYoutubeData(false);
             } else {
-                player.sendMessage(Color.translate("&cThat's an invalid youtube link!"));
-                player.sendMessage(Color.translate("&cExample: https://youtube.com/c/SolexGames/"));
+                player.sendMessage(ChatColor.RED + ("Error: That's an invalid youtube link!"));
+                player.sendMessage(ChatColor.RED + ("Example: https://youtube.com/c/SolexGames/"));
             }
             event.setCancelled(true);
             return;
@@ -339,11 +339,11 @@ public class PlayerListener implements Listener {
         if (CorePlugin.getInstance().getPlayerManager().getPlayer(player).getMedia().getMediaData().isModifyingTwitterData()) {
             if (twitterMatcher.matches()) {
                 potPlayer.getMedia().setTwitter(event.getMessage());
-                player.sendMessage(Color.translate("&aUpdated your twitter to &6" + event.getMessage() + "&a!"));
+                player.sendMessage(ChatColor.GREEN + Color.translate("Updated your twitter to &6" + event.getMessage() + ChatColor.GREEN + "!"));
                 potPlayer.getMedia().getMediaData().setModifyingTwitterData(false);
             } else {
-                player.sendMessage(Color.translate("&cThat's an invalid twitter link!"));
-                player.sendMessage(Color.translate("&cExample: @SolexGames"));
+                player.sendMessage(ChatColor.RED + ("Error: That's an invalid twitter link!"));
+                player.sendMessage(ChatColor.RED + ("Example: @SolexGames"));
             }
             event.setCancelled(true);
             return;
@@ -577,7 +577,7 @@ public class PlayerListener implements Listener {
                     } else {
                         RedisUtil.writeAsync(RedisUtil.onDisconnect(event.getPlayer().getDisplayName()));
                     }
-                }, 55L);
+                }, 60L);
             }
         });
     }

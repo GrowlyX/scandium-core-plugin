@@ -7,6 +7,7 @@ import com.solexgames.core.manager.ServerManager;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.StaffUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -51,17 +52,17 @@ public class VanishCommand extends BaseCommand {
             if (target != null) {
                 if (manager.getVanishedPlayers().contains(target)) {
                     vanishManager.unVanishPlayer(target);
-                    player.sendMessage(Color.translate("&aUnvanished " + target.getName() + "."));
+                    player.sendMessage(ChatColor.GREEN + Color.translate("Unvanished " + target.getName() + "."));
 
                     StaffUtil.sendAlert(player, "unvanished " + target.getName());
                 } else {
                     vanishManager.vanishPlayer(target);
-                    player.sendMessage(Color.translate("&aVanished " + target.getName() + "."));
+                    player.sendMessage(ChatColor.GREEN + Color.translate("Vanished " + target.getName() + "."));
 
                     StaffUtil.sendAlert(player, "vanished " + target.getName());
                 }
             } else {
-                player.sendMessage(Color.translate("&cThat player does not exist."));
+                player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
             }
         }
 

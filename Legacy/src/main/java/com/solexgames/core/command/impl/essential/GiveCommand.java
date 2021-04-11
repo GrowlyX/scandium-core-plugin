@@ -34,14 +34,14 @@ public class GiveCommand extends BaseCommand {
             try {
                 amount = Integer.parseInt(args[1]);
             } catch (Exception ignored) {
-                player.sendMessage(Color.translate("&cThat amount is not an integer."));
+                player.sendMessage(ChatColor.RED + ("Error: That amount is not an integer."));
                 return false;
             }
 
             String message = StringUtil.buildMessage(args, 2);
 
             if (target == null) {
-                player.sendMessage(Color.translate("&cThat player does not exist."));
+                player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
                 return false;
             }
 
@@ -49,7 +49,7 @@ public class GiveCommand extends BaseCommand {
             XMaterial material = XMaterial.matchXMaterial(formatted).orElse(null);
 
             if (material == null) {
-                player.sendMessage(Color.translate("&cThat material does not exist."));
+                player.sendMessage(ChatColor.RED + ("Error: That material does not exist."));
                 return false;
             }
 

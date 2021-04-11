@@ -58,7 +58,7 @@ public class MaintenanceCommand extends Command {
                                 sender.sendMessage(TextComponent.fromLegacyText(translateAlternateColorCodes('&', "&cThat player is already whitelisted!")));
                             } else {
                                 CorePlugin.getInstance().getWhitelistedPlayers().add(player);
-                                sender.sendMessage(TextComponent.fromLegacyText(translateAlternateColorCodes('&', "&aAdded &f" + player + "&a to the network maintenance.")));
+                                sender.sendMessage(TextComponent.fromLegacyText(translateAlternateColorCodes('&', "&aAdded &f" + player + ChatColor.GREEN + " to the network maintenance.")));
                             }
                         }
                         break;
@@ -72,7 +72,7 @@ public class MaintenanceCommand extends Command {
                                 sender.sendMessage(TextComponent.fromLegacyText(translateAlternateColorCodes('&', "&cThat player is not on the maintenance!")));
                             } else {
                                 CorePlugin.getInstance().getWhitelistedPlayers().remove(player);
-                                sender.sendMessage(TextComponent.fromLegacyText(translateAlternateColorCodes('&', "&aRemoved &f" + player + "&a from the network maintenance.")));
+                                sender.sendMessage(TextComponent.fromLegacyText(translateAlternateColorCodes('&', "&aRemoved &f" + player + ChatColor.GREEN + " from the network maintenance.")));
                             }
                         }
                         break;

@@ -300,7 +300,7 @@ public class PlayerManager {
             CorePlugin.getInstance().getServerManager().getVanishedPlayers().remove(player);
         });
 
-        player.sendMessage(Color.translate("&aYou are now visible to all online players."));
+        player.sendMessage(ChatColor.GREEN + Color.translate("You are now visible to all online players."));
     }
 
     public String formatChatChannel(ChatChannelType chatChannel, String player, String message, String fromServer) {

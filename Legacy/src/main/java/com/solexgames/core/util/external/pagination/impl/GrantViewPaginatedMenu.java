@@ -6,6 +6,7 @@ import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.impl.grant.remove.GrantRemoveConfirmMenu;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.grant.Grant;
+import com.solexgames.core.util.Color;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.util.external.pagination.Button;
 import com.solexgames.core.util.external.pagination.pagination.PaginatedMenu;
@@ -62,7 +63,7 @@ public class GrantViewPaginatedMenu extends PaginatedMenu {
                 arrayList.add("&eDuration&7: " + network.getMainColor() + (grant.isPermanent() ? "&4Forever" : DurationFormatUtils.formatDurationWords(grant.getDuration(), true, true)));
                 arrayList.add(network.getMainColor() + "&m------------------------------------");
                 arrayList.add(network.getSecondaryColor() + "Scopes:");
-                arrayList.add(" &7- " + ChatColor.GREEN + (grant.getScope() != null ? grant.getScope() : "global"));
+                arrayList.add(" &7- " + ChatColor.GREEN + Color.translate(grant.getScope() != null ? grant.getScope() : "global"));
                 arrayList.add(network.getMainColor() + "&m------------------------------------");
                 arrayList.add("&eIssued By&7: " + network.getMainColor() + (grant.getIssuer() != null ? Bukkit.getOfflinePlayer(grant.getIssuer()).getName() : "&4Console"));
                 arrayList.add("&eIssued On&7: " + network.getMainColor() + CorePlugin.FORMAT.format(new Date(grant.getDateAdded())));

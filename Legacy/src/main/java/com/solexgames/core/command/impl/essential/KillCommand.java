@@ -20,9 +20,6 @@ public class KillCommand extends BaseCommand {
             return false;
         }
 
-        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
-        ChatColor secondColor = network.getSecondaryColor();
-
         Player player = (Player) sender;
 
         if (!player.hasPermission("scandium.command.kill")) {
@@ -32,7 +29,7 @@ public class KillCommand extends BaseCommand {
 
         if (args.length == 0) {
             player.setHealth(0);
-            player.sendMessage(Color.translate("&aKilled yourself."));
+            player.sendMessage(Color.SECONDARY_COLOR + ("You've killed yourself."));
 
             StaffUtil.sendAlert(player, "killed themself");
         }
@@ -41,13 +38,14 @@ public class KillCommand extends BaseCommand {
 
             if (target != null) {
                 target.setHealth(0);
-                player.sendMessage(Color.translate(secondColor + "Killed " + target.getDisplayName() + secondColor + "."));
+                player.sendMessage(Color.SECONDARY_COLOR + "Killed " + target.getDisplayName() + Color.SECONDARY_COLOR + ".");
 
                 StaffUtil.sendAlert(player, "killed " + target.getName());
             } else {
-                player.sendMessage(Color.translate("&cThat player does not exist."));
+                player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
             }
         }
+
         return false;
     }
 }

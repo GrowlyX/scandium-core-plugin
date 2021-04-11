@@ -4,6 +4,7 @@ import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -26,10 +27,10 @@ public class ToggleAutoVanishCommand extends BaseCommand {
         }
 
         if (potPlayer.isAutoVanish()) {
-            player.sendMessage(Color.translate("&cYou've disabled auto vanish."));
+            player.sendMessage(ChatColor.RED + ("You've disabled auto vanish."));
             potPlayer.setAutoVanish(false);
         } else {
-            player.sendMessage(Color.translate("&aYou've enabled auto vanish."));
+            player.sendMessage(ChatColor.GREEN + Color.translate("You've enabled auto vanish."));
             potPlayer.setAutoVanish(true);
         }
 

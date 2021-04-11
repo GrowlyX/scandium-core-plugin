@@ -34,12 +34,13 @@ public class ReportCommand extends BaseCommand {
                 if (target.getUniqueId() != player.getUniqueId()) {
                     new ReportMenu(player, target).open(player);
                 } else {
-                    player.sendMessage(Color.translate("&cYou cannot report yourself!"));
+                    player.sendMessage(ChatColor.RED + ("You cannot report yourself!"));
                 }
             } else {
-                player.sendMessage(Color.translate("&cThat player does not exist."));
+                player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
             }
         }
+
         return false;
     }
 }

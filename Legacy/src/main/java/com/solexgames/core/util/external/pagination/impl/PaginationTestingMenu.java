@@ -44,7 +44,7 @@ public class PaginationTestingMenu extends PaginatedMenu {
             public void clicked(Player player, ClickType clickType) {
                 PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
                 potPlayer.setAppliedPrefix(null);
-                player.sendMessage(Color.translate("&aReset your prefix to default!"));
+                player.sendMessage(ChatColor.GREEN + Color.translate("Reset your prefix to default!"));
                 player.closeInventory();
             }
         });
@@ -99,10 +99,10 @@ public class PaginationTestingMenu extends PaginatedMenu {
                     Prefix prefix = Prefix.getByName(ChatColor.stripColor(getButtonItem(player).getItemMeta().getDisplayName()));
                     if (potPlayer.getAllPrefixes().contains(prefix.getName())) {
                         potPlayer.setAppliedPrefix(prefix);
-                        player.sendMessage(Color.translate("&aYou've updated your prefix to &6" + prefix.getName() + "&a!"));
+                        player.sendMessage(ChatColor.GREEN + Color.translate("You've updated your prefix to &6" + prefix.getName() + ChatColor.GREEN + "!"));
                     } else {
-                        player.sendMessage(Color.translate("&cYou do not own this prefix!"));
-                        player.sendMessage(Color.translate("&cYou can purchase this prefix at " + CorePlugin.getInstance().getServerManager().getNetwork().getStoreLink() + "!"));
+                        player.sendMessage(ChatColor.RED + ("You do not own this prefix!"));
+                        player.sendMessage(ChatColor.RED + ("You can purchase this prefix at " + CorePlugin.getInstance().getServerManager().getNetwork().getStoreLink() + "!"));
                     }
                     player.closeInventory();
                 }

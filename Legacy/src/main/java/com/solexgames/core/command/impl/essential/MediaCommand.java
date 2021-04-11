@@ -1,10 +1,10 @@
 package com.solexgames.core.command.impl.essential;
 
 import com.solexgames.core.command.BaseCommand;
-import com.solexgames.core.menu.impl.media.ExternalMediaMenu;
-import com.solexgames.core.menu.impl.media.MediaMenu;
-import com.solexgames.core.util.Color;
+import com.solexgames.core.menu.impl.media.MediaViewMenu;
+import com.solexgames.core.menu.impl.media.MediaManagerMenu;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -21,16 +21,15 @@ public class MediaCommand extends BaseCommand {
         Player player = (Player) sender;
 
         if (args.length == 0) {
-            new MediaMenu(player).open(player);
+            new MediaManagerMenu(player).open(player);
         }
-
         if (args.length == 1) {
             Player target = Bukkit.getPlayerExact(args[0]);
 
             if (target != null) {
-                new ExternalMediaMenu(target).open(player);
+                new MediaViewMenu(target).open(player);
             } else {
-                player.sendMessage(Color.translate("&cThat player does not exist."));
+                player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
             }
         }
 

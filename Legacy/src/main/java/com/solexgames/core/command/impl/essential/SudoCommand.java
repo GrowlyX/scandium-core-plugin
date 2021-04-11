@@ -49,7 +49,7 @@ public class SudoCommand extends BaseCommand {
                     StaffUtil.sendAlert((Player) sender, "sudoed " + target.getName());
                 }
             } else {
-                sender.sendMessage(Color.translate("&cThat player does not exist."));
+                sender.sendMessage(ChatColor.RED + "That player does not exist");
             }
         }
         return false;

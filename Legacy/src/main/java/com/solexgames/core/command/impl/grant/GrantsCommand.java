@@ -37,7 +37,7 @@ public class GrantsCommand extends BaseCommand {
             if (target != null) {
                 new GrantViewPaginatedMenu(player, target).openMenu(player);
             } else {
-                player.sendMessage(Color.translate("&cThat player does not exist."));
+                player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
             }
         }
 

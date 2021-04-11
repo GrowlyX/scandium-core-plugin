@@ -5,6 +5,7 @@ import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.StaffUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -32,20 +33,20 @@ public class GmspCommand extends BaseCommand {
 
         if (args.length == 0) {
             player.setGameMode(GameMode.SPECTATOR);
-            player.sendMessage(Color.translate("&aSet your gamemode to Spectator."));
+            player.sendMessage(Color.SECONDARY_COLOR + "You've set your gamemode to " + Color.MAIN_COLOR + "spectator" + Color.SECONDARY_COLOR + ".");
 
-            StaffUtil.sendAlert(player, "set gamemode spectator");
+            StaffUtil.sendAlert(player, "gamemode spectator");
         }
         if (args.length == 1) {
             Player target = Bukkit.getPlayerExact(args[0]);
 
             if (target != null) {
                 target.setGameMode(GameMode.SPECTATOR);
-                player.sendMessage(Color.translate("&aSet " + target.getDisplayName() + "'s&a gamemode to Spectator."));
+                player.sendMessage(Color.SECONDARY_COLOR + "You've set " + target.getDisplayName() + Color.SECONDARY_COLOR + "'s gamemode to " + Color.MAIN_COLOR + "spectator" + Color.SECONDARY_COLOR + ".");
 
-                StaffUtil.sendAlert(player, "set gamemode spectator for " + target.getName());
+                StaffUtil.sendAlert(player, "gamemode spectator for " + target.getName());
             } else {
-                player.sendMessage(Color.translate("&cThat player does not exist."));
+                player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
             }
         }
 

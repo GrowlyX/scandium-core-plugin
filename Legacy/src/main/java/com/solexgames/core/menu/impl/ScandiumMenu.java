@@ -8,6 +8,7 @@ import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.util.Color;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
@@ -84,10 +85,10 @@ public class ScandiumMenu extends AbstractInventoryMenu {
             if (item == null || item.getType() == XMaterial.AIR.parseMaterial()) return;
             if (event.getRawSlot() == 2) {
                 CorePlugin.getInstance().reloadConfig();
-                player.sendMessage(Color.translate("&aReloaded the main config!"));
+                player.sendMessage(ChatColor.GREEN + Color.translate("Reloaded the main config!"));
             }
             if (event.getRawSlot() == 4) {
-                player.sendMessage(Color.translate("&aContact: &6https://dsc.bio/GrowlyX/."));
+                player.sendMessage(ChatColor.GREEN + Color.translate("Contact: &6https://dsc.bio/GrowlyX/."));
             }
         }
     }

@@ -20,8 +20,6 @@ public class ClearCommand extends BaseCommand {
             return false;
         }
 
-        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
-        ChatColor secondColor = network.getSecondaryColor();
         Player player = (Player) sender;
 
         if (!player.hasPermission("scandium.command.clear")) {
@@ -31,20 +29,21 @@ public class ClearCommand extends BaseCommand {
 
         if (args.length == 0) {
             player.getInventory().clear();
-            player.sendMessage(Color.translate(secondColor + "Cleared your inventory."));
+            player.sendMessage(Color.SECONDARY_COLOR + "You've cleared your inventory.");
 
-            StaffUtil.sendAlert(player, "cleared");
+            StaffUtil.sendAlert(player, "cleared inventory");
         }
         if (args.length == 1) {
             Player target = Bukkit.getPlayerExact(args[0]);
+
             if (target != null) {
                 player.getInventory().clear();
 
-                player.sendMessage(Color.translate(secondColor + "Cleared " + target.getDisplayName() + secondColor + "'s inventory."));
+                player.sendMessage(Color.SECONDARY_COLOR + "You've cleared " + target.getDisplayName() + Color.SECONDARY_COLOR + "'s inventory.");
 
-                StaffUtil.sendAlert(player, "cleared " + target.getName());
+                StaffUtil.sendAlert(player, "cleared inventory for " + target.getName());
             } else {
-                player.sendMessage(Color.translate("&cThat player does not exist."));
+                player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
             }
         }
         return false;

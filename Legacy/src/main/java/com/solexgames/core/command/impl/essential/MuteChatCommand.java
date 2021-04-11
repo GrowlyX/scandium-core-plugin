@@ -21,10 +21,23 @@ public class MuteChatCommand extends BaseCommand {
             return false;
         }
 
-        serverManager.setChatEnabled(!serverManager.isChatEnabled());
 
-        Bukkit.broadcastMessage(ChatColor.GREEN + "The chat has been " + (serverManager.isChatEnabled() ? "disabled" : "enabled") + " by " + displayName + ".");
-        CorePlugin.getInstance().getPlayerManager().sendToNetworkStaff("&3[S] " + "&7[" + CorePlugin.getInstance().getServerName() + "] " + displayName + " &bhas " + (serverManager.isChatEnabled() ? "enabled" : "disabled") + " chat.");
+
+        if (args.length == 0) {
+            serverManager.setChatEnabled(!serverManager.isChatEnabled());
+
+            Bukkit.broadcastMessage(ChatColor.GREEN + "The chat has been " + (serverManager.isChatEnabled() ? "enabled" : "disabled") + " by " + displayName + ".");
+            CorePlugin.getInstance().getPlayerManager().sendToNetworkStaff("&3[S] " + "&7[" + CorePlugin.getInstance().getServerName() + "] " + displayName + " &bhas " + (serverManager.isChatEnabled() ? "enabled" : "disabled") + " chat.");
+        }
+
+        if (args.length == 1) {
+            if (args[0].equalsIgnoreCase("-s")) {
+                serverManager.setChatEnabled(!serverManager.isChatEnabled());
+
+                Bukkit.broadcastMessage(ChatColor.RED + "The chat has been " + (serverManager.isChatEnabled() ? "enabled" : "disabled") + " by staff.");
+                CorePlugin.getInstance().getPlayerManager().sendToNetworkStaff("&3[S] " + "&7[" + CorePlugin.getInstance().getServerName() + "] " + displayName + " &bhas " + (serverManager.isChatEnabled() ? "enabled" : "disabled") + " chat.");
+            }
+        }
 
         return false;
     }

@@ -45,7 +45,7 @@ public class HealCommand extends BaseCommand {
 
                 StaffUtil.sendAlert(player, "healed " + target.getName());
             } else {
-                player.sendMessage(Color.translate("&cThat player does not exist."));
+                player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
             }
         }
         return false;

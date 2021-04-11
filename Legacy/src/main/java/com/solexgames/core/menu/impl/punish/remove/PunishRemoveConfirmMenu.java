@@ -73,12 +73,12 @@ public class PunishRemoveConfirmMenu extends AbstractInventoryMenu {
                 Punishment.getAllPunishments().remove(punishment);
                 RedisUtil.writeAsync(RedisUtil.fRemovePunishment(punishment));
 
-                player.sendMessage(Color.translate("&aRemoved the punishment from &b" + target + "'s &ahistory!"));
+                player.sendMessage(ChatColor.GREEN + Color.translate("Removed the punishment from &b" + target + "'s &ahistory!"));
                 player.closeInventory();
 
                 new PunishViewPaginatedMenu(player, target, punishment.getPunishmentType()).openMenu(player);
             } else if (ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()).contains("Cancel")) {
-                player.sendMessage(Color.translate("&cYou've cancelled the current punishment remove process."));
+                player.sendMessage(ChatColor.RED + ("You've cancelled the current punishment remove process."));
                 player.closeInventory();
             }
         }

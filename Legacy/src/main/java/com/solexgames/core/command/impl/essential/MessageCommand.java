@@ -32,7 +32,7 @@ public class MessageCommand extends BaseCommand {
             String message = StringUtil.buildMessage(args, 1);
 
             if (target == null) {
-                player.sendMessage(Color.translate("&cThat player does not exist."));
+                player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
                 return false;
             }
 
@@ -40,43 +40,43 @@ public class MessageCommand extends BaseCommand {
             PotPlayer potTarget = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
 
             if (potTarget == null) {
-                player.sendMessage(Color.translate("&cThat player does not exist."));
+                player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
                 return false;
             }
             if (potTarget == potPlayer) {
-                player.sendMessage(Color.translate("&cYou cannot message yourself."));
+                player.sendMessage(ChatColor.RED + ("You cannot message yourself."));
                 return false;
             }
             if (potTarget.isVanished() && (potPlayer.getActiveGrant().getRank().getWeight() < potTarget.getActiveGrant().getRank().getWeight())) {
-                player.sendMessage(Color.translate("&cThat player does not exist."));
+                player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
                 return false;
             }
             if (!potTarget.isIgnoring(potPlayer.getPlayer())) {
-                player.sendMessage(Color.translate("&cThat player is currently ignoring you."));
+                player.sendMessage(ChatColor.RED + ("Error: That player is currently ignoring you."));
                 return false;
             }
             if (!potPlayer.isIgnoring(potTarget.getPlayer())) {
-                player.sendMessage(Color.translate("&cYou are currently ignoring that player."));
+                player.sendMessage(ChatColor.RED + ("You are currently ignoring that player."));
                 return false;
             }
             if (!potPlayer.isCanReceiveDms()) {
-                player.sendMessage(Color.translate("&cYou've your dms disabled."));
+                player.sendMessage(ChatColor.RED + ("You've your dms disabled."));
                 return false;
             }
             if (potTarget.isCurrentlyRestricted()) {
-                player.sendMessage(Color.translate("&cYou cannot message this player right now."));
+                player.sendMessage(ChatColor.RED + ("You cannot message this player right now."));
                 return false;
             }
             if (potTarget.isCurrentlyMuted()) {
-                player.sendMessage(Color.translate("&cYou cannot message this player right now."));
+                player.sendMessage(ChatColor.RED + ("You cannot message this player right now."));
                 return false;
             }
             if (!potTarget.isCanReceiveDms()) {
-                player.sendMessage(Color.translate("&cThat player has their dms disabled."));
+                player.sendMessage(ChatColor.RED + ("Error: That player has their dms disabled."));
                 return false;
             }
             if (CorePlugin.getInstance().getFilterManager().isDmFiltered(player, potTarget.getName(), message)) {
-                player.sendMessage(Color.translate("&cYou cannot use censored words in a direct message."));
+                player.sendMessage(ChatColor.RED + ("You cannot use censored words in a direct message."));
                 return false;
             }
 

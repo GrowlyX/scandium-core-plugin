@@ -28,7 +28,7 @@ public class JumpToPageButton extends Button {
         stringList.add(Color.translate("&7Click to switch to this menu!"));
         if (this.current) {
             stringList.add("  ");
-            stringList.add(Color.translate("&aThis is the current page."));
+            stringList.add(ChatColor.GREEN + Color.translate("This is the current page."));
         }
 
         return new ItemBuilder(this.current ? XMaterial.ENCHANTED_BOOK.parseMaterial() : XMaterial.BOOK.parseMaterial())

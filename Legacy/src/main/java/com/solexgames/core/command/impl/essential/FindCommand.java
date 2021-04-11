@@ -34,12 +34,13 @@ public class FindCommand extends BaseCommand {
             sender.sendMessage(serverType.getSecondaryColor() + "Searching for that player...");
 
             CompletableFuture.runAsync(() -> {
-                completableFuture.complete(CorePlugin.getInstance().getPlayerManager().getNetworkPlayer(target));
+                NetworkPlayer networkPlayer = CorePlugin.getInstance().getPlayerManager().getNetworkPlayer(target);
+                completableFuture.complete(networkPlayer);
             });
 
             completableFuture.thenAccept(networkPlayer -> {
                 if (networkPlayer == null) {
-                    sender.sendMessage(ChatColor.RED + "I'm sorry, but we could not find that player on the network.");
+                    sender.sendMessage(ChatColor.RED + "Error: The player with the specified name does not exist.");
                 } else {
                     Rank rank = Rank.getByName(networkPlayer.getRankName());
                     String displayName = Color.translate((rank != null ? rank.getColor() : ChatColor.GRAY) + networkPlayer.getName());

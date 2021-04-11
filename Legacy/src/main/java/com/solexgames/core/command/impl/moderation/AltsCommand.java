@@ -74,7 +74,7 @@ public class AltsCommand extends BaseCommand {
                     });
                 });
             } else {
-                sender.sendMessage(ChatColor.RED + "That player is not online the network right now.");
+                sender.sendMessage(ChatColor.RED + "Error: That player is not online the network right now.");
             }
         }
 

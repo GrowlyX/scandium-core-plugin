@@ -34,7 +34,7 @@ public class SlowChatCommand extends BaseCommand {
 
                 CorePlugin.getInstance().getPlayerManager().sendToNetworkStaff("&3[S] " + "&7[" + CorePlugin.getInstance().getServerName() + "] " + displayName + " &bhas slowed the chat to &6" + time + " seconds&b.");
             } catch (NumberFormatException e) {
-                sender.sendMessage(Color.translate("&cThat number is invalid."));
+                sender.sendMessage(ChatColor.RED + "Error: That's not a valid number.");
             }
         }
         return false;

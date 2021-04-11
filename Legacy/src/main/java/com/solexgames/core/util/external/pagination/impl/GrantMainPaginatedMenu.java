@@ -86,7 +86,7 @@ public class GrantMainPaginatedMenu extends PaginatedMenu {
                             } else if ((potPlayer.getActiveGrant().getRank().getWeight() >= rank.getWeight()) && player.isOp()) {
                                 new GrantScopePaginatedMenu(player, document, rank).openMenu(player);
                             } else {
-                                player.sendMessage(Color.translate("&cYou cannot grant a rank weight a weight that is higher than yours."));
+                                player.sendMessage(ChatColor.RED + ("You cannot grant a rank weight a weight that is higher than yours."));
                                 player.closeInventory();
                             }
                         }
@@ -97,7 +97,7 @@ public class GrantMainPaginatedMenu extends PaginatedMenu {
                             } else if ((potPlayer.getActiveGrant().getRank().getWeight() >= rank.getWeight()) && player.isOp()) {
                                 new GrantSelectDurationMenu(player, getDocument(), rank, "global").open(player);
                             } else {
-                                player.sendMessage(Color.translate("&cYou cannot grant a rank weight a weight that is higher than yours."));
+                                player.sendMessage(ChatColor.RED + ("You cannot grant a rank weight a weight that is higher than yours."));
                                 player.closeInventory();
                             }
                         }

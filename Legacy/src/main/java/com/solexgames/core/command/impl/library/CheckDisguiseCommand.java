@@ -38,9 +38,13 @@ public class CheckDisguiseCommand extends BaseCommand {
             PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
 
             if (potPlayer == null) {
-                sender.sendMessage(ChatColor.RED + "I'm sorry, but we could not find that player on the network.");
+                sender.sendMessage(ChatColor.RED + "Error: That player does not exist.");
             } else {
-                sender.sendMessage(potPlayer.getColorByRankColor() + potPlayer.getName() + ChatColor.GREEN + " is disguised as " + Color.translate(potPlayer.getDisguiseRank().getColor() + potPlayer.getDisguiseRank().getName()) + org.bukkit.ChatColor.GREEN + "!");
+                if (potPlayer.getDisguiseRank() != null) {
+                    sender.sendMessage(potPlayer.getColorByRankColor() + potPlayer.getName() + ChatColor.GREEN + " is disguised as " + Color.translate(potPlayer.getDisguiseRank().getColor() + potPlayer.getDisguiseRank().getName()) + org.bukkit.ChatColor.GREEN + "!");
+                } else {
+                    sender.sendMessage(ChatColor.RED + "Error: That player is not disguised.");
+                }
             }
         }
         return false;

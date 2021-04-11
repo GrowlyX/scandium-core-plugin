@@ -30,19 +30,20 @@ public class TpHereCommand extends BaseCommand {
         }
 
         if (args.length == 0) {
-            player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player>."));
+            player.sendMessage(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player>.");
         }
         if (args.length == 1) {
             Player target = Bukkit.getPlayerExact(args[0]);
 
             if (target != null) {
                 target.teleport(player.getLocation());
-                player.sendMessage(Color.translate(secondColor + "Teleported " + target.getDisplayName() + secondColor + " to your location."));
-                target.sendMessage(Color.translate(secondColor + "You've been teleported to " + target.getDisplayName() + secondColor + "."));
+
+                player.sendMessage(secondColor + "Teleported " + target.getDisplayName() + secondColor + " to your location.");
+                target.sendMessage(secondColor + "You've been teleported to " + target.getDisplayName() + secondColor + ".");
 
                 StaffUtil.sendAlert(player, "teleported " + target.getName() + " to themselves");
             } else {
-                player.sendMessage(Color.translate("&cThat player does not exist."));
+                player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
             }
         }
 

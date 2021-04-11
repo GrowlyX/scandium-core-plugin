@@ -20,6 +20,7 @@ public class WarpCommand extends BaseCommand {
     public void sendHelp(Player player) {
         player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
         player.sendMessage(Color.translate(NETWORK.getMainColor() + ChatColor.BOLD.toString() + "Warp Management:"));
+        player.sendMessage("  ");
         player.sendMessage(Color.translate("/warp <warp> &7- Teleport to a warp."));
         player.sendMessage(Color.translate("/warp create &7- Create a new warp."));
         player.sendMessage(Color.translate("/warp delete &7- Delete an existing warp."));
@@ -54,17 +55,17 @@ public class WarpCommand extends BaseCommand {
                     player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
                     break;
                 case "create":
-                    if (args.length == 1) player.sendMessage(Color.translate("&cUsage: /warp create <name>."));
+                    if (args.length == 1) player.sendMessage(ChatColor.RED + ("Usage: /warp create <name>."));
                     if (args.length == 2) {
                         String value = args[1];
                         Warp warp = new Warp(value, player.getLocation(), CorePlugin.getInstance().getServerName());
                         warp.saveWarp();
 
-                        player.sendMessage(Color.translate("&aCreated a new warp with the name '" + value + "'."));
+                        player.sendMessage(ChatColor.GREEN + Color.translate("Created a new warp with the name '" + value + "'."));
                     }
                     break;
                 case "delete":
-                    if (args.length == 1) player.sendMessage(Color.translate("&cUsage: /warp delete <name>."));
+                    if (args.length == 1) player.sendMessage(ChatColor.RED + ("Usage: /warp delete <name>."));
                     if (args.length == 2) {
                         String value = args[1];
                         Warp warp = Warp.getByName(value);
@@ -73,9 +74,9 @@ public class WarpCommand extends BaseCommand {
                             Warp.getWarps().remove(warp);
                             CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getWarpCollection().deleteOne(Filters.eq("_id", warp.getId())));
 
-                            player.sendMessage(Color.translate("&cDeleted the warp '" + value + "'."));
+                            player.sendMessage(ChatColor.RED + ("Deleted the warp '" + value + "'."));
                         } else {
-                            player.sendMessage(Color.translate("&cThat warp does not exist!"));
+                            player.sendMessage(ChatColor.RED + ("Error: That warp does not exist!"));
                         }
                     }
                     break;
@@ -87,12 +88,12 @@ public class WarpCommand extends BaseCommand {
                         if (warp.getServer().equalsIgnoreCase(CorePlugin.getInstance().getServerName())) {
                             if (warp.getLocation() != null) {
                                 player.teleport(warp.getLocation());
-                                player.sendMessage(Color.translate("&aWarped you to the &6" + warp.getName() + "&a warp!"));
+                                player.sendMessage(ChatColor.GREEN + Color.translate("Warped you to the &6" + warp.getName() + ChatColor.GREEN + " warp!"));
                             } else {
-                                player.sendMessage(Color.translate("&cThe location for that warp does not exist!"));
+                                player.sendMessage(ChatColor.RED + ("The location for that warp does not exist!"));
                             }
                         } else {
-                            player.sendMessage(Color.translate("&cThat warp was created on another server!"));
+                            player.sendMessage(ChatColor.RED + ("Error: That warp was created on another server!"));
                         }
                     } else {
                         sendHelp(player);

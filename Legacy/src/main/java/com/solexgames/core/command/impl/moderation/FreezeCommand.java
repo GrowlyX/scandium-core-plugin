@@ -43,7 +43,7 @@ public class FreezeCommand extends BaseCommand {
 
                     RedisUtil.writeAsync(RedisUtil.onUnfreeze(player, target));
 
-                    player.sendMessage(Color.translate("&aUnfroze " + target.getDisplayName() + "&a."));
+                    player.sendMessage(ChatColor.GREEN + Color.translate("Unfroze " + target.getDisplayName() + ChatColor.GREEN + "."));
                 } else {
                     PotPlayer mainPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
                     PotPlayer targetPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
@@ -54,14 +54,14 @@ public class FreezeCommand extends BaseCommand {
 
                             RedisUtil.writeAsync(RedisUtil.onFreeze(player, target));
 
-                            player.sendMessage(Color.translate("&aFroze " + target.getDisplayName() + "&a."));
+                            player.sendMessage(ChatColor.GREEN + Color.translate("Froze " + target.getDisplayName() + ChatColor.GREEN + "."));
                         } else {
-                            player.sendMessage(Color.translate("&cYou cannot freeze this player as their rank weight is higher than yours!"));
+                            player.sendMessage(ChatColor.RED + ("You cannot freeze this player as their rank weight is higher than yours!"));
                         }
                     }
                 }
             } else {
-                player.sendMessage(Color.translate("&cThat player does not exist."));
+                player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
             }
         }
         return false;

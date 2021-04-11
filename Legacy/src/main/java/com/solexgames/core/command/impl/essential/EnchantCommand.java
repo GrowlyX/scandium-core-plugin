@@ -16,7 +16,7 @@ public class EnchantCommand extends BaseCommand {
 
         Player player = (Player) sender;
 
-        if (!player.hasPermission("scandium.command.crafting")) {
+        if (!player.hasPermission("scandium.command.enchant")) {
             player.sendMessage(NO_PERMISSION);
             return false;
         }

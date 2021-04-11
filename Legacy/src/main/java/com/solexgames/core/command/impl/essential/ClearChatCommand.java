@@ -3,6 +3,7 @@ package com.solexgames.core.command.impl.essential;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.util.Color;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -20,7 +21,8 @@ public class ClearChatCommand extends BaseCommand {
             Bukkit.broadcastMessage(Color.translate("  "));
         }
 
-        Bukkit.broadcastMessage(Color.translate("&aThe chat has been cleared by " + (sender instanceof Player ? ((Player) sender).getDisplayName() : "&4Console") + "&a."));
+        Bukkit.broadcastMessage(ChatColor.GREEN + Color.translate("The chat has been cleared by " + (sender instanceof Player ? ((Player) sender).getDisplayName() : "&4Console") + ChatColor.GREEN + "."));
+
         return false;
     }
 }

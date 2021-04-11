@@ -18,7 +18,7 @@ messages:
 tablist:
   enabled: true
   header: "&7<nl>&e&lMine&3&lArcade<nl>&7www.minearcade.org<nl>&7"
-  footer: "&7<nl>&7store.minearcade.org<nl>&7You're currently on &3<server-name>&7!<nl>&7"
+  footer: "&7<nl>&7store.minearcade.org<nl>&7 &7You're currently on &3<server-name>&7! &7<nl>&7"
 
 discord:
   enabled: false

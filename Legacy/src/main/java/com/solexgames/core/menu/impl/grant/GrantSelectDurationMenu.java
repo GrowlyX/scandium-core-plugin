@@ -90,7 +90,7 @@ public class GrantSelectDurationMenu extends AbstractInventoryMenu {
                     potPlayer.setGrantDurationScope(this.scope);
 
                     player.sendMessage(Color.translate("  "));
-                    player.sendMessage(Color.translate("&aType in a custom duration in chat!"));
+                    player.sendMessage(ChatColor.GREEN + Color.translate("Type in a custom duration in chat!"));
                     player.sendMessage(Color.translate("&7&oUse 'cancel' to cancel this process, or use 'perm' to set it as a permanent punishment!"));
                     player.sendMessage(Color.translate("  "));
 

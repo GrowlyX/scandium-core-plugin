@@ -29,14 +29,12 @@ public class ExperienceCommand extends BaseCommand {
         }
 
         if (args.length > 0) {
-            switch (args[0]) {
+            switch (args[0].toLowerCase()) {
                 case "add":
                     if (!sender.hasPermission("scandium.experience.management")) {
                         sender.sendMessage(NO_PERMISSION);
                         return false;
                     }
-
-
                     if (args.length < 3) {
                         this.sendHelpMessage(sender);
                     }
@@ -48,7 +46,7 @@ public class ExperienceCommand extends BaseCommand {
                             try {
                                 amount = Integer.parseInt(args[2]);
                             } catch (NumberFormatException exception) {
-                                sender.sendMessage(ChatColor.RED + "That is not a valid integer!");
+                                sender.sendMessage(ChatColor.RED + "Error: That is not a valid integer!");
                                 return false;
                             }
 
@@ -56,7 +54,7 @@ public class ExperienceCommand extends BaseCommand {
 
                             sender.sendMessage(ChatColor.GREEN + "Added " + ChatColor.WHITE + amount + ChatColor.GREEN + " experience to " + ChatColor.WHITE + target.getDisplayName() + ChatColor.GREEN + "!");
                         } else {
-                            sender.sendMessage(ChatColor.RED + "That player does not exist!");
+                            sender.sendMessage(ChatColor.RED + "Error: That player does not exist!");
                         }
                     }
                     break;
@@ -77,7 +75,7 @@ public class ExperienceCommand extends BaseCommand {
                             try {
                                 amount = Integer.parseInt(args[2]);
                             } catch (NumberFormatException exception) {
-                                sender.sendMessage(ChatColor.RED + "That is not a valid integer!");
+                                sender.sendMessage(ChatColor.RED + "Error: That is not a valid integer!");
                                 return false;
                             }
 
@@ -85,7 +83,7 @@ public class ExperienceCommand extends BaseCommand {
 
                             sender.sendMessage(ChatColor.GREEN + "Removed " + ChatColor.WHITE + amount + ChatColor.GREEN + " experience from " + ChatColor.WHITE + target.getDisplayName() + ChatColor.GREEN + "!");
                         } else {
-                            sender.sendMessage(ChatColor.RED + "That player does not exist!");
+                            sender.sendMessage(ChatColor.RED + "Error: That player does not exist!");
                         }
                     }
                     break;
@@ -106,7 +104,7 @@ public class ExperienceCommand extends BaseCommand {
                             try {
                                 amount = Integer.parseInt(args[2]);
                             } catch (NumberFormatException exception) {
-                                sender.sendMessage(ChatColor.RED + "That is not a valid integer!");
+                                sender.sendMessage(ChatColor.RED + "Error: That is not a valid integer!");
                                 return false;
                             }
 
@@ -114,7 +112,7 @@ public class ExperienceCommand extends BaseCommand {
 
                             sender.sendMessage(ChatColor.GREEN + "Set " + ChatColor.WHITE + amount + ChatColor.GREEN + " experience to " + ChatColor.WHITE + target.getDisplayName() + ChatColor.GREEN + "!");
                         } else {
-                            sender.sendMessage(ChatColor.RED + "That player does not exist!");
+                            sender.sendMessage(ChatColor.RED + "Error: That player does not exist!");
                         }
                     }
                     break;
@@ -131,8 +129,8 @@ public class ExperienceCommand extends BaseCommand {
         ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
 
         sender.sendMessage(Arrays.asList(
-                ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 52),
-                serverType.getMainColor() + ChatColor.BOLD.toString() + "Experience Help:",
+                ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 53),
+                serverType.getMainColor() + ChatColor.BOLD.toString() + "Experience Information:",
                 "",
                 "/experience " + ChatColor.GRAY + "- Open the Experience Menu.",
                 "/experience help " + ChatColor.GRAY + "- View this help message.",
@@ -140,7 +138,7 @@ public class ExperienceCommand extends BaseCommand {
                 "/experience set <player> <amount> " + ChatColor.GRAY + "- Set a player's experience level to an amount.",
                 "/experience add <player> <amount> " + ChatColor.GRAY + "- Add experience to a player.",
                 "/experience remove <player> <amount> " + ChatColor.GRAY + "- Remove experience from a player.",
-                ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 52)
+                ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 53)
         ).toArray(new String[0]));
     }
 }

@@ -317,11 +317,11 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                                         .stream()
                                         .filter(player -> player.hasPermission("scandium.staff"))
                                         .forEach(player1 -> player1.sendMessage(Color.translate(
-                                                "&7[S] " + punishedName + " &awas " + "un" + finalPunishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (removerDisplayName != null ? removerDisplayName : "Console") + "&a."
+                                                "&7[S] " + punishedName + " &awas " + "un" + finalPunishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (removerDisplayName != null ? removerDisplayName : "Console") + ChatColor.GREEN + "."
                                         )));
                             } else {
                                 Bukkit.broadcastMessage(Color.translate(
-                                        "&7" + punishedName + " &awas un" + finalPunishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (removerDisplayName != null ? removerDisplayName : "Console") + "&a."
+                                        "&7" + punishedName + " &awas un" + finalPunishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (removerDisplayName != null ? removerDisplayName : "Console") + ChatColor.GREEN + "."
                                 ));
                             }
 
@@ -402,8 +402,8 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
 
                         potPlayer.getPlayer().sendMessage(new String[] {
                                 "  ",
-                                Color.translate("&aThanks for syncing your account! You've been given the &2✔ &7(Verified) &atag!"),
-                                Color.translate("&aYour account has been synced to &b" + discord + "&a."),
+                                ChatColor.GREEN + Color.translate("Thanks for syncing your account! You've been given the &2✔ &7(Verified) &atag!"),
+                                ChatColor.GREEN + Color.translate("Your account has been synced to &b" + discord + ChatColor.GREEN + "."),
                                 "  "
                         });
                     }

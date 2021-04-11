@@ -9,6 +9,7 @@ import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
@@ -84,23 +85,23 @@ public class LanguageMenu extends AbstractInventoryMenu {
             switch (event.getRawSlot()) {
                 case 2:
                     potPlayer.setLanguage(LanguageType.ENGLISH);
-                    this.player.sendMessage(Color.translate("&aYour language has been set to &eEnglish&a."));
+                    this.player.sendMessage(ChatColor.GREEN + Color.translate("Your language has been set to &eEnglish&a."));
                     break;
                 case 3:
                     potPlayer.setLanguage(LanguageType.SPANISH);
-                    this.player.sendMessage(Color.translate("&aYour language has been set to &6Spanish&a."));
+                    this.player.sendMessage(ChatColor.GREEN + Color.translate("Your language has been set to &6Spanish&a."));
                     break;
                 case 4:
                     potPlayer.setLanguage(LanguageType.FRENCH);
-                    this.player.sendMessage(Color.translate("&aYour language has been set to &bFrench&a."));
+                    this.player.sendMessage(ChatColor.GREEN + Color.translate("Your language has been set to &bFrench&a."));
                     break;
                 case 5:
                     potPlayer.setLanguage(LanguageType.ITALIAN);
-                    this.player.sendMessage(Color.translate("&aYour language has been set to &aItalian&a."));
+                    this.player.sendMessage(ChatColor.GREEN + Color.translate("Your language has been set to &aItalian&a."));
                     break;
                 case 6:
                     potPlayer.setLanguage(LanguageType.GERMAN);
-                    this.player.sendMessage(Color.translate("&aYour language has been set to &cGerman&a."));
+                    this.player.sendMessage(ChatColor.GREEN + Color.translate("Your language has been set to &cGerman&a."));
                     break;
             }
             player.closeInventory();

@@ -37,7 +37,7 @@ public class GrantCommand extends BaseCommand {
             UUID uuid = UUIDUtil.fetchUUID(args[0]);
 
             if (uuid == null) {
-                player.sendMessage(ChatColor.RED + "That uuid is not valid.");
+                player.sendMessage(ChatColor.RED + "Error: That uuid is not valid.");
                 return false;
             }
 
@@ -46,7 +46,7 @@ public class GrantCommand extends BaseCommand {
             if (document != null) {
                 new GrantMainPaginatedMenu(document, player).openMenu(player);
             } else {
-                player.sendMessage(ChatColor.RED + "That player does not exist in our databases.");
+                player.sendMessage(ChatColor.RED + "Error: That player does not exist in our database.");
             }
         }
         return false;

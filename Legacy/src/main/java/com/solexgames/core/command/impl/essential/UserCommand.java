@@ -67,10 +67,10 @@ public class UserCommand extends BaseCommand {
                                             potPlayer.getUserPermissions().add(permission.toLowerCase());
                                             potPlayer.resetPermissions();
                                             potPlayer.setupPermissions();
-                                            sender.sendMessage(Color.translate("&aAdded the permission '" + permission + "' to " + target.getDisplayName() + "&a!"));
+                                            sender.sendMessage(ChatColor.GREEN + Color.translate("Added the permission '" + permission + "' to " + target.getDisplayName() + ChatColor.GREEN + "!"));
                                         }
                                     } else {
-                                        sender.sendMessage(Color.translate("&cThat player does not exist."));
+                                        sender.sendMessage(ChatColor.RED + "That player does not exist");
                                     }
                                 }
                                 break;
@@ -92,10 +92,10 @@ public class UserCommand extends BaseCommand {
                                             potPlayer.getUserPermissions().remove(permission.toLowerCase());
                                             potPlayer.resetPermissions();
                                             potPlayer.setupPermissions();
-                                            sender.sendMessage(Color.translate("&aRemoved the permission '" + permission + "' from " + target.getDisplayName() + "&a!"));
+                                            sender.sendMessage(ChatColor.GREEN + Color.translate("Removed the permission '" + permission + "' from " + target.getDisplayName() + ChatColor.GREEN + "!"));
                                         }
                                     } else {
-                                        sender.sendMessage(Color.translate("&cThat player does not exist."));
+                                        sender.sendMessage(ChatColor.RED + "That player does not exist");
                                     }
                                 }
                                 break;
@@ -116,7 +116,7 @@ public class UserCommand extends BaseCommand {
                                             sender.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
                                         }
                                     } else {
-                                        sender.sendMessage(Color.translate("&cThat player does not exist."));
+                                        sender.sendMessage(ChatColor.RED + "That player does not exist");
                                     }
                                 }
                                 break;
@@ -158,7 +158,7 @@ public class UserCommand extends BaseCommand {
                                 }
                             }
                         } else {
-                            sender.sendMessage(Color.translate("&cThat player does not exist."));
+                            sender.sendMessage(ChatColor.RED + "That player does not exist");
                         }
                     }
                     break;

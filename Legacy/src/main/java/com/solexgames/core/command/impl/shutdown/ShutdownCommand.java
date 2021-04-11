@@ -36,17 +36,17 @@ public class ShutdownCommand extends BaseCommand {
                 case "start":
                     if (!shutdownManager.isShutdownScheduled()) {
                         shutdownManager.initiateShutdown(60, player);
-                        player.sendMessage(Color.translate("&aInitiated a shutdown in &660 seconds&a."));
+                        player.sendMessage(ChatColor.GREEN + Color.translate("Initiated a shutdown in &660 seconds&a."));
                     } else {
-                        player.sendMessage(Color.translate("&cThere's already a shutdown initiated!"));
+                        player.sendMessage(ChatColor.RED + ("Error: There's already a shutdown initiated!"));
                     }
                     break;
                 case "cancel":
                     if (shutdownManager.isShutdownScheduled()) {
                         shutdownManager.stopShutdown(player);
-                        player.sendMessage(Color.translate("&aCancelled the scheduled shutdown."));
+                        player.sendMessage(ChatColor.GREEN + Color.translate("Cancelled the scheduled shutdown."));
                     } else {
-                        player.sendMessage(Color.translate("&cThere aren't any shutdowns scheduled!"));
+                        player.sendMessage(ChatColor.RED + ("Error: There aren't any shutdowns scheduled!"));
                     }
                     break;
                 default:

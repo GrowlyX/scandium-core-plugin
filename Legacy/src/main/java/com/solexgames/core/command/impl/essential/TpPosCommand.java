@@ -42,7 +42,7 @@ public class TpPosCommand extends BaseCommand {
 
                 StaffUtil.sendAlert(player, "teleported to " + x1 + ", " + y1 + ", " + z1);
             } catch (Exception e) {
-                player.sendMessage(Color.translate("&cOne of those values was not an integer."));
+                player.sendMessage(ChatColor.RED + ("One of those values was not an integer."));
             }
         }
         return false;

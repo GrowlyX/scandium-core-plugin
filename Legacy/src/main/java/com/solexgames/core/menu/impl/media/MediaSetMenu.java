@@ -8,6 +8,7 @@ import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
@@ -15,12 +16,12 @@ import org.bukkit.inventory.ItemStack;
 
 @Getter
 @Setter
-public class SetMediaMenu extends AbstractInventoryMenu {
+public class MediaSetMenu extends AbstractInventoryMenu {
 
     private Player player;
 
-    public SetMediaMenu(Player player) {
-        super("Media", 9);
+    public MediaSetMenu(Player player) {
+        super("Social Media", 9);
         this.player = player;
         this.update();
     }
@@ -30,10 +31,8 @@ public class SetMediaMenu extends AbstractInventoryMenu {
                 .setDurability(4)
                 .setDisplayName("&9Discord")
                 .addLore(
-                        "",
                         "&7Click here to setup",
-                        "&7your discord account!",
-                        ""
+                        "&7your discord account!"
                 )
                 .create()
         );
@@ -41,10 +40,8 @@ public class SetMediaMenu extends AbstractInventoryMenu {
                 .setDurability(1)
                 .setDisplayName("&cYouTube")
                 .addLore(
-                        "",
                         "&7Click here to setup",
-                        "&7your youtube account!",
-                        ""
+                        "&7your youtube account!"
                 )
                 .create()
         );
@@ -52,10 +49,8 @@ public class SetMediaMenu extends AbstractInventoryMenu {
                 .setDurability(12)
                 .setDisplayName("&bTwitter")
                 .addLore(
-                        "",
                         "&7Click here to setup",
-                        "&7your twitter account!",
-                        ""
+                        "&7your twitter account!"
                 )
                 .create()
         );
@@ -63,10 +58,8 @@ public class SetMediaMenu extends AbstractInventoryMenu {
                 .setDurability(14)
                 .setDisplayName("&6Instagram")
                 .addLore(
-                        "",
                         "&7Click here to setup",
-                        "&7your insta account!",
-                        ""
+                        "&7your insta account!"
                 )
                 .create()
         );
@@ -74,10 +67,8 @@ public class SetMediaMenu extends AbstractInventoryMenu {
                 .setDurability(11)
                 .setDisplayName("&e???")
                 .addLore(
-                        "",
                         "&7Click here to setup",
-                        "&7your ??? account!",
-                        ""
+                        "&7your ??? account!"
                 )
                 .create()
         );
@@ -98,26 +89,26 @@ public class SetMediaMenu extends AbstractInventoryMenu {
             if (item == null || item.getType() == XMaterial.AIR.parseMaterial()) return;
             switch (event.getRawSlot()) {
                 case 2:
-                    player.sendMessage(Color.translate("&cPlease sync your account to our discord server to use this feature."));
+                    player.sendMessage(ChatColor.RED + ("Please sync your account to our discord server to use this feature."));
                     player.closeInventory();
                     break;
                 case 3:
                     potPlayer.getMedia().getMediaData().setModifyingYoutubeData(true);
-                    player.sendMessage(Color.translate("&aType your &cYouTube &achannel link in chat!"));
+                    player.sendMessage(ChatColor.GREEN + Color.translate("Type your &cYouTube &achannel link in chat!"));
                     player.closeInventory();
                     break;
                 case 4:
                     potPlayer.getMedia().getMediaData().setModifyingTwitterData(true);
-                    player.sendMessage(Color.translate("&aType your &bTwitter &ausername in chat!"));
+                    player.sendMessage(ChatColor.GREEN + Color.translate("Type your &bTwitter &ausername in chat!"));
                     player.closeInventory();
                     break;
                 case 5:
                     potPlayer.getMedia().getMediaData().setModifyingInstaData(true);
-                    player.sendMessage(Color.translate("&aType your &6Instagram &ausername in chat!"));
+                    player.sendMessage(ChatColor.GREEN + Color.translate("Type your &6Instagram &ausername in chat!"));
                     player.closeInventory();
                     break;
                 case 6:
-                    player.sendMessage(Color.translate("&cThis button is currently disabled."));
+                    player.sendMessage(ChatColor.RED + ("This button is currently disabled."));
                     player.closeInventory();
                     break;
             }

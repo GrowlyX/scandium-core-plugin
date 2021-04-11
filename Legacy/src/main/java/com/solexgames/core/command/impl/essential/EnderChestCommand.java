@@ -18,7 +18,7 @@ public class EnderChestCommand extends BaseCommand {
 
         Player player = (Player) sender;
 
-        if (!player.hasPermission("scandium.command.crafting")) {
+        if (!player.hasPermission("scandium.command.echest")) {
             player.sendMessage(NO_PERMISSION);
             return false;
         }
@@ -28,7 +28,7 @@ public class EnderChestCommand extends BaseCommand {
         }
 
         if (args.length == 1) {
-            if (!player.hasPermission("scandium.command.crafting.other")) {
+            if (!player.hasPermission("scandium.command.echest.other")) {
                 player.sendMessage(NO_PERMISSION);
                 return false;
             }
@@ -38,7 +38,7 @@ public class EnderChestCommand extends BaseCommand {
             if (target != null) {
                 player.openInventory(target.getEnderChest());
             } else {
-                player.sendMessage(ChatColor.RED + "That player does not exist.");
+                player.sendMessage(ChatColor.RED + "Error: That player does not exist.");
             }
         }
 

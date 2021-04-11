@@ -144,7 +144,7 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
                 player.sendMessage("  ");
                 player.closeInventory();
             } else if (ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()).contains("Cancel")) {
-                player.sendMessage(Color.translate("&cYou've cancelled the current granting process."));
+                player.sendMessage(ChatColor.RED + ("You've cancelled the current granting process."));
                 player.closeInventory();
             }
         }

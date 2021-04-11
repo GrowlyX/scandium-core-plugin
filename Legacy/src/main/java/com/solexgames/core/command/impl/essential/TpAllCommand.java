@@ -1,6 +1,7 @@
 package com.solexgames.core.command.impl.essential;
 
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.util.Color;
 import com.solexgames.core.util.StaffUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -24,6 +25,9 @@ public class TpAllCommand extends BaseCommand {
         }
 
         Bukkit.getOnlinePlayers().forEach(player1 -> player1.teleport(player.getLocation()));
+
+        player.sendMessage(Color.SECONDARY_COLOR + "You've teleported all online players to you.");
+
         StaffUtil.sendAlert(player, "teleported all players");
 
         return false;

@@ -79,11 +79,11 @@ public class ModSuiteListener implements Listener {
                                 if (potPlayer.getActiveGrant().getRank().getWeight() >= targetPotPlayer.getActiveGrant().getRank().getWeight() || player.isOp()) {
                                     potPlayer.getPlayer().chat("/freeze " + targetPotPlayer.getPlayer().getName());
                                 } else {
-                                    player.sendMessage(Color.translate("&cYou cannot freeze this player as their rank weight is higher than yours!"));
+                                    player.sendMessage(ChatColor.RED + ("You cannot freeze this player as their rank weight is higher than yours!"));
                                 }
                             }
                         } else if (materialName.contains("book")) {
-                            player.sendMessage(ChatColor.RED + "The feature you've just tried to perform is disabled.");
+                            player.sendMessage(ChatColor.RED + "Error: The feature you've just tried to perform is disabled.");
                         }
                     }
                 }
@@ -111,7 +111,7 @@ public class ModSuiteListener implements Listener {
                                     .findAny()
                                     .ifPresent(player -> {
                                         event.getPlayer().teleport(player.getLocation());
-                                        event.getPlayer().sendMessage(Color.translate("&aTeleported to &6" + player.getDisplayName() + "&a!"));
+                                        event.getPlayer().sendMessage(ChatColor.GREEN + Color.translate("Teleported to &6" + player.getDisplayName() + ChatColor.GREEN + "!"));
                                     });
                         } else if (materialName.contains("ink")) {
                             event.getPlayer().performCommand("vanish");

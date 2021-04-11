@@ -30,7 +30,7 @@ public class MaxItemCommand extends BaseCommand {
             itemStack.setAmount(itemStack.getMaxStackSize());
             player.updateInventory();
         } else {
-            player.sendMessage(ChatColor.RED + "I'm sorry, but you aren't holding an item in your hand right now.");
+            player.sendMessage(ChatColor.RED + "Error: You aren't holding an item in your hand right now.");
         }
 
         return false;

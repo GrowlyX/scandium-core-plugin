@@ -4,6 +4,7 @@ import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -26,10 +27,10 @@ public class ToggleStaffMessagesCommand extends BaseCommand {
         }
 
         if (potPlayer.isCanSeeStaffMessages()) {
-            player.sendMessage(Color.translate("&cYou've disabled staff messages."));
+            player.sendMessage(ChatColor.RED + ("You've disabled staff messages."));
             potPlayer.setCanSeeStaffMessages(false);
         } else {
-            player.sendMessage(Color.translate("&aYou can now see staff messages."));
+            player.sendMessage(ChatColor.GREEN + Color.translate("You can now see staff messages."));
             potPlayer.setCanSeeStaffMessages(true);
         }
 

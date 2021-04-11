@@ -43,7 +43,7 @@ public class CGrantCommand extends BaseCommand {
             UUID uuid = UUIDUtil.fetchUUID(args[0]);
 
             if (uuid == null) {
-                sender.sendMessage(ChatColor.RED + "That uuid is not valid.");
+                sender.sendMessage(ChatColor.RED + "Error: That uuid is not valid.");
                 return false;
             }
 
@@ -144,10 +144,10 @@ public class CGrantCommand extends BaseCommand {
                             }
                         }
                     } else {
-                        sender.sendMessage(Color.translate("&cThat rank does not exist."));
+                        sender.sendMessage(ChatColor.RED + "Error: That rank does not exist.");
                     }
                 } else {
-                    sender.sendMessage(Color.translate("&cThat player does not exist in our databases."));
+                    sender.sendMessage(ChatColor.RED + "Error: That player does not exist in our database.");
                 }
             });
         }

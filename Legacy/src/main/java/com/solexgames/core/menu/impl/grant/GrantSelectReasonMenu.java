@@ -98,7 +98,7 @@ public class GrantSelectReasonMenu extends AbstractInventoryMenu {
                         this.player.closeInventory();
 
                         this.player.sendMessage(Color.translate("  "));
-                        this.player.sendMessage(Color.translate("&aType a custom reason for the grant in chat!"));
+                        this.player.sendMessage(ChatColor.GREEN + Color.translate("Type a custom reason for the grant in chat!"));
                         this.player.sendMessage(Color.translate("&7&o(Type 'cancel' to cancel this process)."));
                         this.player.sendMessage(Color.translate("  "));
                     }

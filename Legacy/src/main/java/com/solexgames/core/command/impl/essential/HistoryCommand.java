@@ -20,7 +20,6 @@ public class HistoryCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
-        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
 
         if (!player.hasPermission("scandium.command.history")) {
             player.sendMessage(NO_PERMISSION);
@@ -28,11 +27,12 @@ public class HistoryCommand extends BaseCommand {
         }
 
         if (args.length == 0) {
-            player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player>."));
+            player.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player>.");
         }
-        if (args.length > 0) {
+        if (args.length == 1) {
             new PunishHistoryViewMainMenu(player, args[0]).open(player);
         }
+
         return false;
     }
 }

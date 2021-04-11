@@ -27,7 +27,7 @@ public class ListCommand extends BaseCommand {
             String players = this.getOnlinePlayers(false).stream()
                     .map(player -> CorePlugin.getInstance().getPlayerManager().getPlayer(player.getUniqueId()))
                     .sorted(Comparator.comparingInt(potPlayer -> -(potPlayer.getDisguiseRank() != null ? potPlayer.getDisguiseRank().getWeight() : potPlayer.getActiveGrant().getRank().getWeight())))
-                    .map(potPlayer -> Color.translate((potPlayer.isStaffMode() ? "&7[Mod Mode] " : "") + (potPlayer.isVanished() ? "&7[V] " : "") + potPlayer.getActiveGrant().getRank().getColor() + potPlayer.getName()))
+                    .map(potPlayer -> Color.translate((potPlayer.isStaffMode() ? "&7[S] " : "") + (potPlayer.isVanished() ? "&7[V] " : "") + potPlayer.getActiveGrant().getRank().getColor() + potPlayer.getName()))
                     .collect(Collectors.joining(ChatColor.WHITE + ", "));
 
             sender.sendMessage(new String[]{
@@ -59,7 +59,7 @@ public class ListCommand extends BaseCommand {
     }
 
     private String getFormattedName(PotPlayer potPlayer, Player viewer) {
-        return Color.translate((viewer.hasPermission("scandium.staff") ? (potPlayer.isStaffMode() ? "&7[M] " : "") + (potPlayer.isVanished() ? "&7[V] " : "") : "") + (potPlayer.getDisguiseRank() != null ? potPlayer.getDisguiseRank().getColor() : potPlayer.getActiveGrant().getRank().getColor()) + potPlayer.getName());
+        return Color.translate((viewer.hasPermission("scandium.staff") ? (potPlayer.isStaffMode() ? "&7[S] " : "") + (potPlayer.isVanished() ? "&7[V] " : "") : "") + (potPlayer.getDisguiseRank() != null ? potPlayer.getDisguiseRank().getColor() : potPlayer.getActiveGrant().getRank().getColor()) + potPlayer.getName());
     }
 
     private Collection<Player> getOnlinePlayers(boolean filter) {

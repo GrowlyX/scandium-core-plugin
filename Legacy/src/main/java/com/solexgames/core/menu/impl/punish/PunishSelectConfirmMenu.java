@@ -17,6 +17,7 @@ import lombok.Setter;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.bson.Document;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
@@ -107,7 +108,7 @@ public class PunishSelectConfirmMenu extends AbstractInventoryMenu {
 
                     RedisUtil.writeAsync(RedisUtil.executePunishment(this.punishmentType, this.player.getUniqueId(), uuidKey, this.player.getName(), this.reason, new Date(System.currentTimeMillis()), this.punishmentDuration, this.permanent, newDate, randomUuid, saltedString, this.isSilent));
                 } else {
-                    this.player.sendMessage(Color.translate("&cCould not find that player's UUID!"));
+                    this.player.sendMessage(ChatColor.RED + ("Error: Could not find that player's UUID!"));
                 }
 
                 this.player.closeInventory();
@@ -116,7 +117,7 @@ public class PunishSelectConfirmMenu extends AbstractInventoryMenu {
 
             if (event.getCurrentItem().getItemMeta().getDisplayName().contains("Cancel")) {
                 this.player.closeInventory();
-                this.player.sendMessage(Color.translate("&cCancelled the punishment process."));
+                this.player.sendMessage(ChatColor.RED + ("Cancelled the punishment process."));
             }
         }
     }

@@ -43,7 +43,7 @@ public class BanCommand extends BaseCommand {
 
             completableFuture.thenRun(() -> {
                 if (document.get() == null) {
-                    sender.sendMessage(ChatColor.RED + "That player does not exist in our database.");
+                    sender.sendMessage(ChatColor.RED + "Error: That player does not exist in our database.");
                 } else {
                     UUID playerId = UUIDUtil.fetchUUID(document.get().getString("name"));
                     List<Punishment> punishmentList = Punishment.getAllPunishments().stream()
@@ -55,7 +55,7 @@ public class BanCommand extends BaseCommand {
                             .collect(Collectors.toList());
 
                     if (punishmentList.size() > 0) {
-                        sender.sendMessage(ChatColor.RED + "That player already has an active ban!");
+                        sender.sendMessage(ChatColor.RED + "Error: That player already has an active ban!");
                     } else {
                         Date newIssuingDate = new Date();
                         UUID newPunishmentUuid = UUID.randomUUID();
@@ -112,7 +112,7 @@ public class BanCommand extends BaseCommand {
                                     false
                             ));
                         } catch (Exception ignored) {
-                            sender.sendMessage(ChatColor.RED + "That's not a valid duration!");
+                            sender.sendMessage(ChatColor.RED + "Error: That is not a valid duration!");
                             ignored.printStackTrace();
                         }
                     }

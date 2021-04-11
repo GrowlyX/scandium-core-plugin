@@ -41,10 +41,10 @@ public class PunishCommand extends BaseCommand {
                 if (!target.equals(player.getName())) {
                     new PunishMainMenu(player, target).open(player);
                 } else {
-                    player.sendMessage(Color.translate("&cYou cannot punish yourself."));
+                    player.sendMessage(ChatColor.RED + ("You cannot punish yourself."));
                 }
             } else {
-                player.sendMessage(Color.translate("&cThat player does not exist."));
+                player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
             }
         }
         return false;

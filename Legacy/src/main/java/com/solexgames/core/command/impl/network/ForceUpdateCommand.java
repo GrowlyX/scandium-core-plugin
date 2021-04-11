@@ -1,6 +1,8 @@
 package com.solexgames.core.command.impl.network;
 
+import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -22,7 +24,8 @@ public class ForceUpdateCommand extends BaseCommand {
         }
 
         RedisUtil.writeAsync(RedisUtil.onServerUpdate());
-        sender.sendMessage(ChatColor.GREEN + "Force-updated the server.");
+        sender.sendMessage(Color.SECONDARY_COLOR + "You've force updated this server instance: " + Color.MAIN_COLOR + CorePlugin.getInstance().getServerName());
+
         return false;
     }
 }

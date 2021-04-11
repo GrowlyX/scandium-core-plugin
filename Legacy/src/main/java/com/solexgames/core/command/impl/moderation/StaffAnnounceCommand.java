@@ -34,6 +34,7 @@ public class StaffAnnounceCommand extends BaseCommand {
             String message = StringUtil.buildMessage(args, 0);
             CorePlugin.getInstance().getPlayerManager().sendToNetworkStaff("&3[S] &c[Alert] &b" + message);
         }
+
         return false;
     }
 }
