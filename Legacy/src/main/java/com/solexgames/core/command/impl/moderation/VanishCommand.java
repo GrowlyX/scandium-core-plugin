@@ -5,7 +5,7 @@ import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.manager.PlayerManager;
 import com.solexgames.core.manager.ServerManager;
 import com.solexgames.core.util.Color;
-import com.solexgames.core.util.StaffUtil;
+import com.solexgames.core.util.PlayerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -34,11 +34,11 @@ public class VanishCommand extends BaseCommand {
             if (manager.getVanishedPlayers().contains(player)) {
                 vanishManager.unVanishPlayer(player);
 
-                StaffUtil.sendAlert(player, "unvanished");
+                PlayerUtil.sendAlert(player, "unvanished");
             } else {
                 vanishManager.vanishPlayer(player);
 
-                StaffUtil.sendAlert(player, "vanished");
+                PlayerUtil.sendAlert(player, "vanished");
             }
         }
         if (args.length == 1) {
@@ -54,12 +54,12 @@ public class VanishCommand extends BaseCommand {
                     vanishManager.unVanishPlayer(target);
                     player.sendMessage(ChatColor.GREEN + Color.translate("Unvanished " + target.getName() + "."));
 
-                    StaffUtil.sendAlert(player, "unvanished " + target.getName());
+                    PlayerUtil.sendAlert(player, "unvanished " + target.getName());
                 } else {
                     vanishManager.vanishPlayer(target);
                     player.sendMessage(ChatColor.GREEN + Color.translate("Vanished " + target.getName() + "."));
 
-                    StaffUtil.sendAlert(player, "vanished " + target.getName());
+                    PlayerUtil.sendAlert(player, "vanished " + target.getName());
                 }
             } else {
                 player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));

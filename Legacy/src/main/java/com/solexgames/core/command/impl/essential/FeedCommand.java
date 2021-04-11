@@ -4,7 +4,7 @@ import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.util.Color;
-import com.solexgames.core.util.StaffUtil;
+import com.solexgames.core.util.PlayerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -33,7 +33,7 @@ public class FeedCommand extends BaseCommand {
             player.sendMessage(Color.translate(network.getSecondaryColor() + "Set your food level to " + network.getMainColor() + "20" + network.getSecondaryColor() +"."));
             player.sendMessage(Color.SECONDARY_COLOR + "You've reset your " + Color.MAIN_COLOR + "food level" + Color.SECONDARY_COLOR + ".");
 
-            StaffUtil.sendAlert(player, "reset food level");
+            PlayerUtil.sendAlert(player, "reset food level");
         }
 
         if (args.length > 0) {
@@ -45,7 +45,7 @@ public class FeedCommand extends BaseCommand {
                 target.setFoodLevel(20);
                 player.sendMessage(Color.SECONDARY_COLOR + "You've reset " + target.getDisplayName() + Color.SECONDARY_COLOR + "'s " + Color.MAIN_COLOR + "food level" + Color.SECONDARY_COLOR + ".");
 
-                StaffUtil.sendAlert(player, "reset food level for " + target.getName());
+                PlayerUtil.sendAlert(player, "reset food level for " + target.getName());
             }
         }
         return false;

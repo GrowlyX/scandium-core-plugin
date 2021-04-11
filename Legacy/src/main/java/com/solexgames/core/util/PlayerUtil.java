@@ -12,7 +12,7 @@ import java.util.Objects;
  * @since 3/4/2021
  */
 
-public final class StaffUtil {
+public final class PlayerUtil {
 
     public static void sendAlert(Player player, String reason) {
         if (CorePlugin.STAFF_ALERTS_COMMAND) {

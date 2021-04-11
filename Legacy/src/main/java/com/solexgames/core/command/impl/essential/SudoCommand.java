@@ -4,7 +4,7 @@ import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.util.Color;
-import com.solexgames.core.util.StaffUtil;
+import com.solexgames.core.util.PlayerUtil;
 import com.solexgames.core.util.StringUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -46,7 +46,7 @@ public class SudoCommand extends BaseCommand {
                 }
 
                 if (sender instanceof Player) {
-                    StaffUtil.sendAlert((Player) sender, "sudoed " + target.getName());
+                    PlayerUtil.sendAlert((Player) sender, "sudoed " + target.getName());
                 }
             } else {
                 sender.sendMessage(ChatColor.RED + "That player does not exist");

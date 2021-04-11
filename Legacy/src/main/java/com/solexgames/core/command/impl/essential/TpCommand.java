@@ -4,7 +4,7 @@ import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.util.Color;
-import com.solexgames.core.util.StaffUtil;
+import com.solexgames.core.util.PlayerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -41,7 +41,7 @@ public class TpCommand extends BaseCommand {
 
                 player.sendMessage(secondColor + "You've been teleported to " + target.getDisplayName() + secondColor + ".");
 
-                StaffUtil.sendAlert(player, "teleported to " + target.getName());
+                PlayerUtil.sendAlert(player, "teleported to " + target.getName());
             } else {
                 player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
             }

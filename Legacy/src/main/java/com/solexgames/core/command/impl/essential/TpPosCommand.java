@@ -3,8 +3,7 @@ package com.solexgames.core.command.impl.essential;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.enums.ServerType;
-import com.solexgames.core.util.Color;
-import com.solexgames.core.util.StaffUtil;
+import com.solexgames.core.util.PlayerUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -40,7 +39,7 @@ public class TpPosCommand extends BaseCommand {
                 player.teleport(new Location(player.getWorld(), x1, y1, z1, 0.0F, 0.0F));
                 player.sendMessage(serverType.getSecondaryColor() + "Teleported you to " + serverType.getMainColor() + x1 + serverType.getSecondaryColor() + ", " + serverType.getMainColor() + y1 + serverType.getSecondaryColor() + ", " + serverType.getMainColor() + z1 + serverType.getSecondaryColor() + ".");
 
-                StaffUtil.sendAlert(player, "teleported to " + x1 + ", " + y1 + ", " + z1);
+                PlayerUtil.sendAlert(player, "teleported to " + x1 + ", " + y1 + ", " + z1);
             } catch (Exception e) {
                 player.sendMessage(ChatColor.RED + ("One of those values was not an integer."));
             }

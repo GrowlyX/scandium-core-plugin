@@ -503,10 +503,6 @@ public class PotPlayer {
         this.attachment = this.player.addAttachment(JavaPlugin.getPlugin(CorePlugin.class));
         this.gameProfile = CorePlugin.getInstance().getPlayerManager().getGameProfile(this.player);
 
-        if (this.player.hasPermission("scandium.staff") && !CorePlugin.getInstance().getPlayerManager().isOnline(this.player.getName())) {
-            RedisUtil.writeAsync(RedisUtil.onConnect(this.player));
-        }
-
         CompletableFuture.runAsync(() -> {
             if (CorePlugin.NAME_MC_REWARDS) {
                 this.checkVoting();
@@ -523,6 +519,10 @@ public class PotPlayer {
                     List<String> prefixes = ((List<String>) this.profile.get("allPrefixes"));
                     this.allPrefixes.addAll(prefixes);
                 }
+            }
+
+            if (this.player.hasPermission("scandium.staff") && !CorePlugin.getInstance().getPlayerManager().isOnline(this.player.getName())) {
+                RedisUtil.writeAsync(RedisUtil.onConnect(this.player));
             }
         });
     }

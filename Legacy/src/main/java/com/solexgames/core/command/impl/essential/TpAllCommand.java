@@ -2,7 +2,7 @@ package com.solexgames.core.command.impl.essential;
 
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.util.Color;
-import com.solexgames.core.util.StaffUtil;
+import com.solexgames.core.util.PlayerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -28,7 +28,7 @@ public class TpAllCommand extends BaseCommand {
 
         player.sendMessage(Color.SECONDARY_COLOR + "You've teleported all online players to you.");
 
-        StaffUtil.sendAlert(player, "teleported all players");
+        PlayerUtil.sendAlert(player, "teleported all players");
 
         return false;
     }

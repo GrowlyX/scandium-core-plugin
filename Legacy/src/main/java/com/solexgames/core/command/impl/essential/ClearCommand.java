@@ -1,10 +1,8 @@
 package com.solexgames.core.command.impl.essential;
 
-import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
-import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.util.Color;
-import com.solexgames.core.util.StaffUtil;
+import com.solexgames.core.util.PlayerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -31,7 +29,7 @@ public class ClearCommand extends BaseCommand {
             player.getInventory().clear();
             player.sendMessage(Color.SECONDARY_COLOR + "You've cleared your inventory.");
 
-            StaffUtil.sendAlert(player, "cleared inventory");
+            PlayerUtil.sendAlert(player, "cleared inventory");
         }
         if (args.length == 1) {
             Player target = Bukkit.getPlayerExact(args[0]);
@@ -41,7 +39,7 @@ public class ClearCommand extends BaseCommand {
 
                 player.sendMessage(Color.SECONDARY_COLOR + "You've cleared " + target.getDisplayName() + Color.SECONDARY_COLOR + "'s inventory.");
 
-                StaffUtil.sendAlert(player, "cleared inventory for " + target.getName());
+                PlayerUtil.sendAlert(player, "cleared inventory for " + target.getName());
             } else {
                 player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
             }

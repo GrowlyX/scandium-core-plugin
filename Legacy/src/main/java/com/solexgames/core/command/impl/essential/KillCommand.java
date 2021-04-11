@@ -1,10 +1,8 @@
 package com.solexgames.core.command.impl.essential;
 
-import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
-import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.util.Color;
-import com.solexgames.core.util.StaffUtil;
+import com.solexgames.core.util.PlayerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -31,7 +29,7 @@ public class KillCommand extends BaseCommand {
             player.setHealth(0);
             player.sendMessage(Color.SECONDARY_COLOR + ("You've killed yourself."));
 
-            StaffUtil.sendAlert(player, "killed themself");
+            PlayerUtil.sendAlert(player, "killed themself");
         }
         if (args.length > 0) {
             Player target = Bukkit.getPlayerExact(args[0]);
@@ -40,7 +38,7 @@ public class KillCommand extends BaseCommand {
                 target.setHealth(0);
                 player.sendMessage(Color.SECONDARY_COLOR + "Killed " + target.getDisplayName() + Color.SECONDARY_COLOR + ".");
 
-                StaffUtil.sendAlert(player, "killed " + target.getName());
+                PlayerUtil.sendAlert(player, "killed " + target.getName());
             } else {
                 player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
             }

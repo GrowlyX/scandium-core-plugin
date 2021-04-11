@@ -12,24 +12,24 @@ public final class SaltUtil {
     private final static String SALT_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
 
     public static String getRandomSaltedString() {
-        final StringBuilder salt = new StringBuilder();
+        final StringBuilder saltedString = new StringBuilder();
 
-        while (salt.length() < 6) {
-            int index = (int) (CorePlugin.RANDOM.nextFloat() * SALT_CHARS.length());
-            salt.append(SALT_CHARS.charAt(index));
+        while (saltedString.length() < 6) {
+            int index = (int) (CorePlugin.RANDOM.nextFloat() * SaltUtil.SALT_CHARS.length());
+            saltedString.append(SaltUtil.SALT_CHARS.charAt(index));
         }
 
-        return salt.toString();
+        return saltedString.toString();
     }
 
     public static String getRandomSaltedString(int size) {
-        final StringBuilder salt = new StringBuilder();
+        final StringBuilder saltedString = new StringBuilder();
 
-        while (salt.length() < size) {
-            int index = (int) (CorePlugin.RANDOM.nextFloat() * SALT_CHARS.length());
-            salt.append(SALT_CHARS.charAt(index));
+        while (saltedString.length() < size) {
+            int index = (int) (CorePlugin.RANDOM.nextFloat() * SaltUtil.SALT_CHARS.length());
+            saltedString.append(SaltUtil.SALT_CHARS.charAt(index));
         }
 
-        return salt.toString();
+        return saltedString.toString();
     }
 }

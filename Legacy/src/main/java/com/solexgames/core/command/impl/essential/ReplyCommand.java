@@ -28,7 +28,6 @@ public class ReplyCommand extends BaseCommand {
         }
         if (args.length > 0) {
             String message = StringUtil.buildMessage(args, 0);
-
             PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
             if (potPlayer.getLastRecipient() == null) {

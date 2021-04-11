@@ -2,7 +2,7 @@ package com.solexgames.core.command.impl.essential;
 
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.util.Color;
-import com.solexgames.core.util.StaffUtil;
+import com.solexgames.core.util.PlayerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -31,13 +31,13 @@ public class FlyCommand extends BaseCommand {
                 player.setFlying(false);
                 player.sendMessage(Color.SECONDARY_COLOR + "You've " + ChatColor.RED + "disabled" + Color.SECONDARY_COLOR + " flight mode.");
 
-                StaffUtil.sendAlert(player, "disabled flight");
+                PlayerUtil.sendAlert(player, "disabled flight");
             } else {
                 player.setAllowFlight(true);
                 player.setFlying(true);
                 player.sendMessage(Color.SECONDARY_COLOR + "You've " + ChatColor.GREEN + "enabled" + Color.SECONDARY_COLOR + " flight mode.");
 
-                StaffUtil.sendAlert(player, "enabled flight");
+                PlayerUtil.sendAlert(player, "enabled flight");
             }
         }
         if (args.length == 1) {
@@ -48,12 +48,12 @@ public class FlyCommand extends BaseCommand {
                     target.setFlying(false);
                     player.sendMessage(Color.SECONDARY_COLOR + "You've " + ChatColor.RED + "disabled" + Color.SECONDARY_COLOR + " flight mode for " + target.getDisplayName() + Color.SECONDARY_COLOR + ".");
 
-                    StaffUtil.sendAlert(player, "disabled flight for " + target.getName());
+                    PlayerUtil.sendAlert(player, "disabled flight for " + target.getName());
                 } else {
                     target.setFlying(true);
                     player.sendMessage(Color.SECONDARY_COLOR + "You've " + ChatColor.GREEN + "enabled" + Color.SECONDARY_COLOR + " flight mode for " + target.getDisplayName() + Color.SECONDARY_COLOR + ".");
 
-                    StaffUtil.sendAlert(player, "enabled flight for " + target.getName());
+                    PlayerUtil.sendAlert(player, "enabled flight for " + target.getName());
                 }
             } else {
                 player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));

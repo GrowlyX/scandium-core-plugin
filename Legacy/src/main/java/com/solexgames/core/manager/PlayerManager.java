@@ -9,10 +9,9 @@ import com.solexgames.core.enums.ChatChannelType;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.global.NetworkPlayer;
-import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
-import com.solexgames.core.util.StaffUtil;
+import com.solexgames.core.util.PlayerUtil;
 import com.solexgames.core.util.builder.ItemBuilder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,7 +25,6 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
@@ -188,7 +186,7 @@ public class PlayerManager {
 
         player.sendMessage(secondColor + "You are now in moderation mode.");
 
-        StaffUtil.sendAlert(player, "modmoded");
+        PlayerUtil.sendAlert(player, "modmoded");
 
         if (CorePlugin.getInstance().getLunar() != null) {
             CorePlugin.getInstance().getLunar().enableStaffModules(player);
@@ -259,7 +257,7 @@ public class PlayerManager {
 
         potPlayer.setPreviousBoard(null);
 
-        StaffUtil.sendAlert(player, "unmodmoded");
+        PlayerUtil.sendAlert(player, "unmodmoded");
 
         player.removePotionEffect(PotionEffectType.SPEED);
 

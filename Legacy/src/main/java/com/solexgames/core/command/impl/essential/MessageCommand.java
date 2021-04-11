@@ -44,7 +44,7 @@ public class MessageCommand extends BaseCommand {
                 return false;
             }
             if (potTarget == potPlayer) {
-                player.sendMessage(ChatColor.RED + ("You cannot message yourself."));
+                player.sendMessage(ChatColor.RED + ("Error: You cannot message yourself."));
                 return false;
             }
             if (potTarget.isVanished() && (potPlayer.getActiveGrant().getRank().getWeight() < potTarget.getActiveGrant().getRank().getWeight())) {
