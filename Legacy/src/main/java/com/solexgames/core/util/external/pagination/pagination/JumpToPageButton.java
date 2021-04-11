@@ -25,10 +25,11 @@ public class JumpToPageButton extends Button {
     public ItemStack getButtonItem(Player player) {
         List<String> stringList = new ArrayList<>();
 
-        stringList.add(Color.translate("&7Click to switch to this menu!"));
+        stringList.add(ChatColor.GRAY + "Click to switch to this menu!");
+
         if (this.current) {
             stringList.add("  ");
-            stringList.add(ChatColor.GREEN + Color.translate("This is the current page."));
+            stringList.add(ChatColor.GREEN + "This is the current page.");
         }
 
         return new ItemBuilder(this.current ? XMaterial.ENCHANTED_BOOK.parseMaterial() : XMaterial.BOOK.parseMaterial())

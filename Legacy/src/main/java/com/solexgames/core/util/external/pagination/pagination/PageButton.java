@@ -27,7 +27,7 @@ public class PageButton extends Button {
         }
 
         return new ItemBuilder(this.mod > 0 ? XMaterial.GLISTERING_MELON_SLICE.parseMaterial() : XMaterial.MELON_SLICE.parseMaterial())
-                .setDisplayName(this.mod > 0 ? ChatColor.GREEN + "Next page" : ChatColor.RED + "Previous page" + ChatColor.GRAY + " (" + Color.MAIN_COLOR + (menu.getPage() + mod) + ChatColor.GRAY + "/" + Color.MAIN_COLOR + menu.getPages(player) + ChatColor.GRAY + ")")
+                .setDisplayName((this.mod > 0 ? ChatColor.GREEN + "Next page" : ChatColor.RED + "Previous page") + ChatColor.GRAY + " (" + Color.MAIN_COLOR + (menu.getPage() + mod) + ChatColor.GRAY + "/" + Color.MAIN_COLOR + menu.getPages(player) + ChatColor.GRAY + ")")
                 .addLore(
                         "&7Right Click to view all pages!"
                 ).create();

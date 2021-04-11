@@ -33,7 +33,8 @@ public class PunishViewPaginatedMenu extends PaginatedMenu {
     private final UUID targetUuid;
 
     public PunishViewPaginatedMenu(Player player, String target, PunishmentType punishmentType) {
-        super(45);
+        super(9);
+
         this.player = player;
         this.target = target;
         this.punishmentType = punishmentType;
@@ -55,7 +56,7 @@ public class PunishViewPaginatedMenu extends PaginatedMenu {
         HashMap<Integer, Button> buttons = new HashMap<>();
         AtomicInteger i = new AtomicInteger(0);
 
-        getSortedPunishmentsByType().forEach(punishment -> {
+        this.getSortedPunishmentsByType().forEach(punishment -> {
             OfflinePlayer issuerOfflinePlayer;
 
             if (punishment.getIssuer() != null) {

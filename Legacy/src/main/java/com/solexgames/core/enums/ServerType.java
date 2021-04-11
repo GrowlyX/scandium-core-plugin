@@ -12,7 +12,7 @@ import java.beans.ConstructorProperties;
 @Getter
 public enum ServerType {
 
-    POTCLUBVIP("PotClub Network", "01", ChatColor.LIGHT_PURPLE, ChatColor.YELLOW, "https://dsc.gg/pot", "PotClubVIP", "store.potclub.vip", "eu.potclub.vip"),
+    BLARE("Blare Network", "01", ChatColor.AQUA, ChatColor.DARK_AQUA, "https://dsc.gg/blare", "BlareNetworkRIP", "shop.blare.rip", "blare.rip"),
     EVENTIS("Eventis Network", "03", ChatColor.AQUA, ChatColor.DARK_AQUA, "https://discord.eventis.club", "EventisClubMC", "store.eventis.club", "eventis.club"),
     SCANDIUM("SolexGames", "04", ChatColor.GOLD, ChatColor.YELLOW, "https://solexgames.com", "SolexDev", "store.solexgames.com", "demo.solexgames.com"),
     BUZZMC("BuzzMC Network", "05", ChatColor.RED, ChatColor.AQUA, "https://discord.gg/683arg8CZE", "Coming Soon", "store.buzzmc.cf", "https://discord.gg/683arg8CZE"),
