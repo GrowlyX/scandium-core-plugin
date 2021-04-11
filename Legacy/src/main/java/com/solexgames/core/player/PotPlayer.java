@@ -259,7 +259,7 @@ public class PotPlayer {
     public void loadPlayerData() {
         CompletableFuture.runAsync(() -> {
             CorePlugin.getInstance().getPunishmentManager().getPunishments().stream()
-                    .filter(punishment -> punishment.getTarget().equals(this.uuid.toString()))
+                    .filter(punishment -> punishment.getTarget().equals(this.uuid))
                     .forEach(this.punishments::add);
 
             this.getPunishments().stream()

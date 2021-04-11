@@ -35,7 +35,7 @@ public class PageButton extends Button {
 
     @Override
     public void clicked(Player player, ClickType clickType) {
-        if (clickType == ClickType.RIGHT) {
+        if (clickType.equals(ClickType.RIGHT) && !this.hasNext(player)) {
             new ViewAllPagesMenu(this.menu).openMenu(player);
         } else {
             if (this.hasNext(player)) {

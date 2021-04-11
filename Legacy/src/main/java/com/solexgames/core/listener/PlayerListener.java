@@ -139,7 +139,7 @@ public class PlayerListener implements Listener {
             }
 
             if (potPlayer.getDisguiseRank() != null) {
-                event.getPlayer().sendMessage(ChatColor.GREEN + "You've been automatically disguised as " + potPlayer.getColorByRankColor() + potPlayer.getDisguiseRank().getName() + ChatColor.GREEN + "!");
+                event.getPlayer().sendMessage(Color.SECONDARY_COLOR + "You've been automatically disguised as " + potPlayer.getColorByRankColor() + potPlayer.getDisguiseRank().getName() + Color.SECONDARY_COLOR + "!");
             }
         });
 
@@ -374,7 +374,7 @@ public class PlayerListener implements Listener {
                     return;
                 }
 
-                checkChannel(event, player, potPlayer);
+                this.checkChannel(event, player, potPlayer);
             } else {
                 event.setCancelled(true);
                 event.getPlayer().sendMessage(Color.translate(PunishmentStrings.MUTE_MESSAGE));
@@ -386,7 +386,7 @@ public class PlayerListener implements Listener {
                         return;
                     }
 
-                    checkChannel(event, player, potPlayer);
+                    this.checkChannel(event, player, potPlayer);
                 } else {
                     event.setCancelled(true);
                     event.getPlayer().sendMessage(Color.translate(PunishmentStrings.MUTE_MESSAGE));
@@ -453,12 +453,13 @@ public class PlayerListener implements Listener {
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer());
 
         if (potPlayer == null) {
+            event.setCancelled(true);
             return;
         }
 
         if (LockedState.isLocked(event.getPlayer())) {
             event.getPlayer().sendMessage(ChatColor.RED + "You cannot perform this action right now!");
-            event.getPlayer().sendMessage(ChatColor.RED + "The only action you can perform is " + ChatColor.DARK_RED + "/2fa" + ChatColor.RED + "!");
+            event.getPlayer().sendMessage(ChatColor.RED + "The only action you can perform is " + ChatColor.RED + ChatColor.BOLD.toString() + "/2fa" + ChatColor.RED + "!");
 
             event.setCancelled(true);
         }
@@ -470,7 +471,7 @@ public class PlayerListener implements Listener {
 
         if (potPlayer.isCurrentlyRestricted() && !event.getMessage().startsWith("/discord")) {
             event.getPlayer().sendMessage(ChatColor.RED + "You cannot perform this command as you are currently banned.");
-            event.getPlayer().sendMessage(ChatColor.RED + "The only command you can perform is " + ChatColor.DARK_RED + "/2fa" + ChatColor.RED + "!");
+            event.getPlayer().sendMessage(ChatColor.RED + "The only command you can perform is " + ChatColor.RED + ChatColor.BOLD.toString() + "/discord" + ChatColor.RED + "!");
 
             event.setCancelled(true);
             return;
