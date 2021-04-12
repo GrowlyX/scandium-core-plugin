@@ -49,6 +49,13 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onLogin(PreLoginEvent event) {
+        if (event.getConnection().getVersion() < CorePlugin.getInstance().getMinProtocol()) {
+            event.setCancelReason(TextComponent.fromLegacyText(ChatColor.RED + "You're on an unsupported version!\n" + ChatColor.RED + "Please connect using at least " + CorePlugin.getInstance().getMinVersion() + "!"));
+            event.setCancelled(true);
+
+            return;
+        }
+
         if (plugin.isMaintenance() && !plugin.getWhitelistedPlayers().contains(event.getConnection().getName())) {
             event.setCancelReason(TextComponent.fromLegacyText(CorePlugin.getInstance().getMaintenanceMessage()));
             event.setCancelled(true);

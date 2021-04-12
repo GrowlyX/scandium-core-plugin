@@ -2,8 +2,8 @@ package com.solexgames.core.hook.access.extend;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.hook.access.AbstractNMSAccess;
-import net.minecraft.server.v1_9_R1.*;
-import org.bukkit.craftbukkit.v1_9_R1.entity.CraftPlayer;
+import net.minecraft.server.v1_9_R2.*;
+import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
@@ -28,15 +28,15 @@ public class NMSAccess_v1_9 extends AbstractNMSAccess {
 
     @Override
     public void updateTablist() {
-        final List<EntityPlayer> playerList = new ArrayList<>(net.minecraft.server.v1_9_R1.MinecraftServer.getServer().getPlayerList().players);
+        final List<EntityPlayer> playerList = new ArrayList<>(net.minecraft.server.v1_9_R2.MinecraftServer.getServer().getPlayerList().players);
         final List<EntityPlayer> finalList = playerList.stream()
                 .sorted(Comparator.comparingInt(potPlayer -> -(CorePlugin.getInstance().getPlayerManager().getPlayer(potPlayer.getName()).getDisguiseRank() != null ? CorePlugin.getInstance().getPlayerManager().getPlayer(potPlayer.getName()).getDisguiseRank().getWeight() : CorePlugin.getInstance().getPlayerManager().getPlayer(potPlayer.getName()).getActiveGrant().getRank().getWeight())))
                 .collect(Collectors.toList());
 
         try {
-            Object list = net.minecraft.server.v1_9_R1.MinecraftServer.getServer().getPlayerList().getClass()
+            Object list = net.minecraft.server.v1_9_R2.MinecraftServer.getServer().getPlayerList().getClass()
                     .getMethod("playerList", ((Class<?>[]) null))
-                    .invoke(net.minecraft.server.v1_9_R1.MinecraftServer.getServer().getPlayerList());
+                    .invoke(net.minecraft.server.v1_9_R2.MinecraftServer.getServer().getPlayerList());
             Class<?> playerListClass = list.getClass().getSuperclass();
             Field declaredField = playerListClass.getDeclaredField("players");
 

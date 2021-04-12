@@ -66,6 +66,9 @@ public class CorePlugin extends Plugin {
 
     private Executor redisExecutor;
 
+    private int minProtocol;
+    private String minVersion;
+
     @SneakyThrows
     @Override
     public void onEnable() {
@@ -95,6 +98,10 @@ public class CorePlugin extends Plugin {
         ));*/
 
         this.maintenance = this.configuration.getBoolean("maintenance");
+
+        this.minProtocol = this.configuration.getInt("minimum-protocol");
+        this.minVersion = this.configuration.getString("minimum-version");
+
         this.whitelistedPlayers.addAll(this.configuration.getStringList("whitelistedPlayers"));
 
         this.maintenanceMotd = Color.translate(MOTDUtil.getCenteredMotd(this.configuration.getString("motd.maintenance.line-1")) + "<nl>" + MOTDUtil.getCenteredMotd(this.configuration.getString("motd.maintenance.line-2")))
