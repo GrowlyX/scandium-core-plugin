@@ -3,6 +3,7 @@ package com.solexgames.core;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.solexgames.core.command.impl.CoreCommand;
+import com.solexgames.core.command.impl.xlib.WebPostCommand;
 import com.solexgames.core.command.impl.discord.SyncCommand;
 import com.solexgames.core.command.impl.discord.UnsyncCommand;
 import com.solexgames.core.command.impl.essential.*;
@@ -25,10 +26,9 @@ import com.solexgames.core.command.impl.test.TestCommand;
 import com.solexgames.core.command.impl.toggle.*;
 import com.solexgames.core.command.impl.warps.WarpCommand;
 import com.solexgames.core.database.Database;
+import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.hook.access.AbstractNMSAccess;
-import com.solexgames.core.hook.access.extend.NMSAccess_v1_16;
-import com.solexgames.core.hook.access.extend.NMSAccess_v1_7;
-import com.solexgames.core.hook.access.extend.NMSAccess_v1_8;
+import com.solexgames.core.hook.access.extend.*;
 import com.solexgames.core.hook.client.AbstractClientHook;
 import com.solexgames.core.hook.client.extend.LunarClientHook;
 import com.solexgames.core.hook.protocol.AbstractChatInterceptor;
@@ -239,6 +239,10 @@ public final class CorePlugin extends JavaPlugin {
             this.NMS = new NMSAccess_v1_7();
         } else if (this.getServer().getVersion().contains("1.8")) {
             this.NMS = new NMSAccess_v1_8();
+        } else if (this.getServer().getVersion().contains("1.9")) {
+            this.NMS = new NMSAccess_v1_9();
+        } else if (this.getServer().getVersion().contains("1.12")) {
+            this.NMS = new NMSAccess_v1_12();
         } else if (this.getServer().getVersion().contains("1.16")) {
             this.NMS = new NMSAccess_v1_16();
         }
@@ -406,6 +410,10 @@ public final class CorePlugin extends JavaPlugin {
 
             if (commandMap != null) {
                 commandMap.register(getConfig().getString("core-settings.command-name"), new CoreCommand(getConfig().getString("core-settings.command-name")));
+
+                if (this.getServerManager().getNetwork().equals(ServerType.BLARE)) {
+                    commandMap.register("xlib", new WebPostCommand());
+                }
             } else {
                 this.getServer().getPluginManager().disablePlugin(this);
                 this.getLogger().warning("Your server software's PluginManager does not contain a commandMap so I cannot register a command. This may be due to the fact you might be running a custom Bukkit/Spigot version.");

@@ -156,6 +156,13 @@
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-19-api</artifactId>
+            <version>1.9-R0.1-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/Spigot_1_9.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
             <artifactId>spigot-1_7-api</artifactId>
             <version>1.7.10-R0.1-SNAPSHOT</version>
             <scope>system</scope>
