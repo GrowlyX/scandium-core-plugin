@@ -19,7 +19,8 @@ import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.enums.PotionMessageType;
 import com.solexgames.core.player.global.NetworkPlayer;
 import com.solexgames.core.util.*;
-import com.solexgames.core.util.external.NameTagExternal;
+import com.solexgames.core.manager.NameTagManager;
+import com.solexgames.core.util.rainbow.RainbowNametag;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.Document;
@@ -149,6 +150,7 @@ public class PotPlayer {
     private PotionMessageType potionMessageType;
 
     private Rank disguiseRank;
+    private RainbowNametag rainbowNametag;
 
     private int experience;
 
@@ -503,6 +505,7 @@ public class PotPlayer {
         this.player = Bukkit.getPlayer(uuid);
         this.attachment = this.player.addAttachment(JavaPlugin.getPlugin(CorePlugin.class));
         this.gameProfile = CorePlugin.getInstance().getPlayerManager().getGameProfile(this.player);
+        this.rainbowNametag = new RainbowNametag(this.player, CorePlugin.getInstance());
 
         CompletableFuture.runAsync(() -> {
             if (CorePlugin.NAME_MC_REWARDS) {
@@ -608,20 +611,20 @@ public class PotPlayer {
         Bukkit.getOnlinePlayers().forEach(player -> {
             if (this.isStaffMode()) {
                 if (player.hasPermission("scandium.staff")) {
-                    NameTagExternal.setupStaffModeTag(player, this.player);
+                    CorePlugin.getInstance().getNameTagManager().setupStaffModeTag(player, this.player);
                     return;
                 }
             } else if (this.isVanished()) {
                 if (player.hasPermission("scandium.staff")) {
-                    NameTagExternal.setupVanishTag(player, this.player);
+                    CorePlugin.getInstance().getNameTagManager().setupVanishTag(player, this.player);
                     return;
                 }
             }
 
-            NameTagExternal.setupNameTag(player, this.player, this.getColorByRankColor());
+            CorePlugin.getInstance().getNameTagManager().setupNameTag(player, this.player, this.getColorByRankColor());
 
             PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-            NameTagExternal.setupNameTag(this.player, player, potPlayer.getColorByRankColor());
+            CorePlugin.getInstance().getNameTagManager().setupNameTag(this.player, player, potPlayer.getColorByRankColor());
         });
     }
 

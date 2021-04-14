@@ -25,13 +25,13 @@ public final class StringUtil {
     }
 
     public static void sendPrivateMessage(Player sender, Player target, String message) {
-        String toMessage = ChatColor.GRAY + "(To " + target.getDisplayName() + ChatColor.GRAY + ") " + message;
-        String fromMessage = ChatColor.GRAY + "(From " + sender.getDisplayName() + ChatColor.GRAY + ") " + message;
+        final String toMessage = ChatColor.GRAY + "(To " + target.getDisplayName() + ChatColor.GRAY + ") " + message;
+        final String fromMessage = ChatColor.GRAY + "(From " + sender.getDisplayName() + ChatColor.GRAY + ") " + message;
 
         sender.sendMessage(toMessage);
         target.sendMessage(fromMessage);
 
-        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
+        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
         if (potPlayer.isCanReceiveDmsSounds()) {
             target.playSound(target.getLocation(), XSound.BLOCK_NOTE_BLOCK_PLING.parseSound(), 1.0F, 1.0F);
         }

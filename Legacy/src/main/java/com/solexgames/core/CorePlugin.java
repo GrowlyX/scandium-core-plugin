@@ -3,6 +3,7 @@ package com.solexgames.core;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.solexgames.core.command.impl.CoreCommand;
+import com.solexgames.core.command.impl.xlib.NametagCommand;
 import com.solexgames.core.command.impl.xlib.WebPostCommand;
 import com.solexgames.core.command.impl.discord.SyncCommand;
 import com.solexgames.core.command.impl.discord.UnsyncCommand;
@@ -107,6 +108,7 @@ public final class CorePlugin extends JavaPlugin {
     private FilterManager filterManager;
     private PrefixManager prefixManager;
     private PunishmentManager punishmentManager;
+    private NameTagManager nameTagManager;
 
     private String serverName;
     private HttpClient httpClient;
@@ -216,6 +218,7 @@ public final class CorePlugin extends JavaPlugin {
         this.filterManager = new FilterManager();
         this.warpManager = new WarpManager();
         this.shutdownManager = new ShutdownManager();
+        this.nameTagManager = new NameTagManager();
 
         this.setupExtra();
 
@@ -300,6 +303,7 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("sync").setExecutor(new SyncCommand());
         this.getCommand("unsync").setExecutor(new UnsyncCommand());
         this.getCommand("reply").setExecutor(new ReplyCommand());
+        this.getCommand("nametag").setExecutor(new NametagCommand());
         this.getCommand("grant").setExecutor(new GrantCommand());
         this.getCommand("cgrant").setExecutor(new CGrantCommand());
         this.getCommand("prefix").setExecutor(new PrefixCommand());

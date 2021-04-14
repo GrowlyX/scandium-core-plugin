@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author GrowlyX
@@ -12,12 +13,22 @@ import java.util.Arrays;
 
 public final class WoolUtil {
 
-    private static final ArrayList<ChatColor> CHAT_COLORS = new ArrayList<>(Arrays.asList(ChatColor.WHITE, ChatColor.GOLD, ChatColor.LIGHT_PURPLE, ChatColor.AQUA, ChatColor.YELLOW, ChatColor.GREEN, ChatColor.LIGHT_PURPLE, ChatColor.DARK_GRAY, ChatColor.GRAY, ChatColor.DARK_AQUA, ChatColor.DARK_PURPLE, ChatColor.BLUE, ChatColor.BLACK, ChatColor.DARK_GREEN, ChatColor.RED, ChatColor.BLACK));
+    private static final List<ChatColor> CHAT_COLORS = Arrays.asList(
+            ChatColor.WHITE, ChatColor.GOLD, ChatColor.LIGHT_PURPLE,
+            ChatColor.AQUA, ChatColor.YELLOW, ChatColor.GREEN,
+            ChatColor.LIGHT_PURPLE, ChatColor.DARK_GRAY, ChatColor.GRAY,
+            ChatColor.DARK_AQUA, ChatColor.DARK_PURPLE, ChatColor.BLUE,
+            ChatColor.BLACK, ChatColor.DARK_GREEN, ChatColor.RED, ChatColor.BLACK
+    );
 
     public static int getByColor(ChatColor color) {
-        if (color.equals(ChatColor.DARK_RED)) color = ChatColor.RED;
-        if (color.equals(ChatColor.DARK_BLUE)) color = ChatColor.BLUE;
-
-        return WoolUtil.CHAT_COLORS.indexOf(color);
+        switch (color) {
+            case DARK_RED:
+                return WoolUtil.CHAT_COLORS.indexOf(ChatColor.RED);
+            case DARK_BLUE:
+                return WoolUtil.CHAT_COLORS.indexOf(ChatColor.BLUE);
+            default:
+                return WoolUtil.CHAT_COLORS.indexOf(color);
+        }
     }
 }

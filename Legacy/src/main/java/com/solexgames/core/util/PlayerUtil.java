@@ -18,18 +18,16 @@ public final class PlayerUtil {
         if (CorePlugin.STAFF_ALERTS_COMMAND) {
             Bukkit.getOnlinePlayers().stream()
                     .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
-                    .filter(Objects::nonNull)
-                    .filter(PotPlayer::isCanSeeStaffMessages)
-                    .filter(potPlayer -> potPlayer.getPlayer().hasPermission(CorePlugin.getInstance().getConfig().getString("settings.staff-command-alerts-permission")))
+                    .filter(potPlayer -> potPlayer != null && potPlayer.isCanSeeStaffMessages() && potPlayer.getPlayer().hasPermission(CorePlugin.getInstance().getConfig().getString("settings.staff-command-alerts-permission")))
                     .forEach(potPlayer -> potPlayer.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getConfig().getString("settings.staff-command-alerts-format").replace("<playername>", player.getName()).replace("<message>", reason))));
         }
     }
 
     public static int getPing(Player player) {
         try {
-            String bukkitVersion = Bukkit.getServer().getClass().getPackage().getName().substring(23);
-            Class<?> craftPlayer = Class.forName("org.bukkit.craftbukkit." + bukkitVersion + ".entity.CraftPlayer");
-            Object handle = craftPlayer.getMethod("getHandle").invoke(player);
+            final String bukkitVersion = Bukkit.getServer().getClass().getPackage().getName().substring(23);
+            final Class<?> craftPlayer = Class.forName("org.bukkit.craftbukkit." + bukkitVersion + ".entity.CraftPlayer");
+            final Object handle = craftPlayer.getMethod("getHandle").invoke(player);
 
             return (Integer) handle.getClass().getDeclaredField("ping").get(handle);
         } catch (Exception ignored) {
