@@ -1,6 +1,4 @@
-# Scandium | An all-in-one network suite.
-[![Java CI with Maven](https://github.com/GrowlyX/Core/actions/workflows/maven.yml/badge.svg)](https://github.com/GrowlyX/Core/actions/workflows/maven.yml)
+# Scandium
 
-
-- Documentation is available at Core-Docs.
+- Documentation is available at docs.solexgames.com/scandium
 - Created by SolexGames
