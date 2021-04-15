@@ -3,7 +3,6 @@ package com.solexgames.core.util.external.pagination.impl;
 import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
-import com.solexgames.core.menu.impl.grant.GrantSelectDurationMenu;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.util.Color;
@@ -93,9 +92,9 @@ public class GrantMainPaginatedMenu extends PaginatedMenu {
                     } else if (clickType == ClickType.LEFT) {
                         if (rank != null) {
                             if ((potPlayer.getActiveGrant().getRank().getWeight() >= rank.getWeight()) && !player.isOp()) {
-                                new GrantSelectDurationMenu(player, getDocument(), rank, "global").open(player);
+                                new GrantDurationPaginatedMenu(player, getDocument(), rank, "global").openMenu(player);
                             } else if ((potPlayer.getActiveGrant().getRank().getWeight() >= rank.getWeight()) && player.isOp()) {
-                                new GrantSelectDurationMenu(player, getDocument(), rank, "global").open(player);
+                                new GrantDurationPaginatedMenu(player, getDocument(), rank, "global").openMenu(player);
                             } else {
                                 player.sendMessage(ChatColor.RED + ("You cannot grant a rank weight a weight that is higher than yours."));
                                 player.closeInventory();

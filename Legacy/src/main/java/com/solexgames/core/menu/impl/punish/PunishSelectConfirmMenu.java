@@ -39,18 +39,26 @@ public class PunishSelectConfirmMenu extends AbstractInventoryMenu {
 
     public PunishSelectConfirmMenu(Player player, String target, String reason, PunishmentType punishmentType, long punishmentDuration, boolean permanent) {
         super("Confirm punishment for: " + Color.translate("&b") + (Bukkit.getPlayer(target) != null ? Bukkit.getPlayer(target).getDisplayName() : target), 9*5);
+
         this.player = player;
         this.target = target;
         this.reason = reason;
         this.permanent = permanent;
         this.punishmentType = punishmentType;
         this.punishmentDuration = punishmentDuration;
+
         this.update();
     }
 
     public void update() {
-
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
+
+        while (inventory.firstEmpty() != -1) {
+            inventory.setItem(inventory.firstEmpty(), new ItemBuilder(XMaterial.GRAY_STAINED_GLASS_PANE.parseMaterial())
+                    .setDurability(7)
+                    .setDisplayName(" ")
+                    .create());
+        }
 
         int[] intsConfirm = new int[] { 10,11,12,19,20,21,28,29,30 };
         int[] intsDecline = new int[] { 14,15,16,23,24,25,32,33,34 };

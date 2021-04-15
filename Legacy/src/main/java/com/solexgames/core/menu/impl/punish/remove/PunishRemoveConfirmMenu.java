@@ -33,6 +33,13 @@ public class PunishRemoveConfirmMenu extends AbstractInventoryMenu {
 
     @Override
     public void update() {
+        while (inventory.firstEmpty() != -1) {
+            inventory.setItem(inventory.firstEmpty(), new ItemBuilder(XMaterial.GRAY_STAINED_GLASS_PANE.parseMaterial())
+                    .setDurability(7)
+                    .setDisplayName(" ")
+                    .create());
+        }
+
         int[] intsConfirm = new int[]{10, 11, 12, 19, 20, 21, 28, 29, 30};
         int[] intsDecline = new int[]{14, 15, 16, 23, 24, 25, 32, 33, 34};
 

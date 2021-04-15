@@ -2,7 +2,6 @@ package com.solexgames.core.util.external.pagination.impl;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.menu.impl.grant.GrantSelectDurationMenu;
 import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.util.external.pagination.Button;
