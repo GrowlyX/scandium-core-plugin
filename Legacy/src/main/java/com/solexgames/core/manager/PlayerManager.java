@@ -4,7 +4,7 @@ import com.cryptomorin.xseries.XMaterial;
 import com.mojang.authlib.GameProfile;
 import com.mongodb.client.model.Filters;
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.board.extend.ModSuiteBoard;
+import com.solexgames.core.board.impl.ModModeBoard;
 import com.solexgames.core.enums.ChatChannelType;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.player.PotPlayer;
@@ -156,8 +156,8 @@ public class PlayerManager {
         potPlayer.setItemHistory(player.getInventory().getContents());
         potPlayer.setPreviousBoard(player.getScoreboard());
 
-        ModSuiteBoard modSuiteBoard = new ModSuiteBoard(player);
-        potPlayer.setModModeBoard(modSuiteBoard);
+        ModModeBoard modModeBoard = new ModModeBoard(player);
+        potPlayer.setModModeBoard(modModeBoard);
 
         player.getInventory().clear();
 
@@ -203,8 +203,8 @@ public class PlayerManager {
         potPlayer.setItemHistory(player.getInventory().getContents());
         potPlayer.setPreviousBoard(player.getScoreboard());
 
-        ModSuiteBoard modSuiteBoard = new ModSuiteBoard(player);
-        potPlayer.setModModeBoard(modSuiteBoard);
+        ModModeBoard modModeBoard = new ModModeBoard(player);
+        potPlayer.setModModeBoard(modModeBoard);
 
         player.getInventory().clear();
 
@@ -246,7 +246,7 @@ public class PlayerManager {
 
         potPlayer.setStaffMode(false);
         potPlayer.setupPlayerTag();
-        potPlayer.getModModeBoard().deleteBoard();
+        potPlayer.getModModeBoard().remove();
         potPlayer.setModModeBoard(null);
 
         player.setScoreboard(potPlayer.getPreviousBoard());

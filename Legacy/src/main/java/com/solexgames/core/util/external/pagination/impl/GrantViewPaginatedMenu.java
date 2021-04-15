@@ -47,7 +47,7 @@ public class GrantViewPaginatedMenu extends PaginatedMenu {
     @Override
     public Map<Integer, Button> getAllPagesButtons(Player player) {
         HashMap<Integer, Button> buttons = new HashMap<>();
-        AtomicInteger i = new AtomicInteger(0);
+        AtomicInteger i = new AtomicInteger();
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
         PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
 

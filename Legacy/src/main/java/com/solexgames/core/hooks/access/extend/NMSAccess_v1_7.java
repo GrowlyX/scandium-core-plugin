@@ -1,7 +1,7 @@
-package com.solexgames.core.hook.access.extend;
+package com.solexgames.core.hooks.access.extend;
 
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.hook.access.AbstractNMSAccess;
+import com.solexgames.core.hooks.access.AbstractNMSAccess;
 import net.minecraft.server.v1_7_R4.*;
 import org.bukkit.craftbukkit.v1_7_R4.entity.CraftPlayer;
 import org.bukkit.entity.Player;

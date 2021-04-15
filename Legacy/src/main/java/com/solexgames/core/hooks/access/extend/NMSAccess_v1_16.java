@@ -1,13 +1,12 @@
-package com.solexgames.core.hook.access.extend;
+package com.solexgames.core.hooks.access.extend;
 
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.hook.access.AbstractNMSAccess;
+import com.solexgames.core.hooks.access.AbstractNMSAccess;
 import net.minecraft.server.v1_16_R3.EntityPlayer;
 import net.minecraft.server.v1_16_R3.MinecraftServer;
 import net.minecraft.server.v1_16_R3.PacketPlayOutPlayerInfo;
 import net.minecraft.server.v1_16_R3.IChatBaseComponent;
 import net.minecraft.server.v1_16_R3.PacketPlayOutPlayerListHeaderFooter;
-import net.minecraft.server.v1_8_R3.Packet;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 

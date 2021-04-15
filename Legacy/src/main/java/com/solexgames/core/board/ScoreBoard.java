@@ -14,6 +14,12 @@ import org.bukkit.scoreboard.Team;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
+
+/**
+ * @author GrowlyX
+ * @since 4/15/2021
+ */
 
 @Getter
 @Setter
@@ -74,16 +80,24 @@ public abstract class ScoreBoard {
 
     private void removeSlot(int slot) {
         String entry = genEntry(slot);
-        if (this.scoreboard.getEntries().contains(entry)) this.scoreboard.resetScores(entry);
+
+        if (this.scoreboard.getEntries().contains(entry)) {
+            this.scoreboard.resetScores(entry);
+        }
     }
 
     public void setSlotsFromList() {
-        int slot = this.getLines().size();
-        if (slot < 15) for (int i = (slot + 1); i <= 15; i++) removeSlot(i);
+        AtomicInteger slot = new AtomicInteger(this.getLines().size());
 
-        for (String line : this.getLines()) {
-            setSlot(slot, line);
-            slot--;
+        if (slot.get() < 15) {
+            for (int i = (slot.get() + 1); i <= 15; i++) {
+                this.removeSlot(i);
+            }
+        } else {
+            for (String line : this.getLines()) {
+                this.setSlot(slot.get(), line);
+                slot.getAndDecrement();
+            }
         }
     }
 
@@ -105,11 +119,12 @@ public abstract class ScoreBoard {
         return s.length() > 16 ? s.substring(16) : "";
     }
 
-    public void deleteBoard() {
+    public void remove() {
         this.player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
         ScoreBoard.getAllBoards().remove(this.getPlayer().getUniqueId());
     }
 
     public abstract List<String> getLines();
     public abstract String getTitle();
+
 }

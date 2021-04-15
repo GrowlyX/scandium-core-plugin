@@ -1,6 +1,7 @@
 package com.solexgames.core.util.external.pagination.button;
 
 import com.cryptomorin.xseries.XMaterial;
+import com.cryptomorin.xseries.XSound;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.util.external.pagination.Button;
 import com.solexgames.core.util.external.pagination.Menu;
@@ -32,9 +33,9 @@ public class ConfirmationButton extends Button {
     @Override
     public void clicked(Player player, ClickType clickType) {
         if (this.confirm) {
-            player.playSound(player.getLocation(), Sound.NOTE_PIANO, 20f, 0.1f);
+            player.playSound(player.getLocation(), XSound.ENTITY_EXPERIENCE_ORB_PICKUP.parseSound(), 20f, 0.1f);
         } else {
-            player.playSound(player.getLocation(), Sound.DIG_GRAVEL, 20f, 0.1F);
+            player.playSound(player.getLocation(), XSound.BLOCK_GRAVEL_BREAK.parseSound(), 20f, 0.1F);
         }
 
         if (this.closeAfterResponse) {

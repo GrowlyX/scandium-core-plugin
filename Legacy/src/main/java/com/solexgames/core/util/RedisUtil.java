@@ -7,7 +7,7 @@ import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.punishment.Punishment;
 import com.solexgames.core.player.punishment.PunishmentType;
 import com.solexgames.core.player.ranks.Rank;
-import com.solexgames.core.redis.action.RedisAction;
+import com.solexgames.core.redis.packet.RedisAction;
 import com.solexgames.core.redis.json.JsonAppender;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

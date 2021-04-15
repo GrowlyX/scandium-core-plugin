@@ -61,6 +61,12 @@ public final class UUIDUtil {
      * @param name the name of the player
      */
     public static UUID fetchUUID(String name) {
+        final UUID uuid = CorePlugin.getInstance().getUuidCache().get(name);
+
+        if (uuid != null) {
+            return uuid;
+        }
+
         try {
             HttpPost request = new HttpPost("https://api.mojang.com/profiles/minecraft");
 

@@ -1,7 +1,7 @@
 package com.solexgames.core.redis.json;
 
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.redis.action.RedisAction;
+import com.solexgames.core.redis.packet.RedisAction;
 import lombok.Getter;
 
 import java.util.HashMap;

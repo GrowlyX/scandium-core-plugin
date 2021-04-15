@@ -1,4 +1,4 @@
-package com.solexgames.core.hook.protocol.extend;
+package com.solexgames.core.hooks.protocol.extend;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
@@ -8,7 +8,7 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.WrappedServerPing;
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.hook.protocol.AbstractChatInterceptor;
+import com.solexgames.core.hooks.protocol.AbstractChatInterceptor;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.InvocationTargetException;

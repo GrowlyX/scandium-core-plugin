@@ -1,4 +1,4 @@
-package com.solexgames.core.hook.placeholder;
+package com.solexgames.core.hooks.placeholder;
 
 //import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 

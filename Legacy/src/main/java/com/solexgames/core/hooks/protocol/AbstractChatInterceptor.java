@@ -1,4 +1,4 @@
-package com.solexgames.core.hook.protocol;
+package com.solexgames.core.hooks.protocol;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;

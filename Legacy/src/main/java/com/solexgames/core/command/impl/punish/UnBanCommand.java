@@ -33,7 +33,7 @@ public class UnBanCommand extends BaseCommand {
             if (document != null) {
                 CorePlugin.getInstance().getPunishmentManager().handleUnPunishment(document, message, (sender instanceof Player ? (Player) sender : null), PunishmentType.BAN);
             } else {
-                sender.sendMessage(ChatColor.RED + "Error: That player does not exist in our database.");
+                sender.sendMessage(ChatColor.RED + "Error: That player does not exist in our coreDatabase.");
             }
         }
 

@@ -36,7 +36,7 @@ public abstract class Menu {
     private Button placeholderButton = Button.placeholder(XMaterial.GLASS_PANE.parseMaterial(), (byte) 15, " ");
 
     private ItemStack createItemStack(Player player, Button button) {
-        ItemStack item = button.getButtonItem(player);
+        final ItemStack item = button.getButtonItem(player);
 
         if (item.getType() != XMaterial.SKELETON_SKULL.parseMaterial()) {
             ItemMeta meta = item.getItemMeta();

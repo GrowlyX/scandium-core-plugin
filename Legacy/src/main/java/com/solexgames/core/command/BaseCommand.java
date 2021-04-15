@@ -1,8 +1,7 @@
 package com.solexgames.core.command;
 
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.database.Database;
-import com.solexgames.core.enums.ServerType;
+import com.solexgames.core.database.CoreDatabase;
 import com.solexgames.core.manager.PlayerManager;
 import com.solexgames.core.redis.RedisManager;
 import com.solexgames.core.util.Color;
@@ -26,20 +25,20 @@ public abstract class BaseCommand implements CommandExecutor {
 
     protected PlayerManager playerManager;
     protected RedisManager client;
-    protected Database database;
+    protected CoreDatabase coreDatabase;
 
     /**
      * Created a new instance of BaseCommand.
      */
     protected BaseCommand() {
         this.playerManager = CorePlugin.getInstance().getPlayerManager();
-        this.database = CorePlugin.getInstance().getCoreDatabase();
+        this.coreDatabase = CorePlugin.getInstance().getCoreDatabase();
         this.client = CorePlugin.getInstance().getRedisManager();
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        sender.sendMessage(Color.translate("&cThis command was not created properly."));
+        sender.sendMessage(NO_PERMISSION);
         return false;
     }
 }

@@ -35,5 +35,9 @@ public class NetworkPlayer {
         this.synced = synced;
 
         CorePlugin.getInstance().getPlayerManager().getAllNetworkProfiles().put(this.uuid, this);
+
+        if (!CorePlugin.getInstance().getUuidCache().contains(this.uuid)) {
+            CorePlugin.getInstance().getUuidCache().put(this.name, this.uuid);
+        }
     }
 }

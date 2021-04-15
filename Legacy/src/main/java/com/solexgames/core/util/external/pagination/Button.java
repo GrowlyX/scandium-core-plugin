@@ -1,5 +1,6 @@
 package com.solexgames.core.util.external.pagination;
 
+import com.cryptomorin.xseries.XSound;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -25,16 +26,16 @@ public abstract class Button {
     }
 
     public static void playFail(Player player) {
-        player.playSound(player.getLocation(), Sound.DIG_GRASS, 20F, 0.1F);
+        player.playSound(player.getLocation(), XSound.BLOCK_GRASS_BREAK.parseSound(), 20F, 0.1F);
 
     }
 
     public static void playSuccess(Player player) {
-        player.playSound(player.getLocation(), Sound.NOTE_PIANO, 20F, 15F);
+        player.playSound(player.getLocation(), XSound.ENTITY_EXPERIENCE_ORB_PICKUP.parseSound(), 20F, 15F);
     }
 
     public static void playNeutral(Player player) {
-        player.playSound(player.getLocation(), Sound.CLICK, 20F, 1F);
+        player.playSound(player.getLocation(), XSound.BLOCK_NOTE_BLOCK_PLING.parseSound(), 20F, 1F);
     }
 
     public abstract ItemStack getButtonItem(Player player);

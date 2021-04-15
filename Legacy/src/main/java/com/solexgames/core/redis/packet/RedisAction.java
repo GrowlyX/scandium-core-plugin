@@ -1,4 +1,4 @@
-package com.solexgames.core.redis.action;
+package com.solexgames.core.redis.packet;
 
 import lombok.Getter;
 

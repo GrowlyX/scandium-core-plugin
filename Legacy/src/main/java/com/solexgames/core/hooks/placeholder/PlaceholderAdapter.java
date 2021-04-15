@@ -1,4 +1,4 @@
-package com.solexgames.core.hook.placeholder;
+package com.solexgames.core.hooks.placeholder;
 
 /*import com.solexgames.core.CorePlugin;
 import com.solexgames.core.player.PotPlayer;

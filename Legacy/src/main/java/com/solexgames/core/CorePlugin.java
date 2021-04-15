@@ -26,14 +26,14 @@ import com.solexgames.core.command.impl.shutdown.ShutdownCommand;
 import com.solexgames.core.command.impl.test.TestCommand;
 import com.solexgames.core.command.impl.toggle.*;
 import com.solexgames.core.command.impl.warps.WarpCommand;
-import com.solexgames.core.database.Database;
+import com.solexgames.core.database.CoreDatabase;
 import com.solexgames.core.enums.ServerType;
-import com.solexgames.core.hook.access.AbstractNMSAccess;
-import com.solexgames.core.hook.access.extend.*;
-import com.solexgames.core.hook.client.AbstractClientHook;
-import com.solexgames.core.hook.client.extend.LunarClientHook;
-import com.solexgames.core.hook.protocol.AbstractChatInterceptor;
-import com.solexgames.core.hook.protocol.extend.ProtocolChatInterceptor;
+import com.solexgames.core.hooks.access.AbstractNMSAccess;
+import com.solexgames.core.hooks.access.extend.*;
+import com.solexgames.core.hooks.client.AbstractClientHook;
+import com.solexgames.core.hooks.client.extend.LunarClientHook;
+import com.solexgames.core.hooks.protocol.AbstractChatInterceptor;
+import com.solexgames.core.hooks.protocol.extend.ProtocolChatInterceptor;
 import com.solexgames.core.listener.ModSuiteListener;
 import com.solexgames.core.listener.PaginationListener;
 import com.solexgames.core.listener.PlayerListener;
@@ -46,6 +46,7 @@ import com.solexgames.core.task.*;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
 import com.solexgames.core.util.external.ConfigExternal;
+import com.solexgames.core.uuid.UUIDCache;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.http.client.HttpClient;
@@ -110,9 +111,11 @@ public final class CorePlugin extends JavaPlugin {
     private PunishmentManager punishmentManager;
     private NameTagManager nameTagManager;
 
+    private UUIDCache uuidCache;
+
     private String serverName;
     private HttpClient httpClient;
-    private Database coreDatabase;
+    private CoreDatabase coreDatabase;
     private RedisManager redisManager;
 
     private ConfigExternal ranksConfig;
@@ -140,25 +143,6 @@ public final class CorePlugin extends JavaPlugin {
             this.getServer().shutdown();
         }
 
-        /*
-        try {
-            URL url = new URL("http://104.237.8.85:1920/check?apikey=rT4bM8lQ5cP8gM1cA2jO6bX4vW6nQ0vN&id=" + this.getConfig().getString("license") + "&plugin=Scandium");
-            URLConnection urlConnection = url.openConnection();
-            InputStream inputStream = urlConnection.getInputStream();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                if (!line.equalsIgnoreCase("VALID")) {
-                    Bukkit.getPluginManager().disablePlugin(Bukkit.getPluginManager().getPlugin("Scandium"));
-                    Bukkit.getLogger().info("License key not found!");
-                }
-            }
-        } catch (Exception ex) {
-            Bukkit.getPluginManager().disablePlugin(Bukkit.getPluginManager().getPlugin("Scandium"));
-            Bukkit.getLogger().info("License key not found!");
-        }*/
-
         FORMAT = new SimpleDateFormat("MM/dd/yyyy HH:mma");
         FORMAT.setTimeZone(TimeZone.getTimeZone("EST"));
 
@@ -177,7 +161,7 @@ public final class CorePlugin extends JavaPlugin {
         this.getConfig().options().copyDefaults();
 
         this.ranksConfig = new ConfigExternal("ranks");
-        this.databaseConfig = new ConfigExternal("database");
+        this.databaseConfig = new ConfigExternal("coreDatabase");
         this.motdConfig = new ConfigExternal("motd");
         this.filterConfig = new ConfigExternal("filtered");
 
@@ -199,7 +183,7 @@ public final class CorePlugin extends JavaPlugin {
         this.disallow = false;
 
         this.subscriptions = new RedisSubscriptions();
-        this.coreDatabase = new Database();
+        this.coreDatabase = new CoreDatabase();
         this.redisManager = new RedisManager(new RedisSettings(
                 this.databaseConfig.getString("redis.host"),
                 this.databaseConfig.getInt("redis.port"),
@@ -219,13 +203,12 @@ public final class CorePlugin extends JavaPlugin {
         this.warpManager = new WarpManager();
         this.shutdownManager = new ShutdownManager();
         this.nameTagManager = new NameTagManager();
+        this.uuidCache = new UUIDCache();
 
         this.setupExtra();
-
-        RedisUtil.writeAsync(RedisUtil.onServerOnline());
-        Bukkit.getScheduler().runTaskLater(this, () -> CAN_JOIN = true, 5 * 20L);
-
         this.logInformation();
+
+        new ServerLoadingTask();
     }
 
     private void setupHooks() {

@@ -1,4 +1,4 @@
-package com.solexgames.core.hook.access;
+package com.solexgames.core.hooks.access;
 
 import org.bukkit.entity.Player;
 

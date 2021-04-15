@@ -69,7 +69,7 @@ public class SetSlotsCommand extends BaseCommand {
     }
 
     private void changeProperties(int slots) {
-        Path resolve = Paths.get(CorePlugin.getInstance().getDataFolder().getParentFile().getAbsolutePath()).getParent().resolve("server.properties");
+        final Path resolve = Paths.get(CorePlugin.getInstance().getDataFolder().getParentFile().getAbsolutePath()).getParent().resolve("server.properties");
 
         try {
             List<String> allLines = Files.readAllLines(resolve);

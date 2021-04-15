@@ -85,7 +85,9 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                         CorePlugin.getInstance().getServer().getPluginManager().callEvent(retrieveEvent);
                     }
 
-                    Bukkit.getOnlinePlayers().stream().filter(player -> player.hasPermission("scandium.network.alerts")).forEach(player -> player.sendMessage(Color.translate("&3[S] &e" + bootingServerName + " &bhas just &6booted&b and will be joinable in 5 seconds.")));
+                    Bukkit.getOnlinePlayers().stream()
+                            .filter(player -> player.hasPermission("scandium.network.alerts"))
+                            .forEach(player -> player.sendMessage(Color.translate("&3[S] &e" + bootingServerName + " &bhas just come &aonline&b.")));
                     break;
                 case SERVER_DATA_UPDATE:
                     String splitPlayers = jsonAppender.getParam("SPLITPLAYERS");
@@ -127,7 +129,9 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                         CorePlugin.getInstance().getServerManager().removeNetworkServer(NetworkServer.getByName(offlineServerName));
                     }
 
-                    Bukkit.getOnlinePlayers().stream().filter(player -> player.hasPermission("scandium.network.alerts")).forEach(player -> player.sendMessage(Color.translate("&3[S] &e" + offlineServerName + " &bhas just went &coffline&b and is no longer joinable.")));
+                    Bukkit.getOnlinePlayers().stream()
+                            .filter(player -> player.hasPermission("scandium.network.alerts"))
+                            .forEach(player -> player.sendMessage(Color.translate("&3[S] &e" + offlineServerName + " &bhas just went &coffline&b.")));
                     break;
                 case PLAYER_CONNECT_UPDATE:
                     String fromConnectServer = jsonAppender.getParam("SERVER");

@@ -13,6 +13,6 @@ public enum PotionMessageType {
     GAMER("GAMER"),
     TOXIC("TOXIC");
 
-    private String typeName;
+    private final String typeName;
 
 }

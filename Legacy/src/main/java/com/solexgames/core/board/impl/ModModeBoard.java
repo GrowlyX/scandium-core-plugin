@@ -1,4 +1,4 @@
-package com.solexgames.core.board.extend;
+package com.solexgames.core.board.impl;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.board.ScoreBoard;
@@ -14,12 +14,12 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ModSuiteBoard extends ScoreBoard {
+public class ModModeBoard extends ScoreBoard {
 
     public final ServerType network;
     public final PotPlayer potPlayer;
 
-    public ModSuiteBoard(Player player) {
+    public ModModeBoard(Player player) {
         super(player);
 
         this.potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(this.getPlayer());

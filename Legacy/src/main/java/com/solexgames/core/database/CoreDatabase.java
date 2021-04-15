@@ -9,7 +9,7 @@ import lombok.Getter;
 import org.bson.Document;
 
 @Getter
-public class Database {
+public class CoreDatabase {
 
     private final MongoClient client;
     private final MongoDatabase database;
@@ -21,7 +21,7 @@ public class Database {
     private final MongoCollection<Document> rankCollection;
     private final MongoCollection<Document> webCollection;
 
-    public Database() {
+    public CoreDatabase() {
         this.client = new MongoClient(new MongoClientURI(CorePlugin.getInstance().getDatabaseConfig().getString("mongodb.url")));
 
         this.database = client.getDatabase("SGSoftware");
