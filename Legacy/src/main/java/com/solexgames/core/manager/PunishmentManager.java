@@ -100,9 +100,9 @@ public class PunishmentManager {
             }
         });
 
-        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(name);
-
         Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () -> {
+            PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(name);
+
             if (potPlayer != null) {
                 switch (punishment.getPunishmentType()) {
                     case WARN:
@@ -128,11 +128,11 @@ public class PunishmentManager {
                         break;
                 }
             }
-
-            if (CorePlugin.getInstance().getDiscordManager().getClient() != null) {
-                CorePlugin.getInstance().getDiscordManager().sendPunishment(punishment);
-            }
         });
+
+        if (CorePlugin.getInstance().getDiscordManager().getClient() != null) {
+            CorePlugin.getInstance().getDiscordManager().sendPunishment(punishment);
+        }
     }
 
     public void handleUnPunishment(Document document, String message, Player player, PunishmentType punishmentType) {

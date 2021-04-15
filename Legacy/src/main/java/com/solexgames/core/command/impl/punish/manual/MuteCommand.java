@@ -41,7 +41,7 @@ public class MuteCommand extends BaseCommand {
                 completableFuture.complete(true);
             });
 
-            completableFuture.thenRun(() -> {
+            completableFuture.thenRunAsync(() -> {
                 if (document.get() == null) {
                     sender.sendMessage(ChatColor.RED + "Error: That player does not exist in our database.");
                 } else {

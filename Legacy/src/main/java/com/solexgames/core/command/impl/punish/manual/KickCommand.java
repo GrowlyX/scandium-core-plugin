@@ -45,7 +45,7 @@ public class KickCommand extends BaseCommand {
             });
 
 
-            completableFuture.thenRun(() -> {
+            completableFuture.thenRunAsync(() -> {
                 if (document.get() == null) {
                     sender.sendMessage(ChatColor.RED + "Error: That player does not exist in our database.");
                 } else {
