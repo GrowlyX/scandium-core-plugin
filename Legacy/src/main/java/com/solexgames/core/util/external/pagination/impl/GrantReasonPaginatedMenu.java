@@ -46,26 +46,6 @@ public class GrantReasonPaginatedMenu extends PaginatedMenu {
     @Override
     public Map<Integer, Button> getGlobalButtons(Player player) {
         Map<Integer, Button> buttonMap = new HashMap<>();
-        AtomicInteger atomicInteger = new AtomicInteger();
-
-        buttonMap.put(atomicInteger.getAndIncrement(), new ReasonButton(XMaterial.WHITE_WOOL, 0, "Rank Migration", this));
-        buttonMap.put(atomicInteger.getAndIncrement(), new ReasonButton(XMaterial.ORANGE_WOOL, 1, "Buycraft Issues", this));
-        buttonMap.put(atomicInteger.getAndIncrement(), new ReasonButton(XMaterial.PINK_WOOL, 2, "Promotion", this));
-        buttonMap.put(atomicInteger.getAndIncrement(), new ReasonButton(XMaterial.LIGHT_BLUE_WOOL, 3, "Demotion", this));
-        buttonMap.put(atomicInteger.getAndIncrement(), new ReasonButton(XMaterial.YELLOW_WOOL, 4, "Giveaway Winner", this));
-        buttonMap.put(atomicInteger.getAndIncrement(), new ReasonButton(XMaterial.GREEN_WOOL, 5, "Event Winner", this));
-
-        return buttonMap;
-    }
-
-    @Override
-    public String getPrePaginatedTitle(Player player) {
-        return "Grant reason for: " + (Bukkit.getPlayer(document.getString("name")) != null ? Bukkit.getPlayer(document.getString("name")).getDisplayName() : document.getString("name"));
-    }
-
-    @Override
-    public Map<Integer, Button> getAllPagesButtons(Player player) {
-        Map<Integer, Button> buttonMap = new HashMap<>();
 
         buttonMap.put(2, new Button() {
             @Override
@@ -104,7 +84,6 @@ public class GrantReasonPaginatedMenu extends PaginatedMenu {
             @Override
             public ItemStack getButtonItem(Player player) {
                 return new ItemBuilder(XMaterial.RED_BED.parseMaterial())
-                        .setDurability(14)
                         .setDisplayName(ChatColor.RED + ChatColor.BOLD.toString() + "Return Back")
                         .addLore(
                                 ChatColor.GRAY + "Click to return to the",
@@ -137,6 +116,25 @@ public class GrantReasonPaginatedMenu extends PaginatedMenu {
                 new ReasonButton(XMaterial.PAPER, 0, "Unspecified", GrantReasonPaginatedMenu.this).clicked(player, clickType);
             }
         });
+
+        return buttonMap;
+    }
+
+    @Override
+    public String getPrePaginatedTitle(Player player) {
+        return "Grant reason for: " + (Bukkit.getPlayer(document.getString("name")) != null ? Bukkit.getPlayer(document.getString("name")).getDisplayName() : document.getString("name"));
+    }
+
+    @Override
+    public Map<Integer, Button> getAllPagesButtons(Player player) {
+        Map<Integer, Button> buttonMap = new HashMap<>();
+
+        buttonMap.put(0, new ReasonButton(XMaterial.WHITE_WOOL, 0, "Rank Migration", this));
+        buttonMap.put(1, new ReasonButton(XMaterial.ORANGE_WOOL, 1, "Buycraft Issues", this));
+        buttonMap.put(2, new ReasonButton(XMaterial.PINK_WOOL, 2, "Promotion", this));
+        buttonMap.put(3, new ReasonButton(XMaterial.LIGHT_BLUE_WOOL, 3, "Demotion", this));
+        buttonMap.put(4, new ReasonButton(XMaterial.YELLOW_WOOL, 4, "Giveaway Winner", this));
+        buttonMap.put(5, new ReasonButton(XMaterial.GREEN_WOOL, 5, "Event Winner", this));
 
         return buttonMap;
     }

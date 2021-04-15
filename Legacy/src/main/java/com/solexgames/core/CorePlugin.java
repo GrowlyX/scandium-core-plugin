@@ -26,7 +26,7 @@ import com.solexgames.core.command.impl.shutdown.ShutdownCommand;
 import com.solexgames.core.command.impl.test.TestCommand;
 import com.solexgames.core.command.impl.toggle.*;
 import com.solexgames.core.command.impl.warps.WarpCommand;
-import com.solexgames.core.database.CoreDatabase;
+import com.solexgames.core.database.Database;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.hooks.access.AbstractNMSAccess;
 import com.solexgames.core.hooks.access.extend.*;
@@ -115,7 +115,7 @@ public final class CorePlugin extends JavaPlugin {
 
     private String serverName;
     private HttpClient httpClient;
-    private CoreDatabase coreDatabase;
+    private Database coreDatabase;
     private RedisManager redisManager;
 
     private ConfigExternal ranksConfig;
@@ -161,7 +161,7 @@ public final class CorePlugin extends JavaPlugin {
         this.getConfig().options().copyDefaults();
 
         this.ranksConfig = new ConfigExternal("ranks");
-        this.databaseConfig = new ConfigExternal("coreDatabase");
+        this.databaseConfig = new ConfigExternal("database");
         this.motdConfig = new ConfigExternal("motd");
         this.filterConfig = new ConfigExternal("filtered");
 
@@ -183,7 +183,7 @@ public final class CorePlugin extends JavaPlugin {
         this.disallow = false;
 
         this.subscriptions = new RedisSubscriptions();
-        this.coreDatabase = new CoreDatabase();
+        this.coreDatabase = new Database();
         this.redisManager = new RedisManager(new RedisSettings(
                 this.databaseConfig.getString("redis.host"),
                 this.databaseConfig.getInt("redis.port"),

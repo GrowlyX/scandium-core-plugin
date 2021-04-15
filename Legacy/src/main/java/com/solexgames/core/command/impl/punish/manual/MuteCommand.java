@@ -43,7 +43,7 @@ public class MuteCommand extends BaseCommand {
 
             completableFuture.thenRunAsync(() -> {
                 if (document.get() == null) {
-                    sender.sendMessage(ChatColor.RED + "Error: That player does not exist in our coreDatabase.");
+                    sender.sendMessage(ChatColor.RED + "Error: That player does not exist in our database.");
                 } else {
                     UUID playerId = UUIDUtil.fetchUUID(document.get().getString("name"));
                     List<Punishment> punishmentList = Punishment.getAllPunishments().stream()

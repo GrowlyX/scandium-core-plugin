@@ -4,11 +4,9 @@ import com.solexgames.core.CorePlugin;
 import com.solexgames.core.player.website.PostBuilder;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.StringUtil;
-import org.bson.Document;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
-import org.bukkit.entity.Player;
 
 import java.util.Date;
 import java.util.UUID;

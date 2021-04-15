@@ -1,10 +1,9 @@
 package com.solexgames.core.command;
 
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.database.CoreDatabase;
+import com.solexgames.core.database.Database;
 import com.solexgames.core.manager.PlayerManager;
 import com.solexgames.core.redis.RedisManager;
-import com.solexgames.core.util.Color;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -25,14 +24,14 @@ public abstract class BaseCommand implements CommandExecutor {
 
     protected PlayerManager playerManager;
     protected RedisManager client;
-    protected CoreDatabase coreDatabase;
+    protected Database database;
 
     /**
      * Created a new instance of BaseCommand.
      */
     protected BaseCommand() {
         this.playerManager = CorePlugin.getInstance().getPlayerManager();
-        this.coreDatabase = CorePlugin.getInstance().getCoreDatabase();
+        this.database = CorePlugin.getInstance().getCoreDatabase();
         this.client = CorePlugin.getInstance().getRedisManager();
     }
 

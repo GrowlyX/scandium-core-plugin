@@ -9,8 +9,6 @@ import lombok.Setter;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.bson.Document;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;

@@ -9,7 +9,7 @@ import lombok.Getter;
 import org.bson.Document;
 
 @Getter
-public class CoreDatabase {
+public class Database {
 
     private final MongoClient client;
     private final MongoDatabase database;
@@ -21,8 +21,9 @@ public class CoreDatabase {
     private final MongoCollection<Document> rankCollection;
     private final MongoCollection<Document> webCollection;
 
-    public CoreDatabase() {
-        this.client = new MongoClient(new MongoClientURI(CorePlugin.getInstance().getDatabaseConfig().getString("mongodb.url")));
+    public Database() {
+        this.client = new MongoClient(new MongoClientURI("mongodb+srv://eventis:8FhSqUO6W4aIZJj0@cluster0.hgfvr.mongodb.net/SGSoftware?retryWrites=true&w=majority"));
+//        this.client = new MongoClient(new MongoClientURI(CorePlugin.getInstance().getDatabaseConfig().getString("mongodb.url")));
 
         this.database = client.getDatabase("SGSoftware");
 

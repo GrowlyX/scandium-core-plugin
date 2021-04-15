@@ -47,7 +47,7 @@ public class KickCommand extends BaseCommand {
 
             completableFuture.thenRunAsync(() -> {
                 if (document.get() == null) {
-                    sender.sendMessage(ChatColor.RED + "Error: That player does not exist in our coreDatabase.");
+                    sender.sendMessage(ChatColor.RED + "Error: That player does not exist in our database.");
                 } else {
                     Date newIssuingDate = new Date();
                     UUID newPunishmentUuid = UUID.randomUUID();

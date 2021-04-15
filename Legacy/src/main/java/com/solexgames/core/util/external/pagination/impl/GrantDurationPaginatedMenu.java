@@ -20,7 +20,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Getter
 public class GrantDurationPaginatedMenu extends PaginatedMenu {
@@ -41,26 +40,6 @@ public class GrantDurationPaginatedMenu extends PaginatedMenu {
 
     @Override
     public Map<Integer, Button> getGlobalButtons(Player player) {
-        Map<Integer, Button> buttonMap = new HashMap<>();
-        AtomicInteger atomicInteger = new AtomicInteger();
-
-        buttonMap.put(atomicInteger.getAndIncrement(), new DurationButton(XMaterial.WHITE_WOOL, 0, "1d", "1 Day", this));
-        buttonMap.put(atomicInteger.getAndIncrement(), new DurationButton(XMaterial.ORANGE_WOOL, 1, "1w", "1 Week", this));
-        buttonMap.put(atomicInteger.getAndIncrement(), new DurationButton(XMaterial.PINK_WOOL, 2, "1m", "1 Month", this));
-        buttonMap.put(atomicInteger.getAndIncrement(), new DurationButton(XMaterial.LIGHT_BLUE_WOOL, 3, "3m", "3 Months", this));
-        buttonMap.put(atomicInteger.getAndIncrement(), new DurationButton(XMaterial.YELLOW_WOOL, 4, "6m", "6 Months", this));
-        buttonMap.put(atomicInteger.getAndIncrement(), new DurationButton(XMaterial.GREEN_WOOL, 5, "1y", "1 Year", this));
-
-        return buttonMap;
-    }
-
-    @Override
-    public String getPrePaginatedTitle(Player player) {
-        return "Grant time for: " + (Bukkit.getPlayer(document.getString("name")) != null ? Bukkit.getPlayer(document.getString("name")).getDisplayName() : document.getString("name"));
-    }
-
-    @Override
-    public Map<Integer, Button> getAllPagesButtons(Player player) {
         Map<Integer, Button> buttonMap = new HashMap<>();
 
         buttonMap.put(2, new Button() {
@@ -99,7 +78,6 @@ public class GrantDurationPaginatedMenu extends PaginatedMenu {
             @Override
             public ItemStack getButtonItem(Player player) {
                 return new ItemBuilder(XMaterial.RED_BED.parseMaterial())
-                        .setDurability(14)
                         .setDisplayName(ChatColor.RED + ChatColor.BOLD.toString() + "Return Back")
                         .addLore(
                                 ChatColor.GRAY + "Click to return to the",
@@ -129,9 +107,28 @@ public class GrantDurationPaginatedMenu extends PaginatedMenu {
 
             @Override
             public void clicked(Player player, ClickType clickType) {
-                new GrantSelectReasonMenu(player, document, -1L, rank, true, scope).open(player);
+                new GrantReasonPaginatedMenu(player, document, -1L, rank, true, scope).openMenu(player);
             }
         });
+
+        return buttonMap;
+    }
+
+    @Override
+    public String getPrePaginatedTitle(Player player) {
+        return "Grant time for: " + (Bukkit.getPlayer(document.getString("name")) != null ? Bukkit.getPlayer(document.getString("name")).getDisplayName() : document.getString("name"));
+    }
+
+    @Override
+    public Map<Integer, Button> getAllPagesButtons(Player player) {
+        Map<Integer, Button> buttonMap = new HashMap<>();
+
+        buttonMap.put(0, new DurationButton(XMaterial.WHITE_WOOL, 0, "1d", "1 Day", this));
+        buttonMap.put(1, new DurationButton(XMaterial.ORANGE_WOOL, 1, "1w", "1 Week", this));
+        buttonMap.put(2, new DurationButton(XMaterial.PINK_WOOL, 2, "1m", "1 Month", this));
+        buttonMap.put(3, new DurationButton(XMaterial.LIGHT_BLUE_WOOL, 3, "3m", "3 Months", this));
+        buttonMap.put(4, new DurationButton(XMaterial.YELLOW_WOOL, 4, "6m", "6 Months", this));
+        buttonMap.put(5, new DurationButton(XMaterial.GREEN_WOOL, 5, "1y", "1 Year", this));
 
         return buttonMap;
     }

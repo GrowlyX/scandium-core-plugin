@@ -10,6 +10,7 @@ import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.media.MediaConstants;
 import com.solexgames.core.player.punishment.PunishmentStrings;
 import com.solexgames.core.util.*;
+import com.solexgames.core.util.external.pagination.impl.GrantReasonPaginatedMenu;
 import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -242,14 +243,14 @@ public class PlayerListener implements Listener {
                 potPlayer.setGrantDurationTarget(null);
                 potPlayer.setGrantDurationEditing(false);
             } else if (message.equalsIgnoreCase("perm") || message.equalsIgnoreCase("permanent")) {
-                new GrantSelectReasonMenu(player, potPlayer.getGrantDurationTarget(), -1L, potPlayer.getGrantDurationRank(), true, potPlayer.getGrantDurationScope()).open(player);
+                new GrantReasonPaginatedMenu(player, potPlayer.getGrantDurationTarget(), -1L, potPlayer.getGrantDurationRank(), true, potPlayer.getGrantDurationScope()).openMenu(player);
 
                 potPlayer.setGrantDurationRank(null);
                 potPlayer.setGrantDurationTarget(null);
                 potPlayer.setGrantDurationEditing(false);
             } else {
                 try {
-                    new GrantSelectReasonMenu(player, potPlayer.getGrantDurationTarget(), System.currentTimeMillis() - DateUtil.parseDateDiff(event.getMessage(), false), potPlayer.getGrantDurationRank(), false, potPlayer.getGrantDurationScope()).open(player);
+                    new GrantReasonPaginatedMenu(player, potPlayer.getGrantDurationTarget(), System.currentTimeMillis() - DateUtil.parseDateDiff(event.getMessage(), false), potPlayer.getGrantDurationRank(), false, potPlayer.getGrantDurationScope()).openMenu(player);
 
                     potPlayer.setGrantDurationRank(null);
                     potPlayer.setGrantDurationTarget(null);

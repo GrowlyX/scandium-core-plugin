@@ -46,7 +46,7 @@ public class GrantCommand extends BaseCommand {
             if (document != null) {
                 new GrantMainPaginatedMenu(document, player).openMenu(player);
             } else {
-                player.sendMessage(ChatColor.RED + "Error: That player does not exist in our coreDatabase.");
+                player.sendMessage(ChatColor.RED + "Error: That player does not exist in our database.");
             }
         }
         return false;

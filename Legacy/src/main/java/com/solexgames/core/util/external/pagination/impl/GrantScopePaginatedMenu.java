@@ -50,7 +50,7 @@ public class GrantScopePaginatedMenu extends PaginatedMenu {
 
             @Override
             public void clicked(Player player, ClickType clickType) {
-                new GrantSelectDurationMenu(player, document, rank, "global").open(player);
+                new GrantDurationPaginatedMenu(player, document, rank, "global").openMenu(player);
             }
         });
 
@@ -117,7 +117,7 @@ public class GrantScopePaginatedMenu extends PaginatedMenu {
                     public void clicked(Player player, ClickType clickType) {
                         String display = ChatColor.stripColor(getButtonItem(player).getItemMeta().getDisplayName());
 
-                        new GrantSelectDurationMenu(player, document, rank, display).open(player);
+                        new GrantDurationPaginatedMenu(player, document, rank, display).openMenu(player);
                     }
                 }));
 

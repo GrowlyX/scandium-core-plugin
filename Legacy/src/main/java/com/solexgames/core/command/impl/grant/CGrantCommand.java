@@ -147,7 +147,7 @@ public class CGrantCommand extends BaseCommand {
                         sender.sendMessage(ChatColor.RED + "Error: That rank does not exist.");
                     }
                 } else {
-                    sender.sendMessage(ChatColor.RED + "Error: That player does not exist in our coreDatabase.");
+                    sender.sendMessage(ChatColor.RED + "Error: That player does not exist in our database.");
                 }
             });
         }

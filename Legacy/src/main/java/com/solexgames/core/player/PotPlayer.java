@@ -19,7 +19,6 @@ import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.enums.PotionMessageType;
 import com.solexgames.core.player.global.NetworkPlayer;
 import com.solexgames.core.util.*;
-import com.solexgames.core.manager.NameTagManager;
 import com.solexgames.core.util.rainbow.RainbowNametag;
 import lombok.Getter;
 import lombok.Setter;
