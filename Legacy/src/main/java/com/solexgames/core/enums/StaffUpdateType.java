@@ -1,10 +1,12 @@
 package com.solexgames.core.enums;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.beans.ConstructorProperties;
 
 @Getter
+@AllArgsConstructor
 public enum StaffUpdateType {
 
     HELPOP("&2[H] ", "HELPOP", "scandium.staff"),
@@ -16,10 +18,4 @@ public enum StaffUpdateType {
     public final String name;
     public final String permission;
 
-    @ConstructorProperties({"prefix", "name", "permission"})
-    StaffUpdateType(String prefix, String name, String permission) {
-        this.prefix = prefix;
-        this.permission = permission;
-        this.name = name;
-    }
 }

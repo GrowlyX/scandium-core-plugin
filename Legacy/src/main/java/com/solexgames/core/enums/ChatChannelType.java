@@ -1,10 +1,12 @@
 package com.solexgames.core.enums;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.beans.ConstructorProperties;
 
 @Getter
+@AllArgsConstructor
 public enum ChatChannelType {
 
     STAFF("&3[S] ","scandium.channels.staff"),
@@ -17,9 +19,4 @@ public enum ChatChannelType {
     private final String prefix;
     private final String permission;
 
-    @ConstructorProperties({"prefix", "permission"})
-    ChatChannelType(String prefix, String permission) {
-        this.prefix = prefix;
-        this.permission = permission;
-    }
 }

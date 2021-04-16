@@ -1,11 +1,13 @@
 package com.solexgames.core.enums;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.beans.ConstructorProperties;
 import java.util.Arrays;
 
 @Getter
+@AllArgsConstructor
 public enum LanguageType {
 
     ENGLISH("English", "en"),
@@ -16,12 +18,6 @@ public enum LanguageType {
 
     private final String languageName;
     private final String languageId;
-
-    @ConstructorProperties("languageName")
-    LanguageType(String languageName, String languageId) {
-        this.languageName = languageName;
-        this.languageId = languageId;
-    }
 
     public static LanguageType getByName(String name) {
         return Arrays.stream(LanguageType.values())

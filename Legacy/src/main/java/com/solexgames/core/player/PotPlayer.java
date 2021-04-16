@@ -16,7 +16,6 @@ import com.solexgames.core.player.punishment.Punishment;
 import com.solexgames.core.player.punishment.PunishmentStrings;
 import com.solexgames.core.player.punishment.PunishmentType;
 import com.solexgames.core.player.ranks.Rank;
-import com.solexgames.core.enums.PotionMessageType;
 import com.solexgames.core.player.global.NetworkPlayer;
 import com.solexgames.core.util.*;
 import com.solexgames.core.util.rainbow.RainbowNametag;
@@ -48,7 +47,6 @@ public class PotPlayer {
     private List<String> allIgnoring = new ArrayList<>();
     private List<String> allFriends = new ArrayList<>();
     private List<String> userPermissions = new ArrayList<>();
-    private List<PotionMessageType> allPurchasedMessages = new ArrayList<>();
 
     @SerializedName("_id")
     private UUID uuid;
@@ -146,7 +144,6 @@ public class PotPlayer {
     private Punishment warningPunishment;
     private Punishment restrictionPunishment;
     private AchievementData achievementData;
-    private PotionMessageType potionMessageType;
 
     private Rank disguiseRank;
     private RainbowNametag rainbowNametag;
@@ -192,13 +189,9 @@ public class PotPlayer {
         List<String> grantStrings = new ArrayList<>();
         this.getAllGrants().forEach(grant -> grantStrings.add(grant.toJson()));
 
-        List<String> messages = new ArrayList<>();
-        this.getAllPurchasedMessages().forEach(message -> messages.add(message.getTypeName()));
-
         List<String> prefixStrings = new ArrayList<>(this.getAllPrefixes());
 
         document.put("allGrants", grantStrings);
-        document.put("allMessages", messages);
         document.put("allPrefixes", prefixStrings);
         document.put("allPermissions", userPermissions);
         document.put("allIgnored", this.allIgnoring);
@@ -228,11 +221,6 @@ public class PotPlayer {
         document.put("youtube", this.media.getYoutubeLink());
 
         document.put("achievementData", CorePlugin.GSON.toJson(this.achievementData));
-        if (this.potionMessageType != null) {
-            document.put("potionMessageType", this.potionMessageType.getTypeName());
-        } else {
-            document.put("potionMessageType", "NORMAL");
-        }
 
         document.put("autoVanish", this.isAutoVanish);
         document.put("autoModMode", this.isAutoModMode);
@@ -370,11 +358,6 @@ public class PotPlayer {
             } else {
                 this.media.setDiscord("N/A");
             }
-            if (profile.getString("potionMessageType") != null) {
-                this.potionMessageType = PotionMessageType.valueOf(profile.getString("potionMessageType"));
-            } else {
-                this.potionMessageType = PotionMessageType.NORMAL;
-            }
             if (profile.getString("twitter") != null) {
                 this.media.setTwitter(profile.getString("twitter"));
             } else {
@@ -411,12 +394,6 @@ public class PotPlayer {
                 List<String> permissions = ((List<String>) profile.get("allPermissions"));
                 if (!permissions.isEmpty()) {
                     this.userPermissions.addAll(permissions);
-                }
-            }
-            if (profile.get("allMessages") != null) {
-                List<String> allMessages = ((List<String>) profile.get("allMessages"));
-                if (!allMessages.isEmpty()) {
-                    allMessages.forEach(s -> this.allPurchasedMessages.add(PotionMessageType.valueOf(s)));
                 }
             }
             if (profile.getBoolean("isSynced") != null) {

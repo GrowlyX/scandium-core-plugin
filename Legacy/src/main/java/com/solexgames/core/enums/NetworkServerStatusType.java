@@ -1,10 +1,12 @@
 package com.solexgames.core.enums;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.beans.ConstructorProperties;
 
 @Getter
+@AllArgsConstructor
 public enum NetworkServerStatusType {
 
     BOOTING("Booting", "&6Booting..."),
@@ -15,9 +17,4 @@ public enum NetworkServerStatusType {
     public final String serverStatusString;
     public final String serverStatusFancyString;
 
-    @ConstructorProperties({"serverTypeString", "serverStatusFancyString"})
-    NetworkServerStatusType(String serverStatusString, String serverStatusFancyString) {
-        this.serverStatusString = serverStatusString;
-        this.serverStatusFancyString = serverStatusFancyString;
-    }
 }

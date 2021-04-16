@@ -1,5 +1,6 @@
 package com.solexgames.core.enums;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 
@@ -10,6 +11,7 @@ import java.beans.ConstructorProperties;
  */
 
 @Getter
+@AllArgsConstructor
 public enum ServerType {
 
     BLARE("Blare Network", "01", ChatColor.AQUA, ChatColor.DARK_AQUA, "https://dsc.gg/blare", "BlareNetworkRIP", "shop.blare.rip", "blare.rip"),
@@ -37,15 +39,4 @@ public enum ServerType {
     private final String twitterLink;
     private final String websiteLink;
 
-    @ConstructorProperties({"serverName", "serverId", "mainColor", "secondaryColor", "generalPrefix", "discordLink", "storeLink", "websiteLink", "mainOwner", "mainDeveloper"})
-    ServerType(String serverName, String serverId, ChatColor mainColor, ChatColor secondaryColor, String discordLink, String twitterLink, String storeLink, String websiteLink) {
-        this.serverName = serverName;
-        this.serverId = serverId;
-        this.mainColor = mainColor;
-        this.secondaryColor = secondaryColor;
-        this.discordLink = discordLink;
-        this.twitterLink = twitterLink;
-        this.storeLink = storeLink;
-        this.websiteLink = websiteLink;
-    }
 }

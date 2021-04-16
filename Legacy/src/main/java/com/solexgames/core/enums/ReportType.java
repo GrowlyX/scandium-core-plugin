@@ -1,6 +1,7 @@
 package com.solexgames.core.enums;
 
 import com.cryptomorin.xseries.XMaterial;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.beans.ConstructorProperties;
@@ -14,6 +15,7 @@ import java.util.List;
  */
 
 @Getter
+@AllArgsConstructor
 public enum ReportType {
 
     COMBAT_HACKS("Combat Hacks", Arrays.asList("KillAura", "Reach", "Aim Assist"), XMaterial.DIAMOND_SWORD, 0),
@@ -30,11 +32,4 @@ public enum ReportType {
     private final XMaterial xMaterial;
     private final Integer durability;
 
-    @ConstructorProperties({"name", "examples", "xMaterial", "durability"})
-    ReportType(String name, List<String> examples, XMaterial xMaterial, Integer durability) {
-        this.name = name;
-        this.examples = examples;
-        this.xMaterial = xMaterial;
-        this.durability = durability;
-    }
 }

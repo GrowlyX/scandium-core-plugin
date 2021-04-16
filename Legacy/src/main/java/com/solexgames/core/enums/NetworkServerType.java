@@ -1,10 +1,12 @@
 package com.solexgames.core.enums;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.beans.ConstructorProperties;
 
 @Getter
+@AllArgsConstructor
 public enum NetworkServerType {
 
     PRACTICE("Practice"),
@@ -23,8 +25,4 @@ public enum NetworkServerType {
 
     public final String serverTypeString;
 
-    @ConstructorProperties("serverTypeString")
-    NetworkServerType(String serverTypeString) {
-        this.serverTypeString = serverTypeString;
-    }
 }
