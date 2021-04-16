@@ -1,9 +1,11 @@
 package com.solexgames.core.util;
 
 import com.solexgames.core.CorePlugin;
+import lombok.experimental.UtilityClass;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 
+@UtilityClass
 public final class LockedState {
 
     private static final String METADATA_KEY = "LOCKED";

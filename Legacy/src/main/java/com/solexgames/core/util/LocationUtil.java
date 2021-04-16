@@ -1,5 +1,6 @@
 package com.solexgames.core.util;
 
+import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -11,6 +12,7 @@ import java.util.Optional;
  * @since 3/4/2021
  */
 
+@UtilityClass
 public final class LocationUtil {
 
     private static final String SEPARATOR = "_S_";

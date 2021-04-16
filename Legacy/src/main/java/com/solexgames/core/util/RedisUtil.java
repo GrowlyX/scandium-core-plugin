@@ -76,9 +76,9 @@ public final class RedisUtil {
                 .getAppended();
     }
 
-    public static String onDisconnect(String player) {
+    public static String onDisconnect(Player player) {
         return new JsonAppender(RedisAction.PLAYER_DISCONNECT_UPDATE)
-                .put("PLAYER", player)
+                .put("PLAYER", player.getDisplayName())
                 .put("SERVER", CorePlugin.getInstance().getServerName())
                 .getAppended();
     }

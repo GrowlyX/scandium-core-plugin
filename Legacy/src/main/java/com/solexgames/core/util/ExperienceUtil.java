@@ -4,6 +4,7 @@ import com.mongodb.client.MongoCursor;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.player.PotPlayer;
+import lombok.experimental.UtilityClass;
 import org.bson.Document;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@UtilityClass
 public final class ExperienceUtil {
 
     /**

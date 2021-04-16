@@ -15,7 +15,7 @@ public enum StaffUpdateType {
     UNFREEZE("&4[F] ", "UNFREEZE", "scandium.staff");
 
     private final String prefix;
-    public final String name;
-    public final String permission;
+    private final String name;
+    private final String permission;
 
 }

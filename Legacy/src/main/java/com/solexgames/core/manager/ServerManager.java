@@ -72,7 +72,10 @@ public class ServerManager {
     }
 
     public NetworkServer getServer(String player) {
-        return this.getNetworkServers().stream().filter(server -> server.getAllPlayers().contains(player)).findFirst().orElse(null);
+        return this.getNetworkServers().stream()
+                .filter(server -> server.getAllPlayers().contains(player))
+                .findFirst()
+                .orElse(null);
     }
 
     public void setupServerType() {

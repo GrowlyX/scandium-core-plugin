@@ -27,8 +27,10 @@ public class PlayerListener implements Listener {
             responseProtocol.setName(CorePlugin.getInstance().getMinVersion() + "+");
             responseProtocol.setProtocol(-1);
 
-            event.getResponse().setDescription(this.plugin.getMaintenanceMotd());
+            event.getResponse().setDescription(this.plugin.getNormalMotd());
             event.getResponse().setPlayers(new ServerPing.Players(0, 1, new ServerPing.PlayerInfo[] {}));
+
+            return;
         }
 
         if (this.plugin.isMaintenance()) {

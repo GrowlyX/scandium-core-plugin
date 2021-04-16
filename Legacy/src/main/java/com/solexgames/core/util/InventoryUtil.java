@@ -1,5 +1,6 @@
 package com.solexgames.core.util;
 
+import lombok.experimental.UtilityClass;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
@@ -9,6 +10,7 @@ import org.bukkit.inventory.InventoryView;
  * @since 3/4/2021
  */
 
+@UtilityClass
 public final class InventoryUtil {
 
     public static boolean clickedTopInventory(InventoryDragEvent event) {

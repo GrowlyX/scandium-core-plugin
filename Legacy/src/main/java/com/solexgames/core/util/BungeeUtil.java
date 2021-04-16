@@ -2,6 +2,7 @@ package com.solexgames.core.util;
 
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
+import lombok.experimental.UtilityClass;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -11,11 +12,8 @@ import org.bukkit.plugin.java.JavaPlugin;
  * @since ???
  */
 
+@UtilityClass
 public final class BungeeUtil {
-
-    private BungeeUtil() {
-        throw new RuntimeException("Cannot instantiate a utility class.");
-    }
 
     public static void sendToServer(Player player, String connectingTo, JavaPlugin javaPlugin) {
         try {

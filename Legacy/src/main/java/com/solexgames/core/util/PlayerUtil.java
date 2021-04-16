@@ -2,6 +2,7 @@ package com.solexgames.core.util;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.player.PotPlayer;
+import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -12,6 +13,7 @@ import java.util.Objects;
  * @since 3/4/2021
  */
 
+@UtilityClass
 public final class PlayerUtil {
 
     public static void sendAlert(Player player, String reason) {

@@ -1,6 +1,7 @@
 package com.solexgames.core.util;
 
 import com.solexgames.core.CorePlugin;
+import lombok.experimental.UtilityClass;
 import org.bukkit.ChatColor;
 
 import java.util.List;

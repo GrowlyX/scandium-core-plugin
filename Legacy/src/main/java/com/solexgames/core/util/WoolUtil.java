@@ -1,5 +1,6 @@
 package com.solexgames.core.util;
 
+import lombok.experimental.UtilityClass;
 import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.List;
  * @since 3/4/2021
  */
 
+@UtilityClass
 public final class WoolUtil {
 
     private static final List<ChatColor> CHAT_COLORS = Arrays.asList(

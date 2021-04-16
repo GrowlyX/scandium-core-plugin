@@ -9,6 +9,7 @@ import com.solexgames.core.menu.impl.punish.PunishSelectDurationMenu;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.media.MediaConstants;
 import com.solexgames.core.player.punishment.PunishmentStrings;
+import com.solexgames.core.server.NetworkServer;
 import com.solexgames.core.util.*;
 import com.solexgames.core.util.external.pagination.impl.GrantReasonPaginatedMenu;
 import org.apache.commons.lang.time.DurationFormatUtils;
@@ -570,12 +571,14 @@ public class PlayerListener implements Listener {
 
             if (event.getPlayer().hasPermission("scandium.staff")) {
                 Bukkit.getScheduler().runTaskLaterAsynchronously(CorePlugin.getInstance(), () -> {
-                    if (CorePlugin.getInstance().getServerManager().getServer(event.getPlayer().getName()) != null) {
-                        RedisUtil.writeAsync(RedisUtil.onSwitchServer(event.getPlayer().getDisplayName(), CorePlugin.getInstance().getServerManager().getServer(event.getPlayer().getName()).getServerName()));
+                    NetworkServer server = CorePlugin.getInstance().getServerManager().getServer(event.getPlayer().getName());
+
+                    if (server != null) {
+                        RedisUtil.writeAsync(RedisUtil.onSwitchServer(event.getPlayer().getDisplayName(), server.getServerName()));
                     } else {
-                        RedisUtil.writeAsync(RedisUtil.onDisconnect(event.getPlayer().getDisplayName()));
+                        RedisUtil.writeAsync(RedisUtil.onDisconnect(event.getPlayer()));
                     }
-                }, 60L);
+                }, 80L);
             }
         });
     }

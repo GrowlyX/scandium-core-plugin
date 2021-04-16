@@ -1,12 +1,14 @@
 package com.solexgames.core.util;
 
 import com.solexgames.core.CorePlugin;
+import lombok.experimental.UtilityClass;
 
 /**
  * @author GrowlyX
  * @since 3/4/2021
  */
 
+@UtilityClass
 public final class MOTDUtil {
 
     public static String getNormalMotd() {

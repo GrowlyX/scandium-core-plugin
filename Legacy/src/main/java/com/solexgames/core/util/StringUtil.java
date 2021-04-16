@@ -4,6 +4,7 @@ import com.cryptomorin.xseries.XSound;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.font.DefaultFontInfo;
+import lombok.experimental.UtilityClass;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -16,6 +17,7 @@ import java.util.Arrays;
  * @since 3/4/2021
  */
 
+@UtilityClass
 public final class StringUtil {
 
     private final static int CENTER_PX = 154;

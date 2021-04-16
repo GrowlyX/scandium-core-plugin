@@ -1,5 +1,7 @@
 package com.solexgames.core.util;
 
+import lombok.experimental.UtilityClass;
+
 import java.security.GeneralSecurityException;
 import java.security.SecureRandom;
 import java.util.Arrays;
@@ -40,6 +42,8 @@ import javax.crypto.spec.SecretKeySpec;
  *
  * @author graywatson
  */
+
+@UtilityClass
 public final class TotpUtil {
 
     /** default time-step which is part of the spec, 30 seconds is default */

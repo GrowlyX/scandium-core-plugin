@@ -1,12 +1,14 @@
 package com.solexgames.core.util;
 
 import com.solexgames.core.CorePlugin;
+import lombok.experimental.UtilityClass;
 
 import java.net.URL;
 import java.util.Scanner;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+@UtilityClass
 public final class VotingUtil {
 
     public static final String NAME_MC_URL = "https://api.namemc.com/server/$ip/likes?profile=$uuid";

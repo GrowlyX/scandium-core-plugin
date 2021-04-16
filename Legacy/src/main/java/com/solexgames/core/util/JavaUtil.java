@@ -2,6 +2,7 @@ package com.solexgames.core.util;
 
 import com.google.common.collect.ImmutableSet;
 import com.solexgames.core.CorePlugin;
+import lombok.experimental.UtilityClass;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
@@ -20,6 +21,7 @@ import java.util.jar.JarFile;
  * @since ???
  */
 
+@UtilityClass
 public final class JavaUtil {
 
     public static void registerCommandsIn(String packageName) {
