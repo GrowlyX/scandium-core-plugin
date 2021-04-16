@@ -15,6 +15,7 @@ import com.solexgames.core.redis.json.JsonAppender;
 import com.solexgames.core.redis.subscription.AbstractJedisSubscriber;
 import com.solexgames.core.player.global.NetworkPlayer;
 import com.solexgames.core.server.NetworkServer;
+import com.solexgames.core.util.AsyncUtil;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.UUIDUtil;
 import org.bson.Document;
@@ -60,6 +61,7 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                     String globalServer = jsonAppender.getParam("SERVER");
                     String ipAddress = jsonAppender.getParam("IP_ADDRESS");
                     String syncCode = jsonAppender.getParam("SYNC_CODE");
+
                     boolean dmsEnabled = Boolean.parseBoolean(jsonAppender.getParam("DMS_ENABLED"));
                     boolean isSynced = Boolean.parseBoolean(jsonAppender.getParam("IS_SYNCED"));
 
@@ -262,13 +264,15 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                     break;
                 case RANK_DELETE_UPDATE:
                     Rank delRank = Rank.getByName(jsonAppender.getParam("RANK"));
+
                     if (delRank != null) {
                         Player delRankPlayer = Bukkit.getPlayer(jsonAppender.getParam("PLAYER"));
+
                         if (delRankPlayer != null)
                             delRankPlayer.sendMessage(ChatColor.RED + "Rank named '" + delRank.getName() + "' successfully deleted.");
 
                         Rank.getRanks().remove(delRank);
-                        CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getRankCollection().deleteOne(Filters.eq("_id", delRank.getUuid())));
+                        AsyncUtil.run(() -> CorePlugin.getInstance().getCoreDatabase().getRankCollection().deleteOne(Filters.eq("_id", delRank.getUuid())));
                     }
                     break;
                 case PUNISHMENT_EXECUTE_UPDATE:
@@ -288,6 +292,8 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                         }
 
                         Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByUuid(UUID.fromString(jsonAppender.getParam("ISSUER"))).orElse(null);
+
+                        assert document != null;
                         CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, jsonAppender.getParam("ISSUERNAME"), document, Boolean.parseBoolean(jsonAppender.getParam("SILENT")));
                     }
                     break;
@@ -364,6 +370,8 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
 
                     boolean rankSettingsHidden = Boolean.parseBoolean(jsonAppender.getParam("HIDDEN"));
                     boolean rankSettingsDefault = Boolean.parseBoolean(jsonAppender.getParam("DEFAULT"));
+                    boolean rankSettingsPurchasable = Boolean.parseBoolean(jsonAppender.getParam("PURCHASABLE"));
+                    boolean rankSettingsItalic = Boolean.parseBoolean(jsonAppender.getParam("ITALIC"));
 
                     List<String> rankSettingsPermissions = Arrays.asList(jsonAppender.getParam("PERMISSIONS").split(" "));
                     List<UUID> rankSettingsInheritance = Arrays.stream(jsonAppender.getParam("INHERITANCE").split(" ")).map(UUID::fromString).collect(Collectors.toList());
@@ -380,6 +388,8 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
 
                             rankSettingsRank.setDefaultRank(rankSettingsDefault);
                             rankSettingsRank.setHidden(rankSettingsHidden);
+                            rankSettingsRank.setItalic(rankSettingsItalic);
+                            rankSettingsRank.setPurchasable(rankSettingsPurchasable);
                         }
                     }
 
@@ -388,6 +398,7 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                     if (!SERVER_NAME.equalsIgnoreCase(jsonAppender.getParam("SERVER"))) {
                         String punishmentString = jsonAppender.getParam("ID");
                         Punishment punishment = Punishment.getByIdentification(punishmentString);
+
                         if (punishment != null) {
                             Punishment.getAllPunishments().remove(punishment);
                         }

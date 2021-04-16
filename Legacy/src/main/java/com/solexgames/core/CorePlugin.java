@@ -43,8 +43,10 @@ import com.solexgames.core.redis.RedisManager;
 import com.solexgames.core.redis.RedisSettings;
 import com.solexgames.core.redis.RedisSubscriptions;
 import com.solexgames.core.task.*;
+import com.solexgames.core.util.AsyncUtil;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
+import com.solexgames.core.util.callback.AsyncCallback;
 import com.solexgames.core.util.external.ConfigExternal;
 import com.solexgames.core.uuid.UUIDCache;
 import lombok.Getter;
@@ -144,9 +146,6 @@ public final class CorePlugin extends JavaPlugin {
             this.getServer().shutdown();
         }
 
-        FORMAT = new SimpleDateFormat("MM/dd/yyyy HH:mma");
-        FORMAT.setTimeZone(TimeZone.getTimeZone("EST"));
-
         RANDOM = new Random();
         GSON = new GsonBuilder()
                 .serializeNulls()
@@ -160,6 +159,9 @@ public final class CorePlugin extends JavaPlugin {
 
         this.saveDefaultConfig();
         this.getConfig().options().copyDefaults();
+
+        FORMAT = new SimpleDateFormat("MM/dd/yyyy HH:mma");
+        FORMAT.setTimeZone(TimeZone.getTimeZone(this.getConfig().getString("settings.time-zone")));
 
         this.ranksConfig = new ConfigExternal("ranks");
         this.databaseConfig = new ConfigExternal("database");
@@ -331,6 +333,7 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("kick").setExecutor(new KickCommand());
         this.getCommand("mute").setExecutor(new MuteCommand());
         this.getCommand("warn").setExecutor(new WarnCommand());
+
 
         if (this.chatInterceptor != null)
             this.chatInterceptor.initializePacketInterceptor();

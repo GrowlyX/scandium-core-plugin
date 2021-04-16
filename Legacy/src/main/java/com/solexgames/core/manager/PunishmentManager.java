@@ -76,25 +76,25 @@ public class PunishmentManager {
 
             if (document != null) {
                 Rank playerRank = Rank.getByName(document.getString("rankName"));
-                String formattedName = playerRank.getColor() + document.get("name");
+                String formattedName = playerRank.getColor() + playerRank.getItalic() + document.get("name");
 
                 if (silent) {
                     Bukkit.getOnlinePlayers().stream().filter(player1 -> player1.hasPermission("scandium.staff")).forEach(player1 -> player1.sendMessage(Color.translate(
-                            "&7[S] " + (rank != null ? rank.getColor() : ChatColor.GRAY) + name + " &awas " + (!punishment.isPermanent() && !punishment.getPunishmentType().equals(PunishmentType.KICK) ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (issuer != null ? formattedName : "&4Console") + ChatColor.GREEN + "."
+                            "&7[S] " + (rank != null ? rank.getColor() + rank.getItalic() : ChatColor.GRAY) + name + " &awas " + (!punishment.isPermanent() && !punishment.getPunishmentType().equals(PunishmentType.KICK) ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (issuer != null ? formattedName : "&4Console") + ChatColor.GREEN + "."
                     )));
                 } else {
                     Bukkit.broadcastMessage(Color.translate(
-                            (rank != null ? rank.getColor() : ChatColor.GRAY) + name + " &awas " + (!punishment.isPermanent() && !punishment.getPunishmentType().equals(PunishmentType.KICK) ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (issuer != null ? formattedName : "&4Console") + ChatColor.GREEN + "."
+                            (rank != null ? rank.getColor() + rank.getItalic() : ChatColor.GRAY) + name + " &awas " + (!punishment.isPermanent() && !punishment.getPunishmentType().equals(PunishmentType.KICK) ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (issuer != null ? formattedName : "&4Console") + ChatColor.GREEN + "."
                     ));
                 }
             } else {
                 if (silent) {
                     Bukkit.getOnlinePlayers().stream().filter(player1 -> player1.hasPermission("scandium.staff")).forEach(player1 -> player1.sendMessage(Color.translate(
-                            "&7[S] " + (rank != null ? rank.getColor() : ChatColor.GRAY) + name + " &awas " + (!punishment.isPermanent() && !punishment.getPunishmentType().equals(PunishmentType.KICK) ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4Console&a."
+                            "&7[S] " + (rank != null ? rank.getColor() + rank.getItalic() : ChatColor.GRAY) + name + " &awas " + (!punishment.isPermanent() && !punishment.getPunishmentType().equals(PunishmentType.KICK) ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4Console&a."
                     )));
                 } else {
                     Bukkit.broadcastMessage(Color.translate(
-                            (rank != null ? rank.getColor() : ChatColor.GRAY) + name + " &awas " + (!punishment.isPermanent() && !punishment.getPunishmentType().equals(PunishmentType.KICK) ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4Console&a."
+                            (rank != null ? rank.getColor() + rank.getItalic() : ChatColor.GRAY) + name + " &awas " + (!punishment.isPermanent() && !punishment.getPunishmentType().equals(PunishmentType.KICK) ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4Console&a."
                     ));
                 }
             }
@@ -177,11 +177,11 @@ public class PunishmentManager {
 
                 if (message.endsWith("-s")) {
                     Bukkit.getOnlinePlayers().stream().filter(player1 -> player1.hasPermission("scandium.staff")).forEach(player1 -> player1.sendMessage(Color.translate(
-                            "&7[S] " + (playerRank != null ? playerRank.getColor() : ChatColor.GRAY) + playerName + " &awas " + "un" + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (player != null ? player.getDisplayName() : "Console") + ChatColor.GREEN + "."
+                            "&7[S] " + (playerRank != null ? playerRank.getColor() + playerRank.getItalic() : ChatColor.GRAY) + playerName + " &awas " + "un" + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (player != null ? player.getDisplayName() : "Console") + ChatColor.GREEN + "."
                     )));
                 } else {
                     Bukkit.broadcastMessage(Color.translate(
-                            "&7" + (playerRank != null ? playerRank.getColor() : ChatColor.GRAY) + playerName + " &awas un" + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (player != null ? player.getDisplayName() : "Console") + ChatColor.GREEN + "."
+                            "&7" + (playerRank != null ? playerRank.getColor() + playerRank.getItalic() : ChatColor.GRAY) + playerName + " &awas un" + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (player != null ? player.getDisplayName() : "Console") + ChatColor.GREEN + "."
                     ));
                 }
 

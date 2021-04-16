@@ -17,6 +17,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.concurrent.CompletableFuture;
+
 public class PrefixCommand extends BaseCommand {
 
     @Override
@@ -145,7 +147,7 @@ public class PrefixCommand extends BaseCommand {
                             if (prefix != null) {
                                 Document document = CorePlugin.getInstance().getCoreDatabase().getPrefixCollection().find(Filters.eq("name", prefix.getName())).first();
                                 if (document != null) {
-                                    CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPrefixCollection().deleteOne(document));
+                                    CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPrefixCollection().deleteOne(document));
                                 }
                                 Prefix.getPrefixes().remove(prefix);
                                 CorePlugin.getInstance().getPrefixManager().savePrefixes();

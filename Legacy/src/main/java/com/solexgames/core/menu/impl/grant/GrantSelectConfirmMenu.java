@@ -21,6 +21,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 @Getter
 public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
@@ -61,7 +62,7 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
                     network.getMainColor() + "&m--------------------------------",
                     network.getSecondaryColor() + "Issuer: " + network.getMainColor() + player.getDisplayName(),
                     network.getSecondaryColor() + "Target: " + network.getMainColor() + (Bukkit.getPlayer(document.getString("name")) != null ? Bukkit.getPlayer(document.getString("name")).getDisplayName() : document.getString("name")),
-                    network.getSecondaryColor() + "Rank: " + network.getMainColor() + rank.getColor() + rank.getName(),
+                    network.getSecondaryColor() + "Rank: " + network.getMainColor() + rank.getColor() + rank.getItalic() + rank.getName(),
                     network.getSecondaryColor() + "Duration: " + network.getMainColor() + (isPermanent() ? "&4Forever" : DurationFormatUtils.formatDurationWords(duration, true, true)),
                     network.getSecondaryColor() + "Reason: " + network.getMainColor() + reason,
                     network.getSecondaryColor() + "Scopes: " + network.getMainColor() + scope,
@@ -116,7 +117,7 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
 
                     targetPotPlayer.getPlayer().sendMessage(ChatColor.GREEN + Color.translate("Your rank has been set to " + newGrant.getRank().getColor() + newGrant.getRank().getName() + ChatColor.GREEN + "."));
                     player.sendMessage("  ");
-                    player.sendMessage(Color.translate(network.getSecondaryColor() + "You've granted " + targetPotPlayer.getPlayer().getDisplayName() + network.getSecondaryColor() + " the rank " + rank.getColor() + rank.getName() + network.getSecondaryColor() + " for " + network.getMainColor() + this.getReason() + network.getSecondaryColor() + "."));
+                    player.sendMessage(Color.translate(network.getSecondaryColor() + "You've granted " + targetPotPlayer.getPlayer().getDisplayName() + network.getSecondaryColor() + " the rank " + rank.getColor() + rank.getItalic() + rank.getName() + network.getSecondaryColor() + " for " + network.getMainColor() + this.getReason() + network.getSecondaryColor() + "."));
                     player.sendMessage(Color.translate(network.getSecondaryColor() + "Granted for scopes: " + network.getMainColor() + this.scope + network.getSecondaryColor() + "."));
                     player.sendMessage(Color.translate(network.getSecondaryColor() + "The grant will expire in " + network.getMainColor() + (newGrant.isPermanent() ? "&4Never" : DurationFormatUtils.formatDurationWords(duration, true, true) + " (" + CorePlugin.FORMAT.format(new Date(duration)) + ")")));
                 } else {
@@ -134,10 +135,10 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
 
                     document.put("allGrants", grantStrings);
 
-                    CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("uuid", this.document.getString("uuid")), document, new ReplaceOptions().upsert(true)));
+                    CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("uuid", this.document.getString("uuid")), document, new ReplaceOptions().upsert(true)));
 
                     player.sendMessage("  ");
-                    player.sendMessage(Color.translate(network.getSecondaryColor() + "You've granted " + document.getString("name") + network.getSecondaryColor() + " the rank " + rank.getColor() + rank.getName() + network.getSecondaryColor() + " for " + network.getMainColor() + this.getReason() + network.getSecondaryColor() + "."));
+                    player.sendMessage(Color.translate(network.getSecondaryColor() + "You've granted " + document.getString("name") + network.getSecondaryColor() + " the rank " + rank.getColor() + rank.getItalic() + rank.getName() + network.getSecondaryColor() + " for " + network.getMainColor() + this.getReason() + network.getSecondaryColor() + "."));
                     player.sendMessage(Color.translate(network.getSecondaryColor() + "Granted for scopes: " + network.getMainColor() + this.scope + network.getSecondaryColor() + "."));
                     player.sendMessage(Color.translate(network.getSecondaryColor() + "The grant will expire " + network.getMainColor() + (newGrant.isPermanent() ? "&4Never&e." : "in " + DurationFormatUtils.formatDurationWords(newGrant.getDuration(), true, true) + " (" + CorePlugin.FORMAT.format(new Date(duration)) + ")")));
                 }

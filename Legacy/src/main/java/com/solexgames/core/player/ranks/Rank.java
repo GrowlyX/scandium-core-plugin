@@ -7,10 +7,12 @@ import com.solexgames.core.CorePlugin;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.Document;
+import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * @author GrowlyX
@@ -39,6 +41,7 @@ public class Rank {
 
     private boolean defaultRank;
 
+    private boolean italic = false;
     private boolean hidden = false;
     private boolean purchasable = false;
 
@@ -72,8 +75,12 @@ public class Rank {
         ranks.add(this);
     }
 
+    public boolean isItalic() {
+        return this.italic;
+    }
+
     public void saveRank() {
-        CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getRankCollection().replaceOne(Filters.eq("uuid", this.uuid.toString()), this.getDocument(), new ReplaceOptions().upsert(true)));
+        CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getRankCollection().replaceOne(Filters.eq("uuid", this.uuid.toString()), this.getDocument(), new ReplaceOptions().upsert(true)));
     }
 
     public void saveMainThread() {
@@ -93,10 +100,15 @@ public class Rank {
         document.put("defaultRank", this.defaultRank);
         document.put("weight", this.weight);
         document.put("hidden", this.hidden);
+        document.put("italic", this.italic);
 
         document.put("purchasable", this.purchasable);
 
         return document;
+    }
+
+    public String getItalic() {
+        return this.italic ? ChatColor.STRIKETHROUGH.toString() : "";
     }
 
     public static Rank getDefault() {

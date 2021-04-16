@@ -43,7 +43,7 @@ public class FindCommand extends BaseCommand {
                     sender.sendMessage(ChatColor.RED + "Error: The player with the specified name does not exist.");
                 } else {
                     Rank rank = Rank.getByName(networkPlayer.getRankName());
-                    String displayName = Color.translate((rank != null ? rank.getColor() : ChatColor.GRAY) + networkPlayer.getName());
+                    String displayName = Color.translate((rank != null ? rank.getColor() + rank.getItalic() : ChatColor.GRAY) + networkPlayer.getName());
 
                     sender.sendMessage(serverType.getMainColor() + displayName + serverType.getSecondaryColor() + " is currently online " + serverType.getMainColor() + networkPlayer.getServerName() + serverType.getSecondaryColor() + "!");
                 }

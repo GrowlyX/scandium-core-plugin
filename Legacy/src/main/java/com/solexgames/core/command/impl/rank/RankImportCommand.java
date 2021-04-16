@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public class RankImportCommand extends BaseCommand {
 
@@ -27,7 +28,7 @@ public class RankImportCommand extends BaseCommand {
 
         Player player = (Player) sender;
 
-        if (player.isOp()) {
+        if (!player.isOp()) {
             player.sendMessage(NO_PERMISSION);
             return false;
         }
@@ -49,9 +50,16 @@ public class RankImportCommand extends BaseCommand {
         }
         if (args.length == 1) {
             if (args[0].equalsIgnoreCase("import")) {
+                CompletableFuture<Boolean> completableFuture = new CompletableFuture<>();
+
                 player.sendMessage(ChatColor.GRAY + "Importing ranks from the configuration...");
-                this.handleImport();
-                player.sendMessage(ChatColor.GREEN + "Successfully imported all ranks!");
+
+                CompletableFuture.runAsync(() -> {
+                    this.handleImport();
+                    completableFuture.complete(true);
+                });
+
+                completableFuture.thenAccept(aBoolean -> player.sendMessage(ChatColor.GREEN + "Successfully imported all ranks!"));
             }
         }
 
@@ -59,39 +67,36 @@ public class RankImportCommand extends BaseCommand {
     }
 
     private void handleImport() {
-        Rank.getRanks().clear();
+        final ConfigExternal config = CorePlugin.getInstance().getRanksConfig();
 
+        Rank.getRanks().clear();
         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getRankCollection().drop());
 
-        ConfigExternal config = CorePlugin.getInstance().getRanksConfig();
-        Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.getInstance(), () -> {
+        config.getConfiguration().getKeys(false).forEach(key -> {
+            String prefix = config.getString(key + ".prefix", "&7", false);
+            String suffix = config.getString(key + ".suffix", "&7", false);
+            String color = config.getString(key + ".color", "&7", false);
 
-            config.getConfiguration().getKeys(false).forEach(key -> {
-                String name = config.getString(key + ".NAME");
-                String prefix = config.getString(key + ".PREFIX", "&7", false);
-                String suffix = config.getString(key + ".SUFFIX", "&7", false);
-                String color = config.getString(key + ".COLOR", "&7", false);
+            int weight = config.getInt(key + ".weight");
+            boolean defaultRank = config.getBoolean(key + ".defaultRank");
 
-                int weight = config.getInt(key + ".WEIGHT");
-                boolean defaultRank = config.getBoolean(key + ".DEFAULT");
+            List<String> permissions = config.getStringListOrDefault(key + ".permissions", new ArrayList<>());
 
-                List<String> permissions = config.getStringListOrDefault(key + ".PERMISSIONS", new ArrayList<>());
-
-                new Rank(UUID.randomUUID(), new ArrayList<>(), permissions, name, prefix, color, suffix, defaultRank, weight);
-            });
-
-            config.getConfiguration().getKeys(false).stream()
-                    .map(key -> Rank.getByName(config.getString(key + ".NAME")))
-                    .filter(Objects::nonNull)
-                    .forEach(rank -> {
-                        for (String name2 : config.getStringListOrDefault(rank.getName().toUpperCase() + ".INHERITANCE", new ArrayList<>())) {
-                            Rank other = Rank.getByName(config.getString(name2 + ".NAME"));
-                            if (other != null) {
-                                rank.getInheritance().add(other.getUuid());
-                            }
-                        }
-                    });
+            Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () -> new Rank(UUID.randomUUID(), new ArrayList<>(), permissions, key, prefix, color, suffix, defaultRank, weight));
         });
+
+        config.getConfiguration().getKeys(false).stream()
+                .map(key -> Rank.getByName(config.getString(key)))
+                .filter(Objects::nonNull)
+                .forEach(rank -> {
+                    final List<String> stringList = config.getStringListOrDefault(rank.getName() + ".inheritance", new ArrayList<>());
+
+                    stringList.stream()
+                            .map(s -> Rank.getByName(config.getString(s)))
+                            .filter(Objects::nonNull)
+                            .map(Rank::getUuid)
+                            .forEach(rank.getInheritance()::add);
+                });
 
         CorePlugin.getInstance().getRankManager().saveRanks();
     }

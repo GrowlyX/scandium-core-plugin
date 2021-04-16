@@ -30,6 +30,7 @@ public class RankCommand extends BaseCommand {
         player.sendMessage(Color.translate("/rank delPerm &7- Remove a permission from a rank."));
         player.sendMessage(Color.translate("/rank prefix &7- Set a rank's prefix."));
         player.sendMessage(Color.translate("/rank suffix &7- Set a rank's suffix."));
+        player.sendMessage(Color.translate("/rank italic &7- Set a rank as italic."));
         player.sendMessage(Color.translate("/rank color &7- Set a rank's color."));
         player.sendMessage(Color.translate("/rank list &7- List all loaded ranks."));
         player.sendMessage(Color.translate("/rank info &7- Show info of a rank."));
@@ -74,7 +75,7 @@ public class RankCommand extends BaseCommand {
                                 player.sendMessage(Color.translate(NETWORK.getMainColor() + ChatColor.BOLD.toString() + "Rank Information:"));
                                 player.sendMessage(Color.translate("  "));
                                 player.sendMessage(Color.translate("&7Name: &f" + displayName));
-                                player.sendMessage(Color.translate("&7Color: &f" + rank.getColor() + "This Color"));
+                                player.sendMessage(Color.translate("&7Color: &f" + rank.getColor() + rank.getItalic() + "This Color"));
                                 player.sendMessage(Color.translate("&7Weight: &f" + rank.getWeight()));
                                 player.sendMessage(Color.translate("&7Default: &f" + rank.isDefaultRank()));
                                 player.sendMessage(Color.translate("&7Hidden: &f" + rank.isHidden()));
@@ -100,7 +101,7 @@ public class RankCommand extends BaseCommand {
                             Rank rank = Rank.getByName(name);
 
                             if (rank != null) {
-                                String displayName = Color.translate(rank.getColor() + rank.getName());
+                                String displayName = Color.translate(rank.getColor() + rank.getItalic() + rank.getName());
 
                                 if (rank.isHidden()) {
                                     rank.setHidden(false);
@@ -124,7 +125,7 @@ public class RankCommand extends BaseCommand {
                             Rank rank = Rank.getByName(name);
 
                             if (rank != null) {
-                                String displayName = Color.translate(rank.getColor() + rank.getName());
+                                String displayName = Color.translate(rank.getColor() + rank.getItalic() + rank.getName());
 
                                 if (rank.isDefaultRank()) {
                                     rank.setDefaultRank(false);
@@ -148,7 +149,7 @@ public class RankCommand extends BaseCommand {
                             Rank rank = Rank.getByName(name);
 
                             if (rank != null) {
-                                String displayName = Color.translate(rank.getColor() + rank.getName());
+                                String displayName = Color.translate(rank.getColor() + rank.getItalic() + rank.getName());
 
                                 if (rank.isPurchasable()) {
                                     rank.setPurchasable(false);
@@ -168,7 +169,7 @@ public class RankCommand extends BaseCommand {
                     case "list":
                         player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
                         player.sendMessage(Color.translate(NETWORK.getMainColor() + ChatColor.BOLD.toString() + "All Ranks:"));
-                        this.getSortedRanks().forEach(rank -> player.sendMessage(Color.translate(" &7* " + Color.translate(rank.getColor() + rank.getName()) + " &7(" + rank.getWeight() + ") (" + rank.getPrefix() + "&7)" + " (" + rank.getColor() + "C&7)")));
+                        this.getSortedRanks().forEach(rank -> player.sendMessage(Color.translate(" &7* " + Color.translate(rank.getColor() + rank.getItalic() + rank.getName()) + " &7(" + rank.getWeight() + ") (" + rank.getPrefix() + "&7)" + " (" + rank.getColor() + rank.getItalic() + "C&7)")));
                         player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
                         break;
                     case "teamletter":
@@ -181,7 +182,7 @@ public class RankCommand extends BaseCommand {
                             Rank rank = Rank.getByName(name);
 
                             if (rank != null) {
-                                String displayName = Color.translate(rank.getColor() + rank.getName());
+                                String displayName = Color.translate(rank.getColor() + rank.getItalic() + rank.getName());
 
                                 if (!(value.length() > 1)) {
                                     rank.setTeamLetter(value.toLowerCase());
@@ -207,7 +208,7 @@ public class RankCommand extends BaseCommand {
                             Rank delRank = Rank.getByName(value);
 
                             if (rank != null) {
-                                String displayName = Color.translate(rank.getColor() + rank.getName());
+                                String displayName = Color.translate(rank.getColor() + rank.getItalic() + rank.getName());
 
                                 rank.getInheritance().remove(delRank.getUuid());
                                 player.sendMessage(ChatColor.GREEN + Color.translate("Removed the inheritance '" + delRank.getName() + ChatColor.GREEN + "' from the rank " + displayName + ChatColor.GREEN + "."));
@@ -229,7 +230,7 @@ public class RankCommand extends BaseCommand {
                             Rank delRank = Rank.getByName(value);
 
                             if (rank != null) {
-                                String displayName = Color.translate(rank.getColor() + rank.getName());
+                                String displayName = Color.translate(rank.getColor() + rank.getItalic() + rank.getName());
 
                                 if (!rank.getInheritance().contains(delRank.getUuid())) {
                                     rank.getInheritance().add(delRank.getUuid());
@@ -254,7 +255,7 @@ public class RankCommand extends BaseCommand {
                             Rank rank = Rank.getByName(name);
 
                             if (rank != null) {
-                                String displayName = Color.translate(rank.getColor() + rank.getName());
+                                String displayName = Color.translate(rank.getColor() + rank.getItalic() + rank.getName());
                                 List<String> finalList = new ArrayList<>(rank.getPermissions());
 
                                 finalList.remove(value);
@@ -279,7 +280,7 @@ public class RankCommand extends BaseCommand {
 
                             if (rank != null) {
                                 if (!rank.getPermissions().contains(value)) {
-                                    String displayName = Color.translate(rank.getColor() + rank.getName());
+                                    String displayName = Color.translate(rank.getColor() + rank.getItalic() + rank.getName());
                                     List<String> finalList = new ArrayList<>(rank.getPermissions());
 
                                     finalList.add(value.toLowerCase());
@@ -308,7 +309,7 @@ public class RankCommand extends BaseCommand {
                             if (rank != null) {
                                 try {
                                     int integer = Integer.parseInt(value);
-                                    String displayName = Color.translate(rank.getColor() + rank.getName());
+                                    String displayName = Color.translate(rank.getColor() + rank.getItalic() + rank.getName());
 
                                     rank.setWeight(integer);
                                     player.sendMessage(ChatColor.GREEN + Color.translate("Changed the weight of " + displayName + ChatColor.GREEN + " to &6" + integer + ChatColor.GREEN + "."));
@@ -332,10 +333,10 @@ public class RankCommand extends BaseCommand {
                             Rank rank = Rank.getByName(name);
 
                             if (rank != null) {
-                                String displayName = Color.translate(rank.getColor() + rank.getName());
+                                String displayName = Color.translate(rank.getColor() + rank.getItalic() + rank.getName());
 
                                 rank.setColor(Color.translate(value));
-                                player.sendMessage(ChatColor.GREEN + Color.translate("Changed the color of " + displayName + ChatColor.GREEN + " to " + rank.getColor() + "this" + ChatColor.GREEN + "."));
+                                player.sendMessage(ChatColor.GREEN + Color.translate("Changed the color of " + displayName + ChatColor.GREEN + " to " + rank.getColor() + rank.getItalic() + "this" + ChatColor.GREEN + "."));
 
                                 RedisUtil.writeAsync(RedisUtil.updateRank(rank));
                                 rank.saveRank();
@@ -353,7 +354,7 @@ public class RankCommand extends BaseCommand {
                             Rank rank = Rank.getByName(name);
 
                             if (rank != null) {
-                                String displayName = Color.translate(rank.getColor() + rank.getName());
+                                String displayName = Color.translate(rank.getColor() + rank.getItalic() + rank.getName());
 
                                 rank.setSuffix(Color.translate(value.replace("_", " ")));
                                 player.sendMessage(ChatColor.GREEN + Color.translate("Changed the suffix of " + displayName + ChatColor.GREEN + " to " + rank.getSuffix() + ChatColor.GREEN + "."));
@@ -374,7 +375,7 @@ public class RankCommand extends BaseCommand {
                             Rank rank = Rank.getByName(name);
 
                             if (rank != null) {
-                                String displayName = Color.translate(rank.getColor() + rank.getName());
+                                String displayName = Color.translate(rank.getColor() + rank.getItalic() + rank.getName());
 
                                 rank.setPrefix(Color.translate(value.replace("_", " ")));
                                 player.sendMessage(ChatColor.GREEN + Color.translate("Changed the prefix of " + displayName + ChatColor.GREEN + " to " + rank.getPrefix() + ChatColor.GREEN + "."));

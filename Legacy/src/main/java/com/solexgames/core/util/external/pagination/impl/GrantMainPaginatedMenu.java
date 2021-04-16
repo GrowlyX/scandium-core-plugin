@@ -55,20 +55,20 @@ public class GrantMainPaginatedMenu extends PaginatedMenu {
             buttons.put(i.get(), new Button() {
                 @Override
                 public ItemStack getButtonItem(Player player) {
-                    return new ItemBuilder(XMaterial.RED_WOOL.parseMaterial(), ((rank.getColor() != null) ? (ChatColor.getByChar(Color.translate(rank.getColor().replace("&", "").replace("§", ""))) != null) ? WoolUtil.getByColor(ChatColor.getByChar(Color.translate(rank.getColor().replace("&", "").replace("§", "")))) : 0 : 0))
+                    return new ItemBuilder(XMaterial.RED_WOOL.parseMaterial(), ((rank.getColor() + rank.getItalic() != null) ? (ChatColor.getByChar(Color.translate(rank.getColor() + rank.getItalic().replace("&", "").replace("§", ""))) != null) ? WoolUtil.getByColor(ChatColor.getByChar(Color.translate(rank.getColor() + rank.getItalic().replace("&", "").replace("§", "")))) : 0 : 0))
                             .addLore(Arrays.asList(
                                     network.getMainColor() + "&m--------------------------------",
                                     network.getSecondaryColor() + "Priority: " + network.getMainColor() + rank.getWeight(),
                                     network.getSecondaryColor() + "Prefix: " + network.getMainColor() + rank.getPrefix(),
                                     network.getSecondaryColor() + "Suffix: " + network.getMainColor() + rank.getSuffix(),
                                     network.getSecondaryColor() + "Visible: " + network.getMainColor() + rank.isHidden(),
-                                    network.getSecondaryColor() + "Color: " + network.getMainColor() + rank.getColor() + "Example",
+                                    network.getSecondaryColor() + "Color: " + network.getMainColor() + rank.getColor() + rank.getItalic() + "Example",
                                     "",
-                                    ChatColor.GREEN + "Left-Click to grant the " + rank.getColor() + rank.getName() + ChatColor.GREEN + " rank!",
+                                    ChatColor.GREEN + "Left-Click to grant the " + rank.getColor() + rank.getItalic() + rank.getName() + ChatColor.GREEN + " rank!",
                                     ChatColor.GREEN + "Right-Click to grant with scope selection.",
                                     network.getMainColor() + "&m--------------------------------"
                             ))
-                            .setDisplayName(rank.getColor() + rank.getName())
+                            .setDisplayName(rank.getColor() + rank.getItalic() + rank.getName())
                             .create();
                 }
 

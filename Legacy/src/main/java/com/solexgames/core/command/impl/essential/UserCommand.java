@@ -137,7 +137,7 @@ public class UserCommand extends BaseCommand {
                             if (rank != null) {
                                 potPlayer.setDisguiseRank(rank);
 
-                                sender.sendMessage(ChatColor.GREEN + "You've disguised " + potPlayer.getColorByRankColor() + potPlayer.getName() + ChatColor.GREEN + " as " + Color.translate(rank.getColor()) + rank.getName() + ChatColor.GREEN + "!");
+                                sender.sendMessage(ChatColor.GREEN + "You've disguised " + potPlayer.getColorByRankColor() + potPlayer.getName() + ChatColor.GREEN + " as " + Color.translate(rank.getColor() + rank.getItalic()) + rank.getName() + ChatColor.GREEN + "!");
                                 potPlayer.setupPlayerList();
 
                                 if (CorePlugin.TAB_ENABLED) {

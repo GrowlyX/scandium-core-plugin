@@ -13,6 +13,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.concurrent.CompletableFuture;
+
 public class WarpCommand extends BaseCommand {
 
     public final ServerType NETWORK = CorePlugin.getInstance().getServerManager().getNetwork();
@@ -72,7 +74,7 @@ public class WarpCommand extends BaseCommand {
 
                         if (warp != null) {
                             Warp.getWarps().remove(warp);
-                            CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getWarpCollection().deleteOne(Filters.eq("_id", warp.getId())));
+                            CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getWarpCollection().deleteOne(Filters.eq("_id", warp.getId())));
 
                             player.sendMessage(ChatColor.RED + ("Deleted the warp '" + value + "'."));
                         } else {

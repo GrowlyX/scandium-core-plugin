@@ -22,7 +22,7 @@ public class ListCommand extends BaseCommand {
         if (sender instanceof ConsoleCommandSender) {
             String ranks = Rank.getRanks().stream()
                     .sorted(Comparator.comparingInt(rank -> -rank.getWeight()))
-                    .map(rank -> Color.translate((rank.isHidden() ? "&7*" : "") + rank.getColor() + rank.getName()))
+                    .map(rank -> Color.translate((rank.isHidden() ? "&7*" : "") + rank.getColor() + rank.getItalic() + rank.getName()))
                     .collect(Collectors.joining(ChatColor.WHITE + ", "));
             String players = this.getOnlinePlayers(false).stream()
                     .map(player -> CorePlugin.getInstance().getPlayerManager().getPlayer(player.getUniqueId()))
@@ -42,7 +42,7 @@ public class ListCommand extends BaseCommand {
         String ranks = Rank.getRanks().stream()
                 .filter(rank -> !rank.isHidden())
                 .sorted(Comparator.comparingInt(rank -> -rank.getWeight()))
-                .map(rank -> Color.translate(rank.getColor() + rank.getName()))
+                .map(rank -> Color.translate(rank.getColor() + rank.getItalic() + rank.getName()))
                 .collect(Collectors.joining(ChatColor.WHITE + ", "));
         String players = this.getOnlinePlayers(!player.hasPermission("scandium.staff")).stream()
                 .map(player1 -> CorePlugin.getInstance().getPlayerManager().getPlayer(player1.getUniqueId()))

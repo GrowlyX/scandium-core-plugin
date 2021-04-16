@@ -12,6 +12,7 @@ import org.bson.Document;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * @author GrowlyX
@@ -103,7 +104,7 @@ public class Punishment {
         document.put("punishmentDuration", this.punishmentDuration);
         document.put("identification", this.punishIdentification);
 
-        CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().replaceOne(Filters.eq("id", this.id.toString()), document, new ReplaceOptions().upsert(true)));
+        CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().replaceOne(Filters.eq("id", this.id.toString()), document, new ReplaceOptions().upsert(true)));
     }
 
     public void saveMainThread() {

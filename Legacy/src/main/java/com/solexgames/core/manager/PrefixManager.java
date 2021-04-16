@@ -16,15 +16,21 @@ public class PrefixManager {
     }
 
     private void createDefaultPrefixes() {
-        if (CorePlugin.getInstance().getCoreDatabase().getPrefixCollection().find(Filters.eq("name", "Verified")).first() == null) new Prefix("Verified", "&2✔");
-        if (CorePlugin.getInstance().getCoreDatabase().getPrefixCollection().find(Filters.eq("name", "Liked")).first() == null) new Prefix("Liked", "&b✔");
+        CompletableFuture.runAsync(() -> {
+            if (CorePlugin.getInstance().getCoreDatabase().getPrefixCollection().find(Filters.eq("name", "Verified")).first() == null) new Prefix("Verified", "&2✔");
+            if (CorePlugin.getInstance().getCoreDatabase().getPrefixCollection().find(Filters.eq("name", "Liked")).first() == null) new Prefix("Liked", "&b✔");
+        });
     }
 
     public void loadPrefixes() {
         CompletableFuture.runAsync(() -> {
             CorePlugin.getInstance().getCoreDatabase().getPrefixCollection().find().forEach((Block<? super Document>) document -> {
                 if (Prefix.getByName(document.getString("name")) == null) {
-                    new Prefix(document.getString("_id"), document.getString("name"), document.getString("displayName"), document.getString("prefix"));
+                    Prefix prefix = new Prefix(document.getString("_id"), document.getString("name"), document.getString("displayName"), document.getString("prefix"));
+
+                    if (document.getBoolean("purchasable") != null) {
+                        prefix.setPurchasable(document.getBoolean("purchasable"));
+                    }
                 }
             });
         });

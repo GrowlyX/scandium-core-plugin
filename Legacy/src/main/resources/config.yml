@@ -37,6 +37,7 @@ settings:
   color-gui: true
   namemc-rewards: true
   namemc-ip: "eu.potclub.vip"
+  time-zone: "EST"
   anti-chat-spam: true
   anti-command-spam: true
   automatic-string: "&e&lYou've been automatically put into <value>."
