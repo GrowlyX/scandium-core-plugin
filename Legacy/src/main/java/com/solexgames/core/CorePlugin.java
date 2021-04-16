@@ -324,6 +324,7 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("message").setExecutor(new MessageCommand());
         this.getCommand("list").setExecutor(new ListCommand());
         this.getCommand("ping").setExecutor(new PingCommand());
+        this.getCommand("viewinv").setExecutor(new ViewInvCommand());
 
         this.getCommand("ban").setExecutor(new BanCommand());
         this.getCommand("blacklist").setExecutor(new BlacklistCommand());
