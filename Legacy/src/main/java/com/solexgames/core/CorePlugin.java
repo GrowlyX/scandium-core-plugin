@@ -136,6 +136,7 @@ public final class CorePlugin extends JavaPlugin {
     private boolean disallow;
 
     @Override
+    @Deprecated
     public void onEnable() {
         instance = this;
 

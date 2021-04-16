@@ -94,7 +94,7 @@ public class GrantReasonPaginatedMenu extends PaginatedMenu {
 
             @Override
             public void clicked(Player player, ClickType clickType) {
-                new GrantDurationPaginatedMenu(player, document, rank, scope);
+                new GrantDurationPaginatedMenu(player, document, rank, scope).openMenu(player);
             }
         });
 

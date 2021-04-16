@@ -231,7 +231,7 @@ public class PlayerListener implements Listener {
         Matcher discordMatcher = MediaConstants.DISCORD_USERNAME_REGEX.matcher(event.getMessage());
         Matcher twitterMatcher = MediaConstants.TWITTER_USERNAME_REGEX.matcher(event.getMessage());
         Matcher instaMatcher = MediaConstants.INSTAGRAM_USERNAME_REGEX.matcher(event.getMessage());
-        Matcher youtubeMatcher = MediaConstants.YOUTUBE_PROFILELINK_REGEX.matcher(event.getMessage());
+        Matcher youtubeMatcher = MediaConstants.YOUTUBE_PROFILE_LINK_REGEX.matcher(event.getMessage());
 
         if (potPlayer.isGrantDurationEditing()) {
             event.setCancelled(true);

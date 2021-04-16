@@ -88,7 +88,7 @@ public class GrantDurationPaginatedMenu extends PaginatedMenu {
 
             @Override
             public void clicked(Player player, ClickType clickType) {
-                new GrantMainPaginatedMenu(document, player);
+                new GrantMainPaginatedMenu(document, player).openMenu(player);
             }
         });
 
