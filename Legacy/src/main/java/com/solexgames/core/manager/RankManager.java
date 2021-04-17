@@ -18,29 +18,27 @@ public class RankManager {
     }
 
     public void loadRanks() {
-        CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getRankCollection().find().forEach((Block<? super Document>) document -> {
-            if (Rank.getByName(document.getString("name")) == null) {
-                Rank rank = new Rank(
-                        UUID.fromString(document.getString("uuid")),
-                        (ArrayList<UUID>) document.get("inheritance"),
-                        (ArrayList<String>) document.get("permissions"),
-                        document.getString("name"),
-                        document.getString("prefix"),
-                        document.getString("color"),
-                        document.getString("suffix"),
-                        document.getBoolean("defaultRank"),
-                        document.getInteger("weight")
-                );
+        CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getRankCollection().find().forEach((Block<? super Document>) document -> {
+            Rank rank = new Rank(
+                    UUID.fromString(document.getString("uuid")),
+                    (ArrayList<UUID>) document.get("inheritance"),
+                    (ArrayList<String>) document.get("permissions"),
+                    document.getString("name"),
+                    document.getString("prefix"),
+                    document.getString("color"),
+                    document.getString("suffix"),
+                    document.getBoolean("defaultRank"),
+                    document.getInteger("weight")
+            );
 
-                if (document.getBoolean("hidden") != null) {
-                    rank.setHidden(document.getBoolean("hidden"));
-                }
-                if (document.getBoolean("purchasable") != null) {
-                    rank.setPurchasable(document.getBoolean("purchasable"));
-                }
-                if (document.getBoolean("italic") != null) {
-                    rank.setItalic(document.getBoolean("italic"));
-                }
+            if (document.getBoolean("hidden") != null) {
+                rank.setHidden(document.getBoolean("hidden"));
+            }
+            if (document.getBoolean("purchasable") != null) {
+                rank.setPurchasable(document.getBoolean("purchasable"));
+            }
+            if (document.getBoolean("italic") != null) {
+                rank.setItalic(document.getBoolean("italic"));
             }
         }));
     }

@@ -22,8 +22,7 @@ public class Database {
     private final MongoCollection<Document> webCollection;
 
     public Database() {
-        this.client = new MongoClient(new MongoClientURI("mongodb+srv://eventis:8FhSqUO6W4aIZJj0@cluster0.hgfvr.mongodb.net/SGSoftware?retryWrites=true&w=majority"));
-//        this.client = new MongoClient(new MongoClientURI(CorePlugin.getInstance().getDatabaseConfig().getString("mongodb.url")));
+        this.client = new MongoClient(new MongoClientURI(CorePlugin.getInstance().getDatabaseConfig().getString("mongodb.url")));
 
         this.database = client.getDatabase("SGSoftware");
 
