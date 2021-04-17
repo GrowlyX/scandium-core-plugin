@@ -24,14 +24,14 @@ public class ShutdownManager {
         ChatColor secondaryColor = network.getSecondaryColor();
 
         Bukkit.broadcastMessage(secondaryColor + "The server will be shutting down in " + mainColor + seconds + " seconds" + secondaryColor + ".");
-        CorePlugin.getInstance().getPlayerManager().sendToNetworkStaff("&3[S] " + "&7[" + CorePlugin.getInstance().getServerName() + "] " + initiator.getDisplayName() + " &bhas initiated a shutdown on &6" + CorePlugin.getInstance().getServerName() + "&b.");
+        CorePlugin.getInstance().getPlayerManager().sendToNetworkStaff("&b[S] " + "&3[" + CorePlugin.getInstance().getServerName() + "] " + initiator.getDisplayName() + " &3has initiated a shutdown on &e" + CorePlugin.getInstance().getServerName() + "&3.");
 
         this.shutdownTask = new ShutdownTask(seconds);
         this.shutdownScheduled = true;
     }
 
     public void stopShutdown(Player stopper) {
-        CorePlugin.getInstance().getPlayerManager().sendToNetworkStaff("&3[S] " + "&7[" + CorePlugin.getInstance().getServerName() + "] " + stopper.getDisplayName() + " &bhas stopped a shutdown on &6" + CorePlugin.getInstance().getServerName() + "&b.");
+        CorePlugin.getInstance().getPlayerManager().sendToNetworkStaff("&b[S] " + "&3[" + CorePlugin.getInstance().getServerName() + "] " + stopper.getDisplayName() + " &3has stopped a shutdown on &e" + CorePlugin.getInstance().getServerName() + "&3.");
         Bukkit.broadcastMessage(Color.translate(ChatColor.RED + "The scheduled server shutdown has been cancelled."));
 
         this.shutdownTask.cancel();
