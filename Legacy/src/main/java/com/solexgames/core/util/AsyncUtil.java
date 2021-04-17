@@ -18,14 +18,6 @@ public class AsyncUtil {
         CompletableFuture.runAsync(runnable, executor);
     }
 
-    /**
-     *
-     *
-     * @param asyncCallback
-     * @param <T>
-     *
-     * @return The output of the
-     */
     public static <T> T processAndGetAsync(AsyncCallback asyncCallback) {
         CompletableFuture<T> completableFuture = new CompletableFuture<>();
         AtomicReference<T> reference = new AtomicReference<>();
