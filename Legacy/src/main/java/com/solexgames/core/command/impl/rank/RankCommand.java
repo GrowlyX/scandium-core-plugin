@@ -144,7 +144,7 @@ public class RankCommand extends BaseCommand {
                             }
                         }
                         break;
-                    case "default":
+                    case "italic":
                         if (args.length == 1) player.sendMessage(ChatColor.RED + ("Usage: /rank italic <name>."));
                         if (args.length == 2) {
                             String name = args[1];
