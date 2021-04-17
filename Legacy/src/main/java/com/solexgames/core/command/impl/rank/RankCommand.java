@@ -79,6 +79,8 @@ public class RankCommand extends BaseCommand {
                                 player.sendMessage(Color.translate("&7Weight: &f" + rank.getWeight()));
                                 player.sendMessage(Color.translate("&7Default: &f" + rank.isDefaultRank()));
                                 player.sendMessage(Color.translate("&7Hidden: &f" + rank.isHidden()));
+                                player.sendMessage(Color.translate("&7Italic: &f" + rank.isItalic()));
+                                player.sendMessage(Color.translate("&7Purchasable: &f" + rank.isPurchasable()));
                                 player.sendMessage(Color.translate("&7Prefix: &f" + rank.getPrefix()));
                                 player.sendMessage(Color.translate("&7Suffix: &f" + rank.getSuffix()));
                                 player.sendMessage(Color.translate("&7UUID: &f" + rank.getUuid().toString()));
@@ -133,6 +135,30 @@ public class RankCommand extends BaseCommand {
                                 } else {
                                     rank.setDefaultRank(true);
                                     player.sendMessage(ChatColor.GREEN + Color.translate("Set the " + displayName + ChatColor.GREEN + " rank default mode to true!"));
+                                }
+
+                                RedisUtil.writeAsync(RedisUtil.updateRank(rank));
+                                rank.saveRank();
+                            } else {
+                                player.sendMessage(ChatColor.RED + ("Error: That rank does not exist!"));
+                            }
+                        }
+                        break;
+                    case "default":
+                        if (args.length == 1) player.sendMessage(ChatColor.RED + ("Usage: /rank italic <name>."));
+                        if (args.length == 2) {
+                            String name = args[1];
+                            Rank rank = Rank.getByName(name);
+
+                            if (rank != null) {
+                                String displayName = Color.translate(rank.getColor() + rank.getItalic() + rank.getName());
+
+                                if (rank.isItalic()) {
+                                    rank.setItalic(false);
+                                    player.sendMessage(ChatColor.GREEN + Color.translate("Set the " + displayName + ChatColor.GREEN + " rank italic mode to false!"));
+                                } else {
+                                    rank.setItalic(true);
+                                    player.sendMessage(ChatColor.GREEN + Color.translate("Set the " + displayName + ChatColor.GREEN + " rank italic mode to true!"));
                                 }
 
                                 RedisUtil.writeAsync(RedisUtil.updateRank(rank));

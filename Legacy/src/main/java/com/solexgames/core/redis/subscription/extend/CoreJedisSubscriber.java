@@ -89,7 +89,7 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
 
                     Bukkit.getOnlinePlayers().stream()
                             .filter(player -> player.hasPermission("scandium.network.alerts"))
-                            .forEach(player -> player.sendMessage(Color.translate("&b[S] &e" + bootingServerName + " &3has just come &aonline&3.")));
+                            .forEach(player -> player.sendMessage(Color.translate("&3[S] &e" + bootingServerName + " &bhas just come &aonline&b.")));
                     break;
                 case SERVER_DATA_UPDATE:
                     String splitPlayers = jsonAppender.getParam("SPLITPLAYERS");
@@ -133,7 +133,7 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
 
                     Bukkit.getOnlinePlayers().stream()
                             .filter(player -> player.hasPermission("scandium.network.alerts"))
-                            .forEach(player -> player.sendMessage(Color.translate("&b[S] &e" + offlineServerName + " &3has just went &coffline&3.")));
+                            .forEach(player -> player.sendMessage(Color.translate("&3[S] &e" + offlineServerName + " &bhas just went &coffline&b.")));
                     break;
                 case PLAYER_CONNECT_UPDATE:
                     String fromConnectServer = jsonAppender.getParam("SERVER");
@@ -145,10 +145,10 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                             .filter(potPlayer -> potPlayer.getPlayer().hasPermission("scandium.staff"))
                             .filter(PotPlayer::isCanSeeStaffMessages)
                             .forEach(potPlayer -> {
-                                potPlayer.getPlayer().sendMessage(Color.translate("&b[S] " + connectingPlayer + " &3connected to &b" + fromConnectServer + "&3."));
+                                potPlayer.getPlayer().sendMessage(Color.translate("&3[S] " + connectingPlayer + " &bconnected to &3" + fromConnectServer + "&b."));
 
                                 if (CorePlugin.getInstance().getLunar() != null) {
-                                    CorePlugin.getInstance().getLunar().sendNotification(potPlayer.getPlayer(), Color.translate("&b[S] " + connectingPlayer + " &3connected to &b" + fromConnectServer + "&3."));
+                                    CorePlugin.getInstance().getLunar().sendNotification(potPlayer.getPlayer(), Color.translate("&3[S] " + connectingPlayer + " &bconnected to &3" + fromConnectServer + "&b."));
                                 }
                             });
                     break;
@@ -162,10 +162,10 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                             .filter(potPlayer -> potPlayer.getPlayer().hasPermission("scandium.staff"))
                             .filter(PotPlayer::isCanSeeStaffMessages)
                             .forEach(potPlayer -> {
-                                potPlayer.getPlayer().sendMessage(Color.translate("&b[S] " + disconnectingPlayer + " &3disconnected from &b" + fromDisconnectServer + "&3."));
+                                potPlayer.getPlayer().sendMessage(Color.translate("&3[S] " + disconnectingPlayer + " &bdisconnected from &3" + fromDisconnectServer + "&b."));
 
                                 if (CorePlugin.getInstance().getLunar() != null) {
-                                    CorePlugin.getInstance().getLunar().sendNotification(potPlayer.getPlayer(), Color.translate("&b[S] " + disconnectingPlayer + " &3disconnected from &b" + fromDisconnectServer + "&3."));
+                                    CorePlugin.getInstance().getLunar().sendNotification(potPlayer.getPlayer(), Color.translate("&3[S] " + disconnectingPlayer + " &bdisconnected from &3" + fromDisconnectServer + "&b."));
                                 }
                             });
                     break;
@@ -179,7 +179,7 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                             .filter(Objects::nonNull)
                             .filter(potPlayer -> potPlayer.getPlayer().hasPermission("scandium.staff"))
                             .filter(PotPlayer::isCanSeeStaffMessages)
-                            .forEach(potPlayer -> potPlayer.getPlayer().sendMessage(Color.translate("&b[S] " + switchingPlayer + " &3joined &b" + newServer + "&3 from &b" + fromSwitchingServer + "&3.")));
+                            .forEach(potPlayer -> potPlayer.getPlayer().sendMessage(Color.translate((!fromSwitchingServer.equalsIgnoreCase(newServer)) ? "&3[S] " + switchingPlayer + " &bjoined &3" + newServer + "&b from &3" + fromSwitchingServer + "&b." : "&3[S] " + switchingPlayer + " &bconnected to &3" + newServer + "&b.")));
                     break;
                 case CHAT_CHANNEL_UPDATE:
                     ChatChannelType chatChannel = ChatChannelType.valueOf(jsonAppender.getParam("CHANNEL"));
@@ -207,7 +207,7 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                                     .filter(Objects::nonNull)
                                     .filter(potPlayer -> potPlayer.getPlayer().hasPermission(updateType.getPermission()))
                                     .filter(PotPlayer::isCanSeeStaffMessages)
-                                    .forEach(potPlayer -> potPlayer.getPlayer().sendMessage(Color.translate(updateType.getPrefix() + "&3[" + fromFreezeServer + "] " + "&b" + freezeExecutor + " &3has frozen &b" + freezeTarget + "&3.")));
+                                    .forEach(potPlayer -> potPlayer.getPlayer().sendMessage(Color.translate(updateType.getPrefix() + "&7[" + fromFreezeServer + "] " + "&3" + freezeExecutor + " &bhas frozen &3" + freezeTarget + "&b.")));
                             break;
                         case UNFREEZE:
                             String unfreezeExecutor = jsonAppender.getParam("PLAYER");
@@ -219,7 +219,7 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                                     .filter(Objects::nonNull)
                                     .filter(potPlayer -> potPlayer.getPlayer().hasPermission(updateType.getPermission()))
                                     .filter(PotPlayer::isCanSeeStaffMessages)
-                                    .forEach(potPlayer -> potPlayer.getPlayer().sendMessage(Color.translate(updateType.getPrefix() + "&3[" + fromUnFreezeServer + "] " + "&b" + unfreezeExecutor + " &3has unfrozen &b" + unfreezeTarget + "&3.")));
+                                    .forEach(potPlayer -> potPlayer.getPlayer().sendMessage(Color.translate(updateType.getPrefix() + "&7[" + fromUnFreezeServer + "] " + "&3" + unfreezeExecutor + " &bhas unfrozen &3" + unfreezeTarget + "&b.")));
                             break;
                         case HELPOP:
                             String helpOpMessage = jsonAppender.getParam("MESSAGE");
@@ -230,7 +230,7 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                                 PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
                                 if (player.hasPermission(updateType.getPermission())) {
                                     if (potPlayer.isCanSeeStaffMessages()) {
-                                        player.sendMessage(Color.translate(updateType.getPrefix() + "&3[" + fromHelpOpServer + "] " + "&b" + helpOpPlayer + " &3has requested assistance: &e" + helpOpMessage + "&3."));
+                                        player.sendMessage(Color.translate(updateType.getPrefix() + "&7[" + fromHelpOpServer + "] " + "&3" + helpOpPlayer + " &bhas requested assistance: &e" + helpOpMessage + "&b."));
                                     }
                                 }
                             });
@@ -245,7 +245,7 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                                 PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
                                 if (player.hasPermission(updateType.getPermission())) {
                                     if (potPlayer.isCanSeeStaffMessages()) {
-                                        player.sendMessage(Color.translate(updateType.getPrefix() + "&3[" + fromReportServer + "] " + "&b" + reportPlayer + " &3has reported &b" + reportTarget + "&3 for &e" + reportMessage + "&3."));
+                                        player.sendMessage(Color.translate(updateType.getPrefix() + "&7[" + fromReportServer + "] " + "&3" + reportPlayer + " &bhas reported &3" + reportTarget + "&b for &e" + reportMessage + "&b."));
                                     }
                                 }
                             });

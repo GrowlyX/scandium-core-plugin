@@ -9,7 +9,7 @@ import java.beans.ConstructorProperties;
 @AllArgsConstructor
 public enum ChatChannelType {
 
-    STAFF("&b[S] ","scandium.channels.staff"),
+    STAFF("&3[S] ","scandium.channels.staff"),
     ADMIN("&c[A] ","scandium.channels.admin"),
     HOST("&2[H] ","scandium.channels.host"),
     MANAGER("&4[M] ","scandium.channels.manager"),

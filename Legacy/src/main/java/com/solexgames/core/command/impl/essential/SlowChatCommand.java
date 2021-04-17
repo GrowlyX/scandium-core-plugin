@@ -32,7 +32,7 @@ public class SlowChatCommand extends BaseCommand {
                 CorePlugin.getInstance().getServerManager().setChatSlow(time * 1000L);
                 Bukkit.broadcastMessage(CorePlugin.getInstance().getServerManager().getChatSlow() > 0L ? ChatColor.GREEN + "Public chat is now in slow mode. " + ChatColor.GRAY + "(" + time + " seconds)" : ChatColor.RED + "Public chat is no longer in slow mode.");
 
-                CorePlugin.getInstance().getPlayerManager().sendToNetworkStaff("&b[S] " + "&3[" + CorePlugin.getInstance().getServerName() + "] " + displayName + " &3has slowed the chat to &6" + time + " seconds&3.");
+                CorePlugin.getInstance().getPlayerManager().sendToNetworkStaff("&3[S] " + "&7[" + CorePlugin.getInstance().getServerName() + "] " + displayName + " &bhas slowed the chat to &e" + time + " seconds&b.");
             } catch (NumberFormatException e) {
                 sender.sendMessage(ChatColor.RED + "Error: That's not a valid number.");
             }

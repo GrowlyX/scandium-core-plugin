@@ -306,7 +306,7 @@ public class PlayerManager {
     }
 
     public void sendDisconnectFreezeMessage(Player target) {
-        this.sendToNetworkStaff("&b[S] &3[" + CorePlugin.getInstance().getServerName() + "] &b" + target.getDisplayName() + " &cdisconnected whilst being frozen!");
+        this.sendToNetworkStaff("&3[S] &7[" + CorePlugin.getInstance().getServerName() + "] &b" + target.getDisplayName() + " &cdisconnected whilst being frozen!");
     }
 
     public void sendToNetworkStaff(String... strings) {
