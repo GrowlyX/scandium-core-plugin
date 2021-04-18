@@ -1,0 +1,13 @@
+#
+#  Whitelist Configuration
+#
+whitelisted:
+  - GrowlyX
+whitelist: true
+whitelisted-msg: '&cThis server is currently whitelisted.\n&cPlease check our discord for more information.'
+
+beta-whitelisted:
+  - GrowlyX
+beta-whitelist: true
+beta-whitelisted-can-join: false
+beta-whitelisted-msg: '&cThis server is currently whitelisted.\n&cPlease check our discord for more information.'

@@ -1,0 +1,136 @@
+#
+#  Scandium - by SolexGames (GrowlyX)
+#
+region: "EU"
+server-type: "PRACTICE"
+server-id: "eu-practice"
+refresh-time: 5
+
+messages:
+  load-error: "&cAn error occurred while trying to load your data.<nl>&cPlease try again later or contact a staff member."
+  server-not-loaded: "&cThe server you've tried to connect to has not loaded.<nl>&cPlease try again in a few seconds or contact staff."
+  chat-cooldown: "&cPlease wait another <amount> before chatting again."
+  command-cooldown: "&cYou're on command cooldown, please wait <amount>."
+  chat-delay-cooldown: "&cPlease wait before chatting again."
+  kick-message: "&cYou were kicked for: &7<reason>"
+  mute-restricted: "&cYou cannot speak as you are currently muted."
+
+tablist:
+  enabled: true
+  header: "&7<nl>&e&lMine&3&lArcade<nl>&7www.minearcade.org<nl>&7"
+  footer: "&7<nl>&7store.minearcade.org<nl>&7 &7You're currently on &3<server-name>&7! &7<nl>&7"
+
+discord:
+  enabled: false
+  webhook: ""
+
+core-settings:
+  name: "Scandium"
+  command-name: "scandium"
+
+# The crypto key should be a randomly generated string.
+crypto:
+  key: "JRzRsNGvutZbcrrTklcSJsWSQNImMJSqxLZZ"
+
+settings:
+  license: ""
+  color-gui: true
+  namemc-rewards: true
+  namemc-ip: "eu.potclub.vip"
+  time-zone: "EST"
+  anti-chat-spam: true
+  anti-command-spam: true
+  automatic-string: "&e&lYou've been automatically put into <value>."
+  staff-command-alerts: true
+  staff-command-alerts-format: "&7&o[<playername>: &e<message>&7&o]"
+  staff-command-alerts-permission: "scandium.staff"
+  mod-mode-tag: "&7[S] "
+  vanish-tag: "&7[V] "
+  punish-gui-enabled: false
+  chat-format-enabled: true
+  chat-format: "<prefix><rank_prefix><rank_color><custom_color><player_name> &7» &f<message>"
+
+# Sends to staff on join
+staff-information:
+  - " "
+  - "&b&lStaff Information:"
+  - " &7<nice_char> &3Channel: <channel>"
+  - " &7<nice_char> &3Messages: <messages> &7(/tsm)"
+  - " &7<nice_char> &3Filter: <filter> &7(/tfm)"
+  - " &7<nice_char> &3Mod Mode: <modmode> &7(/mod)"
+  - " &7<nice_char> &3Vanish: <vanish> &7(/vanish)"
+  - " "
+
+server:
+  settings:
+    server-id: "POTCLUBVIP"
+tab-block:
+  return-enabled: true
+  enabled: true
+  return:
+    - "/scandium:who"
+    - "/scandium:list"
+  message:
+    enabled: false
+    string: "&f/scandium:settings, &f/scandium:media"
+
+block-commands:
+  enabled: true
+  message: 'Unknown command. Type \"/help\" for help.'
+  list:
+    - "bukkit:plugins"
+    - "bukkit:?"
+    - "bukkit:help"
+    - "bukkit:ver"
+    - "bukkit:version"
+    - "bukkit:about"
+    - "bukkit:pl"
+    - "bukkit:msg"
+    - "bukkit:kill"
+    - "bukkit:tell"
+    - "bukkit:me"
+    - "minecraft:me"
+    - "pl"
+    - "plugins"
+    - "me"
+    - "about"
+    - "version"
+    - "ver"
+    - "icanhasbukkit"
+
+player-join:
+  clear-chat: false
+  join-message:
+    enabled: false
+    centered: false
+    message:
+      - '&7&m---------------------------------------------'
+      - '&7'
+      - '&eWelcome %PLAYER%&e, to &dPotClub Practice&e.'
+      - '&7'
+      - '&eStore: &bshop.potclub.vip'
+      - '&eTeamSpeak: &bts.potclub.vip'
+      - '&eTwitter: &bwww.twitter.com/PotClubVIP'
+      - '&eDiscord: &bwww.dsc.gg/pot'
+      - '&7'
+      - '&7&m---------------------------------------------'
+
+freeze-message:
+  - " "
+  - "&4&lDo not disconnect!"
+  - "&cIf you disconnect, you will be punished!"
+  - ""
+  - "&7You've been frozen by a staff member!"
+  - "&7Please connect to &fTeamSpeak &7within &f3 minutes &7or you will"
+  - "&7be banned for &cRefusing to Screenshare&7!"
+  - " "
+tips:
+  enabled: true
+  padding: true
+  interval: 120
+  use-prefix: true
+  prefix: "&7[&3TIP&7] &b"
+  messages:
+    - "Here's an example tip! These will broadcast every 120 seconds."
+    - "Here's another tip! This tip will broadcast...<nl><nl>Multiple lines!"
+    - "These tips support color codes too! &6Hey! &bHow are you doing? &lEnjoying Scandium?"
