@@ -8,18 +8,18 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="Placeholder" />
-        <module name="Legacy" />
         <module name="Bungee" />
         <module name="API" />
         <module name="ScandiumL" />
         <module name="Library" />
+        <module name="Bukkit" />
         <module name="Velocity" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="API" target="1.8" />
+      <module name="Bukkit" target="1.8" />
       <module name="Bungee" target="1.8" />
-      <module name="Legacy" target="1.8" />
       <module name="Library" target="1.8" />
       <module name="Non-Legacy" target="1.8" />
       <module name="Placeholder" target="1.8" />
