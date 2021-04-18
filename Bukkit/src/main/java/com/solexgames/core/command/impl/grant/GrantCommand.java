@@ -3,6 +3,7 @@ package com.solexgames.core.command.impl.grant;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.enums.ServerType;
+import com.solexgames.core.util.Color;
 import com.solexgames.core.util.UUIDUtil;
 import com.solexgames.core.util.external.pagination.impl.GrantMainPaginatedMenu;
 import org.bson.Document;
@@ -23,7 +24,6 @@ public class GrantCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
-        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
 
         if (!player.hasPermission("scandium.command.grant")) {
             player.sendMessage(NO_PERMISSION);
@@ -31,13 +31,13 @@ public class GrantCommand extends BaseCommand {
         }
 
         if (args.length == 0) {
-            sender.sendMessage(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player>.");
+            sender.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player>.");
         }
         if (args.length > 0) {
             UUID uuid = UUIDUtil.fetchUUID(args[0]);
 
             if (uuid == null) {
-                player.sendMessage(ChatColor.RED + "Error: That uuid is not valid.");
+                player.sendMessage(ChatColor.RED + "Error: That player is not valid.");
                 return false;
             }
 
@@ -49,6 +49,7 @@ public class GrantCommand extends BaseCommand {
                 player.sendMessage(ChatColor.RED + "Error: That player does not exist in our database.");
             }
         }
+
         return false;
     }
 }

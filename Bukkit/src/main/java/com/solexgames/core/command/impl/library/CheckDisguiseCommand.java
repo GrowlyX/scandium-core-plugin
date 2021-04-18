@@ -17,36 +17,35 @@ public class CheckDisguiseCommand extends BaseCommand {
 
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
-        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
-
         if (!sender.hasPermission("scandium.command.checkdisguise")) {
             sender.sendMessage(NO_PERMISSION);
             return false;
         }
 
         if (args.length == 0) {
-            sender.sendMessage(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player>.");
+            sender.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player>.");
         }
 
         if (args.length > 0) {
-            Player target = Bukkit.getPlayer(args[0]);
+            final Player target = Bukkit.getPlayer(args[0]);
 
             if (target == null) {
                 return false;
             }
 
-            PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
+            final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
 
             if (potPlayer == null) {
                 sender.sendMessage(ChatColor.RED + "Error: That player does not exist.");
             } else {
                 if (potPlayer.getDisguiseRank() != null) {
-                    sender.sendMessage(potPlayer.getColorByRankColor() + potPlayer.getName() + ChatColor.GREEN + " is disguised as " + Color.translate(potPlayer.getDisguiseRank().getColor() + potPlayer.getDisguiseRank().getName()) + org.bukkit.ChatColor.GREEN + "!");
+                    sender.sendMessage(potPlayer.getColorByRankColor() + potPlayer.getName() + Color.SECONDARY_COLOR + " is disguised as " + Color.translate(potPlayer.getDisguiseRank().getColor() + potPlayer.getDisguiseRank().getName()) + Color.SECONDARY_COLOR + "!");
                 } else {
                     sender.sendMessage(ChatColor.RED + "Error: That player is not disguised.");
                 }
             }
         }
+
         return false;
     }
 }

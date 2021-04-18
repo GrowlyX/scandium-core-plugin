@@ -2,6 +2,7 @@ package com.solexgames.core.command.impl.discord;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -23,19 +24,15 @@ public class SyncCommand extends BaseCommand {
         }
 
         Player player = (Player) sender;
+        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
-        ChatColor MC = CorePlugin.getInstance().getServerManager().getNetwork().getMainColor();
-        String MCB = CorePlugin.getInstance().getServerManager().getNetwork().getMainColor() + ChatColor.BOLD.toString();
-        ChatColor SC = CorePlugin.getInstance().getServerManager().getNetwork().getSecondaryColor();
-
-        player.sendMessage(Color.translate("  "));
-        player.sendMessage(Color.translate(MCB + "Discord Sync:"));
-        player.sendMessage(Color.translate("  "));
-        player.sendMessage(Color.translate(SC + "To sync your account with your discord account and receive"));
-        player.sendMessage(Color.translate(SC + "the " + ChatColor.GREEN + "Verified" + SC + " role, copy this code '" + MC + CorePlugin.getInstance().getPlayerManager().getPlayer(player).getSyncCode() + SC + "' and"));
-        player.sendMessage(Color.translate(SC + "paste it into the " + MC + "#sync" + SC + " channel with " + MC + "'-sync'" + SC + " on our discord"));
-        player.sendMessage(Color.translate(SC + "server! To join our discord, use " + MC + CorePlugin.getInstance().getServerManager().getNetwork().getDiscordLink() + SC + "!"));
-        player.sendMessage(Color.translate("  "));
+        player.sendMessage(new String[]{
+                Color.MAIN_COLOR + ChatColor.BOLD.toString() + "Discord Syncing",
+                Color.SECONDARY_COLOR + "To sync your account with your discord account and receive",
+                Color.SECONDARY_COLOR + "the " + ChatColor.GREEN + "Verified" + Color.SECONDARY_COLOR + " role, copy this code '" + Color.MAIN_COLOR + potPlayer.getSyncCode() + Color.SECONDARY_COLOR + "' and",
+                Color.SECONDARY_COLOR + "paste it into the " + Color.MAIN_COLOR + "#sync" + Color.SECONDARY_COLOR + " channel with " + Color.MAIN_COLOR + "'-sync'" + Color.SECONDARY_COLOR + " on our discord",
+                Color.SECONDARY_COLOR + "server! To join our discord, use " + Color.MAIN_COLOR + CorePlugin.getInstance().getServerManager().getNetwork().getDiscordLink() + Color.SECONDARY_COLOR + "!",
+        });
 
         return false;
     }

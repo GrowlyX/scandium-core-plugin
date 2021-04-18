@@ -3,7 +3,6 @@ package com.solexgames.core.util;
 import com.google.common.collect.ImmutableSet;
 import com.solexgames.core.CorePlugin;
 import lombok.experimental.UtilityClass;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 
@@ -21,18 +20,22 @@ import java.util.jar.JarFile;
  */
 
 @UtilityClass
-public final class JavaUtil {
+public final class BukkitUtil {
 
     public static final String COMMAND_PKG = "com.solexgames.core.commands.impl.%s";
 
+    public static void registerDefaultCommand() {
+        BukkitUtil.registerCommandsIn(BukkitUtil.COMMAND_PKG.replace(".%s", ""));
+    }
+
     public static void registerCommandModules(String... strings) {
         for (String pkgEndpoint : strings) {
-            JavaUtil.registerCommandsIn(String.format(JavaUtil.COMMAND_PKG, pkgEndpoint.toLowerCase()));
+            BukkitUtil.registerCommandsIn(String.format(BukkitUtil.COMMAND_PKG, pkgEndpoint.toLowerCase()));
         }
     }
 
     public static void registerCommandsIn(String packageName) {
-        final Collection<Class<?>> collection = JavaUtil.getClassesInPackage(CorePlugin.getInstance(), packageName);
+        final Collection<Class<?>> collection = BukkitUtil.getClassesInPackage(CorePlugin.getInstance(), packageName);
 
         collection.forEach(aClass -> {
             try {
@@ -43,7 +46,7 @@ public final class JavaUtil {
     }
 
     public static void registerListenersIn(String packageName) {
-        final Collection<Class<?>> collection = JavaUtil.getClassesInPackage(CorePlugin.getInstance(), packageName);
+        final Collection<Class<?>> collection = BukkitUtil.getClassesInPackage(CorePlugin.getInstance(), packageName);
 
         collection.forEach(aClass -> {
             try {

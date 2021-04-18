@@ -28,6 +28,8 @@ public class ExperienceCommand extends BaseCommand {
             }
         }
 
+        // We're checking for permissions during each arg since there may be an argument
+        // that allows players without any permissions to execute them.
         if (args.length > 0) {
             switch (args[0].toLowerCase()) {
                 case "add":

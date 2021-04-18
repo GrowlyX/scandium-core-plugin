@@ -28,27 +28,21 @@ public class FindCommand extends BaseCommand {
         }
 
         if (args.length > 0) {
-            String target = args[0];
-            CompletableFuture<NetworkPlayer> completableFuture = new CompletableFuture<>();
+            final String target = args[0];
+            final NetworkPlayer networkPlayer = CorePlugin.getInstance().getPlayerManager().getNetworkPlayer(target);
 
             sender.sendMessage(serverType.getSecondaryColor() + "Searching for that player...");
 
-            CompletableFuture.runAsync(() -> {
-                NetworkPlayer networkPlayer = CorePlugin.getInstance().getPlayerManager().getNetworkPlayer(target);
-                completableFuture.complete(networkPlayer);
-            });
+            if (networkPlayer == null) {
+                sender.sendMessage(ChatColor.RED + "Error: The player with the specified name does not exist.");
+            } else {
+                Rank rank = Rank.getByName(networkPlayer.getRankName());
+                String displayName = Color.translate((rank != null ? rank.getColor() + rank.getItalic() : ChatColor.GRAY) + networkPlayer.getName());
 
-            completableFuture.thenAccept(networkPlayer -> {
-                if (networkPlayer == null) {
-                    sender.sendMessage(ChatColor.RED + "Error: The player with the specified name does not exist.");
-                } else {
-                    Rank rank = Rank.getByName(networkPlayer.getRankName());
-                    String displayName = Color.translate((rank != null ? rank.getColor() + rank.getItalic() : ChatColor.GRAY) + networkPlayer.getName());
-
-                    sender.sendMessage(serverType.getMainColor() + displayName + serverType.getSecondaryColor() + " is currently online " + serverType.getMainColor() + networkPlayer.getServerName() + serverType.getSecondaryColor() + "!");
-                }
-            });
+                sender.sendMessage(serverType.getMainColor() + displayName + serverType.getSecondaryColor() + " is currently online " + serverType.getMainColor() + networkPlayer.getServerName() + serverType.getSecondaryColor() + "!");
+            }
         }
+
         return false;
     }
 }

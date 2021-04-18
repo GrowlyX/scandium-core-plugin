@@ -13,7 +13,6 @@ import org.apache.commons.lang.StringUtils;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -59,7 +58,8 @@ public class PrefixCommand extends BaseCommand {
             if (args.length > 0) {
                 switch (args[0]) {
                     case "purchasable":
-                        if (args.length == 1) player.sendMessage(ChatColor.RED + ("Usage: /prefix purchasable <name>."));
+                        if (args.length == 1)
+                            player.sendMessage(ChatColor.RED + ("Usage: /prefix purchasable <name>."));
                         if (args.length == 2) {
                             String name = args[1];
                             Prefix rank = Prefix.getByName(name);
@@ -126,7 +126,7 @@ public class PrefixCommand extends BaseCommand {
                                 if (prefix != null) {
                                     PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
                                     potPlayer.getAllPrefixes().remove(prefix.getName());
-                                    CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getPrefixCollection().deleteOne(Filters.eq("_id", prefix.getId())));
+                                    CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPrefixCollection().deleteOne(Filters.eq("_id", prefix.getId())));
 
                                     player.sendMessage(ChatColor.GREEN + Color.translate("Removed the prefix " + prefix.getName() + " from " + target.getDisplayName()));
                                 } else {

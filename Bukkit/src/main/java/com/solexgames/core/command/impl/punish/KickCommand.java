@@ -1,4 +1,4 @@
-package com.solexgames.core.command.impl.punish.manual;
+package com.solexgames.core.command.impl.punish;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
@@ -12,7 +12,6 @@ import com.solexgames.core.util.SaltUtil;
 import com.solexgames.core.util.StringUtil;
 import net.md_5.bungee.api.ChatColor;
 import org.bson.Document;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -36,14 +35,13 @@ public class KickCommand extends BaseCommand {
             sender.sendMessage(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player> <reason> " + ChatColor.GRAY + "[-s]" + ChatColor.WHITE + ".");
         }
         if (args.length >= 2) {
-            AtomicReference<Document> document = new AtomicReference<>(CorePlugin.getInstance().getPlayerManager().getDocumentByName(args[0]).orElse(null));
+            AtomicReference<Document> document = new AtomicReference<>();
             CompletableFuture<Boolean> completableFuture = new CompletableFuture<>();
 
             CompletableFuture.runAsync(() -> {
                 document.set(CorePlugin.getInstance().getPlayerManager().getDocumentByName(args[0]).orElse(null));
                 completableFuture.complete(true);
             });
-
 
             completableFuture.thenRunAsync(() -> {
                 if (document.get() == null) {

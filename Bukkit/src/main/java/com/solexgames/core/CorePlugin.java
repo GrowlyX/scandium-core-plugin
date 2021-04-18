@@ -21,7 +21,7 @@ import com.solexgames.core.redis.RedisSubscriptions;
 import com.solexgames.core.settings.ServerSettings;
 import com.solexgames.core.task.*;
 import com.solexgames.core.util.Color;
-import com.solexgames.core.util.JavaUtil;
+import com.solexgames.core.util.BukkitUtil;
 import com.solexgames.core.util.RedisUtil;
 import com.solexgames.core.util.external.ConfigExternal;
 import com.solexgames.core.uuid.UUIDCache;
@@ -222,13 +222,9 @@ public final class CorePlugin extends JavaPlugin {
             this.logConsole("&a[PAPI] &eSetup the &6ScandiumPAPI &ePlaceholderAPI Hook!");
         }
 
-        JavaUtil.registerListenersIn("com.solexgames.core.listener");
+        BukkitUtil.registerListenersIn("com.solexgames.core.listener");
 
-        if (this.getConfig().getBoolean("settings.color-gui")) {
-            this.getCommand("color").setExecutor(new ColorCommand());
-        }
-
-        this.registerTasks();
+        this.registerDefaultTasks();
         this.registerSpigotCommands();
         this.registerBukkitCommands();
 
@@ -236,7 +232,7 @@ public final class CorePlugin extends JavaPlugin {
     }
 
     private void registerSpigotCommands() {
-        JavaUtil.registerCommandModules(
+        BukkitUtil.registerCommandModules(
                 "Auth", "Discord", "Essential",
                 "Experience", "Grant", "Library",
                 "Moderation", "Network", "Other",
@@ -246,7 +242,7 @@ public final class CorePlugin extends JavaPlugin {
         );
     }
 
-    private void registerTasks() {
+    private void registerDefaultTasks() {
         if (this.getConfig().getBoolean("tips.enabled")) {
             new AutoMessageTask();
         }
@@ -328,12 +324,6 @@ public final class CorePlugin extends JavaPlugin {
 
         if (this.redisManager.isActive()) {
             this.redisManager.unsubscribe();
-        }
-    }
-
-    public void registerListeners(Listener... listeners) {
-        for (Listener listener : listeners) {
-            Bukkit.getPluginManager().registerEvents(listener, this);
         }
     }
 }

@@ -18,7 +18,7 @@ public class RankManager {
     }
 
     public void loadRanks() {
-        CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getRankCollection().find().forEach((Block<? super Document>) document -> {
+        CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getRankCollection().find().forEach((Block<? super Document>) document -> {
             final Rank rank = new Rank(
                     UUID.fromString(document.getString("uuid")),
                     (ArrayList<UUID>) document.get("inheritance"),

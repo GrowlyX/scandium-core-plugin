@@ -27,9 +27,9 @@ public class NametagCommand extends BaseCommand {
             PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
             if (potPlayer.getRainbowNametag().isActive()) {
-                player.sendMessage(ChatColor.RED + "Stopped the rainbow nametag!");
+                player.sendMessage(ChatColor.RED + "You've enabled the rainbow nametag.");
             } else {
-                player.sendMessage(ChatColor.GREEN + "Started the rainbow nametag!");
+                player.sendMessage(ChatColor.GREEN + "You've disabled the rainbow nametag.");
             }
 
             potPlayer.getRainbowNametag().toggle();

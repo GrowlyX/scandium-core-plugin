@@ -14,8 +14,6 @@ import java.util.stream.Collectors;
 
 public class NetworkCommand extends BaseCommand {
 
-    private final ServerType SERVER = CorePlugin.getInstance().getServerManager().getNetwork();
-
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
         if (!sender.hasPermission("scandium.command.network")) {
@@ -30,7 +28,7 @@ public class NetworkCommand extends BaseCommand {
 
             sender.sendMessage(new String[]{
                     ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 53),
-                    SERVER.getMainColor() + ChatColor.BOLD.toString() + "Network Data: ",
+                    Color.MAIN_COLOR + ChatColor.BOLD.toString() + "Network Data: ",
                     networkData,
                     ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 53),
             });
@@ -45,7 +43,7 @@ public class NetworkCommand extends BaseCommand {
 
             sender.sendMessage(new String[]{
                     ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 53),
-                    SERVER.getMainColor() + ChatColor.BOLD.toString() + server.getServerName() + " Data:",
+                    Color.MAIN_COLOR + ChatColor.BOLD.toString() + server.getServerName() + " Data:",
                     "",
                     this.getIndividualNetworkData(server),
                     ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 53)
@@ -63,7 +61,7 @@ public class NetworkCommand extends BaseCommand {
      */
     private String getNetworkData(NetworkServer server) {
         return ChatColor.GRAY + ChatColor.BOLD.toString() + " • " + String.join(" ", new String[]{
-                SERVER.getSecondaryColor() + server.getServerName(),
+                Color.SECONDARY_COLOR + server.getServerName(),
                 ChatColor.GRAY + "(TPS: " + server.getTicksPerSecond() + ")",
                 ChatColor.GRAY + "(Online: " + server.getOnlinePlayers() + "/" + server.getMaxPlayerLimit() + ")",
                 ChatColor.GRAY + "(State: " + server.getServerStatus().name() + ")",
@@ -79,11 +77,11 @@ public class NetworkCommand extends BaseCommand {
      */
     private String getIndividualNetworkData(NetworkServer server) {
         return String.join("\n", new String[]{
-                SERVER.getSecondaryColor() + "Server Type: " + SERVER.getMainColor() + server.getServerType().getServerTypeString(),
-                SERVER.getSecondaryColor() + "server Status: " + Color.translate(server.getServerStatus().getServerStatusFancyString()),
-                SERVER.getSecondaryColor() + "Max Players: " + SERVER.getMainColor() + server.getMaxPlayerLimit(),
-                SERVER.getSecondaryColor() + "Online Players: " + SERVER.getMainColor() + server.getOnlinePlayers(),
-                SERVER.getSecondaryColor() + "Ticks per Second: " + SERVER.getMainColor() + server.getTicksPerSecond(),
+                Color.SECONDARY_COLOR + "Server Type: " + Color.MAIN_COLOR + server.getServerType().getServerTypeString(),
+                Color.SECONDARY_COLOR + "server Status: " + Color.translate(server.getServerStatus().getServerStatusFancyString()),
+                Color.SECONDARY_COLOR + "Max Players: " + Color.MAIN_COLOR + server.getMaxPlayerLimit(),
+                Color.SECONDARY_COLOR + "Online Players: " + Color.MAIN_COLOR + server.getOnlinePlayers(),
+                Color.SECONDARY_COLOR + "Ticks per Second: " + Color.MAIN_COLOR + server.getTicksPerSecond(),
         });
     }
 }

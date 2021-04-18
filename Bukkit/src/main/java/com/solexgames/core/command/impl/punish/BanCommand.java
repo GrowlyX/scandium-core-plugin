@@ -1,4 +1,4 @@
-package com.solexgames.core.command.impl.punish.manual;
+package com.solexgames.core.command.impl.punish;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
@@ -9,7 +9,6 @@ import com.solexgames.core.player.punishment.PunishmentType;
 import com.solexgames.core.util.*;
 import net.md_5.bungee.api.ChatColor;
 import org.bson.Document;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -18,11 +17,11 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
-public class WarnCommand extends BaseCommand {
+public class BanCommand extends BaseCommand {
 
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
-        if (!sender.hasPermission("scandium.command.warn")) {
+        if (!sender.hasPermission("scandium.command.ban")) {
             sender.sendMessage(NO_PERMISSION);
             return false;
         }
@@ -49,13 +48,13 @@ public class WarnCommand extends BaseCommand {
                     List<Punishment> punishmentList = Punishment.getAllPunishments().stream()
                             .filter(Objects::nonNull)
                             .filter(Punishment::isActive)
-                            .filter(punishment -> punishment.getPunishmentType().equals(PunishmentType.WARN))
+                            .filter(punishment -> punishment.getPunishmentType().equals(PunishmentType.BAN))
                             .filter(punishment -> punishment.getTarget().equals(playerId))
                             .sorted(Comparator.comparingLong(Punishment::getCreatedAtLong).reversed())
                             .collect(Collectors.toList());
 
                     if (punishmentList.size() > 0) {
-                        sender.sendMessage(ChatColor.RED + "Error: That player already has an active warn!");
+                        sender.sendMessage(ChatColor.RED + "Error: That player already has an active ban!");
                     } else {
                         Date newIssuingDate = new Date();
                         UUID newPunishmentUuid = UUID.randomUUID();
@@ -74,7 +73,7 @@ public class WarnCommand extends BaseCommand {
 
                         try {
                             Punishment punishment = new Punishment(
-                                    PunishmentType.WARN,
+                                    PunishmentType.BAN,
                                     issuerUuid,
                                     targetUuid,
                                     issuerName,
@@ -98,7 +97,7 @@ public class WarnCommand extends BaseCommand {
                             CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, issuerNameNull, document.get(), isSilent);
 
                             RedisUtil.writeAsync(RedisUtil.executePunishment(
-                                    PunishmentType.WARN,
+                                    PunishmentType.BAN,
                                     issuerUuid,
                                     targetUuid,
                                     issuerName,

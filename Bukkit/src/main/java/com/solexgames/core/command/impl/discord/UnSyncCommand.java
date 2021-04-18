@@ -10,7 +10,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class UnsyncCommand extends BaseCommand {
+public class UnSyncCommand extends BaseCommand {
 
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
@@ -23,9 +23,11 @@ public class UnsyncCommand extends BaseCommand {
             return false;
         }
 
-        Player player = (Player) sender;
+        final Player player = (Player) sender;
+
         if (args.length == 0) {
-            PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+            final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+
             if (potPlayer.isSynced() && (potPlayer.getSyncDiscord() != null)) {
                 potPlayer.setSynced(false);
                 potPlayer.setSyncDiscord(null);
@@ -35,6 +37,7 @@ public class UnsyncCommand extends BaseCommand {
                 player.sendMessage(ChatColor.RED + ("Error: You are not synced to a discord account."));
             }
         }
+
         return false;
     }
 }

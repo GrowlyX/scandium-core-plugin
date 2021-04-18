@@ -50,27 +50,20 @@ public class ImportCommand extends BaseCommand {
         }
         if (args.length == 1) {
             if (args[0].equalsIgnoreCase("import")) {
-                CompletableFuture<Boolean> completableFuture = new CompletableFuture<>();
-
                 player.sendMessage(ChatColor.GRAY + "Importing ranks from the configuration...");
 
-                CompletableFuture.runAsync(() -> {
-                    this.handleImport();
-                    completableFuture.complete(true);
-                });
-
-                completableFuture.thenAccept(aBoolean -> player.sendMessage(ChatColor.GREEN + "Successfully imported all ranks!"));
+                CompletableFuture.supplyAsync(this::handleImport).thenAccept(aBoolean -> player.sendMessage(ChatColor.GREEN + "Successfully imported all ranks!"));
             }
         }
 
         return false;
     }
 
-    private void handleImport() {
+    private boolean handleImport() {
         final ConfigExternal config = CorePlugin.getInstance().getRanksConfig();
 
         Rank.getRanks().clear();
-        CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getRankCollection().drop());
+        CorePlugin.getInstance().getCoreDatabase().getRankCollection().drop();
 
         config.getConfiguration().getKeys(false).forEach(key -> {
             String prefix = config.getString(key + ".prefix", "&7", false);
@@ -99,5 +92,7 @@ public class ImportCommand extends BaseCommand {
                 });
 
         CorePlugin.getInstance().getRankManager().saveRanks();
+
+        return true;
     }
 }

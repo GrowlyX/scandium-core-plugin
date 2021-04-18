@@ -41,11 +41,15 @@ public class WebPostCommand extends BukkitCommand {
             postBuilder.setTitle(title);
             postBuilder.setFormatTime(CorePlugin.FORMAT.format(creation));
 
-            CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getWebCollection().insertOne(postBuilder.getDocument()));
-
-            sender.sendMessage(Color.SECONDARY_COLOR + "You've created a website post with the title: " + Color.MAIN_COLOR + title + Color.SECONDARY_COLOR + "!");
-            sender.sendMessage(Color.SECONDARY_COLOR + "View it via: " + Color.MAIN_COLOR + " https://blare.rip/");
+            CompletableFuture.supplyAsync(() -> {
+                CorePlugin.getInstance().getCoreDatabase().getWebCollection().insertOne(postBuilder.getDocument());
+                return true;
+            }).thenAccept(a -> {
+                sender.sendMessage(Color.SECONDARY_COLOR + "You've created a website post with the title: " + Color.MAIN_COLOR + title + Color.SECONDARY_COLOR + "!");
+                sender.sendMessage(Color.SECONDARY_COLOR + "View it via: " + Color.MAIN_COLOR + " https://blare.rip/");
+            });
         }
+
         return false;
     }
 }
