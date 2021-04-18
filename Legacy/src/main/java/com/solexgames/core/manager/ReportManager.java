@@ -13,8 +13,4 @@ public class ReportManager {
     public void registerReport(Report report) {
         this.reports.add(report);
     }
-
-    public void resolveReport(Report report) {
-        report.setResolved(true);
-    }
 }

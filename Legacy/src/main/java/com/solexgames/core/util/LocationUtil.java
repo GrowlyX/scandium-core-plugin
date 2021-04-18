@@ -21,21 +21,22 @@ public final class LocationUtil {
         if (location != null) {
             return Optional.of(location.getWorld().getName() + SEPARATOR + location.getX() + SEPARATOR + location.getY() + SEPARATOR + location.getZ() + SEPARATOR + location.getYaw() + SEPARATOR + location.getPitch());
         }
+
         return Optional.empty();
     }
 
     public static Optional<Location> getLocationFromString(String string) {
         if (string != null && !string.trim().equals("")) {
-            String[] args = string.split(SEPARATOR);
+            final String[] args = string.split(SEPARATOR);
 
             if (args.length == 6) {
-                World world = Bukkit.getServer().getWorld(args[0]);
+                final World world = Bukkit.getServer().getWorld(args[0]);
 
-                double xCoord = Double.parseDouble(args[1]);
-                double yCoord = Double.parseDouble(args[2]);
-                double zCoord = Double.parseDouble(args[3]);
-                float yawFloat = Float.parseFloat(args[4]);
-                float pitchFloat = Float.parseFloat(args[5]);
+                final double xCoord = Double.parseDouble(args[1]);
+                final double yCoord = Double.parseDouble(args[2]);
+                final double zCoord = Double.parseDouble(args[3]);
+                final float yawFloat = Float.parseFloat(args[4]);
+                final float pitchFloat = Float.parseFloat(args[5]);
 
                 return Optional.of(new Location(world, xCoord, yCoord, zCoord, yawFloat, pitchFloat));
             }

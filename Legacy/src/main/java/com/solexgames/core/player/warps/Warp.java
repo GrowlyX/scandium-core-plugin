@@ -49,24 +49,22 @@ public class Warp {
         Warp.getWarps().add(this);
     }
 
-    public void saveWarp() {
-        Document document = new Document("_id", this.id);
+    public Document getDocument() {
+        final Document document = new Document("_id", this.id);
 
         document.put("server", this.server);
         document.put("name", this.name);
         document.put("location", LocationUtil.getStringFromLocation(this.location).orElse(null));
 
-        CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getWarpCollection().replaceOne(Filters.eq("_id", this.id), document, new ReplaceOptions().upsert(true)));
+        return document;
+    }
+
+    public void saveWarp() {
+        CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getWarpCollection().replaceOne(Filters.eq("_id", this.id), this.getDocument(), new ReplaceOptions().upsert(true)));
     }
 
     public void saveMainThread() {
-        Document document = new Document("_id", this.id);
-
-        document.put("server", this.server);
-        document.put("name", this.name);
-        document.put("location", LocationUtil.getStringFromLocation(this.location).orElse(null));
-
-        CorePlugin.getInstance().getCoreDatabase().getWarpCollection().replaceOne(Filters.eq("_id", this.id), document, new ReplaceOptions().upsert(true));
+        CorePlugin.getInstance().getCoreDatabase().getWarpCollection().replaceOne(Filters.eq("_id", this.id), this.getDocument(), new ReplaceOptions().upsert(true));
     }
 
     public static Warp getById(String id) {

@@ -17,7 +17,6 @@ import java.security.spec.KeySpec;
 import java.util.Base64;
 
 @Getter
-@Setter
 public class CryptoManager {
 
     private static final byte[] SALT = {
@@ -37,9 +36,9 @@ public class CryptoManager {
         byte[] out;
 
         try {
-            KeySpec keySpec = new PBEKeySpec(this.secretKey.toCharArray(), CryptoManager.SALT, this.iterationCount);
-            SecretKey key = SecretKeyFactory.getInstance("PBEWithMD5AndDES").generateSecret(keySpec);
-            AlgorithmParameterSpec paramSpec = new PBEParameterSpec(CryptoManager.SALT, this.iterationCount);
+            final KeySpec keySpec = new PBEKeySpec(this.secretKey.toCharArray(), CryptoManager.SALT, this.iterationCount);
+            final SecretKey key = SecretKeyFactory.getInstance("PBEWithMD5AndDES").generateSecret(keySpec);
+            final AlgorithmParameterSpec paramSpec = new PBEParameterSpec(CryptoManager.SALT, this.iterationCount);
 
             encryptCipher = Cipher.getInstance(key.getAlgorithm());
             encryptCipher.init(Cipher.ENCRYPT_MODE, key, paramSpec);
@@ -58,9 +57,9 @@ public class CryptoManager {
         byte[] utf8;
 
         try {
-            KeySpec keySpec = new PBEKeySpec(this.secretKey.toCharArray(), CryptoManager.SALT, this.iterationCount);
-            SecretKey key = SecretKeyFactory.getInstance("PBEWithMD5AndDES").generateSecret(keySpec);
-            AlgorithmParameterSpec paramSpec = new PBEParameterSpec(CryptoManager.SALT, this.iterationCount);
+            final KeySpec keySpec = new PBEKeySpec(this.secretKey.toCharArray(), CryptoManager.SALT, this.iterationCount);
+            final SecretKey key = SecretKeyFactory.getInstance("PBEWithMD5AndDES").generateSecret(keySpec);
+            final AlgorithmParameterSpec paramSpec = new PBEParameterSpec(CryptoManager.SALT, this.iterationCount);
 
             decryptCipher = Cipher.getInstance(key.getAlgorithm());
             decryptCipher.init(Cipher.DECRYPT_MODE, key, paramSpec);

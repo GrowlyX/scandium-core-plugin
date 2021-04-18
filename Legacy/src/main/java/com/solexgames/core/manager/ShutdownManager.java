@@ -19,11 +19,7 @@ public class ShutdownManager {
     private boolean shutdownScheduled;
 
     public void initiateShutdown(int seconds, Player initiator) {
-        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
-        ChatColor mainColor = network.getMainColor();
-        ChatColor secondaryColor = network.getSecondaryColor();
-
-        Bukkit.broadcastMessage(secondaryColor + "The server will be shutting down in " + mainColor + seconds + " seconds" + secondaryColor + ".");
+        Bukkit.broadcastMessage(Color.SECONDARY_COLOR + "The server will be shutting down in " + Color.MAIN_COLOR + seconds + " seconds" + Color.SECONDARY_COLOR + ".");
         CorePlugin.getInstance().getPlayerManager().sendToNetworkStaff("&3[S] " + "&7[" + CorePlugin.getInstance().getServerName() + "] " + initiator.getDisplayName() + " &bhas initiated a shutdown on &6" + CorePlugin.getInstance().getServerName() + "&b.");
 
         this.shutdownTask = new ShutdownTask(seconds);

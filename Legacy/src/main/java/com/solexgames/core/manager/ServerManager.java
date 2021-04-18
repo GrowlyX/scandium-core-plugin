@@ -16,7 +16,7 @@ import java.util.List;
 @Setter
 public class ServerManager {
 
-    private final long HEARTBEAT_CHECK_TIMEOUT = 15_000L;
+    private final long heartbeatCheckTimeout = 15_000L;
 
     private List<String> joinMessage;
     private List<String> staffInformation;

@@ -39,7 +39,7 @@ public abstract class Menu {
         final ItemStack item = button.getButtonItem(player);
 
         if (item.getType() != XMaterial.SKELETON_SKULL.parseMaterial()) {
-            ItemMeta meta = item.getItemMeta();
+            final ItemMeta meta = item.getItemMeta();
 
             if (meta != null && meta.hasDisplayName()) {
                 meta.setDisplayName(meta.getDisplayName() + "§b§c§d§e");
@@ -54,10 +54,13 @@ public abstract class Menu {
     public void openMenu(final Player player) {
         this.buttons = this.getButtons(player);
 
-        Menu previousMenu = Menu.currentlyOpenedMenus.get(player.getName());
+        final Menu previousMenu = Menu.currentlyOpenedMenus.get(player.getName());
+
         Inventory inventory = null;
-        int size = this.getSize() == -1 ? this.size(this.buttons) : this.getSize();
+
+        final int size = this.getSize() == -1 ? this.size(this.buttons) : this.getSize();
         boolean update = false;
+
         String title = Color.translate(this.getTitle(player));
 
         if (title.length() > 32) {

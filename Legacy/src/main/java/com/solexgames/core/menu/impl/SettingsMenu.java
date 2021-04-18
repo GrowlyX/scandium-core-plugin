@@ -121,15 +121,16 @@ public class SettingsMenu extends AbstractInventoryMenu {
 
     @Override
     public void onInventoryClick(InventoryClickEvent event) {
-        Inventory clickedInventory = event.getClickedInventory();
-        Inventory topInventory = event.getView().getTopInventory();
+        final Inventory clickedInventory = event.getClickedInventory();
+        final Inventory topInventory = event.getView().getTopInventory();
+
         if (!topInventory.equals(this.inventory)) return;
         if (topInventory.equals(clickedInventory)) {
             event.setCancelled(true);
 
-            ItemStack item = event.getCurrentItem();
-            Player player = (Player) event.getWhoClicked();
-            PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+            final ItemStack item = event.getCurrentItem();
+            final Player player = (Player) event.getWhoClicked();
+            final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
             if (item == null || item.getType() == XMaterial.AIR.parseMaterial()) return;
             switch (event.getRawSlot()) {

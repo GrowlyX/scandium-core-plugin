@@ -5,9 +5,9 @@ import lombok.Data;
 @Data
 public class MediaData {
 
-    private boolean isModifyingInstaData = false;
-    private boolean isModifyingTwitterData = false;
-    private boolean isModifyingYoutubeData = false;
-    private boolean isModifyingDiscordData = false;
+    private boolean modifyingInsta = false;
+    private boolean modifyingTwitter = false;
+    private boolean modifyingYouTube = false;
+    private boolean modifyingDiscord = false;
 
 }

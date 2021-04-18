@@ -1,8 +1,9 @@
-package com.solexgames.core.player.hook;
+package com.solexgames.core.player.achievement;
 
 import lombok.Data;
 
 @Data
+@Deprecated
 public class AchievementData {
 
     private boolean hasCompletedOne = false;

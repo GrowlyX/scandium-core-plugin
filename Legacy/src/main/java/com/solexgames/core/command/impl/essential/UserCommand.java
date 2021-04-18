@@ -45,28 +45,28 @@ public class UserCommand extends BaseCommand {
             switch (args[0]) {
                 case "permission":
                     if (args.length == 1) {
-                        sendHelp(sender);
+                        this.sendHelp(sender);
                     }
                     if (args.length > 1) {
                         switch (args[1]) {
                             case "add":
-                                if (args.length == 2) {
-                                    sendHelp(sender);
-                                }
-                                if (args.length == 3) {
-                                    sendHelp(sender);
+                                if (args.length < 4) {
+                                    this.sendHelp(sender);
                                 }
                                 if (args.length == 4) {
-                                    String permission = args[3];
-                                    Player target = Bukkit.getPlayerExact(args[2]);
+                                    final String permission = args[3];
+                                    final Player target = Bukkit.getPlayerExact(args[2]);
+
                                     if (target != null) {
-                                        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
+                                        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
+
                                         if (potPlayer.getUserPermissions().contains(permission.toLowerCase())) {
                                             sender.sendMessage(Color.translate("&cThat player already has that permission."));
                                         } else {
                                             potPlayer.getUserPermissions().add(permission.toLowerCase());
                                             potPlayer.resetPermissions();
                                             potPlayer.setupPermissions();
+
                                             sender.sendMessage(ChatColor.GREEN + Color.translate("Added the permission '" + permission + "' to " + target.getDisplayName() + ChatColor.GREEN + "!"));
                                         }
                                     } else {
@@ -75,17 +75,16 @@ public class UserCommand extends BaseCommand {
                                 }
                                 break;
                             case "remove":
-                                if (args.length == 2) {
-                                    sendHelp(sender);
-                                }
-                                if (args.length == 3) {
-                                    sendHelp(sender);
+                                if (args.length < 4) {
+                                    this.sendHelp(sender);
                                 }
                                 if (args.length == 4) {
-                                    String permission = args[3];
-                                    Player target = Bukkit.getPlayerExact(args[2]);
+                                    final String permission = args[3];
+                                    final Player target = Bukkit.getPlayerExact(args[2]);
+
                                     if (target != null) {
-                                        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
+                                        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
+
                                         if (!potPlayer.getUserPermissions().contains(permission.toLowerCase())) {
                                             sender.sendMessage(Color.translate("&cThat player does not have that permission."));
                                         } else {
@@ -101,12 +100,14 @@ public class UserCommand extends BaseCommand {
                                 break;
                             case "list":
                                 if (args.length == 2) {
-                                    sendHelp(sender);
+                                    this.sendHelp(sender);
                                 }
                                 if (args.length == 3) {
-                                    Player target = Bukkit.getPlayerExact(args[2]);
+                                    final Player target = Bukkit.getPlayerExact(args[2]);
+
                                     if (target != null) {
-                                        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
+                                        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
+
                                         if (potPlayer.getUserPermissions().isEmpty()) {
                                             sender.sendMessage(Color.translate("&cThat player does not have any permissions."));
                                         } else {
@@ -125,14 +126,14 @@ public class UserCommand extends BaseCommand {
                     break;
                 case "disguise":
                     if (args.length < 3) {
-                        sendHelp(sender);
+                        this.sendHelp(sender);
                     }
                     if (args.length == 3) {
-                        Player target = Bukkit.getPlayerExact(args[1]);
-                        Rank rank = Rank.getByName(args[2]);
+                        final Player target = Bukkit.getPlayerExact(args[1]);
+                        final Rank rank = Rank.getByName(args[2]);
 
                         if (target != null) {
-                            PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
+                            final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
 
                             if (rank != null) {
                                 potPlayer.setDisguiseRank(rank);
@@ -140,9 +141,7 @@ public class UserCommand extends BaseCommand {
                                 sender.sendMessage(ChatColor.GREEN + "You've disguised " + potPlayer.getColorByRankColor() + potPlayer.getName() + ChatColor.GREEN + " as " + Color.translate(rank.getColor() + rank.getItalic()) + rank.getName() + ChatColor.GREEN + "!");
                                 potPlayer.setupPlayerList();
 
-                                if (CorePlugin.TAB_ENABLED) {
-                                    CorePlugin.getInstance().getNMS().updateTablist();
-                                }
+                                CorePlugin.getInstance().getNMS().updateTablist();
                             } else {
                                 if (args[2].equalsIgnoreCase("reset")) {
                                     potPlayer.setDisguiseRank(null);
@@ -150,9 +149,7 @@ public class UserCommand extends BaseCommand {
                                     sender.sendMessage(ChatColor.GREEN + "You've undisguised " + potPlayer.getColorByRankColor() + potPlayer.getPlayer().getName());
                                     potPlayer.setupPlayerList();
 
-                                    if (CorePlugin.TAB_ENABLED) {
-                                        CorePlugin.getInstance().getNMS().updateTablist();
-                                    }
+                                    CorePlugin.getInstance().getNMS().updateTablist();
                                 } else {
                                     sender.sendMessage(Color.translate("&cThat rank does not exist."));
                                 }
@@ -163,7 +160,7 @@ public class UserCommand extends BaseCommand {
                     }
                     break;
                 default:
-                    sendHelp(sender);
+                    this.sendHelp(sender);
                     break;
             }
         }

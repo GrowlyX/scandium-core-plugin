@@ -1,5 +1,6 @@
 package com.solexgames.core.util.clickable;
 
+import lombok.Getter;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -9,16 +10,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author VISUAL_
- * @since March 2021
+ * @author VISUAL_ & GrowlyX
  */
 
+@Getter
 public class Clickable {
 
     private final List<TextComponent> components = new ArrayList<>();
 
     public Clickable(String msg) {
-        TextComponent message = new TextComponent(msg);
+        final TextComponent message = new TextComponent(msg);
+
         this.components.add(message);
     }
 
@@ -27,10 +29,14 @@ public class Clickable {
     }
 
     public TextComponent add(String msg, String hoverMsg, String clickString, ClickEvent.Action action) {
-        TextComponent message = new TextComponent(msg);
+        final TextComponent message = new TextComponent(msg);
 
-        if (hoverMsg != null) message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, (new ComponentBuilder(hoverMsg)).create()));
-        if (clickString != null) message.setClickEvent(new ClickEvent(action, clickString));
+        if (hoverMsg != null) {
+            message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, (new ComponentBuilder(hoverMsg)).create()));
+        }
+        if (clickString != null) {
+            message.setClickEvent(new ClickEvent(action, clickString));
+        }
 
         this.components.add(message);
         return message;

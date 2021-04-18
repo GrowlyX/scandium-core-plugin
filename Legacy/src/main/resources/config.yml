@@ -28,7 +28,7 @@ core-settings:
   name: "Scandium"
   command-name: "scandium"
 
-# The crypto key should be a randomly generated STRING with only letters.
+# The crypto key should be a randomly generated string.
 crypto:
   key: "JRzRsNGvutZbcrrTklcSJsWSQNImMJSqxLZZ"
 

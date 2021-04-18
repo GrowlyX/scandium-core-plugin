@@ -2,7 +2,6 @@ package com.solexgames.core.task;
 
 /**
  * @author SpigotMC
- * @since March 2021
  */
 
 public class TPSUpdateTask implements Runnable {

@@ -56,7 +56,7 @@ public class AutoMessageTask extends BukkitRunnable {
     }
 
     private void executeMessage(PotPlayer potPlayer) {
-        int count = CorePlugin.RANDOM.nextInt(this.allTips.size());
+        final int count = CorePlugin.RANDOM.nextInt(this.allTips.size());
 
         potPlayer.getPlayer().sendMessage(Color.translate(
                 (this.prefix ? this.tipPrefix : "") + this.allTips.get(this.lastCount == count ? CorePlugin.RANDOM.nextInt(this.allTips.size()) : count).replace("<nl>", "\n")

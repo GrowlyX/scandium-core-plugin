@@ -2,11 +2,12 @@ package com.solexgames.core.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.beans.ConstructorProperties;
 
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public enum StaffUpdateType {
 
     HELPOP("&2[H] ", "HELPOP", "scandium.staff"),

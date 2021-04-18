@@ -17,7 +17,7 @@ import java.util.Objects;
 public final class PlayerUtil {
 
     public static void sendAlert(Player player, String reason) {
-        if (CorePlugin.STAFF_ALERTS_COMMAND) {
+        if (CorePlugin.getInstance().getServerSettings().isStaffAlertsEnabled()) {
             Bukkit.getOnlinePlayers().stream()
                     .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
                     .filter(potPlayer -> potPlayer != null && potPlayer.isCanSeeStaffMessages() && potPlayer.getPlayer().hasPermission(CorePlugin.getInstance().getConfig().getString("settings.staff-command-alerts-permission")))
@@ -25,6 +25,12 @@ public final class PlayerUtil {
         }
     }
 
+    /**
+     * Gets a player's connection ping via reflection
+     *
+     * @param player specified player
+     * @return the player's ping
+     */
     public static int getPing(Player player) {
         try {
             final String bukkitVersion = Bukkit.getServer().getClass().getPackage().getName().substring(23);

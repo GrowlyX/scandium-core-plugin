@@ -16,8 +16,8 @@ public class PaginationListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onButtonPress(InventoryClickEvent event) {
-        Player player = (Player) event.getWhoClicked();
-        Menu openMenu = Menu.currentlyOpenedMenus.get(player.getName());
+        final Player player = (Player) event.getWhoClicked();
+        final Menu openMenu = Menu.currentlyOpenedMenus.get(player.getName());
 
         if (openMenu != null) {
             if (event.getSlot() != event.getRawSlot()) {
@@ -29,7 +29,7 @@ public class PaginationListener implements Listener {
             }
 
             if (openMenu.getButtons().containsKey(event.getSlot())) {
-                Button button = openMenu.getButtons().get(event.getSlot());
+                final Button button = openMenu.getButtons().get(event.getSlot());
                 boolean cancel = button.shouldCancel(player, event.getClick());
 
                 if (!cancel && (event.getClick() == ClickType.SHIFT_LEFT || event.getClick() == ClickType.SHIFT_RIGHT)) {
@@ -46,7 +46,7 @@ public class PaginationListener implements Listener {
                 button.clicked(player, event.getSlot(), event.getClick(), event.getHotbarButton());
 
                 if (Menu.currentlyOpenedMenus.containsKey(player.getName())) {
-                    Menu newMenu = Menu.currentlyOpenedMenus.get(player.getName());
+                    final Menu newMenu = Menu.currentlyOpenedMenus.get(player.getName());
 
                     if (newMenu == openMenu) {
                         boolean buttonUpdate = button.shouldUpdate(player, event.getClick());
@@ -78,8 +78,8 @@ public class PaginationListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onInventoryClose(InventoryCloseEvent event) {
-        Player player = (Player) event.getPlayer();
-        Menu openMenu = Menu.currentlyOpenedMenus.get(player.getName());
+        final Player player = (Player) event.getPlayer();
+        final Menu openMenu = Menu.currentlyOpenedMenus.get(player.getName());
 
         if (openMenu != null) {
             openMenu.onClose(player);

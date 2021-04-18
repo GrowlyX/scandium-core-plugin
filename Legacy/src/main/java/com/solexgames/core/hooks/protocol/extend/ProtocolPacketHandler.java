@@ -8,12 +8,13 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.WrappedServerPing;
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.hooks.protocol.AbstractChatInterceptor;
+import com.solexgames.core.hooks.protocol.AbstractPacketHandler;
+import org.apache.http.annotation.Experimental;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.InvocationTargetException;
 
-public class ProtocolChatInterceptor extends AbstractChatInterceptor {
+public class ProtocolPacketHandler extends AbstractPacketHandler {
 
     protected PacketAdapter adapter;
     protected PacketAdapter sendAdapter;
@@ -22,7 +23,7 @@ public class ProtocolChatInterceptor extends AbstractChatInterceptor {
     protected String[] returnString;
 
     @Override
-    public void initializePacketInterceptor() {
+    public void initializePacketHandlers() {
         this.returnString = CorePlugin.getInstance().getConfig().getStringList("tab-block.return").toArray(new String[0]);
         this.adapter = new PacketAdapter(CorePlugin.getInstance(), ListenerPriority.HIGHEST, PacketType.Play.Client.TAB_COMPLETE) {
             public void onPacketReceiving(PacketEvent event) {
@@ -30,8 +31,8 @@ public class ProtocolChatInterceptor extends AbstractChatInterceptor {
                     try {
                         if (event.getPlayer().hasPermission("scandium.tabcomplete.bypass")) return;
 
-                        PacketContainer packet = event.getPacket();
-                        String message = packet.getSpecificModifier(String.class).read(0).toLowerCase();
+                        final PacketContainer packet = event.getPacket();
+                        final String message = packet.getSpecificModifier(String.class).read(0).toLowerCase();
 
                         if (((message.startsWith("/")) && (!message.contains(" "))) || ((message.startsWith("/ver")) && (!message.contains("  "))) || ((message.startsWith("/version")) && (!message.contains("  "))) || ((message.startsWith("/?")) && (!message.contains("  "))) || ((message.startsWith("/about")) && (!message.contains("  "))) || ((message.startsWith("/help")) && (!message.contains("  ")))) {
                             event.setCancelled(true);
@@ -41,10 +42,13 @@ public class ProtocolChatInterceptor extends AbstractChatInterceptor {
             }
         };
 
+        // experimental
         this.outPlay = new PacketAdapter(CorePlugin.getInstance(), ListenerPriority.HIGHEST, PacketType.Status.Server.OUT_SERVER_INFO) {
             @Override
+            @Experimental
             public void onPacketSending(PacketEvent event) {
-                WrappedServerPing serverPing = event.getPacket().getServerPings().read(0);
+                final WrappedServerPing serverPing = event.getPacket().getServerPings().read(0);
+
                 serverPing.setVersionProtocol(-1332);
                 serverPing.setVersionName("CheatBreaker");
             }
@@ -60,8 +64,6 @@ public class ProtocolChatInterceptor extends AbstractChatInterceptor {
             }
         };
 
-//        ProtocolLibrary.getProtocolManager().addPacketListener(this.outPlay);
-
         if (this.getConfig().getBoolean("tab-block.enabled")) {
             ProtocolLibrary.getProtocolManager().addPacketListener(this.adapter);
         }
@@ -70,8 +72,11 @@ public class ProtocolChatInterceptor extends AbstractChatInterceptor {
         }
     }
 
+    /**
+     * From Bukkit Forums - https://bukkit.org/threads/how-to-open-demo-minecraft-gui.407815/
+     */
     private boolean sendDemoScreen(Player player) {
-        PacketContainer packet = new PacketContainer(PacketType.Play.Server.GAME_STATE_CHANGE);
+        final PacketContainer packet = new PacketContainer(PacketType.Play.Server.GAME_STATE_CHANGE);
 
         packet.getIntegers().write(0, 5);
         packet.getFloat().write(0, (float) 0);

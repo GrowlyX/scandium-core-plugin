@@ -5,10 +5,12 @@ import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.impl.grant.GrantRemoveConfirmMenu;
 import com.solexgames.core.player.PotPlayer;
+import com.solexgames.core.player.grant.Grant;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.util.external.pagination.Button;
 import com.solexgames.core.util.external.pagination.pagination.PaginatedMenu;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
@@ -27,7 +29,7 @@ public class GrantViewPaginatedMenu extends PaginatedMenu {
     private final Player target;
 
     public GrantViewPaginatedMenu(Player player, Player target) {
-        super(45);
+        super(18);
 
         this.player = player;
         this.target = target;
@@ -45,46 +47,51 @@ public class GrantViewPaginatedMenu extends PaginatedMenu {
 
     @Override
     public Map<Integer, Button> getAllPagesButtons(Player player) {
-        HashMap<Integer, Button> buttons = new HashMap<>();
-        AtomicInteger i = new AtomicInteger();
-        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
-        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
+        final HashMap<Integer, Button> buttons = new HashMap<>();
+        final AtomicInteger atomicInteger = new AtomicInteger();
+        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
 
-        potPlayer.getAllGrants().forEach(grant -> buttons.put(i.getAndIncrement(), new Button() {
-            @Override
-            public ItemStack getButtonItem(Player player) {
-                List<String> arrayList = new ArrayList<>();
-                String statusLore = grant.isActive() ? ChatColor.GREEN + "[Active]" : (grant.isExpired() ? ChatColor.GOLD + "[Expired]" : ChatColor.RED + "[Removed]");
-
-                arrayList.add(network.getMainColor() + "&m------------------------------------");
-                arrayList.add("&eTarget&7: " + network.getMainColor() + target.getDisplayName());
-                arrayList.add("&eRank&7: " + network.getMainColor() + grant.getRank().getColor() + grant.getRank().getName());
-                arrayList.add("&eDuration&7: " + network.getMainColor() + (grant.isPermanent() ? "&4Forever" : DurationFormatUtils.formatDurationWords(grant.getDuration(), true, true)));
-                arrayList.add(network.getMainColor() + "&m------------------------------------");
-                arrayList.add(network.getSecondaryColor() + "Scopes:");
-                arrayList.add(" &7- " + ChatColor.GREEN + Color.translate(grant.getScope() != null ? grant.getScope() : "global"));
-                arrayList.add(network.getMainColor() + "&m------------------------------------");
-                arrayList.add("&eIssued By&7: " + network.getMainColor() + (grant.getIssuer() != null ? Bukkit.getOfflinePlayer(grant.getIssuer()).getName() : "&4Console"));
-                arrayList.add("&eIssued On&7: " + network.getMainColor() + CorePlugin.FORMAT.format(new Date(grant.getDateAdded())));
-                arrayList.add("&eIssued At&7: " + network.getMainColor() + (grant.getIssuedServer() != null ? grant.getIssuedServer() : "Not Recorded"));
-                arrayList.add("&eIssued Reason&7: " + network.getMainColor() + grant.getReason());
-                arrayList.add(network.getMainColor() + "&m------------------------------------");
-
-                return new ItemBuilder(XMaterial.LIME_WOOL.parseMaterial(), (grant.isActive() ? 5 : (grant.isExpired() ? 1 : 14)))
-                        .setDisplayName(ChatColor.DARK_GRAY + "#" + grant.getId() + " " + statusLore)
-                        .addLore(arrayList)
-                        .create();
-            }
-
-            @Override
-            public void clicked(Player player, ClickType clickType) {
-                if (clickType.equals(ClickType.RIGHT)) {
-                    new GrantRemoveConfirmMenu(player, target, grant).open(player);
-                    setClosedByMenu(true);
-                }
-            }
-        }));
+        potPlayer.getAllGrants().forEach(grant -> buttons.put(atomicInteger.getAndIncrement(), new GrantButton(grant)));
 
         return buttons;
+    }
+
+    @AllArgsConstructor
+    private class GrantButton extends Button {
+
+        private final Grant grant;
+
+        @Override
+        public ItemStack getButtonItem(Player player) {
+            final List<String> arrayList = new ArrayList<>();
+            final String statusLore = this.grant.isActive() ? ChatColor.GREEN + "[Active]" : (this.grant.isExpired() ? ChatColor.GOLD + "[Expired]" : ChatColor.RED + "[Removed]");
+
+            arrayList.add(Color.MAIN_COLOR + "&m------------------------------------");
+            arrayList.add(Color.SECONDARY_COLOR + "Target&7: " + Color.MAIN_COLOR + target.getDisplayName());
+            arrayList.add(Color.SECONDARY_COLOR + "Rank&7: " + Color.MAIN_COLOR + this.grant.getRank().getColor() + this.grant.getRank().getName());
+            arrayList.add(Color.SECONDARY_COLOR + "Duration&7: " + Color.MAIN_COLOR + (this.grant.isPermanent() ? "&4Forever" : DurationFormatUtils.formatDurationWords(this.grant.getDuration(), true, true)));
+            arrayList.add(Color.MAIN_COLOR + "&m------------------------------------");
+            arrayList.add(Color.SECONDARY_COLOR + "Scopes:");
+            arrayList.add(" &7- " + ChatColor.GREEN + Color.translate(this.grant.getScope() != null ? this.grant.getScope() : "global"));
+            arrayList.add(Color.MAIN_COLOR + "&m------------------------------------");
+            arrayList.add(Color.SECONDARY_COLOR + "Issued By&7: " + Color.MAIN_COLOR + (this.grant.getIssuer() != null ? Bukkit.getOfflinePlayer(this.grant.getIssuer()).getName() : "&4Console"));
+            arrayList.add(Color.SECONDARY_COLOR + "Issued On&7: " + Color.MAIN_COLOR + CorePlugin.FORMAT.format(new Date(this.grant.getDateAdded())));
+            arrayList.add(Color.SECONDARY_COLOR + "Issued At&7: " + Color.MAIN_COLOR + (this.grant.getIssuedServer() != null ? this.grant.getIssuedServer() : "Not Recorded"));
+            arrayList.add(Color.SECONDARY_COLOR + "Issued Reason&7: " + Color.MAIN_COLOR + this.grant.getReason());
+            arrayList.add(Color.MAIN_COLOR + "&m------------------------------------");
+
+            return new ItemBuilder(XMaterial.LIME_WOOL.parseMaterial(), (this.grant.isActive() ? 5 : (this.grant.isExpired() ? 1 : 14)))
+                    .setDisplayName(ChatColor.DARK_GRAY + "#" + this.grant.getId() + " " + statusLore)
+                    .addLore(arrayList)
+                    .create();
+        }
+
+        @Override
+        public void clicked(Player player, ClickType clickType) {
+            if (clickType.equals(ClickType.RIGHT)) {
+                new GrantRemoveConfirmMenu(player, target, this.grant).open(player);
+                setClosedByMenu(true);
+            }
+        }
     }
 }

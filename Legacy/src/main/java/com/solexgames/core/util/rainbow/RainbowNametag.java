@@ -49,7 +49,7 @@ public class RainbowNametag extends BukkitRunnable {
             this.active = false;
             this.currentColor = this.colors[0];
 
-            PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+            final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
             potPlayer.setupPlayerTag();
             potPlayer.setupPlayerList();

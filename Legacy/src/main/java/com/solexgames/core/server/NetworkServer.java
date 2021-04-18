@@ -71,7 +71,7 @@ public class NetworkServer {
         this.ticksPerSecondSimplified = ticksPerSecondSimplified;
         this.allPlayers = (onlinePlayersSplit == null || onlinePlayersSplit.equals("")) ? Collections.singletonList("") : Arrays.asList(onlinePlayersSplit.split(" "));
 
-        updateServerStatus(online, whitelistEnabled);
+        this.updateServerStatus(online, whitelistEnabled);
     }
 
     public void updateServerStatus(boolean online, boolean whitelistEnabled) {

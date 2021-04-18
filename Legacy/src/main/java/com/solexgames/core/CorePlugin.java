@@ -3,8 +3,6 @@ package com.solexgames.core;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.solexgames.core.command.impl.CoreCommand;
-import com.solexgames.core.command.impl.xlib.NametagCommand;
-import com.solexgames.core.command.impl.xlib.WebPostCommand;
 import com.solexgames.core.command.impl.discord.SyncCommand;
 import com.solexgames.core.command.impl.discord.UnsyncCommand;
 import com.solexgames.core.command.impl.essential.*;
@@ -26,14 +24,16 @@ import com.solexgames.core.command.impl.shutdown.ShutdownCommand;
 import com.solexgames.core.command.impl.test.TestCommand;
 import com.solexgames.core.command.impl.toggle.*;
 import com.solexgames.core.command.impl.warps.WarpCommand;
+import com.solexgames.core.command.impl.other.NametagCommand;
+import com.solexgames.core.command.impl.other.WebPostCommand;
 import com.solexgames.core.database.Database;
 import com.solexgames.core.enums.ServerType;
-import com.solexgames.core.hooks.access.AbstractNMSAccess;
-import com.solexgames.core.hooks.access.extend.*;
+import com.solexgames.core.hooks.nms.INMS;
+import com.solexgames.core.hooks.nms.extend.*;
 import com.solexgames.core.hooks.client.AbstractClientHook;
 import com.solexgames.core.hooks.client.extend.LunarClientHook;
-import com.solexgames.core.hooks.protocol.AbstractChatInterceptor;
-import com.solexgames.core.hooks.protocol.extend.ProtocolChatInterceptor;
+import com.solexgames.core.hooks.protocol.AbstractPacketHandler;
+import com.solexgames.core.hooks.protocol.extend.ProtocolPacketHandler;
 import com.solexgames.core.listener.ModSuiteListener;
 import com.solexgames.core.listener.PaginationListener;
 import com.solexgames.core.listener.PlayerListener;
@@ -42,11 +42,10 @@ import com.solexgames.core.player.punishment.PunishmentStrings;
 import com.solexgames.core.redis.RedisManager;
 import com.solexgames.core.redis.RedisSettings;
 import com.solexgames.core.redis.RedisSubscriptions;
+import com.solexgames.core.settings.ServerSettings;
 import com.solexgames.core.task.*;
-import com.solexgames.core.util.AsyncUtil;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
-import com.solexgames.core.util.callback.AsyncCallback;
 import com.solexgames.core.util.external.ConfigExternal;
 import com.solexgames.core.uuid.UUIDCache;
 import lombok.Getter;
@@ -79,20 +78,6 @@ public final class CorePlugin extends JavaPlugin {
 
     public static SimpleDateFormat FORMAT;
     public static Random RANDOM;
-
-    public static String TAB_HEADER;
-    public static String TAB_FOOTER;
-    public static String CHAT_FORMAT;
-
-    public static boolean TAB_ENABLED = true;
-    public static boolean CAN_JOIN = false;
-    public static boolean COLOR_ENABLED = true;
-    public static boolean NAME_MC_REWARDS = true;
-    public static boolean CHAT_FORMAT_ENABLED = true;
-    public static boolean ANTI_CHAT_SPAM = true;
-    public static boolean ANTI_CMD_SPAM = true;
-    public static boolean STAFF_ALERTS_COMMAND = false;
-
     public static Gson GSON;
 
     @Getter
@@ -114,6 +99,7 @@ public final class CorePlugin extends JavaPlugin {
     private NameTagManager nameTagManager;
 
     private UUIDCache uuidCache;
+    private ServerSettings serverSettings;
 
     private String serverName;
     private HttpClient httpClient;
@@ -127,9 +113,9 @@ public final class CorePlugin extends JavaPlugin {
 
     private RedisSubscriptions subscriptions;
 
-    private AbstractChatInterceptor chatInterceptor;
+    private AbstractPacketHandler chatInterceptor;
     private AbstractClientHook lunar;
-    private AbstractNMSAccess NMS;
+    private INMS NMS;
 
     private Executor redisThread;
     private Executor mongoThread;
@@ -138,7 +124,7 @@ public final class CorePlugin extends JavaPlugin {
     private boolean disallow;
 
     @Override
-    @Deprecated
+    @Deprecated // For DefaultHttpClient
     public void onEnable() {
         instance = this;
 
@@ -168,17 +154,9 @@ public final class CorePlugin extends JavaPlugin {
         this.motdConfig = new ConfigExternal("motd");
         this.filterConfig = new ConfigExternal("filtered");
 
-        TAB_ENABLED = this.getConfig().getBoolean("tablist.enabled");
-        TAB_HEADER = Color.translate(this.getConfig().getString("tablist.header").replace("<nl>", "\n").replace("<server-name>", this.getConfig().getString("server-id")));
-        TAB_FOOTER = Color.translate(this.getConfig().getString("tablist.footer").replace("<nl>", "\n").replace("<server-name>", this.getConfig().getString("server-id")));
-        CHAT_FORMAT = this.getConfig().getString("settings.chat-format");
-        CHAT_FORMAT_ENABLED = this.getConfig().getBoolean("settings.chat-format-enabled");
-        NAME_MC_REWARDS = this.getConfig().getBoolean("settings.namemc-rewards");
+        this.serverSettings = new ServerSettings();
 
-        ANTI_CHAT_SPAM = this.getConfig().getBoolean("settings.anti-chat-spam");
-        ANTI_CMD_SPAM = this.getConfig().getBoolean("settings.anti-command-spam");
-        STAFF_ALERTS_COMMAND = this.getConfig().getBoolean("settings.staff-command-alerts");
-
+        this.setupSettings();
         this.setupHooks();
 
         this.serverName = this.getConfig().getString("server-id");
@@ -214,10 +192,25 @@ public final class CorePlugin extends JavaPlugin {
         new ServerLoadingTask();
     }
 
+    private void setupSettings() {
+        this.serverSettings.setTabEnabled(this.getConfig().getBoolean("tablist.enabled"));
+        this.serverSettings.setTabHeader(Color.translate(this.getConfig().getString("tablist.header").replace("<nl>", "\n").replace("<server-name>", this.getConfig().getString("server-id"))));
+        this.serverSettings.setTabFooter(Color.translate(this.getConfig().getString("tablist.footer").replace("<nl>", "\n").replace("<server-name>", this.getConfig().getString("server-id"))));
+        this.serverSettings.setChatFormat(this.getConfig().getString("settings.chat-format"));
+        this.serverSettings.setChatFormatEnabled(this.getConfig().getBoolean("settings.chat-format-enabled"));
+        this.serverSettings.setNameMcEnabled(this.getConfig().getBoolean("settings.namemc-rewards"));
+        this.serverSettings.setAntiSpamEnabled(this.getConfig().getBoolean("settings.anti-chat-spam"));
+        this.serverSettings.setAntiCommandSpamEnabled(this.getConfig().getBoolean("settings.anti-command-spam"));
+        this.serverSettings.setStaffAlertsEnabled(this.getConfig().getBoolean("settings.staff-command-alerts"));
+    }
+
     private void setupHooks() {
-        if (this.getServer().getPluginManager().isPluginEnabled("ProtocolLib"))
-            this.chatInterceptor = new ProtocolChatInterceptor();
-        else this.getLogger().info("[Protocol] Could not find ProtocolLib! Chat tab block will not work without it!");
+        if (this.getServer().getPluginManager().isPluginEnabled("ProtocolLib")) {
+            this.chatInterceptor = new ProtocolPacketHandler();
+        } else {
+            this.getLogger().info("[Protocol] Could not find ProtocolLib! Chat tab block will not work without it!");
+        }
+
         if (this.getServer().getPluginManager().isPluginEnabled("LunarClient-API")) {
             this.lunar = new LunarClientHook();
         } else {
@@ -260,7 +253,6 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("staffannounce").setExecutor(new StaffAnnounceCommand());
         this.getCommand("tp").setExecutor(new TpCommand());
         this.getCommand("report").setExecutor(new ReportCommand());
-        this.getCommand("punish").setExecutor(new PunishCommand());
         this.getCommand("shutdown").setExecutor(new ShutdownCommand());
         this.getCommand("freeze").setExecutor(new FreezeCommand());
         this.getCommand("ignore").setExecutor(new IgnoreCommand());
@@ -335,13 +327,14 @@ public final class CorePlugin extends JavaPlugin {
         this.getCommand("warn").setExecutor(new WarnCommand());
 
 
-        if (this.chatInterceptor != null)
-            this.chatInterceptor.initializePacketInterceptor();
+        if (this.chatInterceptor != null) {
+            this.chatInterceptor.initializePacketHandlers();
+        }
 
         new PunishmentStrings().setupMessages();
         new Color().setupMessages();
 
-        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+        if (this.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             this.logConsole("&a[PAPI] &eSetup the &6ScandiumPAPI &ePlaceholderAPI Hook!");
         }
 
@@ -351,8 +344,20 @@ public final class CorePlugin extends JavaPlugin {
                 new ModSuiteListener()
         );
 
-        if (this.getConfig().getBoolean("settings.color-gui")) this.getCommand("color").setExecutor(new ColorCommand());
-        if (this.getConfig().getBoolean("tips.enabled")) new AutoMessageTask();
+        if (this.getConfig().getBoolean("settings.color-gui")) {
+            this.getCommand("color").setExecutor(new ColorCommand());
+        }
+
+        this.registerTasks();
+        this.registerBukkitCommand();
+
+        this.getServer().getScheduler().scheduleSyncRepeatingTask(this, this.tpsRunnable, 0L, 1L);
+    }
+
+    private void registerTasks() {
+        if (this.getConfig().getBoolean("tips.enabled")) {
+            new AutoMessageTask();
+        }
 
         new PunishExpireTask();
         new GrantExpireTask();
@@ -361,10 +366,6 @@ public final class CorePlugin extends JavaPlugin {
         new FrozenMessageTask();
         new BoardUpdateTask();
         new ServerTimeoutTask();
-
-        this.registerBukkitCommand();
-
-        this.getServer().getScheduler().scheduleSyncRepeatingTask(this, this.tpsRunnable, 0L, 1L);
     }
 
     private void logInformation() {
@@ -388,12 +389,13 @@ public final class CorePlugin extends JavaPlugin {
 
     private void registerBukkitCommand() {
         // Thanks to ItsSteve for the general concept of using the commandMap to register commands without using the plugin.yml
-        // Source: https://www.spigotmc.org/threads/small-easy-register-command-without-plugin-yml.38036/
+        // Source: https://www.spigotmc.org/threads/small-easy-register-command-without-plugin-yml.38036/ & https://github.com/TehNeon/StaffDisplay
         if (this.getServer().getPluginManager() instanceof SimplePluginManager) {
             CommandMap commandMap = null;
 
             try {
-                Field commandMapField = SimplePluginManager.class.getDeclaredField("commandMap");
+                final Field commandMapField = SimplePluginManager.class.getDeclaredField("commandMap");
+
                 commandMapField.setAccessible(true);
                 commandMap = (CommandMap) commandMapField.get(this.getServer().getPluginManager());
             } catch (Exception ex) {
@@ -404,7 +406,7 @@ public final class CorePlugin extends JavaPlugin {
                 commandMap.register(getConfig().getString("core-settings.command-name"), new CoreCommand(getConfig().getString("core-settings.command-name")));
 
                 if (this.getServerManager().getNetwork().equals(ServerType.BLARE)) {
-                    commandMap.register("xlib", new WebPostCommand());
+                    commandMap.register("lib", new WebPostCommand());
                 }
             } else {
                 this.getServer().getPluginManager().disablePlugin(this);
@@ -421,7 +423,7 @@ public final class CorePlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        CAN_JOIN = false;
+        this.serverSettings.setCanJoin(false);
 
         RedisUtil.write(RedisUtil.onServerOffline());
 
@@ -430,9 +432,11 @@ public final class CorePlugin extends JavaPlugin {
         this.punishmentManager.savePunishments();
         this.prefixManager.savePrefixes();
 
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> System.out.println("com.solexgames.core.CorePlugin has been shutdown.")));
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> System.out.println("test")));
 
-        if (this.redisManager.isActive()) this.redisManager.unsubscribe();
+        if (this.redisManager.isActive()) {
+            this.redisManager.unsubscribe();
+        }
     }
 
     public void registerListeners(Listener... listeners) {

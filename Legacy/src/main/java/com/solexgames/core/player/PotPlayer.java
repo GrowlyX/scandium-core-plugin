@@ -10,7 +10,7 @@ import com.solexgames.core.enums.ChatChannelType;
 import com.solexgames.core.enums.LanguageType;
 import com.solexgames.core.player.media.Media;
 import com.solexgames.core.player.grant.Grant;
-import com.solexgames.core.player.hook.AchievementData;
+import com.solexgames.core.player.achievement.AchievementData;
 import com.solexgames.core.player.prefixes.Prefix;
 import com.solexgames.core.player.punishment.Punishment;
 import com.solexgames.core.player.punishment.PunishmentStrings;
@@ -169,7 +169,7 @@ public class PotPlayer {
     }
 
     public Document getDocument(boolean removing) {
-        Document document = new Document("_id", this.uuid);
+        final Document document = new Document("_id", this.uuid);
 
         document.put("name", this.getName());
         document.put("uuid", this.uuid.toString());
@@ -186,10 +186,10 @@ public class PotPlayer {
         document.put("firstJoined", this.firstJoin);
         document.put("disguiseRank", (this.disguiseRank == null ? null : this.disguiseRank.getName()));
 
-        List<String> grantStrings = new ArrayList<>();
+        final List<String> grantStrings = new ArrayList<>();
         this.getAllGrants().forEach(grant -> grantStrings.add(grant.toJson()));
 
-        List<String> prefixStrings = new ArrayList<>(this.getAllPrefixes());
+        final List<String> prefixStrings = new ArrayList<>(this.getAllPrefixes());
 
         document.put("allGrants", grantStrings);
         document.put("allPrefixes", prefixStrings);
@@ -267,7 +267,7 @@ public class PotPlayer {
                                 this.currentlyBlacklisted = true;
                                 this.currentlyRestricted = true;
                                 break;
-                            case IPBAN:
+                            case IP_BAN:
                             case BAN:
                                 this.currentlyRestricted = true;
                                 this.restrictionPunishment = punishment;
@@ -276,10 +276,7 @@ public class PotPlayer {
                     });
         });
 
-        CompletableFuture<Document> completableFuture = new CompletableFuture<>();
-        CompletableFuture.runAsync(() -> completableFuture.complete(CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("_id", this.uuid)).first()));
-
-        completableFuture.thenAcceptAsync(document -> {
+        CompletableFuture.supplyAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("_id", this.uuid)).first()).thenAcceptAsync(document -> {
             this.profile = document;
 
             if (this.profile == null) {
@@ -373,10 +370,10 @@ public class PotPlayer {
             } else {
                 this.media.setInstagram("N/A");
             }
-            if ((((List<String>) profile.get("allGrants")).isEmpty()) || (profile.get("allGrants") == null)) {
+            if (profile.getList("allGrants", String.class).isEmpty()) {
                 this.allGrants.add(new Grant(null, Objects.requireNonNull(Rank.getDefault()), new Date().getTime(), -1L, "Automatic Grant (Default)", true, true));
             } else {
-                List<String> allGrants = ((List<String>) profile.get("allGrants"));
+                final List<String> allGrants = profile.getList("allGrants", String.class);
                 allGrants.forEach(s -> this.allGrants.add(CorePlugin.GSON.fromJson(s, Grant.class)));
             }
             if ((profile.getString("appliedPrefix") != null) && !profile.getString("appliedPrefix").equals("Default")) {
@@ -385,13 +382,15 @@ public class PotPlayer {
                 this.appliedPrefix = null;
             }
             if (profile.get("allIgnored") != null) {
-                List<String> ignoring = ((List<String>) profile.get("allIgnored"));
+                final List<String> ignoring = profile.getList("allIgnored", String.class);
+
                 if (!ignoring.isEmpty()) {
                     this.allIgnoring.addAll(ignoring);
                 }
             }
             if (profile.get("allPermissions") != null) {
-                List<String> permissions = ((List<String>) profile.get("allPermissions"));
+                final List<String> permissions = profile.getList("allPermissions", String.class);
+
                 if (!permissions.isEmpty()) {
                     this.userPermissions.addAll(permissions);
                 }
@@ -428,51 +427,49 @@ public class PotPlayer {
     }
 
     public boolean findIpRelative(AsyncPlayerPreLoginEvent loginEvent, boolean hub) {
-        CompletableFuture<Iterator<Document>> completableFuture = new CompletableFuture<>();
-        CompletableFuture.runAsync(() -> completableFuture.complete(CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("previousIpAddress", this.encryptedIpAddress)).iterator()));
-        AtomicBoolean atomicBoolean = new AtomicBoolean(false);
+        final AtomicBoolean atomicBoolean = new AtomicBoolean(false);
 
-        completableFuture.thenAccept(documentIterator -> CompletableFuture.runAsync(() -> {
-            while (documentIterator.hasNext()) {
-                Document document = documentIterator.next();
+        CompletableFuture.supplyAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("previousIpAddress", this.encryptedIpAddress)).iterator())
+                .thenAcceptAsync(documentIterator -> {
+                    while (documentIterator.hasNext()) {
+                        final Document document = documentIterator.next();
 
-                if (document.getBoolean("blacklisted") != null && document.getBoolean("blacklisted") && !this.currentlyBlacklisted) {
-                    this.currentlyBlacklisted = true;
-                    this.currentlyRestricted = true;
-                    this.relatedToBlacklist = true;
-                    this.relatedTo = document.getString("name");
+                        if (document.getBoolean("blacklisted") != null && document.getBoolean("blacklisted") && !this.currentlyBlacklisted) {
+                            this.currentlyBlacklisted = true;
+                            this.currentlyRestricted = true;
+                            this.relatedToBlacklist = true;
+                            this.relatedTo = document.getString("name");
 
-                    Date date = new Date();
+                            final Date date = new Date();
+                            final Punishment punishment = new Punishment(
+                                    PunishmentType.BLACKLIST,
+                                    null,
+                                    this.uuid,
+                                    this.name,
+                                    "Related to Blacklisted Player (" + this.relatedTo + ")",
+                                    date,
+                                    date.getTime() - DateUtil.parseDateDiff("1d", false),
+                                    true,
+                                    date,
+                                    UUID.randomUUID(),
+                                    SaltUtil.getRandomSaltedString(7),
+                                    true
+                            );
 
-                    Punishment punishment = new Punishment(
-                            PunishmentType.BLACKLIST,
-                            null,
-                            this.uuid,
-                            this.name,
-                            "Related to Blacklisted Player (" + this.relatedTo + ")",
-                            date,
-                            date.getTime() - DateUtil.parseDateDiff("1d", false),
-                            true,
-                            date,
-                            UUID.randomUUID(),
-                            SaltUtil.getRandomSaltedString(7),
-                            true
-                    );
+                            punishment.savePunishment();
 
-                    punishment.savePunishment();
+                            this.restrictionPunishment = punishment;
 
-                    this.restrictionPunishment = punishment;
+                            if (!hub) {
+                                loginEvent.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, Color.translate(PunishmentStrings.BLACK_LIST_RELATION_MESSAGE.replace("<player>", document.getString("name"))));
+                            }
 
-                    if (!hub) {
-                        loginEvent.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, Color.translate(PunishmentStrings.BLACK_LIST_RELATION_MESSAGE.replace("<player>", document.getString("name"))));
+                            atomicBoolean.set(true);
+
+                            return;
+                        }
                     }
-
-                    atomicBoolean.set(true);
-
-                    return;
-                }
-            }
-        }));
+                });
 
         return atomicBoolean.get();
     }
@@ -484,19 +481,21 @@ public class PotPlayer {
         this.rainbowNametag = new RainbowNametag(this.player, CorePlugin.getInstance());
 
         CompletableFuture.runAsync(() -> {
-            if (CorePlugin.NAME_MC_REWARDS) {
+            if (CorePlugin.getInstance().getServerSettings().isNameMcEnabled()) {
                 this.checkVoting();
             }
 
             this.setupPlayer();
 
-            if (profile.get("allPrefixes") != null) {
-                if (player.hasPermission("scandium.prefixes.all")) {
-                    List<String> prefixes = new ArrayList<>();
+            if (this.profile.get("allPrefixes") != null) {
+                if (this.player.hasPermission("scandium.prefixes.all")) {
+                    final List<String> prefixes = new ArrayList<>();
+
                     Prefix.getPrefixes().forEach(prefix -> prefixes.add(prefix.getName()));
-                    this.getAllPrefixes().addAll(prefixes);
-                } else if (!player.hasPermission("scandium.prefixes.all")) {
-                    List<String> prefixes = ((List<String>) this.profile.get("allPrefixes"));
+                    this.allPrefixes.addAll(prefixes);
+                } else {
+                    final List<String> prefixes = profile.getList("allPrefixes", String.class);
+
                     this.allPrefixes.addAll(prefixes);
                 }
             }
@@ -519,7 +518,7 @@ public class PotPlayer {
         switch (this.restrictionPunishment.getPunishmentType()) {
             case BLACKLIST:
                 return Color.translate(PunishmentStrings.BLACK_LIST_MESSAGE.replace("<reason>", this.restrictionPunishment.getReason()));
-            case IPBAN:
+            case IP_BAN:
             case BAN:
                 return (this.restrictionPunishment.isPermanent() ? Color.translate(PunishmentStrings.BAN_MESSAGE_PERM.replace("<reason>", this.restrictionPunishment.getReason())) : Color.translate(PunishmentStrings.BAN_MESSAGE_TEMP.replace("<reason>", this.restrictionPunishment.getReason()).replace("<time>", this.restrictionPunishment.getDurationString())));
             default:
@@ -552,13 +551,13 @@ public class PotPlayer {
     }
 
     public void setupDisplay() {
-        this.player.setDisplayName(Color.translate(this.getActiveGrant().getRank().getColor()) + player.getName());
+        this.player.setDisplayName(Color.translate(this.getActiveGrant().getRank().getColor()) + this.player.getName());
     }
 
     public void setupPlayerList() {
-        player.setPlayerListName(Color.translate((this.getActiveGrant().getRank().getColor() == null ? ChatColor.GRAY.toString() : this.getActiveGrant().getRank().getColor()) + (this.customColor != null ? this.customColor : "") + this.player.getName()));
+        this.player.setPlayerListName(Color.translate((this.getActiveGrant().getRank().getColor() == null ? ChatColor.GRAY.toString() : this.getActiveGrant().getRank().getColor()) + (this.customColor != null ? this.customColor : "") + this.player.getName()));
 
-        if (CorePlugin.TAB_ENABLED) {
+        if (CorePlugin.getInstance().getServerSettings().isTabEnabled()) {
             CorePlugin.getInstance().getNMS().updateTablist();
         }
     }
@@ -599,7 +598,7 @@ public class PotPlayer {
 
             CorePlugin.getInstance().getNameTagManager().setupNameTag(player, this.player, this.getColorByRankColor());
 
-            PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+            final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
             CorePlugin.getInstance().getNameTagManager().setupNameTag(this.player, player, potPlayer.getColorByRankColor());
         });
     }
@@ -658,15 +657,15 @@ public class PotPlayer {
 
     public void checkVoting() {
         CompletableFuture.runAsync(() -> {
-            if (!hasVoted) {
+            if (!this.hasVoted) {
                 if (VotingUtil.hasVoted(this.uuid.toString())) {
                     this.hasVoted = true;
                     this.getAllPrefixes().add("Liked");
 
                     if (this.getAppliedPrefix() == null) this.appliedPrefix = Prefix.getByName("Liked");
-                    if (player != null) {
-                        player.sendMessage(ChatColor.GREEN + Color.translate("Thanks for voting for us on &6NameMC&a!"));
-                        player.sendMessage(ChatColor.GREEN + Color.translate("You've been granted the &b✔ &7(Liked)&a prefix!"));
+                    if (this.player != null) {
+                        this.player.sendMessage(ChatColor.GREEN + Color.translate("Thanks for voting for us on &6NameMC&a!"));
+                        this.player.sendMessage(ChatColor.GREEN + Color.translate("You've been granted the &b✔ &7(Liked)&a prefix!"));
                     }
                 }
             } else {
@@ -674,8 +673,8 @@ public class PotPlayer {
                     this.hasVoted = false;
                     this.getAllPrefixes().remove("Liked");
 
-                    player.sendMessage(ChatColor.RED + Color.translate("Your permission to access the &b✔ &7(Liked) &ctag has been revoked as You've unliked our server on NameMC!"));
-                    player.sendMessage(ChatColor.RED + Color.translate("To gain your tag back, like us on NameMC again!"));
+                    this.player.sendMessage(ChatColor.RED + Color.translate("Your permission to access the &b✔ &7(Liked) &ctag has been revoked as You've unliked our server on NameMC!"));
+                    this.player.sendMessage(ChatColor.RED + Color.translate("To gain your tag back, like us on NameMC again!"));
                 }
             }
         });

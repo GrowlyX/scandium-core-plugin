@@ -47,7 +47,7 @@ public class Prefix {
         prefixes.add(this);
     }
 
-    public void savePrefix() {
+    public Document getDocument() {
         Document document = new Document("_id", this.id);
 
         document.put("name", this.name);
@@ -56,26 +56,28 @@ public class Prefix {
 
         document.put("purchasable", this.purchasable);
 
-        CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPrefixCollection().replaceOne(Filters.eq("_id", this.id), document, new ReplaceOptions().upsert(true)));
+        return document;
+    }
+
+    public void savePrefix() {
+        CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPrefixCollection().replaceOne(Filters.eq("_id", this.id), this.getDocument(), new ReplaceOptions().upsert(true)));
     }
 
     public void savePrefixMainThread() {
-        Document document = new Document("_id", this.id);
-
-        document.put("name", this.name);
-        document.put("displayName", this.displayName);
-        document.put("prefix", this.prefix);
-
-        document.put("purchasable", this.purchasable);
-
-        CorePlugin.getInstance().getCoreDatabase().getPrefixCollection().replaceOne(Filters.eq("_id", this.id), document, new ReplaceOptions().upsert(true));
+        CorePlugin.getInstance().getCoreDatabase().getPrefixCollection().replaceOne(Filters.eq("_id", this.id), this.getDocument(), new ReplaceOptions().upsert(true));
     }
 
     public static Prefix getByName(String name) {
-        return prefixes.stream().filter(prefix -> prefix.getName().equals(name)).findFirst().orElse(null);
+        return Prefix.getPrefixes().stream()
+                .filter(prefix -> prefix.getName().equals(name))
+                .findFirst()
+                .orElse(null);
     }
 
     public static Prefix getById(String id) {
-        return prefixes.stream().filter(prefix -> prefix.getId().equals(id)).findFirst().orElse(null);
+        return Prefix.getPrefixes().stream()
+                .filter(prefix -> prefix.getId().equals(id))
+                .findFirst()
+                .orElse(null);
     }
 }

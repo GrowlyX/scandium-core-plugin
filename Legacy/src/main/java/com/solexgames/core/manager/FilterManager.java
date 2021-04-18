@@ -4,7 +4,6 @@ import com.solexgames.core.CorePlugin;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
 import lombok.Getter;
-import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -15,12 +14,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Getter
-@Setter
 public class FilterManager {
 
-    private static final Pattern URL_REGEX = Pattern.compile("^(http://www\\.|https://www\\.|http://|https://)?[a-z0-9]+([\\-.][a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(/.*)?$");
-    private static final Pattern IP_REGEX = Pattern.compile("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])([.,])){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$");
-    private static final Pattern OTHER_IP_REGEX = Pattern.compile("(\\d{1,2}|(0|1)\\" + "d{2}|2[0-4]\\d|25[0-5])" + "\\." + "(\\d{1,2}|(0|1)\\" + "d{2}|2[0-4]\\d|25[0-5])" + "\\." + "(\\d{1,2}|(0|1)\\" + "d{2}|2[0-4]\\d|25[0-5])" + "\\." + "(\\d{1,2}|(0|1)\\" + "d{2}|2[0-4]\\d|25[0-5])");
+    private final Pattern urlRegex = Pattern.compile("^(http://www\\.|https://www\\.|http://|https://)?[a-z0-9]+([\\-.][a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(/.*)?$");
+    private final Pattern ipRegex = Pattern.compile("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])([.,])){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$");
+    private final Pattern otherIpRegex = Pattern.compile("(\\d{1,2}|(0|1)\\" + "d{2}|2[0-4]\\d|25[0-5])" + "\\." + "(\\d{1,2}|(0|1)\\" + "d{2}|2[0-4]\\d|25[0-5])" + "\\." + "(\\d{1,2}|(0|1)\\" + "d{2}|2[0-4]\\d|25[0-5])" + "\\." + "(\\d{1,2}|(0|1)\\" + "d{2}|2[0-4]\\d|25[0-5])");
 
     private final CorePlugin plugin;
     private final List<String> filteredMessages;
@@ -31,8 +29,8 @@ public class FilterManager {
     }
 
     public boolean isDmFiltered(Player player, String target, String message) {
-        AtomicBoolean atomicBoolean = new AtomicBoolean(false);
-        String fixedMessage = message.toLowerCase()
+        final AtomicBoolean atomicBoolean = new AtomicBoolean(false);
+        final String fixedMessage = message.toLowerCase()
                 .replace("3", "e")
                 .replace("1", "i")
                 .replace("!", "i")
@@ -43,7 +41,7 @@ public class FilterManager {
                 .replace("8", "b")
                 .replaceAll("\\p{Punct}|\\d", "")
                 .trim();
-        String[] words = fixedMessage.replace("(dot)", ".").replace("[dot]", ".").replace("<dot>", ".").trim().split(" ");
+        final String[] words = fixedMessage.replace("(dot)", ".").replace("[dot]", ".").replace("<dot>", ".").trim().split(" ");
 
         this.filteredMessages.stream()
                 .filter(s -> fixedMessage.contains(s.toLowerCase()))
@@ -58,17 +56,17 @@ public class FilterManager {
 
         if (!atomicBoolean.get()) {
             Arrays.asList(words).forEach(word -> {
-                Matcher ipMatcher = FilterManager.IP_REGEX.matcher(word);
+                final Matcher ipMatcher = this.ipRegex.matcher(word);
                 if (ipMatcher.matches()) {
                     atomicBoolean.set(true);
                 }
 
-                Matcher otherIpMatcher = FilterManager.OTHER_IP_REGEX.matcher(word);
+                final Matcher otherIpMatcher = this.otherIpRegex.matcher(word);
                 if (otherIpMatcher.matches()) {
                     atomicBoolean.set(true);
                 }
 
-                Matcher urlMatcher = FilterManager.URL_REGEX.matcher(word);
+                final Matcher urlMatcher = this.urlRegex.matcher(word);
                 if (urlMatcher.matches()) {
                     atomicBoolean.set(true);
                 }
@@ -83,8 +81,8 @@ public class FilterManager {
     }
 
     public boolean isMessageFiltered(Player player, String message) {
-        AtomicBoolean atomicBoolean = new AtomicBoolean(false);
-        String fixedMessage = message.toLowerCase()
+        final AtomicBoolean atomicBoolean = new AtomicBoolean(false);
+        final String fixedMessage = message.toLowerCase()
                 .replace("3", "e")
                 .replace("1", "i")
                 .replace("!", "i")
@@ -95,7 +93,7 @@ public class FilterManager {
                 .replace("8", "b")
                 .replaceAll("\\p{Punct}|\\d", "")
                 .trim();
-        String[] words = fixedMessage.replace("(dot)", ".").replace("[dot]", ".").replace("<dot>", ".").trim().split(" ");
+        final String[] words = fixedMessage.replace("(dot)", ".").replace("[dot]", ".").replace("<dot>", ".").trim().split(" ");
 
         this.filteredMessages.stream()
                 .filter(s -> fixedMessage.contains(s.toLowerCase()))
@@ -110,17 +108,17 @@ public class FilterManager {
 
         if (!atomicBoolean.get()) {
             Arrays.asList(words).forEach(word -> {
-                Matcher ipMatcher = FilterManager.IP_REGEX.matcher(word);
+                final Matcher ipMatcher = this.ipRegex.matcher(word);
                 if (ipMatcher.matches()) {
                     atomicBoolean.set(true);
                 }
 
-                Matcher otherIpMatcher = FilterManager.OTHER_IP_REGEX.matcher(word);
+                final Matcher otherIpMatcher = this.otherIpRegex.matcher(word);
                 if (otherIpMatcher.matches()) {
                     atomicBoolean.set(true);
                 }
 
-                Matcher urlMatcher = FilterManager.URL_REGEX.matcher(word);
+                final Matcher urlMatcher = this.urlRegex.matcher(word);
                 if (urlMatcher.matches()) {
                     atomicBoolean.set(true);
                 }
@@ -131,7 +129,7 @@ public class FilterManager {
     }
 
     private void handleAlert(Player player, String message) {
-        PotPlayer targetPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+        final PotPlayer targetPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
         Bukkit.getOnlinePlayers()
                 .stream()
@@ -141,7 +139,7 @@ public class FilterManager {
     }
 
     private void handleSocialSpy(Player player, String target, String message) {
-        PotPlayer targetPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+        final PotPlayer targetPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
         Bukkit.getOnlinePlayers()
                 .stream()
@@ -151,7 +149,7 @@ public class FilterManager {
     }
 
     private void handleDmAlert(Player player, String target, String message) {
-        PotPlayer targetPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+        final PotPlayer targetPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
         Bukkit.getOnlinePlayers()
                 .stream()

@@ -1,4 +1,4 @@
-package com.solexgames.core.hooks.access;
+package com.solexgames.core.hooks.nms;
 
 import org.bukkit.entity.Player;
 

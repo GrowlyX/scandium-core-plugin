@@ -46,7 +46,7 @@ public class NameColorSelectMenu extends PaginatedMenu {
 
             @Override
             public void clicked(Player player, ClickType clickType) {
-                PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+                final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
                 potPlayer.setCustomColor(null);
                 player.sendMessage(ChatColor.GREEN + "Your custom name color has been reset!");

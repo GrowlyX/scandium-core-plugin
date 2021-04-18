@@ -17,8 +17,7 @@ public class FrozenMessageTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        Bukkit.getOnlinePlayers()
-                .stream()
+        Bukkit.getOnlinePlayers().stream()
                 .filter(player -> CorePlugin.getInstance().getPlayerManager().getPlayer(player).isFrozen())
                 .forEach(player -> CorePlugin.getInstance().getPlayerManager().sendFreezeMessage(player));
     }

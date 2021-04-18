@@ -5,7 +5,6 @@ import com.solexgames.core.enums.ChatChannelType;
 import com.solexgames.core.manager.ServerManager;
 import com.solexgames.core.menu.IMenu;
 import com.solexgames.core.menu.impl.grant.GrantSelectConfirmMenu;
-import com.solexgames.core.menu.impl.punish.PunishSelectDurationMenu;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.media.MediaConstants;
 import com.solexgames.core.player.punishment.PunishmentStrings;
@@ -42,11 +41,11 @@ import java.util.regex.Matcher;
 
 public class PlayerListener implements Listener {
 
-    public ServerManager MANAGER = CorePlugin.getInstance().getServerManager();
+    public ServerManager serverManager = CorePlugin.getInstance().getServerManager();
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPreLogin(AsyncPlayerPreLoginEvent event) {
-        if (!CorePlugin.CAN_JOIN) {
+        if (!CorePlugin.getInstance().getServerSettings().isCanJoin()) {
             event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, PunishmentStrings.SERVER_NOT_LOADED);
             return;
         }
@@ -59,8 +58,8 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onPreLoginCheck(AsyncPlayerPreLoginEvent event) {
         if (event.getLoginResult().equals(AsyncPlayerPreLoginEvent.Result.ALLOWED)) {
-            PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getUniqueId());
-            boolean isHub = CorePlugin.getInstance().getServerName().toLowerCase().contains("hub") || CorePlugin.getInstance().getServerName().toLowerCase().contains("lobby");
+            final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getUniqueId());
+            final boolean isHub = CorePlugin.getInstance().getServerName().toLowerCase().contains("hub") || CorePlugin.getInstance().getServerName().toLowerCase().contains("lobby");
 
             if (potPlayer != null) {
                 if (potPlayer.isCurrentlyRestricted() && !isHub) {
@@ -76,7 +75,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onJoin(PlayerJoinEvent event) {
-        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer());
+        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer());
 
         if (potPlayer == null) {
             event.getPlayer().kickPlayer(PunishmentStrings.PLAYER_DATA_LOAD);
@@ -91,17 +90,17 @@ public class PlayerListener implements Listener {
                     .filter(potPlayer1 -> potPlayer1.isVanished() && potPlayer.getActiveGrant().getRank().getWeight() < potPlayer1.getActiveGrant().getRank().getWeight())
                     .forEach(player -> event.getPlayer().hidePlayer(player.getPlayer())), 35L);
 
-            if (MANAGER.isClearChatJoin()) {
+            if (this.serverManager.isClearChatJoin()) {
                 for (int lines = 0; lines < 250; lines++) {
                     event.getPlayer().sendMessage("  ");
                 }
             }
 
-            if (MANAGER.isJoinMessageEnabled()) {
-                if (MANAGER.isJoinMessageCentered()) {
-                    MANAGER.getJoinMessage().forEach(s -> event.getPlayer().sendMessage(Color.translate(s.replace("%PLAYER%", event.getPlayer().getDisplayName()))));
+            if (this.serverManager.isJoinMessageEnabled()) {
+                if (this.serverManager.isJoinMessageCentered()) {
+                    this.serverManager.getJoinMessage().forEach(s -> event.getPlayer().sendMessage(Color.translate(s.replace("%PLAYER%", event.getPlayer().getDisplayName()))));
                 } else {
-                    StringUtil.sendCenteredMessage(event.getPlayer(), (ArrayList<String>) MANAGER.getJoinMessage());
+                    StringUtil.sendCenteredMessage(event.getPlayer(), (ArrayList<String>) this.serverManager.getJoinMessage());
                 }
             }
 
@@ -146,7 +145,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
-        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer());
+        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer());
 
         if (potPlayer != null) {
             if (potPlayer.isFrozen()) {
@@ -159,8 +158,8 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onDamaged(EntityDamageEvent event) {
         if (event.getEntityType().equals(EntityType.PLAYER)) {
-            Player player = (Player) event.getEntity();
-            PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+            final Player player = (Player) event.getEntity();
+            final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
             if (potPlayer != null) {
                 if (potPlayer.isFrozen()) {
@@ -193,9 +192,9 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onAsyncPlayerChatEvent(AsyncPlayerChatEvent event) {
-        Player player = event.getPlayer();
-        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-        String message = event.getMessage();
+        final Player player = event.getPlayer();
+        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+        final String message = event.getMessage();
 
         if (LockedState.isLocked(player)) {
             event.getPlayer().sendMessage(ChatColor.RED + "You cannot perform this action right now!");
@@ -264,6 +263,8 @@ public class PlayerListener implements Listener {
             return;
         }
 
+        // TODO: Switch these to Prompts
+
         if (potPlayer.isGrantEditing()) {
             event.setCancelled(true);
 
@@ -276,6 +277,7 @@ public class PlayerListener implements Listener {
                 player.sendMessage(ChatColor.GREEN + Color.translate("Set the grant reason to &6'" + message + "'&a."));
                 new GrantSelectConfirmMenu(potPlayer.getPlayer(), potPlayer.getGrantTarget(), potPlayer.getGrantRank(), potPlayer.getGrantDuration(), message, potPlayer.isGrantPerm(), potPlayer.getGrantScope()).open(player);
             }
+
             potPlayer.setGrantEditing(false);
             return;
         }
@@ -295,11 +297,11 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (potPlayer.getMedia().getMediaData().isModifyingDiscordData()) {
+        if (potPlayer.getMedia().getMediaData().isModifyingDiscord()) {
             if (discordMatcher.matches()) {
                 potPlayer.getMedia().setDiscord(event.getMessage());
                 player.sendMessage(ChatColor.GREEN + Color.translate("Updated your discord to &e" + event.getMessage() + ChatColor.GREEN + "!"));
-                potPlayer.getMedia().getMediaData().setModifyingDiscordData(false);
+                potPlayer.getMedia().getMediaData().setModifyingDiscord(false);
             } else {
                 player.sendMessage(ChatColor.RED + ("Error: That's an invalid discord username!"));
                 player.sendMessage(ChatColor.RED + ("Example: Wumpus#1234"));
@@ -308,11 +310,11 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (CorePlugin.getInstance().getPlayerManager().getPlayer(player).getMedia().getMediaData().isModifyingInstaData()) {
+        if (CorePlugin.getInstance().getPlayerManager().getPlayer(player).getMedia().getMediaData().isModifyingInsta()) {
             if (instaMatcher.matches()) {
                 potPlayer.getMedia().setInstagram(event.getMessage());
                 player.sendMessage(ChatColor.GREEN + Color.translate("Updated your instagram to &6" + event.getMessage() + ChatColor.GREEN + "!"));
-                potPlayer.getMedia().getMediaData().setModifyingInstaData(false);
+                potPlayer.getMedia().getMediaData().setModifyingInsta(false);
             } else {
                 player.sendMessage(ChatColor.RED + ("Error: That's an invalid instagram username!"));
                 player.sendMessage(ChatColor.RED + ("Example: @SolexGames"));
@@ -321,11 +323,11 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (CorePlugin.getInstance().getPlayerManager().getPlayer(player).getMedia().getMediaData().isModifyingYoutubeData()) {
+        if (CorePlugin.getInstance().getPlayerManager().getPlayer(player).getMedia().getMediaData().isModifyingYouTube()) {
             if (youtubeMatcher.matches()) {
                 potPlayer.getMedia().setYoutubeLink(event.getMessage());
                 player.sendMessage(ChatColor.GREEN + Color.translate("Updated your youtube to &6" + event.getMessage() + ChatColor.GREEN + "!"));
-                potPlayer.getMedia().getMediaData().setModifyingYoutubeData(false);
+                potPlayer.getMedia().getMediaData().setModifyingYouTube(false);
             } else {
                 player.sendMessage(ChatColor.RED + ("Error: That's an invalid youtube link!"));
                 player.sendMessage(ChatColor.RED + ("Example: https://youtube.com/c/SolexGames/"));
@@ -334,11 +336,11 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (CorePlugin.getInstance().getPlayerManager().getPlayer(player).getMedia().getMediaData().isModifyingTwitterData()) {
+        if (CorePlugin.getInstance().getPlayerManager().getPlayer(player).getMedia().getMediaData().isModifyingTwitter()) {
             if (twitterMatcher.matches()) {
                 potPlayer.getMedia().setTwitter(event.getMessage());
                 player.sendMessage(ChatColor.GREEN + Color.translate("Updated your twitter to &6" + event.getMessage() + ChatColor.GREEN + "!"));
-                potPlayer.getMedia().getMediaData().setModifyingTwitterData(false);
+                potPlayer.getMedia().getMediaData().setModifyingTwitter(false);
             } else {
                 player.sendMessage(ChatColor.RED + ("Error: That's an invalid twitter link!"));
                 player.sendMessage(ChatColor.RED + ("Example: @SolexGames"));
@@ -368,7 +370,7 @@ public class PlayerListener implements Listener {
 
         if (CorePlugin.getInstance().getServerManager().isChatEnabled()) {
             if (!potPlayer.isCurrentlyMuted()) {
-                if (!CorePlugin.CHAT_FORMAT_ENABLED) {
+                if (!CorePlugin.getInstance().getServerSettings().isChatFormatEnabled()) {
                     return;
                 }
 
@@ -380,7 +382,7 @@ public class PlayerListener implements Listener {
         } else {
             if (player.hasPermission("scandium.chat.bypass")) {
                 if (!potPlayer.isCurrentlyMuted()) {
-                    if (!CorePlugin.CHAT_FORMAT_ENABLED) {
+                    if (!CorePlugin.getInstance().getServerSettings().isChatFormatEnabled()) {
                         return;
                     }
 
@@ -504,7 +506,7 @@ public class PlayerListener implements Listener {
             }
         }
 
-        if (CorePlugin.ANTI_CMD_SPAM)
+        if (CorePlugin.getInstance().getServerSettings().isAntiCommandSpamEnabled())
             CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer()).setCommandCooldown(System.currentTimeMillis() + 1L);
         else CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer()).setCommandCooldown(0L);
     }
@@ -517,7 +519,7 @@ public class PlayerListener implements Listener {
         Bukkit.getOnlinePlayers().stream()
                 .map(player1 -> CorePlugin.getInstance().getPlayerManager().getPlayer(player1))
                 .filter(potPlayer1 -> potPlayer1 != null && potPlayer1.isIgnoring(potPlayer.getPlayer()) && potPlayer.isCanSeeGlobalChat())
-                .forEach(potPlayer1 -> potPlayer1.getPlayer().sendMessage(Color.translate(CorePlugin.CHAT_FORMAT
+                .forEach(potPlayer1 -> potPlayer1.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getServerSettings().getChatFormat()
                         .replace("<prefix>", (potPlayer.getAppliedPrefix() != null ? potPlayer.getAppliedPrefix().getPrefix() + " " : ""))
                         .replace("<rank_prefix>", (potPlayer.getDisguiseRank() != null ? potPlayer.getDisguiseRank().getPrefix() : potPlayer.getActiveGrant().getRank().getPrefix()))
                         .replace("<rank_suffix>", (potPlayer.getDisguiseRank() != null ? potPlayer.getDisguiseRank().getSuffix() : potPlayer.getActiveGrant().getRank().getSuffix()))
@@ -527,7 +529,7 @@ public class PlayerListener implements Listener {
                         .replace("<message>", event.getMessage())
                 ));
 
-        if (CorePlugin.ANTI_CHAT_SPAM)
+        if (CorePlugin.getInstance().getServerSettings().isAntiSpamEnabled())
             CorePlugin.getInstance().getPlayerManager().getPlayer(player).setChatCooldown(System.currentTimeMillis() + (slowChat > 0L ? slowChat : 3000L));
         else CorePlugin.getInstance().getPlayerManager().getPlayer(player).setChatCooldown(0L);
     }

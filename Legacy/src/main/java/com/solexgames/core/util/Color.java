@@ -25,6 +25,9 @@ public final class Color {
         return text.stream().map(Color::translate).collect(Collectors.toList());
     }
 
+    /**
+     * Sets up custom colors via the config
+     */
     public void setupMessages() {
         MAIN_COLOR = CorePlugin.getInstance().getServerManager().getNetwork().getMainColor();
         SECONDARY_COLOR = CorePlugin.getInstance().getServerManager().getNetwork().getSecondaryColor();

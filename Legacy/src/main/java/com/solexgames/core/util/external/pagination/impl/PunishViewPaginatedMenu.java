@@ -53,8 +53,8 @@ public class PunishViewPaginatedMenu extends PaginatedMenu {
 
     @Override
     public Map<Integer, Button> getAllPagesButtons(Player player) {
-        HashMap<Integer, Button> buttons = new HashMap<>();
-        AtomicInteger i = new AtomicInteger(0);
+        final HashMap<Integer, Button> buttons = new HashMap<>();
+        final AtomicInteger i = new AtomicInteger(0);
 
         this.getSortedPunishmentsByType().forEach(punishment -> {
             OfflinePlayer issuerOfflinePlayer;

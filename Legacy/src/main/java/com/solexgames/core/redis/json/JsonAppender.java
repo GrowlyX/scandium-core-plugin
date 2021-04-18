@@ -3,6 +3,7 @@ package com.solexgames.core.redis.json;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.redis.packet.RedisAction;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,20 +16,12 @@ import java.util.Map;
  */
 
 @Getter
+@RequiredArgsConstructor
 public class JsonAppender {
 
-    private final Map<String, String> parameters;
-    private final RedisAction packet;
+    private final Map<String, String> parameters = new HashMap<>();
 
-    /**
-     * Creates a new instance of {@link JsonAppender} with a packet type {@link RedisAction}
-     *
-     * @param packet Redis packet type for this instance.
-     */
-    public JsonAppender(RedisAction packet) {
-        this.packet = packet;
-        this.parameters = new HashMap<>();
-    }
+    private final RedisAction packet;
 
     public JsonAppender put(String key, String value) {
         this.parameters.put(key, value);
@@ -36,9 +29,10 @@ public class JsonAppender {
     }
 
     public String getParam(String key) {
-        if (containsParam(key)) {
+        if (this.containsParam(key)) {
             return this.parameters.get(key);
         }
+
         return null;
     }
 

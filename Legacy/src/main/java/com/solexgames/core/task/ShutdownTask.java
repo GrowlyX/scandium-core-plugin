@@ -27,11 +27,7 @@ public class ShutdownTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
-        ChatColor mainColor = network.getMainColor();
-        ChatColor secondaryColor = network.getSecondaryColor();
-
-        int finalSeconds = this.seconds - this.ticks;
+        final int finalSeconds = this.seconds - this.ticks;
 
         switch (finalSeconds) {
             case 40:
@@ -39,7 +35,7 @@ public class ShutdownTask extends BukkitRunnable {
             case 20:
             case 15:
             case 10:
-                Bukkit.broadcastMessage(Color.translate(secondaryColor + "The server will be shutting down in " + mainColor + finalSeconds + " seconds" + secondaryColor + "."));
+                Bukkit.broadcastMessage(Color.SECONDARY_COLOR + "The server will be shutting down in " + Color.MAIN_COLOR + finalSeconds + " seconds" + Color.SECONDARY_COLOR + ".");
                 break;
             case 5:
                 Bukkit.getOnlinePlayers().forEach(player -> player.kickPlayer(Color.translate("&cThe server is currently rebooting...\n&cPlease reconnect in a few minutes.")));

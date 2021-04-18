@@ -63,9 +63,7 @@ public class NameTagManager {
     private Team getTeam(ChatColor color, Scoreboard scoreboard) {
         final Team team = scoreboard.getTeam(this.getTeamName(color));
 
-        return team == null
-                ? scoreboard.registerNewTeam(this.getTeamName(color))
-                : team;
+        return team == null ? scoreboard.registerNewTeam(this.getTeamName(color)) : team;
     }
 
     public void setupVanishTag(Player player, Player target) {

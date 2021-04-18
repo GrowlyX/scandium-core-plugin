@@ -3,10 +3,13 @@ package com.solexgames.core.util.external.pagination.impl;
 import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.player.ranks.Rank;
+import com.solexgames.core.server.NetworkServer;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.util.external.pagination.Button;
 import com.solexgames.core.util.external.pagination.pagination.PaginatedMenu;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -96,31 +99,35 @@ public class GrantScopePaginatedMenu extends PaginatedMenu {
 
     @Override
     public Map<Integer, Button> getAllPagesButtons(Player player) {
-        HashMap<Integer, Button> buttonMap = new HashMap<>();
-        AtomicInteger i = new AtomicInteger(0);
+        final HashMap<Integer, Button> buttonMap = new HashMap<>();
+        final AtomicInteger i = new AtomicInteger(0);
 
         CorePlugin.getInstance().getServerManager().getNetworkServers().stream()
                 .filter(Objects::nonNull)
-                .forEach(server -> buttonMap.put(i.getAndIncrement(), new Button() {
-                    @Override
-                    public ItemStack getButtonItem(Player player) {
-                        return new ItemBuilder(XMaterial.PAPER.parseMaterial())
-                                .setDisplayName(ChatColor.GREEN + ChatColor.BOLD.toString() + server.getServerName())
-                                .addLore(
-                                        "&7Click to select this server",
-                                        "&7for the grant scope."
-                                )
-                                .create();
-                    }
-
-                    @Override
-                    public void clicked(Player player, ClickType clickType) {
-                        String display = ChatColor.stripColor(getButtonItem(player).getItemMeta().getDisplayName());
-
-                        new GrantDurationPaginatedMenu(player, document, rank, display).openMenu(player);
-                    }
-                }));
+                .forEach(server -> buttonMap.put(i.getAndIncrement(), new ScopeButton(server)));
 
         return buttonMap;
+    }
+
+    @RequiredArgsConstructor
+    private class ScopeButton extends Button {
+
+        private final NetworkServer server;
+
+        @Override
+        public ItemStack getButtonItem(Player player) {
+            return new ItemBuilder(XMaterial.PAPER.parseMaterial())
+                    .setDisplayName(ChatColor.GREEN + ChatColor.BOLD.toString() + this.server.getServerName())
+                    .addLore(
+                            "&7Click to select this server",
+                            "&7for the grant scope."
+                    )
+                    .create();
+        }
+
+        @Override
+        public void clicked(Player player, ClickType clickType) {
+            new GrantDurationPaginatedMenu(player, document, rank, this.server.getServerName()).openMenu(player);
+        }
     }
 }

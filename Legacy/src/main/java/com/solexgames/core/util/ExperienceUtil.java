@@ -1,6 +1,5 @@
 package com.solexgames.core.util;
 
-import com.mongodb.client.MongoCursor;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.player.PotPlayer;
@@ -29,8 +28,8 @@ public final class ExperienceUtil {
             return;
         }
 
-        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+        final ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
 
         if (potPlayer != null) {
             potPlayer.setExperience(potPlayer.getExperience() + amount);
@@ -45,21 +44,14 @@ public final class ExperienceUtil {
      * @return The string list.
      */
     public static List<String> getLeaderboardList(String sortingString) {
-        List<String> stringArrayList = new ArrayList<>();
-        Document sortingDocument = new Document();
-        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
-        AtomicInteger lineInt = new AtomicInteger();
+        final List<String> stringArrayList = new ArrayList<>();
+        final Document sortingDocument = new Document();
+        final ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+        final AtomicInteger lineInt = new AtomicInteger();
 
         sortingDocument.put(sortingString, -1);
 
-        CompletableFuture<MongoCursor<Document>> cursorCompletableFuture = new CompletableFuture<>();
-
-        CompletableFuture.runAsync(() -> {
-            MongoCursor<Document> cursor = CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find().sort(sortingDocument).limit(10).iterator();
-            cursorCompletableFuture.complete(cursor);
-        });
-
-        cursorCompletableFuture.thenAccept(documentMongoCursor -> {
+        CompletableFuture.supplyAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find().sort(sortingDocument).limit(10).iterator()).thenAccept(documentMongoCursor -> {
             while (documentMongoCursor.hasNext()) {
                 Document document = documentMongoCursor.next();
                 int amountOfSort;
@@ -89,8 +81,8 @@ public final class ExperienceUtil {
             return;
         }
 
-        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+        final ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
 
         if (potPlayer != null) {
             potPlayer.setExperience(amount);
@@ -110,8 +102,8 @@ public final class ExperienceUtil {
             return;
         }
 
-        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+        final ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
 
         if (potPlayer != null) {
             potPlayer.setExperience(potPlayer.getExperience() - amount);

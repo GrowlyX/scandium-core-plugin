@@ -31,7 +31,13 @@ public class PrefixPurchaseMenu extends PaginatedMenu {
         buttons.put(4, new Button() {
             @Override
             public ItemStack getButtonItem(Player player) {
-                return new ItemBuilder(XMaterial.RED_BED.parseMaterial()).setDisplayName("&cReturn").addLore("&7Click to return to the", "&7main shop menu!").create();
+                return new ItemBuilder(XMaterial.RED_BED.parseMaterial())
+                        .setDisplayName("&cReturn")
+                        .addLore(
+                                "&7Click to return to the",
+                                "&7main shop menu!"
+                        )
+                        .create();
             }
 
             @Override

@@ -54,7 +54,7 @@ public class ScandiumMenu extends AbstractInventoryMenu {
                 .create()
         );
 
-        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
+        final ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
         this.inventory.setItem(6, new ItemBuilder(XMaterial.ORANGE_DYE.parseMaterial(), 14)
                 .setDisplayName("&b&lInformation &7(" + network.getServerName() + ")")
                 .addLore(
@@ -73,14 +73,15 @@ public class ScandiumMenu extends AbstractInventoryMenu {
 
     @Override
     public void onInventoryClick(InventoryClickEvent event) {
-        Inventory clickedInventory = event.getClickedInventory();
-        Inventory topInventory = event.getView().getTopInventory();
+        final Inventory clickedInventory = event.getClickedInventory();
+        final Inventory topInventory = event.getView().getTopInventory();
+
         if (!topInventory.equals(this.inventory)) return;
         if (topInventory.equals(clickedInventory)) {
             event.setCancelled(true);
 
-            ItemStack item = event.getCurrentItem();
-            Player player = (Player) event.getWhoClicked();
+            final ItemStack item = event.getCurrentItem();
+            final Player player = (Player) event.getWhoClicked();
 
             if (item == null || item.getType() == XMaterial.AIR.parseMaterial()) return;
             if (event.getRawSlot() == 2) {

@@ -3,6 +3,7 @@ package com.solexgames.core.enums;
 import com.cryptomorin.xseries.XMaterial;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.beans.ConstructorProperties;
 import java.util.Arrays;
@@ -15,7 +16,7 @@ import java.util.List;
  */
 
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public enum ReportType {
 
     COMBAT_HACKS("Combat Hacks", Arrays.asList("KillAura", "Reach", "Aim Assist"), XMaterial.DIAMOND_SWORD, 0),

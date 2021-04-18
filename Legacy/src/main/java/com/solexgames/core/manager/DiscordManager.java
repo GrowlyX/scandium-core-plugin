@@ -30,12 +30,12 @@ public class DiscordManager {
             return;
         }
 
-        WebhookClientBuilder builder = new WebhookClientBuilder(CorePlugin.getInstance().getConfig().getString("discord.webhook"));
+        final WebhookClientBuilder builder = new WebhookClientBuilder(CorePlugin.getInstance().getConfig().getString("discord.webhook"));
 
         builder.setThreadFactory(job -> {
             Thread thread = new Thread(job);
 
-            thread.setName(CorePlugin.getInstance().getServerManager().getNetwork().getServerName());
+            thread.setName(CorePlugin.getInstance().getServerManager().getNetwork().getServerName() + " Webhook");
             thread.setDaemon(true);
 
             return thread;
@@ -46,7 +46,7 @@ public class DiscordManager {
     }
 
     public void sendReport(Player player, Player target, String reason) {
-        WebhookEmbedBuilder embedBuilder = new WebhookEmbedBuilder();
+        final WebhookEmbedBuilder embedBuilder = new WebhookEmbedBuilder();
 
         embedBuilder.setTitle(new WebhookEmbed.EmbedTitle("New Report", null));
 
@@ -61,7 +61,7 @@ public class DiscordManager {
     }
 
     public void sendPunishment(Punishment punishment) {
-        WebhookEmbedBuilder embedBuilder = new WebhookEmbedBuilder();
+        final WebhookEmbedBuilder embedBuilder = new WebhookEmbedBuilder();
 
         embedBuilder.setTitle(new WebhookEmbed.EmbedTitle("New " + punishment.getPunishmentType().getName(), null));
 

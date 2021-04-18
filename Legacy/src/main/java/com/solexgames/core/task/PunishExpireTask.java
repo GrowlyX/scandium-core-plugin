@@ -8,8 +8,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.Objects;
-import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -30,10 +28,10 @@ public class PunishExpireTask extends BukkitRunnable {
                 .forEach(punishment -> {
                     punishment.setActive(false);
 
-                    Player player = Bukkit.getPlayer(punishment.getTarget());
+                    final Player player = Bukkit.getPlayer(punishment.getTarget());
 
                     if (player != null) {
-                        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+                        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
                         switch (punishment.getPunishmentType()) {
                             case MUTE:
@@ -46,7 +44,7 @@ public class PunishExpireTask extends BukkitRunnable {
                                 player.sendMessage(ChatColor.RED + "Your current warning has expired.");
                                 break;
                             case BLACKLIST:
-                            case IPBAN:
+                            case IP_BAN:
                             case BAN:
                                 potPlayer.setCurrentlyRestricted(false);
                                 player.sendMessage(ChatColor.RED + "Your current ban has expired.");

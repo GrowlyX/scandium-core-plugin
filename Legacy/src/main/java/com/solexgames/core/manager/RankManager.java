@@ -19,7 +19,7 @@ public class RankManager {
 
     public void loadRanks() {
         CorePlugin.getInstance().getMongoThread().execute(() -> CorePlugin.getInstance().getCoreDatabase().getRankCollection().find().forEach((Block<? super Document>) document -> {
-            Rank rank = new Rank(
+            final Rank rank = new Rank(
                     UUID.fromString(document.getString("uuid")),
                     (ArrayList<UUID>) document.get("inheritance"),
                     (ArrayList<String>) document.get("permissions"),
@@ -45,9 +45,9 @@ public class RankManager {
 
     private void createDefaultRanks() {
         if (CorePlugin.getInstance().getCoreDatabase().getRankCollection().find(Filters.eq("name", "Default")).first() == null) {
-            List<String> permissions = Collections.singletonList("scandium.default");
-            UUID uuid = UUID.randomUUID();
-            Document defaultRank = new Document("_id", uuid);
+            final List<String> permissions = Collections.singletonList("scandium.default");
+            final UUID uuid = UUID.randomUUID();
+            final Document defaultRank = new Document("_id", uuid);
 
             defaultRank.put("uuid", uuid.toString());
             defaultRank.put("inheritance", new ArrayList<UUID>());

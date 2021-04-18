@@ -17,15 +17,14 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 /**
- * @author Some website
- * @since ???
+ * @author StackOverflow / modified by GrowlyX
  */
 
 @UtilityClass
 public final class JavaUtil {
 
     public static void registerCommandsIn(String packageName) {
-        Collection<Class<?>> collection = JavaUtil.getClassesInPackage(CorePlugin.getInstance(), packageName);
+        final Collection<Class<?>> collection = JavaUtil.getClassesInPackage(CorePlugin.getInstance(), packageName);
 
         collection.forEach(aClass -> {
             try {
@@ -38,7 +37,7 @@ public final class JavaUtil {
     }
 
     public static void registerListenersIn(String packageName) {
-        Collection<Class<?>> collection = JavaUtil.getClassesInPackage(CorePlugin.getInstance(), packageName);
+        final Collection<Class<?>> collection = JavaUtil.getClassesInPackage(CorePlugin.getInstance(), packageName);
 
         collection.forEach(aClass -> {
             try {
@@ -51,13 +50,14 @@ public final class JavaUtil {
     }
 
     public static Collection<Class<?>> getClassesInPackage(Plugin plugin, String packageName) {
-        Collection<Class<?>> classes = new ArrayList<>();
+        final Collection<Class<?>> classes = new ArrayList<>();
 
-        CodeSource codeSource = plugin.getClass().getProtectionDomain().getCodeSource();
-        URL resource = codeSource.getLocation();
-        String relPath = packageName.replace('.', '/');
-        String resPath = resource.getPath().replace("%20", " ");
-        String jarPath = resPath.replaceFirst("[.]jar[!].*", ".jar").replaceFirst("file:", "");
+        final CodeSource codeSource = plugin.getClass().getProtectionDomain().getCodeSource();
+        final URL resource = codeSource.getLocation();
+        final String relPath = packageName.replace('.', '/');
+        final String resPath = resource.getPath().replace("%20", " ");
+        final String jarPath = resPath.replaceFirst("[.]jar[!].*", ".jar").replaceFirst("file:", "");
+
         JarFile jarFile;
 
         try {
@@ -66,7 +66,7 @@ public final class JavaUtil {
             throw new RuntimeException("Unexpected IOException reading JAR File '" + jarPath + "'", e);
         }
 
-        Enumeration<JarEntry> entries = jarFile.entries();
+        final Enumeration<JarEntry> entries = jarFile.entries();
 
         while (entries.hasMoreElements()) {
             JarEntry entry = entries.nextElement();

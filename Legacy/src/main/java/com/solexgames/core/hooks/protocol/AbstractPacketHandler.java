@@ -7,18 +7,21 @@ import lombok.Getter;
 import org.bukkit.configuration.file.FileConfiguration;
 
 @Getter
-public abstract class AbstractChatInterceptor {
+public abstract class AbstractPacketHandler {
 
     protected ProtocolManager protocolManager;
     protected FileConfiguration config;
     protected CorePlugin coreInstance;
 
-    public AbstractChatInterceptor() {
+    public AbstractPacketHandler() {
         this.protocolManager = ProtocolLibrary.getProtocolManager();
         this.config = CorePlugin.getInstance().getConfig();
         this.coreInstance = CorePlugin.getInstance();
     }
 
-    public abstract void initializePacketInterceptor();
+    /**
+     * Initializes the ProtocolLib packet system
+     */
+    public abstract void initializePacketHandlers();
 
 }

@@ -37,14 +37,16 @@ public class ReportMenu extends AbstractInventoryMenu {
 
     public ReportMenu(Player player, Player target) {
         super("Report", 9);
+
         this.player = player;
         this.target = target;
+
         this.update();
     }
 
     public void update() {
-        AtomicInteger integer = new AtomicInteger();
-        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+        final AtomicInteger integer = new AtomicInteger();
+        final ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
 
         Arrays.asList(ReportType.values()).forEach(reportType -> this.inventory.setItem(integer.getAndIncrement(), new ItemBuilder(reportType.getXMaterial().parseMaterial())
                 .setDisplayName(serverType.getMainColor() + reportType.getName())
@@ -57,18 +59,19 @@ public class ReportMenu extends AbstractInventoryMenu {
 
     @Override
     public void onInventoryClick(InventoryClickEvent event) {
-        Inventory clickedInventory = event.getClickedInventory();
-        Inventory topInventory = event.getView().getTopInventory();
+        final Inventory clickedInventory = event.getClickedInventory();
+        final Inventory topInventory = event.getView().getTopInventory();
+
         if (!topInventory.equals(this.inventory)) return;
         if (topInventory.equals(clickedInventory)) {
             event.setCancelled(true);
 
-            ItemStack item = event.getCurrentItem();
+            final ItemStack item = event.getCurrentItem();
 
             if (item == null || item.getType() == XMaterial.AIR.parseMaterial()) return;
 
-            PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(this.player);
-            ReportType reportType = Arrays.stream(ReportType.values()).filter(reportType1 -> reportType1.getName().equalsIgnoreCase(ChatColor.stripColor(item.getItemMeta().getDisplayName()))).findFirst().orElse(null);
+            final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(this.player);
+            final ReportType reportType = Arrays.stream(ReportType.values()).filter(reportType1 -> reportType1.getName().equalsIgnoreCase(ChatColor.stripColor(item.getItemMeta().getDisplayName()))).findFirst().orElse(null);
 
             if (reportType != null && potPlayer.isCanReport()) {
                 RedisUtil.writeAsync(RedisUtil.onReport(this.player, this.target, reportType.getName()));

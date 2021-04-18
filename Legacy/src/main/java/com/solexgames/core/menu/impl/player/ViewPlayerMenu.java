@@ -160,5 +160,4 @@ public class ViewPlayerMenu extends Menu {
             return String.format(MINUTE_FORMAT, seconds / 60L, seconds % 60L);
         }
     }
-
 }

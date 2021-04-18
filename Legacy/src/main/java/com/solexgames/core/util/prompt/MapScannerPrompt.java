@@ -36,12 +36,12 @@ public class MapScannerPrompt extends StringPrompt {
 
     @Override
     public String getPromptText(ConversationContext context) {
-        Player player = (Player) context.getForWhom();
+        final Player player = (Player) context.getForWhom();
 
         if (this.failures == 0) {
             CompletableFuture.runAsync(() -> {
-                String secret = generateSecret();
-                BufferedImage image = generateImage(player, secret);
+                final String secret = generateSecret();
+                final BufferedImage image = generateImage(player, secret);
 
                 if (image != null) {
                     MapView mapView = Bukkit.getServer().createMap(player.getWorld());
@@ -69,11 +69,11 @@ public class MapScannerPrompt extends StringPrompt {
 
     @Override
     public Prompt acceptInput(ConversationContext context, String input) {
-        ItemStack mapItem = (ItemStack) context.getSessionData("map");
-        String secret = (String) context.getSessionData("secret");
+        final ItemStack mapItem = (ItemStack) context.getSessionData("map");
+        final String secret = (String) context.getSessionData("secret");
 
-        Player player = (Player) context.getForWhom();
-        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+        final Player player = (Player) context.getForWhom();
+        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
         player.getInventory().remove(mapItem);
 
@@ -130,11 +130,11 @@ public class MapScannerPrompt extends StringPrompt {
     }
 
     private BufferedImage generateImage(Player player, String secret) {
-        Escaper urlEscaper = UrlEscapers.urlFragmentEscaper();
+        final Escaper urlEscaper = UrlEscapers.urlFragmentEscaper();
 
-        String issuer = CorePlugin.getInstance().getServerManager().getNetwork().getServerName();
-        String url = "otpauth://totp/" + urlEscaper.escape(player.getName()) + "?secret=" + secret + "&issuer=" + urlEscaper.escape(issuer);
-        String imageUrl = String.format(IMAGE_URL_FORMAT, URLEncoder.encode(url));
+        final String issuer = CorePlugin.getInstance().getServerManager().getNetwork().getServerName();
+        final String url = "otpauth://totp/" + urlEscaper.escape(player.getName()) + "?secret=" + secret + "&issuer=" + urlEscaper.escape(issuer);
+        final String imageUrl = String.format(IMAGE_URL_FORMAT, URLEncoder.encode(url));
 
         try {
             return ImageIO.read(new URL(imageUrl));

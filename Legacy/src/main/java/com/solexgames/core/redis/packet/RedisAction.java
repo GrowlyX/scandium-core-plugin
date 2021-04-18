@@ -1,15 +1,17 @@
 package com.solexgames.core.redis.packet;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.beans.ConstructorProperties;
 
 /**
  * @author GrowlyX
- * @since March 2021
+ * @since 2021
  */
 
 @Getter
+@RequiredArgsConstructor
 public enum RedisAction {
 
     CHAT_CHANNEL_UPDATE("ChatChannelUpdate"),
@@ -46,8 +48,4 @@ public enum RedisAction {
 
     private final String packetDataName;
 
-    @ConstructorProperties("packetDataName")
-    RedisAction(String packetDataName) {
-        this.packetDataName = packetDataName;
-    }
 }

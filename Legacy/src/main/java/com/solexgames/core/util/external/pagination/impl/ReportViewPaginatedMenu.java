@@ -28,7 +28,7 @@ public class ReportViewPaginatedMenu extends PaginatedMenu {
 
     @Override
     public Map<Integer, Button> getGlobalButtons(Player player) {
-        HashMap<Integer, Button> buttons = new HashMap<>();
+        final HashMap<Integer, Button> buttons = new HashMap<>();
 
         buttons.put(4, new Button() {
             @Override
@@ -61,8 +61,8 @@ public class ReportViewPaginatedMenu extends PaginatedMenu {
 
     @Override
     public Map<Integer, Button> getAllPagesButtons(Player player) {
-        HashMap<Integer, Button> buttons = new HashMap<>();
-        AtomicInteger i = new AtomicInteger(0);
+        final HashMap<Integer, Button> buttons = new HashMap<>();
+        final AtomicInteger i = new AtomicInteger(0);
 
         if (onlyResolved) {
             CorePlugin.getInstance().getReportManager().getReports().stream().filter(Report::isResolved).forEach(report -> buttons.put(i.getAndIncrement(), new ReportButton(report)));

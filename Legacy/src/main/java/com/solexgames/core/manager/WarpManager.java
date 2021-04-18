@@ -23,8 +23,4 @@ public class WarpManager {
             }
         }));
     }
-
-    public void saveWarps() {
-        Warp.getWarps().forEach(Warp::saveMainThread);
-    }
 }

@@ -1,7 +1,7 @@
-package com.solexgames.core.command.impl.xlib;
+package com.solexgames.core.command.impl.other;
 
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.player.website.PostBuilder;
+import com.solexgames.core.util.builder.PostBuilder;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.StringUtil;
 import org.bukkit.ChatColor;

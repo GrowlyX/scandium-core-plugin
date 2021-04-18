@@ -27,12 +27,12 @@ public class ServerLoadingTask extends BukkitRunnable {
         switch (this.atomicInteger.decrementAndGet()) {
             case 5: case 4: case 3: case 2:
             case 1:
-                CorePlugin.getInstance().logConsole(Color.SECONDARY_COLOR + "The server's will be available in " + Color.MAIN_COLOR + this.atomicInteger.get() + Color.SECONDARY_COLOR + " seconds.");
+                CorePlugin.getInstance().logConsole(Color.SECONDARY_COLOR + "The server will be available in " + Color.MAIN_COLOR + this.atomicInteger.get() + Color.SECONDARY_COLOR + " seconds.");
                 break;
             case 0:
                 RedisUtil.writeAsync(RedisUtil.onServerOnline());
 
-                CorePlugin.CAN_JOIN = true;
+                CorePlugin.getInstance().getServerSettings().setCanJoin(true);
                 CorePlugin.getInstance().logConsole(Color.MAIN_COLOR + "The server's now available!");
                 break;
         }

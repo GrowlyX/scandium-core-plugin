@@ -70,14 +70,13 @@ public class Punishment {
     }
 
     public static Punishment getByIdentification(String id) {
-        return Punishment.getAllPunishments()
-                .stream()
+        return Punishment.getAllPunishments().stream()
                 .filter(punishment -> punishment.getPunishIdentification().equals(id))
                 .findFirst()
                 .orElse(null);
     }
 
-    public void savePunishment() {
+    public Document getDocument() {
         Document document = new Document("_id", this.id);
 
         document.put("punishmentType", this.punishmentType.toString());
@@ -104,37 +103,15 @@ public class Punishment {
         document.put("punishmentDuration", this.punishmentDuration);
         document.put("identification", this.punishIdentification);
 
-        CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().replaceOne(Filters.eq("id", this.id.toString()), document, new ReplaceOptions().upsert(true)));
+        return document;
+    }
+
+    public void savePunishment() {
+        CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().replaceOne(Filters.eq("id", this.id.toString()), this.getDocument(), new ReplaceOptions().upsert(true)));
     }
 
     public void saveMainThread() {
-        Document document = new Document("_id", this.id);
-
-        document.put("punishmentType", this.punishmentType.toString());
-        document.put("id", this.id.toString());
-
-        if (issuer != null) {
-            document.put("issuer", this.issuer.toString());
-        } else {
-            document.put("issuer", null);
-        }
-
-        document.put("target", this.target.toString());
-        document.put("expirationDate", this.expirationDate);
-        document.put("issuingDate", this.issuingDate);
-        document.put("createdAt", this.createdAt);
-        document.put("issuerName", this.issuerName);
-        document.put("reason", this.reason);
-        document.put("remover", (this.remover != null ? this.remover.toString() : null));
-        document.put("removalReason", (this.removalReason != null ? this.removalReason : null));
-        document.put("removerName", (this.removerName != null ? this.removerName : null));
-        document.put("active", this.active);
-        document.put("permanent", this.permanent);
-        document.put("removed", this.removed);
-        document.put("punishmentDuration", this.punishmentDuration);
-        document.put("identification", this.punishIdentification);
-
-        CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().replaceOne(Filters.eq("id", this.id.toString()), document, new ReplaceOptions().upsert(true));
+        CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().replaceOne(Filters.eq("id", this.id.toString()), this.getDocument(), new ReplaceOptions().upsert(true));
     }
 
     public String getDurationString() {

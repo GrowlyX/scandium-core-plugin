@@ -26,39 +26,37 @@ public class PunishmentManager {
     private final ArrayList<Punishment> punishments = new ArrayList<>();
 
     public PunishmentManager() {
-        CompletableFuture.runAsync(() -> {
-            CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().find().forEach((Block<? super Document>) punishmentDocument -> {
-                Punishment punishment = new Punishment(
-                        PunishmentType.valueOf(punishmentDocument.getString("punishmentType")),
-                        (punishmentDocument.getString("issuer") != null ? UUID.fromString(punishmentDocument.getString("issuer")) : null),
-                        UUID.fromString(punishmentDocument.getString("target")),
-                        punishmentDocument.getString("issuerName"),
-                        punishmentDocument.getString("reason"),
-                        punishmentDocument.getDate("issuingDate"),
-                        punishmentDocument.getLong("punishmentDuration"),
-                        punishmentDocument.getBoolean("permanent"),
-                        punishmentDocument.getDate("createdAt"),
-                        UUID.fromString(punishmentDocument.getString("id")),
-                        punishmentDocument.getString("identification"),
-                        punishmentDocument.getBoolean("active")
-                );
+        CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().find().forEach((Block<? super Document>) punishmentDocument -> {
+            final Punishment punishment = new Punishment(
+                    PunishmentType.valueOf(punishmentDocument.getString("punishmentType")),
+                    (punishmentDocument.getString("issuer") != null ? UUID.fromString(punishmentDocument.getString("issuer")) : null),
+                    UUID.fromString(punishmentDocument.getString("target")),
+                    punishmentDocument.getString("issuerName"),
+                    punishmentDocument.getString("reason"),
+                    punishmentDocument.getDate("issuingDate"),
+                    punishmentDocument.getLong("punishmentDuration"),
+                    punishmentDocument.getBoolean("permanent"),
+                    punishmentDocument.getDate("createdAt"),
+                    UUID.fromString(punishmentDocument.getString("id")),
+                    punishmentDocument.getString("identification"),
+                    punishmentDocument.getBoolean("active")
+            );
 
-                punishment.setPermanent(punishmentDocument.getBoolean("permanent"));
-                punishment.setRemoved(punishmentDocument.getBoolean("removed"));
+            punishment.setPermanent(punishmentDocument.getBoolean("permanent"));
+            punishment.setRemoved(punishmentDocument.getBoolean("removed"));
 
-                if (punishmentDocument.getString("removerName") != null) {
-                    punishment.setRemoverName(punishmentDocument.getString("removerName"));
-                }
-                if (punishmentDocument.getString("removalReason") != null) {
-                    punishment.setRemovalReason(punishmentDocument.getString("removalReason"));
-                }
-                if (punishmentDocument.getString("remover") != null) {
-                    punishment.setRemover(UUID.fromString(punishmentDocument.getString("remover")));
-                }
+            if (punishmentDocument.getString("removerName") != null) {
+                punishment.setRemoverName(punishmentDocument.getString("removerName"));
+            }
+            if (punishmentDocument.getString("removalReason") != null) {
+                punishment.setRemovalReason(punishmentDocument.getString("removalReason"));
+            }
+            if (punishmentDocument.getString("remover") != null) {
+                punishment.setRemover(UUID.fromString(punishmentDocument.getString("remover")));
+            }
 
-                this.punishments.add(punishment);
-            });
-        });
+            this.punishments.add(punishment);
+        }));
     }
 
     public void savePunishments() {
@@ -66,17 +64,17 @@ public class PunishmentManager {
     }
 
     public void handlePunishment(Punishment punishment, String issuer, Document targetDocument, boolean silent) {
-        String name = targetDocument.getString("name");
-        Rank rank = Rank.getByName(targetDocument.getString("rankName"));
+        final String name = targetDocument.getString("name");
+        final Rank rank = Rank.getByName(targetDocument.getString("rankName"));
 
         this.punishments.add(punishment);
 
         CompletableFuture.runAsync(() -> {
-            Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByName(issuer).orElse(null);
+            final Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByName(issuer).orElse(null);
 
             if (document != null) {
-                Rank playerRank = Rank.getByName(document.getString("rankName"));
-                String formattedName = playerRank.getColor() + playerRank.getItalic() + document.get("name");
+                final Rank playerRank = Rank.getByName(document.getString("rankName"));
+                final String formattedName = playerRank.getColor() + playerRank.getItalic() + document.get("name");
 
                 if (silent) {
                     Bukkit.getOnlinePlayers().stream().filter(player1 -> player1.hasPermission("scandium.staff")).forEach(player1 -> player1.sendMessage(Color.translate(
@@ -101,7 +99,7 @@ public class PunishmentManager {
         });
 
         Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () -> {
-            PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(name);
+            final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(name);
 
             if (potPlayer != null) {
                 switch (punishment.getPunishmentType()) {
@@ -118,7 +116,7 @@ public class PunishmentManager {
                         potPlayer.setCurrentlyRestricted(true);
                         potPlayer.getPlayer().kickPlayer(Color.translate(PunishmentStrings.BLACK_LIST_MESSAGE.replace("<reason>", punishment.getReason())));
                         break;
-                    case IPBAN:
+                    case IP_BAN:
                     case BAN:
                         potPlayer.setCurrentlyRestricted(true);
                         potPlayer.getPlayer().kickPlayer((punishment.isPermanent() ? Color.translate(PunishmentStrings.BAN_MESSAGE_PERM.replace("<reason>", punishment.getReason())) : Color.translate(PunishmentStrings.BAN_MESSAGE_TEMP.replace("<reason>", punishment.getReason()).replace("<time>", punishment.getDurationString()))));
@@ -137,9 +135,9 @@ public class PunishmentManager {
 
     public void handleUnPunishment(Document document, String message, Player player, PunishmentType punishmentType) {
         CompletableFuture.runAsync(() -> {
-            Rank playerRank = Rank.getByName(document.getString("rankName"));
-            String playerName = document.getString("name");
-            UUID playerId = UUIDUtil.fetchUUID(playerName);
+            final Rank playerRank = Rank.getByName(document.getString("rankName"));
+            final String playerName = document.getString("name");
+            final UUID playerId = UUIDUtil.fetchUUID(playerName);
 
             if (playerId == null) {
                 if (player != null) {
@@ -151,12 +149,12 @@ public class PunishmentManager {
                 return;
             }
 
-            List<Punishment> punishmentList = Punishment.getAllPunishments().stream()
+            final List<Punishment> punishmentList = Punishment.getAllPunishments().stream()
                     .filter(punishment -> punishment != null && punishment.getPunishmentType().equals(punishmentType) && punishment.getTarget().toString().equals(playerId.toString()) && punishment.isValid())
                     .sorted(Comparator.comparingLong(Punishment::getCreatedAtLong).reversed())
                     .collect(Collectors.toList());
 
-            int punishmentAmount = punishmentList.size();
+            final int punishmentAmount = punishmentList.size();
 
             if (punishmentAmount == 0) {
                 if (player != null) {
@@ -188,10 +186,10 @@ public class PunishmentManager {
                 punishment.savePunishment();
                 RedisUtil.writeAsync(RedisUtil.removePunishment(player, punishment, message));
 
-                Player targetPlayer = Bukkit.getPlayer(punishment.getTarget());
+                final Player targetPlayer = Bukkit.getPlayer(punishment.getTarget());
 
                 if (targetPlayer != null) {
-                    PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(targetPlayer);
+                    final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(targetPlayer);
 
                     switch (punishment.getPunishmentType()) {
                         case MUTE:
@@ -202,7 +200,7 @@ public class PunishmentManager {
                             targetPlayer.sendMessage(ChatColor.RED + "Your warning has been removed by a staff member.");
                             break;
                         case BLACKLIST:
-                        case IPBAN:
+                        case IP_BAN:
                         case BAN:
                             targetPlayer.sendMessage(ChatColor.RED + "You've been unrestricted by a staff member.");
                             potPlayer.setCurrentlyRestricted(false);

@@ -2,6 +2,7 @@ package com.solexgames.core.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.ChatColor;
 
 import java.beans.ConstructorProperties;
@@ -11,7 +12,7 @@ import java.beans.ConstructorProperties;
  */
 
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public enum ServerType {
 
     BLARE("Blare Network", "01", ChatColor.AQUA, ChatColor.DARK_AQUA, "https://dsc.gg/blare", "BlareNetworkRIP", "shop.blare.rip", "blare.rip"),

@@ -97,7 +97,7 @@ public class PlayerManager {
     }
 
     public void vanishPlayer(Player player) {
-        PotPlayer vanishedPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+        final PotPlayer vanishedPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
         Bukkit.getOnlinePlayers()
                 .stream()
@@ -117,15 +117,11 @@ public class PlayerManager {
 
         vanishedPotPlayer.setVanished(true);
 
-        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
-        ChatColor mainColor = network.getMainColor();
-        ChatColor secondColor = network.getSecondaryColor();
-
-        player.sendMessage(Color.translate(secondColor + "You are now vanished to all online players with a priority less than " + mainColor + vanishedPotPlayer.getActiveGrant().getRank().getWeight() + secondColor + "."));
+        player.sendMessage(Color.SECONDARY_COLOR + "You are now vanished to all online players with a priority less than " + Color.MAIN_COLOR + vanishedPotPlayer.getActiveGrant().getRank().getWeight() + Color.SECONDARY_COLOR + ".");
     }
 
     public void vanishPlayerRaw(Player player) {
-        PotPlayer vanishedPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+        final PotPlayer vanishedPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
         Bukkit.getOnlinePlayers()
                 .stream()
@@ -147,8 +143,8 @@ public class PlayerManager {
     }
 
     public void modModePlayer(Player player) {
-        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
-        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+        final ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
+        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
         potPlayer.setStaffMode(true);
         potPlayer.setupPlayerTag();
@@ -156,7 +152,7 @@ public class PlayerManager {
         potPlayer.setItemHistory(player.getInventory().getContents());
         potPlayer.setPreviousBoard(player.getScoreboard());
 
-        ModModeBoard modModeBoard = new ModModeBoard(player);
+        final ModModeBoard modModeBoard = new ModModeBoard(player);
         potPlayer.setModModeBoard(modModeBoard);
 
         player.getInventory().clear();
@@ -171,18 +167,22 @@ public class PlayerManager {
 
         player.updateInventory();
 
-        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
-        ChatColor secondColor = serverType.getSecondaryColor();
+        final ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+        final ChatColor secondColor = serverType.getSecondaryColor();
 
-        double pitch = (double) (player.getLocation().getPitch() + 90.0F) * 3.141592653589793D / 180.0D;
-        double yaw = (double) (player.getLocation().getYaw() + 90.0F) * 3.141592653589793D / 180.0D;
+        final double pitch = (double) (player.getLocation().getPitch() + 90.0F) * 3.141592653589793D / 180.0D;
+        final double yaw = (double) (player.getLocation().getYaw() + 90.0F) * 3.141592653589793D / 180.0D;
 
-        double xCoordinate = Math.sin(pitch) * Math.cos(yaw);
-        double yCoordinate = Math.sin(pitch) * Math.sin(yaw);
-        double zCoordinate = Math.cos(pitch) * 100.0D;
+        final double xCoordinate = Math.sin(pitch) * Math.cos(yaw);
+        final double yCoordinate = Math.sin(pitch) * Math.sin(yaw);
+        final double zCoordinate = Math.cos(pitch) * 100.0D;
 
-        org.bukkit.util.Vector vector = new org.bukkit.util.Vector(xCoordinate, zCoordinate, yCoordinate);
+        final org.bukkit.util.Vector vector = new org.bukkit.util.Vector(xCoordinate, zCoordinate, yCoordinate);
         player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 1000000, 3));
+
+        if (player.isSprinting()) {
+            player.setVelocity(vector.multiply(50));
+        }
 
         player.sendMessage(secondColor + "You are now in moderation mode.");
 
@@ -194,8 +194,8 @@ public class PlayerManager {
     }
 
     public void modModeRaw(Player player) {
-        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
-        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+        final ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
+        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
         potPlayer.setStaffMode(true);
         potPlayer.setupPlayerTag();
@@ -203,7 +203,7 @@ public class PlayerManager {
         potPlayer.setItemHistory(player.getInventory().getContents());
         potPlayer.setPreviousBoard(player.getScoreboard());
 
-        ModModeBoard modModeBoard = new ModModeBoard(player);
+        final ModModeBoard modModeBoard = new ModModeBoard(player);
         potPlayer.setModModeBoard(modModeBoard);
 
         player.getInventory().clear();
@@ -218,14 +218,14 @@ public class PlayerManager {
 
         player.updateInventory();
 
-        double pitch = (double) (player.getLocation().getPitch() + 90.0F) * 3.141592653589793D / 180.0D;
-        double yaw = (double) (player.getLocation().getYaw() + 90.0F) * 3.141592653589793D / 180.0D;
+        final double pitch = (double) (player.getLocation().getPitch() + 90.0F) * 3.141592653589793D / 180.0D;
+        final double yaw = (double) (player.getLocation().getYaw() + 90.0F) * 3.141592653589793D / 180.0D;
 
-        double xCoordinate = Math.sin(pitch) * Math.cos(yaw);
-        double yCoordinate = Math.sin(pitch) * Math.sin(yaw);
-        double zCoordinate = Math.cos(pitch) * 100.0D;
+        final double xCoordinate = Math.sin(pitch) * Math.cos(yaw);
+        final double yCoordinate = Math.sin(pitch) * Math.sin(yaw);
+        final double zCoordinate = Math.cos(pitch) * 100.0D;
 
-        org.bukkit.util.Vector vector = new org.bukkit.util.Vector(xCoordinate, zCoordinate, yCoordinate);
+        final org.bukkit.util.Vector vector = new org.bukkit.util.Vector(xCoordinate, zCoordinate, yCoordinate);
         player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 1000000, 3));
 
         if (player.isSprinting()) {
@@ -238,7 +238,7 @@ public class PlayerManager {
     }
 
     public void unModModePlayer(Player player) {
-        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
         player.getInventory().clear();
         player.getInventory().setContents(potPlayer.getItemHistory());
@@ -282,7 +282,7 @@ public class PlayerManager {
     }
 
     public void unVanishPlayer(Player player) {
-        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
         Bukkit.getOnlinePlayers()
                 .stream()

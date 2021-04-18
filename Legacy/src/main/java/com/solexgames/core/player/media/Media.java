@@ -12,9 +12,6 @@ public class Media {
     private String instagram = "N/A";
     private String discord = "N/A";
 
-    private MediaData mediaData;
+    private MediaData mediaData = new MediaData();
 
-    public Media() {
-        this.mediaData = new MediaData();
-    }
 }

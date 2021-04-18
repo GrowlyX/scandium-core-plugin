@@ -1,7 +1,7 @@
-package com.solexgames.core.hooks.access.extend;
+package com.solexgames.core.hooks.nms.extend;
 
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.hooks.access.AbstractNMSAccess;
+import com.solexgames.core.hooks.nms.INMS;
 import net.minecraft.server.v1_7_R4.*;
 import org.bukkit.craftbukkit.v1_7_R4.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -12,7 +12,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class NMSAccess_v1_7 extends AbstractNMSAccess {
+public class NMSAccess_v1_7 implements INMS {
 
     @Override
     public void removeExecute(Player player) {
@@ -45,6 +45,6 @@ public class NMSAccess_v1_7 extends AbstractNMSAccess {
 
     @Override
     public void setupTablist(Player player) {
-        // nothing
+        // TODO: Convert 1.8 NMS to 1.7 for 1.7 Tablist support
     }
 }

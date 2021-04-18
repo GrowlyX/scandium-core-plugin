@@ -38,13 +38,14 @@ public class RedisManager {
     public RedisManager(RedisSettings settings) {
         this.settings = settings;
         this.subscriptions = CorePlugin.getInstance().getSubscriptions();
+
         this.subscribe();
     }
 
     private void subscribe() {
-        try {
-            this.jedisPool = new JedisPool(settings.getHostAddress(), settings.getPort());
-            Jedis jedis = this.jedisPool.getResource();
+        this.jedisPool = new JedisPool(settings.getHostAddress(), settings.getPort());
+
+        try (Jedis jedis = this.jedisPool.getResource()) {
 
             if (settings.isAuth()) {
                 jedis.auth(settings.getPassword());

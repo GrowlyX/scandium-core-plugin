@@ -8,16 +8,24 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
- * @author Joelioli
- * @since ???
+ * @author GrowlyX
+ * @since March 2021
  */
 
 @UtilityClass
 public final class BungeeUtil {
 
+    /**
+     * Connects a player to a server
+     * <p>
+     *
+     * @param player       Player to connect to a server
+     * @param connectingTo Connecting server
+     * @param javaPlugin   Java plugin which has the BungeeCord messaging channel registered.
+     */
     public static void sendToServer(Player player, String connectingTo, JavaPlugin javaPlugin) {
         try {
-            ByteArrayDataOutput byteArrayDataOutput = ByteStreams.newDataOutput();
+            final ByteArrayDataOutput byteArrayDataOutput = ByteStreams.newDataOutput();
 
             byteArrayDataOutput.writeUTF("Connect");
             byteArrayDataOutput.writeUTF(connectingTo);

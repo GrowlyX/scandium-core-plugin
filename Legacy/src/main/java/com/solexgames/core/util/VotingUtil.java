@@ -14,19 +14,22 @@ public final class VotingUtil {
     public static final String NAME_MC_URL = "https://api.namemc.com/server/$ip/likes?profile=$uuid";
     public static final String SERVER_IP = CorePlugin.getInstance().getConfig().getString("settings.namemc-ip");
 
+    /**
+     * Fetches a player's Voting Status via NameMC's api
+     *
+     * @param uuidString The player's uuid string
+     * @return a boolean
+     */
     public static boolean hasVoted(String uuidString) {
-        CompletableFuture<Boolean> completableFuture = new CompletableFuture<>();
+        final AtomicBoolean result = new AtomicBoolean(false);
 
-        CompletableFuture.runAsync(() -> {
+        CompletableFuture.supplyAsync(() -> {
             try (Scanner scanner = new Scanner(new URL(VotingUtil.NAME_MC_URL.replace("$ip", VotingUtil.SERVER_IP).replace("$uuid", uuidString) + uuidString).openStream()).useDelimiter("\\A")) {
-                completableFuture.complete(Boolean.parseBoolean(scanner.next()));
+                return Boolean.parseBoolean(scanner.next());
             } catch (Exception ignored) {
-                completableFuture.complete(false);
+                return false;
             }
-        });
-
-        AtomicBoolean result = new AtomicBoolean(false);
-        completableFuture.thenAccept(result::set);
+        }).thenAccept(result::set);
 
         return result.get();
     }

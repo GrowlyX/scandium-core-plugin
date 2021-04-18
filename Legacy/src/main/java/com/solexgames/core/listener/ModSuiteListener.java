@@ -26,7 +26,7 @@ public class ModSuiteListener implements Listener {
 
     @EventHandler
     public void onEvent(BlockBreakEvent event) {
-        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer());
+        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer());
 
         if (potPlayer.isStaffMode()) {
             event.setCancelled(true);
@@ -36,7 +36,7 @@ public class ModSuiteListener implements Listener {
 
     @EventHandler
     public void onEvent(BlockPlaceEvent event) {
-        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer());
+        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer());
 
         if (potPlayer.isStaffMode()) {
             event.setCancelled(true);
@@ -46,7 +46,7 @@ public class ModSuiteListener implements Listener {
 
     @EventHandler
     public void onEvent(PlayerDropItemEvent event) {
-        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer());
+        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer());
 
         if (potPlayer.isStaffMode()) {
             event.setCancelled(true);
@@ -55,25 +55,25 @@ public class ModSuiteListener implements Listener {
 
     @EventHandler
     public void onEvent(PlayerInteractAtEntityEvent event) {
-        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer());
+        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer());
 
         if (event.getRightClicked() instanceof Player) {
-            Player target = (Player) event.getRightClicked();
+            final Player target = (Player) event.getRightClicked();
 
             if (target == null) {
                 return;
             }
 
-            Player player = event.getPlayer();
-            ItemStack item = event.getPlayer().getItemInHand();
+            final Player player = event.getPlayer();
+            final ItemStack item = event.getPlayer().getItemInHand();
 
             if (potPlayer.isStaffMode()) {
                 if (item != null) {
                     if (item.hasItemMeta()) {
-                        String materialName = item.getType().name().toLowerCase();
+                        final String materialName = item.getType().name().toLowerCase();
 
                         if (materialName.contains("packed")) {
-                            PotPlayer targetPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
+                            final PotPlayer targetPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
 
                             if (potPlayer.getActiveGrant().getRank() != null) {
                                 if (potPlayer.getActiveGrant().getRank().getWeight() >= targetPotPlayer.getActiveGrant().getRank().getWeight() || player.isOp()) {
@@ -93,13 +93,13 @@ public class ModSuiteListener implements Listener {
 
     @EventHandler
     public void onEvent(PlayerInteractEvent event) {
-        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer());
+        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer());
 
         if (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             if (potPlayer.isStaffMode()) {
                 if (event.getItem() != null) {
                     if (event.getItem().hasItemMeta()) {
-                        String materialName = event.getItem().getType().name().toLowerCase();
+                        final String materialName = event.getItem().getType().name().toLowerCase();
 
                         if (materialName.contains("compass")) {
                             event.getPlayer().setVelocity(event.getPlayer().getLocation().getDirection().multiply(2.5F));
@@ -130,7 +130,7 @@ public class ModSuiteListener implements Listener {
     @EventHandler
     public void onEvent(EntityDamageEvent event) {
         if (event.getEntityType().equals(EntityType.PLAYER)) {
-            PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer((Player) event.getEntity());
+            final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer((Player) event.getEntity());
 
             if (potPlayer != null) {
                 if (potPlayer.isStaffMode()) {

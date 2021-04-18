@@ -1,6 +1,8 @@
 package com.solexgames.core.player.punishment;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.beans.ConstructorProperties;
 
@@ -10,6 +12,7 @@ import java.beans.ConstructorProperties;
  */
 
 @Getter
+@RequiredArgsConstructor
 public enum PunishmentDuration {
 
     SECOND(1000L, "s"),
@@ -24,9 +27,4 @@ public enum PunishmentDuration {
     private final long duration;
     private final String name;
 
-    @ConstructorProperties({"duration", "name"})
-    PunishmentDuration(long duration, String name) {
-        this.duration = duration;
-        this.name = name;
-    }
 }

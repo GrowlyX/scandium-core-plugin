@@ -18,13 +18,12 @@ import java.util.List;
 import java.util.Map;
 
 @Getter
-@Setter
 public class ItemBuilder {
 
-    private ItemStack itemStack;
-    private ItemMeta itemMeta;
+    private final Map<Enchantment, Integer> enchantments = new HashMap<>();
+    private final ItemStack itemStack;
 
-    private Map<Enchantment, Integer> enchantments = new HashMap<>();
+    private ItemMeta itemMeta;
 
     public ItemBuilder(Material material) {
         this.itemStack = new ItemStack(material);
@@ -42,26 +41,25 @@ public class ItemBuilder {
     }
 
     public ItemBuilder setAmount(int amount) {
-        itemStack.setAmount(amount);
+        this.itemStack.setAmount(amount);
         return this;
     }
 
     public ItemBuilder setOwner(String name) {
-        SkullMeta skullMeta = (SkullMeta) this.itemMeta;
+        final SkullMeta skullMeta = (SkullMeta) this.itemMeta;
 
         if (this.itemStack.getType().equals(XMaterial.SKELETON_SKULL.parseMaterial())) {
-
             skullMeta.setOwner(name);
         } else {
             return this;
         }
 
-        this.setItemMeta(skullMeta);
+        this.itemMeta = skullMeta;
         return this;
     }
 
     public ItemBuilder setDisplayName(String name) {
-        itemMeta.setDisplayName(Color.translate(name));
+        this.itemMeta.setDisplayName(Color.translate(name));
         return this;
     }
 
@@ -71,58 +69,62 @@ public class ItemBuilder {
     }
 
     public ItemBuilder setDurability(int durability) {
-        itemStack.setDurability((short) durability);
+        this.itemStack.setDurability((short) durability);
         return this;
     }
 
     public ItemBuilder addLore(String lore) {
-        List<String> list = itemMeta.getLore();
-        if (list == null) list = new ArrayList<>();
+        final List<String> list = (this.itemMeta.getLore() == null ? new ArrayList<>() : this.itemMeta.getLore());
 
         list.add(Color.translate(lore));
 
-        itemMeta.setLore(list);
+        this.itemMeta.setLore(list);
         return this;
     }
 
     public ItemBuilder addLore(List<String> lore) {
-        itemMeta.setLore(Color.translate(lore));
+        this.itemMeta.setLore(Color.translate(lore));
         return this;
     }
 
     public ItemBuilder addLore(String... lore) {
-        List<String> strings = new ArrayList<>();
+        final List<String> strings = new ArrayList<>();
 
         for (String string : lore) {
             strings.add(Color.translate(string));
         }
 
-        itemMeta.setLore(strings);
+        this.itemMeta.setLore(strings);
+
         return this;
     }
 
     public ItemBuilder setEnchant(Enchantment enchantment, int level) {
-        enchantments.put(enchantment, level);
+        this.enchantments.put(enchantment, level);
+
         return this;
     }
 
     public ItemBuilder setUnbreakable(boolean unbreakable) {
-        itemMeta.spigot().setUnbreakable(unbreakable);
+        this.itemMeta.spigot().setUnbreakable(unbreakable);
         return this;
     }
 
     public ItemBuilder setColor(org.bukkit.Color color) {
-        if (itemStack.getType() != null && itemStack.getType().name().contains("LEATHER")) {
-            LeatherArmorMeta armorMeta = (LeatherArmorMeta) itemMeta;
+        if (this.itemStack.getType() != null && this.itemStack.getType().name().contains("LEATHER")) {
+            final LeatherArmorMeta armorMeta = (LeatherArmorMeta) this.itemMeta;
+
             armorMeta.setColor(color);
         }
+
         return this;
     }
 
     public ItemStack create() {
-        if (itemMeta != null) {
-            itemStack.setItemMeta(itemMeta);
+        if (this.itemMeta != null) {
+            this.itemStack.setItemMeta(this.itemMeta);
         }
-        return itemStack;
+
+        return this.itemStack;
     }
 }

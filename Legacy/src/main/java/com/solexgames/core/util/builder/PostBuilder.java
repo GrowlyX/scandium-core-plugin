@@ -1,4 +1,4 @@
-package com.solexgames.core.player.website;
+package com.solexgames.core.util.builder;
 
 import com.solexgames.core.CorePlugin;
 import lombok.Data;

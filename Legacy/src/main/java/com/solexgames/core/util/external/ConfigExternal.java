@@ -12,11 +12,10 @@ import java.util.Collections;
 import java.util.List;
 
 @Getter
-@Setter
 public class ConfigExternal {
 
-    private File file;
-    private YamlConfiguration configuration;
+    private final File file;
+    private final YamlConfiguration configuration;
 
     public ConfigExternal(String name) {
         this.file = new File(CorePlugin.getInstance().getDataFolder(), name + ".yml");
@@ -34,7 +33,9 @@ public class ConfigExternal {
     public void save() {
         try {
             this.configuration.save(file);
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+
+        }
     }
 
     public double getDouble(String path) {
@@ -60,11 +61,13 @@ public class ConfigExternal {
             return colorize ? Color.translate(this.configuration.getString(path)) : this.configuration.getString(path);
         }
     }
+
     public List<String> getStringList(String path) {
         if (!this.configuration.contains(path)) {
             return Collections.singletonList("ERROR: STRING LIST NOT FOUND!");
         } else {
-            ArrayList<String> strings = new ArrayList<>();
+            final ArrayList<String> strings = new ArrayList<>();
+
             for (String string : this.configuration.getStringList(path)) {
                 strings.add(Color.translate(string));
             }
@@ -77,7 +80,7 @@ public class ConfigExternal {
         if (!this.configuration.contains(path)) {
             return toReturn;
         } else {
-            ArrayList<String> strings = new ArrayList<>();
+            final ArrayList<String> strings = new ArrayList<>();
 
             this.configuration.getStringList(path).forEach(s -> strings.add(Color.translate(s)));
 

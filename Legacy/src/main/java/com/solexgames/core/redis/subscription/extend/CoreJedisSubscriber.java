@@ -350,7 +350,7 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                                         targetPlayer.sendMessage(ChatColor.RED + "Your current warning has now expired.");
                                         break;
                                     case BLACKLIST:
-                                    case IPBAN:
+                                    case IP_BAN:
                                     case BAN:
                                         potPlayer.setCurrentlyRestricted(false);
                                         break;

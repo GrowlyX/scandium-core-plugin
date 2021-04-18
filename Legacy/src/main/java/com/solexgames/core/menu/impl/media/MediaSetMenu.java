@@ -93,17 +93,17 @@ public class MediaSetMenu extends AbstractInventoryMenu {
                     player.closeInventory();
                     break;
                 case 3:
-                    potPlayer.getMedia().getMediaData().setModifyingYoutubeData(true);
+                    potPlayer.getMedia().getMediaData().setModifyingYouTube(true);
                     player.sendMessage(ChatColor.GREEN + Color.translate("Type your &cYouTube &achannel link in chat!"));
                     player.closeInventory();
                     break;
                 case 4:
-                    potPlayer.getMedia().getMediaData().setModifyingTwitterData(true);
+                    potPlayer.getMedia().getMediaData().setModifyingTwitter(true);
                     player.sendMessage(ChatColor.GREEN + Color.translate("Type your &bTwitter &ausername in chat!"));
                     player.closeInventory();
                     break;
                 case 5:
-                    potPlayer.getMedia().getMediaData().setModifyingInstaData(true);
+                    potPlayer.getMedia().getMediaData().setModifyingInsta(true);
                     player.sendMessage(ChatColor.GREEN + Color.translate("Type your &6Instagram &ausername in chat!"));
                     player.closeInventory();
                     break;
