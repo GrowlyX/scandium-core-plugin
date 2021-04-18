@@ -122,10 +122,6 @@ public class PotPlayer {
     private boolean grantDurationPerm;
     private String grantDurationScope;
 
-    private boolean isReasonEditing = false;
-    private PunishmentType reasonType = null;
-    private String reasonTarget = null;
-
     private LanguageType language;
     private PermissionAttachment attachment;
     private GameProfile gameProfile;

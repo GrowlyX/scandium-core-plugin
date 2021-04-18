@@ -10,11 +10,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.entity.Player;
 
-import java.time.Instant;
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
-import java.time.temporal.TemporalAccessor;
-
 @Getter
 @Setter
 public class DiscordManager {
@@ -78,7 +73,7 @@ public class DiscordManager {
     }
 
     public void sendRequest(Player player, String reason) {
-        WebhookEmbedBuilder embedBuilder = new WebhookEmbedBuilder();
+        final WebhookEmbedBuilder embedBuilder = new WebhookEmbedBuilder();
 
         embedBuilder.setTitle(new WebhookEmbed.EmbedTitle("New Request", null));
 

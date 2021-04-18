@@ -1,16 +1,17 @@
 package com.solexgames.core.menu.impl.player;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.InventoryUtil;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.util.external.pagination.Button;
 import com.solexgames.core.util.external.pagination.Menu;
-import com.solexgames.core.util.external.pagination.button.DisplayButton;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -158,6 +159,27 @@ public class ViewPlayerMenu extends Menu {
             return String.format(HOUR_FORMAT, seconds / 3600L, seconds % 3600L / 60L, seconds % 60L);
         } else {
             return String.format(MINUTE_FORMAT, seconds / 60L, seconds % 60L);
+        }
+    }
+
+    @AllArgsConstructor
+    private static class DisplayButton extends Button {
+
+        private final ItemStack itemStack;
+        private final boolean cancel;
+
+        @Override
+        public ItemStack getButtonItem(Player player) {
+            if (this.itemStack == null) {
+                return new ItemBuilder(XMaterial.AIR.parseMaterial()).create();
+            } else {
+                return this.itemStack;
+            }
+        }
+
+        @Override
+        public boolean shouldCancel(Player player, ClickType clickType) {
+            return this.cancel;
         }
     }
 }

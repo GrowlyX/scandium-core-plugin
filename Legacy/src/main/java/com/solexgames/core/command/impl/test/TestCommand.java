@@ -14,9 +14,6 @@ public class TestCommand extends BaseCommand {
             return false;
         }
 
-        Player player = (Player) sender;
-        new PaginationTestingMenu().openMenu(player);
-
         return false;
     }
 }

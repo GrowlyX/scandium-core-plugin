@@ -118,8 +118,6 @@ commands:
     aliases: [ttps]
   togglestaffmessages:
     aliases: [tsm]
-  punish:
-    aliases: [punishment]
   tphere:
     aliases: [s]
   message:

@@ -282,21 +282,6 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (potPlayer.isReasonEditing()) {
-            event.setCancelled(true);
-
-            if (event.getMessage().equalsIgnoreCase("cancel")) {
-                player.sendMessage(ChatColor.RED + ("Cancelled the punishment process."));
-                potPlayer.setReasonTarget(null);
-                potPlayer.setReasonType(null);
-            } else {
-                player.sendMessage(ChatColor.GREEN + Color.translate("Set the punishment reason to &6'" + message + "'&a."));
-                new PunishSelectDurationMenu(potPlayer.getPlayer(), potPlayer.getReasonTarget(), message, potPlayer.getReasonType()).open(player);
-            }
-            potPlayer.setReasonEditing(false);
-            return;
-        }
-
         if (potPlayer.getMedia().getMediaData().isModifyingDiscord()) {
             if (discordMatcher.matches()) {
                 potPlayer.getMedia().setDiscord(event.getMessage());
