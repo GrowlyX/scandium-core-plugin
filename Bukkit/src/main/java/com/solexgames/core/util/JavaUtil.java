@@ -23,6 +23,14 @@ import java.util.jar.JarFile;
 @UtilityClass
 public final class JavaUtil {
 
+    public static final String COMMAND_PKG = "com.solexgames.core.commands.impl.%s";
+
+    public static void registerCommandModules(String... strings) {
+        for (String pkgEndpoint : strings) {
+            JavaUtil.registerCommandsIn(String.format(JavaUtil.COMMAND_PKG, pkgEndpoint.toLowerCase()));
+        }
+    }
+
     public static void registerCommandsIn(String packageName) {
         final Collection<Class<?>> collection = JavaUtil.getClassesInPackage(CorePlugin.getInstance(), packageName);
 
@@ -32,8 +40,6 @@ public final class JavaUtil {
             } catch (Exception ignored) {
             }
         });
-
-        CorePlugin.getInstance().logConsole("&a[Command] &eLoaded &6" + collection.size() + "&e new commands!");
     }
 
     public static void registerListenersIn(String packageName) {

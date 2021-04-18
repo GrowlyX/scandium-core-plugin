@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 public class ForceUpdateCommand extends BaseCommand {
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
+    public boolean execute(CommandSender sender, String label, String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage(ONLY_PLAYERS);
             return false;

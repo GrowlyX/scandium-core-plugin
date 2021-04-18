@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class WarnCommand extends BaseCommand {
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean execute(CommandSender sender, String label, String[] args) {
         if (!sender.hasPermission("scandium.command.warn")) {
             sender.sendMessage(NO_PERMISSION);
             return false;

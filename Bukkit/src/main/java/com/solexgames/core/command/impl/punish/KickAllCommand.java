@@ -10,7 +10,7 @@ import org.bukkit.command.CommandSender;
 public class KickAllCommand extends BaseCommand {
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean execute(CommandSender sender, String label, String[] args) {
         if (!sender.hasPermission("scandium.punishments.kickall")) {
             sender.sendMessage(NO_PERMISSION);
             return false;

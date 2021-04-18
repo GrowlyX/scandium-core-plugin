@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
 public class SudoCommand extends BaseCommand {
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean execute(CommandSender sender, String label, String[] args) {
         ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
         ChatColor mainColor = serverType.getMainColor();
         ChatColor secondColor = serverType.getSecondaryColor();

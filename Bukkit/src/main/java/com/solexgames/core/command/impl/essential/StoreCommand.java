@@ -10,7 +10,7 @@ import org.bukkit.command.CommandSender;
 public class StoreCommand extends BaseCommand {
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean execute(CommandSender sender, String label, String[] args) {
         sender.sendMessage(Color.SECONDARY_COLOR + "Store: " + Color.MAIN_COLOR + CorePlugin.getInstance().getServerManager().getNetwork().getStoreLink());
         return false;
     }

@@ -3,28 +3,7 @@ package com.solexgames.core;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.solexgames.core.command.impl.CoreCommand;
-import com.solexgames.core.command.impl.discord.SyncCommand;
-import com.solexgames.core.command.impl.discord.UnsyncCommand;
 import com.solexgames.core.command.impl.essential.*;
-import com.solexgames.core.command.impl.experience.ExperienceCommand;
-import com.solexgames.core.command.impl.grant.CGrantCommand;
-import com.solexgames.core.command.impl.grant.GrantCommand;
-import com.solexgames.core.command.impl.grant.GrantsCommand;
-import com.solexgames.core.command.impl.library.CheckDisguiseCommand;
-import com.solexgames.core.command.impl.moderation.*;
-import com.solexgames.core.command.impl.network.ForceUpdateCommand;
-import com.solexgames.core.command.impl.network.NetworkCommand;
-import com.solexgames.core.command.impl.prefix.PrefixCommand;
-import com.solexgames.core.command.impl.punish.*;
-import com.solexgames.core.command.impl.punish.manual.*;
-import com.solexgames.core.command.impl.rank.RankCommand;
-import com.solexgames.core.command.impl.rank.RankImportCommand;
-import com.solexgames.core.command.impl.server.SetSlotsCommand;
-import com.solexgames.core.command.impl.shutdown.ShutdownCommand;
-import com.solexgames.core.command.impl.test.TestCommand;
-import com.solexgames.core.command.impl.toggle.*;
-import com.solexgames.core.command.impl.warps.WarpCommand;
-import com.solexgames.core.command.impl.other.NametagCommand;
 import com.solexgames.core.command.impl.other.WebPostCommand;
 import com.solexgames.core.database.Database;
 import com.solexgames.core.enums.ServerType;
@@ -34,9 +13,6 @@ import com.solexgames.core.hooks.client.AbstractClientHook;
 import com.solexgames.core.hooks.client.extend.LunarClientHook;
 import com.solexgames.core.hooks.protocol.AbstractPacketHandler;
 import com.solexgames.core.hooks.protocol.extend.ProtocolPacketHandler;
-import com.solexgames.core.listener.ModSuiteListener;
-import com.solexgames.core.listener.PaginationListener;
-import com.solexgames.core.listener.PlayerListener;
 import com.solexgames.core.manager.*;
 import com.solexgames.core.player.punishment.PunishmentStrings;
 import com.solexgames.core.redis.RedisManager;
@@ -45,6 +21,7 @@ import com.solexgames.core.redis.RedisSubscriptions;
 import com.solexgames.core.settings.ServerSettings;
 import com.solexgames.core.task.*;
 import com.solexgames.core.util.Color;
+import com.solexgames.core.util.JavaUtil;
 import com.solexgames.core.util.RedisUtil;
 import com.solexgames.core.util.external.ConfigExternal;
 import com.solexgames.core.uuid.UUIDCache;
@@ -202,6 +179,7 @@ public final class CorePlugin extends JavaPlugin {
         this.serverSettings.setAntiSpamEnabled(this.getConfig().getBoolean("settings.anti-chat-spam"));
         this.serverSettings.setAntiCommandSpamEnabled(this.getConfig().getBoolean("settings.anti-command-spam"));
         this.serverSettings.setStaffAlertsEnabled(this.getConfig().getBoolean("settings.staff-command-alerts"));
+        this.serverSettings.setAlertFormat(Color.translate(this.getConfig().getString("settings.staff-command-alerts-format")));
     }
 
     private void setupHooks() {
@@ -233,99 +211,6 @@ public final class CorePlugin extends JavaPlugin {
     }
 
     public void setupExtra() {
-        this.getCommand("staffchat").setExecutor(new StaffChatCommand());
-        this.getCommand("adminchat").setExecutor(new AdminChatCommand());
-        this.getCommand("devchat").setExecutor(new DevChatCommand());
-        this.getCommand("hostchat").setExecutor(new HostChatCommand());
-        this.getCommand("helpop").setExecutor(new HelpOpCommand());
-        this.getCommand("broadcast").setExecutor(new BroadcastCommand());
-        this.getCommand("kill").setExecutor(new KillCommand());
-        this.getCommand("feed").setExecutor(new FeedCommand());
-        this.getCommand("heal").setExecutor(new HealCommand());
-        this.getCommand("tppos").setExecutor(new TpPosCommand());
-        this.getCommand("socialspy").setExecutor(new SocialSpyCommand());
-        this.getCommand("sudo").setExecutor(new SudoCommand());
-        this.getCommand("sudoall").setExecutor(new SudoAllCommand());
-        this.getCommand("tphere").setExecutor(new TpHereCommand());
-        this.getCommand("gmc").setExecutor(new GmcCommand());
-        this.getCommand("gms").setExecutor(new GmsCommand());
-        this.getCommand("gmsp").setExecutor(new GmspCommand());
-        this.getCommand("staffannounce").setExecutor(new StaffAnnounceCommand());
-        this.getCommand("tp").setExecutor(new TpCommand());
-        this.getCommand("report").setExecutor(new ReportCommand());
-        this.getCommand("shutdown").setExecutor(new ShutdownCommand());
-        this.getCommand("freeze").setExecutor(new FreezeCommand());
-        this.getCommand("ignore").setExecutor(new IgnoreCommand());
-        this.getCommand("checkdisguise").setExecutor(new CheckDisguiseCommand());
-        this.getCommand("rank").setExecutor(new RankCommand());
-        this.getCommand("media").setExecutor(new MediaCommand());
-        this.getCommand("discord").setExecutor(new DiscordCommand());
-        this.getCommand("import").setExecutor(new RankImportCommand());
-        this.getCommand("experience").setExecutor(new ExperienceCommand());
-        this.getCommand("alts").setExecutor(new AltsCommand());
-        this.getCommand("options").setExecutor(new OptionsCommand());
-        this.getCommand("warp").setExecutor(new WarpCommand());
-        this.getCommand("history").setExecutor(new HistoryCommand());
-        this.getCommand("twitter").setExecutor(new TwitterCommand());
-        this.getCommand("website").setExecutor(new WebsiteCommand());
-        this.getCommand("unmute").setExecutor(new UnMuteCommand());
-        this.getCommand("unban").setExecutor(new UnBanCommand());
-        this.getCommand("permissions").setExecutor(new PermissionsCommand());
-        this.getCommand("find").setExecutor(new FindCommand());
-        this.getCommand("forceupdate").setExecutor(new ForceUpdateCommand());
-        this.getCommand("network").setExecutor(new NetworkCommand());
-        this.getCommand("unblacklist").setExecutor(new UnBlacklistCommand());
-        this.getCommand("unmute").setExecutor(new UnMuteCommand());
-        this.getCommand("kickall").setExecutor(new KickAllCommand());
-        this.getCommand("store").setExecutor(new StoreCommand());
-        this.getCommand("sync").setExecutor(new SyncCommand());
-        this.getCommand("unsync").setExecutor(new UnsyncCommand());
-        this.getCommand("reply").setExecutor(new ReplyCommand());
-        this.getCommand("nametag").setExecutor(new NametagCommand());
-        this.getCommand("grant").setExecutor(new GrantCommand());
-        this.getCommand("cgrant").setExecutor(new CGrantCommand());
-        this.getCommand("prefix").setExecutor(new PrefixCommand());
-        this.getCommand("grants").setExecutor(new GrantsCommand());
-        this.getCommand("setslots").setExecutor(new SetSlotsCommand());
-        this.getCommand("clear").setExecutor(new ClearCommand());
-        this.getCommand("grants").setExecutor(new GrantsCommand());
-        this.getCommand("vanish").setExecutor(new VanishCommand());
-        this.getCommand("modmode").setExecutor(new StaffModeCommand());
-        this.getCommand("clearchat").setExecutor(new ClearChatCommand());
-        this.getCommand("slowchat").setExecutor(new SlowChatCommand());
-        this.getCommand("tpall").setExecutor(new TpAllCommand());
-        this.getCommand("managerchat").setExecutor(new ManagerChatCommand());
-        this.getCommand("ownerchat").setExecutor(new OwnerChatCommand());
-        this.getCommand("mutechat").setExecutor(new MuteChatCommand());
-        this.getCommand("fly").setExecutor(new FlyCommand());
-        this.getCommand("user").setExecutor(new UserCommand());
-        this.getCommand("language").setExecutor(new LanguageCommand());
-        this.getCommand("craft").setExecutor(new CraftingCommand());
-        this.getCommand("enchant").setExecutor(new EnchantCommand());
-        this.getCommand("enderchest").setExecutor(new EnderChestCommand());
-        this.getCommand("maxitem").setExecutor(new MaxItemCommand());
-        this.getCommand("setspawn").setExecutor(new SetSpawnCommand());
-        this.getCommand("spawn").setExecutor(new SpawnCommand());
-        this.getCommand("test").setExecutor(new TestCommand());
-        this.getCommand("reports").setExecutor(new ReportsCommand());
-
-        this.getCommand("toggletips").setExecutor(new ToggleTipsCommand());
-        this.getCommand("togglestaffmessages").setExecutor(new ToggleStaffMessagesCommand());
-        this.getCommand("toggleautomodmode").setExecutor(new ToggleAutoModModeCommand());
-        this.getCommand("toggleautovanish").setExecutor(new ToggleAutoVanishCommand());
-        this.getCommand("togglefilteredmessages").setExecutor(new ToggleFilteredMessagesCommand());
-
-        this.getCommand("message").setExecutor(new MessageCommand());
-        this.getCommand("list").setExecutor(new ListCommand());
-        this.getCommand("ping").setExecutor(new PingCommand());
-        this.getCommand("viewinv").setExecutor(new ViewInvCommand());
-
-        this.getCommand("ban").setExecutor(new BanCommand());
-        this.getCommand("blacklist").setExecutor(new BlacklistCommand());
-        this.getCommand("kick").setExecutor(new KickCommand());
-        this.getCommand("mute").setExecutor(new MuteCommand());
-        this.getCommand("warn").setExecutor(new WarnCommand());
-
         if (this.chatInterceptor != null) {
             this.chatInterceptor.initializePacketHandlers();
         }
@@ -337,20 +222,28 @@ public final class CorePlugin extends JavaPlugin {
             this.logConsole("&a[PAPI] &eSetup the &6ScandiumPAPI &ePlaceholderAPI Hook!");
         }
 
-        this.registerListeners(
-                new PlayerListener(),
-                new PaginationListener(),
-                new ModSuiteListener()
-        );
+        JavaUtil.registerListenersIn("com.solexgames.core.listener");
 
         if (this.getConfig().getBoolean("settings.color-gui")) {
             this.getCommand("color").setExecutor(new ColorCommand());
         }
 
         this.registerTasks();
-        this.registerBukkitCommand();
+        this.registerSpigotCommands();
+        this.registerBukkitCommands();
 
         this.getServer().getScheduler().scheduleSyncRepeatingTask(this, this.tpsRunnable, 0L, 1L);
+    }
+
+    private void registerSpigotCommands() {
+        JavaUtil.registerCommandModules(
+                "Auth", "Discord", "Essential",
+                "Experience", "Grant", "Library",
+                "Moderation", "Network", "Other",
+                "Prefix", "Punish", "Rank",
+                "Shutdown", "Server", "Test",
+                "Toggle", "Warps"
+        );
     }
 
     private void registerTasks() {
@@ -386,7 +279,7 @@ public final class CorePlugin extends JavaPlugin {
         );
     }
 
-    private void registerBukkitCommand() {
+    private void registerBukkitCommands() {
         // Thanks to ItsSteve for the general concept of using the commandMap to register commands without using the plugin.yml
         // Source: https://www.spigotmc.org/threads/small-easy-register-command-without-plugin-yml.38036/ & https://github.com/TehNeon/StaffDisplay
         if (this.getServer().getPluginManager() instanceof SimplePluginManager) {

@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
 public class UnMuteCommand extends BaseCommand {
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean execute(CommandSender sender, String label, String[] args) {
         ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
 
         if (!sender.hasPermission("scandium.command.unmute")) {

@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 public class MuteChatCommand extends BaseCommand {
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean execute(CommandSender sender, String label, String[] args) {
         ServerManager serverManager = CorePlugin.getInstance().getServerManager();
         String displayName = ((sender instanceof Player) ? ((Player) sender).getDisplayName() : ChatColor.DARK_RED + "Console");
 

@@ -17,7 +17,7 @@ public class NetworkCommand extends BaseCommand {
     private final ServerType SERVER = CorePlugin.getInstance().getServerManager().getNetwork();
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
+    public boolean execute(CommandSender sender, String label, String[] args) {
         if (!sender.hasPermission("scandium.command.network")) {
             sender.sendMessage(NO_PERMISSION);
             return false;

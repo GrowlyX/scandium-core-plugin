@@ -10,7 +10,7 @@ import org.bukkit.command.CommandSender;
 public class DiscordCommand extends BaseCommand {
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean execute(CommandSender sender, String label, String[] args) {
         sender.sendMessage(Color.SECONDARY_COLOR + "Discord: " + Color.MAIN_COLOR + CorePlugin.getInstance().getServerManager().getNetwork().getDiscordLink());
         return false;
     }

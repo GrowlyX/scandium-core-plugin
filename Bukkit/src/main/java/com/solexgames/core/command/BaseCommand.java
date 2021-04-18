@@ -33,11 +33,14 @@ public abstract class BaseCommand implements CommandExecutor {
         this.playerManager = CorePlugin.getInstance().getPlayerManager();
         this.database = CorePlugin.getInstance().getCoreDatabase();
         this.client = CorePlugin.getInstance().getRedisManager();
+
+        CorePlugin.getInstance().getCommand(this.getClass().getSimpleName().replace("Command", "").toLowerCase()).setExecutor(this);
     }
+
+    protected abstract boolean execute(CommandSender sender, String label, String[] args);
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        sender.sendMessage(NO_PERMISSION);
-        return false;
+        return this.execute(sender, label, args);
     }
 }

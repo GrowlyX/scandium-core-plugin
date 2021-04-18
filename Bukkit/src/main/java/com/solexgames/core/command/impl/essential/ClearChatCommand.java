@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 public class ClearChatCommand extends BaseCommand {
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean execute(CommandSender sender, String label, String[] args) {
         if (!sender.hasPermission("scandium.command.clearchat")) {
             sender.sendMessage(NO_PERMISSION);
             return false;

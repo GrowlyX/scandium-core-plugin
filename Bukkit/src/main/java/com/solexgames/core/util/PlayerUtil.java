@@ -16,12 +16,17 @@ import java.util.Objects;
 @UtilityClass
 public final class PlayerUtil {
 
+    private static Class<?> CRAFT_PLAYER;
+
     public static void sendAlert(Player player, String reason) {
         if (CorePlugin.getInstance().getServerSettings().isStaffAlertsEnabled()) {
             Bukkit.getOnlinePlayers().stream()
                     .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
-                    .filter(potPlayer -> potPlayer != null && potPlayer.isCanSeeStaffMessages() && potPlayer.getPlayer().hasPermission(CorePlugin.getInstance().getConfig().getString("settings.staff-command-alerts-permission")))
-                    .forEach(potPlayer -> potPlayer.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getConfig().getString("settings.staff-command-alerts-format").replace("<playername>", player.getName()).replace("<message>", reason))));
+                    .filter(potPlayer -> potPlayer != null && potPlayer.isCanSeeStaffMessages() && potPlayer.getPlayer().hasPermission("scandium.staff"))
+                    .forEach(potPlayer -> potPlayer.getPlayer().sendMessage(CorePlugin.getInstance().getServerSettings().getAlertFormat()
+                            .replace("<playername>", player.getName())
+                            .replace("<message>", reason))
+                    );
         }
     }
 
@@ -33,13 +38,18 @@ public final class PlayerUtil {
      */
     public static int getPing(Player player) {
         try {
-            final String bukkitVersion = Bukkit.getServer().getClass().getPackage().getName().substring(23);
-            final Class<?> craftPlayer = Class.forName("org.bukkit.craftbukkit." + bukkitVersion + ".entity.CraftPlayer");
-            final Object handle = craftPlayer.getMethod("getHandle").invoke(player);
+            final Object handle = PlayerUtil.CRAFT_PLAYER.getMethod("getHandle").invoke(player);
 
             return (Integer) handle.getClass().getDeclaredField("ping").get(handle);
         } catch (Exception ignored) {
             return 0;
+        }
+    }
+
+    static {
+        try {
+            CRAFT_PLAYER = Class.forName("org.bukkit.craftbukkit." + Bukkit.getServer().getClass().getPackage().getName().substring(23) + ".entity.CraftPlayer");
+        } catch (Exception ignored) {
         }
     }
 }

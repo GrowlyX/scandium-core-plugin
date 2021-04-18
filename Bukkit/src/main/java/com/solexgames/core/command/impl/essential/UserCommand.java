@@ -28,7 +28,7 @@ public class UserCommand extends BaseCommand {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
+    public boolean execute(CommandSender sender, String label, String[] args) {
         if (!sender.hasPermission("scandium.command.user")) {
             sender.sendMessage(NO_PERMISSION);
             return false;

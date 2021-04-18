@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class ListCommand extends BaseCommand {
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
+    public boolean execute(CommandSender sender, String label, String[] args) {
         if (sender instanceof ConsoleCommandSender) {
             String ranks = Rank.getRanks().stream()
                     .sorted(Comparator.comparingInt(rank -> -rank.getWeight()))

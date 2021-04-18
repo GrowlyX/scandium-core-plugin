@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 public class AuthBypassCommand extends BaseCommand {
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean execute(CommandSender sender, String label, String[] args) {
         if (sender instanceof Player) {
             sender.sendMessage(ChatColor.RED + "Only players can execute this command.");
             return true;

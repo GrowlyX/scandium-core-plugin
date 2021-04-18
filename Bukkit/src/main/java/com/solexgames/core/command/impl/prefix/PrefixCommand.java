@@ -22,7 +22,7 @@ import java.util.concurrent.CompletableFuture;
 public class PrefixCommand extends BaseCommand {
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean execute(CommandSender sender, String label, String[] args) {
         if (!(sender instanceof Player)) {
             ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
 

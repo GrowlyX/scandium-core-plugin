@@ -8,6 +8,7 @@ public class ServerSettings {
     private String tabHeader;
     private String tabFooter;
     private String chatFormat;
+    private String alertFormat;
 
     private boolean tabEnabled = true;
     private boolean canJoin = false;
