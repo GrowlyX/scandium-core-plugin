@@ -30,7 +30,14 @@ public class KickCommand extends BaseCommand {
             sender.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player> <reason> " + ChatColor.GRAY + "[-s]" + ChatColor.WHITE + ".");
         }
         if (args.length >= 2) {
-            CompletableFuture.supplyAsync(() -> CorePlugin.getInstance().getPlayerManager().getDocumentByName(args[0]).orElse(null)).thenAcceptAsync(document -> {
+            final UUID uuid = CorePlugin.getInstance().getUuidCache().getUuidFromUsername(args[0]);
+
+            if (uuid == null) {
+                sender.sendMessage(org.bukkit.ChatColor.RED + "Error: That player is not valid.");
+                return false;
+            }
+
+            CorePlugin.getInstance().getPlayerManager().findOrMake(args[0], uuid).thenAcceptAsync(document -> {
                 if (document == null) {
                     sender.sendMessage(ChatColor.RED + "Error: That player does not exist in our database.");
                 } else {
