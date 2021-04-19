@@ -47,7 +47,7 @@ public class CGrantCommand extends BaseCommand {
                 return false;
             }
 
-            CompletableFuture.supplyAsync(() -> CorePlugin.getInstance().getPlayerManager().getDocumentByUuid(uuid).orElse(null))
+            CorePlugin.getInstance().getPlayerManager().findOrMake(args[0], uuid)
                     .thenAcceptAsync(document -> {
                         if (document != null) {
                             final Rank rank = Rank.getByName(args[1]);

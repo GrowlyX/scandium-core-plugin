@@ -14,7 +14,7 @@ public class UUIDCache extends HashMap<String, UUID> {
      * <p>
      *
      * @param playerName Player's name
-     * @return The player's UUID from the cache, or if not from Mojang's API, or else null.
+     * @return The player's UUID from the cache, or if not from 's API, or else null.
      */
     public UUID getUuidFromUsername(String playerName) {
         if (playerName == null || playerName.equals("")) {

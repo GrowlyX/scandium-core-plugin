@@ -12,6 +12,7 @@ import com.solexgames.core.player.global.NetworkPlayer;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
 import com.solexgames.core.util.PlayerUtil;
+import com.solexgames.core.util.atomic.AtomicDocument;
 import com.solexgames.core.util.builder.ItemBuilder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,7 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.net.InetAddress;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
@@ -167,7 +169,6 @@ public class PlayerManager {
 
         player.updateInventory();
 
-        final ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
         final ChatColor secondColor = Color.SECONDARY_COLOR;
 
         final double pitch = (double) (player.getLocation().getPitch() + 90.0F) * 3.141592653589793D / 180.0D;
@@ -279,6 +280,27 @@ public class PlayerManager {
 
     public Optional<Document> getDocumentByUuid(UUID uuid) {
         return Optional.ofNullable(CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("_id", uuid)).first());
+    }
+
+    public CompletableFuture<Document> findOrMake(String playerName, UUID uuid) {
+        return CompletableFuture.supplyAsync(() -> {
+            final Document document = CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("_id", uuid)).first();
+
+            if (document == null) {
+                final PotPlayer potPlayer = new PotPlayer(uuid, playerName, null);
+                final AtomicDocument atomicDocument = new AtomicDocument();
+
+                CompletableFuture.supplyAsync(() -> {
+                    potPlayer.savePlayerData();
+                    return true;
+                }).thenRunAsync(() -> CompletableFuture.supplyAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("_id", uuid)).first())
+                        .thenAcceptAsync(atomicDocument::setDocument));
+
+                return atomicDocument.getDocument();
+            } else {
+                return document;
+            }
+        });
     }
 
     public void unVanishPlayer(Player player) {

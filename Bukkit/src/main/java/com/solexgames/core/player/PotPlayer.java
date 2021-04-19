@@ -150,7 +150,7 @@ public class PotPlayer {
 
     public PotPlayer(UUID uuid, String name, InetAddress inetAddress) {
         this.uuid = uuid;
-        this.ipAddress = inetAddress.getHostAddress();
+        this.ipAddress = (inetAddress != null ? inetAddress.getHostAddress() : null);
         this.name = name;
 
         this.media = new Media();

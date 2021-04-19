@@ -41,13 +41,14 @@ public class GrantCommand extends BaseCommand {
                 return false;
             }
 
-            final Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByUuid(uuid).orElse(null);
-
-            if (document != null) {
-                new GrantMainPaginatedMenu(document, player).openMenu(player);
-            } else {
-                player.sendMessage(ChatColor.RED + "Error: That player does not exist in our database.");
-            }
+            CorePlugin.getInstance().getPlayerManager().findOrMake(args[0], uuid)
+                    .thenAccept(document -> {
+                        if (document != null) {
+                            new GrantMainPaginatedMenu(document, player).openMenu(player);
+                        } else {
+                            player.sendMessage(ChatColor.RED + "Error: That player does not exist in our database.");
+                        }
+                    });
         }
 
         return false;
