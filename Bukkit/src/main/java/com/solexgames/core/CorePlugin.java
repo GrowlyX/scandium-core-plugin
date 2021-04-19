@@ -304,7 +304,6 @@ public final class CorePlugin extends JavaPlugin {
 
         this.getServer().getOnlinePlayers().forEach(player -> player.kickPlayer(Color.translate("&cThe server is currently rebooting.\n&cPlease reconnect in a few minutes, or check discord for more information.")));
 
-        this.punishmentManager.savePunishments();
         this.prefixManager.savePrefixes();
 
         final Thread thread = new Thread(() ->
