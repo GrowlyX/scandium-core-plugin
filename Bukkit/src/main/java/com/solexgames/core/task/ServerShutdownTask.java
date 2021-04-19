@@ -14,15 +14,15 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 
 @Getter
-public class ShutdownTask extends BukkitRunnable {
+public class ServerShutdownTask extends BukkitRunnable {
 
     private int ticks;
     private final int seconds;
 
-    public ShutdownTask(int seconds) {
+    public ServerShutdownTask(int seconds) {
         this.seconds = seconds;
 
-        this.runTaskTimerAsynchronously(CorePlugin.getInstance(), 20L, this.seconds * 20L);
+        this.runTaskTimerAsynchronously(CorePlugin.getInstance(), 20L, 20L);
     }
 
     @Override
@@ -30,10 +30,7 @@ public class ShutdownTask extends BukkitRunnable {
         final int finalSeconds = this.seconds - this.ticks;
 
         switch (finalSeconds) {
-            case 40:
-            case 30:
-            case 20:
-            case 15:
+            case 40: case 30: case 20: case 15:
             case 10:
                 Bukkit.broadcastMessage(Color.SECONDARY_COLOR + "The server will be shutting down in " + Color.MAIN_COLOR + finalSeconds + " seconds" + Color.SECONDARY_COLOR + ".");
                 break;

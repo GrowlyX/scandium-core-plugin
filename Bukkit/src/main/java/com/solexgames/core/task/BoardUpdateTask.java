@@ -16,7 +16,7 @@ import java.util.Objects;
 public class BoardUpdateTask extends BukkitRunnable {
 
     public BoardUpdateTask() {
-        this.runTaskTimerAsynchronously(CorePlugin.getInstance(), 0L, 2L);
+        this.runTaskTimer(CorePlugin.getInstance(), 0L, 2L);
     }
 
     @Override

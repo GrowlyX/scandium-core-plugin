@@ -24,8 +24,10 @@ import java.util.List;
 public class RedisManager {
 
     private JedisPool jedisPool;
+
     private RedisSettings settings;
     private RedisSubscriptions subscriptions;
+
     private CoreJedisSubscriber jedisSubscriber;
 
     private boolean active;
@@ -43,27 +45,30 @@ public class RedisManager {
     }
 
     private void subscribe() {
-        this.jedisPool = new JedisPool(this.settings.getHostAddress(), this.settings.getPort());
+        try {
+            this.jedisPool = new JedisPool(this.settings.getHostAddress(), this.settings.getPort());
+            Jedis jedis = this.jedisPool.getResource();
 
-        try (Jedis jedis = this.jedisPool.getResource()) {
-            if (settings.isAuth()) {
-                jedis.auth(settings.getPassword());
+            if (this.settings.isAuth()) {
+                jedis.auth(this.settings.getPassword());
             }
 
             this.jedisSubscriber = new CoreJedisSubscriber();
-            (new Thread(() -> jedis.subscribe(this.jedisSubscriber, "Scandium:BUKKIT"))).start();
+            (new Thread(() -> jedis.subscribe(this.jedisSubscriber, this.jedisSubscriber.getChannelName()))).start();
 
             jedis.connect();
 
+            CorePlugin.getInstance().getLogger().info("[Redis] Connected to Redis backend.");
             this.active = true;
         } catch (Exception ignored) {
+            CorePlugin.getInstance().getLogger().severe("[Redis] Could not connect to Redis backend.");
             this.active = false;
         }
     }
 
     public void unsubscribe() {
         try {
-            jedisPool.destroy();
+            this.jedisPool.destroy();
             this.jedisSubscriber.unsubscribe();
         } catch (Exception e) {
             System.out.println("[Redis] Could not destroy Redis Pool.");
