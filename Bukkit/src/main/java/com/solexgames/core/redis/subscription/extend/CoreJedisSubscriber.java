@@ -44,6 +44,7 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
     public void onMessage(String channel, String message) {
         JsonAppender jsonAppender = CorePlugin.GSON.fromJson(message, JsonAppender.class);
 
+        // Running async just incase this thread gets blocked from too many incoming packets
         CompletableFuture.runAsync(() -> {
             switch (jsonAppender.getPacket()) {
                 case GLOBAL_PLAYER_REMOVE:

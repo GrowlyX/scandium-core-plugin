@@ -43,24 +43,21 @@ public class RedisManager {
     }
 
     private void subscribe() {
-        this.jedisPool = new JedisPool(settings.getHostAddress(), settings.getPort());
+        this.jedisPool = new JedisPool(this.settings.getHostAddress(), this.settings.getPort());
 
         try (Jedis jedis = this.jedisPool.getResource()) {
-
             if (settings.isAuth()) {
                 jedis.auth(settings.getPassword());
             }
 
-            (new Thread(() -> jedis.subscribe(new CoreJedisSubscriber(), "Scandium:BUKKIT"))).start();
+            this.jedisSubscriber = new CoreJedisSubscriber();
+            (new Thread(() -> jedis.subscribe(this.jedisSubscriber, "Scandium:BUKKIT"))).start();
 
             jedis.connect();
 
             this.active = true;
-
-            CorePlugin.getInstance().logConsole("&6[Redis] &eConnected to redis backend!");
         } catch (Exception ignored) {
-            CorePlugin.getInstance().logConsole("&c[Redis] Could not connect to redis backend!");
-            this.setActive(false);
+            this.active = false;
         }
     }
 

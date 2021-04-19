@@ -22,7 +22,7 @@ import java.util.jar.JarFile;
 @UtilityClass
 public final class BukkitUtil {
 
-    public static final String COMMAND_PKG = "com.solexgames.core.commands.impl.%s";
+    public static final String COMMAND_PKG = "com.solexgames.core.command.impl.%s";
 
     public static void registerDefaultCommand() {
         BukkitUtil.registerCommandsIn(BukkitUtil.COMMAND_PKG.replace(".%s", ""));
