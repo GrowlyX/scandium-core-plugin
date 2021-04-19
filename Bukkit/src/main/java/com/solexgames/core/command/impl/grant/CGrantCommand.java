@@ -34,122 +34,115 @@ public class CGrantCommand extends BaseCommand {
             return false;
         }
 
-        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+        final ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
 
         if (args.length <= 2) {
-            sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player> <rank> <duration> <reason>."));
+            sender.sendMessage(Color.translate(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player> <rank> <duration> <reason>."));
         }
         if (args.length > 2) {
-            UUID uuid = UUIDUtil.fetchUUID(args[0]);
+            final UUID uuid = CorePlugin.getInstance().getUuidCache().getUuidFromUsername(args[0]);
 
             if (uuid == null) {
                 sender.sendMessage(ChatColor.RED + "Error: That uuid is not valid.");
                 return false;
             }
 
-            AtomicReference<Document> document = new AtomicReference<>();
-            CompletableFuture<Boolean> completableFuture = new CompletableFuture<>();
+            CompletableFuture.supplyAsync(() -> CorePlugin.getInstance().getPlayerManager().getDocumentByUuid(uuid).orElse(null))
+                    .thenAcceptAsync(document -> {
+                        if (document != null) {
+                            final Rank rank = Rank.getByName(args[1]);
+                            final ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
-            CompletableFuture.runAsync(() -> {
-                document.set(CorePlugin.getInstance().getPlayerManager().getDocumentByUuid(uuid).orElse(null));
-                completableFuture.complete(true);
-            });
+                            if (rank != null) {
+                                if (args[2].equalsIgnoreCase("perm") || args[2].equalsIgnoreCase("permanent")) {
+                                    final String reason = StringUtil.buildMessage(args, 3);
+                                    PotPlayer targetPotPlayer = null;
 
-            completableFuture.thenRun(() -> {
-                if (document.get() != null) {
-                    Rank rank = Rank.getByName(args[1]);
-                    ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
-
-                    if (rank != null) {
-                        if (args[2].equalsIgnoreCase("perm") || args[2].equalsIgnoreCase("permanent")) {
-                            String reason = StringUtil.buildMessage(args, 3);
-                            PotPlayer targetPotPlayer = null;
-
-                            try {
-                                targetPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(document.get().getString("name"));
-                            } catch (Exception ignored) {
-                            }
-
-                            Grant newGrant = new Grant(null, rank, System.currentTimeMillis(), -1L, reason, true, true, "global");
-                            newGrant.setPermanent(true);
-                            newGrant.setIssuedServer(CorePlugin.getInstance().getServerName());
-
-                            if (targetPotPlayer != null) {
-                                targetPotPlayer.getAllGrants().add(newGrant);
-                                targetPotPlayer.setupPlayer();
-                                targetPotPlayer.saveWithoutRemove();
-
-                                targetPotPlayer.getPlayer().sendMessage(ChatColor.GREEN + Color.translate("Your rank has been set to " + newGrant.getRank().getColor() + newGrant.getRank().getName() + ChatColor.GREEN + "."));
-                                sender.sendMessage(Color.translate(network.getSecondaryColor() + "You've granted " + targetPotPlayer.getPlayer().getDisplayName() + network.getSecondaryColor() + " the rank " + rank.getColor() + rank.getItalic() + rank.getName() + network.getSecondaryColor() + " for " + network.getMainColor() + reason + network.getSecondaryColor() + "."));
-                            } else {
-                                List<Grant> allGrants = new ArrayList<>();
-
-                                if ((!((List<String>) document.get().get("allGrants")).isEmpty()) || ((document.get().get("allGrants") != null))) {
-                                    List<String> allStringGrants = ((List<String>) document.get().get("allGrants"));
-                                    allStringGrants.forEach(s -> allGrants.add(CorePlugin.GSON.fromJson(s, Grant.class)));
-                                }
-
-                                allGrants.add(newGrant);
-
-                                List<String> grantStrings = new ArrayList<>();
-                                allGrants.forEach(grant -> grantStrings.add(grant.toJson()));
-
-                                document.get().put("allGrants", grantStrings);
-
-                                CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("uuid", uuid), document.get(), new ReplaceOptions().upsert(true)));
-
-                                sender.sendMessage(Color.translate(network.getSecondaryColor() + "You've granted &b" + UUIDUtil.fetchName(UUID.fromString(document.get().getString("uuid"))) + network.getSecondaryColor() + " the rank " + rank.getColor() + rank.getItalic() + rank.getName() + network.getSecondaryColor() + " for " + network.getMainColor() + reason + network.getSecondaryColor() + "."));
-                            }
-                        } else {
-                            try {
-                                String reason = StringUtil.buildMessage(args, 3);
-                                PotPlayer targetPotPlayer = null;
-
-                                try {
-                                    targetPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(document.get().getString("name"));
-                                } catch (Exception ignored) {
-                                }
-
-                                Grant newGrant = new Grant(null, rank, System.currentTimeMillis(), System.currentTimeMillis() - DateUtil.parseDateDiff(args[2], false), reason, true, false, "global");
-                                newGrant.setIssuedServer(CorePlugin.getInstance().getServerName());
-
-                                if (targetPotPlayer != null) {
-                                    targetPotPlayer.getAllGrants().add(newGrant);
-                                    targetPotPlayer.setupPlayer();
-                                    targetPotPlayer.saveWithoutRemove();
-
-                                    targetPotPlayer.getPlayer().sendMessage(ChatColor.GREEN + Color.translate("Your rank has been set to " + newGrant.getRank().getColor() + newGrant.getRank().getName() + ChatColor.GREEN + "."));
-                                    sender.sendMessage(Color.translate(network.getSecondaryColor() + "You've granted " + targetPotPlayer.getPlayer().getDisplayName() + network.getSecondaryColor() + " the rank " + rank.getColor() + rank.getItalic() + rank.getName() + network.getSecondaryColor() + " for " + network.getMainColor() + reason + network.getSecondaryColor() + "."));
-                                } else {
-                                    List<Grant> allGrants = new ArrayList<>();
-
-                                    if ((!((List<String>) document.get().get("allGrants")).isEmpty()) || ((document.get().get("allGrants") != null))) {
-                                        List<String> allStringGrants = ((List<String>) document.get().get("allGrants"));
-                                        allStringGrants.forEach(s -> allGrants.add(CorePlugin.GSON.fromJson(s, Grant.class)));
+                                    try {
+                                        targetPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(document.getString("name"));
+                                    } catch (Exception ignored) {
                                     }
 
-                                    allGrants.add(newGrant);
+                                    final Grant newGrant = new Grant(null, rank, System.currentTimeMillis(), -1L, reason, true, true, "global");
+                                    newGrant.setPermanent(true);
+                                    newGrant.setIssuedServer(CorePlugin.getInstance().getServerName());
 
-                                    List<String> grantStrings = new ArrayList<>();
-                                    allGrants.forEach(grant -> grantStrings.add(grant.toJson()));
+                                    if (targetPotPlayer != null) {
+                                        targetPotPlayer.getAllGrants().add(newGrant);
+                                        targetPotPlayer.setupPlayer();
+                                        targetPotPlayer.saveWithoutRemove();
 
-                                    document.get().put("allGrants", grantStrings);
+                                        targetPotPlayer.getPlayer().sendMessage(ChatColor.GREEN + Color.translate("Your rank has been set to " + newGrant.getRank().getColor() + newGrant.getRank().getName() + ChatColor.GREEN + "."));
+                                        sender.sendMessage(Color.translate(network.getSecondaryColor() + "You've granted " + targetPotPlayer.getPlayer().getDisplayName() + network.getSecondaryColor() + " the rank " + rank.getColor() + rank.getItalic() + rank.getName() + network.getSecondaryColor() + " for " + network.getMainColor() + reason + network.getSecondaryColor() + "."));
+                                    } else {
+                                        final List<Grant> allGrants = new ArrayList<>();
 
-                                    CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("uuid", uuid), document.get(), new ReplaceOptions().upsert(true)));
+                                        if ((!((List<String>) document.get("allGrants")).isEmpty()) || ((document.get("allGrants") != null))) {
+                                            List<String> allStringGrants = ((List<String>) document.get("allGrants"));
+                                            allStringGrants.forEach(s -> allGrants.add(CorePlugin.GSON.fromJson(s, Grant.class)));
+                                        }
 
-                                    sender.sendMessage(Color.translate(network.getSecondaryColor() + "You've granted " + args[0] + network.getSecondaryColor() + " the rank " + rank.getColor() + rank.getItalic() + rank.getName() + network.getSecondaryColor() + " for " + network.getMainColor() + reason + network.getSecondaryColor() + "."));
+                                        allGrants.add(newGrant);
+
+                                        final List<String> grantStrings = new ArrayList<>();
+                                        allGrants.forEach(grant -> grantStrings.add(grant.toJson()));
+
+                                        document.put("allGrants", grantStrings);
+
+                                        CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("uuid", uuid), document, new ReplaceOptions().upsert(true)));
+
+                                        sender.sendMessage(Color.translate(network.getSecondaryColor() + "You've granted &b" + UUIDUtil.fetchName(UUID.fromString(document.getString("uuid"))) + network.getSecondaryColor() + " the rank " + rank.getColor() + rank.getItalic() + rank.getName() + network.getSecondaryColor() + " for " + network.getMainColor() + reason + network.getSecondaryColor() + "."));
+                                    }
+                                } else {
+                                    try {
+                                        final String reason = StringUtil.buildMessage(args, 3);
+                                        PotPlayer targetPotPlayer = null;
+
+                                        try {
+                                            targetPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(document.getString("name"));
+                                        } catch (Exception ignored) {
+                                        }
+
+                                        final Grant newGrant = new Grant(null, rank, System.currentTimeMillis(), System.currentTimeMillis() - DateUtil.parseDateDiff(args[2], false), reason, true, false, "global");
+                                        newGrant.setIssuedServer(CorePlugin.getInstance().getServerName());
+
+                                        if (targetPotPlayer != null) {
+                                            targetPotPlayer.getAllGrants().add(newGrant);
+                                            targetPotPlayer.setupPlayer();
+                                            targetPotPlayer.saveWithoutRemove();
+
+                                            targetPotPlayer.getPlayer().sendMessage(ChatColor.GREEN + Color.translate("Your rank has been set to " + newGrant.getRank().getColor() + newGrant.getRank().getName() + ChatColor.GREEN + "."));
+                                            sender.sendMessage(Color.translate(network.getSecondaryColor() + "You've granted " + targetPotPlayer.getPlayer().getDisplayName() + network.getSecondaryColor() + " the rank " + rank.getColor() + rank.getItalic() + rank.getName() + network.getSecondaryColor() + " for " + network.getMainColor() + reason + network.getSecondaryColor() + "."));
+                                        } else {
+                                            final List<Grant> allGrants = new ArrayList<>();
+
+                                            if ((!document.getList("allGrants", String.class).isEmpty()) || ((document.get("allGrants") != null))) {
+                                                List<String> allStringGrants = ((List<String>) document.get("allGrants"));
+                                                allStringGrants.forEach(s -> allGrants.add(CorePlugin.GSON.fromJson(s, Grant.class)));
+                                            }
+
+                                            allGrants.add(newGrant);
+
+                                            List<String> grantStrings = new ArrayList<>();
+                                            allGrants.forEach(grant -> grantStrings.add(grant.toJson()));
+
+                                            document.put("allGrants", grantStrings);
+
+                                            CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("uuid", uuid), document, new ReplaceOptions().upsert(true)));
+
+                                            sender.sendMessage(Color.translate(network.getSecondaryColor() + "You've granted " + args[0] + network.getSecondaryColor() + " the rank " + rank.getColor() + rank.getItalic() + rank.getName() + network.getSecondaryColor() + " for " + network.getMainColor() + reason + network.getSecondaryColor() + "."));
+                                        }
+                                    } catch (Exception exception) {
+                                        sender.sendMessage(ChatColor.RED + "Invalid duration.");
+                                    }
                                 }
-                            } catch (Exception exception) {
-                                sender.sendMessage(ChatColor.RED + "Invalid duration.");
+                            } else {
+                                sender.sendMessage(ChatColor.RED + "Error: That rank does not exist.");
                             }
+                        } else {
+                            sender.sendMessage(ChatColor.RED + "Error: That player does not exist in our database.");
                         }
-                    } else {
-                        sender.sendMessage(ChatColor.RED + "Error: That rank does not exist.");
-                    }
-                } else {
-                    sender.sendMessage(ChatColor.RED + "Error: That player does not exist in our database.");
-                }
-            });
+                    });
         }
         return false;
     }

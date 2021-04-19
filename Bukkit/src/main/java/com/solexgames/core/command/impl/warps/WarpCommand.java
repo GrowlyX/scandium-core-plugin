@@ -7,6 +7,7 @@ import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.player.warps.Warp;
 import com.solexgames.core.util.Color;
+import com.solexgames.core.util.external.pagination.impl.NameColorSelectMenu;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -17,11 +18,9 @@ import java.util.concurrent.CompletableFuture;
 
 public class WarpCommand extends BaseCommand {
 
-    public final ServerType NETWORK = CorePlugin.getInstance().getServerManager().getNetwork();
-
     public void sendHelp(Player player) {
         player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
-        player.sendMessage(Color.translate(NETWORK.getMainColor() + ChatColor.BOLD.toString() + "Warp Management:"));
+        player.sendMessage(Color.translate(Color.MAIN_COLOR + ChatColor.BOLD.toString() + "Warp Management:"));
         player.sendMessage("  ");
         player.sendMessage(Color.translate("/warp <warp> &7- Teleport to a warp."));
         player.sendMessage(Color.translate("/warp create &7- Create a new warp."));
@@ -37,9 +36,11 @@ public class WarpCommand extends BaseCommand {
             return false;
         }
 
-        Player player = (Player) sender;
+        final Player player = (Player) sender;
+
         if (!player.hasPermission("scandium.command.warp")) {
             player.sendMessage(NO_PERMISSION);
+            return false;
         }
 
         if (args.length == 0) {
@@ -49,9 +50,9 @@ public class WarpCommand extends BaseCommand {
             switch (args[0]) {
                 case "list":
                     player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
-                    player.sendMessage(Color.translate(NETWORK.getMainColor() + ChatColor.BOLD.toString() + "All Warps:"));
+                    player.sendMessage(Color.translate(Color.MAIN_COLOR + ChatColor.BOLD.toString() + "All Warps:"));
                     Warp.getWarps().stream().filter(warp -> warp.getLocation() != null).forEach(warp -> {
-                        Clickable chatClickable = new Clickable(ChatColor.GRAY + " * " + ChatColor.YELLOW + warp.getName(), ChatColor.GREEN + "Click to warp to " + ChatColor.RESET + warp.getName() + ChatColor.GREEN + "!", "/warp " + warp.getName());
+                        final Clickable chatClickable = new Clickable(ChatColor.GRAY + " * " + ChatColor.YELLOW + warp.getName(), ChatColor.GREEN + "Click to warp to " + ChatColor.RESET + warp.getName() + ChatColor.GREEN + "!", "/warp " + warp.getName());
                         player.spigot().sendMessage(chatClickable.asComponents());
                     });
                     player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
@@ -59,8 +60,8 @@ public class WarpCommand extends BaseCommand {
                 case "create":
                     if (args.length == 1) player.sendMessage(ChatColor.RED + ("Usage: /warp create <name>."));
                     if (args.length == 2) {
-                        String value = args[1];
-                        Warp warp = new Warp(value, player.getLocation(), CorePlugin.getInstance().getServerName());
+                        final String value = args[1];
+                        final Warp warp = new Warp(value, player.getLocation(), CorePlugin.getInstance().getServerName());
                         warp.saveWarp();
 
                         player.sendMessage(ChatColor.GREEN + Color.translate("Created a new warp with the name '" + value + "'."));
@@ -69,8 +70,8 @@ public class WarpCommand extends BaseCommand {
                 case "delete":
                     if (args.length == 1) player.sendMessage(ChatColor.RED + ("Usage: /warp delete <name>."));
                     if (args.length == 2) {
-                        String value = args[1];
-                        Warp warp = Warp.getByName(value);
+                        final String value = args[1];
+                        final Warp warp = Warp.getByName(value);
 
                         if (warp != null) {
                             Warp.getWarps().remove(warp);
@@ -83,8 +84,8 @@ public class WarpCommand extends BaseCommand {
                     }
                     break;
                 default:
-                    String value = args[0];
-                    Warp warp = Warp.getByName(value);
+                    final String value = args[0];
+                    final Warp warp = Warp.getByName(value);
 
                     if (warp != null) {
                         if (warp.getServer().equalsIgnoreCase(CorePlugin.getInstance().getServerName())) {
@@ -98,7 +99,7 @@ public class WarpCommand extends BaseCommand {
                             player.sendMessage(ChatColor.RED + ("Error: That warp was created on another server!"));
                         }
                     } else {
-                        sendHelp(player);
+                        this.sendHelp(player);
                     }
                     break;
             }

@@ -17,7 +17,7 @@ public class ViewInvCommand extends BaseCommand {
             return false;
         }
 
-        Player player = (Player) sender;
+        final Player player = (Player) sender;
 
         if (!player.hasPermission("scandium.command.viewinv")) {
             player.sendMessage(NO_PERMISSION);
@@ -34,7 +34,7 @@ public class ViewInvCommand extends BaseCommand {
                 return false;
             }
 
-            Player target = Bukkit.getPlayer(args[0]);
+            final Player target = Bukkit.getPlayer(args[0]);
 
             if (target != null) {
                 new ViewPlayerMenu(target).openMenu(player);

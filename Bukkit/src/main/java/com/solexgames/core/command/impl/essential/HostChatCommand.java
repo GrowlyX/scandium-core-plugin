@@ -21,8 +21,8 @@ public class HostChatCommand extends BaseCommand {
             return false;
         }
 
-        Player player = (Player) sender;
-        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+        final Player player = (Player) sender;
+        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
         if (!player.hasPermission(ChatChannelType.HOST.getPermission())) {
             player.sendMessage(NO_PERMISSION);
@@ -40,7 +40,7 @@ public class HostChatCommand extends BaseCommand {
         }
 
         if (args.length > 0) {
-            String message = StringUtil.buildMessage(args, 0);
+            final String message = StringUtil.buildMessage(args, 0);
             RedisUtil.writeAsync(RedisUtil.onChatChannel(ChatChannelType.HOST, message, player));
         }
         return false;

@@ -23,6 +23,8 @@ import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 /**
@@ -50,8 +52,8 @@ public final class UUIDUtil {
             String textResponse = bufferedReader.lines().collect(Collectors.joining(" "));
 
             Map map = CorePlugin.GSON.fromJson(textResponse, Map.class);
-            return map.get("name").toString();
 
+            return map.get("name").toString();
         } catch (Exception exception) {
             return null;
         }
@@ -63,37 +65,31 @@ public final class UUIDUtil {
      * @param name the name of the player
      */
     public static UUID fetchUUID(String name) {
-        final UUID uuid = CorePlugin.getInstance().getUuidCache().get(name);
+        final AtomicReference<UUID> uuidAtomicReference = new AtomicReference<>();
 
-        if (uuid != null) {
-            return uuid;
-        }
+        CompletableFuture.supplyAsync(() -> {
+            try {
+                HttpPost request = new HttpPost("https://api.mojang.com/profiles/minecraft");
+                StringEntity entity = new StringEntity("[\"" + name + "\"]");
 
-        try {
-            HttpPost request = new HttpPost("https://api.mojang.com/profiles/minecraft");
+                request.setEntity(entity);
+                request.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
 
-            // create the entity
-            StringEntity entity = new StringEntity("[\"" + name + "\"]");
-            request.setEntity(entity);
-            request.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
+                HttpResponse response = CorePlugin.getInstance().getHttpClient().execute(request);
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+                String textResponse = bufferedReader.lines().collect(Collectors.joining(" "));
 
-            // send the request
-            HttpResponse response = CorePlugin.getInstance().getHttpClient().execute(request);
+                List list = CorePlugin.GSON.fromJson(textResponse, List.class);
+                Map profile = (Map) list.get(0);
+                String stringUUID = (String) profile.get("id");
 
-            // read the response
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-            String textResponse = bufferedReader.lines().collect(Collectors.joining(" "));
+                return UUID.fromString(formatUUID(stringUUID));
+            } catch (Exception ignored) {
+                return null;
+            }
+        }).thenAccept(uuidAtomicReference::set);
 
-            // parse the response
-            List list = CorePlugin.GSON.fromJson(textResponse, List.class);
-            Map profile = (Map) list.get(0);
-            String stringUUID = (String) profile.get("id");
-
-            return UUID.fromString(formatUUID(stringUUID));
-
-        } catch (Exception exception) {
-            return null;
-        }
+        return uuidAtomicReference.get();
     }
 
     /**

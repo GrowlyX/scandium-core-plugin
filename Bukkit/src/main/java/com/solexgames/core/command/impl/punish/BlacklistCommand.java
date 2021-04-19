@@ -26,25 +26,15 @@ public class BlacklistCommand extends BaseCommand {
             return false;
         }
 
-        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
-
         if (args.length < 2) {
-            sender.sendMessage(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player> <reason> " + ChatColor.GRAY + "[-s]" + ChatColor.WHITE + ".");
+            sender.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player> <reason> " + ChatColor.GRAY + "[-s]" + ChatColor.WHITE + ".");
         }
         if (args.length >= 2) {
-            AtomicReference<Document> document = new AtomicReference<>();
-            CompletableFuture<Boolean> completableFuture = new CompletableFuture<>();
-
-            CompletableFuture.runAsync(() -> {
-                document.set(CorePlugin.getInstance().getPlayerManager().getDocumentByName(args[0]).orElse(null));
-                completableFuture.complete(true);
-            });
-
-            completableFuture.thenRunAsync(() -> {
-                if (document.get() == null) {
+            CompletableFuture.supplyAsync(() -> CorePlugin.getInstance().getPlayerManager().getDocumentByName(args[0]).orElse(null)).thenAcceptAsync(document -> {
+                if (document == null) {
                     sender.sendMessage(ChatColor.RED + "Error: That player does not exist in our database.");
                 } else {
-                    UUID playerId = UUIDUtil.fetchUUID(document.get().getString("name"));
+                    UUID playerId = CorePlugin.getInstance().getUuidCache().getUuidFromUsername(document.getString("name"));
                     List<Punishment> punishmentList = Punishment.getAllPunishments().stream()
                             .filter(Objects::nonNull)
                             .filter(Punishment::isActive)
@@ -61,7 +51,7 @@ public class BlacklistCommand extends BaseCommand {
                         String newPunishmentId = SaltUtil.getRandomSaltedString(7);
 
                         String targetName = args[0];
-                        UUID targetUuid = UUID.fromString(document.get().getString("uuid"));
+                        UUID targetUuid = UUID.fromString(document.getString("uuid"));
                         String reason = StringUtil.buildMessage(args, 1);
 
                         String issuerName = (sender instanceof Player ? ((Player) sender).getName() : "Console");
@@ -89,7 +79,7 @@ public class BlacklistCommand extends BaseCommand {
 
                             PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(targetName);
 
-                            CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, issuerNameNull, document.get(), isSilent);
+                            CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, issuerNameNull, document, isSilent);
 
                             if (potPlayer != null) {
                                 potPlayer.getPunishments().add(punishment);

@@ -2,19 +2,16 @@ package com.solexgames.core.command.impl.punish;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
-import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.punishment.Punishment;
 import com.solexgames.core.player.punishment.PunishmentType;
 import com.solexgames.core.util.*;
 import net.md_5.bungee.api.ChatColor;
-import org.bson.Document;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 public class WarnCommand extends BaseCommand {
@@ -26,17 +23,15 @@ public class WarnCommand extends BaseCommand {
             return false;
         }
 
-        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
-
         if (args.length < 3) {
-            sender.sendMessage(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player> <time> <reason> " + ChatColor.GRAY + "[-s]" + ChatColor.WHITE + ".");
+            sender.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player> <time> <reason> " + ChatColor.GRAY + "[-s]" + ChatColor.WHITE + ".");
         }
         if (args.length >= 3) {
             CompletableFuture.supplyAsync(() -> CorePlugin.getInstance().getPlayerManager().getDocumentByName(args[0]).orElse(null)).thenAccept(document -> {
                 if (document == null) {
                     sender.sendMessage(ChatColor.RED + "Error: That player does not exist in our database.");
                 } else {
-                    UUID playerId = UUIDUtil.fetchUUID(document.getString("name"));
+                    UUID playerId = CorePlugin.getInstance().getUuidCache().getUuidFromUsername(document.getString("name"));
                     List<Punishment> punishmentList = Punishment.getAllPunishments().stream()
                             .filter(Objects::nonNull)
                             .filter(Punishment::isActive)
@@ -104,7 +99,6 @@ public class WarnCommand extends BaseCommand {
                             ));
                         } catch (Exception ignored) {
                             sender.sendMessage(ChatColor.RED + "Error: That is not a valid duration!");
-                            ignored.printStackTrace();
                         }
                     }
                 }

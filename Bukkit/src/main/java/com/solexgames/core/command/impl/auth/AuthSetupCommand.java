@@ -20,9 +20,8 @@ public class AuthSetupCommand extends BaseCommand {
             return true;
         }
 
-        CorePlugin plugin = CorePlugin.getInstance();
-        Player player = (Player) sender;
-        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+        final Player player = (Player) sender;
+        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
         if (!player.hasPermission("scandium.2fa")) {
             player.sendMessage(ChatColor.RED + "You don't have permission to setup 2FA.");
@@ -35,7 +34,7 @@ public class AuthSetupCommand extends BaseCommand {
                 return;
             }
 
-            ConversationFactory factory = new ConversationFactory(plugin)
+            ConversationFactory factory = new ConversationFactory(CorePlugin.getInstance())
                     .withFirstPrompt(new DisclaimerPrompt())
                     .withLocalEcho(false)
                     .thatExcludesNonPlayersWithMessage(ChatColor.RED + "NO CONSOLE YOU NUB");

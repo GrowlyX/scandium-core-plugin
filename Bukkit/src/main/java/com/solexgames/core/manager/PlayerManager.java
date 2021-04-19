@@ -168,7 +168,7 @@ public class PlayerManager {
         player.updateInventory();
 
         final ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
-        final ChatColor secondColor = serverType.getSecondaryColor();
+        final ChatColor secondColor = Color.SECONDARY_COLOR;
 
         final double pitch = (double) (player.getLocation().getPitch() + 90.0F) * 3.141592653589793D / 180.0D;
         final double yaw = (double) (player.getLocation().getYaw() + 90.0F) * 3.141592653589793D / 180.0D;

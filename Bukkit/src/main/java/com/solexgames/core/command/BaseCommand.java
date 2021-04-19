@@ -27,7 +27,7 @@ public abstract class BaseCommand implements CommandExecutor {
     protected Database database;
 
     /**
-     * Created a new instance of BaseCommand.
+     * Creates a new instance of BaseCommand.
      */
     protected BaseCommand() {
         this.playerManager = CorePlugin.getInstance().getPlayerManager();

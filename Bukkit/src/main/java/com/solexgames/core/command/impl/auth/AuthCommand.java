@@ -21,8 +21,8 @@ public class AuthCommand extends BaseCommand {
             return false;
         }
 
-        Player player = (Player) sender;
-        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+        final Player player = (Player) sender;
+        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
         if (!player.hasPermission("scandium.2fa")) {
             player.sendMessage(NO_PERMISSION);
@@ -34,7 +34,7 @@ public class AuthCommand extends BaseCommand {
             return false;
         }
 
-        String input = StringUtils.join(args).replace(" ", "");
+        final String input = StringUtils.join(args).replace(" ", "");
 
         int code;
         try {

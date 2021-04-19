@@ -19,7 +19,7 @@ public class HistoryCommand extends BaseCommand {
             return false;
         }
 
-        Player player = (Player) sender;
+        final Player player = (Player) sender;
 
         if (!player.hasPermission("scandium.command.history")) {
             player.sendMessage(NO_PERMISSION);

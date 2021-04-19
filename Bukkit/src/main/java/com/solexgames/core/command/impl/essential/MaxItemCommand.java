@@ -17,14 +17,14 @@ public class MaxItemCommand extends BaseCommand {
             return false;
         }
 
-        Player player = (Player) sender;
+        final Player player = (Player) sender;
 
         if (!player.hasPermission("scandium.command.maxitem")) {
             player.sendMessage(NO_PERMISSION);
             return false;
         }
 
-        ItemStack itemStack = player.getItemInHand();
+        final ItemStack itemStack = player.getItemInHand();
 
         if (itemStack != null && !itemStack.getType().equals(Material.AIR)) {
             itemStack.setAmount(itemStack.getMaxStackSize());

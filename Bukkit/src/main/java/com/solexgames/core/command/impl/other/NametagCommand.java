@@ -17,14 +17,15 @@ public class NametagCommand extends BaseCommand {
             return false;
         }
 
-        Player player = (Player) sender;
+        final Player player = (Player) sender;
+
         if (!player.hasPermission("scandium.command.nametag")) {
             player.sendMessage(NO_PERMISSION);
             return false;
         }
 
         if (args.length == 0) {
-            PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+            final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
             if (potPlayer.getRainbowNametag().isActive()) {
                 player.sendMessage(ChatColor.RED + "You've enabled the rainbow nametag.");

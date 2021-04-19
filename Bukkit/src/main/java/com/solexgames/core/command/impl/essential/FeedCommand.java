@@ -20,8 +20,7 @@ public class FeedCommand extends BaseCommand {
             return false;
         }
 
-        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
-        Player player = (Player) sender;
+        final Player player = (Player) sender;
 
         if (!player.hasPermission("scandium.command.feed")) {
             player.sendMessage(NO_PERMISSION);
@@ -30,14 +29,15 @@ public class FeedCommand extends BaseCommand {
 
         if (args.length == 0) {
             player.setFoodLevel(20);
-            player.sendMessage(Color.translate(network.getSecondaryColor() + "Set your food level to " + network.getMainColor() + "20" + network.getSecondaryColor() +"."));
+
+            player.sendMessage(Color.SECONDARY_COLOR + "Set your food level to " + Color.MAIN_COLOR + "20" + Color.SECONDARY_COLOR +".");
             player.sendMessage(Color.SECONDARY_COLOR + "You've reset your " + Color.MAIN_COLOR + "food level" + Color.SECONDARY_COLOR + ".");
 
             PlayerUtil.sendAlert(player, "reset food level");
         }
 
         if (args.length > 0) {
-            Player target = Bukkit.getPlayerExact(args[0]);
+            final Player target = Bukkit.getPlayerExact(args[0]);
 
             if (target == null) {
                 player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));

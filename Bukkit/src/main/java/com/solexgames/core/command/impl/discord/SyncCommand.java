@@ -23,8 +23,8 @@ public class SyncCommand extends BaseCommand {
             return false;
         }
 
-        Player player = (Player) sender;
-        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+        final Player player = (Player) sender;
+        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
         player.sendMessage(new String[]{
                 Color.MAIN_COLOR + ChatColor.BOLD.toString() + "Discord Syncing",

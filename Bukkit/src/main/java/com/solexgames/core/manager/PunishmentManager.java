@@ -137,7 +137,7 @@ public class PunishmentManager {
         CompletableFuture.runAsync(() -> {
             final Rank playerRank = Rank.getByName(document.getString("rankName"));
             final String playerName = document.getString("name");
-            final UUID playerId = UUIDUtil.fetchUUID(playerName);
+            final UUID playerId = CorePlugin.getInstance().getUuidCache().getUuidFromUsername(playerName);
 
             if (playerId == null) {
                 if (player != null) {

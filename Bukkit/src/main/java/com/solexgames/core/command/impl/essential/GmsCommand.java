@@ -19,7 +19,7 @@ public class GmsCommand extends BaseCommand {
             return false;
         }
 
-        Player player = (Player) sender;
+        final Player player = (Player) sender;
 
         if (!player.hasPermission("scandium.command.gms")) {
             player.sendMessage(NO_PERMISSION);
@@ -33,7 +33,7 @@ public class GmsCommand extends BaseCommand {
             PlayerUtil.sendAlert(player, "gamemode survival");
         }
         if (args.length == 1) {
-            Player target = Bukkit.getPlayerExact(args[0]);
+            final Player target = Bukkit.getPlayerExact(args[0]);
 
             if (target != null) {
                 target.setGameMode(GameMode.SURVIVAL);

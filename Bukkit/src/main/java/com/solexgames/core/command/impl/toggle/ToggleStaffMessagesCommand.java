@@ -18,8 +18,8 @@ public class ToggleStaffMessagesCommand extends BaseCommand {
             return false;
         }
 
-        Player player = (Player) sender;
-        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+        final Player player = (Player) sender;
+        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
         if (!player.hasPermission("scandium.staff")) {
             player.sendMessage(NO_PERMISSION);

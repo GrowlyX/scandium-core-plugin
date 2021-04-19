@@ -25,7 +25,7 @@ public class MessageCommand extends BaseCommand {
         ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
 
         if (args.length < 1) {
-            player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player> <message>."));
+            player.sendMessage(Color.translate(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player> <message>."));
         }
         if (args.length > 1) {
             Player target = Bukkit.getPlayer(args[0]);

@@ -18,13 +18,13 @@ public class MediaCommand extends BaseCommand {
             return false;
         }
 
-        Player player = (Player) sender;
+        final Player player = (Player) sender;
 
         if (args.length == 0) {
             new MediaManagerMenu(player).open(player);
         }
         if (args.length == 1) {
-            Player target = Bukkit.getPlayerExact(args[0]);
+            final Player target = Bukkit.getPlayerExact(args[0]);
 
             if (target != null) {
                 new MediaViewMenu(target).open(player);

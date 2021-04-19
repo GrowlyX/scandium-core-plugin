@@ -21,9 +21,9 @@ public class VanishCommand extends BaseCommand {
             return false;
         }
 
-        Player player = (Player) sender;
-        PlayerManager vanishManager = CorePlugin.getInstance().getPlayerManager();
-        ServerManager manager = CorePlugin.getInstance().getServerManager();
+        final Player player = (Player) sender;
+        final PlayerManager vanishManager = CorePlugin.getInstance().getPlayerManager();
+        final ServerManager manager = CorePlugin.getInstance().getServerManager();
 
         if (!player.hasPermission("scandium.command.vanish")) {
             player.sendMessage(NO_PERMISSION);
@@ -47,7 +47,7 @@ public class VanishCommand extends BaseCommand {
                 return false;
             }
 
-            Player target = Bukkit.getPlayerExact(args[0]);
+            final Player target = Bukkit.getPlayerExact(args[0]);
 
             if (target != null) {
                 if (manager.getVanishedPlayers().contains(target)) {

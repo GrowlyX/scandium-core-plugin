@@ -21,8 +21,7 @@ public class BroadcastCommand extends BaseCommand {
             return false;
         }
 
-        Player player = (Player) sender;
-        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+        final Player player = (Player) sender;
 
         if (!player.hasPermission("scandium.command.broadcast")) {
             player.sendMessage(NO_PERMISSION);
@@ -30,16 +29,16 @@ public class BroadcastCommand extends BaseCommand {
         }
 
         if (args.length == 0) {
-            player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " [l:] [g:] <message>."));
+            player.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " [l:] [g:] <message>.");
         }
         if (args.length > 0) {
             String message = StringUtil.buildMessage(args, 0);
             if (message.startsWith("l:")) {
                 Bukkit.broadcastMessage(Color.translate(message.replace("l:", "")));
             } else if (message.startsWith("g:")) {
-                CorePlugin.getInstance().getRedisThread().execute(() -> client.write(RedisUtil.onGlobalBroadcast(message.replace("g:", ""))));
+                RedisUtil.writeAsync(RedisUtil.onGlobalBroadcast(message.replace("g:", "")));
             } else {
-                CorePlugin.getInstance().getRedisThread().execute(() -> client.write(RedisUtil.onGlobalBroadcast(message)));
+                RedisUtil.writeAsync(RedisUtil.onGlobalBroadcast(message));
             }
         }
 

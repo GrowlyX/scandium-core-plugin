@@ -18,7 +18,7 @@ public class KillCommand extends BaseCommand {
             return false;
         }
 
-        Player player = (Player) sender;
+        final Player player = (Player) sender;
 
         if (!player.hasPermission("scandium.command.kill")) {
             player.sendMessage(NO_PERMISSION);
@@ -32,7 +32,7 @@ public class KillCommand extends BaseCommand {
             PlayerUtil.sendAlert(player, "killed themself");
         }
         if (args.length > 0) {
-            Player target = Bukkit.getPlayerExact(args[0]);
+            final Player target = Bukkit.getPlayerExact(args[0]);
 
             if (target != null) {
                 target.setHealth(0);

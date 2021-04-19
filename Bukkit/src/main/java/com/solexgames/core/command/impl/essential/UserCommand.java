@@ -112,7 +112,7 @@ public class UserCommand extends BaseCommand {
                                             sender.sendMessage(Color.translate("&cThat player does not have any permissions."));
                                         } else {
                                             sender.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
-                                            sender.sendMessage(Color.translate(NETWORK.getMainColor() + ChatColor.BOLD.toString() + "User Commands:"));
+                                            sender.sendMessage(Color.translate(NETWORK.getMainColor() + ChatColor.BOLD.toString() + "User Permissions:"));
                                             potPlayer.getUserPermissions().forEach(string -> sender.sendMessage(Color.translate(" &7* &a" + string)));
                                             sender.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
                                         }

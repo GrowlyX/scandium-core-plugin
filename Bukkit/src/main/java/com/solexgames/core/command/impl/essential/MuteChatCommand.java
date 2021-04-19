@@ -13,8 +13,8 @@ public class MuteChatCommand extends BaseCommand {
 
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
-        ServerManager serverManager = CorePlugin.getInstance().getServerManager();
-        String displayName = ((sender instanceof Player) ? ((Player) sender).getDisplayName() : ChatColor.DARK_RED + "Console");
+        final ServerManager serverManager = CorePlugin.getInstance().getServerManager();
+        final String displayName = ((sender instanceof Player) ? ((Player) sender).getDisplayName() : ChatColor.DARK_RED + "Console");
 
         if (!sender.hasPermission("scandium.command.mutechat")) {
             sender.sendMessage(NO_PERMISSION);

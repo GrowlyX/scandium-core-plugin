@@ -23,7 +23,7 @@ public class GrantCommand extends BaseCommand {
             return false;
         }
 
-        Player player = (Player) sender;
+        final Player player = (Player) sender;
 
         if (!player.hasPermission("scandium.command.grant")) {
             player.sendMessage(NO_PERMISSION);
@@ -34,14 +34,14 @@ public class GrantCommand extends BaseCommand {
             sender.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player>.");
         }
         if (args.length > 0) {
-            UUID uuid = UUIDUtil.fetchUUID(args[0]);
+            final UUID uuid = CorePlugin.getInstance().getUuidCache().getUuidFromUsername(args[0]);
 
             if (uuid == null) {
                 player.sendMessage(ChatColor.RED + "Error: That player is not valid.");
                 return false;
             }
 
-            Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByUuid(uuid).orElse(null);
+            final Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByUuid(uuid).orElse(null);
 
             if (document != null) {
                 new GrantMainPaginatedMenu(document, player).openMenu(player);

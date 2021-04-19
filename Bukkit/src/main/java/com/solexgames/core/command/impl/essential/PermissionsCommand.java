@@ -37,9 +37,9 @@ public class PermissionsCommand extends BaseCommand {
         int permissionsCount = permissions.size();
 
         player.sendMessage(ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 53));
-        StringUtil.sendCenteredMessage(player, serverType.getSecondaryColor() + "You currently have " + serverType.getMainColor() + "" + permissionsCount + serverType.getSecondaryColor() + " permissions!");
+        StringUtil.sendCenteredMessage(player, Color.SECONDARY_COLOR + "You currently have " + Color.MAIN_COLOR + "" + permissionsCount + Color.SECONDARY_COLOR + " permissions!");
         player.sendMessage("  ");
-        permissions.forEach(s -> player.sendMessage(ChatColor.GRAY + " * " + serverType.getMainColor() + s));
+        permissions.forEach(s -> player.sendMessage(ChatColor.GRAY + " * " + Color.MAIN_COLOR + s));
         player.sendMessage(ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 53));
 
         return false;

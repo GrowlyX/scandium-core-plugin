@@ -16,15 +16,13 @@ public class UnBlacklistCommand extends BaseCommand {
 
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
-        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
-
         if (!sender.hasPermission("scandium.command.unblacklist")) {
             sender.sendMessage(NO_PERMISSION);
             return false;
         }
 
         if (args.length < 2) {
-            sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player> <reason> &7[-s]."));
+            sender.sendMessage(Color.translate(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player> <reason> &7[-s]."));
         }
         if (args.length >= 2) {
             final Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByName(args[0]).orElse(null);

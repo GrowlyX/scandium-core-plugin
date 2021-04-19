@@ -18,7 +18,7 @@ public class ClearCommand extends BaseCommand {
             return false;
         }
 
-        Player player = (Player) sender;
+        final Player player = (Player) sender;
 
         if (!player.hasPermission("scandium.command.clear")) {
             player.sendMessage(NO_PERMISSION);
@@ -32,7 +32,7 @@ public class ClearCommand extends BaseCommand {
             PlayerUtil.sendAlert(player, "cleared inventory");
         }
         if (args.length == 1) {
-            Player target = Bukkit.getPlayerExact(args[0]);
+            final Player target = Bukkit.getPlayerExact(args[0]);
 
             if (target != null) {
                 player.getInventory().clear();

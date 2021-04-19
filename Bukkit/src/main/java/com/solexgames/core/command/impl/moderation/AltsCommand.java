@@ -29,15 +29,13 @@ public class AltsCommand extends BaseCommand {
             return false;
         }
 
-        final ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
-
         if (!sender.hasPermission("scandium.command.alts")) {
             sender.sendMessage(NO_PERMISSION);
             return false;
         }
 
         if (args.length == 0) {
-            sender.sendMessage(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player>.");
+            sender.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player>.");
         }
         if (args.length == 1) {
             final String target = args[0];
@@ -46,18 +44,19 @@ public class AltsCommand extends BaseCommand {
             if (targetPlayer != null) {
                 final String playerFormattedDisplay = Color.translate(targetPlayer.getActiveGrant().getRank().getColor() + targetPlayer.getName());
 
-                CompletableFuture<List<Document>> documents = new CompletableFuture<>();
-                CompletableFuture.runAsync(() -> {
-                    List<Document> documentList = new ArrayList<>();
-                    CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("previousIpAddress", targetPlayer.getEncryptedIpAddress())).forEach((Block<? super Document>) documentList::add);
-                    documents.complete(documentList);
-                });
+                CompletableFuture.supplyAsync(() -> {
+                    final List<Document> documentList = new ArrayList<>();
 
-                documents.thenAcceptAsync(potentialAlts -> {
-                    String altsMessage = potentialAlts.stream()
+                    CorePlugin.getInstance().getCoreDatabase().getPlayerCollection()
+                            .find(Filters.eq("previousIpAddress", targetPlayer.getEncryptedIpAddress()))
+                            .forEach((Block<? super Document>) documentList::add);
+
+                    return documentList;
+                }).thenAcceptAsync(potentialAlts -> {
+                    final String altsMessage = potentialAlts.stream()
                             .map(this::getFancyName)
                             .collect(Collectors.joining(ChatColor.WHITE + ", "));
-                    int altsAmount = potentialAlts.size();
+                    final int altsAmount = potentialAlts.size();
 
                     sender.sendMessage(new String[]{
                             "",

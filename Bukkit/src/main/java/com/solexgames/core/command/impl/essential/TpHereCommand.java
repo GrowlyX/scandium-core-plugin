@@ -20,7 +20,7 @@ public class TpHereCommand extends BaseCommand {
         }
 
         ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
-        ChatColor secondColor = serverType.getSecondaryColor();
+        ChatColor secondColor = Color.SECONDARY_COLOR;
         Player player = (Player) sender;
 
         if (!sender.hasPermission("scandium.command.tphere")) {
@@ -29,7 +29,7 @@ public class TpHereCommand extends BaseCommand {
         }
 
         if (args.length == 0) {
-            player.sendMessage(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player>.");
+            player.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player>.");
         }
         if (args.length == 1) {
             Player target = Bukkit.getPlayerExact(args[0]);

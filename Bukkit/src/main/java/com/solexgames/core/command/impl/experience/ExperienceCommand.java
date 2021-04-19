@@ -1,18 +1,14 @@
 package com.solexgames.core.command.impl.experience;
 
-import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
-import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.impl.experience.ExperienceMainMenu;
+import com.solexgames.core.util.Color;
 import com.solexgames.core.util.ExperienceUtil;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.Arrays;
 
 public class ExperienceCommand extends BaseCommand {
 
@@ -128,11 +124,9 @@ public class ExperienceCommand extends BaseCommand {
     }
 
     public void sendHelpMessage(CommandSender sender) {
-        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
-
-        sender.sendMessage(Arrays.asList(
+        sender.sendMessage(new String[]{
                 ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 53),
-                serverType.getMainColor() + ChatColor.BOLD.toString() + "Experience Information:",
+                Color.MAIN_COLOR + ChatColor.BOLD.toString() + "Experience Information:",
                 "",
                 "/experience " + ChatColor.GRAY + "- Open the Experience Menu.",
                 "/experience help " + ChatColor.GRAY + "- View this help message.",
@@ -141,6 +135,6 @@ public class ExperienceCommand extends BaseCommand {
                 "/experience add <player> <amount> " + ChatColor.GRAY + "- Add experience to a player.",
                 "/experience remove <player> <amount> " + ChatColor.GRAY + "- Remove experience from a player.",
                 ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 53)
-        ).toArray(new String[0]));
+        });
     }
 }

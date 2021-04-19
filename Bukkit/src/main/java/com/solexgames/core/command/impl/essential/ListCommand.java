@@ -20,11 +20,11 @@ public class ListCommand extends BaseCommand {
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
         if (sender instanceof ConsoleCommandSender) {
-            String ranks = Rank.getRanks().stream()
+            final String ranks = Rank.getRanks().stream()
                     .sorted(Comparator.comparingInt(rank -> -rank.getWeight()))
                     .map(rank -> Color.translate((rank.isHidden() ? "&7*" : "") + rank.getColor() + rank.getItalic() + rank.getName()))
                     .collect(Collectors.joining(ChatColor.WHITE + ", "));
-            String players = this.getOnlinePlayers(false).stream()
+            final String players = this.getOnlinePlayers(false).stream()
                     .map(player -> CorePlugin.getInstance().getPlayerManager().getPlayer(player.getUniqueId()))
                     .sorted(Comparator.comparingInt(potPlayer -> -(potPlayer.getDisguiseRank() != null ? potPlayer.getDisguiseRank().getWeight() : potPlayer.getActiveGrant().getRank().getWeight())))
                     .map(potPlayer -> Color.translate((potPlayer.isStaffMode() ? "&7[S] " : "") + (potPlayer.isVanished() ? "&7[V] " : "") + potPlayer.getActiveGrant().getRank().getColor() + potPlayer.getName()))
@@ -38,13 +38,14 @@ public class ListCommand extends BaseCommand {
             return false;
         }
 
-        Player player = (Player) sender;
-        String ranks = Rank.getRanks().stream()
+        final Player player = (Player) sender;
+
+        final String ranks = Rank.getRanks().stream()
                 .filter(rank -> !rank.isHidden())
                 .sorted(Comparator.comparingInt(rank -> -rank.getWeight()))
                 .map(rank -> Color.translate(rank.getColor() + rank.getItalic() + rank.getName()))
                 .collect(Collectors.joining(ChatColor.WHITE + ", "));
-        String players = this.getOnlinePlayers(!player.hasPermission("scandium.staff")).stream()
+        final String players = this.getOnlinePlayers(!player.hasPermission("scandium.staff")).stream()
                 .map(player1 -> CorePlugin.getInstance().getPlayerManager().getPlayer(player1.getUniqueId()))
                 .sorted(Comparator.comparingInt(potPlayer -> -(potPlayer.getDisguiseRank() != null ? potPlayer.getDisguiseRank().getWeight() : potPlayer.getActiveGrant().getRank().getWeight())))
                 .map(potPlayer -> this.getFormattedName(potPlayer, player))

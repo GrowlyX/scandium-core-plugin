@@ -16,7 +16,7 @@ public class EnderChestCommand extends BaseCommand {
             return false;
         }
 
-        Player player = (Player) sender;
+        final Player player = (Player) sender;
 
         if (!player.hasPermission("scandium.command.echest")) {
             player.sendMessage(NO_PERMISSION);
@@ -33,7 +33,7 @@ public class EnderChestCommand extends BaseCommand {
                 return false;
             }
 
-            Player target = Bukkit.getPlayer(args[0]);
+            final Player target = Bukkit.getPlayer(args[0]);
 
             if (target != null) {
                 player.openInventory(target.getEnderChest());

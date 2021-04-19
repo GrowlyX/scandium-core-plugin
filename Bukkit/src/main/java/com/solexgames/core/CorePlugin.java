@@ -85,7 +85,6 @@ public final class CorePlugin extends JavaPlugin {
 
     private ConfigExternal ranksConfig;
     private ConfigExternal databaseConfig;
-    private ConfigExternal motdConfig;
     private ConfigExternal filterConfig;
 
     private RedisSubscriptions subscriptions;
@@ -94,14 +93,11 @@ public final class CorePlugin extends JavaPlugin {
     private AbstractClientHook lunar;
     private INMS NMS;
 
-    private Executor redisThread;
-    private Executor mongoThread;
-
     private boolean debugging;
     private boolean disallow;
 
     @Override
-    @Deprecated // For DefaultHttpClient
+    @SuppressWarnings("deprecation") // For DefaultHttpClient
     public void onEnable() {
         instance = this;
 
@@ -115,9 +111,6 @@ public final class CorePlugin extends JavaPlugin {
                 .setPrettyPrinting()
                 .create();
 
-        this.mongoThread = Executors.newFixedThreadPool(1);
-        this.redisThread = Executors.newFixedThreadPool(1);
-
         this.httpClient = new DefaultHttpClient();
 
         this.saveDefaultConfig();
@@ -128,7 +121,6 @@ public final class CorePlugin extends JavaPlugin {
 
         this.ranksConfig = new ConfigExternal("ranks");
         this.databaseConfig = new ConfigExternal("database");
-        this.motdConfig = new ConfigExternal("motd");
         this.filterConfig = new ConfigExternal("filtered");
 
         this.serverSettings = new ServerSettings();

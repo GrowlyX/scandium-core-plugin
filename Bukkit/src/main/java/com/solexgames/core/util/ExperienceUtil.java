@@ -33,7 +33,7 @@ public final class ExperienceUtil {
 
         if (potPlayer != null) {
             potPlayer.setExperience(potPlayer.getExperience() + amount);
-            player.sendMessage(serverType.getSecondaryColor() + "You've received " + serverType.getMainColor() + amount + serverType.getSecondaryColor() + " Experience!");
+            player.sendMessage(Color.SECONDARY_COLOR + "You've received " + Color.MAIN_COLOR + amount + Color.SECONDARY_COLOR + " Experience!");
         }
     }
 
@@ -62,7 +62,7 @@ public final class ExperienceUtil {
                     continue;
                 }
 
-                stringArrayList.add(serverType.getMainColor() + ChatColor.BOLD.toString() + lineInt.getAndIncrement() + "." + ChatColor.GRAY + " - " + ChatColor.WHITE + document.getString("name") + ChatColor.GRAY + " - " + serverType.getSecondaryColor() + amountOfSort);
+                stringArrayList.add(Color.MAIN_COLOR + ChatColor.BOLD.toString() + lineInt.getAndIncrement() + "." + ChatColor.GRAY + " - " + ChatColor.WHITE + document.getString("name") + ChatColor.GRAY + " - " + Color.SECONDARY_COLOR + amountOfSort);
             }
         });
 
@@ -86,7 +86,7 @@ public final class ExperienceUtil {
 
         if (potPlayer != null) {
             potPlayer.setExperience(amount);
-            player.sendMessage(serverType.getSecondaryColor() + "Your experience has been set to " + serverType.getMainColor() + amount + serverType.getSecondaryColor() + "!");
+            player.sendMessage(Color.SECONDARY_COLOR + "Your experience has been set to " + Color.MAIN_COLOR + amount + Color.SECONDARY_COLOR + "!");
         }
     }
 
@@ -107,7 +107,7 @@ public final class ExperienceUtil {
 
         if (potPlayer != null) {
             potPlayer.setExperience(potPlayer.getExperience() - amount);
-            player.sendMessage(serverType.getMainColor() + String.valueOf(amount) + serverType.getSecondaryColor() + " experience has been removed from your profile.");
+            player.sendMessage(Color.MAIN_COLOR + String.valueOf(amount) + Color.SECONDARY_COLOR + " experience has been removed from your profile.");
         }
     }
 }

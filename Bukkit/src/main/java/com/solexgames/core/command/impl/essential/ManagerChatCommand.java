@@ -40,7 +40,7 @@ public class ManagerChatCommand extends BaseCommand {
         }
 
         if (args.length > 0) {
-            String message = StringUtil.buildMessage(args, 0);
+            final String message = StringUtil.buildMessage(args, 0);
             RedisUtil.writeAsync(RedisUtil.onChatChannel(ChatChannelType.MANAGER, message, player));
         }
 

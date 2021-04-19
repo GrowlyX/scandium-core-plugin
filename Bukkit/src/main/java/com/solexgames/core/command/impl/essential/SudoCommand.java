@@ -17,8 +17,8 @@ public class SudoCommand extends BaseCommand {
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
         ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
-        ChatColor mainColor = serverType.getMainColor();
-        ChatColor secondColor = serverType.getSecondaryColor();
+        ChatColor mainColor = Color.MAIN_COLOR;
+        ChatColor secondColor = Color.SECONDARY_COLOR;
 
         if (!sender.hasPermission("scandium.command.sudo")) {
             sender.sendMessage(NO_PERMISSION);
@@ -26,7 +26,7 @@ public class SudoCommand extends BaseCommand {
         }
 
         if (args.length <= 1) {
-            sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " [c:] [e:] <message>."));
+            sender.sendMessage(Color.translate(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " [c:] [e:] <message>."));
         }
 
         if (args.length > 1) {

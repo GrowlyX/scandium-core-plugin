@@ -21,8 +21,7 @@ public class FreezeCommand extends BaseCommand {
             return false;
         }
 
-        Player player = (Player) sender;
-        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+        final Player player = (Player) sender;
 
         if (!player.hasPermission("scandium.command.freeze")) {
             player.sendMessage(NO_PERMISSION);
@@ -30,13 +29,13 @@ public class FreezeCommand extends BaseCommand {
         }
 
         if (args.length == 0) {
-            sender.sendMessage(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player>.");
+            sender.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player>.");
         }
         if (args.length == 1) {
-            Player target = Bukkit.getPlayerExact(args[0]);
+            final Player target = Bukkit.getPlayerExact(args[0]);
 
             if (target != null) {
-                PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
+                final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
 
                 if (potPlayer.isFrozen()) {
                     potPlayer.setFrozen(false);
@@ -45,8 +44,8 @@ public class FreezeCommand extends BaseCommand {
 
                     player.sendMessage(ChatColor.GREEN + Color.translate("Unfroze " + target.getDisplayName() + ChatColor.GREEN + "."));
                 } else {
-                    PotPlayer mainPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-                    PotPlayer targetPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
+                    final PotPlayer mainPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+                    final  PotPlayer targetPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
 
                     if (mainPotPlayer.getActiveGrant().getRank() != null) {
                         if ((mainPotPlayer.getActiveGrant().getRank().getWeight() >= targetPotPlayer.getActiveGrant().getRank().getWeight()) || player.isOp()) {

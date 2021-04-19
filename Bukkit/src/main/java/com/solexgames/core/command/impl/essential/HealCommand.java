@@ -20,11 +20,7 @@ public class HealCommand extends BaseCommand {
             return false;
         }
 
-        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
-        ChatColor mainColor = network.getMainColor();
-        ChatColor secondColor = network.getSecondaryColor();
-
-        Player player = (Player) sender;
+        final Player player = (Player) sender;
 
         if (!player.hasPermission("scandium.command.heal")) {
             player.sendMessage(NO_PERMISSION);
@@ -33,15 +29,16 @@ public class HealCommand extends BaseCommand {
 
         if (args.length == 0) {
             player.setHealth(20);
-            player.sendMessage(Color.translate(secondColor + "Set your health level to " + mainColor + "20" + secondColor +"."));
+            player.sendMessage(Color.SECONDARY_COLOR + "Set your health level to " + Color.MAIN_COLOR + "20" + Color.SECONDARY_COLOR +".");
 
             PlayerUtil.sendAlert(player, "healed");
         }
         if (args.length > 0) {
-            Player target = Bukkit.getPlayerExact(args[0]);
+            final Player target = Bukkit.getPlayerExact(args[0]);
+
             if (target != null) {
                 target.setHealth(20);
-                player.sendMessage(Color.translate(secondColor + "Set " + target.getDisplayName() + " health level to " + mainColor + "20" + secondColor +"."));
+                player.sendMessage(Color.SECONDARY_COLOR + "Set " + target.getDisplayName() + " health level to " + Color.MAIN_COLOR + "20" + Color.SECONDARY_COLOR +".");
 
                 PlayerUtil.sendAlert(player, "healed " + target.getName());
             } else {

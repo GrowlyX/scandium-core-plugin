@@ -15,7 +15,7 @@ public class LanguageCommand extends BaseCommand {
             return false;
         }
 
-        Player player = (Player) sender;
+        final Player player = (Player) sender;
         new LanguageMenu(player).open(player);
 
         return false;

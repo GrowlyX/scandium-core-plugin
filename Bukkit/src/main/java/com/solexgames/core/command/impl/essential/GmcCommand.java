@@ -19,7 +19,7 @@ public class GmcCommand extends BaseCommand {
             return false;
         }
 
-        Player player = (Player) sender;
+        final Player player = (Player) sender;
 
         if (!player.hasPermission("scandium.command.gmc")) {
             player.sendMessage(NO_PERMISSION);
@@ -33,7 +33,7 @@ public class GmcCommand extends BaseCommand {
             PlayerUtil.sendAlert(player, "gamemode creative");
         }
         if (args.length == 1) {
-            Player target = Bukkit.getPlayerExact(args[0]);
+            final Player target = Bukkit.getPlayerExact(args[0]);
 
             if (target != null) {
                 target.setGameMode(GameMode.CREATIVE);

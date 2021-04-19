@@ -28,12 +28,12 @@ public class WebPostCommand extends BukkitCommand {
             sender.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + s + ChatColor.WHITE + " <title|split with _> <content>.");
         }
         if (args.length > 1) {
-            UUID uuid = UUID.randomUUID();
-            PostBuilder postBuilder = new PostBuilder(uuid, sender);
-            Date creation = new Date();
+            final UUID uuid = UUID.randomUUID();
+            final PostBuilder postBuilder = new PostBuilder(uuid, sender);
+            final Date creation = new Date();
 
-            String title = args[0].replace("_", " ");
-            String message = StringUtil.buildMessage(args, 1).replace("<nl>", "\n");
+            final String title = args[0].replace("_", " ");
+            final String message = StringUtil.buildMessage(args, 1).replace("<nl>", "\n");
 
             postBuilder.setCreation(creation);
             postBuilder.setDeck(message);

@@ -18,8 +18,8 @@ public class TogglePrivateMessagesCommand extends BaseCommand {
             return false;
         }
 
-        Player player = (Player) sender;
-        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+        final Player player = (Player) sender;
+        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
         if (potPlayer.isCanReceiveDms()) {
             player.sendMessage(ChatColor.RED + ("You've disabled private messages."));

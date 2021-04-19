@@ -229,7 +229,7 @@ public class PotPlayer {
     }
 
     public void saveWithoutRemove() {
-        CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), this.getDocument(false), new ReplaceOptions().upsert(true)));
+        CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", this.uuid), this.getDocument(false), new ReplaceOptions().upsert(true)));
     }
 
     public void savePlayerData() {
@@ -238,7 +238,7 @@ public class PotPlayer {
         CorePlugin.getInstance().getPlayerManager().getAllNetworkProfiles().remove(this.uuid);
         CorePlugin.getInstance().getPlayerManager().getAllProfiles().remove(this.uuid);
 
-        CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", uuid), this.getDocument(true), new ReplaceOptions().upsert(true)));
+        CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", this.uuid), this.getDocument(true), new ReplaceOptions().upsert(true)));
     }
 
     public void loadPlayerData() {

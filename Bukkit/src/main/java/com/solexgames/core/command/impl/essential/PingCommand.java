@@ -18,14 +18,14 @@ public class PingCommand extends BaseCommand {
             return false;
         }
 
-        Player player = (Player) sender;
+        final Player player = (Player) sender;
 
         if (args.length == 0) {
             player.sendMessage(Color.SECONDARY_COLOR + "Your ping is currently: " + Color.MAIN_COLOR + PlayerUtil.getPing(player) + "ms" + Color.SECONDARY_COLOR + "!");
         }
 
         if (args.length == 1) {
-            Player target = Bukkit.getPlayerExact(args[0]);
+            final Player target = Bukkit.getPlayerExact(args[0]);
 
             if (target != null) {
                 player.sendMessage(target.getDisplayName() + Color.SECONDARY_COLOR + "'s ping is currently: " + Color.MAIN_COLOR + PlayerUtil.getPing(target) + "ms" + Color.SECONDARY_COLOR + "!");

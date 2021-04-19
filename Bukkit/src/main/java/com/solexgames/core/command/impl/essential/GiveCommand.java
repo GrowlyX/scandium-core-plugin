@@ -21,14 +21,13 @@ public class GiveCommand extends BaseCommand {
             return false;
         }
 
-        Player player = (Player) sender;
-        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+        final Player player = (Player) sender;
 
         if (args.length < 2) {
-            player.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player> <amount> <item>."));
+            player.sendMessage(Color.translate(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player> <amount> <item>."));
         }
         if (args.length > 2) {
-            Player target = Bukkit.getPlayer(args[0]);
+            final Player target = Bukkit.getPlayer(args[0]);
 
             int amount;
             try {
@@ -38,15 +37,15 @@ public class GiveCommand extends BaseCommand {
                 return false;
             }
 
-            String message = StringUtil.buildMessage(args, 2);
+            final String message = StringUtil.buildMessage(args, 2);
 
             if (target == null) {
                 player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
                 return false;
             }
 
-            String formatted = message.replace(" ", "_").toUpperCase();
-            XMaterial material = XMaterial.matchXMaterial(formatted).orElse(null);
+            final String formatted = message.replace(" ", "_").toUpperCase();
+            final XMaterial material = XMaterial.matchXMaterial(formatted).orElse(null);
 
             if (material == null) {
                 player.sendMessage(ChatColor.RED + ("Error: That material does not exist."));

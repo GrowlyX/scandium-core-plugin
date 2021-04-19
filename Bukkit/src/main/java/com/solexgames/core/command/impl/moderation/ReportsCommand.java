@@ -15,7 +15,7 @@ public class ReportsCommand extends BaseCommand {
             return false;
         }
 
-        Player player = (Player) sender;
+        final Player player = (Player) sender;
 
         if (!player.hasPermission("scandium.commands.reports")) {
             player.sendMessage(NO_PERMISSION);

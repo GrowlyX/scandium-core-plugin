@@ -15,7 +15,7 @@ public class ColorCommand extends BaseCommand {
             return false;
         }
 
-        Player player = (Player) sender;
+        final Player player = (Player) sender;
 
         if (!player.hasPermission("scandium.chat.colors")) {
             player.sendMessage(NO_PERMISSION);

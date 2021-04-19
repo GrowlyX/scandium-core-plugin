@@ -28,7 +28,7 @@ public class TpPosCommand extends BaseCommand {
         }
 
         if (args.length <= 2) {
-            player.sendMessage(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <x> <y> <z>.");
+            player.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <x> <y> <z>.");
         }
         if (args.length == 3) {
             try {
@@ -37,7 +37,7 @@ public class TpPosCommand extends BaseCommand {
                 int z1 = Integer.parseInt(args[2]);
 
                 player.teleport(new Location(player.getWorld(), x1, y1, z1, 0.0F, 0.0F));
-                player.sendMessage(serverType.getSecondaryColor() + "Teleported you to " + serverType.getMainColor() + x1 + serverType.getSecondaryColor() + ", " + serverType.getMainColor() + y1 + serverType.getSecondaryColor() + ", " + serverType.getMainColor() + z1 + serverType.getSecondaryColor() + ".");
+                player.sendMessage(Color.SECONDARY_COLOR + "Teleported you to " + Color.MAIN_COLOR + x1 + Color.SECONDARY_COLOR + ", " + Color.MAIN_COLOR + y1 + Color.SECONDARY_COLOR + ", " + Color.MAIN_COLOR + z1 + Color.SECONDARY_COLOR + ".");
 
                 PlayerUtil.sendAlert(player, "teleported to " + x1 + ", " + y1 + ", " + z1);
             } catch (Exception e) {

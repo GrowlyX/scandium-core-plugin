@@ -33,7 +33,7 @@ public class SettingsMenu extends AbstractInventoryMenu {
 
         this.inventory.setItem(2, new ItemBuilder(XMaterial.PAPER.parseMaterial())
                 .addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS)
-                .setDisplayName(serverType.getMainColor() + ChatColor.BOLD.toString() + "Global Chat")
+                .setDisplayName(Color.MAIN_COLOR + ChatColor.BOLD.toString() + "Global Chat")
                 .addLore(
                         "",
                         ChatColor.GRAY + "Would you like to be",
@@ -46,7 +46,7 @@ public class SettingsMenu extends AbstractInventoryMenu {
                 .create()
         );
         this.inventory.setItem(3, new ItemBuilder(XMaterial.EXPERIENCE_BOTTLE.parseMaterial())
-                .setDisplayName(serverType.getMainColor() + ChatColor.BOLD.toString() + "Server Tips")
+                .setDisplayName(Color.MAIN_COLOR + ChatColor.BOLD.toString() + "Server Tips")
                 .addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS)
                 .addLore(
                         "",
@@ -60,7 +60,7 @@ public class SettingsMenu extends AbstractInventoryMenu {
                 .create()
         );
         this.inventory.setItem(4, new ItemBuilder(XMaterial.EMERALD.parseMaterial())
-                .setDisplayName(serverType.getMainColor() + ChatColor.BOLD.toString() + "Receive DMs")
+                .setDisplayName(Color.MAIN_COLOR + ChatColor.BOLD.toString() + "Receive DMs")
                 .addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS)
                 .addLore(
                         "",
@@ -74,7 +74,7 @@ public class SettingsMenu extends AbstractInventoryMenu {
                 .create()
         );
         this.inventory.setItem(5, new ItemBuilder(XMaterial.JUKEBOX.parseMaterial())
-                .setDisplayName(serverType.getMainColor() + ChatColor.BOLD.toString() + "DMs Sounds")
+                .setDisplayName(Color.MAIN_COLOR + ChatColor.BOLD.toString() + "DMs Sounds")
                 .addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS)
                 .addLore(
                         "",
@@ -89,7 +89,7 @@ public class SettingsMenu extends AbstractInventoryMenu {
         );
         if (player.hasPermission("scandium.staff")) {
             this.inventory.setItem(6, new ItemBuilder(XMaterial.BLAZE_POWDER.parseMaterial())
-                    .setDisplayName(serverType.getMainColor() + ChatColor.BOLD.toString() + "Staff Messages")
+                    .setDisplayName(Color.MAIN_COLOR + ChatColor.BOLD.toString() + "Staff Messages")
                     .addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS)
                     .addLore(
                             "",
@@ -104,7 +104,7 @@ public class SettingsMenu extends AbstractInventoryMenu {
             );
         } else {
             this.inventory.setItem(6, new ItemBuilder(XMaterial.BLAZE_POWDER.parseMaterial())
-                    .setDisplayName(serverType.getMainColor() + ChatColor.BOLD.toString() + "Global Broadcasts")
+                    .setDisplayName(Color.MAIN_COLOR + ChatColor.BOLD.toString() + "Global Broadcasts")
                     .addLore(
                             "",
                             ChatColor.GRAY + "Would you like to be",

@@ -49,9 +49,9 @@ public class ReportMenu extends AbstractInventoryMenu {
         final ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
 
         Arrays.asList(ReportType.values()).forEach(reportType -> this.inventory.setItem(integer.getAndIncrement(), new ItemBuilder(reportType.getXMaterial().parseMaterial())
-                .setDisplayName(serverType.getMainColor() + reportType.getName())
+                .setDisplayName(Color.MAIN_COLOR + reportType.getName())
                 .addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS)
-                .addLore(reportType.getExamples().stream().map(s -> ChatColor.GRAY + " * " + serverType.getSecondaryColor() + s).collect(Collectors.toList()))
+                .addLore(reportType.getExamples().stream().map(s -> ChatColor.GRAY + " * " + Color.SECONDARY_COLOR + s).collect(Collectors.toList()))
                 .setDurability(reportType.getDurability())
                 .create()
         ));

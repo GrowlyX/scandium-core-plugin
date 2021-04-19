@@ -18,7 +18,7 @@ public class FlyCommand extends BaseCommand {
             return false;
         }
 
-        Player player = (Player) sender;
+        final Player player = (Player) sender;
 
         if (!player.hasPermission("scandium.command.fly")) {
             player.sendMessage(NO_PERMISSION);
@@ -29,6 +29,7 @@ public class FlyCommand extends BaseCommand {
             if (player.isFlying()) {
                 player.setAllowFlight(false);
                 player.setFlying(false);
+
                 player.sendMessage(Color.SECONDARY_COLOR + "You've " + ChatColor.RED + "disabled" + Color.SECONDARY_COLOR + " flight mode.");
 
                 PlayerUtil.sendAlert(player, "disabled flight");
@@ -41,7 +42,7 @@ public class FlyCommand extends BaseCommand {
             }
         }
         if (args.length == 1) {
-            Player target = Bukkit.getPlayerExact(args[0]);
+            final Player target = Bukkit.getPlayerExact(args[0]);
 
             if (target != null) {
                 if (target.isFlying()) {

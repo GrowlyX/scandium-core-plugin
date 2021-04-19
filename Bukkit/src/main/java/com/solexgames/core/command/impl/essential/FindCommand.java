@@ -16,22 +16,20 @@ public class FindCommand extends BaseCommand {
 
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
-        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
-
         if (!sender.hasPermission("scandium.command.find")) {
             sender.sendMessage(NO_PERMISSION);
             return false;
         }
 
         if (args.length == 0) {
-            sender.sendMessage(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player>.");
+            sender.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player>.");
         }
 
         if (args.length > 0) {
             final String target = args[0];
             final NetworkPlayer networkPlayer = CorePlugin.getInstance().getPlayerManager().getNetworkPlayer(target);
 
-            sender.sendMessage(serverType.getSecondaryColor() + "Searching for that player...");
+            sender.sendMessage(Color.SECONDARY_COLOR + "Searching for that player...");
 
             if (networkPlayer == null) {
                 sender.sendMessage(ChatColor.RED + "Error: The player with the specified name does not exist.");
@@ -39,7 +37,7 @@ public class FindCommand extends BaseCommand {
                 Rank rank = Rank.getByName(networkPlayer.getRankName());
                 String displayName = Color.translate((rank != null ? rank.getColor() + rank.getItalic() : ChatColor.GRAY) + networkPlayer.getName());
 
-                sender.sendMessage(serverType.getMainColor() + displayName + serverType.getSecondaryColor() + " is currently online " + serverType.getMainColor() + networkPlayer.getServerName() + serverType.getSecondaryColor() + "!");
+                sender.sendMessage(Color.MAIN_COLOR + displayName + Color.SECONDARY_COLOR + " is currently online " + Color.MAIN_COLOR + networkPlayer.getServerName() + Color.SECONDARY_COLOR + "!");
             }
         }
 

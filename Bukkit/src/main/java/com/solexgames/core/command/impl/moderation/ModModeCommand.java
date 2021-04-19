@@ -17,9 +17,9 @@ public class ModModeCommand extends BaseCommand {
             return false;
         }
 
-        Player player = (Player) sender;
-        PlayerManager playerManager = CorePlugin.getInstance().getPlayerManager();
-        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+        final Player player = (Player) sender;
+        final PlayerManager playerManager = CorePlugin.getInstance().getPlayerManager();
+        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
         if (!player.hasPermission("scandium.command.modmode")) {
             player.sendMessage(NO_PERMISSION);

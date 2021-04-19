@@ -17,14 +17,14 @@ public class SetSpawnCommand extends BaseCommand {
             return false;
         }
 
-        Player player = (Player) sender;
+        final Player player = (Player) sender;
 
         if (!player.hasPermission("scandium.command.setspawn")) {
             player.sendMessage(NO_PERMISSION);
             return false;
         }
 
-        ServerManager manager = CorePlugin.getInstance().getServerManager();
+        final ServerManager manager = CorePlugin.getInstance().getServerManager();
         manager.setSpawnLocation(player.getLocation());
 
         CorePlugin.getInstance().getConfig().set("locations.spawn", manager.getSpawnLocation());

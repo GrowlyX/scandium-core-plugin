@@ -23,7 +23,7 @@ public class SlowChatCommand extends BaseCommand {
         }
 
         if (args.length == 0) {
-            sender.sendMessage(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <time> " + ChatColor.GRAY + "(Use 0 to disable slow chat)");
+            sender.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <time> " + ChatColor.GRAY + "(Use 0 to disable slow chat)");
         }
 
         if (args.length == 1) {

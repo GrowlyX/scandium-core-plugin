@@ -22,14 +22,15 @@ public class HelpOpCommand extends BaseCommand {
             return false;
         }
 
-        Player player = (Player) sender;
-        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+        final Player player = (Player) sender;
+        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+
         if (args.length == 0) {
             player.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <message>.");
         }
 
         if (args.length > 0) {
-            String reason = StringUtil.buildMessage(args, 0);
+            final String reason = StringUtil.buildMessage(args, 0);
 
             if (!potPlayer.isCanRequest()) {
                 player.sendMessage(ChatColor.RED + ("You cannot perform this action right now."));
@@ -46,7 +47,7 @@ public class HelpOpCommand extends BaseCommand {
             }
 
             Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> {
-                PotPlayer newPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+                final PotPlayer newPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
                 if (newPotPlayer != null) {
                     potPlayer.setCanRequest(true);

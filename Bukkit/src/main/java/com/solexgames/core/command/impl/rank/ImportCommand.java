@@ -26,7 +26,7 @@ public class ImportCommand extends BaseCommand {
             return false;
         }
 
-        Player player = (Player) sender;
+        final Player player = (Player) sender;
 
         if (!player.isOp()) {
             player.sendMessage(NO_PERMISSION);
@@ -66,14 +66,14 @@ public class ImportCommand extends BaseCommand {
         CorePlugin.getInstance().getCoreDatabase().getRankCollection().drop();
 
         config.getConfiguration().getKeys(false).forEach(key -> {
-            String prefix = config.getString(key + ".prefix", "&7", false);
-            String suffix = config.getString(key + ".suffix", "&7", false);
-            String color = config.getString(key + ".color", "&7", false);
+            final String prefix = config.getString(key + ".prefix", "&7", false);
+            final String suffix = config.getString(key + ".suffix", "&7", false);
+            final String color = config.getString(key + ".color", "&7", false);
 
-            int weight = config.getInt(key + ".weight");
-            boolean defaultRank = config.getBoolean(key + ".defaultRank");
+            final int weight = config.getInt(key + ".weight");
+            final boolean defaultRank = config.getBoolean(key + ".defaultRank");
 
-            List<String> permissions = config.getStringListOrDefault(key + ".permissions", new ArrayList<>());
+            final List<String> permissions = config.getStringListOrDefault(key + ".permissions", new ArrayList<>());
 
             Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () -> new Rank(UUID.randomUUID(), new ArrayList<>(), permissions, key, prefix, color, suffix, defaultRank, weight));
         });

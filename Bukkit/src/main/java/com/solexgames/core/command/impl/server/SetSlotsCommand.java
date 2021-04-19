@@ -27,7 +27,7 @@ public class SetSlotsCommand extends BaseCommand {
             return false;
         }
 
-        Player player = (Player) sender;
+        final Player player = (Player) sender;
 
         if (!player.hasPermission("scandium.command.setslots")) {
             player.sendMessage(NO_PERMISSION);
@@ -35,12 +35,11 @@ public class SetSlotsCommand extends BaseCommand {
         }
 
         if (args.length == 0) {
-            ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
-            sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <int>."));
+            sender.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <int>.");
         }
         if (args.length == 1) {
             try {
-                int slots = Integer.parseInt(args[0]);
+                final int slots = Integer.parseInt(args[0]);
 
                 this.setSlots(slots);
 
@@ -56,8 +55,8 @@ public class SetSlotsCommand extends BaseCommand {
         slots = Math.abs(slots);
 
         try {
-            Object invoke = Class.forName(Bukkit.getServer().getClass().getPackage().getName() + ".CraftServer").getDeclaredMethod("getHandle", new Class[0]).invoke(Bukkit.getServer());
-            Field declaredField = invoke.getClass().getSuperclass().getDeclaredField("maxPlayers");
+            final Object invoke = Class.forName(Bukkit.getServer().getClass().getPackage().getName() + ".CraftServer").getDeclaredMethod("getHandle", new Class[0]).invoke(Bukkit.getServer());
+            final Field declaredField = invoke.getClass().getSuperclass().getDeclaredField("maxPlayers");
 
             declaredField.setAccessible(true);
             declaredField.set(invoke, slots);

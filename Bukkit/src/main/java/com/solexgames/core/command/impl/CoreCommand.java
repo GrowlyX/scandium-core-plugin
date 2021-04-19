@@ -28,8 +28,7 @@ public class CoreCommand extends BukkitCommand {
             return false;
         }
 
-        Player player = (Player) sender;
-        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
+        final Player player = (Player) sender;
 
         if (!player.isOp()) {
             player.sendMessage(ChatColor.RED + "I'm sorry, but you do not have permission to perform this command.");
@@ -37,7 +36,7 @@ public class CoreCommand extends BukkitCommand {
         }
 
         if (args.length == 0) {
-            sender.sendMessage(network.getSecondaryColor() + "Usage: " + network.getMainColor() + "/" + label + ChatColor.WHITE + " <debug|disallow|panel|threads>.");
+            sender.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <debug|disallow|panel|threads>.");
         }
         if (args.length > 0) {
             switch (args[0]) {
@@ -62,14 +61,14 @@ public class CoreCommand extends BukkitCommand {
                     });
                     break;
                 case "disallow":
-                    player.sendMessage(Color.translate((CorePlugin.getInstance().isDisallow() ? network.getMainColor() + "[" + CorePlugin.getInstance().getConfig().getString("core-settings.name") + "] &cDisabled disallow." : network.getMainColor() + "[" + CorePlugin.getInstance().getConfig().getString("core-settings.name") + "] &aEnabled disallow.")));
+                    player.sendMessage(Color.translate((CorePlugin.getInstance().isDisallow() ? Color.MAIN_COLOR + "[" + CorePlugin.getInstance().getConfig().getString("core-settings.name") + "] &cDisabled disallow." : Color.MAIN_COLOR + "[" + CorePlugin.getInstance().getConfig().getString("core-settings.name") + "] &aEnabled disallow.")));
                     CorePlugin.getInstance().setDisallow(!CorePlugin.getInstance().isDisallow());
                     break;
                 case "panel":
                     new ScandiumMenu(player).open(player);
                     break;
                 default:
-                    sender.sendMessage(network.getSecondaryColor() + "Usage: /" + network.getMainColor() + label + ChatColor.WHITE + " <debug|disallow|panel>.");
+                    sender.sendMessage(Color.SECONDARY_COLOR + "Usage: /" + Color.MAIN_COLOR + label + ChatColor.WHITE + " <debug|disallow|panel>.");
                     break;
             }
         }

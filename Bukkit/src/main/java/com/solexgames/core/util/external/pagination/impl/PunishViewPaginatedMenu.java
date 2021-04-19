@@ -38,7 +38,7 @@ public class PunishViewPaginatedMenu extends PaginatedMenu {
         this.player = player;
         this.target = target;
         this.punishmentType = punishmentType;
-        this.targetUuid = UUIDUtil.fetchUUID(target);
+        this.targetUuid = CorePlugin.getInstance().getUuidCache().getUuidFromUsername(target);
     }
 
     @Override

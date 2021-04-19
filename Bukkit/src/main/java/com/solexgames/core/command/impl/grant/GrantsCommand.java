@@ -29,7 +29,7 @@ public class GrantsCommand extends BaseCommand {
         }
 
         if (args.length == 0) {
-            sender.sendMessage(Color.translate(serverType.getSecondaryColor() + "Usage: " + serverType.getMainColor() + "/" + label + ChatColor.WHITE + " <player>."));
+            sender.sendMessage(Color.translate(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player>."));
         }
         if (args.length == 1) {
             Player target = Bukkit.getPlayerExact(args[0]);
