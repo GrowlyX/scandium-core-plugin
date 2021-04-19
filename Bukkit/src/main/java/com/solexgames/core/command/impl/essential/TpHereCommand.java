@@ -1,12 +1,10 @@
 package com.solexgames.core.command.impl.essential;
 
-import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
-import com.solexgames.core.enums.ServerType;
+import com.solexgames.core.util.Color;
 import com.solexgames.core.util.PlayerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -19,9 +17,7 @@ public class TpHereCommand extends BaseCommand {
             return false;
         }
 
-        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
-        ChatColor secondColor = Color.SECONDARY_COLOR;
-        Player player = (Player) sender;
+        final Player player = (Player) sender;
 
         if (!sender.hasPermission("scandium.command.tphere")) {
             sender.sendMessage(NO_PERMISSION);
@@ -32,13 +28,13 @@ public class TpHereCommand extends BaseCommand {
             player.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player>.");
         }
         if (args.length == 1) {
-            Player target = Bukkit.getPlayerExact(args[0]);
+            final Player target = Bukkit.getPlayerExact(args[0]);
 
             if (target != null) {
                 target.teleport(player.getLocation());
 
-                player.sendMessage(secondColor + "Teleported " + target.getDisplayName() + secondColor + " to your location.");
-                target.sendMessage(secondColor + "You've been teleported to " + target.getDisplayName() + secondColor + ".");
+                player.sendMessage(Color.SECONDARY_COLOR + "Teleported " + target.getDisplayName() + Color.SECONDARY_COLOR + " to your location.");
+                target.sendMessage(Color.SECONDARY_COLOR + "You've been teleported to " + target.getDisplayName() + Color.SECONDARY_COLOR + ".");
 
                 PlayerUtil.sendAlert(player, "teleported " + target.getName() + " to themselves");
             } else {

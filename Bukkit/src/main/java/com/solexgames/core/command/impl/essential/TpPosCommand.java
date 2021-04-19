@@ -3,6 +3,7 @@ package com.solexgames.core.command.impl.essential;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.enums.ServerType;
+import com.solexgames.core.util.Color;
 import com.solexgames.core.util.PlayerUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -19,8 +20,7 @@ public class TpPosCommand extends BaseCommand {
             return false;
         }
 
-        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
-        Player player = (Player) sender;
+        final Player player = (Player) sender;
 
         if (!player.hasPermission("scandium.command.tppos")) {
             player.sendMessage(NO_PERMISSION);
@@ -32,9 +32,9 @@ public class TpPosCommand extends BaseCommand {
         }
         if (args.length == 3) {
             try {
-                int x1 = Integer.parseInt(args[0]);
-                int y1 = Integer.parseInt(args[1]);
-                int z1 = Integer.parseInt(args[2]);
+                final int x1 = Integer.parseInt(args[0]);
+                final int y1 = Integer.parseInt(args[1]);
+                final int z1 = Integer.parseInt(args[2]);
 
                 player.teleport(new Location(player.getWorld(), x1, y1, z1, 0.0F, 0.0F));
                 player.sendMessage(Color.SECONDARY_COLOR + "Teleported you to " + Color.MAIN_COLOR + x1 + Color.SECONDARY_COLOR + ", " + Color.MAIN_COLOR + y1 + Color.SECONDARY_COLOR + ", " + Color.MAIN_COLOR + z1 + Color.SECONDARY_COLOR + ".");

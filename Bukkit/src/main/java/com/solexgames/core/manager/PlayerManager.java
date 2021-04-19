@@ -10,8 +10,8 @@ import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.global.NetworkPlayer;
 import com.solexgames.core.util.Color;
-import com.solexgames.core.util.RedisUtil;
 import com.solexgames.core.util.PlayerUtil;
+import com.solexgames.core.util.RedisUtil;
 import com.solexgames.core.util.atomic.AtomicDocument;
 import com.solexgames.core.util.builder.ItemBuilder;
 import lombok.Getter;
@@ -24,7 +24,6 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.net.InetAddress;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
@@ -57,7 +56,7 @@ public class PlayerManager {
 
     public GameProfile getGameProfile(Player player) {
         try {
-            Class<?> strClass = Class.forName("org.bukkit.craftbukkit." + this.getServerVersion() + ".entity.CraftPlayer");
+            final Class<?> strClass = Class.forName("org.bukkit.craftbukkit." + this.getServerVersion() + ".entity.CraftPlayer");
             return (GameProfile) strClass.cast(player).getClass().getMethod("getProfile").invoke(strClass.cast(player));
         } catch (Exception ignored) {
             return null;
@@ -89,7 +88,7 @@ public class PlayerManager {
     }
 
     public PotPlayer getPlayer(String name) {
-        Player player = Bukkit.getPlayer(name);
+        final Player player = Bukkit.getPlayer(name);
 
         if (player == null) {
             return null;

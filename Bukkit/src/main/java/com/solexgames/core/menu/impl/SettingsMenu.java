@@ -4,6 +4,7 @@ import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.AbstractInventoryMenu;
+import com.solexgames.core.util.Color;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.PotPlayer;
 import lombok.Getter;
@@ -28,8 +29,7 @@ public class SettingsMenu extends AbstractInventoryMenu {
     }
 
     public void update() {
-        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(this.player);
-        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(this.player);
 
         this.inventory.setItem(2, new ItemBuilder(XMaterial.PAPER.parseMaterial())
                 .addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS)

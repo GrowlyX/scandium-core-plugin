@@ -36,7 +36,7 @@ public class NetworkPlayer {
 
         CorePlugin.getInstance().getPlayerManager().getAllNetworkProfiles().put(this.uuid, this);
 
-        if (!CorePlugin.getInstance().getUuidCache().contains(this.uuid)) {
+        if (!CorePlugin.getInstance().getUuidCache().containsValue(this.uuid)) {
             CorePlugin.getInstance().getUuidCache().put(this.name, this.uuid);
         }
     }
