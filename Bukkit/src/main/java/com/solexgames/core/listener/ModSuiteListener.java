@@ -3,6 +3,7 @@ package com.solexgames.core.listener;
 import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
+import com.solexgames.core.menu.impl.player.ViewPlayerMenu;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.builder.ItemBuilder;
@@ -83,7 +84,7 @@ public class ModSuiteListener implements Listener {
                                 }
                             }
                         } else if (materialName.contains("book")) {
-                            player.sendMessage(ChatColor.RED + "Error: The feature you've just tried to perform is disabled.");
+                            new ViewPlayerMenu(target).openMenu(player);
                         }
                     }
                 }

@@ -23,6 +23,12 @@ public final class WoolUtil {
             ChatColor.BLACK, ChatColor.DARK_GREEN, ChatColor.RED, ChatColor.BLACK
     );
 
+    /**
+     * Gets a wool id by a ChatColor
+     *
+     * @param color ChatColor to convert to wool ID
+     * @return a wool ID
+     */
     public static int getByColor(ChatColor color) {
         switch (color) {
             case DARK_RED:
