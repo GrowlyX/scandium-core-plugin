@@ -155,13 +155,16 @@ public class PotPlayer {
 
         this.media = new Media();
         this.lastJoined = new Date();
-        this.syncCode = SaltUtil.getRandomSaltedString(6);
         this.hasLoaded = false;
 
-        CompletableFuture.runAsync(this::loadPlayerData);
-        CompletableFuture.runAsync(() -> this.encryptedIpAddress = CorePlugin.getInstance().getCryptoManager().encrypt(this.ipAddress));
+        CompletableFuture.supplyAsync(() -> {
+            this.loadPlayerData();
 
-        CorePlugin.getInstance().getPlayerManager().getAllProfiles().put(uuid, this);
+            this.encryptedIpAddress = CorePlugin.getInstance().getCryptoManager().encrypt(this.ipAddress);
+            this.syncCode = SaltUtil.getRandomSaltedString(6);
+
+            return true;
+        }).thenRunAsync(() -> CorePlugin.getInstance().getPlayerManager().getAllProfiles().put(uuid, this));
     }
 
     public Document getDocument(boolean removing) {
@@ -471,7 +474,7 @@ public class PotPlayer {
     }
 
     public void onAfterDataLoad() {
-        this.player = Bukkit.getPlayer(uuid);
+        this.player = Bukkit.getPlayer(this.uuid);
         this.attachment = this.player.addAttachment(JavaPlugin.getPlugin(CorePlugin.class));
         this.gameProfile = CorePlugin.getInstance().getPlayerManager().getGameProfile(this.player);
         this.rainbowNametag = new RainbowNametag(this.player, CorePlugin.getInstance());

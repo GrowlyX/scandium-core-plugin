@@ -3,14 +3,13 @@ package com.solexgames.core;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.solexgames.core.command.impl.CoreCommand;
-import com.solexgames.core.command.impl.essential.*;
 import com.solexgames.core.command.impl.other.WebPostCommand;
 import com.solexgames.core.database.Database;
 import com.solexgames.core.enums.ServerType;
-import com.solexgames.core.hooks.nms.INMS;
-import com.solexgames.core.hooks.nms.extend.*;
 import com.solexgames.core.hooks.client.AbstractClientHook;
 import com.solexgames.core.hooks.client.extend.LunarClientHook;
+import com.solexgames.core.hooks.nms.INMS;
+import com.solexgames.core.hooks.nms.extend.*;
 import com.solexgames.core.hooks.protocol.AbstractPacketHandler;
 import com.solexgames.core.hooks.protocol.extend.ProtocolPacketHandler;
 import com.solexgames.core.manager.*;
@@ -20,8 +19,8 @@ import com.solexgames.core.redis.RedisSettings;
 import com.solexgames.core.redis.RedisSubscriptions;
 import com.solexgames.core.settings.ServerSettings;
 import com.solexgames.core.task.*;
-import com.solexgames.core.util.Color;
 import com.solexgames.core.util.BukkitUtil;
+import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
 import com.solexgames.core.util.external.ConfigExternal;
 import com.solexgames.core.uuid.UUIDCache;
@@ -29,9 +28,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.SimplePluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -39,8 +36,6 @@ import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Random;
 import java.util.TimeZone;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 /**
  * @author GrowlyX
@@ -298,7 +293,7 @@ public final class CorePlugin extends JavaPlugin {
     }
 
     public void logConsole(String message) {
-        Bukkit.getConsoleSender().sendMessage(Color.translate(message));
+        this.getServer().getConsoleSender().sendMessage(Color.translate(message));
     }
 
     @Override
@@ -312,7 +307,11 @@ public final class CorePlugin extends JavaPlugin {
         this.punishmentManager.savePunishments();
         this.prefixManager.savePrefixes();
 
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> System.out.println("test")));
+        final Thread thread = new Thread(() ->
+                System.out.println("test")
+        );
+
+        Runtime.getRuntime().addShutdownHook(thread);
 
         if (this.redisManager.isActive()) {
             this.redisManager.unsubscribe();

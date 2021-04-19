@@ -76,33 +76,37 @@ public final class StringUtil {
     }
 
     public static String getCentered(String message) {
-        if ((message == null) || message.equals("")) return "";
+        if ((message == null) || message.equals("")) {
+            return "";
+        }
 
-        message = Color.translate(message);
+        final String finalMessage = Color.translate(message);
 
         int messagePxSize = 0;
         boolean previousCode = false;
         boolean isBold = false;
 
-        for (char c : message.toCharArray()) {
+        for (char c : finalMessage.toCharArray()) {
             if (c == '§') {
                 previousCode = true;
             } else if (previousCode) {
                 previousCode = false;
                 isBold = c == 'l' || c == 'L';
             } else {
-                DefaultFontInfo dFI = DefaultFontInfo.getDefaultFontInfo(c);
+                final DefaultFontInfo dFI = DefaultFontInfo.getDefaultFontInfo(c);
+
                 messagePxSize += isBold ? dFI.getBoldLength() : dFI.getLength();
                 messagePxSize++;
             }
         }
 
-        int halvedMessageSize = messagePxSize / 2;
-        int toCompensate = CENTER_PX - halvedMessageSize;
-        int spaceLength = DefaultFontInfo.SPACE.getLength() + 1;
+        final StringBuilder sb = new StringBuilder();
+        final int halvedMessageSize = messagePxSize / 2;
+        final int toCompensate = CENTER_PX - halvedMessageSize;
+        final int spaceLength = DefaultFontInfo.SPACE.getLength() + 1;
+
         int compensated = 0;
 
-        StringBuilder sb = new StringBuilder();
         while (compensated < toCompensate) {
             sb.append(" ");
             compensated += spaceLength;
