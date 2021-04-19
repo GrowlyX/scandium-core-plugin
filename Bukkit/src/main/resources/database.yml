@@ -9,3 +9,4 @@ redis:
     password: ""
 mongodb:
   url: "mongodb://localhost:27017/SGSoftware?retryWrites=true&w=majority"
+  database: "SGSoftware"

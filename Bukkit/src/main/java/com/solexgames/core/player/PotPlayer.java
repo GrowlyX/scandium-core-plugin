@@ -433,7 +433,7 @@ public class PotPlayer {
                     while (documentIterator.hasNext()) {
                         final Document document = documentIterator.next();
 
-                        if (document.getBoolean("blacklisted") != null && document.getBoolean("blacklisted") && !this.currentlyBlacklisted) {
+                        if (document.getBoolean("blacklisted") != null && document.getBoolean("blacklisted") && !this.currentlyBlacklisted && !document.getString("name").equalsIgnoreCase(loginEvent.getName())) {
                             this.currentlyBlacklisted = true;
                             this.currentlyRestricted = true;
                             this.relatedToBlacklist = true;

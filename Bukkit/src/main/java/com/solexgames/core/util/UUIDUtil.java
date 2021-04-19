@@ -65,31 +65,25 @@ public final class UUIDUtil {
      * @param name the name of the player
      */
     public static UUID fetchUUID(String name) {
-        final AtomicReference<UUID> uuidAtomicReference = new AtomicReference<>();
+        try {
+            HttpPost request = new HttpPost("https://api.mojang.com/profiles/minecraft");
+            StringEntity entity = new StringEntity("[\"" + name + "\"]");
 
-        CompletableFuture.supplyAsync(() -> {
-            try {
-                HttpPost request = new HttpPost("https://api.mojang.com/profiles/minecraft");
-                StringEntity entity = new StringEntity("[\"" + name + "\"]");
+            request.setEntity(entity);
+            request.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
 
-                request.setEntity(entity);
-                request.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
+            HttpResponse response = CorePlugin.getInstance().getHttpClient().execute(request);
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+            String textResponse = bufferedReader.lines().collect(Collectors.joining(" "));
 
-                HttpResponse response = CorePlugin.getInstance().getHttpClient().execute(request);
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-                String textResponse = bufferedReader.lines().collect(Collectors.joining(" "));
+            List list = CorePlugin.GSON.fromJson(textResponse, List.class);
+            Map profile = (Map) list.get(0);
+            String stringUUID = (String) profile.get("id");
 
-                List list = CorePlugin.GSON.fromJson(textResponse, List.class);
-                Map profile = (Map) list.get(0);
-                String stringUUID = (String) profile.get("id");
-
-                return UUID.fromString(formatUUID(stringUUID));
-            } catch (Exception ignored) {
-                return null;
-            }
-        }).thenAccept(uuidAtomicReference::set);
-
-        return uuidAtomicReference.get();
+            return UUID.fromString(formatUUID(stringUUID));
+        } catch (Exception ignored) {
+            return null;
+        }
     }
 
     /**
