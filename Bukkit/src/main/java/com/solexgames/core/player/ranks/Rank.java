@@ -108,7 +108,7 @@ public class Rank {
     }
 
     public String getItalic() {
-        return this.italic ? ChatColor.STRIKETHROUGH.toString() : "";
+        return this.italic ? ChatColor.ITALIC.toString() : "";
     }
 
     public static Rank getDefault() {

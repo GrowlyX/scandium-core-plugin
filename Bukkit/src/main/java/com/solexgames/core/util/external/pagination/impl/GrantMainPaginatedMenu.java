@@ -52,10 +52,10 @@ public class GrantMainPaginatedMenu extends PaginatedMenu {
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
         this.getSortedRanks().forEach(rank -> {
-            buttons.put(i.get(), new Button() {
+            buttons.put(i.getAndIncrement(), new Button() {
                 @Override
                 public ItemStack getButtonItem(Player player) {
-                    return new ItemBuilder(XMaterial.RED_WOOL.parseMaterial(), ((rank.getColor() + rank.getItalic() != null) ? (ChatColor.getByChar(Color.translate(rank.getColor() + rank.getItalic().replace("&", "").replace("§", ""))) != null) ? WoolUtil.getByColor(ChatColor.getByChar(Color.translate(rank.getColor() + rank.getItalic().replace("&", "").replace("§", "")))) : 0 : 0))
+                    return new ItemBuilder(XMaterial.RED_WOOL.parseMaterial(), ((rank.getColor() != null) ? (ChatColor.getByChar(Color.translate(rank.getColor().replace("&", "").replace("§", ""))) != null) ? WoolUtil.getByColor(ChatColor.getByChar(Color.translate(rank.getColor().replace("&", "").replace("§", "")))) : 0 : 0))
                             .addLore(Arrays.asList(
                                     network.getMainColor() + "&m--------------------------------",
                                     network.getSecondaryColor() + "Priority: " + network.getMainColor() + rank.getWeight(),
@@ -103,8 +103,6 @@ public class GrantMainPaginatedMenu extends PaginatedMenu {
                     }
                 }
             });
-
-            i.getAndIncrement();
         });
 
         return buttons;
