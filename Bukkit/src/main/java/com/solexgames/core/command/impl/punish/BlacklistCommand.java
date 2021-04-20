@@ -109,7 +109,6 @@ public class BlacklistCommand extends BaseCommand {
                             ));
                         } catch (Exception ignored) {
                             sender.sendMessage(ChatColor.RED + "Error: That is not a valid duration!");
-                            ignored.printStackTrace();
                         }
                     }
                 }

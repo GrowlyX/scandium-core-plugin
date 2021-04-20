@@ -563,7 +563,7 @@ public class PotPlayer {
 
     public void resetPermissions() {
         if (!this.attachment.getPermissions().isEmpty()) {
-            final Set<String> keySet = this.attachment.getPermissions().keySet();
+            final Set<String> keySet = new HashSet<>(this.attachment.getPermissions().keySet());
 
             keySet.forEach(s -> this.attachment.unsetPermission(s));
         }

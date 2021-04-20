@@ -335,7 +335,7 @@ public class PlayerManager {
             targetPotPlayer.setupPlayer();
             targetPotPlayer.saveWithoutRemove();
 
-            targetPotPlayer.getPlayer().sendMessage(ChatColor.GREEN + Color.translate("Your rank has been set to " + grant.getRank().getColor() + grant.getRank().getName() + ChatColor.GREEN + "."));
+            targetPotPlayer.getPlayer().sendMessage(ChatColor.GREEN + "Your rank has been set to " + grant.getRank().getColor() + grant.getRank().getItalic() + grant.getRank().getName() + ChatColor.GREEN + ".");
         } else {
             final List<Grant> allGrants = new ArrayList<>();
 

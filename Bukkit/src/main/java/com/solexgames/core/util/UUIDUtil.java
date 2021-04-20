@@ -1,6 +1,9 @@
 package com.solexgames.core.util;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.solexgames.core.CorePlugin;
+import com.solexgames.core.util.atomic.AtomicUUID;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpHeaders;
@@ -28,9 +31,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 /**
- * From https://www.spigotmc.org/threads/get-player-ping-with-reflection.147773/
- * <p>
- *
+ * @author GrowlyX
  * @since 3/4/2021
  */
 
@@ -47,15 +48,10 @@ public final class UUIDUtil {
         String formattedUUID = uuid.toString().replace("-", "");
 
         try {
-            HttpGet request = new HttpGet("https://sessionserver.mojang.com/session/minecraft/profile/" + formattedUUID);
-            HttpResponse response = CorePlugin.getInstance().getHttpClient().execute(request);
+            final URL url = new URL("https://api.mojang.com/users/profiles/minecraft/" + formattedUUID);
+            final JsonObject json = new JsonParser().parse(new InputStreamReader(url.openStream())).getAsJsonObject();
 
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-            String textResponse = bufferedReader.lines().collect(Collectors.joining(" "));
-
-            Map map = CorePlugin.GSON.fromJson(textResponse, Map.class);
-
-            return map.get("name").toString();
+            return json.get("name").toString().replace("\"", "");
         } catch (Exception exception) {
             return null;
         }
@@ -68,21 +64,11 @@ public final class UUIDUtil {
      */
     public static UUID fetchUUID(String name) {
         try {
-            HttpPost request = new HttpPost("https://api.mojang.com/profiles/minecraft");
-            StringEntity entity = new StringEntity("[\"" + name + "\"]");
+            final URL url = new URL("https://api.mojang.com/users/profiles/minecraft/" + name);
+            final JsonObject json = new JsonParser().parse(new InputStreamReader(url.openStream())).getAsJsonObject();
+            final String uuid = json.get("id").toString().replace("\"", "");
 
-            request.setEntity(entity);
-            request.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
-
-            HttpResponse response = CorePlugin.getInstance().getHttpClient().execute(request);
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-            String textResponse = bufferedReader.lines().collect(Collectors.joining(" "));
-
-            List list = CorePlugin.GSON.fromJson(textResponse, List.class);
-            Map profile = (Map) list.get(0);
-            String stringUUID = (String) profile.get("id");
-
-            return UUID.fromString(formatUUID(stringUUID));
+            return UUIDUtil.formatUUID(uuid);
         } catch (Exception ignored) {
             return null;
         }
@@ -95,7 +81,7 @@ public final class UUIDUtil {
      * <p>
      * Formats a UUID given by mojang and adds hyphens so it can be read by UUID#fromString
      */
-    public static String formatUUID(String id) {
-        return id.substring(0, 8) + "-" + id.substring(8, 12) + "-" + id.substring(12, 16) + "-" + id.substring(16, 20) + "-" + id.substring(20, 32);
+    public static UUID formatUUID(String id) {
+        return UUID.fromString(id.substring(0, 8) + "-" + id.substring(8, 12) + "-" + id.substring(12, 16) + "-" + id.substring(16, 20) + "-" + id.substring(20, 32));
     }
 }
