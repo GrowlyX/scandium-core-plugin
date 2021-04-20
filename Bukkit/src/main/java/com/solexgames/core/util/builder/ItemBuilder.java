@@ -17,19 +17,29 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Getter
 public class ItemBuilder {
 
     private final Map<Enchantment, Integer> enchantments = new HashMap<>();
-    private final ItemStack itemStack;
 
+    private final ItemStack itemStack;
     private ItemMeta itemMeta;
 
+    /**
+     * Constructor to make a new item builder object
+     *
+     * @param material the type of the item
+     */
     public ItemBuilder(Material material) {
         this.itemStack = new ItemStack(material);
         this.itemMeta = itemStack.getItemMeta();
     }
 
+    /**
+     * Constructor to make a new item builder object
+     *
+     * @param material the type of the item
+     * @param data the data/durability of the material
+     */
     public ItemBuilder(Material material, int data) {
         this.itemStack = new ItemStack(material, 1, (short) data);
         this.itemMeta = itemStack.getItemMeta();
@@ -74,11 +84,11 @@ public class ItemBuilder {
     }
 
     public ItemBuilder addLore(String lore) {
-        final List<String> list = (this.itemMeta.getLore() == null ? new ArrayList<>() : this.itemMeta.getLore());
+        final ArrayList<String> stringArrayList = new ArrayList<>();
 
-        list.add(Color.translate(lore));
+        stringArrayList.add(Color.translate(lore));
 
-        this.itemMeta.setLore(list);
+        this.itemMeta.setLore(stringArrayList);
         return this;
     }
 
@@ -123,6 +133,10 @@ public class ItemBuilder {
     public ItemStack create() {
         if (this.itemMeta != null) {
             this.itemStack.setItemMeta(this.itemMeta);
+        }
+
+        if (!this.enchantments.isEmpty()) {
+            this.itemStack.addEnchantments(this.enchantments);
         }
 
         return this.itemStack;

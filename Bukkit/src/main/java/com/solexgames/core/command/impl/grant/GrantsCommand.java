@@ -20,8 +20,7 @@ public class GrantsCommand extends BaseCommand {
             return false;
         }
 
-        Player player = (Player) sender;
-        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+        final Player player = (Player) sender;
 
         if (!player.hasPermission("scandium.command.grants")) {
             player.sendMessage(NO_PERMISSION);
@@ -29,7 +28,7 @@ public class GrantsCommand extends BaseCommand {
         }
 
         if (args.length == 0) {
-            sender.sendMessage(Color.translate(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player>."));
+            sender.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player>.");
         }
         if (args.length == 1) {
             Player target = Bukkit.getPlayerExact(args[0]);

@@ -42,9 +42,9 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
 
     @Override
     public void onMessage(String channel, String message) {
-        JsonAppender jsonAppender = CorePlugin.GSON.fromJson(message, JsonAppender.class);
+        final JsonAppender jsonAppender = CorePlugin.GSON.fromJson(message, JsonAppender.class);
 
-        // Running async just incase this thread gets blocked from too many incoming packets
+        // Running async just in case
         CompletableFuture.runAsync(() -> {
             switch (jsonAppender.getPacket()) {
                 case GLOBAL_PLAYER_REMOVE:
@@ -197,6 +197,7 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                     break;
                 case PLAYER_SERVER_UPDATE:
                     StaffUpdateType updateType = StaffUpdateType.valueOf(jsonAppender.getParam("UPDATETYPE"));
+
                     switch (updateType) {
                         case FREEZE:
                             String freezeExecutor = jsonAppender.getParam("PLAYER");
@@ -229,6 +230,7 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
 
                             Bukkit.getOnlinePlayers().forEach(player -> {
                                 PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+
                                 if (player.hasPermission(updateType.getPermission())) {
                                     if (potPlayer.isCanSeeStaffMessages()) {
                                         player.sendMessage(Color.translate(updateType.getPrefix() + "&7[" + fromHelpOpServer + "] " + "&3" + helpOpPlayer + " &bhas requested assistance: &e" + helpOpMessage + "&b."));
@@ -258,8 +260,10 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                     String newRankId = jsonAppender.getParam("UUID");
                     Rank newRank = new Rank(UUID.fromString(newRankId), Collections.singletonList(Objects.requireNonNull(Rank.getDefault()).getUuid()), Collections.singletonList("permission.testing"), newRankName, Color.translate("&7"), Color.translate("&7"), Color.translate("&7"), false, 0);
                     Player newRankPlayer = Bukkit.getPlayer(jsonAppender.getParam("PLAYER"));
-                    if (newRankPlayer != null)
+
+                    if (newRankPlayer != null) {
                         newRankPlayer.sendMessage(ChatColor.GREEN + "Rank named '" + newRank.getName() + "' successfully created.");
+                    }
 
                     newRank.saveRank();
                     break;

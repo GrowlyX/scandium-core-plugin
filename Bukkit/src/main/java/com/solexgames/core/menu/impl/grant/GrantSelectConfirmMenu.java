@@ -52,7 +52,7 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
     }
 
     public void update() {
-        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
+        final ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
         int[] intsConfirm = new int[]{10, 11, 12, 19, 20, 21, 28, 29, 30};
         int[] intsDecline = new int[]{14, 15, 16, 23, 24, 25, 32, 33, 34};
@@ -84,57 +84,23 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
     public void onInventoryClick(InventoryClickEvent event) {
         Inventory clickedInventory = event.getClickedInventory();
         Inventory topInventory = event.getView().getTopInventory();
+
         if (!topInventory.equals(this.inventory)) return;
         if (topInventory.equals(clickedInventory)) {
             event.setCancelled(true);
 
-            final ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
-
-            if (event.getCurrentItem() == null || event.getCurrentItem().getType() == XMaterial.AIR.parseMaterial()) return;
-            if (ChatColor.stripColor(Color.translate(event.getCurrentItem().getItemMeta().getDisplayName())).contains("Confirm")) {
-                final Grant newGrant = new Grant(player.getUniqueId(), rank, System.currentTimeMillis(), duration, reason, true, this.permanent, this.scope);
-                final PotPlayer targetPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(document.getString("name"));
-
-                newGrant.setIssuedServer(CorePlugin.getInstance().getServerName());
-
-                if (targetPotPlayer != null) {
-                    targetPotPlayer.getAllGrants().add(newGrant);
-                    targetPotPlayer.setupPlayer();
-                    targetPotPlayer.saveWithoutRemove();
-
-                    targetPotPlayer.getPlayer().sendMessage(ChatColor.GREEN + Color.translate("Your rank has been set to " + newGrant.getRank().getColor() + newGrant.getRank().getName() + ChatColor.GREEN + "."));
-
-                    player.sendMessage(Color.translate(network.getSecondaryColor() + "You've granted " + targetPotPlayer.getPlayer().getDisplayName() + network.getSecondaryColor() + " the rank " + rank.getColor() + rank.getItalic() + rank.getName() + network.getSecondaryColor() + " for " + network.getMainColor() + this.getReason() + network.getSecondaryColor() + "."));
-                    player.sendMessage(Color.translate(network.getSecondaryColor() + "Granted for scopes: " + network.getMainColor() + this.scope + network.getSecondaryColor() + "."));
-                    player.sendMessage(Color.translate(network.getSecondaryColor() + "The grant will expire in " + network.getMainColor() + (newGrant.isPermanent() ? "&4Never" : DurationFormatUtils.formatDurationWords(duration, true, true) + " (" + CorePlugin.FORMAT.format(new Date(duration)) + ")")));
-                } else {
-                    final List<Grant> allGrants = new ArrayList<>();
-
-                    if (document.getList("allGrants", String.class) == null) {
-                        document.getList("allGrants", String.class)
-                                .forEach(string -> allGrants.add(CorePlugin.GSON.fromJson(string, Grant.class)));
-                    }
-
-                    allGrants.add(newGrant);
-
-                    final List<String> grantStrings = new ArrayList<>();
-                    allGrants.forEach(grant -> grantStrings.add(grant.toJson()));
-
-                    document.put("allGrants", grantStrings);
-
-                    CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("uuid", this.document.getString("uuid")), document, new ReplaceOptions().upsert(true)));
-
-                    player.sendMessage(Color.translate(network.getSecondaryColor() + "You've granted " + document.getString("name") + network.getSecondaryColor() + " the rank " + rank.getColor() + rank.getItalic() + rank.getName() + network.getSecondaryColor() + " for " + network.getMainColor() + this.getReason() + network.getSecondaryColor() + "."));
-                    player.sendMessage(Color.translate(network.getSecondaryColor() + "Granted for scopes: " + network.getMainColor() + this.scope + network.getSecondaryColor() + "."));
-                    player.sendMessage(Color.translate(network.getSecondaryColor() + "The grant will expire " + network.getMainColor() + (newGrant.isPermanent() ? "&4Never&e." : "in " + DurationFormatUtils.formatDurationWords(newGrant.getDuration(), true, true) + " (" + CorePlugin.FORMAT.format(new Date(duration)) + ")")));
-                }
-
-                player.sendMessage("  ");
-                player.closeInventory();
-            } else if (ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()).contains("Cancel")) {
-                player.sendMessage(ChatColor.RED + ("You've cancelled the current granting process."));
-                player.closeInventory();
+            if (event.getCurrentItem() == null || event.getCurrentItem().getType() == XMaterial.AIR.parseMaterial()) {
+                return;
             }
+            if (ChatColor.stripColor(Color.translate(event.getCurrentItem().getItemMeta().getDisplayName())).contains("Confirm")) {
+                final Grant newGrant = new Grant(this.player.getUniqueId(), this.rank, System.currentTimeMillis(), this.duration, this.reason, true, this.permanent, this.scope);
+
+                CorePlugin.getInstance().getPlayerManager().handleGrant(newGrant, this.document, this.player, CorePlugin.getInstance().getServerName(), false);
+            } else if (ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()).contains("Cancel")) {
+                this.player.sendMessage(ChatColor.RED + ("You've cancelled the current granting process."));
+            }
+
+            this.player.closeInventory();
         }
     }
 }

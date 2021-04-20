@@ -3,12 +3,14 @@ package com.solexgames.core.manager;
 import com.cryptomorin.xseries.XMaterial;
 import com.mojang.authlib.GameProfile;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.ReplaceOptions;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.board.impl.ModModeBoard;
 import com.solexgames.core.enums.ChatChannelType;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.global.NetworkPlayer;
+import com.solexgames.core.player.grant.Grant;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.PlayerUtil;
 import com.solexgames.core.util.RedisUtil;
@@ -16,6 +18,7 @@ import com.solexgames.core.util.atomic.AtomicDocument;
 import com.solexgames.core.util.builder.ItemBuilder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -320,6 +323,46 @@ public class PlayerManager {
         });
 
         player.sendMessage(ChatColor.GREEN + Color.translate("You are now visible to all online players."));
+    }
+
+    public void handleGrant(Grant grant, Document document, Player issuer, String issuedServer, boolean raw) {
+        final PotPlayer targetPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(document.getString("name"));
+
+        grant.setIssuedServer(issuedServer);
+
+        if (targetPotPlayer != null) {
+            targetPotPlayer.getAllGrants().add(grant);
+            targetPotPlayer.setupPlayer();
+            targetPotPlayer.saveWithoutRemove();
+
+            targetPotPlayer.getPlayer().sendMessage(ChatColor.GREEN + Color.translate("Your rank has been set to " + grant.getRank().getColor() + grant.getRank().getName() + ChatColor.GREEN + "."));
+        } else {
+            final List<Grant> allGrants = new ArrayList<>();
+
+            if (document.getList("allGrants", String.class) == null) {
+                document.getList("allGrants", String.class)
+                        .forEach(string -> allGrants.add(CorePlugin.GSON.fromJson(string, Grant.class)));
+            }
+
+            allGrants.add(grant);
+
+            final List<String> grantStrings = new ArrayList<>();
+            allGrants.forEach(json -> grantStrings.add(json.toJson()));
+
+            document.put("allGrants", grantStrings);
+
+            CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("uuid", document.getString("uuid")), document, new ReplaceOptions().upsert(true)));
+        }
+
+        if (issuer != null && !raw) {
+            issuer.sendMessage(Color.SECONDARY_COLOR + "You've granted " + (targetPotPlayer != null ? targetPotPlayer.getPlayer().getDisplayName() : Color.MAIN_COLOR + document.getString("name")) + Color.SECONDARY_COLOR + " the rank " + grant.getRank().getColor() + grant.getRank().getItalic() + grant.getRank().getName() + Color.SECONDARY_COLOR + " for " + Color.MAIN_COLOR + grant.getReason() + Color.SECONDARY_COLOR + ".");
+            issuer.sendMessage(Color.SECONDARY_COLOR + "Granted for scopes: " + Color.MAIN_COLOR + grant.getScope() + Color.SECONDARY_COLOR + ".");
+            issuer.sendMessage(Color.SECONDARY_COLOR + "The grant will expire in " + Color.MAIN_COLOR + (grant.isPermanent() ? ChatColor.DARK_RED + "Never" : DurationFormatUtils.formatDurationWords(grant.getDuration(), true, true) + " (" + CorePlugin.FORMAT.format(new Date(System.currentTimeMillis() + grant.getDuration())) + ")"));
+        } else if (issuer == null && !raw) {
+            Bukkit.getConsoleSender().sendMessage(Color.SECONDARY_COLOR + "You've granted " + (targetPotPlayer != null ? targetPotPlayer.getPlayer().getDisplayName() : Color.MAIN_COLOR + document.getString("name")) + Color.SECONDARY_COLOR + " the rank " + grant.getRank().getColor() + grant.getRank().getItalic() + grant.getRank().getName() + Color.SECONDARY_COLOR + " for " + Color.MAIN_COLOR + grant.getReason() + Color.SECONDARY_COLOR + ".");
+            Bukkit.getConsoleSender().sendMessage(Color.SECONDARY_COLOR + "Granted for scopes: " + Color.MAIN_COLOR + grant.getScope() + Color.SECONDARY_COLOR + ".");
+            Bukkit.getConsoleSender().sendMessage(Color.SECONDARY_COLOR + "The grant will expire in " + Color.MAIN_COLOR + (grant.isPermanent() ? ChatColor.DARK_RED + "Never" : DurationFormatUtils.formatDurationWords(grant.getDuration(), true, true) + " (" + CorePlugin.FORMAT.format(new Date(System.currentTimeMillis() + grant.getDuration())) + ")"));
+        }
     }
 
     public String formatChatChannel(ChatChannelType chatChannel, String player, String message, String fromServer) {

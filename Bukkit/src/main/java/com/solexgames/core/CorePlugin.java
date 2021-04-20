@@ -92,7 +92,6 @@ public final class CorePlugin extends JavaPlugin {
     private boolean disallow;
 
     @Override
-    @SuppressWarnings("deprecation") // For DefaultHttpClient
     public void onEnable() {
         instance = this;
 

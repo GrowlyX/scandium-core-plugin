@@ -11,8 +11,6 @@ import java.util.Map;
 /**
  * @author GrowlyX
  * @since 3/1/2021
- * <p>
- * Holds instances to anything redis related.
  */
 
 @Getter

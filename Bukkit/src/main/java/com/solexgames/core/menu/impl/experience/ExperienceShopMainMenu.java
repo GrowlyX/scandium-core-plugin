@@ -21,8 +21,8 @@ public class ExperienceShopMainMenu extends AbstractInventoryMenu {
     @Override
     public void update() {
         this.inventory.setItem(3, new ItemBuilder(XMaterial.NAME_TAG.parseMaterial())
-                .setDisplayName("&3&lPrefixes")
-                .addLore(ChatColor.GRAY + "Click to view all purchasable prefixes!")
+                .setDisplayName("&3&lTags")
+                .addLore(ChatColor.GRAY + "Click to view all purchasable tags!")
                 .create());
         this.inventory.setItem(5, new ItemBuilder(XMaterial.BLAZE_POWDER.parseMaterial())
                 .setDisplayName("&6&lRanks")

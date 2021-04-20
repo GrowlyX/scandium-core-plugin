@@ -6,6 +6,8 @@ import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Objects;
 
 /**
@@ -15,8 +17,6 @@ import java.util.Objects;
 
 @UtilityClass
 public final class PlayerUtil {
-
-    private static Class<?> CRAFT_PLAYER;
 
     public static void sendAlert(Player player, String reason) {
         if (CorePlugin.getInstance().getServerSettings().isStaffAlertsEnabled()) {
@@ -30,26 +30,36 @@ public final class PlayerUtil {
         }
     }
 
+
+    private static Method getHandleMethod;
+    private static Field pingField;
+
     /**
      * Gets a player's connection ping via reflection
+     * From https://www.spigotmc.org/threads/get-player-ping-with-reflection.147773/
      *
      * @param player specified player
      * @return the player's ping
      */
     public static int getPing(Player player) {
         try {
-            final Object handle = PlayerUtil.CRAFT_PLAYER.getMethod("getHandle").invoke(player);
+            if (getHandleMethod == null) {
+                getHandleMethod = player.getClass().getDeclaredMethod("getHandle");
+                getHandleMethod.setAccessible(true);
+            }
 
-            return (Integer) handle.getClass().getDeclaredField("ping").get(handle);
-        } catch (Exception ignored) {
-            return 0;
-        }
-    }
+            final Object entityPlayer = getHandleMethod.invoke(player);
 
-    static {
-        try {
-            CRAFT_PLAYER = Class.forName("org.bukkit.craftbukkit." + Bukkit.getServer().getClass().getPackage().getName().substring(23) + ".entity.CraftPlayer");
-        } catch (Exception ignored) {
+            if (pingField == null) {
+                pingField = entityPlayer.getClass().getDeclaredField("ping");
+                pingField.setAccessible(true);
+            }
+
+            final int ping = pingField.getInt(entityPlayer);
+
+            return Math.max(ping, 0);
+        } catch (Exception e) {
+            return 1;
         }
     }
 }

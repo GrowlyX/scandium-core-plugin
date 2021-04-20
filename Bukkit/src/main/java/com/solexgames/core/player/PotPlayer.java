@@ -563,7 +563,9 @@ public class PotPlayer {
 
     public void resetPermissions() {
         if (!this.attachment.getPermissions().isEmpty()) {
-            this.attachment.getPermissions().keySet().forEach(s -> this.attachment.unsetPermission(s));
+            final Set<String> keySet = this.attachment.getPermissions().keySet();
+
+            keySet.forEach(s -> this.attachment.unsetPermission(s));
         }
     }
 
@@ -661,7 +663,9 @@ public class PotPlayer {
                     this.hasVoted = true;
                     this.getAllPrefixes().add("Liked");
 
-                    if (this.getAppliedPrefix() == null) this.appliedPrefix = Prefix.getByName("Liked");
+                    if (this.getAppliedPrefix() == null) {
+                        this.appliedPrefix = Prefix.getByName("Liked");
+                    }
                     if (this.player != null) {
                         this.player.sendMessage(ChatColor.GREEN + Color.translate("Thanks for voting for us on &6NameMC&a!"));
                         this.player.sendMessage(ChatColor.GREEN + Color.translate("You've been granted the &b✔ &7(Liked)&a prefix!"));

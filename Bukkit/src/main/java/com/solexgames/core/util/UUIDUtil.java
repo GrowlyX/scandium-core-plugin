@@ -28,7 +28,9 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 /**
- * @author GrowlyX & Some github person
+ * From https://www.spigotmc.org/threads/get-player-ping-with-reflection.147773/
+ * <p>
+ *
  * @since 3/4/2021
  */
 

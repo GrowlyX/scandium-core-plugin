@@ -69,7 +69,7 @@ public class PrefixPurchaseMenu extends PaginatedMenu {
                     public ItemStack getButtonItem(Player player) {
                         return new ItemBuilder(XMaterial.INK_SAC.parseMaterial())
                                 .setDurability(1)
-                                .setDisplayName(ChatColor.RED + "No purchasable prefixes!")
+                                .setDisplayName(ChatColor.RED + "No purchasable tags!")
                                 .create();
                     }
                 });
@@ -85,10 +85,10 @@ public class PrefixPurchaseMenu extends PaginatedMenu {
                 final boolean ownsPrefix = potPlayer.getAllPrefixes().contains(prefix.getName());
                 final List<String> lore = new ArrayList<>();
 
-                lore.add("&7This prefix costs:");
+                lore.add("&7This tag costs:");
                 lore.add("&e500 Experience");
                 lore.add(" ");
-                lore.add("&7This prefix will view as:");
+                lore.add("&7This tag will view as:");
                 lore.add(prefix.getPrefix());
                 lore.add(" ");
 
@@ -96,7 +96,7 @@ public class PrefixPurchaseMenu extends PaginatedMenu {
                     lore.add("&cYou already own this prefix!");
                 } else {
                     if (potPlayer.getExperience() >= 500) {
-                        lore.add("&aClick to purchase this prefix");
+                        lore.add("&aClick to purchase this tag");
                         lore.add("&afor 500 Experience!");
                     } else {
                         lore.add("&cYou need " + ChatColor.BOLD.toString() + (500 - potPlayer.getExperience()) + ChatColor.RED + " more");
