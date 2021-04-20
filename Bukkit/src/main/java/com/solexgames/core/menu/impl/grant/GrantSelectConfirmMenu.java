@@ -88,27 +88,14 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
         if (topInventory.equals(clickedInventory)) {
             event.setCancelled(true);
 
-            ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
-            Player player = (Player) event.getWhoClicked();
+            final ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
             if (event.getCurrentItem() == null || event.getCurrentItem().getType() == XMaterial.AIR.parseMaterial()) return;
             if (ChatColor.stripColor(Color.translate(event.getCurrentItem().getItemMeta().getDisplayName())).contains("Confirm")) {
-                Grant newGrant;
-
-                if (scope.equals("global")) {
-                    newGrant = new Grant(player.getUniqueId(), rank, System.currentTimeMillis(), duration, reason, true, this.permanent, "global");
-                } else {
-                    newGrant = new Grant(player.getUniqueId(), rank, System.currentTimeMillis(), duration, reason, true, this.permanent, this.scope);
-                }
+                final Grant newGrant = new Grant(player.getUniqueId(), rank, System.currentTimeMillis(), duration, reason, true, this.permanent, this.scope);
+                final PotPlayer targetPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(document.getString("name"));
 
                 newGrant.setIssuedServer(CorePlugin.getInstance().getServerName());
-
-                PotPlayer targetPotPlayer = null;
-
-                try {
-                    targetPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(document.getString("name"));
-                } catch (Exception ignored) {
-                }
 
                 if (targetPotPlayer != null) {
                     targetPotPlayer.getAllGrants().add(newGrant);
@@ -116,32 +103,32 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
                     targetPotPlayer.saveWithoutRemove();
 
                     targetPotPlayer.getPlayer().sendMessage(ChatColor.GREEN + Color.translate("Your rank has been set to " + newGrant.getRank().getColor() + newGrant.getRank().getName() + ChatColor.GREEN + "."));
-                    player.sendMessage("  ");
+
                     player.sendMessage(Color.translate(network.getSecondaryColor() + "You've granted " + targetPotPlayer.getPlayer().getDisplayName() + network.getSecondaryColor() + " the rank " + rank.getColor() + rank.getItalic() + rank.getName() + network.getSecondaryColor() + " for " + network.getMainColor() + this.getReason() + network.getSecondaryColor() + "."));
                     player.sendMessage(Color.translate(network.getSecondaryColor() + "Granted for scopes: " + network.getMainColor() + this.scope + network.getSecondaryColor() + "."));
                     player.sendMessage(Color.translate(network.getSecondaryColor() + "The grant will expire in " + network.getMainColor() + (newGrant.isPermanent() ? "&4Never" : DurationFormatUtils.formatDurationWords(duration, true, true) + " (" + CorePlugin.FORMAT.format(new Date(duration)) + ")")));
                 } else {
-                    List<Grant> allGrants = new ArrayList<>();
+                    final List<Grant> allGrants = new ArrayList<>();
 
-                    if ((!((List<String>) document.get("allGrants")).isEmpty()) || ((document.get("allGrants") != null))) {
-                        List<String> allStringGrants = ((List<String>) document.get("allGrants"));
-                        allStringGrants.forEach(s -> allGrants.add(CorePlugin.GSON.fromJson(s, Grant.class)));
+                    if (document.getList("allGrants", String.class) == null) {
+                        document.getList("allGrants", String.class)
+                                .forEach(string -> allGrants.add(CorePlugin.GSON.fromJson(string, Grant.class)));
                     }
 
                     allGrants.add(newGrant);
 
-                    List<String> grantStrings = new ArrayList<>();
+                    final List<String> grantStrings = new ArrayList<>();
                     allGrants.forEach(grant -> grantStrings.add(grant.toJson()));
 
                     document.put("allGrants", grantStrings);
 
                     CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("uuid", this.document.getString("uuid")), document, new ReplaceOptions().upsert(true)));
 
-                    player.sendMessage("  ");
                     player.sendMessage(Color.translate(network.getSecondaryColor() + "You've granted " + document.getString("name") + network.getSecondaryColor() + " the rank " + rank.getColor() + rank.getItalic() + rank.getName() + network.getSecondaryColor() + " for " + network.getMainColor() + this.getReason() + network.getSecondaryColor() + "."));
                     player.sendMessage(Color.translate(network.getSecondaryColor() + "Granted for scopes: " + network.getMainColor() + this.scope + network.getSecondaryColor() + "."));
                     player.sendMessage(Color.translate(network.getSecondaryColor() + "The grant will expire " + network.getMainColor() + (newGrant.isPermanent() ? "&4Never&e." : "in " + DurationFormatUtils.formatDurationWords(newGrant.getDuration(), true, true) + " (" + CorePlugin.FORMAT.format(new Date(duration)) + ")")));
                 }
+
                 player.sendMessage("  ");
                 player.closeInventory();
             } else if (ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()).contains("Cancel")) {

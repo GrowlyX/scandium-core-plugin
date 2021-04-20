@@ -20,7 +20,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Getter
 public class GrantReasonPaginatedMenu extends PaginatedMenu {
