@@ -4,7 +4,7 @@ import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.manager.ServerManager;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -25,9 +25,13 @@ public class SetSpawnCommand extends BaseCommand {
         }
 
         final ServerManager manager = CorePlugin.getInstance().getServerManager();
+        final String location = CorePlugin.getInstance().getLibrary().getDataManager()
+                .getWrapper(Location.class)
+                .getJson(player.getLocation());
+
         manager.setSpawnLocation(player.getLocation());
 
-        CorePlugin.getInstance().getConfig().set("locations.spawn", manager.getSpawnLocation());
+        CorePlugin.getInstance().getConfig().set("locations.spawnpoint", location);
         CorePlugin.getInstance().saveConfig();
 
         player.sendMessage(ChatColor.GREEN + "The spawn location has been set to your current location!");

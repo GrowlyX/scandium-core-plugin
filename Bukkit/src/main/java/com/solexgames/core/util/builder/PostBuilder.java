@@ -1,8 +1,6 @@
 package com.solexgames.core.util.builder;
 
-import com.solexgames.core.CorePlugin;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.bson.Document;
 import org.bukkit.command.CommandSender;

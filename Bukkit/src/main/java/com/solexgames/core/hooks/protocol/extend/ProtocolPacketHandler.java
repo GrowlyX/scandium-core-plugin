@@ -9,7 +9,6 @@ import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.WrappedServerPing;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.hooks.protocol.AbstractPacketHandler;
-import org.apache.http.annotation.Experimental;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.InvocationTargetException;
@@ -42,10 +41,8 @@ public class ProtocolPacketHandler extends AbstractPacketHandler {
             }
         };
 
-        // experimental
         this.outPlay = new PacketAdapter(CorePlugin.getInstance(), ListenerPriority.HIGHEST, PacketType.Status.Server.OUT_SERVER_INFO) {
             @Override
-            @Experimental
             public void onPacketSending(PacketEvent event) {
                 final WrappedServerPing serverPing = event.getPacket().getServerPings().read(0);
 

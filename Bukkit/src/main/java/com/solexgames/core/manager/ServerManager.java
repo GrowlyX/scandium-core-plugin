@@ -39,15 +39,19 @@ public class ServerManager {
     private long chatSlow;
 
     public ServerManager() {
-        this.joinMessage = CorePlugin.getInstance().getConfig().getStringList("player-join.join-message.message");
-        this.clearChatJoin = CorePlugin.getInstance().getConfig().getBoolean("player-join.clear-chat");
-        this.joinMessageEnabled = CorePlugin.getInstance().getConfig().getBoolean("player-join.join-message.enabled");
-        this.joinMessageCentered = CorePlugin.getInstance().getConfig().getBoolean("player-join.join-message.centered");
-        this.automaticallyPutInto = CorePlugin.getInstance().getConfig().getString("settings.automatic-string");
+        final CorePlugin plugin = CorePlugin.getInstance();
 
-        this.staffInformation = Color.translate(CorePlugin.getInstance().getConfig().getStringList("staff-information"));
+        this.joinMessage = plugin.getConfig().getStringList("player-join.join-message.message");
+        this.clearChatJoin = plugin.getConfig().getBoolean("player-join.clear-chat");
+        this.joinMessageEnabled = plugin.getConfig().getBoolean("player-join.join-message.enabled");
+        this.joinMessageCentered = plugin.getConfig().getBoolean("player-join.join-message.centered");
+        this.automaticallyPutInto = plugin.getConfig().getString("settings.automatic-string");
 
-        this.spawnLocation = null;
+        this.staffInformation = Color.translate(plugin.getConfig().getStringList("staff-information"));
+
+        this.spawnLocation = (Location) plugin.getLibrary().getDataManager()
+                .getWrapper(Location.class)
+                .fromJson(plugin.getConfig().getString("locations.spawnpoint"));
 
         this.setupServerType();
     }

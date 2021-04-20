@@ -17,6 +17,8 @@ import com.solexgames.core.player.punishment.PunishmentStrings;
 import com.solexgames.core.redis.RedisManager;
 import com.solexgames.core.redis.RedisSettings;
 import com.solexgames.core.redis.RedisSubscriptions;
+import com.solexgames.core.serializer.DataLibrary;
+import com.solexgames.core.serializer.impl.LocationSerializer;
 import com.solexgames.core.settings.ServerSettings;
 import com.solexgames.core.task.*;
 import com.solexgames.core.util.BukkitUtil;
@@ -83,6 +85,7 @@ public final class CorePlugin extends JavaPlugin {
     private ConfigExternal filterConfig;
 
     private RedisSubscriptions subscriptions;
+    private DataLibrary library;
 
     private AbstractPacketHandler chatInterceptor;
     private AbstractClientHook lunar;
@@ -94,6 +97,8 @@ public final class CorePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+
+        final long milli = System.currentTimeMillis();
 
         if (!this.getName().equals("Scandium")) {
             this.getServer().shutdown();
@@ -118,6 +123,9 @@ public final class CorePlugin extends JavaPlugin {
         this.filterConfig = new ConfigExternal("filtered");
 
         this.serverSettings = new ServerSettings();
+
+        this.library = new DataLibrary();
+        this.library.getDataManager().registerSerializer(new LocationSerializer());
 
         this.setupSettings();
         this.setupHooks();
@@ -150,7 +158,7 @@ public final class CorePlugin extends JavaPlugin {
         this.uuidCache = new UUIDCache();
 
         this.setupExtra();
-        this.logInformation();
+        this.logInformation(milli);
 
         new ServerLoadingTask();
     }
@@ -243,16 +251,16 @@ public final class CorePlugin extends JavaPlugin {
         new PlayerDataUpdateTask();
     }
 
-    private void logInformation() {
-        String version = this.getDescription().getVersion();
+    private void logInformation(long milli) {
+        final String version = this.getDescription().getVersion();
 
-        boolean beta = (version.contains("BETA"));
-        boolean stable = (version.contains("STABLE"));
-        boolean dev = (version.contains("DEV"));
+        final boolean beta = (version.contains("BETA"));
+        final boolean stable = (version.contains("STABLE"));
+        final boolean dev = (version.contains("DEV"));
 
-        String extra = (beta ? " (Beta)" : "") + (dev ? " (Experimental)" : "") + (stable ? " (Stable)" : "");
+        final String extra = (beta ? " (Beta)" : "") + (dev ? " (Experimental)" : "") + (stable ? " (Stable)" : "");
 
-        this.logConsole("&bScandium &ahas loaded and players will be able to join in &65 seconds&a...");
+        this.getLogger().info("Initialized CorePlugin in " + (System.currentTimeMillis() - milli) + "ms.");
 
         this.logConsole("&7You are currently running version &e" + version
                 .replace("-BETA", "")

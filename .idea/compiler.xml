@@ -11,7 +11,6 @@
         <module name="Bungee" />
         <module name="API" />
         <module name="ScandiumL" />
-        <module name="Library" />
         <module name="Bukkit" />
         <module name="Velocity" />
       </profile>

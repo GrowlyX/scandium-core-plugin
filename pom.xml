@@ -13,7 +13,6 @@
     <modules>
         <module>Bukkit</module>
         <module>Bungee</module>
-        <module>Library</module>
         <module>Placeholder</module>
         <module>API</module>
         <module>Velocity</module>
@@ -36,7 +35,7 @@
 
         <plugins>
             <plugin>
-                <version>3.6.1</version>
+                <version>3.8.1</version>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
 
@@ -49,7 +48,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.2.4</version>
 
                 <configuration>
                     <createDependencyReducedPom>false</createDependencyReducedPom>

@@ -13,7 +13,6 @@
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/Legacy/pom.xml" />
-        <option value="$PROJECT_DIR$/Library/pom.xml" />
         <option value="$PROJECT_DIR$/Placeholder/pom.xml" />
         <option value="$PROJECT_DIR$/Velocity/pom.xml" />
       </list>
