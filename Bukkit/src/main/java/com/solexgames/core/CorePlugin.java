@@ -241,6 +241,7 @@ public final class CorePlugin extends JavaPlugin {
         new FrozenMessageTask();
         new BoardUpdateTask();
         new ServerTimeoutTask();
+        new PlayerDataUpdateTask();
     }
 
     private void logInformation() {

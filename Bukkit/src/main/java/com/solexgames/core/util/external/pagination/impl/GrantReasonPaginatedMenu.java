@@ -159,7 +159,7 @@ public class GrantReasonPaginatedMenu extends PaginatedMenu {
 
         @Override
         public void clicked(Player player, ClickType clickType) {
-            new GrantSelectConfirmMenu(menuData.getPlayer(), menuData.getDocument(), menuData.getRank(), menuData.getDuration(), this.reason, false, menuData.getScope()).open(player);
+            new GrantSelectConfirmMenu(menuData.getPlayer(), menuData.getDocument(), menuData.getRank(), menuData.getDuration(), this.reason, menuData.isPermanent(), menuData.getScope()).open(player);
         }
     }
 }
