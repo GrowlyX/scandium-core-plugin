@@ -6,11 +6,16 @@ import com.solexgames.core.server.NetworkServer;
 import com.solexgames.core.util.Color;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -57,15 +62,15 @@ public class ServerManager {
     }
 
     public void removeNetworkServer(NetworkServer networkServer) {
-        networkServers.remove(networkServer);
+        this.networkServers.remove(networkServer);
     }
 
     public void addNetworkServer(NetworkServer networkServer) {
-        networkServers.add(networkServer);
+        this.networkServers.add(networkServer);
     }
 
     public boolean existServer(String networkServer) {
-        return networkServers.contains(NetworkServer.getByName(networkServer));
+        return this.networkServers.contains(NetworkServer.getByName(networkServer));
     }
 
     public boolean isOnlineNetwork(String player) {
@@ -85,6 +90,23 @@ public class ServerManager {
         } catch (Exception ignored) {
             CorePlugin.getInstance().logConsole("&cYour Server ID is not correct! &7Please check your config and try again.");
             CorePlugin.getInstance().getServer().shutdown();
+        }
+    }
+
+    public void syncPermissions(Player player, List<String> permissions) {
+        if (!permissions.isEmpty()) {
+            final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            final DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream);
+
+            try {
+                dataOutputStream.writeUTF("core-permissions");
+                dataOutputStream.writeUTF(player.getName());
+                dataOutputStream.writeUTF(String.join(":", permissions));
+            } catch (Exception exception) {
+                System.out.println("[Messenger] Failed to sync permissions: " + exception.getMessage());
+            }
+
+            player.sendPluginMessage(CorePlugin.getInstance(), "core-permissions", byteArrayOutputStream.toByteArray());
         }
     }
 }

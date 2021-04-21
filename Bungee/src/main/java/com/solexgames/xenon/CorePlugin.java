@@ -3,6 +3,7 @@ package com.solexgames.xenon;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.solexgames.xenon.command.*;
+import com.solexgames.xenon.listener.ChannelListener;
 import com.solexgames.xenon.listener.PlayerListener;
 import com.solexgames.xenon.proxy.ProxyManager;
 import com.solexgames.xenon.redis.RedisManager;
@@ -125,8 +126,11 @@ public class CorePlugin extends Plugin {
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new MaintenanceCommand());
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new ProxyStatusCommand());
 
+        this.getProxy().registerChannel("core-permissions");
+        this.getProxy().registerChannel("core-update");
+
         this.getProxy().getPluginManager().registerListener(this, new PlayerListener());
-        this.getProxy().registerChannel("");
+        this.getProxy().getPluginManager().registerListener(this, new ChannelListener());
     }
 
     private void createConfig() {

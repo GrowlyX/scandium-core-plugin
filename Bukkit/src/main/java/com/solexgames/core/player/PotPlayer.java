@@ -35,6 +35,7 @@ import java.net.InetAddress;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @Getter
@@ -47,6 +48,7 @@ public class PotPlayer {
     private List<String> allIgnoring = new ArrayList<>();
     private List<String> allFriends = new ArrayList<>();
     private List<String> userPermissions = new ArrayList<>();
+    private List<String> bungeePermissions = new ArrayList<>();
 
     @SerializedName("_id")
     private UUID uuid;
@@ -157,14 +159,15 @@ public class PotPlayer {
         this.lastJoined = new Date();
         this.hasLoaded = false;
 
-        CompletableFuture.supplyAsync(() -> {
+        this.syncCode = SaltUtil.getRandomSaltedString(6);
+
+        CompletableFuture.runAsync(() -> {
             this.loadPlayerData();
 
             this.encryptedIpAddress = CorePlugin.getInstance().getCryptoManager().encrypt(this.ipAddress);
-            this.syncCode = SaltUtil.getRandomSaltedString(6);
+        });
 
-            return true;
-        }).thenRunAsync(() -> CorePlugin.getInstance().getPlayerManager().getAllProfiles().put(uuid, this));
+        CorePlugin.getInstance().getPlayerManager().getAllProfiles().put(uuid, this);
     }
 
     public Document getDocument(boolean removing) {
@@ -570,17 +573,32 @@ public class PotPlayer {
     }
 
     public void setupPermissions() {
+        final Consumer<? super String> action = (Consumer<String>) s -> {
+            if (s.startsWith("b-")) {
+                this.bungeePermissions.add(s.replace("b-", ""));
+                return;
+            }
+
+            if (s.equals("scandium.staff") && !this.bungeePermissions.contains("scandium.staff")) {
+                this.bungeePermissions.add(s);
+            }
+
+            this.attachment.setPermission(s.replace("*", ""), !s.startsWith("*"));
+        };
+
         CompletableFuture.runAsync(() -> {
             this.getAllGrants().stream()
                     .filter(grant -> grant != null && grant.isActive() && (grant.isApplicable() || grant.isGlobal()))
                     .forEach(grant -> {
-                        grant.getRank().getPermissions().forEach(s -> this.attachment.setPermission(s.replace("*", ""), !s.startsWith("*")));
-                        grant.getRank().getInheritance().stream().map(Rank::getByUuid).filter(Objects::nonNull).forEach(rank -> rank.getPermissions().forEach(s -> this.attachment.setPermission(s.replace("*", ""), !s.startsWith("*"))));
+                        grant.getRank().getPermissions().forEach(action);
+                        grant.getRank().getInheritance().stream().map(Rank::getByUuid).filter(Objects::nonNull).forEach(rank -> rank.getPermissions().forEach(action));
                     });
             this.getUserPermissions().forEach(s -> this.attachment.setPermission(s.replace("*", ""), !s.startsWith("*")));
         });
 
         this.player.recalculatePermissions();
+
+        CorePlugin.getInstance().getServerManager().syncPermissions(this.player, this.bungeePermissions);
     }
 
     public void setupPlayerTag() {
