@@ -30,7 +30,7 @@ public class NMSAccess_v1_8 implements INMS {
     public void updateTablist() {
         final List<EntityPlayer> playerList = new ArrayList<>(net.minecraft.server.v1_8_R3.MinecraftServer.getServer().getPlayerList().players);
         final List<EntityPlayer> finalList = playerList.stream()
-                .sorted(Comparator.comparingInt(potPlayer -> -(CorePlugin.getInstance().getPlayerManager().getPlayer(potPlayer.getName()).getDisguiseRank() != null ? CorePlugin.getInstance().getPlayerManager().getPlayer(potPlayer.getName()).getDisguiseRank().getWeight() : CorePlugin.getInstance().getPlayerManager().getPlayer(potPlayer.getName()).getActiveGrant().getRank().getWeight())))
+                .sorted(Comparator.comparingInt(potPlayer -> +(CorePlugin.getInstance().getPlayerManager().getPlayer(potPlayer.getName()).getDisguiseRank() != null ? CorePlugin.getInstance().getPlayerManager().getPlayer(potPlayer.getName()).getDisguiseRank().getWeight() : CorePlugin.getInstance().getPlayerManager().getPlayer(potPlayer.getName()).getActiveGrant().getRank().getWeight())))
                 .collect(Collectors.toList());
 
         try {

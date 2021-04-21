@@ -80,7 +80,7 @@ public class PunishRemoveConfirmMenu extends AbstractInventoryMenu {
                 Punishment.getAllPunishments().remove(punishment);
                 RedisUtil.writeAsync(RedisUtil.fRemovePunishment(punishment));
 
-                player.sendMessage(Color.SECONDARY_COLOR + "You've removed the grant with the ID: " + Color.MAIN_COLOR + "#" + punishment.getId() + Color.SECONDARY_COLOR + " from " + Color.MAIN_COLOR + target + Color.SECONDARY_COLOR + "'s history!");
+                player.sendMessage(Color.SECONDARY_COLOR + "You've removed the grant with the ID: " + Color.MAIN_COLOR + "#" + punishment.getPunishIdentification() + Color.SECONDARY_COLOR + " from " + Color.MAIN_COLOR + target + Color.SECONDARY_COLOR + "'s history!");
 
                 new PunishViewPaginatedMenu(player, target, punishment.getPunishmentType()).openMenu(player);
             } else if (ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()).contains("Cancel")) {

@@ -42,7 +42,7 @@ public abstract class ScoreBoard {
         player.setScoreboard(this.scoreboard);
 
         for (int i = 1; i <= 15; i++) {
-            final Team team = this.scoreboard.registerNewTeam("SLOT_" + i);
+            Team team = this.scoreboard.registerNewTeam("SLOT_" + i);
             team.addEntry(genEntry(i));
         }
 
@@ -50,44 +50,36 @@ public abstract class ScoreBoard {
     }
 
     public void setTitle() {
-        String title = Color.translate((this.getTitle().length() > 32 ? this.getTitle().substring(0, 32) : this.getTitle()));
+        String title = this.getTitle();
+        title = Color.translate(title);
 
-        if (!this.sidebar.getDisplayName().equals(title)) {
-            this.sidebar.setDisplayName(title);
-        }
+        if (title.length() > 32) title = title.substring(0, 32);
+        if (!this.sidebar.getDisplayName().equals(title)) this.sidebar.setDisplayName(title);
     }
 
     private void setSlot(int slot, String text) {
         if (slot > 15) return;
 
-        final Team team = this.scoreboard.getTeam("SLOT_" + slot);
-        final String entry = this.genEntry(slot);
+        Team team = this.scoreboard.getTeam("SLOT_" + slot);
+        String entry = genEntry(slot);
 
-        if (!this.scoreboard.getEntries().contains(entry)) {
-            this.sidebar.getScore(entry).setScore(slot);
-        }
+        if (!this.scoreboard.getEntries().contains(entry)) this.sidebar.getScore(entry).setScore(slot);
 
-        String prefix = this.getFirstSplit(text);
+        String prefix = getFirstSplit(text);
+
         int lastIndex = prefix.lastIndexOf(167);
+        String lastColor = lastIndex >= 14 ? prefix.substring(lastIndex) : ChatColor.getLastColors(prefix);
 
-        final String lastColor = lastIndex >= 14 ? prefix.substring(lastIndex) : ChatColor.getLastColors(prefix);
+        if (lastIndex >= 14) prefix = prefix.substring(0, lastIndex);
 
-        if (lastIndex >= 14) {
-            prefix = prefix.substring(0, lastIndex);
-        }
+        String suffix = getFirstSplit(lastColor + getSecondSplit(text));
 
-        String suffix = this.getFirstSplit(lastColor + this.getSecondSplit(text));
-
-        if (!team.getPrefix().equals(prefix)) {
-            team.setPrefix(prefix);
-        }
-        if (!team.getSuffix().equals(suffix)) {
-            team.setSuffix(suffix);
-        }
+        if (!team.getPrefix().equals(prefix)) team.setPrefix(prefix);
+        if (!team.getSuffix().equals(suffix)) team.setSuffix(suffix);
     }
 
     private void removeSlot(int slot) {
-        final String entry = this.genEntry(slot);
+        String entry = genEntry(slot);
 
         if (this.scoreboard.getEntries().contains(entry)) {
             this.scoreboard.resetScores(entry);
@@ -123,10 +115,7 @@ public abstract class ScoreBoard {
     }
 
     private String getSecondSplit(String s) {
-        if (s.length() > 32) {
-            s = s.substring(0, 32);
-        }
-
+        if (s.length() > 32) s = s.substring(0, 32);
         return s.length() > 16 ? s.substring(16) : "";
     }
 
@@ -135,18 +124,7 @@ public abstract class ScoreBoard {
         ScoreBoard.getAllBoards().remove(this.getPlayer().getUniqueId());
     }
 
-    /**
-     * Gets the List of scoreboard lines
-     *
-     * @return All available lines from the implementation
-     */
     public abstract List<String> getLines();
-
-    /**
-     * Gets the scoreboard title
-     *
-     * @return The scoreboard title
-     */
     public abstract String getTitle();
 
 }

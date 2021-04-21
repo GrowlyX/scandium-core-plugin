@@ -251,7 +251,7 @@ public class PotPlayer {
                     .forEach(this.punishments::add);
 
             this.getPunishments().stream()
-                    .filter(punishment -> punishment != null && punishment.isActive() && (System.currentTimeMillis() >= punishment.getCreatedAt().getTime() + punishment.getPunishmentDuration() || punishment.isPermanent()) && !punishment.isRemoved())
+                    .filter(punishment -> punishment != null && punishment.isActive() && (System.currentTimeMillis() <= punishment.getCreatedAt().getTime() + punishment.getPunishmentDuration() || punishment.isPermanent()) && !punishment.isRemoved())
                     .forEach(punishment -> {
                         switch (punishment.getPunishmentType()) {
                             case WARN:

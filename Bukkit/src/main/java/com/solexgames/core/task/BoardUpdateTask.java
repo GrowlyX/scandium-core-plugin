@@ -21,11 +21,9 @@ public class BoardUpdateTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        if (!ScoreBoard.getAllBoards().keySet().isEmpty()) {
-            Bukkit.getOnlinePlayers().stream()
-                    .map(player -> ScoreBoard.getAllBoards().get(player.getUniqueId()))
-                    .filter(Objects::nonNull)
-                    .forEach(ScoreBoard::updateForPlayer);
-        }
+        Bukkit.getOnlinePlayers().stream()
+                .map(player -> ScoreBoard.getAllBoards().get(player.getUniqueId()))
+                .filter(Objects::nonNull)
+                .forEach(ScoreBoard::updateForPlayer);
     }
 }

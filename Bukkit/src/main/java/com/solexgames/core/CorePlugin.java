@@ -316,12 +316,6 @@ public final class CorePlugin extends JavaPlugin {
 
         this.prefixManager.savePrefixes();
 
-        final Thread thread = new Thread(() ->
-                System.out.println("test")
-        );
-
-        Runtime.getRuntime().addShutdownHook(thread);
-
         if (this.redisManager.isActive()) {
             this.redisManager.unsubscribe();
         }
