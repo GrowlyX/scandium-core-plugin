@@ -18,6 +18,7 @@ import com.solexgames.core.redis.RedisManager;
 import com.solexgames.core.redis.RedisSettings;
 import com.solexgames.core.redis.RedisSubscriptions;
 import com.solexgames.core.serializer.DataLibrary;
+import com.solexgames.core.serializer.impl.ItemStackSerializer;
 import com.solexgames.core.serializer.impl.LocationSerializer;
 import com.solexgames.core.settings.ServerSettings;
 import com.solexgames.core.task.*;
@@ -126,6 +127,7 @@ public final class CorePlugin extends JavaPlugin {
 
         this.library = new DataLibrary();
         this.library.getDataManager().registerSerializer(new LocationSerializer());
+        this.library.getDataManager().registerSerializer(new ItemStackSerializer());
 
         this.setupSettings();
         this.setupHooks();

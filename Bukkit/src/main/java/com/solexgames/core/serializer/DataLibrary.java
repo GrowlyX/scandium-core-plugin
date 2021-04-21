@@ -5,6 +5,11 @@ import com.google.gson.GsonBuilder;
 import com.solexgames.core.manager.DataManager;
 import lombok.Getter;
 
+/**
+ * @author GrowlyX
+ * @since 4/20/2021
+ */
+
 @Getter
 public final class DataLibrary {
 

@@ -19,7 +19,7 @@ public class DataManager {
     }
 
     public void registerSerializer(DataSerializer<?> serializer) {
-        DataLibrary.getInstance().getDataManager().getWrapperList().add(serializer);
+        this.wrapperList.add(serializer);
 
         System.out.println("[Serializer] Register a data serializer with " + serializer.getClazz().getSimpleName() + ".class!");
     }

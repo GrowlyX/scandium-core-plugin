@@ -1,5 +1,10 @@
 package com.solexgames.core.serializer;
 
+/**
+ * @author GrowlyX
+ * @since 4/20/2021
+ */
+
 public abstract class DataSerializer<T> {
 
     /**
