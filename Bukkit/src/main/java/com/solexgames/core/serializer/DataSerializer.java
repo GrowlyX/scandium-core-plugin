@@ -31,7 +31,7 @@ public abstract class DataSerializer<T> {
      * @return a String serialized json
      */
     public String getJson(Object object) {
-        if (object != this.getClazz()) {
+        if (!object.getClass().equals(this.getClazz())) {
             throw new RuntimeException("Class not matching type parameter T");
         }
 

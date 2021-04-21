@@ -24,7 +24,7 @@ public class Database {
     public Database() {
         this.client = new MongoClient(new MongoClientURI(CorePlugin.getInstance().getDatabaseConfig().getString("mongodb.url")));
 
-        this.database = client.getDatabase(CorePlugin.getInstance().getDatabaseConfig().getString("mongodb.database"));
+        this.database = client.getDatabase(CorePlugin.getInstance().getDatabaseConfig().getConfiguration().getString("mongodb.database", "SGSoftware"));
 
         this.playerCollection = this.database.getCollection("coreprofiles");
         this.prefixCollection = this.database.getCollection("prefix");
