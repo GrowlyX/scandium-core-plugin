@@ -36,34 +36,43 @@ public abstract class ScoreBoard {
         this.player = player;
 
         this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-        this.sidebar = this.scoreboard.registerNewObjective("sidebar", "dummy");
+        this.sidebar = scoreboard.registerNewObjective("sidebar", "dummy");
         this.sidebar.setDisplaySlot(DisplaySlot.SIDEBAR);
 
-        player.setScoreboard(this.scoreboard);
+        final Objective tab = scoreboard.registerNewObjective("tab", "health");
+        tab.setDisplaySlot(DisplaySlot.PLAYER_LIST);
+
+        player.setScoreboard(scoreboard);
 
         for (int i = 1; i <= 15; i++) {
-            Team team = this.scoreboard.registerNewTeam("SLOT_" + i);
+            Team team = scoreboard.registerNewTeam("SLOT_" + i);
             team.addEntry(genEntry(i));
         }
 
         ScoreBoard.getAllBoards().put(player.getUniqueId(), this);
     }
 
-    public void setTitle() {
-        String title = this.getTitle();
+    public void setupHearts() {
+        final Objective name = scoreboard.registerNewObjective("name", "health");
+
+        name.setDisplaySlot(DisplaySlot.BELOW_NAME);
+        name.setDisplayName("§4❤");
+    }
+
+    public void setTitle(String title) {
         title = Color.translate(title);
 
         if (title.length() > 32) title = title.substring(0, 32);
-        if (!this.sidebar.getDisplayName().equals(title)) this.sidebar.setDisplayName(title);
+        if (!sidebar.getDisplayName().equals(title)) sidebar.setDisplayName(title);
     }
 
     private void setSlot(int slot, String text) {
         if (slot > 15) return;
 
-        Team team = this.scoreboard.getTeam("SLOT_" + slot);
+        Team team = scoreboard.getTeam("SLOT_" + slot);
         String entry = genEntry(slot);
 
-        if (!this.scoreboard.getEntries().contains(entry)) this.sidebar.getScore(entry).setScore(slot);
+        if (!scoreboard.getEntries().contains(entry)) sidebar.getScore(entry).setScore(slot);
 
         String prefix = getFirstSplit(text);
 
@@ -80,30 +89,17 @@ public abstract class ScoreBoard {
 
     private void removeSlot(int slot) {
         String entry = genEntry(slot);
-
-        if (this.scoreboard.getEntries().contains(entry)) {
-            this.scoreboard.resetScores(entry);
-        }
+        if (scoreboard.getEntries().contains(entry)) scoreboard.resetScores(entry);
     }
 
-    public void setSlotsFromList() {
-        AtomicInteger slot = new AtomicInteger(this.getLines().size());
+    public void setSlotsFromList(List<String> list) {
+        int slot = list.size();
+        if (slot < 15) for (int i = (slot + 1); i <= 15; i++) removeSlot(i);
 
-        if (slot.get() < 15) {
-            for (int i = (slot.get() + 1); i <= 15; i++) {
-                this.removeSlot(i);
-            }
-        } else {
-            for (String line : this.getLines()) {
-                this.setSlot(slot.get(), line);
-                slot.getAndDecrement();
-            }
+        for (String line : list) {
+            setSlot(slot, line);
+            slot--;
         }
-    }
-
-    public void updateForPlayer() {
-        this.setSlotsFromList();
-        this.setTitle();
     }
 
     private String genEntry(int slot) {
