@@ -1,6 +1,5 @@
 package com.solexgames.core.manager;
 
-import com.mongodb.Block;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.punishment.Punishment;
@@ -9,15 +8,18 @@ import com.solexgames.core.player.punishment.PunishmentType;
 import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
-import com.solexgames.core.util.UUIDUtil;
 import lombok.Getter;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class PunishmentManager {
@@ -26,7 +28,7 @@ public class PunishmentManager {
     private final ArrayList<Punishment> punishments = new ArrayList<>();
 
     public PunishmentManager() {
-        CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().find().forEach((Block<? super Document>) punishmentDocument -> {
+        CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().find().forEach((Consumer<? super Document>) punishmentDocument -> {
             final Punishment punishment = new Punishment(
                     PunishmentType.valueOf(punishmentDocument.getString("punishmentType")),
                     (punishmentDocument.getString("issuer") != null ? UUID.fromString(punishmentDocument.getString("issuer")) : null),
@@ -60,7 +62,7 @@ public class PunishmentManager {
     }
 
     public void savePunishments() {
-        this.punishments.forEach(Punishment::saveMainThread);
+        this.punishments.forEach(Punishment::savePunishment);
     }
 
     public void handlePunishment(Punishment punishment, String issuer, Document targetDocument, boolean silent) {

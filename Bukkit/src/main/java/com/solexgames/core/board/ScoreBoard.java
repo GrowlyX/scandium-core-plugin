@@ -14,7 +14,6 @@ import org.bukkit.scoreboard.Team;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author GrowlyX
@@ -30,89 +29,117 @@ public abstract class ScoreBoard {
 
     private Player player;
     private Scoreboard scoreboard;
-    private Objective sidebar;
+    private Objective objective;
 
     public ScoreBoard(Player player) {
         this.player = player;
 
         this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-        this.sidebar = scoreboard.registerNewObjective("sidebar", "dummy");
-        this.sidebar.setDisplaySlot(DisplaySlot.SIDEBAR);
+        this.objective = this.scoreboard.registerNewObjective("sidebar", "dummy");
+        this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
-        final Objective tab = scoreboard.registerNewObjective("tab", "health");
-        tab.setDisplaySlot(DisplaySlot.PLAYER_LIST);
-
-        player.setScoreboard(scoreboard);
+        this.player.setScoreboard(this.scoreboard);
 
         for (int i = 1; i <= 15; i++) {
-            Team team = scoreboard.registerNewTeam("SLOT_" + i);
-            team.addEntry(genEntry(i));
+            final Team team = this.scoreboard.registerNewTeam("SLOT_" + i);
+            team.addEntry(this.getNewEntry(i));
         }
 
         ScoreBoard.getAllBoards().put(player.getUniqueId(), this);
     }
 
-    public void setupHearts() {
-        final Objective name = scoreboard.registerNewObjective("name", "health");
+    public ScoreBoard enableBelowNameTagHearts() {
+        final Objective objective = this.scoreboard.registerNewObjective("name", "health");
 
-        name.setDisplaySlot(DisplaySlot.BELOW_NAME);
-        name.setDisplayName("§4❤");
+        objective.setDisplaySlot(DisplaySlot.BELOW_NAME);
+        objective.setDisplayName("§4❤");
+
+        return this;
+    }
+
+    public ScoreBoard enableTabListHearts() {
+        final Objective tab = this.scoreboard.registerNewObjective("tab", "health");
+        tab.setDisplaySlot(DisplaySlot.PLAYER_LIST);
+
+        return this;
     }
 
     public void setTitle(String title) {
+        if (title.length() > 32) {
+            title = title.substring(0, 32);
+        }
+
         title = Color.translate(title);
 
-        if (title.length() > 32) title = title.substring(0, 32);
-        if (!sidebar.getDisplayName().equals(title)) sidebar.setDisplayName(title);
+        this.objective.setDisplayName(title);
     }
 
     private void setSlot(int slot, String text) {
-        if (slot > 15) return;
+        if (slot < 15) {
+            final Team team = this.scoreboard.getTeam("SLOT_" + slot);
+            final String entry = this.getNewEntry(slot);
 
-        Team team = scoreboard.getTeam("SLOT_" + slot);
-        String entry = genEntry(slot);
+            if (!this.scoreboard.getEntries().contains(entry)) {
+                this.objective.getScore(entry).setScore(slot);
+            }
 
-        if (!scoreboard.getEntries().contains(entry)) sidebar.getScore(entry).setScore(slot);
+            String prefix = this.getFirstSplit(text);
+            int lastIndex = prefix.lastIndexOf(167);
 
-        String prefix = getFirstSplit(text);
+            String lastColor = lastIndex >= 14 ? prefix.substring(lastIndex) : ChatColor.getLastColors(prefix);
 
-        int lastIndex = prefix.lastIndexOf(167);
-        String lastColor = lastIndex >= 14 ? prefix.substring(lastIndex) : ChatColor.getLastColors(prefix);
+            if (lastIndex >= 14) {
+                prefix = prefix.substring(0, lastIndex);
+            }
 
-        if (lastIndex >= 14) prefix = prefix.substring(0, lastIndex);
+            String suffix = this.getFirstSplit(lastColor + this.getSecondSplit(text));
 
-        String suffix = getFirstSplit(lastColor + getSecondSplit(text));
-
-        if (!team.getPrefix().equals(prefix)) team.setPrefix(prefix);
-        if (!team.getSuffix().equals(suffix)) team.setSuffix(suffix);
+            if (!team.getPrefix().equals(prefix)) {
+                team.setPrefix(prefix);
+            }
+            if (!team.getSuffix().equals(suffix)) {
+                team.setSuffix(suffix);
+            }
+        }
     }
 
     private void removeSlot(int slot) {
-        String entry = genEntry(slot);
-        if (scoreboard.getEntries().contains(entry)) scoreboard.resetScores(entry);
+        final String entry = this.getNewEntry(slot);
+
+        if (scoreboard.getEntries().contains(entry)) {
+            this.scoreboard.resetScores(entry);
+        }
     }
 
     public void setSlotsFromList(List<String> list) {
         int slot = list.size();
-        if (slot < 15) for (int i = (slot + 1); i <= 15; i++) removeSlot(i);
+
+        if (slot < 15) {
+            for (int i = (slot + 1); i <= 15; i++) {
+                this.removeSlot(i);
+            }
+        }
 
         for (String line : list) {
-            setSlot(slot, line);
+            this.setSlot(slot, line);
             slot--;
         }
     }
 
-    private String genEntry(int slot) {
+    private String getNewEntry(int slot) {
         return ChatColor.values()[slot].toString();
     }
 
-    private String getFirstSplit(String s) {
-        return s.length() > 16 ? s.substring(0, 16) : s;
+    private String getFirstSplit(String string) {
+        return string.length() > 16 ? string.substring(0, 16) : string;
     }
 
-    private String getSecondSplit(String s) {
-        if (s.length() > 32) s = s.substring(0, 32);
-        return s.length() > 16 ? s.substring(16) : "";
+    private String getSecondSplit(String string) {
+        if (string.length() > 32) {
+            string = string.substring(0, 32);
+        }
+
+        return string.length() > 16 ? string.substring(16) : "";
     }
 
     public void remove() {

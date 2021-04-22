@@ -48,13 +48,20 @@ public final class UUIDUtil {
         String formattedUUID = uuid.toString().replace("-", "");
 
         try {
-            final URL url = new URL("https://api.mojang.com/users/profiles/minecraft/" + formattedUUID);
-            final JsonObject json = new JsonParser().parse(new InputStreamReader(url.openStream())).getAsJsonObject();
+            HttpGet request = new HttpGet("https://sessionserver.mojang.com/session/minecraft/profile/" + formattedUUID);
+            HttpResponse response = CorePlugin.getInstance().getHttpClient().execute(request);
 
-            return json.get("name").toString().replace("\"", "");
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+            String textResponse = bufferedReader.lines().collect(Collectors.joining(" "));
+
+            Map map = CorePlugin.GSON.fromJson(textResponse, Map.class);
+            return map.get("name").toString();
+
         } catch (Exception exception) {
-            return null;
+            exception.printStackTrace();
         }
+
+        return null;
     }
 
     /**

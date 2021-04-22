@@ -304,19 +304,12 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                     break;
                 case PUNISHMENT_REMOVE_UPDATE:
                     if (!SERVER_NAME.equals(jsonAppender.getParam("SERVER"))) {
-                        Punishment punishment = null;
+                        Punishment finalPunishment = Punishment.getByIdentification(jsonAppender.getParam("ID"));
 
                         UUID removerUuid = UUID.fromString(jsonAppender.getParam("REMOVERUUID"));
                         String removerName = jsonAppender.getParam("REMOVERNAME");
                         String removerDisplayName = jsonAppender.getParam("REMOVERDISPLAYNAME");
                         String reason = jsonAppender.getParam("REASON");
-
-                        try {
-                            punishment = Punishment.getByIdentification(jsonAppender.getParam("ID"));
-                        } catch (Exception ignored) {
-                        }
-
-                        Punishment finalPunishment = punishment;
 
                         if (finalPunishment != null) {
                             finalPunishment.setRemoved(true);
@@ -325,7 +318,7 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                             finalPunishment.setActive(false);
                             finalPunishment.setRemoverName(removerName);
 
-                            String punishedName = UUIDUtil.fetchName(punishment.getTarget());
+                            String punishedName = CorePlugin.getInstance().getUuidCache().getUsernameFromUuid(finalPunishment.getTarget());
 
                             if (reason.endsWith("-s")) {
                                 Bukkit.getOnlinePlayers()
@@ -347,7 +340,7 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                             if (targetPlayer != null) {
                                 PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(targetPlayer);
 
-                                switch (punishment.getPunishmentType()) {
+                                switch (finalPunishment.getPunishmentType()) {
                                     case MUTE:
                                         potPlayer.setCurrentlyMuted(false);
                                         break;

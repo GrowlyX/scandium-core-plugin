@@ -39,6 +39,6 @@ public class PrefixManager {
     }
 
     public void savePrefixes() {
-        Prefix.getPrefixes().forEach(Prefix::savePrefixMainThread);
+        Prefix.getPrefixes().forEach(Prefix::savePrefix);
     }
 }

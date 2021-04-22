@@ -55,14 +55,14 @@ public class PlayerListener implements Listener {
         event.allow();
     }
 
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPreLoginCheck(AsyncPlayerPreLoginEvent event) {
         if (event.getLoginResult().equals(AsyncPlayerPreLoginEvent.Result.ALLOWED)) {
             final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getUniqueId());
             final boolean isHub = CorePlugin.getInstance().getServerName().toLowerCase().contains("hub") || CorePlugin.getInstance().getServerName().toLowerCase().contains("lobby");
 
             if (potPlayer != null) {
-                if (potPlayer.isCurrentlyRestricted() && !isHub) {
+                if (potPlayer.isCurrentlyRestricted() || potPlayer.isCurrentlyBlacklisted() && !isHub) {
                     event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, potPlayer.getRestrictionMessage());
                 } else if (!potPlayer.findIpRelative(event, isHub)) {
                     event.allow();
@@ -147,11 +147,9 @@ public class PlayerListener implements Listener {
     public void onMove(PlayerMoveEvent event) {
         final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer());
 
-        if (potPlayer != null) {
-            if (potPlayer.isFrozen()) {
-                event.setCancelled(true);
-                event.getPlayer().teleport(event.getFrom());
-            }
+        if (potPlayer != null && potPlayer.isFrozen()) {
+            event.setCancelled(true);
+            event.getPlayer().teleport(event.getFrom());
         }
     }
 
@@ -161,10 +159,8 @@ public class PlayerListener implements Listener {
             final Player player = (Player) event.getEntity();
             final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
-            if (potPlayer != null) {
-                if (potPlayer.isFrozen()) {
-                    event.setCancelled(true);
-                }
+            if (potPlayer != null && potPlayer.isFrozen()) {
+                event.setCancelled(true);
             }
         }
     }
@@ -203,7 +199,7 @@ public class PlayerListener implements Listener {
             event.setCancelled(true);
         }
 
-        boolean filtered = CorePlugin.getInstance().getFilterManager().isMessageFiltered(player, message);
+        final boolean filtered = CorePlugin.getInstance().getFilterManager().isMessageFiltered(player, message);
         if (filtered) {
             if (player.hasPermission("scandium.filter.bypass")) {
                 player.sendMessage(ChatColor.RED + "Be careful, that message would have been filtered!");
@@ -228,10 +224,10 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        Matcher discordMatcher = MediaConstants.DISCORD_USERNAME_REGEX.matcher(event.getMessage());
-        Matcher twitterMatcher = MediaConstants.TWITTER_USERNAME_REGEX.matcher(event.getMessage());
-        Matcher instaMatcher = MediaConstants.INSTAGRAM_USERNAME_REGEX.matcher(event.getMessage());
-        Matcher youtubeMatcher = MediaConstants.YOUTUBE_PROFILE_LINK_REGEX.matcher(event.getMessage());
+        final Matcher discordMatcher = MediaConstants.DISCORD_USERNAME_REGEX.matcher(event.getMessage());
+        final Matcher twitterMatcher = MediaConstants.TWITTER_USERNAME_REGEX.matcher(event.getMessage());
+        final Matcher instaMatcher = MediaConstants.INSTAGRAM_USERNAME_REGEX.matcher(event.getMessage());
+        final Matcher youtubeMatcher = MediaConstants.YOUTUBE_PROFILE_LINK_REGEX.matcher(event.getMessage());
 
         if (potPlayer.isGrantDurationEditing()) {
             event.setCancelled(true);
@@ -353,7 +349,7 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (CorePlugin.getInstance().getServerManager().isChatEnabled()) {
+        if (CorePlugin.getInstance().getServerManager().isChatEnabled() || player.hasPermission("scandium.chat.bypass")) {
             if (!potPlayer.isCurrentlyMuted()) {
                 if (!CorePlugin.getInstance().getServerSettings().isChatFormatEnabled()) {
                     return;
@@ -365,36 +361,24 @@ public class PlayerListener implements Listener {
                 event.getPlayer().sendMessage(Color.translate(PunishmentStrings.MUTE_MESSAGE));
             }
         } else {
-            if (player.hasPermission("scandium.chat.bypass")) {
-                if (!potPlayer.isCurrentlyMuted()) {
-                    if (!CorePlugin.getInstance().getServerSettings().isChatFormatEnabled()) {
-                        return;
-                    }
+            event.setCancelled(true);
 
-                    this.checkChannel(event, player, potPlayer);
-                } else {
-                    event.setCancelled(true);
-                    event.getPlayer().sendMessage(Color.translate(PunishmentStrings.MUTE_MESSAGE));
-                }
-            } else {
-                event.setCancelled(true);
-                switch (potPlayer.getLanguage()) {
-                    case ENGLISH:
-                        player.sendMessage(ChatColor.RED + "The chat is currently muted. Please try chatting again later.");
-                        break;
-                    case FRENCH:
-                        player.sendMessage(ChatColor.RED + "Le chat est actuellement désactivé. Veuillez réessayer plus tard.");
-                        break;
-                    case ITALIAN:
-                        player.sendMessage(ChatColor.RED + "La chat è attualmente disattivata. Prova a chattare di nuovo più tardi.");
-                        break;
-                    case GERMAN:
-                        player.sendMessage(ChatColor.RED + "Der Chat ist derzeit stummgeschaltet. Bitte versuchen Sie es später noch einmal.");
-                        break;
-                    case SPANISH:
-                        player.sendMessage(ChatColor.RED + "El chat está silenciado actualmente. Intenta chatear de nuevo más tarde.");
-                        break;
-                }
+            switch (potPlayer.getLanguage()) {
+                case ENGLISH:
+                    player.sendMessage(ChatColor.RED + "The chat is currently muted. Please try chatting again later.");
+                    break;
+                case FRENCH:
+                    player.sendMessage(ChatColor.RED + "Le chat est actuellement désactivé. Veuillez réessayer plus tard.");
+                    break;
+                case ITALIAN:
+                    player.sendMessage(ChatColor.RED + "La chat è attualmente disattivata. Prova a chattare di nuovo più tardi.");
+                    break;
+                case GERMAN:
+                    player.sendMessage(ChatColor.RED + "Der Chat ist derzeit stummgeschaltet. Bitte versuchen Sie es später noch einmal.");
+                    break;
+                case SPANISH:
+                    player.sendMessage(ChatColor.RED + "El chat está silenciado actualmente. Intenta chatear de nuevo más tarde.");
+                    break;
             }
         }
     }

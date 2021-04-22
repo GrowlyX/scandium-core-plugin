@@ -81,7 +81,7 @@ public class PunishViewPaginatedMenu extends PaginatedMenu {
             lore.add(network.getMainColor() + "&m------------------------------------");
 
             if (punishment.isRemoved()) {
-                lore.add("&eRemoved By: &b" + network.getMainColor() + (punishment.getRemoverName() != null ? (punishment.getRemoverName().equals("Console") ? "&4Console" : UUIDUtil.fetchName(punishment.getRemover())) : "Not recorded"));
+                lore.add("&eRemoved By: &b" + network.getMainColor() + (punishment.getRemoverName() != null ? (punishment.getRemoverName().equals("Console") ? "&4Console" : CorePlugin.getInstance().getUuidCache().getUsernameFromUuid(punishment.getTarget())) : "Not recorded"));
                 lore.add("&eRemoved Reason: &b" + network.getMainColor() + punishment.getRemovalReason());
                 lore.add(network.getMainColor() + "&m------------------------------------");
             }

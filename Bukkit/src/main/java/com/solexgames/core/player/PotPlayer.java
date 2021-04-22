@@ -160,12 +160,9 @@ public class PotPlayer {
         this.hasLoaded = false;
 
         this.syncCode = SaltUtil.getRandomSaltedString(6);
+        this.encryptedIpAddress = CorePlugin.getInstance().getCryptoManager().encrypt(this.ipAddress);
 
-        CompletableFuture.runAsync(() -> {
-            this.loadPlayerData();
-
-            this.encryptedIpAddress = CorePlugin.getInstance().getCryptoManager().encrypt(this.ipAddress);
-        });
+        this.loadPlayerData();
 
         CorePlugin.getInstance().getPlayerManager().getAllProfiles().put(uuid, this);
     }

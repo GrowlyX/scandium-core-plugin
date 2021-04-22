@@ -145,12 +145,12 @@ public final class CorePlugin extends JavaPlugin {
                 this.databaseConfig.getString("redis.authentication.password")
         ));
 
+        this.punishmentManager = new PunishmentManager();
         this.cryptoManager = new CryptoManager();
         this.reportManager = new ReportManager();
         this.serverManager = new ServerManager();
         this.rankManager = new RankManager();
         this.prefixManager = new PrefixManager();
-        this.punishmentManager = new PunishmentManager();
         this.playerManager = new PlayerManager();
         this.discordManager = new DiscordManager();
         this.filterManager = new FilterManager();
@@ -317,6 +317,7 @@ public final class CorePlugin extends JavaPlugin {
 
         this.getServer().getOnlinePlayers().forEach(player -> player.kickPlayer(Color.translate("&cThe server is currently rebooting.\n&cPlease reconnect in a few minutes, or check discord for more information.")));
 
+        this.punishmentManager.savePunishments();
         this.prefixManager.savePrefixes();
 
         if (this.redisManager.isActive()) {

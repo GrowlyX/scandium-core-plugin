@@ -15,7 +15,7 @@ public class UUIDCache extends HashMap<String, UUID> {
      * <p>
      *
      * @param playerName Player's name
-     * @return The player's UUID from the cache, or if not from 's API, or else null.
+     * @return The player's UUID from the cache, or if not from mojang's API, or else null.
      */
     public UUID getUuidFromUsername(String playerName) {
         if (playerName == null || playerName.equals("")) {
@@ -28,6 +28,29 @@ public class UUIDCache extends HashMap<String, UUID> {
             return UUIDUtil.fetchUUID(playerName);
         } else {
             return this.getOrDefault(playerName, null);
+        }
+    }
+
+    /**
+     * Fetches a Username from a uuid in the cache
+     * <p>
+     *
+     * @param uuid Player's uuid
+     * @return The player's Username from the cache, or if not from mojang's API, or else null.
+     */
+    public String getUsernameFromUuid(UUID uuid) {
+        if (uuid != null) {
+            final Entry<String, UUID> entry = this.entrySet().stream()
+                    .filter(stringUUIDEntry -> stringUUIDEntry.getValue().toString().equals(uuid.toString()))
+                    .findFirst().orElse(null);
+
+            if (entry == null) {
+                return UUIDUtil.fetchName(uuid);
+            } else {
+                return entry.getKey();
+            }
+        } else {
+            return null;
         }
     }
 }
