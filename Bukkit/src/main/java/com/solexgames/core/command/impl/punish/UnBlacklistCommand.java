@@ -29,7 +29,7 @@ public class UnBlacklistCommand extends BaseCommand {
             final String message = StringUtil.buildMessage(args, 1);
 
             if (document != null) {
-                CorePlugin.getInstance().getPunishmentManager().handleUnPunishment(document, message, (sender instanceof Player ? (Player) sender : null), PunishmentType.BLACKLIST);
+                CorePlugin.getInstance().getPunishmentManager().handleUnPunishment(document, message, (sender instanceof Player ? (Player) sender : null), PunishmentType.BLACKLIST, true);
             } else {
                 sender.sendMessage(ChatColor.RED + "Error: That player does not exist in our database.");
             }

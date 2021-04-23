@@ -251,7 +251,7 @@ public class PotPlayer {
                     .forEach(this.punishments::add);
 
             this.getPunishments().stream()
-                    .filter(punishment -> punishment != null && punishment.isActive() && (System.currentTimeMillis() <= punishment.getCreatedAt().getTime() + punishment.getPunishmentDuration() || punishment.isPermanent()) && !punishment.isRemoved())
+                    .filter(punishment -> punishment != null && punishment.isActive() && (System.currentTimeMillis() >= punishment.getCreatedAt().getTime() + punishment.getPunishmentDuration() || punishment.isPermanent()) && !punishment.isRemoved())
                     .forEach(punishment -> {
                         switch (punishment.getPunishmentType()) {
                             case WARN:
@@ -498,11 +498,11 @@ public class PotPlayer {
                     this.allPrefixes.addAll(prefixes);
                 }
             }
-
-            if (this.player.hasPermission("scandium.staff") && !CorePlugin.getInstance().getPlayerManager().isOnline(this.player.getName())) {
-                RedisUtil.writeAsync(RedisUtil.onConnect(this.player));
-            }
         });
+
+        if (this.player.hasPermission("scandium.staff") && !CorePlugin.getInstance().getPlayerManager().isOnline(this.player.getName())) {
+            RedisUtil.writeAsync(RedisUtil.onConnect(this.player));
+        }
     }
 
     public String getWarningMessage() {

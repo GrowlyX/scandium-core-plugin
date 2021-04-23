@@ -75,6 +75,20 @@ public class Rank {
         ranks.add(this);
     }
 
+    public Rank(UUID uuid, String name) {
+        this.uuid = uuid;
+        this.inheritance = new ArrayList<>();
+        this.permissions = new ArrayList<>();
+        this.name = name;
+        this.prefix = "&7";
+        this.color = "&7";
+        this.suffix = "";
+        this.defaultRank = true;
+        this.weight = 0;
+
+        ranks.add(this);
+    }
+
     public boolean isItalic() {
         return this.italic;
     }

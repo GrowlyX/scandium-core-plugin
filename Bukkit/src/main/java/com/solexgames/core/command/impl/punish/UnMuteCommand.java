@@ -29,7 +29,7 @@ public class UnMuteCommand extends BaseCommand {
             final String message = StringUtil.buildMessage(args, 1);
 
             if (document != null) {
-                CorePlugin.getInstance().getPunishmentManager().handleUnPunishment(document, message, (sender instanceof Player ? (Player) sender : null), PunishmentType.MUTE);
+                CorePlugin.getInstance().getPunishmentManager().handleUnPunishment(document, message, (sender instanceof Player ? (Player) sender : null), PunishmentType.MUTE, true);
             } else {
                 sender.sendMessage(ChatColor.RED + "Error: That player does not exist in our database.");
             }

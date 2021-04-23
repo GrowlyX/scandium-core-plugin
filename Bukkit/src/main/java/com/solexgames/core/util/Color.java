@@ -4,6 +4,7 @@ import com.solexgames.core.CorePlugin;
 import lombok.experimental.UtilityClass;
 import org.bukkit.ChatColor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,7 +23,13 @@ public final class Color {
     }
 
     public static List<String> translate(List<String> text) {
-        return text.stream().map(Color::translate).collect(Collectors.toList());
+        final List<String> newList = new ArrayList<>();
+
+        for (String string : text) {
+            newList.add(Color.translate(string));
+        }
+
+        return newList;
     }
 
     /**

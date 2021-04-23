@@ -31,6 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandMap;
 import org.bukkit.plugin.SimplePluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -164,8 +165,8 @@ public final class CorePlugin extends JavaPlugin {
 
         new ServerLoadingTask();
 
-        this.getServer().getMessenger().registerOutgoingPluginChannel(this, "core-permissions");
-        this.getServer().getMessenger().registerOutgoingPluginChannel(this, "core-update");
+        this.getServer().getMessenger().registerOutgoingPluginChannel(this, "core:permissions");
+        this.getServer().getMessenger().registerOutgoingPluginChannel(this, "core:update");
     }
 
     private void setupSettings() {
@@ -315,12 +316,11 @@ public final class CorePlugin extends JavaPlugin {
 
         RedisUtil.write(RedisUtil.onServerOffline());
 
-        this.getServer().getOnlinePlayers().forEach(player -> player.kickPlayer(Color.translate("&cThe server is currently rebooting.\n&cPlease reconnect in a few minutes, or check discord for more information.")));
+        this.getServer().getOnlinePlayers().forEach(player -> player.kickPlayer(ChatColor.RED + "The server is currently rebooting.\n&cPlease reconnect in a few minutes, or check discord for more information."));
 
-        this.punishmentManager.savePunishments();
         this.prefixManager.savePrefixes();
 
-        if (this.redisManager.isActive()) {
+        if (this.redisManager != null && this.redisManager.isActive()) {
             this.redisManager.unsubscribe();
         }
     }

@@ -62,7 +62,7 @@ public class Punishment {
         this.punishIdentification = punishIdentification;
         this.active = active;
 
-        savePunishment();
+        this.savePunishment();
     }
 
     public static ArrayList<Punishment> getAllPunishments() {
@@ -108,12 +108,12 @@ public class Punishment {
 
     public void savePunishment() {
         CompletableFuture.runAsync(() ->
-                CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().replaceOne(Filters.eq("_id", this.id), this.getDocument(), new ReplaceOptions().upsert(true))
+                CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().replaceOne(Filters.eq("id", this.id.toString()), this.getDocument(), new ReplaceOptions().upsert(true))
         );
     }
 
     public void saveMainThread() {
-        CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().replaceOne(Filters.eq("_id", this.id), this.getDocument(), new ReplaceOptions().upsert(true));
+        CorePlugin.getInstance().getCoreDatabase().getPunishmentCollection().replaceOne(Filters.eq("id", this.id.toString()), this.getDocument(), new ReplaceOptions().upsert(true));
     }
 
     public String getDurationString() {
@@ -132,7 +132,7 @@ public class Punishment {
         } else if (this.isPermanent()) {
             return true;
         } else {
-            return System.currentTimeMillis() <= this.createdAt.getTime() + this.punishmentDuration;
+            return System.currentTimeMillis() >= this.createdAt.getTime() + this.punishmentDuration;
         }
     }
 

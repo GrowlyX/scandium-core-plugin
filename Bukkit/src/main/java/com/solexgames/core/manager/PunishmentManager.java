@@ -7,6 +7,7 @@ import com.solexgames.core.player.punishment.PunishmentStrings;
 import com.solexgames.core.player.punishment.PunishmentType;
 import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.util.Color;
+import com.solexgames.core.util.PlayerUtil;
 import com.solexgames.core.util.RedisUtil;
 import lombok.Getter;
 import org.bson.Document;
@@ -135,7 +136,7 @@ public class PunishmentManager {
         }
     }
 
-    public void handleUnPunishment(Document document, String message, Player player, PunishmentType punishmentType) {
+    public void handleUnPunishment(Document document, String message, Player player, PunishmentType punishmentType, boolean handleRedis) {
         CompletableFuture.runAsync(() -> {
             final Rank playerRank = Rank.getByName(document.getString("rankName"));
             final String playerName = document.getString("name");
@@ -176,17 +177,17 @@ public class PunishmentManager {
                 punishment.setRemoverName((player != null ? player.getName() : null));
 
                 if (message.endsWith("-s")) {
-                    Bukkit.getOnlinePlayers().stream().filter(player1 -> player1.hasPermission("scandium.staff")).forEach(player1 -> player1.sendMessage(Color.translate(
-                            "&7[S] " + (playerRank != null ? playerRank.getColor() + playerRank.getItalic() : ChatColor.GRAY) + playerName + " &awas " + "un" + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (player != null ? player.getDisplayName() : "Console") + ChatColor.GREEN + "."
-                    )));
+                    PlayerUtil.sendToStaff("&7[S] " + (playerRank != null ? playerRank.getColor() + playerRank.getItalic() : ChatColor.GRAY) + playerName + " &awas " + "un" + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (player != null ? player.getDisplayName() : "Console") + ChatColor.GREEN + ".");
                 } else {
                     Bukkit.broadcastMessage(Color.translate(
                             "&7" + (playerRank != null ? playerRank.getColor() + playerRank.getItalic() : ChatColor.GRAY) + playerName + " &awas un" + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (player != null ? player.getDisplayName() : "Console") + ChatColor.GREEN + "."
                     ));
                 }
 
-                punishment.savePunishment();
-                RedisUtil.writeAsync(RedisUtil.removePunishment(player, punishment, message));
+                if (handleRedis) {
+                    punishment.savePunishment();
+                    RedisUtil.writeAsync(RedisUtil.removePunishment(player, punishment, message));
+                }
 
                 final Player targetPlayer = Bukkit.getPlayer(punishment.getTarget());
 

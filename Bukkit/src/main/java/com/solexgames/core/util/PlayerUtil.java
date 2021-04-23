@@ -30,7 +30,6 @@ public final class PlayerUtil {
         }
     }
 
-
     private static Method getHandleMethod;
     private static Field pingField;
 
@@ -61,5 +60,22 @@ public final class PlayerUtil {
         } catch (Exception e) {
             return 1;
         }
+    }
+
+    public static void sendTo(String message, String permission) {
+        Bukkit.getOnlinePlayers().stream()
+                .filter(player -> player.hasPermission(permission))
+                .forEach(player -> player.sendMessage(Color.translate(message)));
+    }
+
+    public static void sendToStaff(String message) {
+        Bukkit.getOnlinePlayers().stream()
+                .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
+                .filter(Objects::nonNull)
+                .filter(potPlayer -> potPlayer.getPlayer().hasPermission("scandium.staff"))
+                .filter(PotPlayer::isCanSeeStaffMessages)
+                .forEach(potPlayer -> {
+                    potPlayer.getPlayer().sendMessage(Color.translate(message));
+                });
     }
 }
