@@ -5,7 +5,7 @@ package com.solexgames.core.serializer;
  * @since 4/20/2021
  */
 
-public abstract class DataSerializer<T> implements ISerializer {
+public abstract class DataSerializer<T> {
 
     /**
      * Get the class

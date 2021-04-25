@@ -112,9 +112,7 @@ public class PunishViewPaginatedMenu extends PaginatedMenu {
 
     private List<Punishment> getSortedPunishmentsByType() {
         return Punishment.getAllPunishments().stream()
-                .filter(Objects::nonNull)
-                .filter(punishment -> punishment.getPunishmentType() == this.punishmentType)
-                .filter(punishment -> punishment.getTarget().equals(this.getTargetUuid()))
+                .filter(punishment -> punishment != null && punishment.getPunishmentType().equals(this.punishmentType) && punishment.getTarget().equals(this.getTargetUuid()))
                 .sorted(Comparator.comparingLong(Punishment::getCreatedAtLong).reversed())
                 .collect(Collectors.toList());
     }

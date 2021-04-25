@@ -29,10 +29,12 @@ import com.solexgames.core.util.external.ConfigExternal;
 import com.solexgames.core.uuid.UUIDCache;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang.time.DurationFormatUtils;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandMap;
+import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.SimplePluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -266,7 +268,7 @@ public final class CorePlugin extends JavaPlugin {
 
         final String extra = (beta ? " (Beta)" : "") + (dev ? " (Experimental)" : "") + (stable ? " (Stable)" : "");
 
-        this.getLogger().info("Initialized CorePlugin in " + (System.currentTimeMillis() - milli) + "ms.");
+        this.getLogger().info("Initialized CorePlugin in " + (System.currentTimeMillis() - milli) + "ms (" + DurationFormatUtils.formatDurationWords((System.currentTimeMillis() - milli), true, true) + ").");
 
         this.logConsole("&7You are currently running version &e" + version
                 .replace("-BETA", "")

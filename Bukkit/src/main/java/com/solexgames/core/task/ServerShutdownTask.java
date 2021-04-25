@@ -35,8 +35,13 @@ public class ServerShutdownTask extends BukkitRunnable {
                 Bukkit.broadcastMessage(Color.SECONDARY_COLOR + "The server will be shutting down in " + Color.MAIN_COLOR + finalSeconds + " seconds" + Color.SECONDARY_COLOR + ".");
                 break;
             case 5:
-                Bukkit.getOnlinePlayers().forEach(player -> player.kickPlayer(Color.translate("&cThe server is currently rebooting...\n&cPlease reconnect in a few minutes.")));
+                Bukkit.getOnlinePlayers().forEach(player -> player.kickPlayer(
+                        ChatColor.RED + "The server is currently rebooting...\n" + ChatColor.RED + "Please reconnect in a few minutes."
+                ));
+                break;
+            case 3:
                 CorePlugin.getInstance().getServer().shutdown();
+                break;
             default:
                 break;
         }
