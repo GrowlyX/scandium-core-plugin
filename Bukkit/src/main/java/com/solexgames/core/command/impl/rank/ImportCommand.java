@@ -95,6 +95,6 @@ public class ImportCommand extends BaseCommand {
 
     @Override
     public List<String> getAliases() {
-        return Arrays.asList("import", "importrankdata");
+        return Arrays.asList("importrankdata");
     }
 }
