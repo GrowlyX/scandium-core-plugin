@@ -64,4 +64,9 @@ public class HelpOpCommand extends BaseCommand {
     public List<String> getAliases() {
         return Arrays.asList("request", "helpme");
     }
+
+    @Override
+    public boolean isHidden() {
+        return false;
+    }
 }

@@ -22,4 +22,9 @@ public class StoreCommand extends BaseCommand {
     public List<String> getAliases() {
         return new ArrayList<>();
     }
+
+    @Override
+    public boolean isHidden() {
+        return false;
+    }
 }

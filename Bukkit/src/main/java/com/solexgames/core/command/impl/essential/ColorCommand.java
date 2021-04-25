@@ -34,4 +34,9 @@ public class ColorCommand extends BaseCommand {
     public List<String> getAliases() {
         return Arrays.asList("chatcolor", "chatcolors");
     }
+
+    @Override
+    public boolean isHidden() {
+        return false;
+    }
 }

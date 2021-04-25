@@ -92,4 +92,9 @@ public class ReplyCommand extends BaseCommand {
     public List<String> getAliases() {
         return Arrays.asList("r");
     }
+
+    @Override
+    public boolean isHidden() {
+        return false;
+    }
 }

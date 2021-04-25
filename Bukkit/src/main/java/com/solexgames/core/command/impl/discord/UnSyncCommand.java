@@ -49,4 +49,9 @@ public class UnSyncCommand extends BaseCommand {
     public List<String> getAliases() {
         return new ArrayList<>();
     }
+
+    @Override
+    public boolean isHidden() {
+        return !Bukkit.getPluginManager().isPluginEnabled("Indium");
+    }
 }

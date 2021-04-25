@@ -28,4 +28,9 @@ public class LanguageCommand extends BaseCommand {
     public List<String> getAliases() {
         return Arrays.asList("lang");
     }
+
+    @Override
+    public boolean isHidden() {
+        return false;
+    }
 }

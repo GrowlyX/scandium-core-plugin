@@ -96,4 +96,9 @@ public class MessageCommand extends BaseCommand {
     public List<String> getAliases() {
         return Arrays.asList("msg", "m", "w", "dm");
     }
+
+    @Override
+    public boolean isHidden() {
+        return false;
+    }
 }

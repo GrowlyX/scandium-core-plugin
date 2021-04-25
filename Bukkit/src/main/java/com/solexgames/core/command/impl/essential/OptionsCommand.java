@@ -28,4 +28,9 @@ public class OptionsCommand extends BaseCommand {
     public List<String> getAliases() {
         return Arrays.asList("settings");
     }
+
+    @Override
+    public boolean isHidden() {
+        return false;
+    }
 }

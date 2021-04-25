@@ -22,4 +22,9 @@ public class DiscordCommand extends BaseCommand {
     public List<String> getAliases() {
         return Arrays.asList("disc");
     }
+
+    @Override
+    public boolean isHidden() {
+        return false;
+    }
 }

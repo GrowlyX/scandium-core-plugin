@@ -1,6 +1,7 @@
 package com.solexgames.core.command.impl;
 
 import com.solexgames.core.CorePlugin;
+import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.impl.ScandiumMenu;
 import com.solexgames.core.util.Color;
@@ -12,14 +13,12 @@ import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.entity.Player;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
-public class CoreCommand extends BukkitCommand {
-
-    public CoreCommand(String name) {
-        super(name, "Base Command for " + name + " Core.", "Usage: /" + name + " <debug|disallow|panel>", Collections.singletonList("core"));
-    }
+public class CoreCommand extends BaseCommand {
 
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
@@ -72,6 +71,12 @@ public class CoreCommand extends BukkitCommand {
                     break;
             }
         }
+
         return false;
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return new ArrayList<>();
     }
 }

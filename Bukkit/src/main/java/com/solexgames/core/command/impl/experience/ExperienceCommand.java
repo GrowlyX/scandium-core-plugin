@@ -137,9 +137,13 @@ public class ExperienceCommand extends BaseCommand {
         ));
     }
 
-
     @Override
     public List<String> getAliases() {
         return Arrays.asList("xp", "exp");
+    }
+
+    @Override
+    public boolean isHidden() {
+        return false;
     }
 }

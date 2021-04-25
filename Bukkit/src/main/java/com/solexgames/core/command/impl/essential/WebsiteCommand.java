@@ -22,4 +22,9 @@ public class WebsiteCommand extends BaseCommand {
     public List<String> getAliases() {
         return Arrays.asList("web");
     }
+
+    @Override
+    public boolean isHidden() {
+        return false;
+    }
 }

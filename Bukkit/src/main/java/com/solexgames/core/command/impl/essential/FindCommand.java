@@ -51,4 +51,9 @@ public class FindCommand extends BaseCommand {
     public List<String> getAliases() {
         return Arrays.asList("search", "lookup");
     }
+
+    @Override
+    public boolean isHidden() {
+        return false;
+    }
 }

@@ -78,4 +78,9 @@ public class ListCommand extends BaseCommand {
     public List<String> getAliases() {
         return Arrays.asList("who", "online");
     }
+
+    @Override
+    public boolean isHidden() {
+        return false;
+    }
 }

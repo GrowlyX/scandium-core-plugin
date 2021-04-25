@@ -39,4 +39,9 @@ public class TogglePrivateMessagesCommand extends BaseCommand {
     public List<String> getAliases() {
         return Arrays.asList("tpm");
     }
+
+    @Override
+    public boolean isHidden() {
+        return false;
+    }
 }
