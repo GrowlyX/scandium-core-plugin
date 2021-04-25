@@ -12,6 +12,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class MessageCommand extends BaseCommand {
 
     @Override
@@ -87,5 +90,10 @@ public class MessageCommand extends BaseCommand {
         }
 
         return false;
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return Arrays.asList("msg", "m", "w", "dm");
     }
 }

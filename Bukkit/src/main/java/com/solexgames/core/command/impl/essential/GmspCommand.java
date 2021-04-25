@@ -1,5 +1,6 @@
 package com.solexgames.core.command.impl.essential;
 
+import com.google.common.collect.Lists;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.PlayerUtil;
@@ -9,6 +10,10 @@ import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class GmspCommand extends BaseCommand {
 
@@ -50,5 +55,10 @@ public class GmspCommand extends BaseCommand {
         }
 
         return false;
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return new ArrayList<>();
     }
 }

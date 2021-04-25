@@ -8,6 +8,9 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SetSpawnCommand extends BaseCommand {
 
     @Override
@@ -37,5 +40,10 @@ public class SetSpawnCommand extends BaseCommand {
         player.sendMessage(ChatColor.GREEN + "The spawn location has been set to your current location!");
 
         return false;
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return new ArrayList<>();
     }
 }

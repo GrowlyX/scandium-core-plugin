@@ -10,6 +10,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class ExperienceCommand extends BaseCommand {
 
     @Override
@@ -132,5 +135,11 @@ public class ExperienceCommand extends BaseCommand {
                 "/experience add <player> <amount>",
                 "/experience remove <player> <amount>"
         ));
+    }
+
+
+    @Override
+    public List<String> getAliases() {
+        return Arrays.asList("xp", "exp");
     }
 }

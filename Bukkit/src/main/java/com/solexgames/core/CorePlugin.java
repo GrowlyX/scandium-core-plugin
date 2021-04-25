@@ -25,6 +25,7 @@ import com.solexgames.core.task.*;
 import com.solexgames.core.util.BukkitUtil;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
+import com.solexgames.core.util.command.CustomCommandMap;
 import com.solexgames.core.util.external.ConfigExternal;
 import com.solexgames.core.uuid.UUIDCache;
 import lombok.Getter;
@@ -33,8 +34,9 @@ import org.apache.commons.lang.time.DurationFormatUtils;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
-import org.bukkit.event.HandlerList;
+import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.plugin.SimplePluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -83,6 +85,7 @@ public final class CorePlugin extends JavaPlugin {
     private HttpClient httpClient;
     private Database coreDatabase;
     private RedisManager redisManager;
+    private String pluginName;
 
     private ConfigExternal ranksConfig;
     private ConfigExternal databaseConfig;
@@ -114,10 +117,17 @@ public final class CorePlugin extends JavaPlugin {
                 .setPrettyPrinting()
                 .create();
 
+        if (!this.swapSimpleCommandMap()) {
+            this.getServer().shutdown();
+            return;
+        }
+
         this.httpClient = new DefaultHttpClient();
 
         this.saveDefaultConfig();
         this.getConfig().options().copyDefaults();
+
+        this.pluginName = this.getConfig().getString("core-settings.command-name");
 
         FORMAT = new SimpleDateFormat("MM/dd/yyyy HH:mma");
         FORMAT.setTimeZone(TimeZone.getTimeZone(this.getConfig().getString("settings.time-zone")));
@@ -260,22 +270,7 @@ public final class CorePlugin extends JavaPlugin {
     }
 
     private void logInformation(long milli) {
-        final String version = this.getDescription().getVersion();
-
-        final boolean beta = (version.contains("BETA"));
-        final boolean stable = (version.contains("STABLE"));
-        final boolean dev = (version.contains("DEV"));
-
-        final String extra = (beta ? " (Beta)" : "") + (dev ? " (Experimental)" : "") + (stable ? " (Stable)" : "");
-
         this.getLogger().info("Initialized CorePlugin in " + (System.currentTimeMillis() - milli) + "ms (" + DurationFormatUtils.formatDurationWords((System.currentTimeMillis() - milli), true, true) + ").");
-
-        this.logConsole("&7You are currently running version &e" + version
-                .replace("-BETA", "")
-                .replace("-STABLE", "")
-                .replace("-DEV", "")
-                + extra + "&7."
-        );
     }
 
     private void registerBukkitCommands() {
@@ -292,7 +287,7 @@ public final class CorePlugin extends JavaPlugin {
             }
 
             if (commandMap != null) {
-                commandMap.register(getConfig().getString("core-settings.command-name"), new CoreCommand(getConfig().getString("core-settings.command-name")));
+                commandMap.register(this.pluginName, new CoreCommand(this.pluginName));
 
                 if (this.getServerManager().getNetwork().equals(ServerType.BLARE)) {
                     commandMap.register("lib", new WebPostCommand());
@@ -306,6 +301,55 @@ public final class CorePlugin extends JavaPlugin {
         }
     }
 
+    public void registerCommand(Command command) {
+        if (this.getServer().getPluginManager() instanceof SimplePluginManager) {
+            CommandMap commandMap = null;
+
+            try {
+                final Field commandMapField = SimplePluginManager.class.getDeclaredField("commandMap");
+
+                commandMapField.setAccessible(true);
+                commandMap = (CommandMap) commandMapField.get(this.getServer().getPluginManager());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+            if (commandMap != null) {
+                commandMap.register(this.pluginName, command);
+            } else {
+                this.getServer().getPluginManager().disablePlugin(this);
+                this.getLogger().warning("Your server software's PluginManager does not contain a commandMap so I cannot register a command. This may be due to the fact you might be running a custom Bukkit/Spigot version.");
+            }
+        } else {
+            this.getLogger().warning("Your server software is running a PluginManager that is unrecognized. This may be due to the fact you might be running a custom Bukkit/Spigot version.");
+        }
+    }
+
+    private boolean swapSimpleCommandMap() {
+        try {
+            final Field commandMapField = this.getServer().getClass().getDeclaredField("commandMap");
+            commandMapField.setAccessible(true);
+
+            final Object oldCommandMap = commandMapField.get(this.getServer());
+            final CustomCommandMap newCommandMap = new CustomCommandMap(this.getServer());
+
+            final Field knownCommandsField = SimpleCommandMap.class.getDeclaredField("knownCommands");
+            knownCommandsField.setAccessible(true);
+
+            final Field modifiersField = Field.class.getDeclaredField("modifiers");
+            modifiersField.setAccessible(true);
+            modifiersField.setInt(knownCommandsField, knownCommandsField.getModifiers() & -17);
+
+            knownCommandsField.set(newCommandMap, knownCommandsField.get(oldCommandMap));
+            commandMapField.set(this.getServer(), newCommandMap);
+
+            return true;
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return false;
+        }
+    }
+
     public void logConsole(String message) {
         this.getServer().getConsoleSender().sendMessage(Color.translate(message));
     }
@@ -316,7 +360,7 @@ public final class CorePlugin extends JavaPlugin {
 
         RedisUtil.write(RedisUtil.onServerOffline());
 
-        this.getServer().getOnlinePlayers().forEach(player -> player.kickPlayer(ChatColor.RED + "The server is currently rebooting.\n&cPlease reconnect in a few minutes, or check discord for more information."));
+        this.getServer().getOnlinePlayers().forEach(player -> player.kickPlayer(ChatColor.RED + "The server is currently rebooting...\n" + ChatColor.GRAY + "Please rejoin in a few minutes."));
 
         this.prefixManager.savePrefixes();
 

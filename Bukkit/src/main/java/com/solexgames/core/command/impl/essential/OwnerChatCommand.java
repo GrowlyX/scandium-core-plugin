@@ -12,6 +12,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class OwnerChatCommand extends BaseCommand {
 
     @Override
@@ -44,5 +47,10 @@ public class OwnerChatCommand extends BaseCommand {
             RedisUtil.writeAsync(RedisUtil.onChatChannel(ChatChannelType.OWNER, message, player));
         }
         return false;
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return Arrays.asList("oc");
     }
 }

@@ -12,7 +12,9 @@ import org.bson.Document;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
@@ -104,5 +106,10 @@ public class KickCommand extends BaseCommand {
         }
 
         return false;
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return new ArrayList<>();
     }
 }

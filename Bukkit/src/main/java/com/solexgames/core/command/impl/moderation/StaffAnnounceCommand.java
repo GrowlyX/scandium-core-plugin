@@ -10,6 +10,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class StaffAnnounceCommand extends BaseCommand {
 
     @Override
@@ -35,5 +38,10 @@ public class StaffAnnounceCommand extends BaseCommand {
         }
 
         return false;
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return Arrays.asList("staffalert", "staffbc");
     }
 }

@@ -9,6 +9,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ForceUpdateCommand extends BaseCommand {
 
     @Override
@@ -27,5 +30,10 @@ public class ForceUpdateCommand extends BaseCommand {
         sender.sendMessage(Color.SECONDARY_COLOR + "You've force updated this server instance: " + Color.MAIN_COLOR + CorePlugin.getInstance().getServerName());
 
         return false;
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return new ArrayList<>();
     }
 }

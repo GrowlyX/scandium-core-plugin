@@ -76,12 +76,14 @@ public class PunishmentManager {
 
         this.punishments.add(punishment);
 
+        final Player issuingPlayer = Bukkit.getPlayerExact(issuer);
+
+        if (issuingPlayer != null) {
+            issuingPlayer.sendMessage(Color.translate((silent ? ChatColor.GRAY + "[Silent] " : "") + ChatColor.GREEN + "You've " + punishmentExplanation + " " + playerFormattedName + ChatColor.GREEN + durationFormat));
+        }
+
         CompletableFuture.runAsync(() -> {
             final Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByName(issuer).orElse(null);
-
-            if (Bukkit.getPlayerExact(issuer) != null) {
-                Bukkit.getPlayerExact(issuer).sendMessage((silent ? ChatColor.GRAY + "[Silent] " : "") + ChatColor.GREEN + "You've " + punishmentExplanation + " " + playerFormattedName + durationFormat);
-            }
 
             if (document != null) {
                 final Rank playerRank = Rank.getByName(document.getString("rankName"));

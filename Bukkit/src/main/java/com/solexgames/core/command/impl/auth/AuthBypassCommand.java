@@ -9,6 +9,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class AuthBypassCommand extends BaseCommand {
 
     @Override
@@ -41,5 +44,10 @@ public class AuthBypassCommand extends BaseCommand {
         sender.sendMessage(ChatColor.GREEN + "You've just granted " + target.getName() + " 2FA bypass.");
 
         return true;
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return Arrays.asList("remove2fa", "bypass2fa");
     }
 }

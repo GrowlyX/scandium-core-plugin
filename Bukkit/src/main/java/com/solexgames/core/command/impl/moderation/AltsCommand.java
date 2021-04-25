@@ -16,6 +16,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -104,5 +105,10 @@ public class AltsCommand extends BaseCommand {
         stringBuilder.append(document.getString("name"));
 
         return stringBuilder.toString();
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return Arrays.asList("alt", "altaccounts");
     }
 }

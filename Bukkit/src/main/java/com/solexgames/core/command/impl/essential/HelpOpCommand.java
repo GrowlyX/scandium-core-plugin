@@ -13,6 +13,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class HelpOpCommand extends BaseCommand {
 
     @Override
@@ -55,5 +58,10 @@ public class HelpOpCommand extends BaseCommand {
             }, 60 * 20L);
         }
         return false;
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return Arrays.asList("request", "helpme");
     }
 }

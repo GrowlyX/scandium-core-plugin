@@ -7,11 +7,20 @@ import com.solexgames.core.util.Color;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class TwitterCommand extends BaseCommand {
 
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
         sender.sendMessage(Color.SECONDARY_COLOR + "Twitter: " + Color.MAIN_COLOR + CorePlugin.getInstance().getServerManager().getNetwork().getTwitterLink());
         return false;
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return new ArrayList<>();
     }
 }

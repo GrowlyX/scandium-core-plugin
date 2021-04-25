@@ -7,6 +7,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class KickAllCommand extends BaseCommand {
 
     @Override
@@ -20,5 +23,11 @@ public class KickAllCommand extends BaseCommand {
         sender.sendMessage(ChatColor.GREEN + Color.translate("Kicked all online players."));
 
         return false;
+    }
+
+
+    @Override
+    public List<String> getAliases() {
+        return new ArrayList<>();
     }
 }

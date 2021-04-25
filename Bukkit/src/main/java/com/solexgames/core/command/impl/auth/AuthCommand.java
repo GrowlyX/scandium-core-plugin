@@ -10,6 +10,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class AuthCommand extends BaseCommand {
@@ -58,5 +61,10 @@ public class AuthCommand extends BaseCommand {
         });
 
         return true;
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return Arrays.asList("2fa");
     }
 }

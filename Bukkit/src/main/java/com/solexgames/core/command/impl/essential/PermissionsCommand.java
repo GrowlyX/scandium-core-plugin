@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,5 +41,10 @@ public class PermissionsCommand extends BaseCommand {
         player.sendMessage(ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 53));
 
         return false;
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return Arrays.asList("perms");
     }
 }

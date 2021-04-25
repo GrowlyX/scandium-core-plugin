@@ -10,6 +10,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class UnSyncCommand extends BaseCommand {
 
     @Override
@@ -39,5 +43,10 @@ public class UnSyncCommand extends BaseCommand {
         }
 
         return false;
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return new ArrayList<>();
     }
 }

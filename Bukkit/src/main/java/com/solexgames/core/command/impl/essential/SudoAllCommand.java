@@ -10,6 +10,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SudoAllCommand extends BaseCommand {
 
     @Override
@@ -47,5 +50,10 @@ public class SudoAllCommand extends BaseCommand {
             }
         }
         return false;
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return new ArrayList<>();
     }
 }

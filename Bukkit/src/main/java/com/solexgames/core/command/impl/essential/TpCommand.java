@@ -11,6 +11,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class TpCommand extends BaseCommand {
 
     @Override
@@ -20,9 +24,7 @@ public class TpCommand extends BaseCommand {
             return false;
         }
 
-        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
-        ChatColor secondColor = Color.SECONDARY_COLOR;
-        Player player = (Player) sender;
+        final Player player = (Player) sender;
 
         if (!sender.hasPermission("scandium.command.tp")) {
             sender.sendMessage(NO_PERMISSION);
@@ -34,12 +36,12 @@ public class TpCommand extends BaseCommand {
         }
 
         if (args.length == 1) {
-            Player target = Bukkit.getPlayerExact(args[0]);
+            final Player target = Bukkit.getPlayerExact(args[0]);
 
             if (target != null) {
                 player.teleport(target.getLocation());
 
-                player.sendMessage(secondColor + "You've been teleported to " + target.getDisplayName() + secondColor + ".");
+                player.sendMessage(Color.SECONDARY_COLOR + "You've been teleported to " + target.getDisplayName() + Color.SECONDARY_COLOR + ".");
 
                 PlayerUtil.sendAlert(player, "teleported to " + target.getName());
             } else {
@@ -47,5 +49,10 @@ public class TpCommand extends BaseCommand {
             }
         }
         return false;
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return Arrays.asList("teleport");
     }
 }

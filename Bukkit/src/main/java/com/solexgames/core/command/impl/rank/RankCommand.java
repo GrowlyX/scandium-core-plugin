@@ -465,4 +465,9 @@ public class RankCommand extends BaseCommand {
                 .sorted(Comparator.comparingInt(Rank::getWeight).reversed())
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<String> getAliases() {
+        return Arrays.asList("ranks", "rankdata");
+    }
 }

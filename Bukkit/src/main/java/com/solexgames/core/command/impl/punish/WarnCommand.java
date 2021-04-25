@@ -107,4 +107,9 @@ public class WarnCommand extends BaseCommand {
 
         return false;
     }
+
+    @Override
+    public List<String> getAliases() {
+        return new ArrayList<>();
+    }
 }

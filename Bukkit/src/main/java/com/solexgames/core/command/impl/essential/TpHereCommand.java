@@ -8,6 +8,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class TpHereCommand extends BaseCommand {
 
     @Override
@@ -43,5 +47,10 @@ public class TpHereCommand extends BaseCommand {
         }
 
         return false;
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return Arrays.asList("s");
     }
 }

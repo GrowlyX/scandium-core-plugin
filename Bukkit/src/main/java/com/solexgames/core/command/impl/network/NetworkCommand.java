@@ -10,6 +10,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class NetworkCommand extends BaseCommand {
@@ -83,5 +85,10 @@ public class NetworkCommand extends BaseCommand {
                 Color.SECONDARY_COLOR + "Online Players: " + Color.MAIN_COLOR + server.getOnlinePlayers(),
                 Color.SECONDARY_COLOR + "Ticks per Second: " + Color.MAIN_COLOR + server.getTicksPerSecond(),
         });
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return new ArrayList<>();
     }
 }

@@ -11,10 +11,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 public class ImportCommand extends BaseCommand {
@@ -94,5 +91,10 @@ public class ImportCommand extends BaseCommand {
         CorePlugin.getInstance().getRankManager().saveRanks();
 
         return true;
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return Arrays.asList("import", "importrankdata");
     }
 }

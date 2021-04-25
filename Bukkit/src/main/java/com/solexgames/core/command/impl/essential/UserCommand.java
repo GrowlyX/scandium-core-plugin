@@ -13,6 +13,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class UserCommand extends BaseCommand {
 
     public final ServerType NETWORK = CorePlugin.getInstance().getServerManager().getNetwork();
@@ -164,6 +167,12 @@ public class UserCommand extends BaseCommand {
                     break;
             }
         }
+
         return false;
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return Arrays.asList("player");
     }
 }

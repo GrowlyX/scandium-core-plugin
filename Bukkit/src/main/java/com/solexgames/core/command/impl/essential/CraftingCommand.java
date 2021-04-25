@@ -5,6 +5,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class CraftingCommand extends BaseCommand {
 
     @Override
@@ -24,5 +27,10 @@ public class CraftingCommand extends BaseCommand {
         player.openWorkbench(player.getLocation(), true);
 
         return false;
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return Arrays.asList("craft");
     }
 }

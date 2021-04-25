@@ -117,4 +117,9 @@ public class BlacklistCommand extends BaseCommand {
 
         return false;
     }
+
+    @Override
+    public List<String> getAliases() {
+        return new ArrayList<>();
+    }
 }

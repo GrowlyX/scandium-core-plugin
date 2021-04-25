@@ -8,6 +8,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class MaxItemCommand extends BaseCommand {
 
     @Override
@@ -34,5 +37,10 @@ public class MaxItemCommand extends BaseCommand {
         }
 
         return false;
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return Arrays.asList("more");
     }
 }

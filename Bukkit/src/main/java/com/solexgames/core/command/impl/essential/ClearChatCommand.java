@@ -8,6 +8,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class ClearChatCommand extends BaseCommand {
 
     @Override
@@ -24,5 +27,10 @@ public class ClearChatCommand extends BaseCommand {
         Bukkit.broadcastMessage(ChatColor.GREEN + Color.translate("The chat has been cleared by " + (sender instanceof Player ? ((Player) sender).getDisplayName() : "&4Console") + ChatColor.GREEN + "."));
 
         return false;
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return Arrays.asList("cc");
     }
 }

@@ -10,12 +10,14 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SlowChatCommand extends BaseCommand {
 
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
-        String displayName = ((sender instanceof Player) ? ((Player) sender).getDisplayName() : ChatColor.DARK_RED + "Console");
-        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+        final String displayName = ((sender instanceof Player) ? ((Player) sender).getDisplayName() : ChatColor.DARK_RED + "Console");
 
         if (!sender.hasPermission("scandium.command.slowchat")) {
             sender.sendMessage(NO_PERMISSION);
@@ -28,7 +30,8 @@ public class SlowChatCommand extends BaseCommand {
 
         if (args.length == 1) {
             try {
-                int time = Integer.parseInt(args[0]);
+                final int time = Integer.parseInt(args[0]);
+
                 CorePlugin.getInstance().getServerManager().setChatSlow(time * 1000L);
                 Bukkit.broadcastMessage(CorePlugin.getInstance().getServerManager().getChatSlow() > 0L ? ChatColor.GREEN + "Public chat is now in slow mode. " + ChatColor.GRAY + "(" + time + " seconds)" : ChatColor.RED + "Public chat is no longer in slow mode.");
 
@@ -38,5 +41,10 @@ public class SlowChatCommand extends BaseCommand {
             }
         }
         return false;
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return new ArrayList<>();
     }
 }

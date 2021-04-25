@@ -16,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
 import java.util.List;
 
 public class SetSlotsCommand extends BaseCommand {
@@ -85,5 +86,10 @@ public class SetSlotsCommand extends BaseCommand {
         } catch (IOException exception) {
             System.out.println("[Error] While setting slots of server. " + exception.getMessage());
         }
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return Arrays.asList("setmaxplayers", "maxplayers");
     }
 }

@@ -6,6 +6,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class LanguageCommand extends BaseCommand {
 
     @Override
@@ -19,5 +22,10 @@ public class LanguageCommand extends BaseCommand {
         new LanguageMenu(player).open(player);
 
         return false;
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return Arrays.asList("lang");
     }
 }

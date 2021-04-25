@@ -12,6 +12,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SudoCommand extends BaseCommand {
 
     @Override
@@ -53,5 +56,10 @@ public class SudoCommand extends BaseCommand {
             }
         }
         return false;
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return new ArrayList<>();
     }
 }

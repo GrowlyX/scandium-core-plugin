@@ -73,4 +73,9 @@ public class ListCommand extends BaseCommand {
                     .collect(Collectors.toList());
         }
     }
+
+    @Override
+    public List<String> getAliases() {
+        return Arrays.asList("who", "online");
+    }
 }

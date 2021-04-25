@@ -16,6 +16,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class PrefixCommand extends BaseCommand {
@@ -53,13 +56,12 @@ public class PrefixCommand extends BaseCommand {
 
         final Player player = (Player) sender;
 
-        if (!player.hasPermission("scandium.command.prefix")) {
+        if (args.length == 0) {
             new PrefixViewPaginatedMenu(player).openMenu(player);
-            return false;
         }
 
-        if (args.length == 0) {
-            this.sendHelp(player);
+        if (!player.hasPermission("scandium.command.prefix")) {
+            return false;
         }
         if (args.length > 0) {
             switch (args[0]) {
@@ -194,5 +196,10 @@ public class PrefixCommand extends BaseCommand {
                 "/prefix purchasable <prefix> <boolean>",
                 "/prefix list"
         ));
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return Arrays.asList("tags", "prefixes", "tag", "chattags");
     }
 }

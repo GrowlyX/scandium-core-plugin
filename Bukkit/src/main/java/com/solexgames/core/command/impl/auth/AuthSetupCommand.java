@@ -10,6 +10,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class AuthSetupCommand extends BaseCommand {
@@ -43,5 +45,10 @@ public class AuthSetupCommand extends BaseCommand {
         });
 
         return true;
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return new ArrayList<>();
     }
 }

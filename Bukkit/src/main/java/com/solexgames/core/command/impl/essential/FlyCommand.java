@@ -9,6 +9,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class FlyCommand extends BaseCommand {
 
     @Override
@@ -62,5 +66,10 @@ public class FlyCommand extends BaseCommand {
         }
 
         return false;
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return Arrays.asList("flight", "toggleflight");
     }
 }
