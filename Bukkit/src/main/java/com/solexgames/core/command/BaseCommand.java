@@ -13,6 +13,7 @@ import org.bukkit.command.CommandSender;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author GrowlyX
@@ -56,9 +57,9 @@ public abstract class BaseCommand implements CommandExecutor {
     public String[] getHelpMessage(String... strings) {
         final List<String> list = new ArrayList<>();
 
-        list.add(Color.MAIN_COLOR + "=== " + Color.SECONDARY_COLOR + "Showing help for " + Color.MAIN_COLOR + "/" + this.label + Color.SECONDARY_COLOR + ". ===");
-        list.addAll(Arrays.asList(strings));
-        list.add(Color.MAIN_COLOR + "- " + Color.SECONDARY_COLOR + "Showing a total of " + Color.MAIN_COLOR + strings.length + Color.SECONDARY_COLOR + " results. -");
+        list.add(Color.MAIN_COLOR + "=== " + Color.SECONDARY_COLOR + "Showing help for " + Color.MAIN_COLOR + "/" + this.label + Color.SECONDARY_COLOR + ". " + Color.MAIN_COLOR + "===");
+        list.addAll(Arrays.stream(strings).map(s -> Color.SECONDARY_COLOR + s.replace("<",  Color.MAIN_COLOR + "<")).collect(Collectors.toList()));
+        list.add(Color.MAIN_COLOR + "== " + Color.SECONDARY_COLOR + "Showing a total of " + Color.MAIN_COLOR + strings.length + Color.SECONDARY_COLOR + " results. " + Color.MAIN_COLOR + "==");
 
         return list.toArray(new String[0]);
     }

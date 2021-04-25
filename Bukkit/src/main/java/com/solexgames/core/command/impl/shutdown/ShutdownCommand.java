@@ -29,8 +29,8 @@ public class ShutdownCommand extends BaseCommand {
 
         if (args.length == 0) {
             player.sendMessage(this.getHelpMessage(
-                    "/shutdown start",
-                    "/shutdown cancel"
+                    "/shutdown <start>",
+                    "/shutdown <cancel>"
             ));
         }
         if (args.length == 1) {
