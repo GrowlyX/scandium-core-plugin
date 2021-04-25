@@ -186,15 +186,13 @@ public class PrefixCommand extends BaseCommand {
     }
 
     public void sendHelp(Player player) {
-        player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
-        player.sendMessage(Color.translate(Color.MAIN_COLOR + ChatColor.BOLD.toString() + "Prefix Management:"));
-        player.sendMessage("  ");
-        player.sendMessage(Color.translate("&f/prefix create <name> <prefix> &7- Create a new prefix."));
-        player.sendMessage(Color.translate("&f/prefix delete <name> &7- Delete a prefix."));
-        player.sendMessage(Color.translate("&f/prefix add <player> <prefix> &7- Add a prefix to a player."));
-        player.sendMessage(Color.translate("&f/prefix remove <player> <prefix> &7- Remove a prefix from a player."));
-        player.sendMessage(Color.translate("&f/prefix list &7- List all prefixes."));
-        player.sendMessage(Color.translate("&f/prefix purchasable &7- Set a prefix purchasable."));
-        player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
+        player.sendMessage(this.getHelpMessage(
+                "/prefix create <name> <design>",
+                "/prefix delete <name>",
+                "/prefix add <player> <prefix>",
+                "/prefix remove <player> <prefix>",
+                "/prefix purchasable <prefix> <boolean>",
+                "/prefix list"
+        ));
     }
 }

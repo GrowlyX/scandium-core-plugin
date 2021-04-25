@@ -28,7 +28,10 @@ public class ShutdownCommand extends BaseCommand {
         }
 
         if (args.length == 0) {
-            sender.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <start|cancel>.");
+            player.sendMessage(this.getHelpMessage(
+                    "/shutdown start",
+                    "/shutdown cancel"
+            ));
         }
         if (args.length == 1) {
             switch (args[0]) {

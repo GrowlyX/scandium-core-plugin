@@ -14,14 +14,12 @@ import org.bukkit.entity.Player;
 public class IgnoreCommand extends BaseCommand {
 
     public void sendHelp(Player player) {
-        player.sendMessage(new String[]{
-                Color.translate("&7&m" + StringUtils.repeat("-", 53)),
-                Color.MAIN_COLOR + ChatColor.BOLD.toString() + "Ignore Commands:",
-                Color.translate("/ignore <player> &7- Add a player to your ignore list."),
-                Color.translate("/ignore list &7- View your ignore list."),
-                Color.translate("/unignore <player> &7- Remove a player from your ignore list."),
-                Color.translate("&7&m" + StringUtils.repeat("-", 53))
-        });
+        player.sendMessage(this.getHelpMessage(
+                "/ignore <player>",
+                "/ignore list",
+                "  ",
+                "/unignore <player>"
+        ));
     }
 
     @Override

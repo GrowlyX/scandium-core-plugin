@@ -19,14 +19,12 @@ import java.util.concurrent.CompletableFuture;
 public class WarpCommand extends BaseCommand {
 
     public void sendHelp(Player player) {
-        player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
-        player.sendMessage(Color.translate(Color.MAIN_COLOR + ChatColor.BOLD.toString() + "Warp Management:"));
-        player.sendMessage("  ");
-        player.sendMessage(Color.translate("/warp <warp> &7- Teleport to a warp."));
-        player.sendMessage(Color.translate("/warp create &7- Create a new warp."));
-        player.sendMessage(Color.translate("/warp delete &7- Delete an existing warp."));
-        player.sendMessage(Color.translate("/warp list &7- List all available warps."));
-        player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
+        player.sendMessage(this.getHelpMessage(
+                "/warp <warp>",
+                "/warp create <name>",
+                "/warp delete <name>",
+                "/warp list"
+        ));
     }
 
     @Override

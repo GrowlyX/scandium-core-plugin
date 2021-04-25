@@ -279,8 +279,6 @@ public final class CorePlugin extends JavaPlugin {
     }
 
     private void registerBukkitCommands() {
-        // Thanks to ItsSteve for the general concept of using the commandMap to register commands without using the plugin.yml
-        // Source: https://www.spigotmc.org/threads/small-easy-register-command-without-plugin-yml.38036/ & https://github.com/TehNeon/StaffDisplay
         if (this.getServer().getPluginManager() instanceof SimplePluginManager) {
             CommandMap commandMap = null;
 

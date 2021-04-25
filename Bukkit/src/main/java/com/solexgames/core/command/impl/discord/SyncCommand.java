@@ -14,7 +14,7 @@ public class SyncCommand extends BaseCommand {
 
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
-        if (!Bukkit.getPluginManager().isPluginEnabled("dRobot")) {
+        if (!Bukkit.getPluginManager().isPluginEnabled("Indium")) {
             return false;
         }
 

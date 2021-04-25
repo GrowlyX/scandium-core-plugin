@@ -124,17 +124,13 @@ public class ExperienceCommand extends BaseCommand {
     }
 
     public void sendHelpMessage(CommandSender sender) {
-        sender.sendMessage(new String[]{
-                ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 53),
-                Color.MAIN_COLOR + ChatColor.BOLD.toString() + "Experience Information:",
-                "",
-                "/experience " + ChatColor.GRAY + "- Open the Experience Menu.",
-                "/experience help " + ChatColor.GRAY + "- View this help message.",
-                "/experience amount <player> " + ChatColor.GRAY + "- View the amount of experience a player has.",
-                "/experience set <player> <amount> " + ChatColor.GRAY + "- Set a player's experience level to an amount.",
-                "/experience add <player> <amount> " + ChatColor.GRAY + "- Add experience to a player.",
-                "/experience remove <player> <amount> " + ChatColor.GRAY + "- Remove experience from a player.",
-                ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 53)
-        });
+        sender.sendMessage(this.getHelpMessage(
+                "/experience",
+                "/experience help",
+                "/experience amount <player>",
+                "/experience set <player> <amount>",
+                "/experience add <player> <amount>",
+                "/experience remove <player> <amount>"
+        ));
     }
 }

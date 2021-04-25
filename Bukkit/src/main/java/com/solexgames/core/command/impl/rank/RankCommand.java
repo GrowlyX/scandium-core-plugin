@@ -1,15 +1,11 @@
 package com.solexgames.core.command.impl.rank;
 
-import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
-import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
 import org.apache.commons.lang.StringUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -19,26 +15,24 @@ import java.util.stream.Collectors;
 public class RankCommand extends BaseCommand {
 
     public void sendHelp(Player player) {
-        player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
-        player.sendMessage(Color.translate(Color.MAIN_COLOR + ChatColor.BOLD.toString() + "Rank Management:"));
-        player.sendMessage("  ");
-        player.sendMessage(Color.translate("/rank create &7- Create a new rank."));
-        player.sendMessage(Color.translate("/rank delete &7- Delete an existing rank."));
-        player.sendMessage(Color.translate("/rank addPerm &7- Add a permission to a rank."));
-        player.sendMessage(Color.translate("/rank delPerm &7- Remove a permission from a rank."));
-        player.sendMessage(Color.translate("/rank prefix &7- Set a rank's prefix."));
-        player.sendMessage(Color.translate("/rank suffix &7- Set a rank's suffix."));
-        player.sendMessage(Color.translate("/rank italic &7- Set a rank as italic."));
-        player.sendMessage(Color.translate("/rank color &7- Set a rank's color."));
-        player.sendMessage(Color.translate("/rank list &7- List all loaded ranks."));
-        player.sendMessage(Color.translate("/rank info &7- Show info of a rank."));
-        player.sendMessage(Color.translate("/rank weight &7- Set a rank's weight."));
-        player.sendMessage(Color.translate("/rank hidden &7- Set a rank as a hidden rank."));
-        player.sendMessage(Color.translate("/rank default &7- Set a rank as a default rank."));
-        player.sendMessage(Color.translate("/rank addInher &7- Add an inheritance to a rank."));
-        player.sendMessage(Color.translate("/rank delInher &7- Remove an inheritance from a rank."));
-        player.sendMessage(Color.translate("/rank purchasable &7- Set a rank purchasable."));
-        player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
+        player.sendMessage(this.getHelpMessage(
+                "/rank create <name>",
+                "/rank delete <name>",
+                "/rank addperm <name> <permission>",
+                "/rank delperm <name> <permission>",
+                "/rank addinher <name> <rank>",
+                "/rank delinher <name> <rank>",
+                "/rank prefix <name> <prefix>",
+                "/rank suffix <name> <suffix>",
+                "/rank italic <name> <boolean>",
+                "/rank hidden <name> <boolean>",
+                "/rank default <name> <boolean>",
+                "/rank purchasable <name> <boolean>",
+                "/rank color <name> <color>",
+                "/rank weight <name> <integer>",
+                "/rank info <name>",
+                "/rank list"
+        ));
     }
 
     @Override
