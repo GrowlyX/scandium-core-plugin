@@ -327,6 +327,7 @@ public class PlayerManager {
 
     public void handleGrant(Grant grant, Document document, Player issuer, String issuedServer, boolean raw) {
         final PotPlayer targetPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(document.getString("name"));
+        final String rankName = Color.translate(grant.getRank().getColor() + grant.getRank().getItalic() + grant.getRank().getName());
 
         grant.setIssuedServer(issuedServer);
 
@@ -335,7 +336,7 @@ public class PlayerManager {
             targetPotPlayer.setupPlayer();
             targetPotPlayer.saveWithoutRemove();
 
-            targetPotPlayer.getPlayer().sendMessage(ChatColor.GREEN + "Your rank has been set to " + grant.getRank().getColor() + grant.getRank().getItalic() + grant.getRank().getName() + ChatColor.GREEN + ".");
+            targetPotPlayer.getPlayer().sendMessage(ChatColor.GREEN + "Your rank has been set to " + rankName + ChatColor.GREEN + ".");
         } else {
             final List<Grant> allGrants = new ArrayList<>();
 
@@ -355,7 +356,7 @@ public class PlayerManager {
         }
 
         if (issuer != null && !raw) {
-            issuer.sendMessage(Color.SECONDARY_COLOR + "You've granted " + (targetPotPlayer != null ? targetPotPlayer.getPlayer().getDisplayName() : Color.MAIN_COLOR + document.getString("name")) + Color.SECONDARY_COLOR + " the rank " + grant.getRank().getColor() + grant.getRank().getItalic() + grant.getRank().getName() + Color.SECONDARY_COLOR + " for " + Color.MAIN_COLOR + grant.getReason() + Color.SECONDARY_COLOR + ".");
+            issuer.sendMessage(Color.SECONDARY_COLOR + "You've granted " + (targetPotPlayer != null ? targetPotPlayer.getPlayer().getDisplayName() : Color.MAIN_COLOR + document.getString("name")) + Color.SECONDARY_COLOR + " the rank " + rankName + Color.SECONDARY_COLOR + " for " + Color.MAIN_COLOR + grant.getReason() + Color.SECONDARY_COLOR + ".");
             issuer.sendMessage(Color.SECONDARY_COLOR + "Granted for scopes: " + Color.MAIN_COLOR + grant.getScope() + Color.SECONDARY_COLOR + ".");
             issuer.sendMessage(Color.SECONDARY_COLOR + "The grant will expire in " + Color.MAIN_COLOR + (grant.isPermanent() ? ChatColor.DARK_RED + "Never" : DurationFormatUtils.formatDurationWords(grant.getDuration(), true, true) + " (" + CorePlugin.FORMAT.format(new Date(System.currentTimeMillis() + grant.getDuration())) + ")"));
         } else if (issuer == null && !raw) {

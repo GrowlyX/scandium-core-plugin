@@ -70,32 +70,37 @@ public class PunishmentManager {
         final String name = targetDocument.getString("name");
         final Rank rank = Rank.getByName(targetDocument.getString("rankName"));
 
+        final String playerFormattedName = (rank != null ? rank.getColor() + rank.getItalic() : ChatColor.GRAY) + name;
+        final String punishmentExplanation = (!punishment.isPermanent() && !punishment.getPunishmentType().equals(PunishmentType.KICK) ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase();
+        final String durationFormat = (punishment.isPermanent() ? "." : " for " + punishment.getDurationString() + ".");
+
         this.punishments.add(punishment);
 
         CompletableFuture.runAsync(() -> {
             final Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByName(issuer).orElse(null);
 
+            if (Bukkit.getPlayerExact(issuer) != null) {
+                Bukkit.getPlayerExact(issuer).sendMessage((silent ? ChatColor.GRAY + "[Silent] " : "") + ChatColor.GREEN + "You've " + punishmentExplanation + " " + playerFormattedName + durationFormat);
+            }
+
             if (document != null) {
                 final Rank playerRank = Rank.getByName(document.getString("rankName"));
                 final String formattedName = playerRank.getColor() + playerRank.getItalic() + document.get("name");
+                final String issuerName = (issuer != null ? formattedName : "&4Console");
 
                 if (silent) {
-                    Bukkit.getOnlinePlayers().stream().filter(player1 -> player1.hasPermission("scandium.staff")).forEach(player1 -> player1.sendMessage(Color.translate(
-                            "&7[S] " + (rank != null ? rank.getColor() + rank.getItalic() : ChatColor.GRAY) + name + " &awas " + (!punishment.isPermanent() && !punishment.getPunishmentType().equals(PunishmentType.KICK) ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (issuer != null ? formattedName : "&4Console") + ChatColor.GREEN + "."
-                    )));
+                    PlayerUtil.sendToStaff("&7[Silent] " + playerFormattedName + " &awas " + punishmentExplanation + " by &4" + issuerName + ChatColor.GREEN + durationFormat);
                 } else {
                     Bukkit.broadcastMessage(Color.translate(
-                            (rank != null ? rank.getColor() + rank.getItalic() : ChatColor.GRAY) + name + " &awas " + (!punishment.isPermanent() && !punishment.getPunishmentType().equals(PunishmentType.KICK) ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (issuer != null ? formattedName : "&4Console") + ChatColor.GREEN + "."
+                            playerFormattedName + " &awas " + punishmentExplanation + " by &4" + issuerName + ChatColor.GREEN + "."
                     ));
                 }
             } else {
                 if (silent) {
-                    Bukkit.getOnlinePlayers().stream().filter(player1 -> player1.hasPermission("scandium.staff")).forEach(player1 -> player1.sendMessage(Color.translate(
-                            "&7[S] " + (rank != null ? rank.getColor() + rank.getItalic() : ChatColor.GRAY) + name + " &awas " + (!punishment.isPermanent() && !punishment.getPunishmentType().equals(PunishmentType.KICK) ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4Console&a."
-                    )));
+                    PlayerUtil.sendToStaff("&7[Silent] " + playerFormattedName + " &awas " + punishmentExplanation + " by &4Console&a" + durationFormat);
                 } else {
                     Bukkit.broadcastMessage(Color.translate(
-                            (rank != null ? rank.getColor() + rank.getItalic() : ChatColor.GRAY) + name + " &awas " + (!punishment.isPermanent() && !punishment.getPunishmentType().equals(PunishmentType.KICK) ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4Console&a."
+                            playerFormattedName + " &awas " + punishmentExplanation + " by &4Console&a."
                     ));
                 }
             }
