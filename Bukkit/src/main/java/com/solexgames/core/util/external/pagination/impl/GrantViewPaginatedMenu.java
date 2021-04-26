@@ -80,8 +80,8 @@ public class GrantViewPaginatedMenu extends PaginatedMenu {
             arrayList.add(Color.SECONDARY_COLOR + "Issued Reason&7: " + Color.MAIN_COLOR + this.grant.getReason());
             arrayList.add(Color.MAIN_COLOR + "&m------------------------------------");
 
-            return new ItemBuilder(XMaterial.LIME_WOOL.parseMaterial(), (this.grant.isActive() ? 5 : (this.grant.isExpired() ? 1 : 14)))
-                    .setDisplayName(ChatColor.DARK_GRAY + "#" + this.grant.getId() + " " + statusLore)
+            return new ItemBuilder(XMaterial.LIME_WOOL.parseMaterial(), (this.grant.isActive() ? (grant.getScope().equals("global") ? 5 : 13) : (this.grant.isExpired() ? 1 : 14)))
+                    .setDisplayName(statusLore + " " + CorePlugin.FORMAT.format(new Date(this.grant.getDateAdded())))
                     .addLore(arrayList)
                     .create();
         }

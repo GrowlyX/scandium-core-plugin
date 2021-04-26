@@ -22,12 +22,12 @@ import java.util.concurrent.CompletableFuture;
 public class WarpCommand extends BaseCommand {
 
     public void sendHelp(Player player) {
-        player.sendMessage(this.getHelpMessage(
+        this.getHelpMessage(1, player,
                 "/warp <warp>",
                 "/warp create <name>",
                 "/warp delete <name>",
                 "/warp list"
-        ));
+        );
     }
 
     @Override

@@ -24,7 +24,7 @@ public abstract class Menu {
     public static Map<String, Menu> currentlyOpenedMenus = new HashMap<>();
 
     @Getter
-    protected CorePlugin plugin = JavaPlugin.getPlugin(CorePlugin.class);
+    protected final CorePlugin plugin = JavaPlugin.getPlugin(CorePlugin.class);
 
     private Map<Integer, Button> buttons = new HashMap<>();
 
@@ -110,7 +110,6 @@ public abstract class Menu {
             player.openInventory(inventory);
         }
 
-        this.onOpen(player);
         this.setClosedByMenu(false);
     }
 
@@ -130,18 +129,8 @@ public abstract class Menu {
         return -1;
     }
 
-    public int getSlot(int x, int y) {
-        return ((9 * y) + x);
-    }
-
     public abstract String getTitle(Player player);
 
     public abstract Map<Integer, Button> getButtons(Player player);
-
-    void onOpen(Player player) {
-    }
-
-    public void onClose(Player player) {
-    }
 
 }

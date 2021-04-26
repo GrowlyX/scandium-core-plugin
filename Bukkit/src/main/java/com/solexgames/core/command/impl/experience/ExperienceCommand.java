@@ -127,14 +127,14 @@ public class ExperienceCommand extends BaseCommand {
     }
 
     public void sendHelpMessage(CommandSender sender) {
-        sender.sendMessage(this.getHelpMessage(
+        this.getHelpMessage(1, sender,
                 "/experience",
                 "/experience help",
                 "/experience amount <player>",
                 "/experience set <player> <amount>",
                 "/experience add <player> <amount>",
                 "/experience remove <player> <amount>"
-        ));
+        );
     }
 
     @Override

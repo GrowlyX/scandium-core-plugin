@@ -188,14 +188,14 @@ public class PrefixCommand extends BaseCommand {
     }
 
     public void sendHelp(Player player) {
-        player.sendMessage(this.getHelpMessage(
+        this.getHelpMessage(1, player,
                 "/prefix create <name> <design>",
                 "/prefix delete <name>",
                 "/prefix add <player> <prefix>",
                 "/prefix remove <player> <prefix>",
                 "/prefix purchasable <prefix> <boolean>",
                 "/prefix list"
-        ));
+        );
     }
 
     @Override

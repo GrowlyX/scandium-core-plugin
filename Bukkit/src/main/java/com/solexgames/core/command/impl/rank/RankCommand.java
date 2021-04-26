@@ -14,8 +14,8 @@ import java.util.stream.Collectors;
 
 public class RankCommand extends BaseCommand {
 
-    public void sendHelp(Player player) {
-        player.sendMessage(this.getHelpMessage(
+    public void sendHelp(Player player, int page) {
+        this.getHelpMessage(page, player,
                 "/rank create <name>",
                 "/rank delete <name>",
                 "/rank addperm <name> <permission>",
@@ -32,7 +32,7 @@ public class RankCommand extends BaseCommand {
                 "/rank weight <name> <integer>",
                 "/rank info <name>",
                 "/rank list"
-        ));
+        );
     }
 
     @Override
@@ -49,10 +49,18 @@ public class RankCommand extends BaseCommand {
         }
 
         if (args.length == 0) {
-            this.sendHelp(player);
+            this.sendHelp(player, 1);
         }
 
         if (args.length > 0) {
+            try {
+                final int page = Integer.parseInt(args[0]);
+
+                this.sendHelp(player, page);
+
+                return true;
+            } catch (Exception ignored) {}
+
             switch (args[0]) {
                 case "info":
                     if (args.length == 1) {
@@ -452,7 +460,7 @@ public class RankCommand extends BaseCommand {
 
                     break;
                 default:
-                    this.sendHelp(player);
+                    this.sendHelp(player, 1);
                     break;
             }
         }

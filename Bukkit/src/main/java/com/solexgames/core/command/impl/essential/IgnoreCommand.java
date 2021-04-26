@@ -13,17 +13,17 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class IgnoreCommand extends BaseCommand {
 
     public void sendHelp(Player player) {
-        player.sendMessage(this.getHelpMessage(
+        this.getHelpMessage(1, player,
                 "/ignore <player>",
                 "/ignore list",
-                "  ",
                 "/unignore <player>"
-        ));
+        );
     }
 
     @Override
@@ -60,34 +60,29 @@ public class IgnoreCommand extends BaseCommand {
 
                     break;
                 case "ignore":
-                    switch (value.toLowerCase()) {
-                        case "list":
-                            if (potPlayer.getAllIgnoring().isEmpty()) {
-                                player.sendMessage(ChatColor.RED + ("Error: You do not have anyone added to your ignore list."));
-                                return false;
-                            }
+                    if ("list".equals(value.toLowerCase())) {
+                        if (potPlayer.getAllIgnoring().isEmpty()) {
+                            player.sendMessage(ChatColor.RED + ("Error: You do not have anyone added to your ignore list."));
+                            return false;
+                        }
 
-                            player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
-                            player.sendMessage(Color.translate(Color.MAIN_COLOR + ChatColor.BOLD.toString() + "Currently Ignoring:"));
-                            potPlayer.getAllIgnoring().forEach(s -> player.sendMessage(Color.translate(" &7* &e" + s)));
-                            player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
+                        player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
+                        player.sendMessage(Color.translate(Color.MAIN_COLOR + ChatColor.BOLD.toString() + "Currently Ignoring:"));
+                        potPlayer.getAllIgnoring().forEach(s -> player.sendMessage(Color.translate(" &7* &e" + s)));
+                        player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
+                    } else {
+                        if (potPlayer.getName().equalsIgnoreCase(value)) {
+                            player.sendMessage(ChatColor.RED + ("You cannot add yourself to your ignore list!"));
+                            return false;
+                        }
 
-                            break;
-                        default:
-                            if (potPlayer.getName().equalsIgnoreCase(value)) {
-                                player.sendMessage(ChatColor.RED + ("You cannot add yourself to your ignore list!"));
-                                return false;
-                            }
+                        if (potPlayer.getAllIgnoring().contains(value)) {
+                            player.sendMessage(ChatColor.RED + ("That player's already on your ignore list!"));
+                            return false;
+                        }
 
-                            if (potPlayer.getAllIgnoring().contains(value)) {
-                                player.sendMessage(ChatColor.RED + ("That player's already on your ignore list!"));
-                                return false;
-                            }
-
-                            potPlayer.getAllIgnoring().add(value);
-                            player.sendMessage(Color.SECONDARY_COLOR + "You've added " + Color.MAIN_COLOR + value + Color.SECONDARY_COLOR + " to your ignored list.");
-
-                            break;
+                        potPlayer.getAllIgnoring().add(value);
+                        player.sendMessage(Color.SECONDARY_COLOR + "You've added " + Color.MAIN_COLOR + value + Color.SECONDARY_COLOR + " to your ignored list.");
                     }
                     break;
             }
@@ -97,7 +92,7 @@ public class IgnoreCommand extends BaseCommand {
 
     @Override
     public List<String> getAliases() {
-        return Arrays.asList("unignore");
+        return Collections.singletonList("unignore");
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.solexgames.core.util.command;
 
 import com.solexgames.core.command.BaseCommand;
-import jdk.nashorn.internal.objects.NativeString;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
@@ -12,14 +11,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
 public class CustomCommandMap extends SimpleCommandMap {
 
-    private static final Pattern PATTERN_ON_SPACE = Pattern.compile(" ", Pattern.LITERAL);
+    private final Pattern PATTERN_ON_SPACE = Pattern.compile(" ", Pattern.LITERAL);
 
     public CustomCommandMap(Server server) {
         super(server);

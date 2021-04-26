@@ -40,14 +40,14 @@ public class ReportViewPaginatedMenu extends PaginatedMenu {
                                 "&7reports or only resolved",
                                 "&7reports?",
                                 "",
-                                "&7Current: &6" + (onlyResolved ? "Only Resolved": "All")
+                                "&7Current: &6" + (onlyResolved ? "Resolved": "All")
                         ).create();
             }
 
             @Override
             public void clicked(Player player, ClickType clickType) {
                 onlyResolved = !onlyResolved;
-                player.updateInventory();
+                openMenu(player);
             }
         });
 

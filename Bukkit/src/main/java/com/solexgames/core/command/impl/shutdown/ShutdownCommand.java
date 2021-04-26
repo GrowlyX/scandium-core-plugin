@@ -31,10 +31,10 @@ public class ShutdownCommand extends BaseCommand {
         }
 
         if (args.length == 0) {
-            player.sendMessage(this.getHelpMessage(
+            this.getHelpMessage(1, player,
                     "/shutdown <start>",
                     "/shutdown <cancel>"
-            ));
+            );
         }
         if (args.length == 1) {
             switch (args[0]) {

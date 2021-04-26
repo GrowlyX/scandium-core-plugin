@@ -90,7 +90,7 @@ public class PunishViewPaginatedMenu extends PaginatedMenu {
                 @Override
                 public ItemStack getButtonItem(Player player) {
                     return new ItemBuilder(XMaterial.LIME_WOOL.parseMaterial(), (punishment.isActive() ? 5 : (punishment.isRemoved() ? 1 : 14)))
-                            .setDisplayName(ChatColor.DARK_GRAY + "#" + punishment.getPunishIdentification() + " " + statusLore)
+                            .setDisplayName(statusLore + " " + CorePlugin.FORMAT.format(punishment.getIssuingDate()))
                             .addLore(Color.translate(lore))
                             .create();
                 }

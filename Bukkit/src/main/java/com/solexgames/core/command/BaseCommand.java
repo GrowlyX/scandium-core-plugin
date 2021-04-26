@@ -5,6 +5,7 @@ import com.solexgames.core.database.Database;
 import com.solexgames.core.manager.PlayerManager;
 import com.solexgames.core.redis.RedisManager;
 import com.solexgames.core.util.Color;
+import com.solexgames.core.util.builder.CommandHelpBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -46,14 +47,10 @@ public abstract class BaseCommand extends Command implements PluginIdentifiableC
 
     public abstract List<String> getAliases();
 
-    public String[] getHelpMessage(String... strings) {
-        final List<String> list = new ArrayList<>();
+    public void getHelpMessage(int page, CommandSender sender, String... strings) {
+        final CommandHelpBuilder helpBuilder = new CommandHelpBuilder(10, this.getLabel());
 
-        list.add(Color.MAIN_COLOR + "=== " + Color.SECONDARY_COLOR + "Showing help for " + Color.MAIN_COLOR + "/" + this.getLabel() + Color.SECONDARY_COLOR + ". " + Color.MAIN_COLOR + "===");
-        list.addAll(Arrays.stream(strings).map(s -> Color.SECONDARY_COLOR + s.replace("<",  Color.MAIN_COLOR + "<")).collect(Collectors.toList()));
-        list.add(Color.MAIN_COLOR + "== " + Color.SECONDARY_COLOR + "Showing a total of " + Color.MAIN_COLOR + strings.length + Color.SECONDARY_COLOR + " results. " + Color.MAIN_COLOR + "==");
-
-        return list.toArray(new String[0]);
+        helpBuilder.display(sender, page, Arrays.asList(strings));
     }
 
     @Override
