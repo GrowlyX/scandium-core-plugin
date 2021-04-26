@@ -72,7 +72,8 @@ public class ProtocolPacketHandler extends AbstractPacketHandler {
     /**
      * From Bukkit Forums - https://bukkit.org/threads/how-to-open-demo-minecraft-gui.407815/
      */
-    private boolean sendDemoScreen(Player player) {
+    @Override
+    public boolean sendDemoScreen(Player player) {
         final PacketContainer packet = new PacketContainer(PacketType.Play.Server.GAME_STATE_CHANGE);
 
         packet.getIntegers().write(0, 5);
@@ -81,7 +82,7 @@ public class ProtocolPacketHandler extends AbstractPacketHandler {
         try {
             ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet);
             return true;
-        } catch (InvocationTargetException ignored) {
+        } catch (Exception ignored) {
             return false;
         }
     }

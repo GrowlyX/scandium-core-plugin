@@ -495,7 +495,8 @@ public class PlayerListener implements Listener {
                         .replace("<rank_color>", (potPlayer.getDisguiseRank() != null ? potPlayer.getDisguiseRank().getColor() : potPlayer.getActiveGrant().getRank().getColor()))
                         .replace("<custom_color>", (potPlayer.getCustomColor() != null ? potPlayer.getCustomColor().toString() : ""))
                         .replace("<player_name>", player.getName()))
-                        .replace("<message>", event.getMessage())
+                        .replace("<message>", event.getMessage()
+                        .replace(potPlayer1.getName(), ChatColor.YELLOW + potPlayer1.getName()))
                 ));
 
         if (CorePlugin.getInstance().getServerSettings().isAntiSpamEnabled())

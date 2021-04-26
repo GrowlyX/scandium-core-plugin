@@ -100,7 +100,7 @@ public final class CorePlugin extends JavaPlugin {
     private RedisSubscriptions subscriptions;
     private DataLibrary library;
 
-    private AbstractPacketHandler chatInterceptor;
+    private AbstractPacketHandler packetHandler;
     private IClient clientHook;
     private INMS NMS;
 
@@ -205,7 +205,7 @@ public final class CorePlugin extends JavaPlugin {
 
     private void setupHooks() {
         if (this.getServer().getPluginManager().isPluginEnabled("ProtocolLib")) {
-            this.chatInterceptor = new ProtocolPacketHandler();
+            this.packetHandler = new ProtocolPacketHandler();
         } else {
             this.getLogger().info("[Protocol] Could not find ProtocolLib! Chat tab block will not work without it!");
         }
@@ -232,8 +232,8 @@ public final class CorePlugin extends JavaPlugin {
     }
 
     public void setupExtra() {
-        if (this.chatInterceptor != null) {
-            this.chatInterceptor.initializePacketHandlers();
+        if (this.packetHandler != null) {
+            this.packetHandler.initializePacketHandlers();
         }
 
         new PunishmentStrings().setupMessages();

@@ -5,6 +5,7 @@ import com.comphenix.protocol.ProtocolManager;
 import com.solexgames.core.CorePlugin;
 import lombok.Getter;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 
 @Getter
 public abstract class AbstractPacketHandler {
@@ -23,5 +24,7 @@ public abstract class AbstractPacketHandler {
      * Initializes the ProtocolLib packet system
      */
     public abstract void initializePacketHandlers();
+
+    public abstract boolean sendDemoScreen(Player player);
 
 }

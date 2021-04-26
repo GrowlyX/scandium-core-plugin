@@ -69,9 +69,7 @@ public abstract class ScoreBoard {
             title = title.substring(0, 32);
         }
 
-        title = Color.translate(title);
-
-        this.objective.setDisplayName(title);
+        this.objective.setDisplayName(Color.translate(title));
     }
 
     private void setSlot(int slot, String text) {
@@ -150,4 +148,8 @@ public abstract class ScoreBoard {
     public abstract List<String> getLines();
     public abstract String getTitle();
 
+    public void update() {
+        this.setTitle(this.getTitle());
+        this.setSlotsFromList(this.getLines());
+    }
 }

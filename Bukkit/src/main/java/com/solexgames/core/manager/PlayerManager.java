@@ -151,7 +151,6 @@ public class PlayerManager {
         final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
         potPlayer.setStaffMode(true);
-        potPlayer.setupPlayerTag();
         potPlayer.setArmorHistory(player.getInventory().getArmorContents());
         potPlayer.setItemHistory(player.getInventory().getContents());
         potPlayer.setPreviousBoard(player.getScoreboard());
@@ -171,23 +170,9 @@ public class PlayerManager {
 
         player.updateInventory();
 
-        final ChatColor secondColor = Color.SECONDARY_COLOR;
-
-        final double pitch = (double) (player.getLocation().getPitch() + 90.0F) * 3.141592653589793D / 180.0D;
-        final double yaw = (double) (player.getLocation().getYaw() + 90.0F) * 3.141592653589793D / 180.0D;
-
-        final double xCoordinate = Math.sin(pitch) * Math.cos(yaw);
-        final double yCoordinate = Math.sin(pitch) * Math.sin(yaw);
-        final double zCoordinate = Math.cos(pitch) * 100.0D;
-
-        final org.bukkit.util.Vector vector = new org.bukkit.util.Vector(xCoordinate, zCoordinate, yCoordinate);
         player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 1000000, 3));
 
-        if (player.isSprinting()) {
-            player.setVelocity(vector.multiply(50));
-        }
-
-        player.sendMessage(secondColor + "You are now in moderation mode.");
+        player.sendMessage(Color.SECONDARY_COLOR + "You've entered moderation mode!");
 
         PlayerUtil.sendAlert(player, "modmoded");
 
