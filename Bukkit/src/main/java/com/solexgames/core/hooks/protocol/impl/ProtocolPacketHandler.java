@@ -1,4 +1,4 @@
-package com.solexgames.core.hooks.protocol.extend;
+package com.solexgames.core.hooks.protocol.impl;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;

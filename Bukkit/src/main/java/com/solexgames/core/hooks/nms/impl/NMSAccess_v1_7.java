@@ -1,4 +1,4 @@
-package com.solexgames.core.hooks.nms.extend;
+package com.solexgames.core.hooks.nms.impl;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.hooks.nms.INMS;

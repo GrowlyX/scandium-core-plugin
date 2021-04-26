@@ -1,11 +1,7 @@
 package com.solexgames.core.command;
 
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.database.Database;
-import com.solexgames.core.manager.PlayerManager;
-import com.solexgames.core.redis.RedisManager;
-import com.solexgames.core.util.Color;
-import com.solexgames.core.util.builder.CommandHelpBuilder;
+import com.solexgames.core.util.command.CommandHelpBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -13,10 +9,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginIdentifiableCommand;
 import org.bukkit.plugin.Plugin;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author GrowlyX

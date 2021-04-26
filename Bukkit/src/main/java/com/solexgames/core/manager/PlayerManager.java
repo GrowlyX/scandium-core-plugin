@@ -191,8 +191,8 @@ public class PlayerManager {
 
         PlayerUtil.sendAlert(player, "modmoded");
 
-        if (CorePlugin.getInstance().getLunar() != null) {
-            CorePlugin.getInstance().getLunar().enableStaffModules(player);
+        if (CorePlugin.getInstance().getClientHook() != null) {
+            CorePlugin.getInstance().getClientHook().enableStaffModules(player);
         }
     }
 
@@ -235,8 +235,8 @@ public class PlayerManager {
             player.setVelocity(vector.multiply(50));
         }
 
-        if (CorePlugin.getInstance().getLunar() != null) {
-            CorePlugin.getInstance().getLunar().enableStaffModules(player);
+        if (CorePlugin.getInstance().getClientHook() != null) {
+            CorePlugin.getInstance().getClientHook().enableStaffModules(player);
         }
     }
 
@@ -264,8 +264,8 @@ public class PlayerManager {
 
         player.removePotionEffect(PotionEffectType.SPEED);
 
-        if (CorePlugin.getInstance().getLunar() != null) {
-            CorePlugin.getInstance().getLunar().disableStaffModules(player);
+        if (CorePlugin.getInstance().getClientHook() != null) {
+            CorePlugin.getInstance().getClientHook().disableStaffModules(player);
         }
     }
 

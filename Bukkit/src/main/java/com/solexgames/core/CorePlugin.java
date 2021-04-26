@@ -2,16 +2,19 @@ package com.solexgames.core;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.solexgames.core.adapter.DateTypeAdapter;
+import com.solexgames.core.adapter.LocationTypeAdapter;
+import com.solexgames.core.adapter.PotionEffectTypeAdapter;
 import com.solexgames.core.command.impl.CoreCommand;
 import com.solexgames.core.command.impl.other.WebPostCommand;
 import com.solexgames.core.database.Database;
 import com.solexgames.core.enums.ServerType;
-import com.solexgames.core.hooks.client.AbstractClientHook;
-import com.solexgames.core.hooks.client.extend.LunarClientHook;
+import com.solexgames.core.hooks.client.IClient;
+import com.solexgames.core.hooks.client.impl.LunarClientImpl;
 import com.solexgames.core.hooks.nms.INMS;
-import com.solexgames.core.hooks.nms.extend.*;
+import com.solexgames.core.hooks.nms.impl.*;
 import com.solexgames.core.hooks.protocol.AbstractPacketHandler;
-import com.solexgames.core.hooks.protocol.extend.ProtocolPacketHandler;
+import com.solexgames.core.hooks.protocol.impl.ProtocolPacketHandler;
 import com.solexgames.core.manager.*;
 import com.solexgames.core.player.punishment.PunishmentStrings;
 import com.solexgames.core.redis.RedisManager;
@@ -34,14 +37,17 @@ import org.apache.commons.lang.time.DurationFormatUtils;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.plugin.SimplePluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
 
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 import java.util.TimeZone;
 
@@ -95,7 +101,7 @@ public final class CorePlugin extends JavaPlugin {
     private DataLibrary library;
 
     private AbstractPacketHandler chatInterceptor;
-    private AbstractClientHook lunar;
+    private IClient clientHook;
     private INMS NMS;
 
     private boolean debugging;
@@ -113,8 +119,11 @@ public final class CorePlugin extends JavaPlugin {
 
         RANDOM = new Random();
         GSON = new GsonBuilder()
-                .serializeNulls()
+                .registerTypeAdapter(PotionEffect.class, new PotionEffectTypeAdapter())
+                .registerTypeAdapter(Location.class, new LocationTypeAdapter())
+                .registerTypeAdapter(Date.class, new DateTypeAdapter())
                 .setPrettyPrinting()
+                .disableHtmlEscaping()
                 .create();
 
         if (!this.swapSimpleCommandMap()) {
@@ -202,7 +211,7 @@ public final class CorePlugin extends JavaPlugin {
         }
 
         if (this.getServer().getPluginManager().isPluginEnabled("LunarClient-API")) {
-            this.lunar = new LunarClientHook();
+            this.clientHook = new LunarClientImpl();
         } else {
             this.getLogger().info("[Protocol] Could not find LunarClient-API! The /lunar command will not work without it!");
         }

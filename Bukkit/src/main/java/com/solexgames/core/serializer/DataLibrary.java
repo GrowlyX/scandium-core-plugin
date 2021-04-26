@@ -2,6 +2,7 @@ package com.solexgames.core.serializer;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.solexgames.core.CorePlugin;
 import com.solexgames.core.manager.DataManager;
 import lombok.Getter;
 
@@ -23,10 +24,7 @@ public final class DataLibrary {
     public DataLibrary() {
         final long milli = System.currentTimeMillis();
 
-        this.gson = new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .create();
+        this.gson = CorePlugin.GSON;
 
         instance = this;
 

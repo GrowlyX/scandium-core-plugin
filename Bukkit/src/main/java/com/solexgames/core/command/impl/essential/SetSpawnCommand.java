@@ -28,9 +28,7 @@ public class SetSpawnCommand extends BaseCommand {
         }
 
         final ServerManager manager = CorePlugin.getInstance().getServerManager();
-        final String location = CorePlugin.getInstance().getLibrary().getDataManager()
-                .getWrapper(Location.class)
-                .getJson(player.getLocation());
+        final String location = CorePlugin.GSON.toJson(player.getLocation());
 
         manager.setSpawnLocation(player.getLocation());
 

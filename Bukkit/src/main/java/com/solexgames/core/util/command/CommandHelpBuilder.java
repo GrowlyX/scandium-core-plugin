@@ -1,4 +1,4 @@
-package com.solexgames.core.util.builder;
+package com.solexgames.core.util.command;
 
 import com.google.common.base.Preconditions;
 import com.solexgames.core.util.Color;
@@ -39,7 +39,7 @@ public class CommandHelpBuilder {
 
                 sender.sendMessage(Color.SECONDARY_COLOR + "Showing page " + Color.MAIN_COLOR + page + Color.SECONDARY_COLOR + " of " + Color.MAIN_COLOR + maxPages + Color.SECONDARY_COLOR + " (" + Color.MAIN_COLOR + results.size() + Color.SECONDARY_COLOR + " results).");
             } else {
-                sender.sendMessage(ChatColor.RED + "Page " + ChatColor.YELLOW + page + ChatColor.RED + " is out of bounds. (" + ChatColor.YELLOW + "1 - " + maxPages + ChatColor.RED + ")");
+                sender.sendMessage(ChatColor.RED + "The page number " + ChatColor.YELLOW + page + ChatColor.RED + " does not exist!");
             }
         }
     }

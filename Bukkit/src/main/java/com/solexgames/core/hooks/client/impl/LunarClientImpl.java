@@ -1,14 +1,14 @@
-package com.solexgames.core.hooks.client.extend;
+package com.solexgames.core.hooks.client.impl;
 
 import com.lunarclient.bukkitapi.LunarClientAPI;
 import com.lunarclient.bukkitapi.object.LCNotification;
-import com.solexgames.core.hooks.client.AbstractClientHook;
+import com.solexgames.core.hooks.client.IClient;
 import org.bukkit.entity.Player;
 
 import java.time.Duration;
 import java.util.Set;
 
-public class LunarClientHook extends AbstractClientHook {
+public class LunarClientImpl implements IClient {
 
     @Override
     public void enableStaffModules(Player player) {
