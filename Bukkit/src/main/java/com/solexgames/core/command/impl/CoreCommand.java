@@ -23,19 +23,23 @@ public class CoreCommand extends BaseCommand {
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.RED + "Only players can execute this command.");
+            sender.sendMessage(ONLY_PLAYERS);
             return false;
         }
 
         final Player player = (Player) sender;
 
         if (!player.isOp()) {
-            player.sendMessage(ChatColor.RED + "I'm sorry, but you do not have permission to perform this command.");
+            player.sendMessage(NO_PERMISSION);
             return false;
         }
 
         if (args.length == 0) {
-            sender.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <debug|disallow|panel|threads>.");
+            this.getHelpMessage(1, sender,
+                    "/" + label + "debug",
+                    "/" + label + "panel",
+                    "/" + label + "threads"
+            );
         }
         if (args.length > 0) {
             switch (args[0]) {
@@ -59,15 +63,15 @@ public class CoreCommand extends BaseCommand {
                             "  "
                     });
                     break;
-                case "disallow":
-                    player.sendMessage(Color.translate((CorePlugin.getInstance().isDisallow() ? Color.MAIN_COLOR + "[" + CorePlugin.getInstance().getConfig().getString("core-settings.name") + "] &cDisabled disallow." : Color.MAIN_COLOR + "[" + CorePlugin.getInstance().getConfig().getString("core-settings.name") + "] &aEnabled disallow.")));
-                    CorePlugin.getInstance().setDisallow(!CorePlugin.getInstance().isDisallow());
-                    break;
                 case "panel":
                     new ScandiumMenu(player).open(player);
                     break;
                 default:
-                    sender.sendMessage(Color.SECONDARY_COLOR + "Usage: /" + Color.MAIN_COLOR + label + ChatColor.WHITE + " <debug|disallow|panel>.");
+                    this.getHelpMessage(1, sender,
+                            "/" + label + "debug",
+                            "/" + label + "panel",
+                            "/" + label + "threads"
+                    );
                     break;
             }
         }

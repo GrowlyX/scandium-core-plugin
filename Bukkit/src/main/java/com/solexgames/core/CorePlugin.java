@@ -8,6 +8,7 @@ import com.solexgames.core.adapter.PotionEffectTypeAdapter;
 import com.solexgames.core.command.impl.CoreCommand;
 import com.solexgames.core.command.impl.other.WebPostCommand;
 import com.solexgames.core.database.Database;
+import com.solexgames.core.disguise.DisguiseCache;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.hooks.client.IClient;
 import com.solexgames.core.hooks.client.impl.LunarClientImpl;
@@ -83,8 +84,10 @@ public final class CorePlugin extends JavaPlugin {
     private PrefixManager prefixManager;
     private PunishmentManager punishmentManager;
     private NameTagManager nameTagManager;
+    private DisguiseManager disguiseManager;
 
     private UUIDCache uuidCache;
+    private DisguiseCache disguiseCache;
     private ServerSettings serverSettings;
 
     private String serverName;
@@ -167,6 +170,9 @@ public final class CorePlugin extends JavaPlugin {
                 this.databaseConfig.getString("redis.authentication.password")
         ));
 
+        this.uuidCache = new UUIDCache();
+        this.disguiseCache = new DisguiseCache();
+
         this.punishmentManager = new PunishmentManager();
         this.cryptoManager = new CryptoManager();
         this.reportManager = new ReportManager();
@@ -179,7 +185,7 @@ public final class CorePlugin extends JavaPlugin {
         this.warpManager = new WarpManager();
         this.shutdownManager = new ShutdownManager();
         this.nameTagManager = new NameTagManager();
-        this.uuidCache = new UUIDCache();
+        this.disguiseManager = new DisguiseManager();
 
         this.setupExtra();
         this.logInformation(milli);
@@ -259,7 +265,7 @@ public final class CorePlugin extends JavaPlugin {
                 "Moderation", "Network", "Other",
                 "Prefix", "Punish", "Rank",
                 "Shutdown", "Server", "Test",
-                "Toggle", "Warps"
+                "Toggle", "Warps", "Disguise"
         );
     }
 

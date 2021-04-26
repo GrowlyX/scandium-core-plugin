@@ -2,6 +2,7 @@ package com.solexgames.core.player;
 
 import com.google.gson.annotations.SerializedName;
 import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import com.solexgames.core.CorePlugin;
@@ -78,7 +79,6 @@ public class PotPlayer {
     private boolean canSeeBroadcasts = true;
     private boolean canSeeFiltered = true;
     private boolean canSeeTips = true;
-    private boolean canAcceptingFriendRequests = true;
     private boolean canReport = true;
     private boolean canRequest = true;
 
@@ -94,6 +94,8 @@ public class PotPlayer {
     private boolean isSocialSpy = false;
     private boolean isAutoVanish = false;
     private boolean isAutoModMode = false;
+    private boolean isDisguised = false;
+    private boolean isAcceptingFriends = false;
 
     private boolean currentlyMuted;
     private boolean currentlyRestricted;
@@ -126,7 +128,10 @@ public class PotPlayer {
 
     private LanguageType language;
     private PermissionAttachment attachment;
+
     private GameProfile gameProfile;
+    private String skin;
+    private String signature;
 
     private long chatCooldown = 1L;
     private long commandCooldown = 1L;
@@ -486,17 +491,25 @@ public class PotPlayer {
 
             this.setupPlayer();
 
-            if (this.profile.get("allPrefixes") != null) {
+            if (this.profile.getList("allPrefixes", String.class) != null) {
                 if (this.player.hasPermission("scandium.prefixes.all")) {
                     final List<String> prefixes = new ArrayList<>();
 
                     Prefix.getPrefixes().forEach(prefix -> prefixes.add(prefix.getName()));
+
                     this.allPrefixes.addAll(prefixes);
                 } else {
-                    final List<String> prefixes = profile.getList("allPrefixes", String.class);
+                    final List<String> prefixes = this.profile.getList("allPrefixes", String.class);
 
                     this.allPrefixes.addAll(prefixes);
                 }
+            }
+
+            final Property property = this.gameProfile.getProperties().get("textures").stream().findFirst().orElse(null);
+
+            if (property != null) {
+                this.skin = property.getValue();
+                this.signature = property.getSignature();
             }
         });
 
