@@ -99,9 +99,7 @@ public class DisguiseAdminCommand extends BaseCommand {
 
                         CorePlugin.getInstance().getDisguiseCache().removeDataPair(disguiseData);
 
-                        CompletableFuture.runAsync(() -> {
-                            CorePlugin.getInstance().getCoreDatabase().getDisguiseCollection().deleteOne(Filters.eq("_id", disguiseData.getUuid()));
-                        });
+                        CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getDisguiseCollection().deleteOne(Filters.eq("_id", disguiseData.getUuid())));
 
                         RedisUtil.writeAsync(RedisUtil.onDisguiseProfileRemove(disguiseData));
 

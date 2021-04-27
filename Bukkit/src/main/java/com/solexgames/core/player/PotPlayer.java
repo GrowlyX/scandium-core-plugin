@@ -69,6 +69,7 @@ public class PotPlayer {
     private String syncCode;
     private String syncDiscord;
     private String name;
+    private String originalName;
 
     private String authSecret;
     private Document profile;
@@ -160,6 +161,7 @@ public class PotPlayer {
         this.uuid = uuid;
         this.ipAddress = (inetAddress != null ? inetAddress.getHostAddress() : null);
         this.name = name;
+        this.originalName = name;
 
         this.media = new Media();
         this.lastJoined = new Date();
