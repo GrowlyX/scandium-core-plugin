@@ -2,7 +2,9 @@ package com.solexgames.core.util;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.player.PotPlayer;
+import com.solexgames.core.util.clickable.Clickable;
 import lombok.experimental.UtilityClass;
+import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -71,11 +73,20 @@ public final class PlayerUtil {
     public static void sendToStaff(String message) {
         Bukkit.getOnlinePlayers().stream()
                 .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
-                .filter(Objects::nonNull)
-                .filter(potPlayer -> potPlayer.getPlayer().hasPermission("scandium.staff"))
-                .filter(PotPlayer::isCanSeeStaffMessages)
+                .filter(potPlayer -> potPlayer != null && potPlayer.isCanSeeStaffMessages() && potPlayer.getPlayer().hasPermission("scandium.staff"))
                 .forEach(potPlayer -> {
                     potPlayer.getPlayer().sendMessage(Color.translate(message));
                 });
+    }
+
+    public static void sendClickableTo(String message, String hover, String value, ClickEvent.Action action) {
+        final Clickable clickable = new Clickable("");
+
+        clickable.add(Color.translate(message), Color.translate(hover), value, action);
+
+        Bukkit.getOnlinePlayers().stream()
+                .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
+                .filter(potPlayer -> potPlayer != null && potPlayer.isCanSeeStaffMessages() && potPlayer.getPlayer().hasPermission("scandium.staff"))
+                .forEach(potPlayer -> potPlayer.getPlayer().spigot().sendMessage(clickable.asComponents()));
     }
 }

@@ -10,6 +10,7 @@ import com.solexgames.core.util.Color;
 import com.solexgames.core.util.PlayerUtil;
 import com.solexgames.core.util.RedisUtil;
 import lombok.Getter;
+import net.md_5.bungee.api.chat.ClickEvent;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -89,9 +90,13 @@ public class PunishmentManager {
                 final Rank playerRank = Rank.getByName(document.getString("rankName"));
                 final String formattedName = playerRank.getColor() + playerRank.getItalic() + document.get("name");
                 final String issuerName = (issuer != null ? formattedName : "&4Console");
+                final String clickableLore = Color.SECONDARY_COLOR + "---------------------------------\n" + Color.SECONDARY_COLOR + "Added by: " + issuerName + "\n" + Color.SECONDARY_COLOR + "Added for: " + ChatColor.WHITE + punishment.getReason() + ChatColor.GRAY + " (" + punishment.getExpirationString() + ")\n" + Color.SECONDARY_COLOR + "---------------------------------";
 
                 if (silent) {
-                    PlayerUtil.sendToStaff("&7[Silent] " + playerFormattedName + " &awas " + punishmentExplanation + " by &4" + issuerName + ChatColor.GREEN + durationFormat);
+                    PlayerUtil.sendClickableTo("&7[Silent] " + playerFormattedName + " &awas " + punishmentExplanation + " by &4Console&a" + durationFormat,
+                            clickableLore,
+                            "/c " + document.getString("name"),
+                            ClickEvent.Action.SUGGEST_COMMAND);
                 } else {
                     Bukkit.broadcastMessage(Color.translate(
                             playerFormattedName + " &awas " + punishmentExplanation + " by &4" + issuerName + ChatColor.GREEN + "."
@@ -99,7 +104,9 @@ public class PunishmentManager {
                 }
             } else {
                 if (silent) {
-                    PlayerUtil.sendToStaff("&7[Silent] " + playerFormattedName + " &awas " + punishmentExplanation + " by &4Console&a" + durationFormat);
+                    PlayerUtil.sendClickableTo("&7[Silent] " + playerFormattedName + " &awas " + punishmentExplanation + " by &4Console&a" + durationFormat,
+                            "",
+                            "", ClickEvent.Action.SUGGEST_COMMAND);
                 } else {
                     Bukkit.broadcastMessage(Color.translate(
                             playerFormattedName + " &awas " + punishmentExplanation + " by &4Console&a."
