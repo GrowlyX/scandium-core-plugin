@@ -10,6 +10,6 @@ public interface INMS {
     void updateTablist();
     void setupTablist(Player player);
 
-//    void updatePlayer();
+    void updatePlayer(Player player);
 
 }

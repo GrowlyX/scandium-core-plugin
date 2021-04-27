@@ -2,6 +2,7 @@ package com.solexgames.core.hooks.protocol.impl;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
@@ -9,6 +10,9 @@ import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.WrappedServerPing;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.hooks.protocol.AbstractPacketHandler;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.InvocationTargetException;
@@ -36,7 +40,8 @@ public class ProtocolPacketHandler extends AbstractPacketHandler {
                         if (((message.startsWith("/")) && (!message.contains(" "))) || ((message.startsWith("/ver")) && (!message.contains("  "))) || ((message.startsWith("/version")) && (!message.contains("  "))) || ((message.startsWith("/?")) && (!message.contains("  "))) || ((message.startsWith("/about")) && (!message.contains("  "))) || ((message.startsWith("/help")) && (!message.contains("  ")))) {
                             event.setCancelled(true);
                         }
-                    } catch (Exception ignored) { }
+                    } catch (Exception ignored) {
+                    }
                 }
             }
         };
@@ -52,7 +57,7 @@ public class ProtocolPacketHandler extends AbstractPacketHandler {
         };
 
         this.sendAdapter = new PacketAdapter(CorePlugin.getInstance(), ListenerPriority.NORMAL, PacketType.Play.Server.TAB_COMPLETE) {
-            public void onPacketSending(PacketEvent e){
+            public void onPacketSending(PacketEvent e) {
                 if (e.getPacketType() == PacketType.Play.Server.TAB_COMPLETE) {
                     if (!e.getPlayer().hasPermission("scandium.tabcomplete.bypass")) {
                         e.getPacket().getStringArrays().write(0, returnString);
@@ -85,5 +90,50 @@ public class ProtocolPacketHandler extends AbstractPacketHandler {
         } catch (Exception ignored) {
             return false;
         }
+    }
+
+    @Override
+    public boolean turnPlayer(Player target) {
+        String n;
+        double x;
+        double y;
+        double z;
+
+        n = target.getLocation().getWorld().getName();
+        x = target.getLocation().getX();
+        y = target.getLocation().getY();
+        z = target.getLocation().getZ();
+
+        double yaw = target.getLocation().getYaw();
+        double pitch = target.getLocation().getPitch();
+
+        World w = Bukkit.getWorld(n);
+
+        double newYaw;
+        Location newLocation;
+
+        if (yaw > 0.0D) {
+            newYaw = yaw - 180.0D;
+            newLocation = new Location(w, x, y, z, (float) newYaw, (float) pitch);
+            target.teleport(newLocation);
+        }
+
+        if (yaw < 0.0D) {
+            newYaw = 180.0D + yaw;
+            newLocation = new Location(w, x, y, z, (float) newYaw, (float) pitch);
+            target.teleport(newLocation);
+        }
+
+        if (yaw == 0.0D || yaw == 0.0D) {
+            newLocation = new Location(w, x, y, z, 180.0F, (float) pitch);
+            target.teleport(newLocation);
+        }
+
+        if (yaw == 180.0D || yaw == -180.0D) {
+            newLocation = new Location(w, x, y, z, 0.0F, (float) pitch);
+            target.teleport(newLocation);
+        }
+
+        return false;
     }
 }

@@ -26,5 +26,6 @@ public abstract class AbstractPacketHandler {
     public abstract void initializePacketHandlers();
 
     public abstract boolean sendDemoScreen(Player player);
+    public abstract boolean turnPlayer(Player player);
 
 }

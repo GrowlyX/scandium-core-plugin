@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 @NoArgsConstructor
@@ -15,6 +16,18 @@ public class DisguiseCache {
 
     public DisguiseData getRandomData() {
         return this.disguiseDataList.get(ThreadLocalRandom.current().nextInt(this.disguiseDataList.size()));
+    }
+
+    public DisguiseData getByUuid(UUID uuid) {
+        return this.disguiseDataList.stream()
+                .filter(disguiseData -> disguiseData.getUuid().equals(uuid))
+                .findFirst().orElse(null);
+    }
+
+    public DisguiseData getByName(String name) {
+        return this.disguiseDataList.stream()
+                .filter(disguiseData -> disguiseData.getName().equalsIgnoreCase(name))
+                .findFirst().orElse(null);
     }
 
     public void registerNewDataPair(DisguiseData disguiseData) {

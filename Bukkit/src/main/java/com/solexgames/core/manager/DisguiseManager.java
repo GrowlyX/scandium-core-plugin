@@ -4,20 +4,16 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import com.mongodb.Block;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.disguise.DisguiseData;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.util.Color;
 import lombok.Getter;
-import net.minecraft.server.v1_8_R3.EntityPlayer;
-import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerInfo;
-import net.minecraft.server.v1_8_R3.PacketPlayOutRespawn;
-import net.minecraft.server.v1_8_R3.WorldSettings;
+import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 
@@ -25,13 +21,24 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 @Getter
 public class DisguiseManager {
 
     private final CorePlugin plugin = CorePlugin.getInstance();
 
-    public void disguise(Player player, DisguiseData disguiseData) {
+    public DisguiseManager() {
+        this.loadToCache();
+    }
+
+    public void loadToCache() {
+        CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getDisguiseCollection().find().forEach((Block<? super Document>) document -> {
+            CorePlugin.getInstance().getDisguiseCache().registerNewDataPair(new DisguiseData(UUID.fromString(document.getString("uuid")), document.getString("name"), document.getString("skin"), document.getString("signature")));
+        }));
+    }
+
+    public void disguise(Player player, DisguiseData disguiseData, DisguiseData skinData) {
         final PotPlayer potPlayer = this.plugin.getPlayerManager().getPlayer(player);
 
         if (disguiseData.getUuid() != null && potPlayer != null) {
@@ -39,13 +46,13 @@ public class DisguiseManager {
             potPlayer.setDisguised(true);
             potPlayer.setName(disguiseData.getName());
 
-            this.setGameProfile(player, disguiseData);
+            this.setGameProfile(player, disguiseData, skinData);
 
             if (!player.hasMetadata("disguised")) {
                 player.setMetadata("disguised", new FixedMetadataValue(this.plugin, true));
             }
 
-            player.sendMessage(Color.SECONDARY_COLOR + "You've disguised as " + Color.MAIN_COLOR + disguiseData.getName() + " " + ChatColor.GRAY + "(with the skin " + disguiseData.getName() + ")" + Color.SECONDARY_COLOR + ".");
+            player.sendMessage(Color.SECONDARY_COLOR + "You've disguised as " + Color.MAIN_COLOR + disguiseData.getName() + ChatColor.GRAY + " (with a random skin)" + Color.SECONDARY_COLOR + ".");
         }
     }
 
@@ -123,7 +130,7 @@ public class DisguiseManager {
      * @param player       Target player to set the game-profile to.
      * @param disguiseData Data pair of the random disguise profile.
      */
-    public void setGameProfile(Player player, DisguiseData disguiseData) {
+    public void setGameProfile(Player player, DisguiseData disguiseData, DisguiseData skinData) {
         try {
             final Object entityPlayer = player.getClass()
                     .getMethod("getHandle", ((Class<?>[]) null))
@@ -152,7 +159,7 @@ public class DisguiseManager {
             }
 
             gameProfile.getProperties().removeAll("textures");
-            gameProfile.getProperties().put("textures", new Property("textures", disguiseData.getSkin(), disguiseData.getSignature()));
+            gameProfile.getProperties().put("textures", new Property("textures", skinData.getSkin(), skinData.getSignature()));
 
             this.updatePlayer(player);
         } catch (Exception ignored) {
@@ -161,19 +168,7 @@ public class DisguiseManager {
     }
 
     private void updatePlayer(Player player) {
-        final EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
-        final Location previousLocation = player.getLocation().clone();
-
-        entityPlayer.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, entityPlayer));
-        entityPlayer.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, entityPlayer));
-        entityPlayer.playerConnection.sendPacket(new PacketPlayOutRespawn(
-                entityPlayer.getWorld().worldProvider.getDimension(),
-                entityPlayer.getWorld().worldData.getDifficulty(),
-                entityPlayer.getWorld().worldData.getType(),
-                WorldSettings.EnumGamemode.valueOf(entityPlayer.getBukkitEntity().getGameMode().name())
-        ));
-
-        player.teleport(previousLocation);
+        CorePlugin.getInstance().getNMS().updatePlayer(player);
     }
 
     public GameProfile getGameProfile(Player player) {

@@ -4,6 +4,7 @@ import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.disguise.DisguiseData;
 import com.solexgames.core.util.Color;
+import com.solexgames.core.util.RedisUtil;
 import com.solexgames.core.util.builder.PageListBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -56,6 +57,11 @@ public class DisguiseAdminCommand extends BaseCommand {
                             return false;
                         }
 
+                        if (CorePlugin.getInstance().getDisguiseCache().getByUuid(uuid) != null || CorePlugin.getInstance().getDisguiseCache().getByName(args[1]) != null) {
+                            player.sendMessage(ChatColor.RED + "Error: There's already a disguise profile with that name!");
+                            return false;
+                        }
+
                         final DisguiseData disguiseData = CorePlugin.getInstance().getDisguiseManager().getDisguiseData(args[1], uuid);
 
                         if (disguiseData == null) {
@@ -64,6 +70,9 @@ public class DisguiseAdminCommand extends BaseCommand {
                         }
 
                         CorePlugin.getInstance().getDisguiseCache().registerNewDataPair(disguiseData);
+                        RedisUtil.writeAsync(RedisUtil.onDisguiseProfileCreate(disguiseData));
+
+                        disguiseData.saveData();
 
                         player.sendMessage(Color.SECONDARY_COLOR + "You've registered a new disguise profile with the name " + Color.MAIN_COLOR + disguiseData.getName() + Color.SECONDARY_COLOR + "!");
                     }

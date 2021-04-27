@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CrasherCommand extends BaseCommand {
+public class TurnCommand extends BaseCommand {
 
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
@@ -35,9 +35,9 @@ public class CrasherCommand extends BaseCommand {
                 final Player target = Bukkit.getPlayerExact(args[0]);
 
                 if (target != null) {
-                    target.openInventory(Bukkit.getServer().createInventory(target, Integer.MAX_VALUE, "Crashed!"));
+                    CorePlugin.getInstance().getPacketHandler().turnPlayer(target);
 
-                    player.sendMessage(Color.SECONDARY_COLOR + "Crashed that player's client!");
+                    player.sendMessage(Color.SECONDARY_COLOR + "Turned that player 180 degrees!");
                 } else {
                     player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
                 }

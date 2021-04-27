@@ -2,11 +2,13 @@ package com.solexgames.core.hooks.nms.impl;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.hooks.nms.INMS;
+import net.minecraft.server.v1_16_R3.EnumGamemode;
 import net.minecraft.server.v1_16_R3.EntityPlayer;
 import net.minecraft.server.v1_16_R3.MinecraftServer;
 import net.minecraft.server.v1_16_R3.PacketPlayOutPlayerInfo;
 import net.minecraft.server.v1_16_R3.IChatBaseComponent;
 import net.minecraft.server.v1_16_R3.PacketPlayOutPlayerListHeaderFooter;
+import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
@@ -71,5 +73,30 @@ public class NMSAccess_v1_16 implements INMS {
 
             ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
         }
+    }
+
+    @Override
+    public void updatePlayer(Player player) {
+        final net.minecraft.server.v1_16_R3.EntityPlayer entityPlayer = ((org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer) player).getHandle();
+        final Location previousLocation = player.getLocation().clone();
+
+        entityPlayer.playerConnection.sendPacket(new net.minecraft.server.v1_16_R3.PacketPlayOutPlayerInfo(net.minecraft.server.v1_16_R3.PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, entityPlayer));
+        entityPlayer.playerConnection.sendPacket(new net.minecraft.server.v1_16_R3.PacketPlayOutPlayerInfo(net.minecraft.server.v1_16_R3.PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, entityPlayer));
+        /*entityPlayer.playerConnection.sendPacket(new net.minecraft.server.v1_16_R3.PacketPlayOutRespawn(
+                entityPlayer.getWorld().getMinecraftWorld().getDimensionManager(),
+                entityPlayer.getWorld().worldData.getDifficulty(),
+                3L,
+                entityPlayer.getWorldServer().getSeed(),
+                entityPlayer.playerInteractManager.getGameMode(),
+                entityPlayer.playerInteractManager.getGameMode(),
+                false,
+                false,
+                true
+        ));*/
+
+        player.getInventory().setItemInHand(player.getItemInHand());
+        player.updateInventory();
+
+        player.teleport(previousLocation);
     }
 }

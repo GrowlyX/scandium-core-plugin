@@ -2,6 +2,7 @@ package com.solexgames.core.redis.subscription.extend;
 
 import com.mongodb.client.model.Filters;
 import com.solexgames.core.CorePlugin;
+import com.solexgames.core.disguise.DisguiseData;
 import com.solexgames.core.enums.ChatChannelType;
 import com.solexgames.core.enums.NetworkServerStatusType;
 import com.solexgames.core.enums.NetworkServerType;
@@ -45,6 +46,14 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
 
         CompletableFuture.runAsync(() -> {
             switch (jsonAppender.getPacket()) {
+                case DISGUISE_PROFILE_CREATE:
+                    final String disguiseName = jsonAppender.getParam("NAME");
+                    final String disguiseSkin = jsonAppender.getParam("SKIN");
+                    final String disguiseSignature = jsonAppender.getParam("SKIN");
+                    final UUID disguiseUUID = UUID.fromString(jsonAppender.getParam("UUID"));
+
+                    CorePlugin.getInstance().getDisguiseCache().registerNewDataPair(new DisguiseData(disguiseUUID, disguiseName, disguiseSkin, disguiseSignature));
+                    break;
                 case GLOBAL_PLAYER_REMOVE:
                     final UUID removingPlayer = UUID.fromString(jsonAppender.getParam("UUID"));
                     final String removalServer = jsonAppender.getParam("SERVER");

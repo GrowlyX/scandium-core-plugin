@@ -44,7 +44,9 @@ public enum RedisAction {
     PREFIX_DELETE_UPDATE("PrefixDeleteUpdate"),
     PREFIX_SETTINGS_UPDATE("PrefixSettingsUpdate"),
 
-    DISCORD_SYNC_UPDATE("DiscordSyncUpdate");
+    DISCORD_SYNC_UPDATE("DiscordSyncUpdate"),
+
+    DISGUISE_PROFILE_CREATE("DisguiseProfileCreate");
 
     private final String packetDataName;
 

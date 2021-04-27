@@ -20,6 +20,7 @@ public class Database {
     private final MongoCollection<Document> warpCollection;
     private final MongoCollection<Document> rankCollection;
     private final MongoCollection<Document> webCollection;
+    private final MongoCollection<Document> disguiseCollection;
 
     public Database() {
         this.client = new MongoClient(new MongoClientURI(CorePlugin.getInstance().getDatabaseConfig().getString("mongodb.url")));
@@ -32,6 +33,7 @@ public class Database {
         this.warpCollection = this.database.getCollection("warps");
         this.punishmentCollection = this.database.getCollection("punishment");
         this.webCollection = this.database.getCollection("website");
+        this.disguiseCollection = this.database.getCollection("disguises");
 
         CorePlugin.getInstance().logConsole("&a[Mongo] &eSetup the MongoDB Database!");
     }

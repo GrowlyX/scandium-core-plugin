@@ -35,9 +35,10 @@ public class DisguiseCommand extends BaseCommand {
         }
 
         final DisguiseData disguiseData = CorePlugin.getInstance().getDisguiseCache().getRandomData();
+        final DisguiseData skinData = CorePlugin.getInstance().getDisguiseCache().getRandomData();
 
         if (disguiseData != null) {
-            CorePlugin.getInstance().getDisguiseManager().disguise(player, disguiseData);
+            CorePlugin.getInstance().getDisguiseManager().disguise(player, disguiseData, skinData);
         } else {
             player.sendMessage(ChatColor.RED + "There aren't any available disguises!");
         }

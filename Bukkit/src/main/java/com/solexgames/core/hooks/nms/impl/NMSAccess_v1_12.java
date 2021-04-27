@@ -3,6 +3,7 @@ package com.solexgames.core.hooks.nms.impl;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.hooks.nms.INMS;
 import net.minecraft.server.v1_12_R1.*;
+import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
@@ -67,5 +68,25 @@ public class NMSAccess_v1_12 implements INMS {
 
             ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
         }
+    }
+
+    @Override
+    public void updatePlayer(Player player) {
+        final net.minecraft.server.v1_12_R1.EntityPlayer entityPlayer = ((org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer) player).getHandle();
+        final Location previousLocation = player.getLocation().clone();
+
+        entityPlayer.playerConnection.sendPacket(new net.minecraft.server.v1_12_R1.PacketPlayOutPlayerInfo(net.minecraft.server.v1_12_R1.PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, entityPlayer));
+        entityPlayer.playerConnection.sendPacket(new net.minecraft.server.v1_12_R1.PacketPlayOutPlayerInfo(net.minecraft.server.v1_12_R1.PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, entityPlayer));
+        entityPlayer.playerConnection.sendPacket(new net.minecraft.server.v1_12_R1.PacketPlayOutRespawn(
+                entityPlayer.getWorld().worldProvider.getDimensionManager().getDimensionID(),
+                entityPlayer.getWorld().worldData.getDifficulty(),
+                entityPlayer.getWorld().worldData.getType(),
+                EnumGamemode.valueOf(entityPlayer.getBukkitEntity().getGameMode().name())
+        ));
+
+        player.getInventory().setItemInHand(player.getItemInHand());
+        player.updateInventory();
+
+        player.teleport(previousLocation);
     }
 }

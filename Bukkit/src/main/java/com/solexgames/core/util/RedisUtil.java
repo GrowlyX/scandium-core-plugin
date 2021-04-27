@@ -1,6 +1,7 @@
 package com.solexgames.core.util;
 
 import com.solexgames.core.CorePlugin;
+import com.solexgames.core.disguise.DisguiseData;
 import com.solexgames.core.enums.ChatChannelType;
 import com.solexgames.core.enums.StaffUpdateType;
 import com.solexgames.core.player.PotPlayer;
@@ -42,13 +43,22 @@ public final class RedisUtil {
                 .getAppended();
     }
 
-    public static String onServerOffline(){
+    public static String onDisguiseProfileCreate(DisguiseData disguiseData) {
+        return new JsonAppender(RedisAction.DISGUISE_PROFILE_CREATE)
+                .put("NAME", disguiseData.getName())
+                .put("SKIN", disguiseData.getSkin())
+                .put("SIGNATURE", disguiseData.getSignature())
+                .put("UUID", disguiseData.getUuid().toString())
+                .getAppended();
+    }
+
+    public static String onServerOffline() {
         return new JsonAppender(RedisAction.SERVER_DATA_OFFLINE)
                 .put("SERVER", CorePlugin.getInstance().getServerName())
                 .getAppended();
     }
 
-    public static String onServerOnline(){
+    public static String onServerOnline() {
         return new JsonAppender(RedisAction.SERVER_DATA_ONLINE)
                 .put("SERVER", CorePlugin.getInstance().getServerName())
                 .getAppended();

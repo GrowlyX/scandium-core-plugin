@@ -3,6 +3,7 @@ package com.solexgames.core.hooks.nms.impl;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.hooks.nms.INMS;
 import net.minecraft.server.v1_8_R3.*;
+import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
@@ -67,5 +68,25 @@ public class NMSAccess_v1_8 implements INMS {
 
             ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
         }
+    }
+
+    @Override
+    public void updatePlayer(Player player) {
+        final EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
+        final Location previousLocation = player.getLocation().clone();
+
+        entityPlayer.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, entityPlayer));
+        entityPlayer.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, entityPlayer));
+        entityPlayer.playerConnection.sendPacket(new PacketPlayOutRespawn(
+                entityPlayer.getWorld().worldProvider.getDimension(),
+                entityPlayer.getWorld().worldData.getDifficulty(),
+                entityPlayer.getWorld().worldData.getType(),
+                WorldSettings.EnumGamemode.valueOf(entityPlayer.getBukkitEntity().getGameMode().name())
+        ));
+
+        player.getInventory().setItemInHand(player.getItemInHand());
+        player.updateInventory();
+
+        player.teleport(previousLocation);
     }
 }
