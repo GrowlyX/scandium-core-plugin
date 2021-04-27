@@ -55,8 +55,6 @@ import java.util.TimeZone;
 /**
  * @author GrowlyX
  * @since 3/1/2021
- * <p>
- * Holds instances to anything important.
  */
 
 @Getter
@@ -115,10 +113,6 @@ public final class CorePlugin extends JavaPlugin {
         instance = this;
 
         final long milli = System.currentTimeMillis();
-
-        if (!this.getName().equals("Scandium")) {
-            this.getServer().shutdown();
-        }
 
         RANDOM = new Random();
         GSON = new GsonBuilder()

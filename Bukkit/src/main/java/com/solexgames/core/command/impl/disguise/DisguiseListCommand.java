@@ -33,10 +33,10 @@ public class DisguiseListCommand extends BaseCommand {
                 .map(potPlayer -> potPlayer.getColorByRankColor() + potPlayer.getName() + ChatColor.GRAY + " (" + potPlayer.getOriginalName() + ")")
                 .collect(Collectors.toList());
 
-        if (args.length == 1) {
+        if (args.length == 0) {
             pageListBuilder.display(sender, 1, stringList);
         }
-        if (args.length == 2) {
+        if (args.length == 1) {
             try {
                 final int page = Integer.parseInt(args[0]);
 

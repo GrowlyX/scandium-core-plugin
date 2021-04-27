@@ -1,6 +1,7 @@
 package com.solexgames.core.command;
 
 import com.solexgames.core.CorePlugin;
+import com.solexgames.core.util.Color;
 import com.solexgames.core.util.command.CommandHelpBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -45,6 +46,10 @@ public abstract class BaseCommand extends Command implements PluginIdentifiableC
         final CommandHelpBuilder helpBuilder = new CommandHelpBuilder(10, this.getLabel());
 
         helpBuilder.display(sender, page, Arrays.asList(strings));
+    }
+
+    public String getUsageMessage(String subCommand, String... arguments) {
+        return Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + this.getLabel() + " " + Color.SECONDARY_COLOR + subCommand + " " + ChatColor.WHITE + String.join(" ", arguments) + ".";
     }
 
     @Override

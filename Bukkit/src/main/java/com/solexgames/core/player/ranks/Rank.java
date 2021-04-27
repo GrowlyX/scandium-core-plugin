@@ -133,10 +133,14 @@ public class Rank {
     }
 
     public static Rank getByName(String name) {
-        return getRanks().stream().filter(rank -> rank.getName().equals(name)).findFirst().orElse(null);
+        return getRanks().stream()
+                .filter(rank -> rank.getName().equalsIgnoreCase(name))
+                .findFirst().orElse(null);
     }
 
     public static Rank getByUuid(UUID uuid) {
-        return getRanks().stream().filter(rank -> rank.getUuid().equals(uuid)).findFirst().orElse(null);
+        return getRanks().stream()
+                .filter(rank -> rank.getUuid().equals(uuid))
+                .findFirst().orElse(null);
     }
 }

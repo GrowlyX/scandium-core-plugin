@@ -221,7 +221,7 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                     final Rank rankCreate = new Rank(rankCreateUuid, rankCreateName);
 
                     if (rankCreatePlayer != null) {
-                        rankCreatePlayer.sendMessage(ChatColor.GREEN + "You've created a rank with the name " + ChatColor.GRAY + rankCreateName + ChatColor.GREEN + "!");
+                        rankCreatePlayer.sendMessage(Color.SECONDARY_COLOR + "You've created a rank with the name " + ChatColor.GRAY + rankCreateName + Color.SECONDARY_COLOR + "!");
                     }
 
                     rankCreate.saveRank();
@@ -233,10 +233,9 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                         final Player rankRemovePlayer = Bukkit.getPlayer(jsonAppender.getParam("PLAYER"));
 
                         Rank.getRanks().remove(rankRemove);
-                        CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getRankCollection().deleteOne(Filters.eq("_id", rankRemove.getUuid())));
 
                         if (rankRemovePlayer != null) {
-                            rankRemovePlayer.sendMessage(ChatColor.RED + "You've deleted the rank with the name " + rankRemove.getName() + "!");
+                            rankRemovePlayer.sendMessage(Color.SECONDARY_COLOR + "You've deleted the rank with the name " + ChatColor.GRAY + rankRemove + Color.SECONDARY_COLOR + "!");
                         }
                     }
                     break;

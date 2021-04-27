@@ -1,15 +1,20 @@
 package com.solexgames.core.command.impl.rank;
 
+import com.mongodb.client.model.Filters;
+import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
+import com.solexgames.core.util.StringUtil;
+import com.solexgames.core.util.builder.PageListBuilder;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 public class RankCommand extends BaseCommand {
@@ -42,7 +47,8 @@ public class RankCommand extends BaseCommand {
             return false;
         }
 
-        Player player = (Player) sender;
+        final Player player = (Player) sender;
+
         if (!player.hasPermission("scandium.command.rank")) {
             player.sendMessage(NO_PERMISSION);
             return false;
@@ -59,12 +65,13 @@ public class RankCommand extends BaseCommand {
                 this.sendHelp(player, page);
 
                 return true;
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
 
             switch (args[0]) {
                 case "info":
                     if (args.length == 1) {
-                        player.sendMessage(ChatColor.RED + ("Usage: /rank info <name>."));
+                        player.sendMessage(this.getUsageMessage("info", "<name>"));
                     }
                     if (args.length == 2) {
                         final String name = args[1];
@@ -73,7 +80,7 @@ public class RankCommand extends BaseCommand {
                         if (rank != null) {
                             String displayName = Color.translate(rank.getName());
 
-                            player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
+                            player.sendMessage(Color.translate(Color.MAIN_COLOR + "&m" + StringUtils.repeat("-", 53)));
                             player.sendMessage(Color.translate(Color.MAIN_COLOR + ChatColor.BOLD.toString() + "Rank Information:"));
                             player.sendMessage(Color.translate("  "));
                             player.sendMessage(Color.translate("&7Name: &f" + displayName));
@@ -91,15 +98,20 @@ public class RankCommand extends BaseCommand {
                             rank.getPermissions().forEach(s -> player.sendMessage(Color.translate(" &7* &f" + s)));
                             player.sendMessage(Color.translate("  "));
                             player.sendMessage(Color.translate("&eInheritances:"));
-                            rank.getInheritance().stream().map(Rank::getByUuid).filter(Objects::nonNull).forEach(s -> player.sendMessage(Color.translate(" &7* &f" + s.getName())));
-                            player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
+                            rank.getInheritance().stream()
+                                    .map(Rank::getByUuid)
+                                    .filter(Objects::nonNull)
+                                    .forEach(s -> player.sendMessage(Color.translate(" &7* &f" + s.getName())));
+                            player.sendMessage(Color.translate(Color.MAIN_COLOR + "&m" + StringUtils.repeat("-", 53)));
                         } else {
                             player.sendMessage(ChatColor.RED + ("Error: That rank does not exist!"));
                         }
                     }
                     break;
                 case "hidden":
-                    if (args.length == 1) player.sendMessage(ChatColor.RED + ("Usage: /rank hidden <name>."));
+                    if (args.length == 1) {
+                        player.sendMessage(this.getUsageMessage("hidden", "<name>"));
+                    }
                     if (args.length == 2) {
                         final String name = args[1];
                         final Rank rank = Rank.getByName(name);
@@ -107,23 +119,21 @@ public class RankCommand extends BaseCommand {
                         if (rank != null) {
                             final String displayName = Color.translate(rank.getColor() + rank.getItalic() + rank.getName());
 
-                            if (rank.isHidden()) {
-                                rank.setHidden(false);
-                                player.sendMessage(ChatColor.GREEN + Color.translate("Set the " + displayName + ChatColor.GREEN + " rank hidden mode to false!"));
-                            } else {
-                                rank.setHidden(true);
-                                player.sendMessage(ChatColor.GREEN + Color.translate("Set the " + displayName + ChatColor.GREEN + " rank hidden mode to true!"));
-                            }
+                            rank.setHidden(!rank.isHidden());
+                            rank.saveRank();
 
                             RedisUtil.writeAsync(RedisUtil.updateRank(rank));
-                            rank.saveRank();
+
+                            player.sendMessage(Color.SECONDARY_COLOR + "You've toggle hidden mode for the " + displayName + Color.SECONDARY_COLOR + " rank!");
                         } else {
                             player.sendMessage(ChatColor.RED + ("Error: That rank does not exist!"));
                         }
                     }
                     break;
                 case "default":
-                    if (args.length == 1) player.sendMessage(ChatColor.RED + ("Usage: /rank default <name>."));
+                    if (args.length == 1) {
+                        player.sendMessage(this.getUsageMessage("default", "<name>"));
+                    }
                     if (args.length == 2) {
                         final String name = args[1];
                         final Rank rank = Rank.getByName(name);
@@ -131,23 +141,21 @@ public class RankCommand extends BaseCommand {
                         if (rank != null) {
                             final String displayName = Color.translate(rank.getColor() + rank.getItalic() + rank.getName());
 
-                            if (rank.isDefaultRank()) {
-                                rank.setDefaultRank(false);
-                                player.sendMessage(ChatColor.GREEN + Color.translate("Set the " + displayName + ChatColor.GREEN + " rank default mode to false!"));
-                            } else {
-                                rank.setDefaultRank(true);
-                                player.sendMessage(ChatColor.GREEN + Color.translate("Set the " + displayName + ChatColor.GREEN + " rank default mode to true!"));
-                            }
+                            rank.setDefaultRank(!rank.isDefaultRank());
+                            rank.saveRank();
 
                             RedisUtil.writeAsync(RedisUtil.updateRank(rank));
-                            rank.saveRank();
+
+                            player.sendMessage(Color.SECONDARY_COLOR + "You've toggle default mode for the " + displayName + Color.SECONDARY_COLOR + " rank!");
                         } else {
                             player.sendMessage(ChatColor.RED + ("Error: That rank does not exist!"));
                         }
                     }
                     break;
                 case "italic":
-                    if (args.length == 1) player.sendMessage(ChatColor.RED + ("Usage: /rank italic <name>."));
+                    if (args.length == 1) {
+                        player.sendMessage(this.getUsageMessage("italic", "<name>"));
+                    }
                     if (args.length == 2) {
                         final String name = args[1];
                         final Rank rank = Rank.getByName(name);
@@ -155,23 +163,21 @@ public class RankCommand extends BaseCommand {
                         if (rank != null) {
                             final String displayName = Color.translate(rank.getColor() + rank.getItalic() + rank.getName());
 
-                            if (rank.isItalic()) {
-                                rank.setItalic(false);
-                                player.sendMessage(ChatColor.GREEN + Color.translate("Set the " + displayName + ChatColor.GREEN + " rank italic mode to false!"));
-                            } else {
-                                rank.setItalic(true);
-                                player.sendMessage(ChatColor.GREEN + Color.translate("Set the " + displayName + ChatColor.GREEN + " rank italic mode to true!"));
-                            }
+                            rank.setItalic(!rank.isItalic());
+                            rank.saveRank();
 
                             RedisUtil.writeAsync(RedisUtil.updateRank(rank));
-                            rank.saveRank();
+
+                            player.sendMessage(Color.SECONDARY_COLOR + "You've toggle italic mode for the " + displayName + Color.SECONDARY_COLOR + " rank!");
                         } else {
                             player.sendMessage(ChatColor.RED + ("Error: That rank does not exist!"));
                         }
                     }
                     break;
                 case "purchasable":
-                    if (args.length == 1) player.sendMessage(ChatColor.RED + ("Usage: /rank purchasable <name>."));
+                    if (args.length == 1) {
+                        player.sendMessage(this.getUsageMessage("purchasable", "<name>"));
+                    }
                     if (args.length == 2) {
                         final String name = args[1];
                         final Rank rank = Rank.getByName(name);
@@ -179,112 +185,95 @@ public class RankCommand extends BaseCommand {
                         if (rank != null) {
                             final String displayName = Color.translate(rank.getColor() + rank.getItalic() + rank.getName());
 
-                            if (rank.isPurchasable()) {
-                                rank.setPurchasable(false);
-                                player.sendMessage(ChatColor.GREEN + Color.translate("Set the " + displayName + ChatColor.GREEN + " rank purchasable mode to false!"));
-                            } else {
-                                rank.setPurchasable(true);
-                                player.sendMessage(ChatColor.GREEN + Color.translate("Set the " + displayName + ChatColor.GREEN + " rank purchasable mode to true!"));
-                            }
+                            rank.setPurchasable(!rank.isPurchasable());
+                            rank.saveRank();
 
                             RedisUtil.writeAsync(RedisUtil.updateRank(rank));
-                            rank.saveRank();
+
+                            player.sendMessage(Color.SECONDARY_COLOR + "You've toggle purchasable mode for the " + displayName + Color.SECONDARY_COLOR + " rank!");
                         } else {
                             player.sendMessage(ChatColor.RED + ("Error: That rank does not exist!"));
                         }
                     }
                     break;
                 case "list":
-                    player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
-                    player.sendMessage(Color.translate(Color.MAIN_COLOR + ChatColor.BOLD.toString() + "All Ranks:"));
-                    this.getSortedRanks().forEach(rank -> player.sendMessage(Color.translate(" &7* " + Color.translate(rank.getColor() + rank.getItalic() + rank.getName()) + " &7(" + rank.getWeight() + ") (" + rank.getPrefix() + "&7)" + " (" + rank.getColor() + rank.getItalic() + "C&7)")));
-                    player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
-                    break;
-                case "teamletter":
-                    if (args.length == 1)
-                        player.sendMessage(ChatColor.RED + ("Usage: /rank teamLetter <name> <letter>."));
-                    if (args.length == 2)
-                        player.sendMessage(ChatColor.RED + ("Usage: /rank teamLetter <name> <letter>."));
-                    if (args.length == 3) {
-                        final String name = args[1];
-                        final String value = args[2];
+                    final PageListBuilder pageListBuilder = new PageListBuilder(10, "Ranks");
+                    final List<String> rankList = this.getSortedRanks().stream()
+                            .map(rank -> Color.translate(rank.getColor() + rank.getItalic() + rank.getName() + " &7(" + rank.getWeight() + ") (" + rank.getPrefix() + "&7)" + " (" + rank.getColor() + rank.getItalic() + "E&7)"))
+                            .collect(Collectors.toList());
 
-                        final Rank rank = Rank.getByName(name);
+                    if (args.length == 1) {
+                        pageListBuilder.display(sender, 1, rankList);
+                    }
+                    if (args.length == 2) {
+                        try {
+                            final int page = Integer.parseInt(args[1]);
 
-                        if (rank != null) {
-                            final String displayName = Color.translate(rank.getColor() + rank.getItalic() + rank.getName());
+                            pageListBuilder.display(sender, page, rankList);
 
-                            if (!(value.length() > 1)) {
-                                rank.setTeamLetter(value.toLowerCase());
-                                player.sendMessage(ChatColor.GREEN + Color.translate("Set the team letter '" + rank.getTeamLetter() + ChatColor.GREEN + "' for the rank " + displayName + ChatColor.GREEN + "."));
-                            } else {
-                                player.sendMessage(ChatColor.RED + ("Error: That has to be a letter!"));
-                            }
-
-                            RedisUtil.writeAsync(RedisUtil.updateRank(rank));
-                            rank.saveRank();
-                        } else {
-                            player.sendMessage(ChatColor.RED + ("Error: That rank does not exist!"));
+                            return true;
+                        } catch (Exception ignored) {
+                            player.sendMessage(ChatColor.RED + "Error: That's not a valid integer!");
                         }
                     }
                     break;
                 case "delinher":
-                    if (args.length == 1)
-                        player.sendMessage(ChatColor.RED + ("Usage: /rank delinher <name> <inheritance>."));
-                    if (args.length == 2)
-                        player.sendMessage(ChatColor.RED + ("Usage: /rank delinher <name> <inheritance>."));
+                    if (args.length < 3) {
+                        player.sendMessage(this.getUsageMessage("delinher", "<name>", "<inheritance>"));
+                    }
                     if (args.length == 3) {
                         final String name = args[1];
                         final String value = args[2];
+
                         final Rank rank = Rank.getByName(name);
                         final Rank delRank = Rank.getByName(value);
 
                         if (rank != null) {
-                            String displayName = Color.translate(rank.getColor() + rank.getItalic() + rank.getName());
+                            final String displayName = Color.translate(rank.getColor() + rank.getItalic() + rank.getName());
+                            final String delDisplayName = Color.translate(delRank.getColor() + delRank.getItalic() + delRank.getName());
 
                             rank.getInheritance().remove(delRank.getUuid());
-                            player.sendMessage(ChatColor.GREEN + Color.translate("Removed the inheritance '" + delRank.getName() + ChatColor.GREEN + "' from the rank " + displayName + ChatColor.GREEN + "."));
+                            rank.saveRank();
+
+                            player.sendMessage(Color.SECONDARY_COLOR + "You've removed the inherited rank " + delDisplayName + Color.SECONDARY_COLOR + " from " + displayName + Color.SECONDARY_COLOR + "!");
 
                             RedisUtil.writeAsync(RedisUtil.updateRank(rank));
-                            rank.saveRank();
                         } else {
                             player.sendMessage(ChatColor.RED + ("Error: That rank does not exist!"));
                         }
                     }
                     break;
                 case "addinher":
-                    if (args.length == 1)
-                        player.sendMessage(ChatColor.RED + ("Usage: /rank addinher <name> <inheritance>."));
-                    if (args.length == 2)
-                        player.sendMessage(ChatColor.RED + ("Usage: /rank addinher <name> <inheritance>."));
+                    if (args.length < 3) {
+                        player.sendMessage(this.getUsageMessage("addinher", "<name>", "<inheritance>"));
+                    }
                     if (args.length == 3) {
-                        final String name = args[1];
-                        final String value = args[2];
-                        final Rank rank = Rank.getByName(name);
-                        final Rank delRank = Rank.getByName(value);
+                        final Rank rank = Rank.getByName(args[1]);
+                        final Rank addingRank = Rank.getByName(args[2]);
 
                         if (rank != null) {
                             final String displayName = Color.translate(rank.getColor() + rank.getItalic() + rank.getName());
+                            final String addDisplayName = Color.translate(addingRank.getColor() + addingRank.getItalic() + addingRank.getName());
 
-                            if (!rank.getInheritance().contains(delRank.getUuid())) {
-                                rank.getInheritance().add(delRank.getUuid());
-                                player.sendMessage(ChatColor.GREEN + Color.translate("Added the inheritance '" + delRank.getName() + ChatColor.GREEN + "' to the rank " + displayName + ChatColor.GREEN + "."));
+                            if (!rank.getInheritance().contains(addingRank.getUuid())) {
+                                rank.getInheritance().add(addingRank.getUuid());
+                                rank.saveRank();
+
+                                player.sendMessage(Color.SECONDARY_COLOR + "You've added the inherited rank " + addDisplayName + Color.SECONDARY_COLOR + " from " + displayName + Color.SECONDARY_COLOR + "!");
+
+                                RedisUtil.writeAsync(RedisUtil.updateRank(rank));
                             } else {
-                                player.sendMessage(ChatColor.RED + ("" + rank.getName() + " is already inheriting that rank!"));
+                                player.sendMessage(ChatColor.RED + (displayName + ChatColor.RED + " is already inheriting that rank!"));
                             }
-
-                            RedisUtil.writeAsync(RedisUtil.updateRank(rank));
-                            rank.saveRank();
                         } else {
                             player.sendMessage(ChatColor.RED + ("Error: That rank does not exist!"));
                         }
                     }
                     break;
                 case "delperm":
-                    if (args.length == 1)
-                        player.sendMessage(ChatColor.RED + ("Usage: /rank delperm <name> <permission>."));
-                    if (args.length == 2)
-                        player.sendMessage(ChatColor.RED + ("Usage: /rank delperm <name> <permission>."));
+                    if (args.length < 3) {
+                        player.sendMessage(this.getUsageMessage("delperm", "<name>", "<permission>"));
+                    }
                     if (args.length == 3) {
                         final String name = args[1];
                         final String value = args[2];
@@ -297,20 +286,20 @@ public class RankCommand extends BaseCommand {
                             finalList.remove(value);
 
                             rank.setPermissions(finalList);
-                            player.sendMessage(ChatColor.GREEN + Color.translate("Removed the permission '" + value + ChatColor.GREEN + "' from the rank " + displayName + ChatColor.GREEN + "."));
+                            rank.saveRank();
+
+                            player.sendMessage(Color.SECONDARY_COLOR + "You've removed the perk " + Color.MAIN_COLOR + value + Color.SECONDARY_COLOR + " from " + displayName + Color.SECONDARY_COLOR + "!");
 
                             RedisUtil.writeAsync(RedisUtil.updateRank(rank));
-                            rank.saveRank();
                         } else {
                             player.sendMessage(ChatColor.RED + ("Error: That rank does not exist!"));
                         }
                     }
                     break;
                 case "addperm":
-                    if (args.length == 1)
-                        player.sendMessage(ChatColor.RED + ("Usage: /rank addperm <name> <permission>."));
-                    if (args.length == 2)
-                        player.sendMessage(ChatColor.RED + ("Usage: /rank addperm <name> <permission>."));
+                    if (args.length < 3) {
+                        player.sendMessage(this.getUsageMessage("addperm", "<name>", "<permission>"));
+                    }
                     if (args.length == 3) {
                         final String name = args[1];
                         final String value = args[2];
@@ -324,10 +313,11 @@ public class RankCommand extends BaseCommand {
                                 finalList.add(value.toLowerCase());
 
                                 rank.setPermissions(finalList);
-                                player.sendMessage(ChatColor.GREEN + Color.translate("Added the permission '" + value + ChatColor.GREEN + "' to the rank " + displayName + ChatColor.GREEN + "."));
+                                rank.saveRank();
+
+                                player.sendMessage(Color.SECONDARY_COLOR + "You've added the perk " + Color.MAIN_COLOR + value + Color.SECONDARY_COLOR + " to " + displayName + Color.SECONDARY_COLOR + "!");
 
                                 RedisUtil.writeAsync(RedisUtil.updateRank(rank));
-                                rank.saveRank();
                             } else {
                                 player.sendMessage(ChatColor.RED + ("Error: That rank already has that permission!"));
                             }
@@ -337,8 +327,9 @@ public class RankCommand extends BaseCommand {
                     }
                     break;
                 case "weight":
-                    if (args.length == 1) player.sendMessage(ChatColor.RED + ("Usage: /rank weight <name> <weight>."));
-                    if (args.length == 2) player.sendMessage(ChatColor.RED + ("Usage: /rank weight <name> <weight>."));
+                    if (args.length < 3) {
+                        player.sendMessage(this.getUsageMessage("weight", "<name>", "<integer>"));
+                    }
                     if (args.length == 3) {
                         final String name = args[1];
                         final String value = args[2];
@@ -350,10 +341,11 @@ public class RankCommand extends BaseCommand {
                                 final String displayName = Color.translate(rank.getColor() + rank.getItalic() + rank.getName());
 
                                 rank.setWeight(integer);
-                                player.sendMessage(ChatColor.GREEN + Color.translate("Changed the weight of " + displayName + ChatColor.GREEN + " to &6" + integer + ChatColor.GREEN + "."));
+                                rank.saveRank();
+
+                                player.sendMessage(Color.SECONDARY_COLOR + "You've set the weight of " + displayName + Color.SECONDARY_COLOR + " to " + Color.MAIN_COLOR + integer + Color.SECONDARY_COLOR + "!");
 
                                 RedisUtil.writeAsync(RedisUtil.updateRank(rank));
-                                rank.saveRank();
                             } catch (NumberFormatException exception) {
                                 player.sendMessage(ChatColor.RED + ("Error: That's not a valid integer!"));
                             }
@@ -363,8 +355,9 @@ public class RankCommand extends BaseCommand {
                     }
                     break;
                 case "color":
-                    if (args.length == 1) player.sendMessage(ChatColor.RED + ("Usage: /rank color <name> <color>."));
-                    if (args.length == 2) player.sendMessage(ChatColor.RED + ("Usage: /rank color <name> <color>."));
+                    if (args.length < 3) {
+                        player.sendMessage(this.getUsageMessage("color", "<name>", "<color>"));
+                    }
                     if (args.length == 3) {
                         final String name = args[1];
                         final String value = args[2];
@@ -374,10 +367,11 @@ public class RankCommand extends BaseCommand {
                             final String displayName = Color.translate(rank.getColor() + rank.getItalic() + rank.getName());
 
                             rank.setColor(Color.translate(value));
-                            player.sendMessage(ChatColor.GREEN + Color.translate("Changed the color of " + displayName + ChatColor.GREEN + " to " + rank.getColor() + rank.getItalic() + "this" + ChatColor.GREEN + "."));
+                            rank.saveRank();
+
+                            player.sendMessage(Color.SECONDARY_COLOR + "You've set the color of " + displayName + Color.SECONDARY_COLOR + " to " + Color.MAIN_COLOR + rank.getColor() + rank.getItalic() + "this" + Color.SECONDARY_COLOR + "!");
 
                             RedisUtil.writeAsync(RedisUtil.updateRank(rank));
-                            rank.saveRank();
                         } else {
                             player.sendMessage(ChatColor.RED + ("Error: That rank does not exist!"));
                         }
@@ -385,23 +379,22 @@ public class RankCommand extends BaseCommand {
 
                     break;
                 case "suffix":
-                    if (args.length == 1)
-                        player.sendMessage(ChatColor.RED + ("Usage: /rank suffix <name> <suffix (_ for space)>."));
-                    if (args.length == 2)
-                        player.sendMessage(ChatColor.RED + ("Usage: /rank suffix <name> <suffix (_ for space)>."));
-                    if (args.length == 3) {
-                        final String name = args[1];
-                        final String value = args[2];
-                        final Rank rank = Rank.getByName(name);
+                    if (args.length < 3) {
+                        player.sendMessage(this.getUsageMessage("suffix", "<name>", "<suffix>"));
+                    }
+                    if (args.length >= 3) {
+                        final String value = StringUtil.buildMessage(args, 2);
+                        final Rank rank = Rank.getByName(args[1]);
 
                         if (rank != null) {
                             final String displayName = Color.translate(rank.getColor() + rank.getItalic() + rank.getName());
 
-                            rank.setSuffix(Color.translate(value.replace("_", " ")));
-                            player.sendMessage(ChatColor.GREEN + Color.translate("Changed the suffix of " + displayName + ChatColor.GREEN + " to " + rank.getSuffix() + ChatColor.GREEN + "."));
+                            rank.setSuffix(Color.translate(value));
+                            rank.saveRank();
+
+                            player.sendMessage(Color.SECONDARY_COLOR + "You've set the suffix of " + displayName + Color.SECONDARY_COLOR + " to " + Color.MAIN_COLOR + rank.getSuffix() + Color.SECONDARY_COLOR + "!");
 
                             RedisUtil.writeAsync(RedisUtil.updateRank(rank));
-                            rank.saveRank();
                         } else {
                             player.sendMessage(ChatColor.RED + ("Error: That rank does not exist!"));
                         }
@@ -409,23 +402,22 @@ public class RankCommand extends BaseCommand {
 
                     break;
                 case "prefix":
-                    if (args.length == 1)
-                        player.sendMessage(ChatColor.RED + ("Usage: /rank prefix <name> <prefix (_ for space)>."));
-                    if (args.length == 2)
-                        player.sendMessage(ChatColor.RED + ("Usage: /rank prefix <name> <prefix (_ for space)>."));
-                    if (args.length == 3) {
-                        final String name = args[1];
-                        final String value = args[2];
-                        final Rank rank = Rank.getByName(name);
+                    if (args.length < 3) {
+                        player.sendMessage(this.getUsageMessage("prefix", "<name>", "<prefix>"));
+                    }
+                    if (args.length >= 3) {
+                        final String value = StringUtil.buildMessage(args, 2);
+                        final Rank rank = Rank.getByName(args[1]);
 
                         if (rank != null) {
                             final String displayName = Color.translate(rank.getColor() + rank.getItalic() + rank.getName());
 
-                            rank.setPrefix(Color.translate(value.replace("_", " ")));
-                            player.sendMessage(ChatColor.GREEN + Color.translate("Changed the prefix of " + displayName + ChatColor.GREEN + " to " + rank.getPrefix() + ChatColor.GREEN + "."));
+                            rank.setPrefix(Color.translate(value));
+                            rank.saveRank();
+
+                            player.sendMessage(Color.SECONDARY_COLOR + "You've set the prefix of " + displayName + Color.SECONDARY_COLOR + " to " + Color.MAIN_COLOR + rank.getSuffix() + Color.SECONDARY_COLOR + "!");
 
                             RedisUtil.writeAsync(RedisUtil.updateRank(rank));
-                            rank.saveRank();
                         } else {
                             player.sendMessage(ChatColor.RED + ("Error: That rank does not exist!"));
                         }
@@ -433,13 +425,17 @@ public class RankCommand extends BaseCommand {
 
                     break;
                 case "delete":
-                    if (args.length == 1) player.sendMessage(ChatColor.RED + ("Usage: /rank delete <name>."));
+                    if (args.length == 1) {
+                        player.sendMessage(this.getUsageMessage("delete", "<name>"));
+                    }
                     if (args.length == 2) {
                         final String name = args[1];
                         final Rank rank = Rank.getByName(name);
 
                         if (rank != null) {
                             RedisUtil.writeAsync(RedisUtil.deleteRank(rank.getName(), player));
+
+                            CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getRankCollection().deleteOne(Filters.eq("_id", rank.getUuid())));
                         } else {
                             player.sendMessage(ChatColor.RED + ("Error: That rank does not exist!"));
                         }
@@ -447,7 +443,9 @@ public class RankCommand extends BaseCommand {
 
                     break;
                 case "create":
-                    if (args.length == 1) player.sendMessage(ChatColor.RED + ("Usage: /rank create <name>."));
+                    if (args.length == 1) {
+                        player.sendMessage(this.getUsageMessage("create", "<name>"));
+                    }
                     if (args.length == 2) {
                         final String name = args[1];
 

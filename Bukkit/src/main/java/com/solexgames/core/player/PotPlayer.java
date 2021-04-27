@@ -527,7 +527,7 @@ public class PotPlayer {
                 final DisguiseData skinData = CorePlugin.getInstance().getDisguiseCache().getRandomData();
 
                 if (disguiseData != null && skinData != null) {
-                    CorePlugin.getInstance().getDisguiseManager().disguise(player, disguiseData, skinData);
+                    CorePlugin.getInstance().getDisguiseManager().disguise(player, disguiseData, skinData, (this.disguiseRank == null ? Rank.getDefault() : this.disguiseRank));
                 } else {
                     player.sendMessage(ChatColor.RED + "We couldn't disguise you as there aren't any available disguises!");
                 }

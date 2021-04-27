@@ -17,13 +17,13 @@ public class NMSAccess_v1_8 implements INMS {
 
     @Override
     public void removeExecute(Player player) {
-        PacketPlayOutPlayerInfo packetPlayOutPlayerInfo = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, (((CraftPlayer) player).getHandle()));
+        final PacketPlayOutPlayerInfo packetPlayOutPlayerInfo = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, (((CraftPlayer) player).getHandle()));
         MinecraftServer.getServer().getPlayerList().sendAll(packetPlayOutPlayerInfo);
     }
 
     @Override
     public void addExecute(Player player) {
-        PacketPlayOutPlayerInfo packetPlayOutPlayerInfo = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, (((CraftPlayer) player).getHandle()));
+        final PacketPlayOutPlayerInfo packetPlayOutPlayerInfo = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, (((CraftPlayer) player).getHandle()));
         MinecraftServer.getServer().getPlayerList().sendAll(packetPlayOutPlayerInfo);
     }
 
@@ -35,11 +35,11 @@ public class NMSAccess_v1_8 implements INMS {
                 .collect(Collectors.toList());
 
         try {
-            Object list = net.minecraft.server.v1_8_R3.MinecraftServer.getServer().getPlayerList().getClass()
+            final Object list = net.minecraft.server.v1_8_R3.MinecraftServer.getServer().getPlayerList().getClass()
                     .getMethod("playerList", ((Class<?>[]) null))
                     .invoke(net.minecraft.server.v1_8_R3.MinecraftServer.getServer().getPlayerList());
-            Class<?> playerListClass = list.getClass().getSuperclass();
-            Field declaredField = playerListClass.getDeclaredField("players");
+            final Class<?> playerListClass = list.getClass().getSuperclass();
+            final Field declaredField = playerListClass.getDeclaredField("players");
 
             declaredField.set(list, finalList);
         } catch (Exception ignored) {
@@ -49,17 +49,19 @@ public class NMSAccess_v1_8 implements INMS {
     @Override
     public void setupTablist(Player player) {
         if (CorePlugin.getInstance().getServerSettings().isTabEnabled()) {
-            IChatBaseComponent tabHeader = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + CorePlugin.getInstance().getServerSettings().getTabHeader() + "\"}");
-            IChatBaseComponent tabFooter = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + CorePlugin.getInstance().getServerSettings().getTabFooter() + "\"}");
-            PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter();
+            final IChatBaseComponent tabHeader = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + CorePlugin.getInstance().getServerSettings().getTabHeader() + "\"}");
+            final IChatBaseComponent tabFooter = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + CorePlugin.getInstance().getServerSettings().getTabFooter() + "\"}");
+            final PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter();
 
             try {
-                Field headerField = packet.getClass().getDeclaredField("a");
+                final Field headerField = packet.getClass().getDeclaredField("a");
+
                 headerField.setAccessible(true);
                 headerField.set(packet, tabHeader);
                 headerField.setAccessible(false);
 
-                Field footerField = packet.getClass().getDeclaredField("b");
+                final Field footerField = packet.getClass().getDeclaredField("b");
+
                 footerField.setAccessible(true);
                 footerField.set(packet, tabFooter);
                 footerField.setAccessible(false);

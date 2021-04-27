@@ -34,7 +34,7 @@ public class PageListBuilder {
                 sender.sendMessage(Color.MAIN_COLOR + "=== " + Color.SECONDARY_COLOR + "Showing all " + Color.MAIN_COLOR + this.resultsFor + Color.SECONDARY_COLOR + ". " + Color.MAIN_COLOR + "===");
 
                 for (int i = this.resultsPerPage * (page - 1); i < this.resultsPerPage * page && i < results.size(); ++i) {
-                    sender.sendMessage(ChatColor.GRAY + "- " + Color.SECONDARY_COLOR + results.get(i).replace("(",  Color.MAIN_COLOR + "("));
+                    sender.sendMessage(ChatColor.GRAY + "- " + Color.SECONDARY_COLOR + results.get(i));
                 }
 
                 sender.sendMessage(Color.SECONDARY_COLOR + "Showing page " + Color.MAIN_COLOR + page + Color.SECONDARY_COLOR + " of " + Color.MAIN_COLOR + maxPages + Color.SECONDARY_COLOR + " (" + Color.MAIN_COLOR + results.size() + Color.SECONDARY_COLOR + " results).");

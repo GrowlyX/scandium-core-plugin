@@ -38,11 +38,11 @@ public class DisguiseManager {
         }));
     }
 
-    public void disguise(Player player, DisguiseData disguiseData, DisguiseData skinData) {
+    public void disguise(Player player, DisguiseData disguiseData, DisguiseData skinData, Rank rank) {
         final PotPlayer potPlayer = this.plugin.getPlayerManager().getPlayer(player);
 
         if (disguiseData.getUuid() != null && potPlayer != null) {
-            potPlayer.setDisguiseRank(Rank.getDefault());
+            potPlayer.setDisguiseRank(rank);
             potPlayer.setDisguised(true);
             potPlayer.setName(disguiseData.getName());
 
@@ -56,6 +56,25 @@ public class DisguiseManager {
             potPlayer.setupPlayerList();
 
             player.sendMessage(Color.SECONDARY_COLOR + "You've disguised as " + Color.MAIN_COLOR + disguiseData.getName() + ChatColor.GRAY + " (with a random skin)" + Color.SECONDARY_COLOR + ".");
+        }
+    }
+
+    public void disguiseOther(Player player, DisguiseData disguiseData, DisguiseData skinData, Rank rank) {
+        final PotPlayer potPlayer = this.plugin.getPlayerManager().getPlayer(player);
+
+        if (disguiseData.getUuid() != null && potPlayer != null) {
+            potPlayer.setDisguiseRank(rank);
+            potPlayer.setDisguised(true);
+            potPlayer.setName(disguiseData.getName());
+
+            this.setGameProfile(player, disguiseData, skinData);
+
+            if (!player.hasMetadata("disguised")) {
+                player.setMetadata("disguised", new FixedMetadataValue(this.plugin, true));
+            }
+
+            potPlayer.setupPlayerTag();
+            potPlayer.setupPlayerList();
         }
     }
 
