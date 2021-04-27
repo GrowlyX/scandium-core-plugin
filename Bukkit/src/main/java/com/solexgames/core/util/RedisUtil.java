@@ -45,9 +45,17 @@ public final class RedisUtil {
 
     public static String onDisguiseProfileCreate(DisguiseData disguiseData) {
         return new JsonAppender(RedisAction.DISGUISE_PROFILE_CREATE)
+                .put("SERVER", CorePlugin.getInstance().getServerName())
                 .put("NAME", disguiseData.getName())
                 .put("SKIN", disguiseData.getSkin())
                 .put("SIGNATURE", disguiseData.getSignature())
+                .put("UUID", disguiseData.getUuid().toString())
+                .getAppended();
+    }
+
+    public static String onDisguiseProfileRemove(DisguiseData disguiseData) {
+        return new JsonAppender(RedisAction.DISGUISE_PROFILE_CREATE)
+                .put("SERVER", CorePlugin.getInstance().getServerName())
                 .put("UUID", disguiseData.getUuid().toString())
                 .getAppended();
     }

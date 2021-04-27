@@ -46,7 +46,8 @@ public enum RedisAction {
 
     DISCORD_SYNC_UPDATE("DiscordSyncUpdate"),
 
-    DISGUISE_PROFILE_CREATE("DisguiseProfileCreate");
+    DISGUISE_PROFILE_CREATE("DisguiseProfileCreate"),
+    DISGUISE_PROFILE_REMOVE("DisguiseProfileRemove");
 
     private final String packetDataName;
 

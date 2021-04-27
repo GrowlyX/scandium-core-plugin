@@ -7,6 +7,7 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.board.ScoreBoard;
+import com.solexgames.core.disguise.DisguiseData;
 import com.solexgames.core.enums.ChatChannelType;
 import com.solexgames.core.enums.LanguageType;
 import com.solexgames.core.player.media.Media;
@@ -218,6 +219,7 @@ public class PotPlayer {
         document.put("hasVoted", this.hasVoted);
         document.put("language", (this.language != null ? this.language.getLanguageName() : LanguageType.ENGLISH.getLanguageName()));
         document.put("currentlyOnline", !removing);
+        document.put("currentlyDisguised", this.isDisguised);
 
         document.put("discord", this.media.getDiscord());
         document.put("twitter", this.media.getTwitter());
@@ -515,6 +517,19 @@ public class PotPlayer {
 
         if (this.player.hasPermission("scandium.staff") && !CorePlugin.getInstance().getPlayerManager().isOnline(this.player.getName())) {
             RedisUtil.writeAsync(RedisUtil.onConnect(this.player));
+        }
+
+        if (profile.getBoolean("currentlyDisguised") != null) {
+            if (profile.getBoolean("currentlyDisguised")) {
+                final DisguiseData disguiseData = CorePlugin.getInstance().getDisguiseCache().getRandomData();
+                final DisguiseData skinData = CorePlugin.getInstance().getDisguiseCache().getRandomData();
+
+                if (disguiseData != null && skinData != null) {
+                    CorePlugin.getInstance().getDisguiseManager().disguise(player, disguiseData, skinData);
+                } else {
+                    player.sendMessage(ChatColor.RED + "We couldn't disguise you as there aren't any available disguises!");
+                }
+            }
         }
     }
 

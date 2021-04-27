@@ -1,5 +1,6 @@
 package com.solexgames.core.command.impl.disguise;
 
+import com.mongodb.client.model.Filters;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.disguise.DisguiseData;
@@ -13,6 +14,7 @@ import org.bukkit.entity.Player;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 public class DisguiseAdminCommand extends BaseCommand {
@@ -96,6 +98,12 @@ public class DisguiseAdminCommand extends BaseCommand {
                         }
 
                         CorePlugin.getInstance().getDisguiseCache().removeDataPair(disguiseData);
+
+                        CompletableFuture.runAsync(() -> {
+                            CorePlugin.getInstance().getCoreDatabase().getDisguiseCollection().deleteOne(Filters.eq("_id", disguiseData.getUuid()));
+                        });
+
+                        RedisUtil.writeAsync(RedisUtil.onDisguiseProfileRemove(disguiseData));
 
                         player.sendMessage(Color.SECONDARY_COLOR + "You've removed the disguise profile with the name " + Color.MAIN_COLOR + disguiseData.getName() + Color.SECONDARY_COLOR + "!");
                     }

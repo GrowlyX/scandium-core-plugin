@@ -46,13 +46,25 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
 
         CompletableFuture.runAsync(() -> {
             switch (jsonAppender.getPacket()) {
-                case DISGUISE_PROFILE_CREATE:
-                    final String disguiseName = jsonAppender.getParam("NAME");
-                    final String disguiseSkin = jsonAppender.getParam("SKIN");
-                    final String disguiseSignature = jsonAppender.getParam("SKIN");
-                    final UUID disguiseUUID = UUID.fromString(jsonAppender.getParam("UUID"));
+                case DISGUISE_PROFILE_REMOVE:
+                    if (!jsonAppender.getParam("SERVER").equals(CorePlugin.getInstance().getServerName())) {
+                        final UUID disguiseRemoveUUID = UUID.fromString(jsonAppender.getParam("UUID"));
+                        final DisguiseData disguiseData = CorePlugin.getInstance().getDisguiseCache().getByUuid(disguiseRemoveUUID);
 
-                    CorePlugin.getInstance().getDisguiseCache().registerNewDataPair(new DisguiseData(disguiseUUID, disguiseName, disguiseSkin, disguiseSignature));
+                        if (disguiseData != null) {
+                            CorePlugin.getInstance().getDisguiseCache().removeDataPair(disguiseData);
+                        }
+                    }
+                    break;
+                case DISGUISE_PROFILE_CREATE:
+                    if (!jsonAppender.getParam("SERVER").equals(CorePlugin.getInstance().getServerName())) {
+                        final String disguiseName = jsonAppender.getParam("NAME");
+                        final String disguiseSkin = jsonAppender.getParam("SKIN");
+                        final String disguiseSignature = jsonAppender.getParam("SKIN");
+                        final UUID disguiseUUID = UUID.fromString(jsonAppender.getParam("UUID"));
+
+                        CorePlugin.getInstance().getDisguiseCache().registerNewDataPair(new DisguiseData(disguiseUUID, disguiseName, disguiseSkin, disguiseSignature));
+                    }
                     break;
                 case GLOBAL_PLAYER_REMOVE:
                     final UUID removingPlayer = UUID.fromString(jsonAppender.getParam("UUID"));
