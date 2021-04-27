@@ -2,8 +2,6 @@ package com.solexgames.core.command.impl.disguise;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
-import com.solexgames.core.disguise.DisguiseData;
-import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.builder.PageListBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;

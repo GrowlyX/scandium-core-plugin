@@ -115,6 +115,9 @@ public class DisguiseManager {
 
             this.updatePlayer(player);
 
+            disguisePlayer.setupPlayerTag();
+            disguisePlayer.setupPlayerList();
+
             if (player.hasMetadata("disguised")) {
                 player.removeMetadata("disguised", this.plugin);
             }
