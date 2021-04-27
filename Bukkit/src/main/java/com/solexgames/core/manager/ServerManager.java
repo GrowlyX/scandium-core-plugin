@@ -54,7 +54,7 @@ public class ServerManager {
 
         this.staffInformation = Color.translate(plugin.getConfig().getStringList("staff-information"));
 
-        this.spawnLocation = CorePlugin.GSON.fromJson(plugin.getConfig().getString("spawn-location"), Location.class);
+        this.spawnLocation = CorePlugin.GSON.fromJson(plugin.getConfig().getString("locations.spawnpoint"), Location.class);
 
         this.setupServerType();
     }

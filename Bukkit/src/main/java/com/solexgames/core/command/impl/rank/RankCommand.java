@@ -146,7 +146,7 @@ public class RankCommand extends BaseCommand {
 
                             RedisUtil.writeAsync(RedisUtil.updateRank(rank));
 
-                            player.sendMessage(Color.SECONDARY_COLOR + "You've toggle default mode for the " + displayName + Color.SECONDARY_COLOR + " rank!");
+                            player.sendMessage(Color.SECONDARY_COLOR + "You've toggled default mode for the " + displayName + Color.SECONDARY_COLOR + " rank!");
                         } else {
                             player.sendMessage(ChatColor.RED + ("Error: That rank does not exist!"));
                         }
@@ -168,7 +168,7 @@ public class RankCommand extends BaseCommand {
 
                             RedisUtil.writeAsync(RedisUtil.updateRank(rank));
 
-                            player.sendMessage(Color.SECONDARY_COLOR + "You've toggle italic mode for the " + displayName + Color.SECONDARY_COLOR + " rank!");
+                            player.sendMessage(Color.SECONDARY_COLOR + "You've toggled italic mode for the " + displayName + Color.SECONDARY_COLOR + " rank!");
                         } else {
                             player.sendMessage(ChatColor.RED + ("Error: That rank does not exist!"));
                         }
@@ -190,7 +190,7 @@ public class RankCommand extends BaseCommand {
 
                             RedisUtil.writeAsync(RedisUtil.updateRank(rank));
 
-                            player.sendMessage(Color.SECONDARY_COLOR + "You've toggle purchasable mode for the " + displayName + Color.SECONDARY_COLOR + " rank!");
+                            player.sendMessage(Color.SECONDARY_COLOR + "You've toggled purchasable mode for the " + displayName + Color.SECONDARY_COLOR + " rank!");
                         } else {
                             player.sendMessage(ChatColor.RED + ("Error: That rank does not exist!"));
                         }
@@ -415,7 +415,7 @@ public class RankCommand extends BaseCommand {
                             rank.setPrefix(Color.translate(value));
                             rank.saveRank();
 
-                            player.sendMessage(Color.SECONDARY_COLOR + "You've set the prefix of " + displayName + Color.SECONDARY_COLOR + " to " + Color.MAIN_COLOR + rank.getSuffix() + Color.SECONDARY_COLOR + "!");
+                            player.sendMessage(Color.SECONDARY_COLOR + "You've set the prefix of " + displayName + Color.SECONDARY_COLOR + " to " + Color.MAIN_COLOR + rank.getPrefix() + Color.SECONDARY_COLOR + "!");
 
                             RedisUtil.writeAsync(RedisUtil.updateRank(rank));
                         } else {

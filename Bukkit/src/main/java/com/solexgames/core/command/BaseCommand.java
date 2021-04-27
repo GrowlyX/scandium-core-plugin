@@ -49,7 +49,7 @@ public abstract class BaseCommand extends Command implements PluginIdentifiableC
     }
 
     public String getUsageMessage(String subCommand, String... arguments) {
-        return Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + this.getLabel() + " " + Color.SECONDARY_COLOR + subCommand + " " + ChatColor.WHITE + String.join(" ", arguments) + ".";
+        return Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + this.getLabel() + " " + ChatColor.WHITE + subCommand + " " + String.join(" ", arguments) + ".";
     }
 
     @Override
