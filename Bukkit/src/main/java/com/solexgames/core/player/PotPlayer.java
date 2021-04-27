@@ -563,11 +563,11 @@ public class PotPlayer {
     }
 
     public void setupDisplay() {
-        this.player.setDisplayName(Color.translate(this.getActiveGrant().getRank().getColor()) + this.player.getName());
+        this.player.setDisplayName(Color.translate(this.getActiveGrant().getRank().getColor()) + this.getName());
     }
 
     public void setupPlayerList() {
-        this.player.setPlayerListName(Color.translate((this.getActiveGrant().getRank().getColor() == null ? ChatColor.GRAY.toString() : this.getActiveGrant().getRank().getColor()) + (this.customColor != null ? this.customColor : "") + this.player.getName()));
+        this.player.setPlayerListName(Color.translate((this.getActiveGrant().getRank().getColor() == null ? ChatColor.GRAY.toString() : this.getActiveGrant().getRank().getColor()) + (this.customColor != null ? this.customColor : "") + this.getName()));
 
         if (CorePlugin.getInstance().getServerSettings().isTabEnabled()) {
             CorePlugin.getInstance().getNMS().updateTablist();

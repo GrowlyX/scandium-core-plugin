@@ -15,6 +15,7 @@ import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerInfo;
 import net.minecraft.server.v1_8_R3.PacketPlayOutRespawn;
 import net.minecraft.server.v1_8_R3.WorldSettings;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -44,7 +45,7 @@ public class DisguiseManager {
                 player.setMetadata("disguised", new FixedMetadataValue(this.plugin, true));
             }
 
-            player.sendMessage(Color.SECONDARY_COLOR + "You've disguised as " + Color.MAIN_COLOR + disguiseData.getName() + Color.SECONDARY_COLOR + "!");
+            player.sendMessage(Color.SECONDARY_COLOR + "You've disguised as " + Color.MAIN_COLOR + disguiseData.getName() + " " + ChatColor.GRAY + "(with the skin " + disguiseData.getName() + ")" + Color.SECONDARY_COLOR + ".");
         }
     }
 
