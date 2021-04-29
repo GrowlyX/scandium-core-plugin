@@ -126,11 +126,11 @@ public class CorePlugin extends Plugin {
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new MaintenanceCommand());
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new ProxyStatusCommand());
 
-        this.getProxy().registerChannel("core-permissions");
-        this.getProxy().registerChannel("core-update");
+        this.getProxy().registerChannel("core:permissions");
+        this.getProxy().registerChannel("core:update");
 
         this.getProxy().getPluginManager().registerListener(this, new PlayerListener());
-        this.getProxy().getPluginManager().registerListener(this, new ChannelListener());
+//        this.getProxy().getPluginManager().registerListener(this, new ChannelListener());
     }
 
     private void createConfig() {

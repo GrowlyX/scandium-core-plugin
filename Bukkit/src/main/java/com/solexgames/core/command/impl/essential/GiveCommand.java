@@ -30,7 +30,7 @@ public class GiveCommand extends BaseCommand {
             player.sendMessage(Color.translate(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player> <amount> <item>."));
         }
         if (args.length > 2) {
-            final Player target = Bukkit.getPlayer(args[0]);
+            final Player target = Bukkit.getPlayerExact(args[0]);
 
             int amount;
             try {

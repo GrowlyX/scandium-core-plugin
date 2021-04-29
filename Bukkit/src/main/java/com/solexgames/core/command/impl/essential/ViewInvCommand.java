@@ -37,7 +37,7 @@ public class ViewInvCommand extends BaseCommand {
                 return false;
             }
 
-            final Player target = Bukkit.getPlayer(args[0]);
+            final Player target = Bukkit.getPlayerExact(args[0]);
 
             if (target != null) {
                 new ViewPlayerMenu(target).openMenu(player);

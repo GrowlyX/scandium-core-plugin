@@ -291,7 +291,7 @@ public class PotPlayer {
                 this.saveWithoutRemove();
                 this.hasLoaded = true;
 
-                System.out.println("[DEBUG] A document was null.");
+                CorePlugin.getInstance().getLogger().info("[Debugger] " + this.name + (this.name.endsWith("s") ? "'" : "'s") + " document was just created.");
 
                 return;
             }
@@ -521,18 +521,20 @@ public class PotPlayer {
             RedisUtil.writeAsync(RedisUtil.onConnect(this.player));
         }
 
-        if (profile.getBoolean("currentlyDisguised") != null) {
-            if (profile.getBoolean("currentlyDisguised")) {
-                final DisguiseData disguiseData = CorePlugin.getInstance().getDisguiseCache().getRandomData();
-                final DisguiseData skinData = CorePlugin.getInstance().getDisguiseCache().getRandomData();
+        Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () -> {
+            if (profile.getBoolean("currentlyDisguised") != null) {
+                if (profile.getBoolean("currentlyDisguised")) {
+                    final DisguiseData disguiseData = CorePlugin.getInstance().getDisguiseCache().getRandomData();
+                    final DisguiseData skinData = CorePlugin.getInstance().getDisguiseCache().getRandomData();
 
-                if (disguiseData != null && skinData != null) {
-                    CorePlugin.getInstance().getDisguiseManager().disguise(player, disguiseData, skinData, (this.disguiseRank == null ? Rank.getDefault() : this.disguiseRank));
-                } else {
-                    player.sendMessage(ChatColor.RED + "We couldn't disguise you as there aren't any available disguises!");
+                    if (disguiseData != null && skinData != null) {
+                        CorePlugin.getInstance().getDisguiseManager().disguise(player, disguiseData, skinData, (this.disguiseRank == null ? Rank.getDefault() : this.disguiseRank));
+                    } else {
+                        player.sendMessage(ChatColor.RED + "We couldn't disguise you as there aren't any available disguises!");
+                    }
                 }
             }
-        }
+        });
     }
 
     public String getWarningMessage() {
@@ -559,7 +561,7 @@ public class PotPlayer {
         return this.getAllGrants().stream()
                 .sorted(Comparator.comparingLong(Grant::getDateAdded).reversed())
                 .collect(Collectors.toList()).stream()
-                .filter(grant -> grant != null && grant.isActive() && !grant.getRank().isHidden() && (grant.getScope() == null || grant.isGlobal() || grant.isApplicable()))
+                .filter(grant -> grant != null && !grant.isRemoved() && grant.isActive() && !grant.getRank().isHidden() && (grant.getScope() == null || grant.isGlobal() || grant.isApplicable()))
                 .findFirst()
                 .orElseGet(this::getDefaultGrant);
     }

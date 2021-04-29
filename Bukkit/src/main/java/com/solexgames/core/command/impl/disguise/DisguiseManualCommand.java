@@ -61,20 +61,18 @@ public class DisguiseManualCommand extends BaseCommand {
 
                     player.sendMessage(Color.SECONDARY_COLOR + "You've disguised " + Color.MAIN_COLOR + player.getDisplayName() + Color.SECONDARY_COLOR + " as " + Color.translate(rank.getColor() + rank.getItalic()) + disguiseData.getName() + ChatColor.GRAY + " (with a random skin)" + Color.SECONDARY_COLOR + ".");
                 } else {
-                    CompletableFuture.runAsync(() -> {
-                        final UUID uuid = CorePlugin.getInstance().getUuidCache().getUuidFromUsername(args[1]);
+                    final UUID uuid = CorePlugin.getInstance().getUuidCache().getUuidFromUsername(args[1]);
 
-                        if (uuid == null) {
-                            player.sendMessage(ChatColor.RED + "Error: That disguise name is not valid.");
-                            return;
-                        }
+                    if (uuid == null) {
+                        player.sendMessage(ChatColor.RED + "Error: That disguise name is not valid.");
+                        return false;
+                    }
 
-                        final DisguiseData generatedData = CorePlugin.getInstance().getDisguiseManager().getDisguiseData(args[1], uuid);
+                    final DisguiseData generatedData = CorePlugin.getInstance().getDisguiseManager().getDisguiseData(args[1], uuid);
 
-                        CorePlugin.getInstance().getDisguiseManager().disguiseOther(player, generatedData, generatedData, rank);
+                    CorePlugin.getInstance().getDisguiseManager().disguiseOther(player, generatedData, generatedData, rank);
 
-                        player.sendMessage(Color.SECONDARY_COLOR + "You've disguised " + Color.MAIN_COLOR + player.getDisplayName() + Color.SECONDARY_COLOR + " as " + Color.translate(rank.getColor() + rank.getItalic()) + generatedData.getName() + ChatColor.GRAY + " (with a random skin)" + Color.SECONDARY_COLOR + ".");
-                    });
+                    player.sendMessage(Color.SECONDARY_COLOR + "You've disguised " + Color.MAIN_COLOR + player.getDisplayName() + Color.SECONDARY_COLOR + " as " + Color.translate(rank.getColor() + rank.getItalic()) + generatedData.getName() + ChatColor.GRAY + " (with a random skin)" + Color.SECONDARY_COLOR + ".");
                 }
             } else {
                 player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));

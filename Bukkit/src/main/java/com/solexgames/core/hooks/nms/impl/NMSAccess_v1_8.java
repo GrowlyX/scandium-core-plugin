@@ -6,6 +6,7 @@ import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.PlayerInventory;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -86,9 +87,53 @@ public class NMSAccess_v1_8 implements INMS {
                 WorldSettings.EnumGamemode.valueOf(entityPlayer.getBukkitEntity().getGameMode().name())
         ));
 
-        player.getInventory().setItemInHand(player.getItemInHand());
         player.updateInventory();
+        player.setGameMode(player.getGameMode());
+
+        final PlayerInventory inventory = player.getInventory();
+        inventory.setHeldItemSlot(inventory.getHeldItemSlot());
+
+        final double oldHealth = player.getHealth();
+        final int oldFood = player.getFoodLevel();
+        final float oldSat = player.getSaturation();
+
+        player.setFoodLevel(20);
+        player.setFoodLevel(oldFood);
+        player.setSaturation(5.0F);
+        player.setSaturation(oldSat);
+        player.setMaxHealth(player.getMaxHealth());
+        player.setHealth(20.0D);
+        player.setHealth(oldHealth);
+
+        final float experience = player.getExp();
+        final int totalExperience = player.getTotalExperience();
+
+        player.setExp(experience);
+        player.setTotalExperience(totalExperience);
+        player.setWalkSpeed(player.getWalkSpeed());
 
         player.teleport(previousLocation);
+    }
+
+    @Override
+    public void updateCache(Player player) {
+        final List<EntityPlayer> playerList = new ArrayList<>(net.minecraft.server.v1_8_R3.MinecraftServer.getServer().getPlayerList().players);
+        final EntityPlayer entityPlayer = playerList.stream()
+                .filter(entityPlayer1 -> entityPlayer1.getUniqueID().equals(player.getUniqueId()))
+                .findFirst().orElse(null);
+
+        playerList.remove(entityPlayer);
+        playerList.add(((CraftPlayer) player).getHandle());
+
+        try {
+            final Object list = net.minecraft.server.v1_8_R3.MinecraftServer.getServer().getPlayerList().getClass()
+                    .getMethod("playerList", ((Class<?>[]) null))
+                    .invoke(net.minecraft.server.v1_8_R3.MinecraftServer.getServer().getPlayerList());
+            final Class<?> playerListClass = list.getClass().getSuperclass();
+            final Field declaredField = playerListClass.getDeclaredField("players");
+
+            declaredField.set(list, playerList);
+        } catch (Exception ignored) {
+        }
     }
 }

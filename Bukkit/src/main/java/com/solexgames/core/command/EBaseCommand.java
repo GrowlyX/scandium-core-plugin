@@ -8,6 +8,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.SimplePluginManager;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public abstract class EBaseCommand extends Command {
 
         this.setLabel(commandNameFromClazz);
         this.setName(commandNameFromClazz);
-        this.setAliases(this.getAliases());
+        this.setAliases((this.getAliases() == null ? new ArrayList<>() : this.getAliases()));
     }
 
     public abstract boolean execute(CommandSender sender, String label, String[] args);

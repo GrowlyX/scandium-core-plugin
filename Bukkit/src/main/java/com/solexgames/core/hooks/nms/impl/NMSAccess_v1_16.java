@@ -52,6 +52,28 @@ public class NMSAccess_v1_16 implements INMS {
     }
 
     @Override
+    public void updateCache(Player player) {
+        final List<net.minecraft.server.v1_16_R3.EntityPlayer> playerList = new ArrayList<>(net.minecraft.server.v1_16_R3.MinecraftServer.getServer().getPlayerList().players);
+        final net.minecraft.server.v1_16_R3.EntityPlayer entityPlayer = playerList.stream()
+                .filter(entityPlayer1 -> entityPlayer1.getUniqueID().equals(player.getUniqueId()))
+                .findFirst().orElse(null);
+
+        playerList.remove(entityPlayer);
+        playerList.add(((org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer) player).getHandle());
+
+        try {
+            final Object list = net.minecraft.server.v1_16_R3.MinecraftServer.getServer().getPlayerList().getClass()
+                    .getMethod("playerList", ((Class<?>[]) null))
+                    .invoke(net.minecraft.server.v1_16_R3.MinecraftServer.getServer().getPlayerList());
+            final Class<?> playerListClass = list.getClass().getSuperclass();
+            final Field declaredField = playerListClass.getDeclaredField("players");
+
+            declaredField.set(list, playerList);
+        } catch (Exception ignored) {
+        }
+    }
+
+    @Override
     public void setupTablist(Player player) {
         if (CorePlugin.getInstance().getServerSettings().isTabEnabled()) {
             IChatBaseComponent tabHeader = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + CorePlugin.getInstance().getServerSettings().getTabHeader() + "\"}");

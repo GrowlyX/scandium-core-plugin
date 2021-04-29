@@ -10,11 +10,14 @@ import com.solexgames.core.util.Color;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.util.external.pagination.Button;
 import com.solexgames.core.util.external.pagination.pagination.PaginatedMenu;
+import com.solexgames.core.util.prompt.GrantRemovalPrompt;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.conversations.Conversation;
+import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
@@ -25,6 +28,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Getter
 public class GrantViewPaginatedMenu extends PaginatedMenu {
 
+    private final int potPlayer;
     private final Player player;
     private final Player target;
 
@@ -32,6 +36,7 @@ public class GrantViewPaginatedMenu extends PaginatedMenu {
         super(18);
 
         this.player = player;
+        this.potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player).getActiveGrant().getRank().getWeight() ;
         this.target = target;
     }
 
@@ -70,27 +75,48 @@ public class GrantViewPaginatedMenu extends PaginatedMenu {
             arrayList.add(Color.SECONDARY_COLOR + "Target&7: " + Color.MAIN_COLOR + target.getDisplayName());
             arrayList.add(Color.SECONDARY_COLOR + "Rank&7: " + Color.MAIN_COLOR + this.grant.getRank().getColor() + this.grant.getRank().getName());
             arrayList.add(Color.SECONDARY_COLOR + "Duration&7: " + Color.MAIN_COLOR + (this.grant.isPermanent() ? "&4Forever" : DurationFormatUtils.formatDurationWords(this.grant.getDuration(), true, true)));
+            arrayList.add(Color.SECONDARY_COLOR + "Expires On&7: " + Color.MAIN_COLOR + CorePlugin.FORMAT.format(new Date(this.grant.getDateAdded() + this.grant.getDuration())));
             arrayList.add(Color.MAIN_COLOR + "&m------------------------------------");
             arrayList.add(Color.SECONDARY_COLOR + "Scopes:");
-            arrayList.add(" &7- " + ChatColor.GREEN + Color.translate(this.grant.getScope() != null ? this.grant.getScope() : "global"));
+            arrayList.add(" &7- " + ChatColor.GREEN + (this.grant.getScope() != null ? this.grant.getScope() : "global"));
             arrayList.add(Color.MAIN_COLOR + "&m------------------------------------");
             arrayList.add(Color.SECONDARY_COLOR + "Issued By&7: " + Color.MAIN_COLOR + (this.grant.getIssuer() != null ? Bukkit.getOfflinePlayer(this.grant.getIssuer()).getName() : "&4Console"));
-            arrayList.add(Color.SECONDARY_COLOR + "Issued On&7: " + Color.MAIN_COLOR + CorePlugin.FORMAT.format(new Date(this.grant.getDateAdded())));
-            arrayList.add(Color.SECONDARY_COLOR + "Issued At&7: " + Color.MAIN_COLOR + (this.grant.getIssuedServer() != null ? this.grant.getIssuedServer() : "Not Recorded"));
+            arrayList.add(Color.SECONDARY_COLOR + "Issued On&7: " + Color.MAIN_COLOR + (this.grant.getIssuedServer() != null ? this.grant.getIssuedServer() : "Not Recorded"));
             arrayList.add(Color.SECONDARY_COLOR + "Issued Reason&7: " + Color.MAIN_COLOR + this.grant.getReason());
             arrayList.add(Color.MAIN_COLOR + "&m------------------------------------");
 
+            if (!this.grant.isRemoved()) {
+                arrayList.add((potPlayer > grant.getRank().getWeight() ? ChatColor.GREEN + "Right-click to remove this grant!" : ChatColor.RED + "You don't have permission to remove this grant!"));
+            } else {
+                arrayList.add(Color.SECONDARY_COLOR + "Removed By&7: " + Color.MAIN_COLOR + this.grant.getRemovedBy());
+                arrayList.add(Color.SECONDARY_COLOR + "Removed Reason&7: " + Color.MAIN_COLOR + this.grant.getRemovedFor());
+            }
+            arrayList.add(Color.MAIN_COLOR + "&m------------------------------------");
+
             return new ItemBuilder(XMaterial.LIME_WOOL.parseMaterial(), (this.grant.isActive() ? (grant.getScope().equals("global") ? 5 : 13) : (this.grant.isExpired() ? 1 : 14)))
-                    .setDisplayName(statusLore + " " + CorePlugin.FORMAT.format(new Date(this.grant.getDateAdded())))
+                    .setDisplayName(statusLore + ChatColor.BOLD.toString() + " " + CorePlugin.FORMAT.format(new Date(this.grant.getDateAdded())))
                     .addLore(arrayList)
                     .create();
         }
 
         @Override
         public void clicked(Player player, ClickType clickType) {
-            if (clickType.equals(ClickType.RIGHT)) {
-                new GrantRemoveConfirmMenu(player, target, this.grant).open(player);
-                setClosedByMenu(true);
+            if (clickType.equals(ClickType.RIGHT) ) {
+                if (potPlayer > grant.getRank().getWeight()) {
+                    final Conversation conversation = CorePlugin.getInstance().getConversationFactory()
+                            .withFirstPrompt(new GrantRemovalPrompt(this.grant, player, target))
+                            .withLocalEcho(false)
+                            .buildConversation(player);
+
+                    conversation.begin();
+
+                    player.closeInventory();
+
+                    setClosedByMenu(true);
+                } else {
+                    player.sendMessage(ChatColor.RED + "You don't have permission to remove this grant.");
+                    player.closeInventory();
+                }
             }
         }
     }

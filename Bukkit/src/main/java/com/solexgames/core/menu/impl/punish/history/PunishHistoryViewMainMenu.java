@@ -21,7 +21,7 @@ public class PunishHistoryViewMainMenu extends AbstractInventoryMenu {
     private String target;
 
     public PunishHistoryViewMainMenu(Player player, String target) {
-        super("Punishment history of: " + (Bukkit.getPlayer(target) != null ? Bukkit.getPlayer(target).getDisplayName() : target), 9);
+        super("Punishment history of: " + (Bukkit.getPlayerExact(target) != null ? Bukkit.getPlayerExact(target).getDisplayName() : target), 9);
         this.player = player;
         this.target = target;
         this.update();

@@ -27,6 +27,10 @@ public class Grant {
     private String issuedServer;
     private String scope = "global";
 
+    private boolean removed = false;
+    private String removedBy = "";
+    private String removedFor = "";
+
     public Grant(UUID issuer, Rank rank, long dateAdded, long duration, String reason, boolean active, boolean permanent) {
         this.issuer = issuer;
         this.rankId = rank.getUuid();

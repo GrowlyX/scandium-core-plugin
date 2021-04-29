@@ -123,10 +123,12 @@ public class DisguiseManager {
             declaredField.setAccessible(true);
             declaredField.set(entityPlayer, disguisePlayer.getGameProfile());
 
-            for (Player player1 : Bukkit.getOnlinePlayers()) {
-                player1.hidePlayer(player);
-                player1.showPlayer(player);
-            }
+            Bukkit.getScheduler().runTask(this.plugin, () -> {
+                for (Player player1 : Bukkit.getOnlinePlayers()) {
+                    player1.hidePlayer(player);
+                    player1.showPlayer(player);
+                }
+            });
 
             disguisePlayer.setDisguiseRank(null);
             disguisePlayer.setDisguised(false);
@@ -142,8 +144,9 @@ public class DisguiseManager {
             }
 
             player.sendMessage(Color.SECONDARY_COLOR + "You've been undisguised and reset to your default skin.");
-        } catch (Exception ignored) {
+        } catch (Exception e) {
             plugin.getLogger().info("Something went wrong while trying to modify \"" + player.getName() + "\"'s GameProfile!");
+            e.printStackTrace();
         }
     }
 
@@ -178,22 +181,26 @@ public class DisguiseManager {
             declaredField.setAccessible(true);
             declaredField.set(entityPlayer, gameProfile);
 
-            for (Player player1 : Bukkit.getOnlinePlayers()) {
-                player1.hidePlayer(player);
-                player1.showPlayer(player);
-            }
+            Bukkit.getScheduler().runTask(this.plugin, () -> {
+                for (Player player1 : Bukkit.getOnlinePlayers()) {
+                    player1.hidePlayer(player);
+                    player1.showPlayer(player);
+                }
+            });
 
             gameProfile.getProperties().removeAll("textures");
             gameProfile.getProperties().put("textures", new Property("textures", skinData.getSkin(), skinData.getSignature()));
 
             this.updatePlayer(player);
-        } catch (Exception ignored) {
+        } catch (Exception e) {
             plugin.getLogger().info("Something went wrong while trying to modify \"" + player.getName() + "\"'s GameProfile!");
+            e.printStackTrace();
         }
     }
 
     private void updatePlayer(Player player) {
         CorePlugin.getInstance().getNMS().updatePlayer(player);
+        CorePlugin.getInstance().getNMS().updateCache(player);
     }
 
     public GameProfile getGameProfile(Player player) {

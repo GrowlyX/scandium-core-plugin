@@ -91,7 +91,7 @@ public class PlayerManager {
     }
 
     public PotPlayer getPlayer(String name) {
-        final Player player = Bukkit.getPlayer(name);
+        final Player player = Bukkit.getPlayerExact(name);
 
         if (player == null) {
             return null;

@@ -28,12 +28,16 @@ public class GrantRemoveConfirmMenu extends AbstractInventoryMenu {
     public Player player;
     public Player target;
     public Grant grant;
+    public String reason;
 
-    public GrantRemoveConfirmMenu(Player player, Player target, Grant grant) {
+    public GrantRemoveConfirmMenu(Player player, Player target, Grant grant, String reason) {
         super("Grant removal for: " + target.getDisplayName(), 9*5);
+
         this.grant = grant;
         this.player = player;
         this.target = target;
+        this.reason = reason;
+
         this.update();
     }
 
@@ -84,7 +88,10 @@ public class GrantRemoveConfirmMenu extends AbstractInventoryMenu {
 
             if (item == null || item.getType() == XMaterial.AIR.parseMaterial()) return;
             if (ChatColor.stripColor(Color.translate(item.getItemMeta().getDisplayName())).contains("Confirm")) {
-                potPlayer.getAllGrants().remove(grant);
+                this.grant.setRemoved(true);
+                this.grant.setRemovedBy(this.player.getDisplayName());
+                this.grant.setRemovedFor(this.reason);
+
                 potPlayer.setupPlayer();
 
                 player.sendMessage(Color.SECONDARY_COLOR + "You've removed the grant with the ID: " + Color.MAIN_COLOR + "#" + grant.getId() + Color.SECONDARY_COLOR + " from " + potPlayer.getPlayer().getDisplayName() + Color.SECONDARY_COLOR + "'s history!");

@@ -42,6 +42,7 @@ import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.plugin.SimplePluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
@@ -107,6 +108,8 @@ public final class CorePlugin extends JavaPlugin {
 
     private boolean debugging;
     private boolean disallow;
+
+    private final ConversationFactory conversationFactory = new ConversationFactory(this);
 
     @Override
     public void onEnable() {

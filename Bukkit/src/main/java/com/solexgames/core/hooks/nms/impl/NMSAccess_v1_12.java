@@ -89,4 +89,26 @@ public class NMSAccess_v1_12 implements INMS {
 
         player.teleport(previousLocation);
     }
+
+    @Override
+    public void updateCache(Player player) {
+        final List<net.minecraft.server.v1_12_R1.EntityPlayer> playerList = new ArrayList<>(net.minecraft.server.v1_12_R1.MinecraftServer.getServer().getPlayerList().players);
+        final net.minecraft.server.v1_12_R1.EntityPlayer entityPlayer = playerList.stream()
+                .filter(entityPlayer1 -> entityPlayer1.getUniqueID().equals(player.getUniqueId()))
+                .findFirst().orElse(null);
+
+        playerList.remove(entityPlayer);
+        playerList.add(((org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer) player).getHandle());
+
+        try {
+            final Object list = net.minecraft.server.v1_12_R1.MinecraftServer.getServer().getPlayerList().getClass()
+                    .getMethod("playerList", ((Class<?>[]) null))
+                    .invoke(net.minecraft.server.v1_12_R1.MinecraftServer.getServer().getPlayerList());
+            final Class<?> playerListClass = list.getClass().getSuperclass();
+            final Field declaredField = playerListClass.getDeclaredField("players");
+
+            declaredField.set(list, playerList);
+        } catch (Exception ignored) {
+        }
+    }
 }

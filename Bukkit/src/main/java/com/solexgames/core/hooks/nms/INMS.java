@@ -11,5 +11,6 @@ public interface INMS {
     void setupTablist(Player player);
 
     void updatePlayer(Player player);
+    void updateCache(Player player);
 
 }

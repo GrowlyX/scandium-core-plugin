@@ -215,7 +215,7 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                     }
                     break;
                 case RANK_CREATE_UPDATE:
-                    final Player rankCreatePlayer = Bukkit.getPlayer(jsonAppender.getParam("PLAYER"));
+                    final Player rankCreatePlayer = Bukkit.getPlayerExact(jsonAppender.getParam("PLAYER"));
                     final String rankCreateName = jsonAppender.getParam("NAME");
                     final UUID rankCreateUuid = UUID.fromString(jsonAppender.getParam("UUID"));
                     final Rank rankCreate = new Rank(rankCreateUuid, rankCreateName);
@@ -230,7 +230,7 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                     final Rank rankRemove = Rank.getByName(jsonAppender.getParam("RANK"));
 
                     if (rankRemove != null) {
-                        final Player rankRemovePlayer = Bukkit.getPlayer(jsonAppender.getParam("PLAYER"));
+                        final Player rankRemovePlayer = Bukkit.getPlayerExact(jsonAppender.getParam("PLAYER"));
 
                         Rank.getRanks().remove(rankRemove);
 

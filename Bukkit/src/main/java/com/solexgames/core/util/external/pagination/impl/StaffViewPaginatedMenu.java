@@ -73,8 +73,8 @@ public class StaffViewPaginatedMenu extends PaginatedMenu {
                     public void clicked(Player player, ClickType clickType) {
                         String display = ChatColor.stripColor(getButtonItem(player).getItemMeta().getDisplayName());
 
-                        if (Bukkit.getPlayer(display) != null) {
-                            Player clickedUser = Bukkit.getPlayer(display);
+                        if (Bukkit.getPlayerExact(display) != null) {
+                            Player clickedUser = Bukkit.getPlayerExact(display);
                             PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(clickedUser);
 
                             player.teleport(clickedUser.getLocation());
