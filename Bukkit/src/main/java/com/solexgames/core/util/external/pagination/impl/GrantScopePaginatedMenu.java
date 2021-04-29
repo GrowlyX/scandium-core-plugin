@@ -45,8 +45,10 @@ public class GrantScopePaginatedMenu extends PaginatedMenu {
                 return new ItemBuilder(XMaterial.LIME_TERRACOTTA.parseMaterial(), 5)
                         .setDisplayName("&a&lGlobal Scope")
                         .addLore(
-                                "&7Click to select the global",
-                                "&7scope for this grant."
+                                "&7Set the grant scope as",
+                                "&7global.",
+                                "",
+                                ChatColor.YELLOW + "[Click to select]"
                         )
                         .create();
             }
@@ -77,8 +79,10 @@ public class GrantScopePaginatedMenu extends PaginatedMenu {
                 return new ItemBuilder(XMaterial.RED_TERRACOTTA.parseMaterial(), 14)
                         .setDisplayName("&c&lReturn to Main")
                         .addLore(
-                                "&7Click to cancel this grant",
-                                "&7and return to the main menu."
+                                "&7Cancel this grant and",
+                                "&7return to the main menu.",
+                                "",
+                                ChatColor.YELLOW + "[Click to return]"
                         )
                         .create();
             }

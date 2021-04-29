@@ -40,7 +40,7 @@ public class ReportViewPaginatedMenu extends PaginatedMenu {
                                 "&7reports or only resolved",
                                 "&7reports?",
                                 "",
-                                "&7Current: &6" + (onlyResolved ? "Resolved": "All")
+                                onlyResolved ? ChatColor.RED + "[Viewing resolved]" : ChatColor.YELLOW + "[Viewing all]"
                         ).create();
             }
 

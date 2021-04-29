@@ -69,7 +69,7 @@ public class GrantViewPaginatedMenu extends PaginatedMenu {
         @Override
         public ItemStack getButtonItem(Player player) {
             final List<String> arrayList = new ArrayList<>();
-            final String statusLore = this.grant.isActive() ? ChatColor.GREEN + "[Active]" : (this.grant.isExpired() ? ChatColor.GOLD + "[Expired]" : ChatColor.RED + "[Removed]");
+            final String statusLore = this.grant.isRemoved() ? ChatColor.RED + "[Removed]" : this.grant.isActive() ? ChatColor.GREEN + "[Active]" : (this.grant.isExpired() ? ChatColor.GOLD + "[Expired]" : ChatColor.RED + "[Removed]");
 
             arrayList.add(Color.MAIN_COLOR + "&m------------------------------------");
             arrayList.add(Color.SECONDARY_COLOR + "Target&7: " + Color.MAIN_COLOR + target.getDisplayName());
@@ -104,7 +104,7 @@ public class GrantViewPaginatedMenu extends PaginatedMenu {
         @Override
         public void clicked(Player player, ClickType clickType) {
             if (clickType.equals(ClickType.RIGHT) ) {
-                if (potPlayer >= grant.getRank().getWeight()) {
+                if (potPlayer >= grant.getRank().getWeight() && !this.grant.isRemoved() && !this.grant.isExpired()) {
                     final Conversation conversation = CorePlugin.getInstance().getConversationFactory()
                             .withFirstPrompt(new GrantRemovalPrompt(this.grant, player, target))
                             .withLocalEcho(false)

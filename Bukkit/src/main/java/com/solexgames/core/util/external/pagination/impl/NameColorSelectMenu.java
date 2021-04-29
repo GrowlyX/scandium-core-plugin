@@ -36,10 +36,12 @@ public class NameColorSelectMenu extends PaginatedMenu {
             @Override
             public ItemStack getButtonItem(Player player) {
                 return new ItemBuilder(XMaterial.RED_BED.parseMaterial())
-                        .setDisplayName(ChatColor.RED + "Reset Name Color")
+                        .setDisplayName(ChatColor.RED + ChatColor.BOLD.toString() + "Reset Color")
                         .addLore(
-                                ChatColor.GRAY + "Click to reset your",
-                                ChatColor.GRAY + "current name color!"
+                                ChatColor.GRAY + "Reset your current",
+                                ChatColor.GRAY + "chat name color!",
+                                "",
+                                ChatColor.YELLOW + "[Click to reset]"
                         )
                         .create();
             }

@@ -35,7 +35,15 @@ public class PrefixViewPaginatedMenu extends PaginatedMenu {
         buttons.put(4, new Button() {
             @Override
             public ItemStack getButtonItem(Player player) {
-                return new ItemBuilder(XMaterial.RED_BED.parseMaterial()).setDisplayName("&cReset Prefix").addLore(Arrays.asList("&7Click to reset your", "&7current applied prefix!")).create();
+                return new ItemBuilder(XMaterial.RED_BED.parseMaterial())
+                        .setDisplayName(ChatColor.RED + ChatColor.BOLD.toString() + "Reset Prefix")
+                        .addLore(
+                                ChatColor.GRAY + "Reset your current",
+                                ChatColor.GRAY + "applied prefix.",
+                                "",
+                                ChatColor.YELLOW + "[Click to reset]"
+                        )
+                        .create();
             }
 
             @Override
@@ -44,7 +52,7 @@ public class PrefixViewPaginatedMenu extends PaginatedMenu {
 
                 potPlayer.setAppliedPrefix(null);
 
-                player.sendMessage(ChatColor.GREEN + Color.translate("Reset your prefix to default!"));
+                player.sendMessage(ChatColor.GREEN + "Reset your prefix to default!");
                 player.closeInventory();
             }
         });

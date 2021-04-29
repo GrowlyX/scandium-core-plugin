@@ -1,12 +1,8 @@
-
 name: Scandium
 version: ${git.commit.id.abbrev}
 main: com.solexgames.core.CorePlugin
 
 load: STARTUP
-loadbefore:
-  - Neon
-  - Iridium
 api-version: "1.13"
 
 author: SolexGames

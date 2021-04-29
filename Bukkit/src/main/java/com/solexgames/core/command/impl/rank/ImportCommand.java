@@ -19,38 +19,26 @@ public class ImportCommand extends BaseCommand {
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ONLY_PLAYERS);
-            return false;
-        }
-
-        final Player player = (Player) sender;
-
-        if (!player.isOp()) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
-
-        if (args.length == 0) {
-            player.sendMessage(new String[]{
-                    "",
-                    ChatColor.GREEN + ChatColor.BOLD.toString() + "Would you like to import the ranks from the ranks.yml?",
-                    ChatColor.GRAY + "If you proceed, make sure to understand all the current",
-                    ChatColor.GRAY + "ranks will be deleted and replaced with the new ones.",
-                    ""
-            });
-
-            player.spigot().sendMessage(
-                    new Clickable(ChatColor.GREEN + ChatColor.BOLD.toString() + "[CONFIRM]", ChatColor.GREEN + "Click to import all ranks from the ranks.yml.", "/import confirm").asComponents()
-            );
-
-            player.sendMessage("  ");
-        }
-        if (args.length == 1) {
-            if (args[0].equalsIgnoreCase("import")) {
-                player.sendMessage(ChatColor.GRAY + "Importing ranks from the configuration...");
-
-                CompletableFuture.supplyAsync(this::handleImport).thenAccept(aBoolean -> player.sendMessage(ChatColor.GREEN + "Successfully imported all ranks!"));
+            if (args.length == 0) {
+                sender.sendMessage(new String[]{
+                        "",
+                        ChatColor.GREEN + ChatColor.BOLD.toString() + "Would you like to import the ranks from the ranks.yml?",
+                        ChatColor.GRAY + "If you proceed, make sure to understand all the current",
+                        ChatColor.GRAY + "ranks will be deleted and replaced with the new ones.",
+                        ""
+                });
             }
+            if (args.length == 1) {
+                if (args[0].equalsIgnoreCase("import")) {
+                    sender.sendMessage(ChatColor.GRAY + "Importing ranks from the configuration...");
+
+                    CompletableFuture.supplyAsync(this::handleImport)
+                            .thenAccept(aBoolean -> sender.sendMessage(ChatColor.GREEN + "Successfully imported all ranks!"));
+                }
+            }
+            return false;
+        } else {
+            sender.sendMessage(NO_PERMISSION);
         }
 
         return false;
