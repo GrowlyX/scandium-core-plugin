@@ -9,11 +9,14 @@ import com.solexgames.core.util.DateUtil;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.util.external.pagination.Button;
 import com.solexgames.core.util.external.pagination.pagination.PaginatedMenu;
+import com.solexgames.core.util.prompt.GrantDurationPrompt;
+import com.solexgames.core.util.prompt.GrantReasonPrompt;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.conversations.Conversation;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
@@ -57,18 +60,12 @@ public class GrantDurationPaginatedMenu extends PaginatedMenu {
 
             @Override
             public void clicked(Player player, ClickType clickType) {
-                PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+                final Conversation conversation = CorePlugin.getInstance().getConversationFactory()
+                        .withFirstPrompt(new GrantDurationPrompt(player, document, rank, scope))
+                        .withLocalEcho(false)
+                        .buildConversation(player);
 
-                potPlayer.setGrantDurationEditing(true);
-                potPlayer.setGrantDurationTarget(document);
-                potPlayer.setGrantDurationPerm(false);
-                potPlayer.setGrantDurationRank(rank);
-                potPlayer.setGrantDurationScope(scope);
-
-                player.sendMessage(Color.translate("  "));
-                player.sendMessage(ChatColor.GREEN + Color.translate("Type in a custom duration in chat!"));
-                player.sendMessage(Color.translate("&7&oUse 'cancel' to cancel this process, or use 'perm' to set it as a permanent punishment!"));
-                player.sendMessage(Color.translate("  "));
+                conversation.begin();
 
                 player.closeInventory();
             }

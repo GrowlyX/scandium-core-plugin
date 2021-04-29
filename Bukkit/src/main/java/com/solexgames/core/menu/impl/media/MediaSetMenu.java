@@ -6,9 +6,12 @@ import com.solexgames.core.menu.AbstractInventoryMenu;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
+import com.solexgames.core.util.prompt.GrantDurationPrompt;
+import com.solexgames.core.util.prompt.SocialMediaPrompt;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.ChatColor;
+import org.bukkit.conversations.Conversation;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
@@ -84,34 +87,46 @@ public class MediaSetMenu extends AbstractInventoryMenu {
 
             ItemStack item = event.getCurrentItem();
             Player player = (Player) event.getWhoClicked();
-            PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
             if (item == null || item.getType() == XMaterial.AIR.parseMaterial()) return;
+
+            Conversation conversation = null;
+
             switch (event.getRawSlot()) {
                 case 2:
-                    player.sendMessage(ChatColor.RED + ("Please sync your account to our discord server to use this feature."));
-                    player.closeInventory();
+                    conversation = CorePlugin.getInstance().getConversationFactory()
+                            .withFirstPrompt(new SocialMediaPrompt(player, "discord", ChatColor.BLUE + "Discord"))
+                            .withLocalEcho(false)
+                            .buildConversation(player);
                     break;
                 case 3:
-                    potPlayer.getMedia().getMediaData().setModifyingYouTube(true);
-                    player.sendMessage(ChatColor.GREEN + Color.translate("Type your &cYouTube &achannel link in chat!"));
-                    player.closeInventory();
+                    conversation = CorePlugin.getInstance().getConversationFactory()
+                            .withFirstPrompt(new SocialMediaPrompt(player, "youtube", ChatColor.RED + "YouTube"))
+                            .withLocalEcho(false)
+                            .buildConversation(player);
                     break;
                 case 4:
-                    potPlayer.getMedia().getMediaData().setModifyingTwitter(true);
-                    player.sendMessage(ChatColor.GREEN + Color.translate("Type your &bTwitter &ausername in chat!"));
-                    player.closeInventory();
+                    conversation = CorePlugin.getInstance().getConversationFactory()
+                            .withFirstPrompt(new SocialMediaPrompt(player, "twitter", ChatColor.AQUA + "Twitter"))
+                            .withLocalEcho(false)
+                            .buildConversation(player);
                     break;
                 case 5:
-                    potPlayer.getMedia().getMediaData().setModifyingInsta(true);
-                    player.sendMessage(ChatColor.GREEN + Color.translate("Type your &6Instagram &ausername in chat!"));
-                    player.closeInventory();
+                    conversation = CorePlugin.getInstance().getConversationFactory()
+                            .withFirstPrompt(new SocialMediaPrompt(player, "instagram", ChatColor.LIGHT_PURPLE + "Instagram"))
+                            .withLocalEcho(false)
+                            .buildConversation(player);
                     break;
                 case 6:
                     player.sendMessage(ChatColor.RED + ("This button is currently disabled."));
-                    player.closeInventory();
                     break;
             }
+
+            if (conversation != null) {
+                conversation.begin();
+            }
+
+            player.closeInventory();
         }
     }
 }

@@ -112,21 +112,7 @@ public class PotPlayer {
 
     private Scoreboard previousBoard;
     private ScoreBoard modModeBoard;
-
-    private boolean isGrantEditing = false;
-    private Document grantTarget = null;
-    private Rank grantRank = null;
-    private long grantDuration;
-    private boolean grantPerm;
-    private String grantScope;
-
     private ChatChannelType channel;
-
-    private boolean isGrantDurationEditing = false;
-    private Document grantDurationTarget = null;
-    private Rank grantDurationRank = null;
-    private boolean grantDurationPerm;
-    private String grantDurationScope;
 
     private LanguageType language;
     private PermissionAttachment attachment;

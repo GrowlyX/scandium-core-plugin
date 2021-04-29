@@ -12,6 +12,4 @@ public class Media {
     private String instagram = "N/A";
     private String discord = "N/A";
 
-    private MediaData mediaData = new MediaData();
-
 }

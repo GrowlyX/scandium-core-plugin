@@ -9,11 +9,14 @@ import com.solexgames.core.util.Color;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.util.external.pagination.Button;
 import com.solexgames.core.util.external.pagination.pagination.PaginatedMenu;
+import com.solexgames.core.util.prompt.GrantReasonPrompt;
+import com.solexgames.core.util.prompt.GrantRemovalPrompt;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.conversations.Conversation;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
@@ -61,19 +64,12 @@ public class GrantReasonPaginatedMenu extends PaginatedMenu {
 
             @Override
             public void clicked(Player player, ClickType clickType) {
-                PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+                final Conversation conversation = CorePlugin.getInstance().getConversationFactory()
+                        .withFirstPrompt(new GrantReasonPrompt(player, document, rank, duration, scope, permanent))
+                        .withLocalEcho(false)
+                        .buildConversation(player);
 
-                potPlayer.setGrantTarget(document);
-                potPlayer.setGrantRank(rank);
-                potPlayer.setGrantDuration(duration);
-                potPlayer.setGrantEditing(true);
-                potPlayer.setGrantScope(scope);
-                potPlayer.setGrantPerm(permanent);
-
-                player.sendMessage(Color.translate("  "));
-                player.sendMessage(ChatColor.GREEN + Color.translate("Type a custom reason for the grant in chat!"));
-                player.sendMessage(Color.translate("&7&o(Type 'cancel' to cancel this process)."));
-                player.sendMessage(Color.translate("  "));
+                conversation.begin();
 
                 player.closeInventory();
             }

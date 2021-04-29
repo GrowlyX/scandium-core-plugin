@@ -85,15 +85,17 @@ public class GrantViewPaginatedMenu extends PaginatedMenu {
             arrayList.add(Color.SECONDARY_COLOR + "Issued Reason&7: " + Color.MAIN_COLOR + this.grant.getReason());
             arrayList.add(Color.MAIN_COLOR + "&m------------------------------------");
 
-            if (!this.grant.isRemoved()) {
-                arrayList.add((potPlayer > grant.getRank().getWeight() ? ChatColor.GREEN + "Right-click to remove this grant!" : ChatColor.RED + "You don't have permission to remove this grant!"));
-            } else {
-                arrayList.add(Color.SECONDARY_COLOR + "Removed By&7: " + Color.MAIN_COLOR + this.grant.getRemovedBy());
-                arrayList.add(Color.SECONDARY_COLOR + "Removed Reason&7: " + Color.MAIN_COLOR + this.grant.getRemovedFor());
+            if (!grant.isExpired()) {
+                if (!this.grant.isRemoved()) {
+                    arrayList.add((potPlayer >= grant.getRank().getWeight() ? ChatColor.GREEN + "Right-click to remove this grant!" : ChatColor.RED + "You don't have permission to remove this grant!"));
+                } else {
+                    arrayList.add(Color.SECONDARY_COLOR + "Removed By&7: " + Color.MAIN_COLOR + this.grant.getRemovedBy());
+                    arrayList.add(Color.SECONDARY_COLOR + "Removed Reason&7: " + Color.MAIN_COLOR + this.grant.getRemovedFor());
+                }
+                arrayList.add(Color.MAIN_COLOR + "&m------------------------------------");
             }
-            arrayList.add(Color.MAIN_COLOR + "&m------------------------------------");
 
-            return new ItemBuilder(XMaterial.LIME_WOOL.parseMaterial(), (this.grant.isActive() ? (grant.getScope().equals("global") ? 5 : 13) : (this.grant.isExpired() ? 1 : 14)))
+            return new ItemBuilder(XMaterial.LIME_WOOL.parseMaterial(), (grant.isRemoved() ? 14 : (this.grant.isActive() ? (grant.getScope().equals("global") ? 5 : 13) : (this.grant.isExpired() ? 1 : 14))))
                     .setDisplayName(statusLore + ChatColor.BOLD.toString() + " " + CorePlugin.FORMAT.format(new Date(this.grant.getDateAdded())))
                     .addLore(arrayList)
                     .create();
@@ -102,7 +104,7 @@ public class GrantViewPaginatedMenu extends PaginatedMenu {
         @Override
         public void clicked(Player player, ClickType clickType) {
             if (clickType.equals(ClickType.RIGHT) ) {
-                if (potPlayer > grant.getRank().getWeight()) {
+                if (potPlayer >= grant.getRank().getWeight()) {
                     final Conversation conversation = CorePlugin.getInstance().getConversationFactory()
                             .withFirstPrompt(new GrantRemovalPrompt(this.grant, player, target))
                             .withLocalEcho(false)

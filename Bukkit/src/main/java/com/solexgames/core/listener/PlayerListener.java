@@ -197,6 +197,8 @@ public class PlayerListener implements Listener {
             event.getPlayer().sendMessage(ChatColor.RED + "The only action you can perform is " + ChatColor.DARK_RED + "/2fa" + ChatColor.RED + "!");
 
             event.setCancelled(true);
+
+            return;
         }
 
         final boolean filtered = CorePlugin.getInstance().getFilterManager().isMessageFiltered(player, message);
@@ -206,7 +208,8 @@ public class PlayerListener implements Listener {
             } else {
                 event.setCancelled(true);
 
-                player.sendMessage(ChatColor.RED + "Error: That message has been filtered as it has a blocked term in it.");
+                player.sendMessage(ChatColor.RED + "That message has been filtered as it has a blocked term in it.");
+
                 return;
             }
         }
@@ -221,112 +224,7 @@ public class PlayerListener implements Listener {
                     .forEach(player1 -> player1.sendMessage(Color.translate("&c[Frozen] &f" + potPlayer.getPlayer().getDisplayName() + "&7: &e" + event.getMessage())));
 
             event.getPlayer().sendMessage(Color.translate(Color.translate("&c[Frozen] &f" + potPlayer.getPlayer().getDisplayName() + "&7: &e" + event.getMessage())));
-            return;
-        }
 
-        final Matcher discordMatcher = MediaConstants.DISCORD_USERNAME_REGEX.matcher(event.getMessage());
-        final Matcher twitterMatcher = MediaConstants.TWITTER_USERNAME_REGEX.matcher(event.getMessage());
-        final Matcher instaMatcher = MediaConstants.INSTAGRAM_USERNAME_REGEX.matcher(event.getMessage());
-        final Matcher youtubeMatcher = MediaConstants.YOUTUBE_PROFILE_LINK_REGEX.matcher(event.getMessage());
-
-        if (potPlayer.isGrantDurationEditing()) {
-            event.setCancelled(true);
-
-            if (event.getMessage().equalsIgnoreCase("cancel")) {
-                player.sendMessage(ChatColor.RED + ("Cancelled the granting process."));
-
-                potPlayer.setGrantDurationRank(null);
-                potPlayer.setGrantDurationTarget(null);
-                potPlayer.setGrantDurationEditing(false);
-            } else if (message.equalsIgnoreCase("perm") || message.equalsIgnoreCase("permanent")) {
-                new GrantReasonPaginatedMenu(player, potPlayer.getGrantDurationTarget(), -1L, potPlayer.getGrantDurationRank(), true, potPlayer.getGrantDurationScope()).openMenu(player);
-
-                potPlayer.setGrantDurationRank(null);
-                potPlayer.setGrantDurationTarget(null);
-                potPlayer.setGrantDurationEditing(false);
-            } else {
-                try {
-                    new GrantReasonPaginatedMenu(player, potPlayer.getGrantDurationTarget(), System.currentTimeMillis() - DateUtil.parseDateDiff(event.getMessage(), false), potPlayer.getGrantDurationRank(), false, potPlayer.getGrantDurationScope()).openMenu(player);
-
-                    potPlayer.setGrantDurationRank(null);
-                    potPlayer.setGrantDurationTarget(null);
-                    potPlayer.setGrantDurationEditing(false);
-                } catch (Exception ignored) {
-                    player.sendMessage(ChatColor.RED + "Invalid duration.");
-                    return;
-                }
-            }
-            return;
-        }
-
-        // TODO: Switch these to Prompts
-
-        if (potPlayer.isGrantEditing()) {
-            event.setCancelled(true);
-
-            if (event.getMessage().equalsIgnoreCase("cancel")) {
-                player.sendMessage(ChatColor.RED + ("Cancelled the granting process."));
-                potPlayer.setGrantTarget(null);
-                potPlayer.setGrantRank(null);
-                potPlayer.setGrantPerm(false);
-            } else {
-                player.sendMessage(ChatColor.GREEN + Color.translate("Set the grant reason to &6'" + message + "'&a."));
-                new GrantSelectConfirmMenu(potPlayer.getPlayer(), potPlayer.getGrantTarget(), potPlayer.getGrantRank(), potPlayer.getGrantDuration(), message, potPlayer.isGrantPerm(), potPlayer.getGrantScope()).open(player);
-            }
-
-            potPlayer.setGrantEditing(false);
-            return;
-        }
-
-        if (potPlayer.getMedia().getMediaData().isModifyingDiscord()) {
-            if (discordMatcher.matches()) {
-                potPlayer.getMedia().setDiscord(event.getMessage());
-                player.sendMessage(ChatColor.GREEN + Color.translate("Updated your discord to &e" + event.getMessage() + ChatColor.GREEN + "!"));
-                potPlayer.getMedia().getMediaData().setModifyingDiscord(false);
-            } else {
-                player.sendMessage(ChatColor.RED + ("Error: That's an invalid discord username!"));
-                player.sendMessage(ChatColor.RED + ("Example: Wumpus#1234"));
-            }
-            event.setCancelled(true);
-            return;
-        }
-
-        if (CorePlugin.getInstance().getPlayerManager().getPlayer(player).getMedia().getMediaData().isModifyingInsta()) {
-            if (instaMatcher.matches()) {
-                potPlayer.getMedia().setInstagram(event.getMessage());
-                player.sendMessage(ChatColor.GREEN + Color.translate("Updated your instagram to &6" + event.getMessage() + ChatColor.GREEN + "!"));
-                potPlayer.getMedia().getMediaData().setModifyingInsta(false);
-            } else {
-                player.sendMessage(ChatColor.RED + ("Error: That's an invalid instagram username!"));
-                player.sendMessage(ChatColor.RED + ("Example: @SolexGames"));
-            }
-            event.setCancelled(true);
-            return;
-        }
-
-        if (CorePlugin.getInstance().getPlayerManager().getPlayer(player).getMedia().getMediaData().isModifyingYouTube()) {
-            if (youtubeMatcher.matches()) {
-                potPlayer.getMedia().setYoutubeLink(event.getMessage());
-                player.sendMessage(ChatColor.GREEN + Color.translate("Updated your youtube to &6" + event.getMessage() + ChatColor.GREEN + "!"));
-                potPlayer.getMedia().getMediaData().setModifyingYouTube(false);
-            } else {
-                player.sendMessage(ChatColor.RED + ("Error: That's an invalid youtube link!"));
-                player.sendMessage(ChatColor.RED + ("Example: https://youtube.com/c/SolexGames/"));
-            }
-            event.setCancelled(true);
-            return;
-        }
-
-        if (CorePlugin.getInstance().getPlayerManager().getPlayer(player).getMedia().getMediaData().isModifyingTwitter()) {
-            if (twitterMatcher.matches()) {
-                potPlayer.getMedia().setTwitter(event.getMessage());
-                player.sendMessage(ChatColor.GREEN + Color.translate("Updated your twitter to &6" + event.getMessage() + ChatColor.GREEN + "!"));
-                potPlayer.getMedia().getMediaData().setModifyingTwitter(false);
-            } else {
-                player.sendMessage(ChatColor.RED + ("Error: That's an invalid twitter link!"));
-                player.sendMessage(ChatColor.RED + ("Example: @SolexGames"));
-            }
-            event.setCancelled(true);
             return;
         }
 
