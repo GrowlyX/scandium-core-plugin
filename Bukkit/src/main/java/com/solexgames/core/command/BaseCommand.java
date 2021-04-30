@@ -1,8 +1,11 @@
 package com.solexgames.core.command;
 
+import com.google.common.collect.Sets;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.command.CommandHelpBuilder;
+import com.solexgames.core.util.command.CustomHelpTopic;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -12,6 +15,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author GrowlyX
@@ -36,6 +40,7 @@ public abstract class BaseCommand extends Command implements PluginIdentifiableC
         this.setAliases(this.getAliases());
 
         CorePlugin.getInstance().registerCommand(this);
+        Bukkit.getHelpMap().addTopic(new CustomHelpTopic(this, Sets.newHashSet(this.getAliases())));
     }
 
     public abstract boolean execute(CommandSender sender, String label, String[] args);

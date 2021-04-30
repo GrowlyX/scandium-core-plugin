@@ -258,8 +258,8 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                                 jsonAppender.getParam("IDENTIFICATION"),
                                 true
                         );
-                        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(punishment.getIssuerName());
-                        final Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByUuid(issuerUuid).orElse(null);
+                        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(punishment.getTarget());
+                        final Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByUuid(punishment.getTarget()).orElse(null);
 
                         if (potPlayer != null) {
                             potPlayer.getPunishments().add(punishment);

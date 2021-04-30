@@ -90,10 +90,10 @@ public class PunishmentManager {
                 final Rank playerRank = Rank.getByName(document.getString("rankName"));
                 final String formattedName = playerRank.getColor() + playerRank.getItalic() + document.get("name");
                 final String issuerName = (issuer != null ? formattedName : "&4Console");
-                final String clickableLore = Color.SECONDARY_COLOR + "---------------------------------\n" + Color.SECONDARY_COLOR + "Added by: " + issuerName + "\n" + Color.SECONDARY_COLOR + "Added for: " + ChatColor.WHITE + punishment.getReason() + ChatColor.GRAY + " (" + punishment.getExpirationString() + ")\n" + Color.SECONDARY_COLOR + "---------------------------------";
+                final String clickableLore = Color.SECONDARY_COLOR + ChatColor.STRIKETHROUGH.toString() + "---------------------------------\n" + Color.SECONDARY_COLOR + "Added by: " + issuerName + "\n" + Color.SECONDARY_COLOR + "Added for: " + ChatColor.WHITE + punishment.getReason() + ChatColor.GRAY + " (" + punishment.getExpirationString() + ")\n" + Color.SECONDARY_COLOR + ChatColor.STRIKETHROUGH.toString() + "---------------------------------";
 
                 if (silent) {
-                    PlayerUtil.sendClickableTo("&7[Silent] " + playerFormattedName + " &awas " + punishmentExplanation + " by &4Console&a" + durationFormat,
+                    PlayerUtil.sendClickableTo("&7[Silent] " + playerFormattedName + " &awas " + punishmentExplanation + " by &4Console&a.",
                             clickableLore,
                             "/c " + document.getString("name"),
                             ClickEvent.Action.SUGGEST_COMMAND);
@@ -104,7 +104,7 @@ public class PunishmentManager {
                 }
             } else {
                 if (silent) {
-                    PlayerUtil.sendClickableTo("&7[Silent] " + playerFormattedName + " &awas " + punishmentExplanation + " by &4Console&a" + durationFormat,
+                    PlayerUtil.sendClickableTo("&7[Silent] " + playerFormattedName + " &awas " + punishmentExplanation + " by &4Console&a.",
                             "",
                             "", ClickEvent.Action.SUGGEST_COMMAND);
                 } else {
