@@ -1,6 +1,7 @@
 package com.solexgames.core.util.command;
 
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.command.EBaseCommand;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
@@ -47,6 +48,14 @@ public class CustomCommandMap extends SimpleCommandMap {
 
                 if (command instanceof BaseCommand) {
                     final BaseCommand baseCommand = (BaseCommand) command;
+
+                    if (!baseCommand.isHidden()) {
+                        completions.add(prefix + name);
+                    } else if (baseCommand.isHidden() && sender.hasPermission("scandium.staff")) {
+                        completions.add(prefix + name);
+                    }
+                } else if (command instanceof EBaseCommand) {
+                    final EBaseCommand baseCommand = (EBaseCommand) command;
 
                     if (!baseCommand.isHidden()) {
                         completions.add(prefix + name);
