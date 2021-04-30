@@ -11,6 +11,7 @@ import com.solexgames.core.player.punishment.PunishmentStrings;
 import com.solexgames.core.server.NetworkServer;
 import com.solexgames.core.util.*;
 import com.solexgames.core.util.external.pagination.impl.GrantReasonPaginatedMenu;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -26,6 +27,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
@@ -438,18 +440,29 @@ public class PlayerListener implements Listener {
 
             CorePlugin.getInstance().getServerManager().getVanishedPlayers().remove(event.getPlayer());
             potPlayer.savePlayerData();
-
-            if (event.getPlayer().hasPermission("scandium.staff")) {
-                Bukkit.getScheduler().runTaskLaterAsynchronously(CorePlugin.getInstance(), () -> {
-                    NetworkServer server = CorePlugin.getInstance().getServerManager().getServer(event.getPlayer().getName());
-
-                    if (server != null) {
-                        RedisUtil.writeAsync(RedisUtil.onSwitchServer(event.getPlayer().getDisplayName(), server.getServerName()));
-                    } else {
-                        RedisUtil.writeAsync(RedisUtil.onDisconnect(event.getPlayer()));
-                    }
-                }, 80L);
-            }
         });
+
+        if (event.getPlayer().hasPermission("scandium.staff")) {
+            new SwitchTask(event.getPlayer().getDisplayName()).runTaskLaterAsynchronously(CorePlugin.getInstance(), 60L);
+        }
+    }
+
+    @RequiredArgsConstructor
+    private final static class SwitchTask extends BukkitRunnable {
+
+        private final String displayName;
+
+        @Override
+        public void run() {
+            final NetworkServer server = CorePlugin.getInstance().getServerManager().getServer(ChatColor.stripColor(this.displayName));
+
+            if (server != null) {
+                if (!server.getServerName().equals(CorePlugin.getInstance().getServerName())) {
+                    RedisUtil.writeAsync(RedisUtil.onSwitchServer(this.displayName, server.getServerName()));
+                }
+            } else {
+                RedisUtil.writeAsync(RedisUtil.onDisconnect(this.displayName));
+            }
+        }
     }
 }

@@ -31,9 +31,9 @@ public class GrantReasonPrompt extends StringPrompt {
     @Override
     public Prompt acceptInput(ConversationContext context, String input) {
         if (input.equalsIgnoreCase("cancel") || input.equalsIgnoreCase("quit")) {
-            this.granter.sendMessage(ChatColor.RED + ("Cancelled the granting process."));
+            context.getForWhom().sendRawMessage(ChatColor.RED + ("Cancelled the granting process."));
         } else {
-            this.granter.sendMessage(Color.SECONDARY_COLOR + "Grant reason set to " + Color.MAIN_COLOR + input + Color.SECONDARY_COLOR + ".");
+            context.getForWhom().sendRawMessage(Color.SECONDARY_COLOR + "Grant reason set to " + Color.MAIN_COLOR + input + Color.SECONDARY_COLOR + ".");
 
             new GrantSelectConfirmMenu(this.granter, this.target, this.rank, this.duration, input, this.permanent, this.scope).open(this.granter);
         }

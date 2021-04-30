@@ -30,15 +30,17 @@ public class SocialMediaPrompt extends StringPrompt {
     @Override
     public Prompt acceptInput(ConversationContext context, String input) {
         if (input.equalsIgnoreCase("cancel") || input.equalsIgnoreCase("quit")) {
-            this.player.sendMessage(ChatColor.RED + ("Cancelled the social media editing process."));
+            context.getForWhom().sendRawMessage(ChatColor.RED + ("Cancelled the social media editing process."));
         } else {
             final boolean matches = this.matches(input);
 
             if (matches) {
                 this.runAfterMatch(input);
+
+                context.getForWhom().sendRawMessage(Color.SECONDARY_COLOR + "You've updated your " + this.mediaFancyName + Color.SECONDARY_COLOR + " to " + Color.MAIN_COLOR + input + Color.SECONDARY_COLOR + ".");
             } else {
-                this.player.sendMessage(ChatColor.RED + "That's not a valid value for the social media account!");
-                this.player.sendMessage(ChatColor.RED + "Please try again or type \"cancel\" to exit the editor.");
+                context.getForWhom().sendRawMessage(ChatColor.RED + "That's not a valid value for the social media account!");
+                context.getForWhom().sendRawMessage(ChatColor.RED + "Please try again or type \"cancel\" to exit the editor.");
 
                 return this;
             }
@@ -85,7 +87,5 @@ public class SocialMediaPrompt extends StringPrompt {
                 potPlayer.getMedia().setYoutubeLink(input);
                 break;
         }
-
-        this.player.sendMessage(Color.SECONDARY_COLOR + "You've updated your " + this.mediaFancyName + Color.SECONDARY_COLOR + " to " + Color.MAIN_COLOR + input + Color.SECONDARY_COLOR + ".");
     }
 }

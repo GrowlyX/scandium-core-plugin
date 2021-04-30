@@ -75,7 +75,7 @@ public abstract class PaginatedMenu extends Menu {
 
         HashMap<Integer, Button> buttons = new HashMap<>();
 
-        for (int i = 0; i <= 8; i++) {
+        for (int i = 1; i <= 7; i++) {
             buttons.put(i, new Button() {
                 @Override
                 public ItemStack getButtonItem(Player player) {

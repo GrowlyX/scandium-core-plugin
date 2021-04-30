@@ -26,8 +26,8 @@ public class GrantRemovalPrompt extends StringPrompt {
     public Prompt acceptInput(ConversationContext context, String input) {
         new GrantRemoveConfirmMenu(this.remover, this.target, this.grant, input).open(this.remover);
 
-        this.remover.sendMessage(Color.SECONDARY_COLOR + "You've set the removal reason to:");
-        this.remover.sendMessage(Color.MAIN_COLOR + input);
+        context.getForWhom().sendRawMessage(Color.SECONDARY_COLOR + "You've set the removal reason to:");
+        context.getForWhom().sendRawMessage(Color.MAIN_COLOR + input);
 
         return Prompt.END_OF_CONVERSATION;
     }

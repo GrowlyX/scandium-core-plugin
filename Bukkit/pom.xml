@@ -92,10 +92,16 @@
             <systemPath>${basedir}/lib/ProtocolLib.jar</systemPath>
         </dependency>
 
+        <!-- Google Depends -->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>30.1.1-jre</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.6</version>
         </dependency>
 
         <!-- Database APIs -->

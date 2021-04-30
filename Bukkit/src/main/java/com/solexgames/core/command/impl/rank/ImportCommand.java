@@ -25,7 +25,8 @@ public class ImportCommand extends BaseCommand {
                         ChatColor.GREEN + ChatColor.BOLD.toString() + "Would you like to import the ranks from the ranks.yml?",
                         ChatColor.GRAY + "If you proceed, make sure to understand all the current",
                         ChatColor.GRAY + "ranks will be deleted and replaced with the new ones.",
-                        ""
+                        "",
+                        ChatColor.YELLOW + "[Use /import confirm to start the rank importation]",
                 });
             }
             if (args.length == 1) {

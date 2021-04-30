@@ -547,7 +547,7 @@ public class PotPlayer {
         return this.getAllGrants().stream()
                 .sorted(Comparator.comparingLong(Grant::getDateAdded).reversed())
                 .collect(Collectors.toList()).stream()
-                .filter(grant -> grant != null && !grant.isRemoved() && grant.isActive() && !grant.getRank().isHidden() && (grant.getScope() == null || grant.isGlobal() || grant.isApplicable()))
+                .filter(grant -> grant != null && grant.getRank() != null && !grant.isRemoved() && grant.isActive() && !grant.getRank().isHidden() && (grant.getScope() == null || grant.isGlobal() || grant.isApplicable()))
                 .findFirst()
                 .orElseGet(this::getDefaultGrant);
     }
@@ -575,7 +575,9 @@ public class PotPlayer {
         this.player.setPlayerListName(Color.translate((this.getActiveGrant().getRank().getColor() == null ? ChatColor.GRAY.toString() : this.getActiveGrant().getRank().getColor()) + (this.customColor != null ? this.customColor : "") + this.getName()));
 
         if (CorePlugin.getInstance().getServerSettings().isTabEnabled()) {
-            CorePlugin.getInstance().getNMS().updateTablist();
+            try {
+                CorePlugin.getInstance().getNMS().updateTablist();
+            } catch (Exception ignored) { }
         }
     }
 
