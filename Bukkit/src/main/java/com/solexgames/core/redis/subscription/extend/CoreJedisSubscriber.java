@@ -235,7 +235,7 @@ public class CoreJedisSubscriber extends AbstractJedisSubscriber {
                         Rank.getRanks().remove(rankRemove);
 
                         if (rankRemovePlayer != null) {
-                            rankRemovePlayer.sendMessage(Color.SECONDARY_COLOR + "You've deleted the rank with the name " + ChatColor.GRAY + rankRemove + Color.SECONDARY_COLOR + "!");
+                            rankRemovePlayer.sendMessage(Color.SECONDARY_COLOR + "You've deleted the rank with the name " + ChatColor.GRAY + rankRemove.getColor() + rankRemove.getItalic() + rankRemove.getName() + Color.SECONDARY_COLOR + "!");
                         }
                     }
                     break;

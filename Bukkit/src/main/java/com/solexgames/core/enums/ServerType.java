@@ -22,7 +22,7 @@ public enum ServerType {
     MINEARCADE("MineArcade", "13", ChatColor.DARK_AQUA, ChatColor.YELLOW, "https://dsc.gg/minearcade", "MineArcadeORG", "shop.minearcade.org", "play.minearcade.org"),
     DEVOUT("DevoutPvP", "14", ChatColor.DARK_RED, ChatColor.RED, "discord.gg/devout", "DevoutPvP", "store.devoutpvp.com", "devoutpvp.com"),
     POGPUBLIC("PogPublic", "15", ChatColor.AQUA, ChatColor.GRAY, "https://discord.gg/U4EZ9eh9xd", "Pog_Public", "https://store.pogpublic.com/", "fun.pogpublic.com"),
-    EVENTSWORLD("EventsWorld", "17", ChatColor.DARK_AQUA, ChatColor.AQUA, "https://discord.gg/YxEYT7xmQe", "EventsWorldUHC", "https://store.eventsworld.club/", "eventsworld.club");
+    APPOLIX("AppolixMC", "16", ChatColor.GOLD, ChatColor.YELLOW, "https://discord.gg/mtrWYcAp7c", "AppolixMC", "https://store.appolixmc.com/", "appolixmc.com");
 
     private final String serverName;
     private final String serverId;

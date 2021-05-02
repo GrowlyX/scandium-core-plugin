@@ -77,9 +77,9 @@ public class PunishmentManager {
 
         this.punishments.add(punishment);
 
-        final Player issuingPlayer = Bukkit.getPlayerExact(issuer);
+        if (issuer != null) {
+            final Player issuingPlayer = Bukkit.getPlayerExact(issuer);
 
-        if (issuingPlayer != null) {
             issuingPlayer.sendMessage(Color.translate((silent ? ChatColor.GRAY + "[Silent] " : "") + ChatColor.GREEN + "You've " + punishmentExplanation + " " + playerFormattedName + ChatColor.GREEN + durationFormat));
         }
 
