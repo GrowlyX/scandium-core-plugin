@@ -16,11 +16,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public class CustomCommandMap extends SimpleCommandMap {
+public class BukkitCommandMap extends SimpleCommandMap {
 
     private final Pattern PATTERN_ON_SPACE = Pattern.compile(" ", Pattern.LITERAL);
 
-    public CustomCommandMap(Server server) {
+    public BukkitCommandMap(Server server) {
         super(server);
     }
 

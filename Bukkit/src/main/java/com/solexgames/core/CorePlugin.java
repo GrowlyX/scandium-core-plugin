@@ -29,7 +29,6 @@ import com.solexgames.core.task.*;
 import com.solexgames.core.util.BukkitUtil;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
-import com.solexgames.core.util.command.CustomCommandMap;
 import com.solexgames.core.util.external.ConfigExternal;
 import com.solexgames.core.uuid.UUIDCache;
 import lombok.Getter;
@@ -41,7 +40,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
-import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.plugin.SimplePluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -125,11 +123,6 @@ public final class CorePlugin extends JavaPlugin {
                 .setPrettyPrinting()
                 .disableHtmlEscaping()
                 .create();
-
-        if (!this.swapSimpleCommandMap()) {
-            this.getServer().shutdown();
-            return;
-        }
 
         this.httpClient = new DefaultHttpClient();
 
@@ -231,6 +224,7 @@ public final class CorePlugin extends JavaPlugin {
             this.NMS = new NMSAccess_v1_16();
         }
 
+        this.getNMS().swapCommandMap();
         this.getLogger().info("[Bukkit] Hooked into Bukkit version " + this.getServer().getVersion() + "!");
     }
 
@@ -334,31 +328,6 @@ public final class CorePlugin extends JavaPlugin {
             }
         } else {
             this.getLogger().warning("Your server software is running a PluginManager that is unrecognized. This may be due to the fact you might be running a custom Bukkit/Spigot version.");
-        }
-    }
-
-    private boolean swapSimpleCommandMap() {
-        try {
-            final Field commandMapField = this.getServer().getClass().getDeclaredField("commandMap");
-            commandMapField.setAccessible(true);
-
-            final Object oldCommandMap = commandMapField.get(this.getServer());
-            final CustomCommandMap newCommandMap = new CustomCommandMap(this.getServer());
-
-            final Field knownCommandsField = SimpleCommandMap.class.getDeclaredField("knownCommands");
-            knownCommandsField.setAccessible(true);
-
-            final Field modifiersField = Field.class.getDeclaredField("modifiers");
-            modifiersField.setAccessible(true);
-            modifiersField.setInt(knownCommandsField, knownCommandsField.getModifiers() & -17);
-
-            knownCommandsField.set(newCommandMap, knownCommandsField.get(oldCommandMap));
-            commandMapField.set(this.getServer(), newCommandMap);
-
-            return true;
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            return false;
         }
     }
 

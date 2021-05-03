@@ -1,21 +1,31 @@
 package com.solexgames.core.hooks.nms.impl;
 
 import com.solexgames.core.CorePlugin;
+import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.command.EBaseCommand;
 import com.solexgames.core.hooks.nms.INMS;
-import net.minecraft.server.v1_16_R3.EnumGamemode;
 import net.minecraft.server.v1_16_R3.EntityPlayer;
 import net.minecraft.server.v1_16_R3.MinecraftServer;
 import net.minecraft.server.v1_16_R3.PacketPlayOutPlayerInfo;
 import net.minecraft.server.v1_16_R3.IChatBaseComponent;
 import net.minecraft.server.v1_16_R3.PacketPlayOutPlayerListHeaderFooter;
+import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandException;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.craftbukkit.v1_16_R3.command.CraftCommandMap;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class NMSAccess_v1_16 implements INMS {
@@ -121,4 +131,102 @@ public class NMSAccess_v1_16 implements INMS {
 
         player.teleport(previousLocation);
     }
+
+    @Override
+    public void swapCommandMap() {
+        try {
+            final Field commandMapField = CorePlugin.getInstance().getServer().getClass().getDeclaredField("commandMap");
+            commandMapField.setAccessible(true);
+
+            final Object oldCommandMap = commandMapField.get(CorePlugin.getInstance().getServer());
+            final CraftCommandMap newCommandMap = new CraftCommandMap(CorePlugin.getInstance().getServer()) {
+
+                private final Pattern PATTERN_ON_SPACE = Pattern.compile(" ", Pattern.LITERAL);
+
+                @Override
+                public List<String> tabComplete(CommandSender sender, String cmdLine) {
+                    Validate.notNull(sender, "Sender cannot be null");
+                    Validate.notNull(cmdLine, "Command line cannot null");
+
+                    int spaceIndex = cmdLine.indexOf(' ');
+
+                    if (spaceIndex == -1) {
+                        final ArrayList<String> completions = new ArrayList<>();
+                        final Map<String, Command> knownCommands = this.knownCommands;
+
+                        final String prefix = (sender instanceof Player ? "/" : "");
+
+                        for (Map.Entry<String, Command> commandEntry : knownCommands.entrySet()) {
+                            final Command command = commandEntry.getValue();
+
+                            if (!command.testPermissionSilent(sender)) {
+                                continue;
+                            }
+
+                            final String name = commandEntry.getKey();
+
+                            if (command instanceof BaseCommand) {
+                                final BaseCommand baseCommand = (BaseCommand) command;
+
+                                if (!baseCommand.isHidden()) {
+                                    completions.add(prefix + name);
+                                } else if (baseCommand.isHidden() && sender.hasPermission("scandium.staff")) {
+                                    completions.add(prefix + name);
+                                }
+                            } else if (command instanceof EBaseCommand) {
+                                final EBaseCommand baseCommand = (EBaseCommand) command;
+
+                                if (!baseCommand.isHidden()) {
+                                    completions.add(prefix + name);
+                                } else if (baseCommand.isHidden() && sender.hasPermission("scandium.staff")) {
+                                    completions.add(prefix + name);
+                                }
+                            } else if (StringUtil.startsWithIgnoreCase(name, cmdLine)) {
+                                completions.add(prefix + name);
+                            }
+                        }
+
+                        completions.sort(String.CASE_INSENSITIVE_ORDER);
+                        return completions;
+                    }
+
+                    final String commandName = cmdLine.substring(0, spaceIndex);
+                    final Command target = getCommand(commandName);
+
+                    if (target == null) {
+                        return null;
+                    }
+
+                    if (!target.testPermissionSilent(sender)) {
+                        return null;
+                    }
+
+                    final String argLine = cmdLine.substring(spaceIndex + 1);
+                    final String[] args = PATTERN_ON_SPACE.split(argLine, -1);
+
+                    try {
+                        return target.tabComplete(sender, commandName, args);
+                    } catch (CommandException ex) {
+                        throw ex;
+                    } catch (Throwable ex) {
+                        throw new CommandException("Unhandled exception executing tab-completer for '" + cmdLine + "' in " + target, ex);
+                    }
+                }
+            };
+
+            final Field knownCommandsField = SimpleCommandMap.class.getDeclaredField("knownCommands");
+            knownCommandsField.setAccessible(true);
+
+            final Field modifiersField = Field.class.getDeclaredField("modifiers");
+            modifiersField.setAccessible(true);
+            modifiersField.setInt(knownCommandsField, knownCommandsField.getModifiers() & -17);
+
+            knownCommandsField.set(newCommandMap, knownCommandsField.get(oldCommandMap));
+            commandMapField.set(CorePlugin.getInstance().getServer(), newCommandMap);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
+
 }
