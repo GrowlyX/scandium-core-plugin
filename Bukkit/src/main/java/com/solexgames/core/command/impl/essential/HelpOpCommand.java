@@ -2,14 +2,12 @@ package com.solexgames.core.command.impl.essential;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
-import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
 import com.solexgames.core.util.StringUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -40,7 +38,7 @@ public class HelpOpCommand extends BaseCommand {
                 return false;
             }
 
-            RedisUtil.writeAsync(RedisUtil.onHelpOp(player, reason));
+            RedisUtil.publishAsync(RedisUtil.onHelpOp(player, reason));
             player.sendMessage(ChatColor.GREEN + Color.translate("Your request has been sent to all online staff!"));
 
             potPlayer.setCanRequest(false);

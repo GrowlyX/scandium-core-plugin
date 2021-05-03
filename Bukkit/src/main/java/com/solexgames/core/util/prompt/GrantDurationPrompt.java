@@ -1,10 +1,9 @@
 package com.solexgames.core.util.prompt;
 
-import com.solexgames.core.menu.impl.grant.GrantSelectConfirmMenu;
 import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.DateUtil;
-import com.solexgames.core.util.external.pagination.impl.GrantReasonPaginatedMenu;
+import com.solexgames.core.util.external.impl.GrantReasonPaginatedMenu;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bson.Document;

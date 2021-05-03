@@ -6,7 +6,7 @@ import com.solexgames.core.player.punishment.Punishment;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
 import com.solexgames.core.util.builder.ItemBuilder;
-import com.solexgames.core.util.external.pagination.impl.PunishViewPaginatedMenu;
+import com.solexgames.core.util.external.impl.PunishViewPaginatedMenu;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -78,7 +78,7 @@ public class PunishRemoveConfirmMenu extends AbstractInventoryMenu {
             if (item == null || item.getType() == XMaterial.AIR.parseMaterial()) return;
             if (ChatColor.stripColor(Color.translate(item.getItemMeta().getDisplayName())).contains("Confirm")) {
                 Punishment.getAllPunishments().remove(punishment);
-                RedisUtil.writeAsync(RedisUtil.fRemovePunishment(punishment));
+                RedisUtil.publishAsync(RedisUtil.fRemovePunishment(punishment));
 
                 player.sendMessage(Color.SECONDARY_COLOR + "You've removed the grant with the ID: " + Color.MAIN_COLOR + "#" + punishment.getPunishIdentification() + Color.SECONDARY_COLOR + " from " + Color.MAIN_COLOR + target + Color.SECONDARY_COLOR + "'s history!");
 

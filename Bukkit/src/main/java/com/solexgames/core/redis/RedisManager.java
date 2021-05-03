@@ -5,6 +5,7 @@ import com.solexgames.core.redis.subscription.AbstractJedisSubscriber;
 import com.solexgames.core.redis.subscription.extend.CoreJedisSubscriber;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.Bukkit;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPubSub;
@@ -70,22 +71,18 @@ public class RedisManager {
         try {
             this.jedisPool.destroy();
             this.jedisSubscriber.unsubscribe();
-        } catch (Exception e) {
-            System.out.println("[Redis] Could not destroy Redis Pool.");
+        } catch (Exception ignored) {
+            Bukkit.getLogger().info("[Redis] Could not destroy Redis Pool.");
         }
     }
 
-    public void write(String json) {
+    public void publishJedis(String json) {
         try (Jedis jedis = this.jedisPool.getResource()) {
-            jedis.auth(this.settings.getPassword());
+            if (this.settings.isAuth()) {
+                jedis.auth(this.settings.getPassword());
+            }
+
             jedis.publish("Scandium:BUKKIT", json);
-        }
-    }
-
-    public void write(String json, AbstractJedisSubscriber subscriber) {
-        try (Jedis jedis = this.jedisPool.getResource()) {
-            jedis.auth(this.settings.getPassword());
-            jedis.publish(subscriber.getChannelName(), json);
         }
     }
 }

@@ -2,13 +2,11 @@ package com.solexgames.core.command.impl.moderation;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
-import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -43,7 +41,7 @@ public class FreezeCommand extends BaseCommand {
                 if (potPlayer.isFrozen()) {
                     potPlayer.setFrozen(false);
 
-                    RedisUtil.writeAsync(RedisUtil.onUnfreeze(player, target));
+                    RedisUtil.publishAsync(RedisUtil.onUnfreeze(player, target));
 
                     player.sendMessage(ChatColor.GREEN + Color.translate("Unfroze " + target.getDisplayName() + ChatColor.GREEN + "."));
                 } else {
@@ -54,7 +52,7 @@ public class FreezeCommand extends BaseCommand {
                         if ((mainPotPlayer.getActiveGrant().getRank().getWeight() >= targetPotPlayer.getActiveGrant().getRank().getWeight()) || player.isOp()) {
                             targetPotPlayer.setFrozen(true);
 
-                            RedisUtil.writeAsync(RedisUtil.onFreeze(player, target));
+                            RedisUtil.publishAsync(RedisUtil.onFreeze(player, target));
 
                             player.sendMessage(ChatColor.GREEN + Color.translate("Froze " + target.getDisplayName() + ChatColor.GREEN + "."));
                         } else {

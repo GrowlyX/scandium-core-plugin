@@ -1,13 +1,11 @@
 package com.solexgames.core.command.impl.rank;
 
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.util.clickable.Clickable;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.player.ranks.Rank;
-import com.solexgames.core.util.external.ConfigExternal;
+import com.solexgames.core.util.config.FileConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -46,7 +44,7 @@ public class ImportCommand extends BaseCommand {
     }
 
     private boolean handleImport() {
-        final ConfigExternal config = CorePlugin.getInstance().getRanksConfig();
+        final FileConfig config = CorePlugin.getInstance().getRanksConfig();
 
         Rank.getRanks().clear();
         CorePlugin.getInstance().getCoreDatabase().getRankCollection().drop();
@@ -59,7 +57,7 @@ public class ImportCommand extends BaseCommand {
             final int weight = config.getInt(key + ".weight");
             final boolean defaultRank = config.getBoolean(key + ".defaultRank");
 
-            final List<String> permissions = config.getStringListOrDefault(key + ".permissions", new ArrayList<>());
+            final List<String> permissions = config.getStringList(key + ".permissions", new ArrayList<>());
 
             Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () -> new Rank(UUID.randomUUID(), new ArrayList<>(), permissions, key, prefix, color, suffix, defaultRank, weight));
         });
@@ -68,7 +66,7 @@ public class ImportCommand extends BaseCommand {
                 .map(key -> Rank.getByName(config.getString(key)))
                 .filter(Objects::nonNull)
                 .forEach(rank -> {
-                    final List<String> stringList = config.getStringListOrDefault(rank.getName() + ".inheritance", new ArrayList<>());
+                    final List<String> stringList = config.getStringList(rank.getName() + ".inheritance", new ArrayList<>());
 
                     stringList.stream()
                             .map(s -> Rank.getByName(config.getString(s)))

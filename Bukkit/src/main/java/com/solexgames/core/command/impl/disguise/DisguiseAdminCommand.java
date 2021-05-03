@@ -72,7 +72,7 @@ public class DisguiseAdminCommand extends BaseCommand {
                         }
 
                         CorePlugin.getInstance().getDisguiseCache().registerNewDataPair(disguiseData);
-                        RedisUtil.writeAsync(RedisUtil.onDisguiseProfileCreate(disguiseData));
+                        RedisUtil.publishAsync(RedisUtil.onDisguiseProfileCreate(disguiseData));
 
                         disguiseData.saveData();
 
@@ -101,7 +101,7 @@ public class DisguiseAdminCommand extends BaseCommand {
 
                         CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getDisguiseCollection().deleteOne(Filters.eq("_id", disguiseData.getUuid())));
 
-                        RedisUtil.writeAsync(RedisUtil.onDisguiseProfileRemove(disguiseData));
+                        RedisUtil.publishAsync(RedisUtil.onDisguiseProfileRemove(disguiseData));
 
                         player.sendMessage(Color.SECONDARY_COLOR + "You've removed the disguise profile with the name " + Color.MAIN_COLOR + disguiseData.getName() + Color.SECONDARY_COLOR + "!");
                     }

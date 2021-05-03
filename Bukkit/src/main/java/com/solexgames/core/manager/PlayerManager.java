@@ -361,7 +361,7 @@ public class PlayerManager {
 
     public void sendToNetworkStaff(String... strings) {
         for (String string : strings) {
-            RedisUtil.writeAsync(RedisUtil.onGlobalBroadcastPermission(Color.translate(string), "scandium.staff"));
+            RedisUtil.publishAsync(RedisUtil.onGlobalBroadcastPermission(Color.translate(string), "scandium.staff"));
         }
     }
 

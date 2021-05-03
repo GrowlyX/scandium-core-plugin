@@ -23,12 +23,13 @@ public class ServerManager {
 
     private final long heartbeatCheckTimeout = 15_000L;
 
-    private List<String> joinMessage;
-    private List<String> staffInformation;
+    private final List<NetworkServer> networkServers = new ArrayList<>();
+    private final List<Player> vanishedPlayers = new ArrayList<>();
+    private final List<Player> staffModePlayers = new ArrayList<>();
 
-    private ArrayList<NetworkServer> networkServers = new ArrayList<>();
-    private ArrayList<Player> vanishedPlayers = new ArrayList<>();
-    private ArrayList<Player> staffModePlayers = new ArrayList<>();
+    private final List<String> joinMessage;
+    private final List<String> staffInformation;
+    private final List<String> blockedCommands;
 
     private ServerType network;
     private String automaticallyPutInto;
@@ -51,9 +52,9 @@ public class ServerManager {
         this.joinMessageEnabled = plugin.getConfig().getBoolean("player-join.join-message.enabled");
         this.joinMessageCentered = plugin.getConfig().getBoolean("player-join.join-message.centered");
         this.automaticallyPutInto = plugin.getConfig().getString("settings.automatic-string");
+        this.blockedCommands = plugin.getConfig().getStringList("block-commands.list");
 
         this.staffInformation = Color.translate(plugin.getConfig().getStringList("staff-information"));
-
         this.spawnLocation = CorePlugin.GSON.fromJson(plugin.getConfig().getString("locations.spawnpoint"), Location.class);
 
         this.setupServerType();

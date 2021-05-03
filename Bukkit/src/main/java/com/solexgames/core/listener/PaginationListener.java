@@ -1,8 +1,8 @@
 package com.solexgames.core.listener;
 
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.util.external.pagination.Button;
-import com.solexgames.core.util.external.pagination.Menu;
+import com.solexgames.core.util.external.Button;
+import com.solexgames.core.util.external.Menu;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

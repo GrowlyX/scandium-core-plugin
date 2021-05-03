@@ -29,7 +29,7 @@ import com.solexgames.core.task.*;
 import com.solexgames.core.util.BukkitUtil;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
-import com.solexgames.core.util.external.ConfigExternal;
+import com.solexgames.core.util.config.FileConfig;
 import com.solexgames.core.uuid.UUIDCache;
 import lombok.Getter;
 import lombok.Setter;
@@ -67,8 +67,6 @@ public final class CorePlugin extends JavaPlugin {
     @Getter
     private static CorePlugin instance;
 
-    private final TPSUpdateTask tpsRunnable = new TPSUpdateTask();
-
     private ServerManager serverManager;
     private ReportManager reportManager;
     private WarpManager warpManager;
@@ -93,9 +91,9 @@ public final class CorePlugin extends JavaPlugin {
     private RedisManager redisManager;
     private String pluginName;
 
-    private ConfigExternal ranksConfig;
-    private ConfigExternal databaseConfig;
-    private ConfigExternal filterConfig;
+    private FileConfig ranksConfig;
+    private FileConfig databaseConfig;
+    private FileConfig filterConfig;
 
     private RedisSubscriptions subscriptions;
     private DataLibrary library;
@@ -108,6 +106,7 @@ public final class CorePlugin extends JavaPlugin {
     private boolean disallow;
 
     private final ConversationFactory conversationFactory = new ConversationFactory(this);
+    private final TPSUpdateTask tpsRunnable = new TPSUpdateTask();
 
     @Override
     public void onEnable() {
@@ -134,9 +133,9 @@ public final class CorePlugin extends JavaPlugin {
         FORMAT = new SimpleDateFormat("MM/dd/yyyy HH:mma");
         FORMAT.setTimeZone(TimeZone.getTimeZone(this.getConfig().getString("settings.time-zone")));
 
-        this.ranksConfig = new ConfigExternal("ranks");
-        this.databaseConfig = new ConfigExternal("database");
-        this.filterConfig = new ConfigExternal("filtered");
+        this.ranksConfig = new FileConfig("ranks");
+        this.databaseConfig = new FileConfig("database");
+        this.filterConfig = new FileConfig("filtered");
 
         this.serverSettings = new ServerSettings();
 
@@ -339,7 +338,7 @@ public final class CorePlugin extends JavaPlugin {
     public void onDisable() {
         this.serverSettings.setCanJoin(false);
 
-        RedisUtil.write(RedisUtil.onServerOffline());
+        RedisUtil.publishSync(RedisUtil.onServerOffline());
 
         this.getServer().getOnlinePlayers().forEach(player -> player.kickPlayer(ChatColor.RED + "The server is currently rebooting...\n" + ChatColor.GRAY + "Please rejoin in a few minutes."));
 

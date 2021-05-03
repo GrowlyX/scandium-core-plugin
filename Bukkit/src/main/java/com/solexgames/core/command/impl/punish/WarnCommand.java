@@ -83,7 +83,7 @@ public class WarnCommand extends BaseCommand {
 
                             CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, issuerNameNull, document, isSilent);
 
-                            RedisUtil.writeAsync(RedisUtil.executePunishment(
+                            RedisUtil.publishAsync(RedisUtil.executePunishment(
                                     PunishmentType.WARN,
                                     issuerUuid,
                                     targetUuid,

@@ -11,7 +11,6 @@ import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
 import lombok.Getter;
-import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -74,7 +73,7 @@ public class ReportMenu extends AbstractInventoryMenu {
             final ReportType reportType = Arrays.stream(ReportType.values()).filter(reportType1 -> reportType1.getName().equalsIgnoreCase(ChatColor.stripColor(item.getItemMeta().getDisplayName()))).findFirst().orElse(null);
 
             if (reportType != null && potPlayer.isCanReport()) {
-                RedisUtil.writeAsync(RedisUtil.onReport(this.player, this.target, reportType.getName()));
+                RedisUtil.publishAsync(RedisUtil.onReport(this.player, this.target, reportType.getName()));
 
                 if (CorePlugin.getInstance().getDiscordManager().getClient() != null) {
                     CorePlugin.getInstance().getDiscordManager().sendReport(player, target, reportType.getName());

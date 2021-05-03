@@ -3,6 +3,7 @@ package com.solexgames.core.manager;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
+import com.solexgames.core.util.PlayerUtil;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -20,68 +21,32 @@ public class FilterManager {
     private final Pattern ipRegex = Pattern.compile("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])([.,])){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$");
     private final Pattern otherIpRegex = Pattern.compile("(\\d{1,2}|(0|1)\\" + "d{2}|2[0-4]\\d|25[0-5])" + "\\." + "(\\d{1,2}|(0|1)\\" + "d{2}|2[0-4]\\d|25[0-5])" + "\\." + "(\\d{1,2}|(0|1)\\" + "d{2}|2[0-4]\\d|25[0-5])" + "\\." + "(\\d{1,2}|(0|1)\\" + "d{2}|2[0-4]\\d|25[0-5])");
 
-    private final CorePlugin plugin;
-    private final List<String> filteredMessages;
-
-    public FilterManager() {
-        this.plugin = CorePlugin.getInstance();
-        this.filteredMessages = this.plugin.getFilterConfig().getStringList("messages");
-    }
+    private final CorePlugin plugin = CorePlugin.getInstance();
+    private final List<String> filteredMessages = CorePlugin.getInstance().getFilterConfig().getStringList("messages");
 
     public boolean isDmFiltered(Player player, String target, String message) {
-        final AtomicBoolean atomicBoolean = new AtomicBoolean(false);
-        final String fixedMessage = message.toLowerCase()
-                .replace("3", "e")
-                .replace("1", "i")
-                .replace("!", "i")
-                .replace("@", "a")
-                .replace("7", "t")
-                .replace("0", "o")
-                .replace("5", "s")
-                .replace("8", "b")
-                .replaceAll("\\p{Punct}|\\d", "")
-                .trim();
-        final String[] words = fixedMessage.replace("(dot)", ".").replace("[dot]", ".").replace("<dot>", ".").trim().split(" ");
+        final boolean filtered = this.isStringFiltered(message);
 
-        this.filteredMessages.stream()
-                .filter(s -> fixedMessage.contains(s.toLowerCase()))
-                .forEach(s -> {
-                    if (!atomicBoolean.get()) {
-                        if (!player.hasPermission("scandium.filter.bypass"))
-                            handleDmAlert(player, target, fixedMessage);
+        this.handleSocialSpy(player, target, message);
 
-                        atomicBoolean.set(true);
-                    }
-                });
-
-        if (!atomicBoolean.get()) {
-            Arrays.asList(words).forEach(word -> {
-                final Matcher ipMatcher = this.ipRegex.matcher(word);
-                if (ipMatcher.matches()) {
-                    atomicBoolean.set(true);
-                }
-
-                final Matcher otherIpMatcher = this.otherIpRegex.matcher(word);
-                if (otherIpMatcher.matches()) {
-                    atomicBoolean.set(true);
-                }
-
-                final Matcher urlMatcher = this.urlRegex.matcher(word);
-                if (urlMatcher.matches()) {
-                    atomicBoolean.set(true);
-                }
-            });
+        if (filtered) {
+            this.handleDmAlert(player, target, message);
         }
 
-        if (!atomicBoolean.get()) {
-            this.handleSocialSpy(player, target, message);
-        }
-
-        return atomicBoolean.get();
+        return filtered;
     }
 
     public boolean isMessageFiltered(Player player, String message) {
-        final AtomicBoolean atomicBoolean = new AtomicBoolean(false);
+        final boolean filtered = this.isStringFiltered(message);
+
+        if (filtered) {
+            this.handleAlert(player, message);
+        }
+
+        return filtered;
+    }
+
+    private boolean isStringFiltered(String message) {
         final String fixedMessage = message.toLowerCase()
                 .replace("3", "e")
                 .replace("1", "i")
@@ -95,66 +60,40 @@ public class FilterManager {
                 .trim();
         final String[] words = fixedMessage.replace("(dot)", ".").replace("[dot]", ".").replace("<dot>", ".").trim().split(" ");
 
-        this.filteredMessages.stream()
-                .filter(s -> fixedMessage.contains(s.toLowerCase()))
-                .forEach(s -> {
-                    if (!atomicBoolean.get()) {
-                        if (!player.hasPermission("scandium.filter.bypass"))
-                            handleAlert(player, fixedMessage);
-
-                        atomicBoolean.set(true);
-                    }
-                });
-
-        if (!atomicBoolean.get()) {
-            Arrays.asList(words).forEach(word -> {
-                final Matcher ipMatcher = this.ipRegex.matcher(word);
-                if (ipMatcher.matches()) {
-                    atomicBoolean.set(true);
-                }
-
-                final Matcher otherIpMatcher = this.otherIpRegex.matcher(word);
-                if (otherIpMatcher.matches()) {
-                    atomicBoolean.set(true);
-                }
-
-                final Matcher urlMatcher = this.urlRegex.matcher(word);
-                if (urlMatcher.matches()) {
-                    atomicBoolean.set(true);
-                }
-            });
+        for (String filtered : this.filteredMessages) {
+            if (!fixedMessage.contains(filtered.toLowerCase())) {
+                return true;
+            }
         }
 
-        return atomicBoolean.get();
+        for (String word : words) {
+            final Matcher ipMatcher = this.ipRegex.matcher(word);
+            final Matcher otherIpMatcher = this.otherIpRegex.matcher(word);
+            final Matcher urlMatcher = this.urlRegex.matcher(word);
+
+            if (ipMatcher.matches() || otherIpMatcher.matches() || urlMatcher.matches()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private void handleAlert(Player player, String message) {
         final PotPlayer targetPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
-        Bukkit.getOnlinePlayers()
-                .stream()
-                .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
-                .filter(potPlayer -> potPlayer.isCanSeeFiltered() && potPlayer.getPlayer().hasPermission("scandium.staff"))
-                .forEach(potPlayer -> potPlayer.getPlayer().sendMessage(Color.translate("&c[Filtered] &e" + targetPlayer.getColorByRankColor() + targetPlayer.getName() + "&7: &e") + message));
+        PlayerUtil.sendToFiltered("&c[Filtered] &e" + targetPlayer.getColorByRankColor() + targetPlayer.getName() + "&7: &e" + message);
     }
 
     private void handleSocialSpy(Player player, String target, String message) {
         final PotPlayer targetPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
-        Bukkit.getOnlinePlayers()
-                .stream()
-                .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
-                .filter(potPlayer -> potPlayer.isSocialSpy() && potPlayer.getPlayer().hasPermission("scandium.socialspy"))
-                .forEach(potPlayer -> potPlayer.getPlayer().sendMessage(Color.translate("&c[Social Spy] &7(" + targetPlayer.getName() + " -> " + target + ")" + "&7: &e") + message));
+        PlayerUtil.sendToSocialSpy("&c[Social Spy] &7(" + targetPlayer.getName() + " -> " + target + ")" + "&7: &e" + message);
     }
 
     private void handleDmAlert(Player player, String target, String message) {
         final PotPlayer targetPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
-        Bukkit.getOnlinePlayers()
-                .stream()
-                .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
-                .filter(potPlayer -> potPlayer.isCanSeeFiltered() && potPlayer.getPlayer().hasPermission("scandium.staff"))
-                .forEach(potPlayer -> potPlayer.getPlayer().sendMessage(Color.translate("&c[Filtered] &7(" + targetPlayer.getName() + " -> " + target + ")" + "&7: &e") + message));
+        PlayerUtil.sendToFiltered("&c[Filtered] &7(" + targetPlayer.getName() + " -> " + target + ")" + "&7: &e" + message);
     }
 }

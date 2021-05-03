@@ -8,11 +8,9 @@ import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
 import com.solexgames.core.util.StringUtil;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -45,7 +43,7 @@ public class StaffChatCommand extends BaseCommand {
 
         if (args.length > 0) {
             final String message = StringUtil.buildMessage(args, 0);
-            RedisUtil.writeAsync(RedisUtil.onChatChannel(ChatChannelType.STAFF, message, player));
+            RedisUtil.publishAsync(RedisUtil.onChatChannel(ChatChannelType.STAFF, message, player));
         }
 
         return false;

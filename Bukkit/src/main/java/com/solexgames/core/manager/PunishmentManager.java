@@ -200,7 +200,7 @@ public class PunishmentManager {
 
                 if (handleRedis) {
                     punishment.savePunishment();
-                    RedisUtil.writeAsync(RedisUtil.removePunishment(player, punishment, message));
+                    RedisUtil.publishAsync(RedisUtil.removePunishment(player, punishment, message));
                 }
 
                 final Player targetPlayer = Bukkit.getPlayer(punishment.getTarget());

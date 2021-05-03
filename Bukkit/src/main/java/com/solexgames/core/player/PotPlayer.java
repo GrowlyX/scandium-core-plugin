@@ -231,7 +231,7 @@ public class PotPlayer {
     }
 
     public void savePlayerData() {
-        RedisUtil.writeAsync(RedisUtil.removeGlobalPlayer(this.uuid));
+        RedisUtil.publishAsync(RedisUtil.removeGlobalPlayer(this.uuid));
 
         CorePlugin.getInstance().getPlayerManager().getAllNetworkProfiles().remove(this.uuid);
         CorePlugin.getInstance().getPlayerManager().getAllProfiles().remove(this.uuid);
@@ -410,7 +410,7 @@ public class PotPlayer {
                     new NetworkPlayer(this.uuid, this.name, CorePlugin.getInstance().getServerName(), this.getActiveGrant().getRank().getName(), this.isCanReceiveDms(), this.ipAddress, this.syncCode, this.isSynced)
             );
 
-            RedisUtil.writeAsync(RedisUtil.addGlobalPlayer(this));
+            RedisUtil.publishAsync(RedisUtil.addGlobalPlayer(this));
             CorePlugin.getInstance().getPlayerManager().getAllSyncCodes().put(this.syncCode, this.getName());
 
             this.currentlyOnline = true;
@@ -504,7 +504,7 @@ public class PotPlayer {
         });
 
         if (this.player.hasPermission("scandium.staff") && !CorePlugin.getInstance().getPlayerManager().isOnline(this.player.getName())) {
-            RedisUtil.writeAsync(RedisUtil.onConnect(this.player));
+            RedisUtil.publishAsync(RedisUtil.onConnect(this.player));
         }
 
         Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () -> {

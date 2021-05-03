@@ -74,9 +74,21 @@ public final class PlayerUtil {
         Bukkit.getOnlinePlayers().stream()
                 .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
                 .filter(potPlayer -> potPlayer != null && potPlayer.isCanSeeStaffMessages() && potPlayer.getPlayer().hasPermission("scandium.staff"))
-                .forEach(potPlayer -> {
-                    potPlayer.getPlayer().sendMessage(Color.translate(message));
-                });
+                .forEach(potPlayer -> potPlayer.getPlayer().sendMessage(Color.translate(message)));
+    }
+
+    public static void sendToFiltered(String message) {
+        Bukkit.getOnlinePlayers().stream()
+                .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
+                .filter(potPlayer -> potPlayer != null && potPlayer.isCanSeeFiltered() && potPlayer.getPlayer().hasPermission("scandium.staff"))
+                .forEach(potPlayer -> potPlayer.getPlayer().sendMessage(Color.translate(message)));
+    }
+
+    public static void sendToSocialSpy(String message) {
+        Bukkit.getOnlinePlayers().stream()
+                .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
+                .filter(potPlayer -> potPlayer != null && potPlayer.isSocialSpy() && potPlayer.getPlayer().hasPermission("scandium.socialspy"))
+                .forEach(potPlayer -> potPlayer.getPlayer().sendMessage(Color.translate(message)));
     }
 
     public static void sendClickableTo(String message, String hover, String value, ClickEvent.Action action) {

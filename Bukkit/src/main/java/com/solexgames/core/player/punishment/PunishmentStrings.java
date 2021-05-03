@@ -36,12 +36,12 @@ public final class PunishmentStrings {
                     "\n&cYou were blacklisted for being in relation with &7<player>" +
                     "\n&7This punishment cannot be appealed or purchased.";
 
-    public static String MUTE_MESSAGE = "&cYou cannot speak as you are currently muted.";
-    public static String KICK_MESSAGE = "&cYou were kicked for: &7<reason>";
+    public static String MUTE_MESSAGE = ChatColor.RED + "You cannot speak as you are currently muted.";
+    public static String KICK_MESSAGE = ChatColor.RED + "You were kicked for: " + ChatColor.GRAY + "<reason>";
 
-    public static String SLOW_CHAT_MESSAGE = "&cPlease wait another <amount> before chatting again.";
-    public static String CMD_CHAT_MESSAGE = "&cYou're on command cooldown, please wait <amount>.";
-    public static String COOL_DOWN_MESSAGE = "&cPlease wait before chatting again.";
+    public static String SLOW_CHAT_MESSAGE = ChatColor.RED + "Please wait another <amount> before chatting again.";
+    public static String CMD_CHAT_MESSAGE = ChatColor.RED + "You're on command cooldown, please wait <amount>.";
+    public static String COOL_DOWN_MESSAGE = ChatColor.RED + "Please wait before chatting again.";
 
     public static String PLAYER_DATA_LOAD = ChatColor.RED + "An error occurred while trying to load your data.\n" + ChatColor.RED + "Please try again later or contact a staff member.";
     public static String SERVER_NOT_LOADED = ChatColor.RED + "The server you've tried to connect to has not loaded.\n" + ChatColor.RED + "Please try again in a few seconds or contact staff.";
@@ -50,7 +50,7 @@ public final class PunishmentStrings {
      * Setups customized messages through the config.
      */
     public void setupMessages() {
-        FileConfiguration configuration = JavaPlugin.getPlugin(CorePlugin.class).getConfig();
+        final FileConfiguration configuration = CorePlugin.getInstance().getConfig();
 
         PunishmentStrings.PLAYER_DATA_LOAD = Color.translate(configuration.getString("messages.load-error").replace("<nl>", "\n"));
         PunishmentStrings.SERVER_NOT_LOADED = Color.translate(configuration.getString("messages.server-not-loaded").replace("<nl>", "\n"));

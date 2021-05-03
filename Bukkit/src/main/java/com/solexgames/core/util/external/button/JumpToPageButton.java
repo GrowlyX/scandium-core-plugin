@@ -1,12 +1,11 @@
-package com.solexgames.core.util.external.pagination.pagination;
+package com.solexgames.core.util.external.button;
 
 import com.cryptomorin.xseries.XMaterial;
-import com.solexgames.core.util.Color;
 import com.solexgames.core.util.builder.ItemBuilder;
-import com.solexgames.core.util.external.pagination.Button;
+import com.solexgames.core.util.external.Button;
+import com.solexgames.core.util.external.pagination.PaginatedMenu;
 import lombok.AllArgsConstructor;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
@@ -41,6 +40,5 @@ public class JumpToPageButton extends Button {
     @Override
     public void clicked(Player player, ClickType clickType) {
         this.menu.modPage(player, this.page - this.menu.getPage());
-        Button.playNeutral(player);
     }
 }

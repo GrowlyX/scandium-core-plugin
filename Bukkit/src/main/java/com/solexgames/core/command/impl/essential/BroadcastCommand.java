@@ -1,14 +1,11 @@
 package com.solexgames.core.command.impl.essential;
 
-import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
-import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
 import com.solexgames.core.util.StringUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -39,9 +36,9 @@ public class BroadcastCommand extends BaseCommand {
             if (message.startsWith("l:")) {
                 Bukkit.broadcastMessage(Color.translate(message.replace("l:", "")));
             } else if (message.startsWith("g:")) {
-                RedisUtil.writeAsync(RedisUtil.onGlobalBroadcast(message.replace("g:", "")));
+                RedisUtil.publishAsync(RedisUtil.onGlobalBroadcast(message.replace("g:", "")));
             } else {
-                RedisUtil.writeAsync(RedisUtil.onGlobalBroadcast(message));
+                RedisUtil.publishAsync(RedisUtil.onGlobalBroadcast(message));
             }
         }
 

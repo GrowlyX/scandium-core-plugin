@@ -122,7 +122,7 @@ public class RankCommand extends BaseCommand {
                             rank.setHidden(!rank.isHidden());
                             rank.saveRank();
 
-                            RedisUtil.writeAsync(RedisUtil.updateRank(rank));
+                            RedisUtil.publishAsync(RedisUtil.updateRank(rank));
 
                             player.sendMessage(Color.SECONDARY_COLOR + "You've toggle hidden mode for the " + displayName + Color.SECONDARY_COLOR + " rank!");
                         } else {
@@ -144,7 +144,7 @@ public class RankCommand extends BaseCommand {
                             rank.setDefaultRank(!rank.isDefaultRank());
                             rank.saveRank();
 
-                            RedisUtil.writeAsync(RedisUtil.updateRank(rank));
+                            RedisUtil.publishAsync(RedisUtil.updateRank(rank));
 
                             player.sendMessage(Color.SECONDARY_COLOR + "You've toggled default mode for the " + displayName + Color.SECONDARY_COLOR + " rank!");
                         } else {
@@ -166,7 +166,7 @@ public class RankCommand extends BaseCommand {
                             rank.setItalic(!rank.isItalic());
                             rank.saveRank();
 
-                            RedisUtil.writeAsync(RedisUtil.updateRank(rank));
+                            RedisUtil.publishAsync(RedisUtil.updateRank(rank));
 
                             player.sendMessage(Color.SECONDARY_COLOR + "You've toggled italic mode for the " + displayName + Color.SECONDARY_COLOR + " rank!");
                         } else {
@@ -188,7 +188,7 @@ public class RankCommand extends BaseCommand {
                             rank.setPurchasable(!rank.isPurchasable());
                             rank.saveRank();
 
-                            RedisUtil.writeAsync(RedisUtil.updateRank(rank));
+                            RedisUtil.publishAsync(RedisUtil.updateRank(rank));
 
                             player.sendMessage(Color.SECONDARY_COLOR + "You've toggled purchasable mode for the " + displayName + Color.SECONDARY_COLOR + " rank!");
                         } else {
@@ -237,7 +237,7 @@ public class RankCommand extends BaseCommand {
 
                             player.sendMessage(Color.SECONDARY_COLOR + "You've removed the inherited rank " + delDisplayName + Color.SECONDARY_COLOR + " from " + displayName + Color.SECONDARY_COLOR + "!");
 
-                            RedisUtil.writeAsync(RedisUtil.updateRank(rank));
+                            RedisUtil.publishAsync(RedisUtil.updateRank(rank));
                         } else {
                             player.sendMessage(ChatColor.RED + ("Error: That rank does not exist!"));
                         }
@@ -261,7 +261,7 @@ public class RankCommand extends BaseCommand {
 
                                 player.sendMessage(Color.SECONDARY_COLOR + "You've added the inherited rank " + addDisplayName + Color.SECONDARY_COLOR + " from " + displayName + Color.SECONDARY_COLOR + "!");
 
-                                RedisUtil.writeAsync(RedisUtil.updateRank(rank));
+                                RedisUtil.publishAsync(RedisUtil.updateRank(rank));
                             } else {
                                 player.sendMessage(ChatColor.RED + (displayName + ChatColor.RED + " is already inheriting that rank!"));
                             }
@@ -290,7 +290,7 @@ public class RankCommand extends BaseCommand {
 
                             player.sendMessage(Color.SECONDARY_COLOR + "You've removed the perk " + Color.MAIN_COLOR + value + Color.SECONDARY_COLOR + " from " + displayName + Color.SECONDARY_COLOR + "!");
 
-                            RedisUtil.writeAsync(RedisUtil.updateRank(rank));
+                            RedisUtil.publishAsync(RedisUtil.updateRank(rank));
                         } else {
                             player.sendMessage(ChatColor.RED + ("Error: That rank does not exist!"));
                         }
@@ -317,7 +317,7 @@ public class RankCommand extends BaseCommand {
 
                                 player.sendMessage(Color.SECONDARY_COLOR + "You've added the perk " + Color.MAIN_COLOR + value + Color.SECONDARY_COLOR + " to " + displayName + Color.SECONDARY_COLOR + "!");
 
-                                RedisUtil.writeAsync(RedisUtil.updateRank(rank));
+                                RedisUtil.publishAsync(RedisUtil.updateRank(rank));
                             } else {
                                 player.sendMessage(ChatColor.RED + ("Error: That rank already has that permission!"));
                             }
@@ -345,7 +345,7 @@ public class RankCommand extends BaseCommand {
 
                                 player.sendMessage(Color.SECONDARY_COLOR + "You've set the weight of " + displayName + Color.SECONDARY_COLOR + " to " + Color.MAIN_COLOR + integer + Color.SECONDARY_COLOR + "!");
 
-                                RedisUtil.writeAsync(RedisUtil.updateRank(rank));
+                                RedisUtil.publishAsync(RedisUtil.updateRank(rank));
                             } catch (NumberFormatException exception) {
                                 player.sendMessage(ChatColor.RED + ("Error: That's not a valid integer!"));
                             }
@@ -371,7 +371,7 @@ public class RankCommand extends BaseCommand {
 
                             player.sendMessage(Color.SECONDARY_COLOR + "You've set the color of " + displayName + Color.SECONDARY_COLOR + " to " + Color.MAIN_COLOR + rank.getColor() + rank.getItalic() + "this" + Color.SECONDARY_COLOR + "!");
 
-                            RedisUtil.writeAsync(RedisUtil.updateRank(rank));
+                            RedisUtil.publishAsync(RedisUtil.updateRank(rank));
                         } else {
                             player.sendMessage(ChatColor.RED + ("Error: That rank does not exist!"));
                         }
@@ -394,7 +394,7 @@ public class RankCommand extends BaseCommand {
 
                             player.sendMessage(Color.SECONDARY_COLOR + "You've set the suffix of " + displayName + Color.SECONDARY_COLOR + " to " + Color.MAIN_COLOR + rank.getSuffix() + Color.SECONDARY_COLOR + "!");
 
-                            RedisUtil.writeAsync(RedisUtil.updateRank(rank));
+                            RedisUtil.publishAsync(RedisUtil.updateRank(rank));
                         } else {
                             player.sendMessage(ChatColor.RED + ("Error: That rank does not exist!"));
                         }
@@ -417,7 +417,7 @@ public class RankCommand extends BaseCommand {
 
                             player.sendMessage(Color.SECONDARY_COLOR + "You've set the prefix of " + displayName + Color.SECONDARY_COLOR + " to " + Color.MAIN_COLOR + rank.getPrefix() + Color.SECONDARY_COLOR + "!");
 
-                            RedisUtil.writeAsync(RedisUtil.updateRank(rank));
+                            RedisUtil.publishAsync(RedisUtil.updateRank(rank));
                         } else {
                             player.sendMessage(ChatColor.RED + ("Error: That rank does not exist!"));
                         }
@@ -433,7 +433,7 @@ public class RankCommand extends BaseCommand {
                         final Rank rank = Rank.getByName(name);
 
                         if (rank != null) {
-                            RedisUtil.writeAsync(RedisUtil.deleteRank(rank.getName(), player));
+                            RedisUtil.publishAsync(RedisUtil.deleteRank(rank.getName(), player));
 
                             CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getRankCollection().deleteOne(Filters.eq("_id", rank.getUuid())));
                         } else {
@@ -452,7 +452,7 @@ public class RankCommand extends BaseCommand {
                         if (Rank.getByName(name) != null) {
                             player.sendMessage(ChatColor.RED + ("Error: That rank already exists!"));
                         } else {
-                            RedisUtil.writeAsync(RedisUtil.createRank(name, player, UUID.randomUUID().toString()));
+                            RedisUtil.publishAsync(RedisUtil.createRank(name, player, UUID.randomUUID().toString()));
                         }
                     }
 

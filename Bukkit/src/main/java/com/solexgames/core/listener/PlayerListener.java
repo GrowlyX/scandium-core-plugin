@@ -4,13 +4,10 @@ import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ChatChannelType;
 import com.solexgames.core.manager.ServerManager;
 import com.solexgames.core.menu.IMenu;
-import com.solexgames.core.menu.impl.grant.GrantSelectConfirmMenu;
 import com.solexgames.core.player.PotPlayer;
-import com.solexgames.core.player.media.MediaConstants;
 import com.solexgames.core.player.punishment.PunishmentStrings;
 import com.solexgames.core.server.NetworkServer;
 import com.solexgames.core.util.*;
-import com.solexgames.core.util.external.pagination.impl.GrantReasonPaginatedMenu;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
@@ -34,7 +31,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.regex.Matcher;
 
 /**
  * @author GrowlyX
@@ -194,51 +190,42 @@ public class PlayerListener implements Listener {
         final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
         final String message = event.getMessage();
 
-        if (LockedState.isLocked(player)) {
-            event.getPlayer().sendMessage(ChatColor.RED + "You cannot perform this action right now!");
-            event.getPlayer().sendMessage(ChatColor.RED + "The only action you can perform is " + ChatColor.DARK_RED + "/2fa" + ChatColor.RED + "!");
+        if (potPlayer.isCurrentlyRestricted()) {
+            player.sendMessage(ChatColor.RED + "You cannot chat as you are currently restricted.");
 
             event.setCancelled(true);
+            return;
+        }
+
+        if (LockedState.isLocked(player)) {
+            event.setCancelled(true);
+
+            player.sendMessage(ChatColor.RED + "You cannot perform this action right now!");
+            player.sendMessage(ChatColor.RED + "The only action you can perform is " + ChatColor.DARK_RED + "/2fa" + ChatColor.RED + "!");
 
             return;
         }
 
         final boolean filtered = CorePlugin.getInstance().getFilterManager().isMessageFiltered(player, message);
         if (filtered) {
-            if (player.hasPermission("scandium.filter.bypass")) {
-                player.sendMessage(ChatColor.RED + "Be careful, that message would have been filtered!");
-            } else {
-                event.setCancelled(true);
-
+            if (!player.hasPermission("scandium.filter.bypass")) {
                 player.sendMessage(ChatColor.RED + "That message has been filtered as it has a blocked term in it.");
 
-                return;
+                event.setCancelled(true);
             }
         }
 
         if (potPlayer.isFrozen()) {
+            PlayerUtil.sendToStaff("&c[Frozen] &f" + potPlayer.getPlayer().getDisplayName() + "&7: &e" + event.getMessage());
+            player.sendMessage(Color.translate("&c[Frozen] &f" + potPlayer.getPlayer().getDisplayName() + "&7: &e") + event.getMessage());
+
             event.setCancelled(true);
-
-            Bukkit.getOnlinePlayers()
-                    .stream()
-                    .filter(player1 -> player1.hasPermission("scandium.staff"))
-                    .filter(player1 -> CorePlugin.getInstance().getPlayerManager().getPlayer(player1).isCanSeeStaffMessages())
-                    .forEach(player1 -> player1.sendMessage(Color.translate("&c[Frozen] &f" + potPlayer.getPlayer().getDisplayName() + "&7: &e" + event.getMessage())));
-
-            event.getPlayer().sendMessage(Color.translate(Color.translate("&c[Frozen] &f" + potPlayer.getPlayer().getDisplayName() + "&7: &e" + event.getMessage())));
 
             return;
         }
 
         if (potPlayer.getChannel() != null) {
-            RedisUtil.writeAsync(RedisUtil.onChatChannel(potPlayer.getChannel(), message, player));
-
-            event.setCancelled(true);
-            return;
-        }
-
-        if (potPlayer.isCurrentlyRestricted()) {
-            player.sendMessage(ChatColor.RED + "You cannot chat as you are currently restricted.");
+            RedisUtil.publishAsync(RedisUtil.onChatChannel(potPlayer.getChannel(), message, player));
 
             event.setCancelled(true);
             return;
@@ -250,76 +237,62 @@ public class PlayerListener implements Listener {
         }
 
         if (CorePlugin.getInstance().getServerManager().isChatEnabled() || player.hasPermission("scandium.chat.bypass")) {
-            if (!potPlayer.isCurrentlyMuted()) {
-                if (!CorePlugin.getInstance().getServerSettings().isChatFormatEnabled()) {
-                    return;
-                }
-
-                this.checkChannel(event, player, potPlayer);
-            } else {
+            if (potPlayer.isCurrentlyMuted()) {
+                player.sendMessage(PunishmentStrings.MUTE_MESSAGE);
                 event.setCancelled(true);
-                event.getPlayer().sendMessage(Color.translate(PunishmentStrings.MUTE_MESSAGE));
+
+                return;
+            }
+
+            if (CorePlugin.getInstance().getServerSettings().isChatFormatEnabled()) {
+                this.checkChannel(event, player, potPlayer);
             }
         } else {
-            event.setCancelled(true);
+            player.sendMessage(ChatColor.RED + "The chat is currently muted. Please try chatting again later.");
 
-            switch (potPlayer.getLanguage()) {
-                case ENGLISH:
-                    player.sendMessage(ChatColor.RED + "The chat is currently muted. Please try chatting again later.");
-                    break;
-                case FRENCH:
-                    player.sendMessage(ChatColor.RED + "Le chat est actuellement désactivé. Veuillez réessayer plus tard.");
-                    break;
-                case ITALIAN:
-                    player.sendMessage(ChatColor.RED + "La chat è attualmente disattivata. Prova a chattare di nuovo più tardi.");
-                    break;
-                case GERMAN:
-                    player.sendMessage(ChatColor.RED + "Der Chat ist derzeit stummgeschaltet. Bitte versuchen Sie es später noch einmal.");
-                    break;
-                case SPANISH:
-                    player.sendMessage(ChatColor.RED + "El chat está silenciado actualmente. Intenta chatear de nuevo más tarde.");
-                    break;
-            }
+            event.setCancelled(true);
         }
     }
 
     private void checkChannel(AsyncPlayerChatEvent event, Player player, PotPlayer potPlayer) {
-        if (event.getMessage().startsWith("! ") && event.getPlayer().hasPermission(ChatChannelType.STAFF.getPermission())) {
+        if (event.getMessage().startsWith("! ") && player.hasPermission(ChatChannelType.STAFF.getPermission())) {
             event.setCancelled(true);
 
-            RedisUtil.writeAsync(RedisUtil.onChatChannel(ChatChannelType.STAFF, event.getMessage().replace("! ", ""), event.getPlayer()));
-        } else if (event.getMessage().startsWith("# ") && event.getPlayer().hasPermission(ChatChannelType.ADMIN.getPermission())) {
+            RedisUtil.publishAsync(RedisUtil.onChatChannel(ChatChannelType.STAFF, event.getMessage().replace("! ", ""), event.getPlayer()));
+        } else if (event.getMessage().startsWith("# ") && player.hasPermission(ChatChannelType.ADMIN.getPermission())) {
             event.setCancelled(true);
 
-            RedisUtil.writeAsync(RedisUtil.onChatChannel(ChatChannelType.ADMIN, event.getMessage().replace("# ", ""), event.getPlayer()));
-        } else if (event.getMessage().startsWith("$ ") && event.getPlayer().hasPermission(ChatChannelType.DEV.getPermission())) {
+            RedisUtil.publishAsync(RedisUtil.onChatChannel(ChatChannelType.ADMIN, event.getMessage().replace("# ", ""), event.getPlayer()));
+        } else if (event.getMessage().startsWith("$ ") && player.hasPermission(ChatChannelType.DEV.getPermission())) {
             event.setCancelled(true);
 
-            RedisUtil.writeAsync(RedisUtil.onChatChannel(ChatChannelType.DEV, event.getMessage().replace("$ ", ""), event.getPlayer()));
-        } else if (event.getMessage().startsWith("@ ") && event.getPlayer().hasPermission(ChatChannelType.HOST.getPermission())) {
+            RedisUtil.publishAsync(RedisUtil.onChatChannel(ChatChannelType.DEV, event.getMessage().replace("$ ", ""), event.getPlayer()));
+        } else if (event.getMessage().startsWith("@ ") && player.hasPermission(ChatChannelType.HOST.getPermission())) {
             event.setCancelled(true);
 
-            RedisUtil.writeAsync(RedisUtil.onChatChannel(ChatChannelType.HOST, event.getMessage().replace("@ ", ""), event.getPlayer()));
+            RedisUtil.publishAsync(RedisUtil.onChatChannel(ChatChannelType.HOST, event.getMessage().replace("@ ", ""), event.getPlayer()));
         } else {
-            long slowChat = CorePlugin.getInstance().getServerManager().getChatSlow();
+            final long slowChat = CorePlugin.getInstance().getServerManager().getChatSlow();
 
-            if ((System.currentTimeMillis() < CorePlugin.getInstance().getPlayerManager().getPlayer(player).getChatCooldown())) {
+            if ((System.currentTimeMillis() < potPlayer.getChatCooldown())) {
                 if (player.hasPermission("scandium.chat.cooldown.bypass")) {
-                    checkThenSend(event, player, potPlayer, slowChat);
+                    this.checkThenSend(event, player, potPlayer, slowChat);
                 } else {
                     player.sendMessage(slowChat > 0L ? Color.translate(PunishmentStrings.SLOW_CHAT_MESSAGE.replace("<amount>", DurationFormatUtils.formatDurationWords(slowChat, true, true))) : Color.translate(PunishmentStrings.COOL_DOWN_MESSAGE));
                     event.setCancelled(true);
                 }
             } else {
-                checkThenSend(event, player, potPlayer, slowChat);
+                this.checkThenSend(event, player, potPlayer, slowChat);
             }
         }
+
         event.setCancelled(true);
     }
 
     @EventHandler
     public void onCommand(PlayerCommandPreprocessEvent event) {
-        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer());
+        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer());
+        final Player player = event.getPlayer();
 
         if (potPlayer == null) {
             event.setCancelled(true);
@@ -327,8 +300,8 @@ public class PlayerListener implements Listener {
         }
 
         if (LockedState.isLocked(event.getPlayer())) {
-            event.getPlayer().sendMessage(ChatColor.RED + "You cannot perform this action right now!");
-            event.getPlayer().sendMessage(ChatColor.RED + "The only action you can perform is " + ChatColor.RED + ChatColor.BOLD.toString() + "/2fa" + ChatColor.RED + "!");
+            player.sendMessage(ChatColor.RED + "You cannot perform this action right now!");
+            player.sendMessage(ChatColor.RED + "The only action you can perform is " + ChatColor.RED + ChatColor.BOLD.toString() + "/2fa" + ChatColor.RED + "!");
 
             event.setCancelled(true);
         }
@@ -339,35 +312,20 @@ public class PlayerListener implements Listener {
         }
 
         if (potPlayer.isCurrentlyRestricted() && !event.getMessage().startsWith("/discord")) {
-            event.getPlayer().sendMessage(ChatColor.RED + "You cannot perform this command as you are currently banned.");
-            event.getPlayer().sendMessage(ChatColor.RED + "The only command you can perform is " + ChatColor.RED + ChatColor.BOLD.toString() + "/discord" + ChatColor.RED + "!");
+            player.sendMessage(ChatColor.RED + "You cannot perform this command as you are currently banned.");
+            player.sendMessage(ChatColor.RED + "The only command you can perform is " + ChatColor.RED + ChatColor.BOLD.toString() + "/discord" + ChatColor.RED + "!");
 
             event.setCancelled(true);
             return;
         }
 
         if (event.getMessage().contains(":") && !event.getPlayer().isOp()) {
-            event.getPlayer().sendMessage(ChatColor.RED + "You cannot execute commands with semi-colons.");
+            player.sendMessage(ChatColor.RED + "You cannot execute commands with semi-colons.");
 
             event.setCancelled(true);
         }
 
-        if (CorePlugin.getInstance().getConfig().getBoolean("block-commands.enabled")) {
-            if (event.getPlayer().hasPermission("scandium.protocol.bypass")) return;
-            CorePlugin.getInstance().getConfig().getStringList("block-commands.list").forEach(s -> {
-                if (event.getMessage().startsWith("/" + s) && (event.getMessage().length() <= ("/" + s).length())) {
-                    event.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getConfig().getString("block-commands.message")));
-                    event.setCancelled(true);
-                }
-
-                if (event.getMessage().startsWith("/" + s) && event.getMessage().contains(" ")) {
-                    event.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getConfig().getString("block-commands.message")));
-                    event.setCancelled(true);
-                }
-            });
-        }
-
-        long commandCoolDown = 1L;
+        final long commandCoolDown = 1L;
         if (System.currentTimeMillis() < potPlayer.getCommandCooldown()) {
             if (!event.getPlayer().hasPermission("scandium.command.cooldown.bypass")) {
                 event.getPlayer().sendMessage(Color.translate(PunishmentStrings.CMD_CHAT_MESSAGE.replace("<amount>", DurationFormatUtils.formatDurationWords(commandCoolDown, true, true))));
@@ -375,9 +333,11 @@ public class PlayerListener implements Listener {
             }
         }
 
-        if (CorePlugin.getInstance().getServerSettings().isAntiCommandSpamEnabled())
-            CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer()).setCommandCooldown(System.currentTimeMillis() + 1L);
-        else CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer()).setCommandCooldown(0L);
+        if (CorePlugin.getInstance().getServerSettings().isAntiCommandSpamEnabled()) {
+            potPlayer.setCommandCooldown(System.currentTimeMillis() + 1L);
+        } else {
+            potPlayer.setCommandCooldown(0L);
+        }
     }
 
     private void checkThenSend(AsyncPlayerChatEvent event, Player player, PotPlayer potPlayer, long slowChat) {
@@ -458,10 +418,10 @@ public class PlayerListener implements Listener {
 
             if (server != null) {
                 if (!server.getServerName().equals(CorePlugin.getInstance().getServerName())) {
-                    RedisUtil.writeAsync(RedisUtil.onSwitchServer(this.displayName, server.getServerName()));
+                    RedisUtil.publishAsync(RedisUtil.onSwitchServer(this.displayName, server.getServerName()));
                 }
             } else {
-                RedisUtil.writeAsync(RedisUtil.onDisconnect(this.displayName));
+                RedisUtil.publishAsync(RedisUtil.onDisconnect(this.displayName));
             }
         }
     }

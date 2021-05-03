@@ -22,7 +22,7 @@ public final class SaltUtil {
         final StringBuilder saltedString = new StringBuilder();
 
         while (saltedString.length() < 6) {
-            int index = (int) (CorePlugin.RANDOM.nextFloat() * SaltUtil.SALT_CHARS.length());
+            final int index = (int) (CorePlugin.RANDOM.nextFloat() * SaltUtil.SALT_CHARS.length());
             saltedString.append(SaltUtil.SALT_CHARS.charAt(index));
         }
 
@@ -39,7 +39,7 @@ public final class SaltUtil {
         final StringBuilder saltedString = new StringBuilder();
 
         while (saltedString.length() < size) {
-            int index = (int) (CorePlugin.RANDOM.nextFloat() * SaltUtil.SALT_CHARS.length());
+            final int index = (int) (CorePlugin.RANDOM.nextFloat() * SaltUtil.SALT_CHARS.length());
             saltedString.append(SaltUtil.SALT_CHARS.charAt(index));
         }
 

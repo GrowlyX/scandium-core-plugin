@@ -259,11 +259,11 @@ public final class RedisUtil {
                 .getAppended();
     }
 
-    public static void writeAsync(String message) {
-        CompletableFuture.runAsync(() -> CorePlugin.getInstance().getRedisManager().write(message));
+    public static void publishAsync(String message) {
+        CompletableFuture.runAsync(() -> CorePlugin.getInstance().getRedisManager().publishJedis(message));
     }
 
-    public static void write(String message) {
-        CorePlugin.getInstance().getRedisManager().write(message);
+    public static void publishSync(String message) {
+        CorePlugin.getInstance().getRedisManager().publishJedis(message);
     }
 }

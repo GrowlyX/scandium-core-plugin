@@ -2,13 +2,9 @@ package com.solexgames.core.command.impl.grant;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
-import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.util.Color;
-import com.solexgames.core.util.UUIDUtil;
-import com.solexgames.core.util.external.pagination.impl.GrantMainPaginatedMenu;
-import org.bson.Document;
+import com.solexgames.core.util.external.impl.GrantMainPaginatedMenu;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

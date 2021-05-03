@@ -1,13 +1,12 @@
-package com.solexgames.core.util.external.pagination.impl;
+package com.solexgames.core.util.external.impl;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.server.NetworkServer;
 import com.solexgames.core.util.builder.ItemBuilder;
-import com.solexgames.core.util.external.pagination.Button;
-import com.solexgames.core.util.external.pagination.pagination.PaginatedMenu;
-import lombok.AllArgsConstructor;
+import com.solexgames.core.util.external.Button;
+import com.solexgames.core.util.external.pagination.PaginatedMenu;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bson.Document;

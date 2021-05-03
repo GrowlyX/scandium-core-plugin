@@ -1,12 +1,12 @@
-package com.solexgames.core.util.external.pagination.impl;
+package com.solexgames.core.util.external.impl;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.player.report.Report;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.builder.ItemBuilder;
-import com.solexgames.core.util.external.pagination.Button;
-import com.solexgames.core.util.external.pagination.pagination.PaginatedMenu;
+import com.solexgames.core.util.external.Button;
+import com.solexgames.core.util.external.pagination.PaginatedMenu;
 import lombok.AllArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

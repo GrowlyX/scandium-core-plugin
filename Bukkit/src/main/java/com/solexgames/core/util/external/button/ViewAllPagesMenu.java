@@ -1,7 +1,8 @@
-package com.solexgames.core.util.external.pagination.pagination;
+package com.solexgames.core.util.external.button;
 
-import com.solexgames.core.util.external.pagination.Button;
-import com.solexgames.core.util.external.pagination.Menu;
+import com.solexgames.core.util.external.Button;
+import com.solexgames.core.util.external.Menu;
+import com.solexgames.core.util.external.pagination.PaginatedMenu;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
 
