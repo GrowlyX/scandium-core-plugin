@@ -48,6 +48,7 @@ settings:
   vanish-tag: "&7[V] "
   punish-gui-enabled: false
   chat-format-enabled: true
+  chat-format-type: "NORMAL" # PAPI, NORMAL
   chat-format: "<prefix><rank_prefix><rank_color><custom_color><player_name> &7» &f<message>"
 
 # Sends to staff on join

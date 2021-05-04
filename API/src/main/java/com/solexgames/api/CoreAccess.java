@@ -1,6 +1,7 @@
 package com.solexgames.api;
 
 import com.solexgames.core.CorePlugin;
+import com.solexgames.core.chat.IChatFormat;
 import com.solexgames.core.manager.PlayerManager;
 import com.solexgames.core.manager.ServerManager;
 import com.solexgames.core.player.PotPlayer;
@@ -82,5 +83,9 @@ public class CoreAccess {
 
     public NetworkPlayer fetchGlobalProfile(String player) {
         return this.plugin.getPlayerManager().getNetworkPlayer(player);
+    }
+
+    public void registerNewChatFormat(IChatFormat chatFormat) {
+        this.getServerManager().setChatFormat(chatFormat);
     }
 }

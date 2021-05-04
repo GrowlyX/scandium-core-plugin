@@ -341,27 +341,16 @@ public class PlayerListener implements Listener {
     }
 
     private void checkThenSend(AsyncPlayerChatEvent event, Player player, PotPlayer potPlayer, long slowChat) {
-        if (event.isCancelled()) {
-            return;
-        }
-
         Bukkit.getOnlinePlayers().stream()
                 .map(player1 -> CorePlugin.getInstance().getPlayerManager().getPlayer(player1))
                 .filter(potPlayer1 -> potPlayer1 != null && potPlayer1.isIgnoring(potPlayer.getPlayer()) && potPlayer.isCanSeeGlobalChat())
-                .forEach(potPlayer1 -> potPlayer1.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getServerSettings().getChatFormat()
-                        .replace("<prefix>", (potPlayer.getAppliedPrefix() != null ? potPlayer.getAppliedPrefix().getPrefix() + " " : ""))
-                        .replace("<rank_prefix>", (potPlayer.getDisguiseRank() != null ? potPlayer.getDisguiseRank().getPrefix() : potPlayer.getActiveGrant().getRank().getPrefix()))
-                        .replace("<rank_suffix>", (potPlayer.getDisguiseRank() != null ? potPlayer.getDisguiseRank().getSuffix() : potPlayer.getActiveGrant().getRank().getSuffix()))
-                        .replace("<rank_color>", (potPlayer.getDisguiseRank() != null ? potPlayer.getDisguiseRank().getColor() : potPlayer.getActiveGrant().getRank().getColor()))
-                        .replace("<custom_color>", (potPlayer.getCustomColor() != null ? potPlayer.getCustomColor().toString() : ""))
-                        .replace("<player_name>", player.getName()))
-                        .replace("<message>", event.getMessage()
-                        .replace(potPlayer1.getName(), ChatColor.YELLOW + potPlayer1.getName()))
-                ));
+                .forEach(potPlayer1 -> potPlayer1.getPlayer().sendMessage(CorePlugin.getInstance().getServerManager().getChatFormat().getFormatted(player, potPlayer1.getPlayer(), event.getMessage())));
 
-        if (CorePlugin.getInstance().getServerSettings().isAntiSpamEnabled())
-            CorePlugin.getInstance().getPlayerManager().getPlayer(player).setChatCooldown(System.currentTimeMillis() + (slowChat > 0L ? slowChat : 3000L));
-        else CorePlugin.getInstance().getPlayerManager().getPlayer(player).setChatCooldown(0L);
+        if (CorePlugin.getInstance().getServerSettings().isAntiSpamEnabled()) {
+            potPlayer.setChatCooldown(System.currentTimeMillis() + (slowChat > 0L ? slowChat : 3000L));
+        } else {
+            potPlayer.setChatCooldown(0L);
+        }
     }
 
     @EventHandler

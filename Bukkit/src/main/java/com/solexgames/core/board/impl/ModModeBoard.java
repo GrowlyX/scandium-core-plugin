@@ -28,7 +28,7 @@ public class ModModeBoard extends ScoreBoard {
 
     @Override
     public List<String> getLines() {
-        List<String> lines = new ArrayList<>();
+        final List<String> lines = new ArrayList<>();
 
         lines.add(ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + "--------------------");
         lines.add((!potPlayer.isVanished() ? ChatColor.GREEN + "Visible (Showing staff)" : ChatColor.RED + "Hidden (Showing staff)"));

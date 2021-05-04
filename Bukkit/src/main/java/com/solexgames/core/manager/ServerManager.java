@@ -1,6 +1,9 @@
 package com.solexgames.core.manager;
 
 import com.solexgames.core.CorePlugin;
+import com.solexgames.core.chat.IChatFormat;
+import com.solexgames.core.chat.impl.DefaultChatFormat;
+import com.solexgames.core.chat.impl.PAPIChatFormat;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.server.NetworkServer;
 import com.solexgames.core.util.Color;
@@ -31,6 +34,7 @@ public class ServerManager {
     private final List<String> staffInformation;
     private final List<String> blockedCommands;
 
+    private IChatFormat chatFormat;
     private ServerType network;
     private String automaticallyPutInto;
 
@@ -53,6 +57,8 @@ public class ServerManager {
         this.joinMessageCentered = plugin.getConfig().getBoolean("player-join.join-message.centered");
         this.automaticallyPutInto = plugin.getConfig().getString("settings.automatic-string");
         this.blockedCommands = plugin.getConfig().getStringList("block-commands.list");
+
+        this.chatFormat = plugin.getConfig().getString("settings.chat-format-type").equals("PAPI") ? new PAPIChatFormat() : new DefaultChatFormat();
 
         this.staffInformation = Color.translate(plugin.getConfig().getStringList("staff-information"));
         this.spawnLocation = CorePlugin.GSON.fromJson(plugin.getConfig().getString("locations.spawnpoint"), Location.class);
