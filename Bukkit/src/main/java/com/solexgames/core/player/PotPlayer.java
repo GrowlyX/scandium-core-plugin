@@ -481,6 +481,23 @@ public class PotPlayer {
 
             this.setupPlayer();
 
+            final Property property = this.gameProfile.getProperties().get("textures").stream().findFirst().orElse(null);
+
+            if (property != null) {
+                this.skin = property.getValue();
+                this.signature = property.getSignature();
+            }
+        });
+
+        if (this.player.hasPermission("scandium.staff") && !CorePlugin.getInstance().getPlayerManager().isOnline(this.player.getName())) {
+            RedisUtil.publishAsync(RedisUtil.onConnect(this.player));
+        }
+
+        if (this.profile == null) {
+            return;
+        }
+
+        CompletableFuture.runAsync(() -> {
             if (this.profile.getList("allPrefixes", String.class) != null) {
                 if (this.player.hasPermission("scandium.prefixes.all")) {
                     final List<String> prefixes = new ArrayList<>();
@@ -494,24 +511,9 @@ public class PotPlayer {
                     this.allPrefixes.addAll(prefixes);
                 }
             }
-
-            final Property property = this.gameProfile.getProperties().get("textures").stream().findFirst().orElse(null);
-
-            if (property != null) {
-                this.skin = property.getValue();
-                this.signature = property.getSignature();
-            }
         });
 
-        if (this.player.hasPermission("scandium.staff") && !CorePlugin.getInstance().getPlayerManager().isOnline(this.player.getName())) {
-            RedisUtil.publishAsync(RedisUtil.onConnect(this.player));
-        }
-
         Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () -> {
-            if (this.profile == null) {
-                return;
-            }
-
             if (this.profile.getBoolean("currentlyDisguised") != null) {
                 if (this.profile.getBoolean("currentlyDisguised")) {
                     final DisguiseData disguiseData = CorePlugin.getInstance().getDisguiseCache().getRandomData();
