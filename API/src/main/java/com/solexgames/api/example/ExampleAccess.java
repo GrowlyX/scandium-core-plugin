@@ -18,10 +18,9 @@ public class ExampleAccess {
      * @param args Startup Arguments
      */
     public static void main(String[] args) {
-
         // Make sure to make a public variable for this to prevent memory leaks.
-        CoreAccess coreAccess = new CoreAccess();
-        NetworkPlayer networkPlayer = coreAccess.fetchGlobalProfile("GrowlyX");
+        final CoreAccess coreAccess = new CoreAccess();
+        final NetworkPlayer networkPlayer = coreAccess.fetchGlobalProfile("GrowlyX");
 
         // Do whatever with the methods available in the CoreAccess Class.
         if (networkPlayer != null) {

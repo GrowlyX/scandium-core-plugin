@@ -106,13 +106,13 @@ public class ModSuiteListener implements Listener {
                             event.getPlayer().setVelocity(event.getPlayer().getLocation().getDirection().multiply(2.5F));
                         } else if (materialName.contains("skull")) {
                             new StaffViewPaginatedMenu(event.getPlayer()).openMenu(event.getPlayer());
-                        } else if (materialName.contains("star")) {
+                        } else if (materialName.contains("nether")) {
                             Bukkit.getOnlinePlayers().stream()
                                     .filter(player -> !player.hasPermission("scandium.staff") && player != event.getPlayer())
                                     .findAny()
                                     .ifPresent(player -> {
                                         event.getPlayer().teleport(player.getLocation());
-                                        event.getPlayer().sendMessage(ChatColor.GREEN + Color.translate("Teleported to &6" + player.getDisplayName() + ChatColor.GREEN + "!"));
+                                        event.getPlayer().sendMessage(Color.SECONDARY_COLOR + "You've been teleported to a random player: " + player.getDisplayName());
                                     });
                         } else if (materialName.contains("ink")) {
                             event.getPlayer().performCommand("vanish");

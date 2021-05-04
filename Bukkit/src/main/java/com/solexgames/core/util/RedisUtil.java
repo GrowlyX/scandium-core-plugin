@@ -149,7 +149,7 @@ public final class RedisUtil {
                 .put("SERVER", CorePlugin.getInstance().getServerName())
                 .put("RANK", rank.getName())
                 .put("WEIGHT", String.valueOf(rank.getWeight()))
-                .put("COLOR", rank.getColor() + rank.getItalic())
+                .put("COLOR", rank.getColor())
                 .put("PREFIX", rank.getPrefix())
                 .put("DEFAULT", String.valueOf(rank.isDefaultRank()))
                 .put("HIDDEN", String.valueOf(rank.isHidden()))

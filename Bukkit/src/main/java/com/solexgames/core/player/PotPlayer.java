@@ -508,15 +508,19 @@ public class PotPlayer {
         }
 
         Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () -> {
-            if (profile.getBoolean("currentlyDisguised") != null) {
-                if (profile.getBoolean("currentlyDisguised")) {
+            if (this.profile == null) {
+                return;
+            }
+
+            if (this.profile.getBoolean("currentlyDisguised") != null) {
+                if (this.profile.getBoolean("currentlyDisguised")) {
                     final DisguiseData disguiseData = CorePlugin.getInstance().getDisguiseCache().getRandomData();
                     final DisguiseData skinData = CorePlugin.getInstance().getDisguiseCache().getRandomData();
 
                     if (disguiseData != null && skinData != null) {
-                        CorePlugin.getInstance().getDisguiseManager().disguise(player, disguiseData, skinData, (this.disguiseRank == null ? Rank.getDefault() : this.disguiseRank));
+                        CorePlugin.getInstance().getDisguiseManager().disguise(this.player, disguiseData, skinData, (this.disguiseRank == null ? Rank.getDefault() : this.disguiseRank));
                     } else {
-                        player.sendMessage(ChatColor.RED + "We couldn't disguise you as there aren't any available disguises!");
+                        this.player.sendMessage(ChatColor.RED + "We couldn't disguise you as there aren't any available disguises!");
                     }
                 }
             }
