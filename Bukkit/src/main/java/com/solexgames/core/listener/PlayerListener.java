@@ -207,12 +207,13 @@ public class PlayerListener implements Listener {
         }
 
         final boolean filtered = CorePlugin.getInstance().getFilterManager().isMessageFiltered(player, message);
-        if (filtered) {
-            if (!player.hasPermission("scandium.filter.bypass")) {
-                player.sendMessage(ChatColor.RED + "That message has been filtered as it has a blocked term in it.");
+        if (filtered && !player.hasPermission("scandium.filter.bypass")) {
+            player.sendMessage(ChatColor.RED + "That message has been filtered as it has a blocked term in it.");
+            CorePlugin.getInstance().getFilterManager().handleAlert(player, message);
 
-                event.setCancelled(true);
-            }
+            event.setCancelled(true);
+
+            return;
         }
 
         if (potPlayer.isFrozen()) {

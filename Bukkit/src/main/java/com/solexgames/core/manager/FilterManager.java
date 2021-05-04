@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -37,17 +38,11 @@ public class FilterManager {
     }
 
     public boolean isMessageFiltered(Player player, String message) {
-        final boolean filtered = this.isStringFiltered(message);
-
-        if (filtered) {
-            this.handleAlert(player, message);
-        }
-
-        return filtered;
+        return this.isStringFiltered(message);
     }
 
     private boolean isStringFiltered(String message) {
-        final String fixedMessage = message.toLowerCase()
+        String msg = message.toLowerCase()
                 .replace("3", "e")
                 .replace("1", "i")
                 .replace("!", "i")
@@ -56,30 +51,45 @@ public class FilterManager {
                 .replace("0", "o")
                 .replace("5", "s")
                 .replace("8", "b")
-                .replaceAll("\\p{Punct}|\\d", "")
-                .trim();
-        final String[] words = fixedMessage.replace("(dot)", ".").replace("[dot]", ".").replace("<dot>", ".").trim().split(" ");
+                .replaceAll("\\p{Punct}|\\d", "").trim();
 
-        for (String filtered : this.filteredMessages) {
-            if (!fixedMessage.contains(filtered.toLowerCase())) {
-                return true;
-            }
-        }
+        String[] words = msg.trim().split(" ");
 
         for (String word : words) {
-            final Matcher ipMatcher = this.ipRegex.matcher(word);
-            final Matcher otherIpMatcher = this.otherIpRegex.matcher(word);
-            final Matcher urlMatcher = this.urlRegex.matcher(word);
+            for (String filteredWord : this.filteredMessages) {
+                if (word.contains(filteredWord)) {
+                    return true;
+                }
+            }
+        }
 
-            if (ipMatcher.matches() || otherIpMatcher.matches() || urlMatcher.matches()) {
+        for (String word : message.replace("(dot)", ".").replace("[dot]", ".").trim().split(" ")) {
+            Matcher matcher = this.ipRegex.matcher(word);
+
+            if (matcher.matches()) {
+                return true;
+            }
+
+            matcher = this.otherIpRegex.matcher(word);
+
+            if (matcher.matches()) {
+                return true;
+            }
+
+            matcher = this.urlRegex.matcher(word);
+
+            if (matcher.matches()) {
                 return true;
             }
         }
 
-        return false;
+        final Optional<String> optional = this.filteredMessages.stream()
+                .filter(msg::contains).findFirst();
+
+        return optional.isPresent();
     }
 
-    private void handleAlert(Player player, String message) {
+    public void handleAlert(Player player, String message) {
         final PotPlayer targetPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
         PlayerUtil.sendToFiltered("&c[Filtered] &e" + targetPlayer.getColorByRankColor() + targetPlayer.getName() + "&7: &e" + message);
