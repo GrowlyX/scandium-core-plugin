@@ -2,10 +2,12 @@ package com.solexgames.core.util.builder;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.util.Color;
+import com.solexgames.core.util.external.Button;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -140,5 +142,14 @@ public class ItemBuilder {
         }
 
         return this.itemStack;
+    }
+
+    public Button buttonized() {
+        return new Button() {
+            @Override
+            public ItemStack getButtonItem(Player player) {
+                return ItemBuilder.this.create();
+            }
+        };
     }
 }

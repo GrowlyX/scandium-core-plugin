@@ -1,4 +1,4 @@
-package com.solexgames.core.util.external.impl;
+package com.solexgames.core.util.external.impl.grant;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;

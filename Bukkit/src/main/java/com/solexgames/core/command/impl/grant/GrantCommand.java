@@ -3,7 +3,7 @@ package com.solexgames.core.command.impl.grant;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.util.Color;
-import com.solexgames.core.util.external.impl.GrantMainPaginatedMenu;
+import com.solexgames.core.util.external.impl.grant.GrantMainPaginatedMenu;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

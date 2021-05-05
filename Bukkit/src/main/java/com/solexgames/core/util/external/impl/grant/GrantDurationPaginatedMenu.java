@@ -1,14 +1,14 @@
-package com.solexgames.core.util.external.impl;
+package com.solexgames.core.util.external.impl.grant;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.menu.impl.grant.GrantSelectConfirmMenu;
 import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.util.Color;
+import com.solexgames.core.util.DateUtil;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.util.external.Button;
 import com.solexgames.core.util.external.pagination.PaginatedMenu;
-import com.solexgames.core.util.prompt.GrantReasonPrompt;
+import com.solexgames.core.util.prompt.GrantDurationPrompt;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bson.Document;
@@ -23,23 +23,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Getter
-public class GrantReasonPaginatedMenu extends PaginatedMenu {
+public class GrantDurationPaginatedMenu extends PaginatedMenu {
 
     private final Player player;
     private final Document document;
     private final Rank rank;
-    private final long duration;
-    private final boolean permanent;
     private final String scope;
 
-    public GrantReasonPaginatedMenu(Player player, Document document, long duration, Rank rank, boolean permanent, String scope) {
+    public GrantDurationPaginatedMenu(Player player, Document document, Rank rank, String scope) {
         super(9);
 
         this.player = player;
         this.document = document;
         this.rank = rank;
-        this.duration = duration;
-        this.permanent = permanent;
         this.scope = scope;
     }
 
@@ -52,10 +48,10 @@ public class GrantReasonPaginatedMenu extends PaginatedMenu {
             public ItemStack getButtonItem(Player player) {
                 return new ItemBuilder(XMaterial.GREEN_TERRACOTTA.parseMaterial())
                         .setDurability(5)
-                        .setDisplayName(ChatColor.GREEN + ChatColor.BOLD.toString() + "Custom Reason")
+                        .setDisplayName(ChatColor.GREEN + ChatColor.BOLD.toString() + "Custom Duration")
                         .addLore(
                                 ChatColor.GRAY + "Click to choose a custom",
-                                ChatColor.GRAY + "reason for your grant!"
+                                ChatColor.GRAY + "duration for your grant!"
                         )
                         .create();
             }
@@ -63,7 +59,7 @@ public class GrantReasonPaginatedMenu extends PaginatedMenu {
             @Override
             public void clicked(Player player, ClickType clickType) {
                 final Conversation conversation = CorePlugin.getInstance().getConversationFactory()
-                        .withFirstPrompt(new GrantReasonPrompt(player, document, rank, duration, scope, permanent))
+                        .withFirstPrompt(new GrantDurationPrompt(player, document, rank, scope))
                         .withLocalEcho(false)
                         .buildConversation(player);
 
@@ -87,7 +83,7 @@ public class GrantReasonPaginatedMenu extends PaginatedMenu {
 
             @Override
             public void clicked(Player player, ClickType clickType) {
-                new GrantDurationPaginatedMenu(player, document, rank, scope).openMenu(player);
+                new GrantMainPaginatedMenu(document, player).openMenu(player);
             }
         });
 
@@ -96,17 +92,17 @@ public class GrantReasonPaginatedMenu extends PaginatedMenu {
             public ItemStack getButtonItem(Player player) {
                 return new ItemBuilder(XMaterial.RED_TERRACOTTA.parseMaterial())
                         .setDurability(14)
-                        .setDisplayName(ChatColor.RED + ChatColor.BOLD.toString() + "Default Reason")
+                        .setDisplayName(ChatColor.RED + ChatColor.BOLD.toString() + "Permanent")
                         .addLore(
-                                ChatColor.GRAY + "Click to select the default",
-                                ChatColor.GRAY + "reason for this grant."
+                                ChatColor.GRAY + "Click to select the perm",
+                                ChatColor.GRAY + "duration for this grant."
                         )
                         .create();
             }
 
             @Override
             public void clicked(Player player, ClickType clickType) {
-                new ReasonButton(XMaterial.PAPER, 0, "Unspecified", GrantReasonPaginatedMenu.this).clicked(player, clickType);
+                new GrantReasonPaginatedMenu(player, document, -1L, rank, true, scope).openMenu(player);
             }
         });
 
@@ -115,44 +111,45 @@ public class GrantReasonPaginatedMenu extends PaginatedMenu {
 
     @Override
     public String getPrePaginatedTitle(Player player) {
-        return "Grant reason for: " + (Bukkit.getPlayerExact(document.getString("name")) != null ? Bukkit.getPlayerExact(document.getString("name")).getDisplayName() : document.getString("name"));
+        return "Grant time for: " + (Bukkit.getPlayerExact(document.getString("name")) != null ? Bukkit.getPlayerExact(document.getString("name")).getDisplayName() : document.getString("name"));
     }
 
     @Override
     public Map<Integer, Button> getAllPagesButtons(Player player) {
         Map<Integer, Button> buttonMap = new HashMap<>();
 
-        buttonMap.put(0, new ReasonButton(XMaterial.WHITE_WOOL, 0, "Rank Migration", this));
-        buttonMap.put(1, new ReasonButton(XMaterial.ORANGE_WOOL, 1, "Buycraft Issues", this));
-        buttonMap.put(2, new ReasonButton(XMaterial.PINK_WOOL, 2, "Promotion", this));
-        buttonMap.put(3, new ReasonButton(XMaterial.LIGHT_BLUE_WOOL, 3, "Demotion", this));
-        buttonMap.put(4, new ReasonButton(XMaterial.YELLOW_WOOL, 4, "Giveaway Winner", this));
-        buttonMap.put(5, new ReasonButton(XMaterial.GREEN_WOOL, 5, "Event Winner", this));
+        buttonMap.put(0, new DurationButton(XMaterial.WHITE_WOOL, 0, "1d", "1 Day", this));
+        buttonMap.put(1, new DurationButton(XMaterial.ORANGE_WOOL, 1, "1w", "1 Week", this));
+        buttonMap.put(2, new DurationButton(XMaterial.PINK_WOOL, 2, "1m", "1 Month", this));
+        buttonMap.put(3, new DurationButton(XMaterial.LIGHT_BLUE_WOOL, 3, "3m", "3 Months", this));
+        buttonMap.put(4, new DurationButton(XMaterial.YELLOW_WOOL, 4, "6m", "6 Months", this));
+        buttonMap.put(5, new DurationButton(XMaterial.GREEN_WOOL, 5, "1y", "1 Year", this));
 
         return buttonMap;
     }
 
     @AllArgsConstructor
-    public static class ReasonButton extends Button {
+    public static class DurationButton extends Button {
 
         private final XMaterial material;
         private final int data;
-        private final String reason;
+        private final String dateDiff;
+        private final String fancyName;
 
-        private final GrantReasonPaginatedMenu menuData;
+        private final GrantDurationPaginatedMenu menuData;
 
         @Override
         public ItemStack getButtonItem(Player player) {
             return new ItemBuilder(this.material.parseMaterial())
-                    .setDisplayName(Color.MAIN_COLOR + this.reason)
-                    .addLore(ChatColor.GRAY + "Click to choose this reason.")
+                    .setDisplayName(Color.MAIN_COLOR + this.fancyName)
+                    .addLore(ChatColor.GRAY + "Click to choose this duration.")
                     .setDurability(this.data)
                     .create();
         }
 
         @Override
         public void clicked(Player player, ClickType clickType) {
-            new GrantSelectConfirmMenu(menuData.getPlayer(), menuData.getDocument(), menuData.getRank(), menuData.getDuration(), this.reason, menuData.isPermanent(), menuData.getScope()).open(player);
+            new GrantReasonPaginatedMenu(menuData.getPlayer(), menuData.getDocument(), System.currentTimeMillis() - DateUtil.parseDateDiff(this.dateDiff, false), menuData.getRank(), false, menuData.getScope()).openMenu(player);
         }
     }
 }

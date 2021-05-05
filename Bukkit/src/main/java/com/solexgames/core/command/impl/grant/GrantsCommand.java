@@ -2,7 +2,7 @@ package com.solexgames.core.command.impl.grant;
 
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.util.Color;
-import com.solexgames.core.util.external.impl.GrantViewPaginatedMenu;
+import com.solexgames.core.util.external.impl.grant.GrantViewPaginatedMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;

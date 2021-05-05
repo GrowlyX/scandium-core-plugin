@@ -5,10 +5,12 @@ import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.server.NetworkServer;
 import com.solexgames.core.util.Color;
+import com.solexgames.core.util.external.impl.network.NetworkServerMainMenu;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,12 @@ public class NetworkCommand extends BaseCommand {
 
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
+        if (sender instanceof Player) {
+            new NetworkServerMainMenu().openMenu((Player) sender);
+
+            return false;
+        }
+
         if (!sender.hasPermission("scandium.command.network")) {
             sender.sendMessage(NO_PERMISSION);
             return false;
