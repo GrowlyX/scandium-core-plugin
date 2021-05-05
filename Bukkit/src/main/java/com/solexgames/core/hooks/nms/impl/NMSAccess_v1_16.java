@@ -4,10 +4,9 @@ import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.command.EBaseCommand;
 import com.solexgames.core.hooks.nms.INMS;
-import net.minecraft.server.v1_16_R3.EntityPlayer;
+import net.minecraft.server.v1_16_R3.IChatBaseComponent;
 import net.minecraft.server.v1_16_R3.MinecraftServer;
 import net.minecraft.server.v1_16_R3.PacketPlayOutPlayerInfo;
-import net.minecraft.server.v1_16_R3.IChatBaseComponent;
 import net.minecraft.server.v1_16_R3.PacketPlayOutPlayerListHeaderFooter;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
@@ -22,11 +21,9 @@ import org.bukkit.util.StringUtil;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class NMSAccess_v1_16 implements INMS {
 
@@ -44,7 +41,7 @@ public class NMSAccess_v1_16 implements INMS {
 
     @Override
     public void updateTablist() {
-        final List<EntityPlayer> playerList = new ArrayList<>(MinecraftServer.getServer().getPlayerList().players);
+        /*final List<EntityPlayer> playerList = new ArrayList<>(MinecraftServer.getServer().getPlayerList().players);
         final List<EntityPlayer> finalList = playerList.stream()
                 .sorted(Comparator.comparingInt(potPlayer -> +(CorePlugin.getInstance().getPlayerManager().getPlayer(potPlayer.getName()).getDisguiseRank() != null ? CorePlugin.getInstance().getPlayerManager().getPlayer(potPlayer.getName()).getDisguiseRank().getWeight() : CorePlugin.getInstance().getPlayerManager().getPlayer(potPlayer.getName()).getActiveGrant().getRank().getWeight())))
                 .collect(Collectors.toList());
@@ -58,7 +55,7 @@ public class NMSAccess_v1_16 implements INMS {
 
             declaredField.set(list, finalList);
         } catch (Exception ignored) {
-        }
+        }*/
     }
 
     @Override

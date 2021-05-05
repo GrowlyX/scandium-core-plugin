@@ -50,6 +50,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
 import java.util.TimeZone;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author GrowlyX
@@ -150,6 +152,8 @@ public final class CorePlugin extends JavaPlugin {
         this.debugging = false;
         this.disallow = false;
 
+        this.disableLoggers();
+
         this.subscriptions = new RedisSubscriptions();
         this.coreDatabase = new Database();
         this.redisManager = new RedisManager(new RedisSettings(
@@ -183,6 +187,11 @@ public final class CorePlugin extends JavaPlugin {
 
         this.getServer().getMessenger().registerOutgoingPluginChannel(this, "core:permissions");
         this.getServer().getMessenger().registerOutgoingPluginChannel(this, "core:update");
+    }
+
+    private void disableLoggers() {
+        Logger.getLogger("org.mongodb.driver.connection").setLevel(Level.OFF);
+        Logger.getLogger("org.mongodb.driver.cluster").setLevel(Level.OFF);
     }
 
     private void setupSettings() {

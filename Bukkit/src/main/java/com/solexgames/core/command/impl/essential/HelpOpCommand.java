@@ -39,7 +39,7 @@ public class HelpOpCommand extends BaseCommand {
             }
 
             RedisUtil.publishAsync(RedisUtil.onHelpOp(player, reason));
-            player.sendMessage(ChatColor.GREEN + Color.translate("Your request has been sent to all online staff!"));
+            player.sendMessage(Color.SECONDARY_COLOR + "You've requested help from staff for: " + Color.SECONDARY_COLOR + reason);
 
             potPlayer.setCanRequest(false);
 
@@ -60,7 +60,7 @@ public class HelpOpCommand extends BaseCommand {
 
     @Override
     public List<String> getAliases() {
-        return Arrays.asList("request", "helpme");
+        return Arrays.asList("request");
     }
 
     @Override

@@ -470,7 +470,7 @@ public class PotPlayer {
 
     public void onAfterDataLoad() {
         this.player = Bukkit.getPlayer(this.uuid);
-        this.attachment = this.player.addAttachment(JavaPlugin.getPlugin(CorePlugin.class));
+        this.attachment = this.player.addAttachment(CorePlugin.getInstance());
         this.gameProfile = CorePlugin.getInstance().getPlayerManager().getGameProfile(this.player);
         this.rainbowNametag = new RainbowNametag(this.player, CorePlugin.getInstance());
 

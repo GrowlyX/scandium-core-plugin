@@ -34,9 +34,14 @@ public abstract class Menu {
 
         Inventory inventory = null;
 
-        final String title = Color.translate(this.getTitle(player));
         final int size = this.getSize() == -1 ? this.size(this.buttons) : this.getSize();
         boolean update = false;
+
+        String title = Color.translate(this.getTitle(player));
+
+        if (title.length() > 32) {
+            title = title.substring(0, 32);
+        }
 
         if (player.getOpenInventory() != null) {
             if (previousMenu == null) {

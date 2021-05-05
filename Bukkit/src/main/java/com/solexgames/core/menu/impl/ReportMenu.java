@@ -45,7 +45,6 @@ public class ReportMenu extends AbstractInventoryMenu {
 
     public void update() {
         final AtomicInteger integer = new AtomicInteger();
-        final ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
 
         Arrays.asList(ReportType.values()).forEach(reportType -> this.inventory.setItem(integer.getAndIncrement(), new ItemBuilder(reportType.getXMaterial().parseMaterial())
                 .setDisplayName(Color.MAIN_COLOR + reportType.getName())
@@ -91,7 +90,7 @@ public class ReportMenu extends AbstractInventoryMenu {
                     }
                 }, 60 * 20L);
 
-                this.player.sendMessage(ChatColor.GREEN + "Your report has been sent to all online staff!");
+                this.player.sendMessage(Color.SECONDARY_COLOR + "You've reported " + this.target.getDisplayName() + Color.SECONDARY_COLOR + " for " + Color.MAIN_COLOR + reportType.getName() + Color.SECONDARY_COLOR + "!");
             } else {
                 this.player.sendMessage(ChatColor.RED + "You cannot perform this action right now.");
             }
