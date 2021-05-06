@@ -2,12 +2,12 @@ package com.solexgames.core.command.impl.essential;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+@Command(label = "ignore", aliases = "unignore", hidden = false)
 public class IgnoreCommand extends BaseCommand {
 
     public void sendHelp(Player player) {
@@ -27,7 +28,7 @@ public class IgnoreCommand extends BaseCommand {
     }
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public boolean command(CommandSender sender, String label, String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage(ONLY_PLAYERS);
             return false;
@@ -87,16 +88,6 @@ public class IgnoreCommand extends BaseCommand {
                     break;
             }
         }
-        return false;
-    }
-
-    @Override
-    public List<String> getAliases() {
-        return Collections.singletonList("unignore");
-    }
-
-    @Override
-    public boolean isHidden() {
         return false;
     }
 }

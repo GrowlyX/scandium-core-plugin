@@ -1,10 +1,10 @@
 package com.solexgames.core.command.impl.essential;
 
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.PlayerUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -12,10 +12,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@Command(label = "tpall")
 public class TpAllCommand extends BaseCommand {
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public boolean command(CommandSender sender, String label, String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage(ONLY_PLAYERS);
             return false;
@@ -35,10 +36,5 @@ public class TpAllCommand extends BaseCommand {
         PlayerUtil.sendAlert(player, "teleported all players");
 
         return false;
-    }
-
-    @Override
-    public List<String> getAliases() {
-        return new ArrayList<>();
     }
 }

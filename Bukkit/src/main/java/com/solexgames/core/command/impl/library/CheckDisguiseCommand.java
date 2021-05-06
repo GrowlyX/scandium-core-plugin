@@ -2,12 +2,12 @@ package com.solexgames.core.command.impl.library;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -16,10 +16,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+@Command(label = "checkdisguise")
 public class CheckDisguiseCommand extends BaseCommand {
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public boolean command(CommandSender sender, String label, String[] args) {
         if (!sender.hasPermission("scandium.command.checkdisguise")) {
             sender.sendMessage(NO_PERMISSION);
             return false;
@@ -50,10 +51,5 @@ public class CheckDisguiseCommand extends BaseCommand {
         }
 
         return false;
-    }
-
-    @Override
-    public List<String> getAliases() {
-        return new ArrayList<>();
     }
 }

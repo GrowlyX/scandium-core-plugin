@@ -2,6 +2,7 @@ package com.solexgames.core.command.impl.network;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
 import org.bukkit.command.CommandSender;
@@ -10,10 +11,11 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
+@Command(label = "forceupdate")
 public class ForceUpdateCommand extends BaseCommand {
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public boolean command(CommandSender sender, String label, String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage(ONLY_PLAYERS);
             return false;
@@ -28,10 +30,5 @@ public class ForceUpdateCommand extends BaseCommand {
         sender.sendMessage(Color.SECONDARY_COLOR + "You've force updated this server instance: " + Color.MAIN_COLOR + CorePlugin.getInstance().getServerName());
 
         return false;
-    }
-
-    @Override
-    public List<String> getAliases() {
-        return new ArrayList<>();
     }
 }

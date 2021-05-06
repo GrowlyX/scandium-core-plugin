@@ -3,22 +3,25 @@ package com.solexgames.core.command.impl.essential;
 import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Command(label = "give")
 public class GiveCommand extends BaseCommand {
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public boolean command(CommandSender sender, String label, String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage(ONLY_PLAYERS);
             return false;
@@ -55,16 +58,17 @@ public class GiveCommand extends BaseCommand {
                 return false;
             }
 
-            target.getInventory().addItem(material.parseItem());
+            final ItemStack itemStack = material.parseItem();
 
-            player.sendMessage(ChatColor.GREEN + "You've given " + target.getDisplayName() + ChatColor.GREEN + " " + amount + ChatColor.YELLOW + " " + material.name() + ChatColor.GREEN + "!");
+            if (itemStack != null) {
+                itemStack.setAmount(amount);
+
+                target.getInventory().setItemInHand(itemStack);
+            }
+
+            player.sendMessage(Color.SECONDARY_COLOR + "You've given " + target.getDisplayName() + Color.MAIN_COLOR + " " + amount + Color.MAIN_COLOR + " " + StringUtils.capitalize(material.name().toLowerCase().replace("_", " ")) + Color.SECONDARY_COLOR + "!");
         }
 
         return false;
-    }
-
-    @Override
-    public List<String> getAliases() {
-        return new ArrayList<>();
     }
 }

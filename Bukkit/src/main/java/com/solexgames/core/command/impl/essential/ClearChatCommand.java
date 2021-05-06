@@ -1,20 +1,21 @@
 package com.solexgames.core.command.impl.essential;
 
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.util.Color;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.List;
 
+@Command(label = "clearchat", aliases = {"cc"})
 public class ClearChatCommand extends BaseCommand {
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public boolean command(CommandSender sender, String label, String[] args) {
         if (!sender.hasPermission("scandium.command.clearchat")) {
             sender.sendMessage(NO_PERMISSION);
             return false;
@@ -27,10 +28,5 @@ public class ClearChatCommand extends BaseCommand {
         Bukkit.broadcastMessage(ChatColor.GREEN + Color.translate("The chat has been cleared by " + (sender instanceof Player ? ((Player) sender).getDisplayName() : "&4Console") + ChatColor.GREEN + "."));
 
         return false;
-    }
-
-    @Override
-    public List<String> getAliases() {
-        return Arrays.asList("cc");
     }
 }

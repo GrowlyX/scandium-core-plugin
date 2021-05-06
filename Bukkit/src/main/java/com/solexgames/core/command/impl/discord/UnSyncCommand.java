@@ -2,11 +2,11 @@ package com.solexgames.core.command.impl.discord;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -14,10 +14,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@Command(label = "unsync")
 public class UnSyncCommand extends BaseCommand {
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public boolean command(CommandSender sender, String label, String[] args) {
         if (!Bukkit.getPluginManager().isPluginEnabled("dRobot")) {
             return false;
         }
@@ -43,15 +44,5 @@ public class UnSyncCommand extends BaseCommand {
         }
 
         return false;
-    }
-
-    @Override
-    public List<String> getAliases() {
-        return new ArrayList<>();
-    }
-
-    @Override
-    public boolean isHidden() {
-        return !Bukkit.getPluginManager().isPluginEnabled("Indium");
     }
 }

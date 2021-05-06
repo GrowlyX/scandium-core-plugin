@@ -2,6 +2,7 @@ package com.solexgames.core.command.impl.warps;
 
 import com.mongodb.client.model.Filters;
 import com.solexgames.core.CorePlugin;
+import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.util.clickable.Clickable;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.player.warps.Warp;
@@ -15,6 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+@Command(label = "warps", aliases = "warp")
 public class WarpCommand extends BaseCommand {
 
     public void sendHelp(Player player) {
@@ -27,7 +29,7 @@ public class WarpCommand extends BaseCommand {
     }
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public boolean command(CommandSender sender, String label, String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage(ONLY_PLAYERS);
             return false;
@@ -102,10 +104,5 @@ public class WarpCommand extends BaseCommand {
             }
         }
         return false;
-    }
-
-    @Override
-    public List<String> getAliases() {
-        return Arrays.asList("warps");
     }
 }

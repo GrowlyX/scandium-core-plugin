@@ -2,45 +2,45 @@ package com.solexgames.core.command.impl.essential;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.StringUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.List;
 
+@Command(label = "message", aliases = {"m", "w", "dm"}, hidden = false)
 public class MessageCommand extends BaseCommand {
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public boolean command(CommandSender sender, String label, String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage(ONLY_PLAYERS);
             return false;
         }
 
-        Player player = (Player) sender;
-        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+        final Player player = (Player) sender;
 
         if (args.length < 1) {
             player.sendMessage(Color.translate(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player> <message>."));
         }
         if (args.length > 1) {
-            Player target = Bukkit.getPlayerExact(args[0]);
-            String message = StringUtil.buildMessage(args, 1);
+            final Player target = Bukkit.getPlayerExact(args[0]);
+            final String message = StringUtil.buildMessage(args, 1);
 
             if (target == null) {
                 player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
                 return false;
             }
 
-            PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-            PotPlayer potTarget = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
+            final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+            final PotPlayer potTarget = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
 
             if (potTarget == null) {
                 player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
@@ -89,16 +89,6 @@ public class MessageCommand extends BaseCommand {
             potTarget.setLastRecipient(player);
         }
 
-        return false;
-    }
-
-    @Override
-    public List<String> getAliases() {
-        return Arrays.asList("msg", "m", "w", "dm");
-    }
-
-    @Override
-    public boolean isHidden() {
         return false;
     }
 }

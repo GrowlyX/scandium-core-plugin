@@ -2,19 +2,20 @@ package com.solexgames.core.command.impl.essential;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.manager.ServerManager;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Command(label = "spawn", hidden = false)
 public class SpawnCommand extends BaseCommand {
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public boolean command(CommandSender sender, String label, String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage(ONLY_PLAYERS);
             return false;
@@ -36,16 +37,6 @@ public class SpawnCommand extends BaseCommand {
             player.sendMessage(ChatColor.RED + "The spawn location hasn't been set on this server!");
         }
 
-        return false;
-    }
-
-    @Override
-    public List<String> getAliases() {
-        return new ArrayList<>();
-    }
-
-    @Override
-    public boolean isHidden() {
         return false;
     }
 }

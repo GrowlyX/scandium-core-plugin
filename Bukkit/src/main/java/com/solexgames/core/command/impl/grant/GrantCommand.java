@@ -2,6 +2,7 @@ package com.solexgames.core.command.impl.grant;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.external.impl.grant.GrantMainPaginatedMenu;
 import org.bukkit.ChatColor;
@@ -12,10 +13,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+@Command(label = "cgrant")
 public class GrantCommand extends BaseCommand {
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public boolean command(CommandSender sender, String label, String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage(ONLY_PLAYERS);
             return false;
@@ -50,10 +52,5 @@ public class GrantCommand extends BaseCommand {
         }
 
         return false;
-    }
-
-    @Override
-    public List<String> getAliases() {
-        return Arrays.asList("setrank");
     }
 }

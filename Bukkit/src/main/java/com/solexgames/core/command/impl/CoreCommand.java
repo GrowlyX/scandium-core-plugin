@@ -2,6 +2,7 @@ package com.solexgames.core.command.impl;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.impl.ScandiumMenu;
 import com.solexgames.core.util.Color;
@@ -18,10 +19,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+@Command(label = "core", aliases = {"scandium"})
 public class CoreCommand extends BaseCommand {
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public boolean command(CommandSender sender, String label, String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage(ONLY_PLAYERS);
             return false;
@@ -77,10 +79,5 @@ public class CoreCommand extends BaseCommand {
         }
 
         return false;
-    }
-
-    @Override
-    public List<String> getAliases() {
-        return new ArrayList<>();
     }
 }

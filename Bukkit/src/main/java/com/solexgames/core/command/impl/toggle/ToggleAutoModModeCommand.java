@@ -2,20 +2,21 @@ package com.solexgames.core.command.impl.toggle;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.List;
 
+@Command(label = "toggleautomodmode", aliases = "tamod")
 public class ToggleAutoModModeCommand extends BaseCommand {
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public boolean command(CommandSender sender, String label, String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage(ONLY_PLAYERS);
             return false;
@@ -38,10 +39,5 @@ public class ToggleAutoModModeCommand extends BaseCommand {
         }
 
         return false;
-    }
-
-    @Override
-    public List<String> getAliases() {
-        return Arrays.asList("tamod");
     }
 }

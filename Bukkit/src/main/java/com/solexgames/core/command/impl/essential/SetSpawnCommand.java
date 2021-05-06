@@ -2,6 +2,7 @@ package com.solexgames.core.command.impl.essential;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.manager.ServerManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -11,10 +12,11 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
+@Command(label = "setspawn")
 public class SetSpawnCommand extends BaseCommand {
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public boolean command(CommandSender sender, String label, String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage(ONLY_PLAYERS);
             return false;
@@ -38,10 +40,5 @@ public class SetSpawnCommand extends BaseCommand {
         player.sendMessage(ChatColor.GREEN + "The spawn location has been set to your current location!");
 
         return false;
-    }
-
-    @Override
-    public List<String> getAliases() {
-        return new ArrayList<>();
     }
 }

@@ -2,6 +2,7 @@ package com.solexgames.core.command.impl.essential;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.enums.ChatChannelType;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
@@ -14,10 +15,11 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
+@Command(label = "devchat", aliases = {"dc"})
 public class DevChatCommand extends BaseCommand {
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public boolean command(CommandSender sender, String label, String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage(ONLY_PLAYERS);
             return false;
@@ -46,10 +48,5 @@ public class DevChatCommand extends BaseCommand {
             RedisUtil.publishAsync(RedisUtil.onChatChannel(ChatChannelType.DEV, message, player));
         }
         return false;
-    }
-
-    @Override
-    public List<String> getAliases() {
-        return Arrays.asList("dc");
     }
 }

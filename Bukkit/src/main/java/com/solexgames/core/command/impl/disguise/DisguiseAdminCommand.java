@@ -3,6 +3,7 @@ package com.solexgames.core.command.impl.disguise;
 import com.mongodb.client.model.Filters;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.disguise.DisguiseData;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
@@ -17,10 +18,11 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
+@Command(label = "disguiseadmin", aliases = {"nickadmin"}, async = true)
 public class DisguiseAdminCommand extends BaseCommand {
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public boolean command(CommandSender sender, String label, String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage(ONLY_PLAYERS);
             return false;
@@ -135,10 +137,5 @@ public class DisguiseAdminCommand extends BaseCommand {
         }
 
         return false;
-    }
-
-    @Override
-    public List<String> getAliases() {
-        return Collections.singletonList("nick");
     }
 }

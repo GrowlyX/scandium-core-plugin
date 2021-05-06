@@ -1,6 +1,7 @@
 package com.solexgames.core.command.impl.experience;
 
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.menu.impl.experience.ExperienceMainMenu;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.ExperienceUtil;
@@ -13,10 +14,11 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
+@Command(label = "experience", aliases = "xp", hidden = false)
 public class ExperienceCommand extends BaseCommand {
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public boolean command(CommandSender sender, String label, String[] args) {
         if (args.length == 0) {
             if (sender instanceof Player) {
                 Player player = (Player) sender;
@@ -135,15 +137,5 @@ public class ExperienceCommand extends BaseCommand {
                 "/experience add <player> <amount>",
                 "/experience remove <player> <amount>"
         );
-    }
-
-    @Override
-    public List<String> getAliases() {
-        return Arrays.asList("xp", "exp");
-    }
-
-    @Override
-    public boolean isHidden() {
-        return false;
     }
 }

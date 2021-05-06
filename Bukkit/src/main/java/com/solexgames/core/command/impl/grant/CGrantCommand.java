@@ -1,36 +1,26 @@
 package com.solexgames.core.command.impl.grant;
 
-import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.ReplaceOptions;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
-import com.solexgames.core.enums.ServerType;
-import com.solexgames.core.player.PotPlayer;
+import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.player.grant.Grant;
 import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.DateUtil;
 import com.solexgames.core.util.StringUtil;
-import com.solexgames.core.util.UUIDUtil;
 import lombok.SneakyThrows;
-import org.bson.Document;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicReference;
 
+@Command(label = "cgrant")
 public class CGrantCommand extends BaseCommand {
 
     @SneakyThrows
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public boolean command(CommandSender sender, String label, String[] args) {
         if (sender instanceof Player) {
             return false;
         }
@@ -78,10 +68,5 @@ public class CGrantCommand extends BaseCommand {
         }
 
         return false;
-    }
-
-    @Override
-    public List<String> getAliases() {
-        return Arrays.asList("consolegrant");
     }
 }

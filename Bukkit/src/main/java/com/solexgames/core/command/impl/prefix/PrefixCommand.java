@@ -3,6 +3,7 @@ package com.solexgames.core.command.impl.prefix;
 import com.mongodb.client.model.Filters;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.prefixes.Prefix;
 import com.solexgames.core.util.Color;
@@ -19,10 +20,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+@Command(label = "prefix", aliases = {"tags", "tag", "chattags"})
 public class PrefixCommand extends BaseCommand {
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public boolean command(CommandSender sender, String label, String[] args) {
         if (!(sender instanceof Player)) {
             if (args.length < 2) {
                 sender.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player> <tag>.");
@@ -194,10 +196,5 @@ public class PrefixCommand extends BaseCommand {
                 "/prefix purchasable <prefix> <boolean>",
                 "/prefix list"
         );
-    }
-
-    @Override
-    public List<String> getAliases() {
-        return Arrays.asList("tags", "prefixes", "tag", "chattags");
     }
 }

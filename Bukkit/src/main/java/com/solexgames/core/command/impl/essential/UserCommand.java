@@ -2,6 +2,7 @@ package com.solexgames.core.command.impl.essential;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.ranks.Rank;
@@ -9,29 +10,28 @@ import com.solexgames.core.util.Color;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.List;
 
+@Command(label = "user")
 public class UserCommand extends BaseCommand {
 
     public final ServerType NETWORK = CorePlugin.getInstance().getServerManager().getNetwork();
 
     public void sendHelp(CommandSender player) {
-        player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
-        player.sendMessage(Color.translate(NETWORK.getMainColor() + ChatColor.BOLD.toString() + "User Commands:"));
-        player.sendMessage(Color.translate("/user permission add <player> &7- Add a permission to a player."));
-        player.sendMessage(Color.translate("/user permission remove <player> &7- Remove a permission from a player."));
-        player.sendMessage(Color.translate("/user permission list <player> &7- List all player permissions."));
-        player.sendMessage(Color.translate("/user disguise <player> <rank> &7- Disguise a player to a rank."));
-        player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
+        this.getHelpMessage(0, player,
+                "/user permission add <player>",
+                "/user permission remove <player>",
+                "/user permission list <player>",
+                "/user disguise <player> <rank>"
+        );
     }
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public boolean command(CommandSender sender, String label, String[] args) {
         if (!sender.hasPermission("scandium.command.user")) {
             sender.sendMessage(NO_PERMISSION);
             return false;
@@ -169,10 +169,5 @@ public class UserCommand extends BaseCommand {
         }
 
         return false;
-    }
-
-    @Override
-    public List<String> getAliases() {
-        return Arrays.asList("player");
     }
 }

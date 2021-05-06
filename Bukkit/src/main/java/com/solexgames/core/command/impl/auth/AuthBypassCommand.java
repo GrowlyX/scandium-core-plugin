@@ -1,21 +1,22 @@
 package com.solexgames.core.command.impl.auth;
 
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.LockedState;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.List;
 
+@Command(label = "authbypass", aliases = {"remove2fa", "bypass2fa"})
 public class AuthBypassCommand extends BaseCommand {
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public boolean command(CommandSender sender, String label, String[] args) {
         if (sender instanceof Player) {
             sender.sendMessage(ChatColor.RED + "Only players can execute this command.");
             return true;
@@ -44,10 +45,5 @@ public class AuthBypassCommand extends BaseCommand {
         sender.sendMessage(ChatColor.GREEN + "You've just granted " + target.getName() + " 2FA bypass.");
 
         return true;
-    }
-
-    @Override
-    public List<String> getAliases() {
-        return Arrays.asList("remove2fa", "bypass2fa");
     }
 }

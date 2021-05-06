@@ -2,6 +2,7 @@ package com.solexgames.core.command.impl.rank;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.util.config.FileConfig;
 import org.bukkit.Bukkit;
@@ -12,10 +13,11 @@ import org.bukkit.entity.Player;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
+@Command(label = "import")
 public class ImportCommand extends BaseCommand {
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public boolean command(CommandSender sender, String label, String[] args) {
         if (!(sender instanceof Player)) {
             if (args.length == 0) {
                 sender.sendMessage(new String[]{
@@ -78,10 +80,5 @@ public class ImportCommand extends BaseCommand {
         CorePlugin.getInstance().getRankManager().saveRanks();
 
         return true;
-    }
-
-    @Override
-    public List<String> getAliases() {
-        return Arrays.asList("importrankdata");
     }
 }

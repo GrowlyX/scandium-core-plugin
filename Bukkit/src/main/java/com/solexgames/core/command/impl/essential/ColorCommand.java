@@ -1,6 +1,7 @@
 package com.solexgames.core.command.impl.essential;
 
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.util.external.impl.NameColorSelectMenu;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -8,10 +9,11 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
+@Command(label = "color", aliases = {"chatcolor"}, hidden = false)
 public class ColorCommand extends BaseCommand {
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public boolean command(CommandSender sender, String label, String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage(ONLY_PLAYERS);
             return false;
@@ -26,16 +28,6 @@ public class ColorCommand extends BaseCommand {
 
         new NameColorSelectMenu().openMenu(player);
 
-        return false;
-    }
-
-    @Override
-    public List<String> getAliases() {
-        return Arrays.asList("chatcolor", "chatcolors");
-    }
-
-    @Override
-    public boolean isHidden() {
         return false;
     }
 }

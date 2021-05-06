@@ -2,6 +2,7 @@ package com.solexgames.core.command.impl.disguise;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.disguise.DisguiseData;
 import com.solexgames.core.player.PotPlayer;
 import org.bukkit.ChatColor;
@@ -11,10 +12,11 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
+@Command(label = "undisguise", aliases = {"unnick"})
 public class UnDisguiseCommand extends BaseCommand {
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public boolean command(CommandSender sender, String label, String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage(ONLY_PLAYERS);
             return false;
@@ -37,10 +39,5 @@ public class UnDisguiseCommand extends BaseCommand {
         CorePlugin.getInstance().getDisguiseManager().unDisguise(potPlayer, player);
 
         return false;
-    }
-
-    @Override
-    public List<String> getAliases() {
-        return Arrays.asList("unnick");
     }
 }

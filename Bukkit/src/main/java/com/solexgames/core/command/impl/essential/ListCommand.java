@@ -2,12 +2,12 @@ package com.solexgames.core.command.impl.essential;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.util.Color;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -15,10 +15,11 @@ import org.bukkit.entity.Player;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Command(label = "list", aliases = {"who", "online"}, hidden = false)
 public class ListCommand extends BaseCommand {
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public boolean command(CommandSender sender, String label, String[] args) {
         if (sender instanceof ConsoleCommandSender) {
             final String ranks = Rank.getRanks().stream()
                     .sorted(Comparator.comparingInt(rank -> -rank.getWeight()))
@@ -72,15 +73,5 @@ public class ListCommand extends BaseCommand {
                     .filter(player -> !CorePlugin.getInstance().getPlayerManager().getPlayer(player).isStaffMode())
                     .collect(Collectors.toList());
         }
-    }
-
-    @Override
-    public List<String> getAliases() {
-        return Arrays.asList("who", "online");
-    }
-
-    @Override
-    public boolean isHidden() {
-        return false;
     }
 }

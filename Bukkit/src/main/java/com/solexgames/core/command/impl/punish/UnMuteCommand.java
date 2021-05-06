@@ -2,23 +2,24 @@ package com.solexgames.core.command.impl.punish;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.player.punishment.PunishmentType;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.StringUtil;
 import net.md_5.bungee.api.ChatColor;
 import org.bson.Document;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Command(label = "unmute")
 public class UnMuteCommand extends BaseCommand {
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public boolean command(CommandSender sender, String label, String[] args) {
         if (!sender.hasPermission("scandium.command.unmute")) {
             sender.sendMessage(NO_PERMISSION);
             return false;
@@ -39,10 +40,5 @@ public class UnMuteCommand extends BaseCommand {
         }
 
         return false;
-    }
-
-    @Override
-    public List<String> getAliases() {
-        return new ArrayList<>();
     }
 }

@@ -2,6 +2,7 @@ package com.solexgames.core.command.impl.disguise;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.util.builder.PageListBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -11,10 +12,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Command(label = "disguiselist", aliases = {"nicklist"})
 public class DisguiseListCommand extends BaseCommand {
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public boolean command(CommandSender sender, String label, String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage(ONLY_PLAYERS);
             return false;
@@ -47,10 +49,5 @@ public class DisguiseListCommand extends BaseCommand {
         }
 
         return false;
-    }
-
-    @Override
-    public List<String> getAliases() {
-        return Arrays.asList("nicked", "nicklist");
     }
 }

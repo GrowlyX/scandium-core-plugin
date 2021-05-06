@@ -4,6 +4,7 @@ import com.mongodb.Block;
 import com.mongodb.client.model.Filters;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
@@ -11,7 +12,6 @@ import com.solexgames.core.util.StringUtil;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -21,10 +21,11 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
+@Command(label = "alts")
 public class AltsCommand extends BaseCommand {
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public boolean command(CommandSender sender, String label, String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage(ONLY_PLAYERS);
             return false;
@@ -105,10 +106,5 @@ public class AltsCommand extends BaseCommand {
         stringBuilder.append(document.getString("name"));
 
         return stringBuilder.toString();
-    }
-
-    @Override
-    public List<String> getAliases() {
-        return Arrays.asList("alt", "altaccounts");
     }
 }

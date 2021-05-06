@@ -3,6 +3,7 @@ package com.solexgames.core.command.impl.rank;
 import com.mongodb.client.model.Filters;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
@@ -17,6 +18,7 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
+@Command(label = "rank", async = true)
 public class RankCommand extends BaseCommand {
 
     public void sendHelp(Player player, int page) {
@@ -41,7 +43,7 @@ public class RankCommand extends BaseCommand {
     }
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public boolean command(CommandSender sender, String label, String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage(ONLY_PLAYERS);
             return false;
@@ -470,10 +472,5 @@ public class RankCommand extends BaseCommand {
         return Rank.getRanks().stream()
                 .sorted(Comparator.comparingInt(Rank::getWeight).reversed())
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<String> getAliases() {
-        return Arrays.asList("ranks", "rankdata");
     }
 }

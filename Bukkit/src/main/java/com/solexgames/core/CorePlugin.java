@@ -263,8 +263,8 @@ public final class CorePlugin extends JavaPlugin {
                 "Experience", "Grant", "Library",
                 "Moderation", "Network", "Other",
                 "Prefix", "Punish", "Rank",
-                "Shutdown", "Server", "Test",
-                "Toggle", "Warps", "Disguise"
+                "Shutdown", "Server", "Toggle",
+                "Warps", "Disguise", "Library"
         );
     }
 

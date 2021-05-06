@@ -2,12 +2,12 @@ package com.solexgames.core.command.impl.essential;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
+import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.player.global.NetworkPlayer;
 import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.util.Color;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
@@ -15,10 +15,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+@Command(label = "find", aliases = "search", hidden = false)
 public class FindCommand extends BaseCommand {
 
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public boolean command(CommandSender sender, String label, String[] args) {
         if (!sender.hasPermission("scandium.command.find")) {
             sender.sendMessage(NO_PERMISSION);
             return false;
@@ -44,16 +45,6 @@ public class FindCommand extends BaseCommand {
             }
         }
 
-        return false;
-    }
-
-    @Override
-    public List<String> getAliases() {
-        return Arrays.asList("search", "lookup");
-    }
-
-    @Override
-    public boolean isHidden() {
         return false;
     }
 }
