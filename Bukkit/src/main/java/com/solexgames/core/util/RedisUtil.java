@@ -260,10 +260,10 @@ public final class RedisUtil {
     }
 
     public static void publishAsync(String message) {
-        CompletableFuture.runAsync(() -> CorePlugin.getInstance().getRedisManager().publishJedis(message));
+        CompletableFuture.runAsync(() -> CorePlugin.getInstance().getJedisManager().publish(message));
     }
 
     public static void publishSync(String message) {
-        CorePlugin.getInstance().getRedisManager().publishJedis(message);
+        CorePlugin.getInstance().getJedisManager().publish(message);
     }
 }

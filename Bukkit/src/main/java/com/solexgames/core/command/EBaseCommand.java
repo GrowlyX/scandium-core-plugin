@@ -1,9 +1,11 @@
 package com.solexgames.core.command;
 
-import com.solexgames.core.CorePlugin;
 import com.solexgames.core.util.command.CommandHelpBuilder;
 import org.bukkit.ChatColor;
-import org.bukkit.command.*;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandMap;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.SimplePluginManager;
 

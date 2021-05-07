@@ -27,15 +27,11 @@ public class JsonAppender {
     }
 
     public String getParam(String key) {
-        if (this.containsParam(key)) {
+        if (this.parameters.containsKey(key)) {
             return this.parameters.get(key);
         }
 
         return null;
-    }
-
-    public boolean containsParam(String key) {
-        return this.parameters.containsKey(key);
     }
 
     /**

@@ -3,21 +3,12 @@ package com.solexgames.core.command.impl;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.command.annotation.Command;
-import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.impl.ScandiumMenu;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.StringUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.entity.Player;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 @Command(label = "core", aliases = {"scandium"})
 public class CoreCommand extends BaseCommand {
@@ -56,9 +47,9 @@ public class CoreCommand extends BaseCommand {
                             StringUtil.getCentered(Color.MAIN_COLOR + ChatColor.BOLD.toString() + CorePlugin.getInstance().getConfig().getString("core-settings.name") + " Server Instance:"),
                             "",
                             StringUtil.getCentered(Color.SECONDARY_COLOR + "Current Threads: " + Color.MAIN_COLOR + Thread.getAllStackTraces().keySet().stream().filter(thread -> thread.isAlive() && thread.isDaemon()).count()),
-                            StringUtil.getCentered(Color.SECONDARY_COLOR + "Jedis Active: " + Color.MAIN_COLOR + CorePlugin.getInstance().getRedisManager().getJedisPool().getNumActive()),
-                            StringUtil.getCentered(Color.SECONDARY_COLOR + "Jedis Idle: " + Color.MAIN_COLOR + CorePlugin.getInstance().getRedisManager().getJedisPool().getNumIdle()),
-                            StringUtil.getCentered(Color.SECONDARY_COLOR + "Jedis Waiters: " + Color.MAIN_COLOR + CorePlugin.getInstance().getRedisManager().getJedisPool().getNumWaiters()),
+                            StringUtil.getCentered(Color.SECONDARY_COLOR + "Jedis Active: " + Color.MAIN_COLOR + CorePlugin.getInstance().getJedisManager().getJedisPool().getNumActive()),
+                            StringUtil.getCentered(Color.SECONDARY_COLOR + "Jedis Idle: " + Color.MAIN_COLOR + CorePlugin.getInstance().getJedisManager().getJedisPool().getNumIdle()),
+                            StringUtil.getCentered(Color.SECONDARY_COLOR + "Jedis Waiters: " + Color.MAIN_COLOR + CorePlugin.getInstance().getJedisManager().getJedisPool().getNumWaiters()),
                             StringUtil.getCentered(Color.SECONDARY_COLOR + "Current TPS: " + Color.MAIN_COLOR + String.format("%.2f", Math.min(CorePlugin.getInstance().getTpsRunnable().getTPS(), 20.0))),
                             "",
                             StringUtil.getCentered(ChatColor.GRAY + ChatColor.ITALIC.toString() + "For more information on threads, use /" + label + " threads."),

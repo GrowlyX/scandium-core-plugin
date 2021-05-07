@@ -18,9 +18,9 @@ import com.solexgames.core.hooks.protocol.AbstractPacketHandler;
 import com.solexgames.core.hooks.protocol.impl.ProtocolPacketHandler;
 import com.solexgames.core.manager.*;
 import com.solexgames.core.player.punishment.PunishmentStrings;
-import com.solexgames.core.redis.RedisManager;
+import com.solexgames.core.redis.JedisManager;
 import com.solexgames.core.redis.RedisSettings;
-import com.solexgames.core.redis.RedisSubscriptions;
+import com.solexgames.core.redis.handler.impl.JedisListener;
 import com.solexgames.core.serializer.DataLibrary;
 import com.solexgames.core.serializer.impl.ItemStackSerializer;
 import com.solexgames.core.serializer.impl.LocationSerializer;
@@ -90,14 +90,13 @@ public final class CorePlugin extends JavaPlugin {
     private String serverName;
     private HttpClient httpClient;
     private Database coreDatabase;
-    private RedisManager redisManager;
+    private JedisManager jedisManager;
     private String pluginName;
 
     private FileConfig ranksConfig;
     private FileConfig databaseConfig;
     private FileConfig filterConfig;
 
-    private RedisSubscriptions subscriptions;
     private DataLibrary library;
 
     private AbstractPacketHandler packetHandler;
@@ -154,14 +153,7 @@ public final class CorePlugin extends JavaPlugin {
 
         this.disableLoggers();
 
-        this.subscriptions = new RedisSubscriptions();
         this.coreDatabase = new Database();
-        this.redisManager = new RedisManager(new RedisSettings(
-                this.databaseConfig.getString("redis.host"),
-                this.databaseConfig.getInt("redis.port"),
-                this.databaseConfig.getBoolean("redis.authentication.enabled"),
-                this.databaseConfig.getString("redis.authentication.password")
-        ));
 
         this.uuidCache = new UUIDCache();
         this.disguiseCache = new DisguiseCache();
@@ -179,6 +171,14 @@ public final class CorePlugin extends JavaPlugin {
         this.shutdownManager = new ShutdownManager();
         this.nameTagManager = new NameTagManager();
         this.disguiseManager = new DisguiseManager();
+
+        final RedisSettings redisSettings = new RedisSettings(
+                this.databaseConfig.getString("redis.host"),
+                this.databaseConfig.getInt("redis.port"),
+                this.databaseConfig.getBoolean("redis.authentication.enabled"),
+                this.databaseConfig.getString("redis.authentication.password")
+        );
+        this.jedisManager = new JedisManager("Scandium:BUKKIT", redisSettings, new JedisListener());
 
         this.setupExtra();
         this.logInformation(milli);
@@ -353,8 +353,8 @@ public final class CorePlugin extends JavaPlugin {
 
         this.prefixManager.savePrefixes();
 
-        if (this.redisManager != null && this.redisManager.isActive()) {
-            this.redisManager.unsubscribe();
+        if (this.jedisManager != null) {
+            this.jedisManager.disconnect();
         }
     }
 }
