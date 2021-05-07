@@ -27,7 +27,7 @@ public abstract class Menu {
     private boolean closedByMenu = false;
     private boolean placeholder = false;
 
-    public void openMenu(final Player player) {
+    public void openMenu(Player player) {
         this.buttons = this.getButtons(player);
 
         final Menu previousMenu = Menu.currentlyOpenedMenus.get(player.getName());
@@ -65,7 +65,7 @@ public abstract class Menu {
 
         inventory.setContents(new ItemStack[inventory.getSize()]);
 
-        currentlyOpenedMenus.put(player.getName(), this);
+        Menu.currentlyOpenedMenus.put(player.getName(), this);
 
         for (Map.Entry<Integer, Button> buttonEntry : this.buttons.entrySet()) {
             inventory.setItem(buttonEntry.getKey(), buttonEntry.getValue().getButtonItem(player));
@@ -111,6 +111,8 @@ public abstract class Menu {
 
         return (int) (Math.ceil((highest + 1) / 9D) * 9D);
     }
+
+    public void onClose(Player player) { }
 
     public int getSize() {
         return -1;
