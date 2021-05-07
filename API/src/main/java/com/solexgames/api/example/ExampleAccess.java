@@ -7,7 +7,7 @@ import com.solexgames.core.player.global.NetworkPlayer;
  * @author GrowlyX
  * @since 4/2/2021
  * <p>
- * Shows how the {@link CoreAccess} is used.
+ * Example of how the {@link CoreAccess} is used.
  */
 
 public class ExampleAccess {
