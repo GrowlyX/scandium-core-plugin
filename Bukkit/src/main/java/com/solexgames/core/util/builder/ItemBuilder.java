@@ -2,12 +2,14 @@ package com.solexgames.core.util.builder;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.util.Color;
+import com.solexgames.core.util.callback.MenuClickCallback;
 import com.solexgames.core.util.external.Button;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -18,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Future;
 
 public class ItemBuilder {
 
@@ -144,11 +147,25 @@ public class ItemBuilder {
         return this.itemStack;
     }
 
-    public Button buttonized() {
+    public Button toButton() {
         return new Button() {
             @Override
             public ItemStack getButtonItem(Player player) {
                 return ItemBuilder.this.create();
+            }
+        };
+    }
+
+    public Button toButton(MenuClickCallback runnable) {
+        return new Button() {
+            @Override
+            public ItemStack getButtonItem(Player player) {
+                return ItemBuilder.this.create();
+            }
+
+            @Override
+            public void clicked(Player player, ClickType clickType) {
+                runnable.call(player, clickType);
             }
         };
     }

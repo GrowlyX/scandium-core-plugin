@@ -23,7 +23,8 @@ public enum ServerType {
     DEVOUT("DevoutPvP", "14", ChatColor.DARK_RED, ChatColor.RED, "discord.gg/devout", "DevoutPvP", "store.devoutpvp.com", "devoutpvp.com"),
     POGPUBLIC("PogPublic", "15", ChatColor.AQUA, ChatColor.GRAY, "https://discord.gg/U4EZ9eh9xd", "Pog_Public", "https://store.pogpublic.com/", "fun.pogpublic.com"),
     APPOLIX("AppolixMC", "16", ChatColor.GOLD, ChatColor.YELLOW, "https://discord.gg/mtrWYcAp7c", "AppolixMC", "https://store.appolixmc.com/", "appolixmc.com"),
-    KYRO("Kryo Network", "17", ChatColor.BLUE, ChatColor.WHITE, "https://discord.kyro.rip", "KyroNetwork", "https://store.kyro.rip/", "kyro.rip");
+    KYRO("Kryo Network", "17", ChatColor.BLUE, ChatColor.WHITE, "https://discord.kyro.rip", "KyroNetwork", "https://store.kyro.rip/", "kyro.rip"),
+    PVPBAR("PvPBar", "18", ChatColor.GOLD, ChatColor.YELLOW, "https://pvp.bar/discord", "PvPBarMC", "https://store.pvp.bar", "pvp.bar");
 
     private final String serverName;
     private final String serverId;

@@ -34,7 +34,7 @@ public class NetworkServerInfoMenu extends Menu {
         buttonHashMap.put(0, new ItemBuilder(XMaterial.MELON_SLICE.parseMaterial())
                 .setDisplayName(Color.MAIN_COLOR + ChatColor.BOLD.toString() + this.networkServer.getServerName())
                 .addLore(ChatColor.GRAY + "Viewing in-depth details of this server.")
-                .buttonized()
+                .toButton()
         );
 
         buttonHashMap.put(2, new ItemBuilder(XMaterial.STICKY_PISTON.parseMaterial())
@@ -43,7 +43,7 @@ public class NetworkServerInfoMenu extends Menu {
                         ChatColor.GRAY + "Average: " + Color.SECONDARY_COLOR + this.networkServer.getTicksPerSecond(),
                         ChatColor.GRAY + "Simple: " + Color.SECONDARY_COLOR + this.networkServer.getTicksPerSecondSimplified()
                 )
-                .buttonized()
+                .toButton()
         );
 
         buttonHashMap.put(3, new ItemBuilder(XMaterial.REDSTONE_LAMP.parseMaterial())
@@ -51,7 +51,7 @@ public class NetworkServerInfoMenu extends Menu {
                 .addLore(
                         ChatColor.GRAY + "Type: " + Color.SECONDARY_COLOR + this.networkServer.getServerType().getServerTypeString()
                 )
-                .buttonized()
+                .toButton()
         );
 
         buttonHashMap.put(4, new ItemBuilder(XMaterial.EMERALD.parseMaterial())
@@ -59,7 +59,7 @@ public class NetworkServerInfoMenu extends Menu {
                 .addLore(
                         ChatColor.GRAY + "Status: " + Color.SECONDARY_COLOR + this.networkServer.getServerStatus().getServerStatusFancyString()
                 )
-                .buttonized()
+                .toButton()
         );
 
         buttonHashMap.put(5, new ItemBuilder(XMaterial.EGG.parseMaterial())
@@ -67,7 +67,7 @@ public class NetworkServerInfoMenu extends Menu {
                 .addLore(
                         ChatColor.GRAY + "Online: " + Color.SECONDARY_COLOR + this.networkServer.getOnlinePlayers()
                 )
-                .buttonized()
+                .toButton()
         );
 
         buttonHashMap.put(6, new ItemBuilder(XMaterial.BARRIER.parseMaterial())
@@ -76,7 +76,7 @@ public class NetworkServerInfoMenu extends Menu {
                         ChatColor.GRAY + "Whitelist: " + Color.SECONDARY_COLOR + this.networkServer.isWhitelistEnabled(),
                         ChatColor.GRAY + "Last Update: " + Color.SECONDARY_COLOR + CorePlugin.FORMAT.format(new Date(this.networkServer.getLastUpdate()))
                 )
-                .buttonized()
+                .toButton()
         );
 
         buttonHashMap.put(8, new Button() {

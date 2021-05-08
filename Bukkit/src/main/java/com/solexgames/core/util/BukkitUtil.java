@@ -34,6 +34,12 @@ public final class BukkitUtil {
         }
     }
 
+    public static void registerCommandModulesIn(String pkg, String... strings) {
+        for (String pkgEndpoint : strings) {
+            BukkitUtil.registerCommandsIn(String.format(pkg + ".%s", pkgEndpoint.toLowerCase()));
+        }
+    }
+
     public static void registerCommandsIn(String packageName) {
         final Collection<Class<?>> collection = BukkitUtil.getClassesInPackage(CorePlugin.getInstance(), packageName);
 

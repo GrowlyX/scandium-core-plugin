@@ -15,6 +15,7 @@ import java.beans.ConstructorProperties;
 public enum RedisAction {
 
     CHAT_CHANNEL_UPDATE("ChatChannelUpdate"),
+    EMILY_KICK_EVENT("ChatChannelUpdate"),
 
     PLAYER_SERVER_UPDATE("PlayerServerUpdate"),
     PLAYER_SERVER_SWITCH_UPDATE("PlayerServerSwitchUpdate"),

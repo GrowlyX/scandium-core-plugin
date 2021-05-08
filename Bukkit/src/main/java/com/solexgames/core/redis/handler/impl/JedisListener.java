@@ -247,7 +247,8 @@ public class JedisListener implements JedisHandler {
         final boolean rankSettingsItalic = Boolean.parseBoolean(jsonAppender.getParam("ITALIC"));
 
         final List<String> rankSettingsPermissions = Arrays.asList(jsonAppender.getParam("PERMISSIONS").split(" "));
-        final List<UUID> rankSettingsInheritance = Arrays.stream(jsonAppender.getParam("INHERITANCE").split(" ")).map(UUID::fromString).collect(Collectors.toList());
+        /*final List<UUID> rankSettingsInheritance = Arrays.stream(jsonAppender.getParam("INHERITANCE").split(" "))
+                .map(UUID::fromString).collect(Collectors.toList());*/
 
         if (!CorePlugin.getInstance().getServerName().equalsIgnoreCase(rankSettingsServer)) {
             if (rankSettingsRank != null) {
@@ -257,7 +258,7 @@ public class JedisListener implements JedisHandler {
                 rankSettingsRank.setWeight(rankSettingsWeight);
 
                 rankSettingsRank.setPermissions(rankSettingsPermissions);
-                rankSettingsRank.setInheritance(rankSettingsInheritance);
+//                rankSettingsRank.setInheritance(rankSettingsInheritance);
 
                 rankSettingsRank.setDefaultRank(rankSettingsDefault);
                 rankSettingsRank.setHidden(rankSettingsHidden);
@@ -420,5 +421,10 @@ public class JedisListener implements JedisHandler {
         final String permission = jsonAppender.getParam("PERMISSION");
 
         PlayerUtil.sendTo(broadcast, permission);
+    }
+
+    @JedisSubscription(action = RedisAction.EMILY_KICK_EVENT)
+    public void onEmilyKick(JsonAppender jsonAppender) {
+        Bukkit.broadcastMessage("emily has been Kicked. LES GOOOOOOOOOOOOO");
     }
 }
