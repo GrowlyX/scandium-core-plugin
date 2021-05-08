@@ -41,7 +41,7 @@ public class HelpOpCommand extends BaseCommand {
             }
 
             RedisUtil.publishAsync(RedisUtil.onHelpOp(player, reason));
-            player.sendMessage(Color.SECONDARY_COLOR + "You've requested help from staff for: " + Color.SECONDARY_COLOR + reason);
+            player.sendMessage(Color.SECONDARY_COLOR + "You've requested help from staff for: " + Color.MAIN_COLOR + reason);
 
             potPlayer.setCanRequest(false);
 
