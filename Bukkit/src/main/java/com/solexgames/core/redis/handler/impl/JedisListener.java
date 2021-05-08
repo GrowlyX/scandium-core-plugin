@@ -169,6 +169,14 @@ public class JedisListener implements JedisHandler {
         PlayerUtil.sendToStaff("&3[S] " + switchingPlayer + " &bjoined &3" + newServer + "&b from &3" + fromSwitchingServer + "&b.");
     }
 
+    @JedisSubscription(action = RedisAction.PLAYER_DISCONNECT_UPDATE)
+    public void onPlayerDisconnectServer(JsonAppender jsonAppender) {
+        final String server = jsonAppender.getParam("SERVER");
+        final String player = jsonAppender.getParam("PLAYER");
+
+        PlayerUtil.sendToStaff("&3[S] " + server + " &bdisconnected from &3" + player);
+    }
+
     @JedisSubscription(action = RedisAction.CHAT_CHANNEL_UPDATE)
     public void onChatChannelUpdate(JsonAppender jsonAppender) {
         final ChatChannelType chatChannel = ChatChannelType.valueOf(jsonAppender.getParam("CHANNEL"));
