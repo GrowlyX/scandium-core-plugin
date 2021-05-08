@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-@Command(label = "cgrant")
+@Command(label = "grant")
 public class GrantCommand extends BaseCommand {
 
     @Override
