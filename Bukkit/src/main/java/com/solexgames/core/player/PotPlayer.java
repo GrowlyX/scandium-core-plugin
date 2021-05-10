@@ -487,7 +487,7 @@ public class PotPlayer {
         });
 
         if (this.player.hasPermission("scandium.staff") && !CorePlugin.getInstance().getPlayerManager().isOnline(this.player.getName())) {
-            RedisUtil.publishAsync(RedisUtil.onConnect(this.player));
+            Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> RedisUtil.publishAsync(RedisUtil.onConnect(this.player)), 30L);
         }
 
         if (this.profile == null) {

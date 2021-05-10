@@ -339,7 +339,7 @@ public class JedisListener implements JedisHandler {
         }
     }
 
-    @JedisSubscription(action = RedisAction.PUNISHMENT_EXECUTE_UPDATE)
+    @JedisSubscription(action = RedisAction.PUNISHMENT_REMOVE_UPDATE)
     public void onPunishmentRemoval(JsonAppender jsonAppender) {
         final String removeServer = jsonAppender.getParam("SERVER");
 

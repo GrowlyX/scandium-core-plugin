@@ -27,10 +27,10 @@ public class TogglePrivateMessagesCommand extends BaseCommand {
 
         if (potPlayer.isCanReceiveDms()) {
             player.sendMessage(ChatColor.RED + ("You've disabled private messages."));
-            potPlayer.setCanSeeStaffMessages(false);
+            potPlayer.setCanReceiveDms(false);
         } else {
             player.sendMessage(ChatColor.GREEN + Color.translate("You can now see private messages."));
-            potPlayer.setCanSeeStaffMessages(true);
+            potPlayer.setCanReceiveDms(true);
         }
 
         return false;
