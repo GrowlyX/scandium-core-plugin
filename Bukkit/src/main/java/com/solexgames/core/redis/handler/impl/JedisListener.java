@@ -19,6 +19,7 @@ import com.solexgames.core.redis.packet.RedisAction;
 import com.solexgames.core.server.NetworkServer;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.PlayerUtil;
+import com.solexgames.core.util.RedisUtil;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -28,7 +29,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @SuppressWarnings("unused")
 public class JedisListener implements JedisHandler {
@@ -63,24 +63,38 @@ public class JedisListener implements JedisHandler {
         final String removalServer = jsonAppender.getParam("SERVER");
 
         if (!removalServer.equalsIgnoreCase(CorePlugin.getInstance().getServerName())) {
-            CorePlugin.getInstance().getPlayerManager().getAllNetworkProfiles().remove(removingPlayer);
+            CorePlugin.getInstance().getPlayerManager().getAllNetworkProfiles().remove(CorePlugin.getInstance().getPlayerManager().getNetworkPlayer(removingPlayer));
         }
     }
 
     @JedisSubscription(action = RedisAction.GLOBAL_PLAYER_ADDITION)
     public void onGlobalPlayerAddition(JsonAppender jsonAppender) {
-        final UUID uuid = UUID.fromString(jsonAppender.getParam("UUID"));
-        final String name = jsonAppender.getParam("NAME");
-        final Rank rank = Rank.getByName(jsonAppender.getParam("RANK"));
-        final String globalServer = jsonAppender.getParam("SERVER");
-        final String ipAddress = jsonAppender.getParam("IP_ADDRESS");
-        final String syncCode = jsonAppender.getParam("SYNC_CODE");
+        try {
+            final UUID uuid = UUID.fromString(jsonAppender.getParam("UUID"));
+            final String name = jsonAppender.getParam("NAME");
+            final Rank rank = Rank.getByName(jsonAppender.getParam("RANK"));
+            final String globalServer = jsonAppender.getParam("SERVER");
+            final String syncCode = jsonAppender.getParam("SYNC_CODE");
 
-        final boolean dmsEnabled = Boolean.parseBoolean(jsonAppender.getParam("DMS_ENABLED"));
-        final boolean isSynced = Boolean.parseBoolean(jsonAppender.getParam("IS_SYNCED"));
+            final boolean dmsEnabled = Boolean.parseBoolean(jsonAppender.getParam("DMS_ENABLED"));
+            final boolean isSynced = Boolean.parseBoolean(jsonAppender.getParam("IS_SYNCED"));
 
-        if (!globalServer.equalsIgnoreCase(CorePlugin.getInstance().getServerName())) {
-            new NetworkPlayer(uuid, name, rank.getName(), globalServer, dmsEnabled, ipAddress, syncCode, isSynced);
+            final NetworkPlayer networkPlayer = new NetworkPlayer(uuid, "", name, globalServer, rank.getName(), syncCode, dmsEnabled, isSynced);
+
+            if (CorePlugin.getInstance().getPlayerManager().isOnline(name)) {
+                final NetworkPlayer oldPlayer = CorePlugin.getInstance().getPlayerManager().getNetworkPlayer(name);
+
+                oldPlayer.setServerName(globalServer);
+                oldPlayer.setSynced(isSynced);
+            } else {
+                CorePlugin.getInstance().getPlayerManager().getAllNetworkProfiles().add(networkPlayer);
+            }
+
+            if (!CorePlugin.getInstance().getUuidCache().containsValue(uuid)) {
+                CorePlugin.getInstance().getUuidCache().put(name, uuid);
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
         }
     }
 
@@ -174,7 +188,7 @@ public class JedisListener implements JedisHandler {
         final String server = jsonAppender.getParam("SERVER");
         final String player = jsonAppender.getParam("PLAYER");
 
-        PlayerUtil.sendToStaff("&3[S] " + server + " &bdisconnected from &3" + player);
+        PlayerUtil.sendToStaff("&3[S] " + player + " &bdisconnected from &3" + server);
     }
 
     @JedisSubscription(action = RedisAction.CHAT_CHANNEL_UPDATE)
@@ -405,14 +419,17 @@ public class JedisListener implements JedisHandler {
             potPlayer.setSynced(true);
             potPlayer.setSyncDiscord(discord);
             potPlayer.getMedia().setDiscord(discord);
-            potPlayer.getAllPrefixes().add("Verified");
+
+            if (!potPlayer.getAllPrefixes().contains("Verified")) {
+                potPlayer.getAllPrefixes().add("Verified");
+            }
 
             potPlayer.getPlayer().sendMessage(new String[]{
-                    "  ",
-                    ChatColor.GREEN + Color.translate("Thanks for syncing your account! You've been given the &2✔ &7(Verified) &atag!"),
-                    ChatColor.GREEN + Color.translate("Your account has been synced to &b" + discord + ChatColor.GREEN + "."),
-                    "  "
+                    Color.SECONDARY_COLOR + "Thanks for syncing your account! You've been given the " + ChatColor.DARK_GREEN + "✔ " + ChatColor.GRAY + "(Verified) " + Color.SECONDARY_COLOR + "tag!",
+                    Color.SECONDARY_COLOR + "Your account has been synced to " + Color.MAIN_COLOR + discord + Color.SECONDARY_COLOR + "."
             });
+
+            RedisUtil.publishAsync(RedisUtil.addGlobalPlayer(potPlayer));
         }
     }
 
@@ -429,10 +446,5 @@ public class JedisListener implements JedisHandler {
         final String permission = jsonAppender.getParam("PERMISSION");
 
         PlayerUtil.sendTo(broadcast, permission);
-    }
-
-    @JedisSubscription(action = RedisAction.EMILY_KICK_EVENT)
-    public void onEmilyKick(JsonAppender jsonAppender) {
-        Bukkit.broadcastMessage("emily has been Kicked. LES GOOOOOOOOOOOOO");
     }
 }

@@ -235,10 +235,9 @@ public final class RedisUtil {
     public static String addGlobalPlayer(PotPlayer potPlayer) {
         return new JsonAppender(RedisAction.GLOBAL_PLAYER_ADDITION)
                 .put("UUID", potPlayer.getUuid().toString())
-                .put("NAME", potPlayer.getName())
+                .put("NAME", potPlayer.getPlayer().getName())
                 .put("SERVER", CorePlugin.getInstance().getServerName())
                 .put("RANK", potPlayer.getActiveGrant().getRank().getName())
-                .put("IP_ADDRESS", potPlayer.getIpAddress())
                 .put("SYNC_CODE", potPlayer.getSyncCode())
                 .put("IS_SYNCED", String.valueOf(potPlayer.isSynced()))
                 .put("DMS_ENABLED", String.valueOf(potPlayer.isCanReceiveDms()))

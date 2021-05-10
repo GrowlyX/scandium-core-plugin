@@ -87,7 +87,7 @@ public abstract class BaseCommand extends Command {
             }
 
             if (commandMap != null) {
-                commandMap.register(this.getLabel(), this);
+                commandMap.register(javaPlugin.getName(), this);
             } else {
                 javaPlugin.getServer().getPluginManager().disablePlugin(javaPlugin);
                 javaPlugin.getLogger().warning("Your server software's PluginManager does not contain a commandMap so I cannot register a command. This may be due to the fact you might be running a custom Bukkit/Spigot version.");

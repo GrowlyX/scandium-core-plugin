@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
-@Command(label = "message", aliases = {"m", "w", "dm"}, hidden = false)
+@Command(label = "message", aliases = {"m", "msg", "w", "dm"}, hidden = false)
 public class MessageCommand extends BaseCommand {
 
     @Override

@@ -409,6 +409,8 @@ public class PlayerListener implements Listener {
             if (server != null) {
                 if (!server.getServerName().equals(CorePlugin.getInstance().getServerName())) {
                     RedisUtil.publishAsync(RedisUtil.onSwitchServer(this.displayName, server.getServerName()));
+                } else {
+                    new SwitchTask(this.displayName).runTaskLaterAsynchronously(CorePlugin.getInstance(), 60L);
                 }
             } else {
                 RedisUtil.publishAsync(RedisUtil.onDisconnect(this.displayName));

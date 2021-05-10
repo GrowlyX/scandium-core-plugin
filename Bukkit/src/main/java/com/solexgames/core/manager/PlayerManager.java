@@ -18,6 +18,7 @@ import com.solexgames.core.util.atomic.AtomicDocument;
 import com.solexgames.core.util.builder.ItemBuilder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.bson.Document;
 import org.bukkit.Bukkit;
@@ -31,63 +32,25 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 @Getter
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class PlayerManager {
 
-    public final Map<UUID, NetworkPlayer> allNetworkProfiles = new HashMap<>();
     public final Map<UUID, PotPlayer> allProfiles = new HashMap<>();
 
     public final Map<String, String> allSyncCodes = new HashMap<>();
     public final Map<String, String> all2FACodes = new HashMap<>();
 
     public final List<String> freezeMessage = CorePlugin.getInstance().getConfig().getStringList("freeze-message");
-
-    public PotPlayer getPlayer(Player player) {
-        return this.allProfiles.getOrDefault(player.getUniqueId(), null);
-    }
-
-    public PotPlayer getPlayer(UUID uuid) {
-        return this.allProfiles.getOrDefault(uuid, null);
-    }
-
-    public NetworkPlayer getNetworkPlayer(String player) {
-        return this.allNetworkProfiles.values().stream()
-                .filter(networkPlayer -> networkPlayer.getName().equalsIgnoreCase(player))
-                .findFirst()
-                .orElse(null);
-    }
-
-    public GameProfile getGameProfile(Player player) {
-        try {
-            final Class<?> strClass = Class.forName("org.bukkit.craftbukkit." + this.getServerVersion() + ".entity.CraftPlayer");
-            return (GameProfile) strClass.cast(player).getClass().getMethod("getProfile").invoke(strClass.cast(player));
-        } catch (Exception ignored) {
-            return null;
-        }
-    }
-
-    public String getServerVersion() {
-        String version;
-
-        try {
-            version = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
-        } catch (Exception exception) {
-            return null;
-        }
-
-        return version;
-    }
+    public final List<NetworkPlayer> allNetworkProfiles = new ArrayList<>();
 
     public void setupPlayer(AsyncPlayerPreLoginEvent event) {
         new PotPlayer(event.getUniqueId(), event.getName(), event.getAddress());
     }
 
     public boolean isOnline(String player) {
-        return this.allNetworkProfiles.values()
-                .stream()
+        return this.allNetworkProfiles.stream()
                 .filter(networkPlayer -> networkPlayer.getName().equalsIgnoreCase(player))
-                .findFirst()
-                .orElse(null) != null;
+                .findFirst().orElse(null) != null;
     }
 
     public PotPlayer getPlayer(String name) {
@@ -255,10 +218,9 @@ public class PlayerManager {
     }
 
     public NetworkPlayer getPlayerFromSyncCode(String syncCode) {
-        return this.allNetworkProfiles.values().stream()
+        return this.allNetworkProfiles.stream()
                 .filter(networkPlayer -> networkPlayer.getDiscordCode().equalsIgnoreCase(syncCode))
-                .findFirst()
-                .orElse(null);
+                .findFirst().orElse(null);
     }
 
     public Optional<Document> getDocumentByName(String name) {
@@ -370,7 +332,50 @@ public class PlayerManager {
     }
 
     public NetworkPlayer getNetworkPlayer(Player player) {
-        return this.getAllNetworkProfiles().getOrDefault(player.getUniqueId(), null);
+        return this.allNetworkProfiles.stream()
+                .filter(networkPlayer -> networkPlayer.getName().equalsIgnoreCase(player.getName()))
+                .findFirst().orElse(null);
+    }
+
+    public PotPlayer getPlayer(Player player) {
+        return this.allProfiles.getOrDefault(player.getUniqueId(), null);
+    }
+
+    public PotPlayer getPlayer(UUID uuid) {
+        return this.allProfiles.getOrDefault(uuid, null);
+    }
+
+    public NetworkPlayer getNetworkPlayer(String player) {
+        return this.allNetworkProfiles.stream()
+                .filter(networkPlayer -> networkPlayer.getName().equalsIgnoreCase(player))
+                .findFirst().orElse(null);
+    }
+
+    public NetworkPlayer getNetworkPlayer(UUID player) {
+        return this.allNetworkProfiles.stream()
+                .filter(networkPlayer -> networkPlayer.getUuid().equals(player))
+                .findFirst().orElse(null);
+    }
+
+    public GameProfile getGameProfile(Player player) {
+        try {
+            final Class<?> strClass = Class.forName("org.bukkit.craftbukkit." + this.getServerVersion() + ".entity.CraftPlayer");
+            return (GameProfile) strClass.cast(player).getClass().getMethod("getProfile").invoke(strClass.cast(player));
+        } catch (Exception ignored) {
+            return null;
+        }
+    }
+
+    public String getServerVersion() {
+        String version;
+
+        try {
+            version = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
+        } catch (Exception exception) {
+            return null;
+        }
+
+        return version;
     }
 
     public String formatBroadcast(String message) {

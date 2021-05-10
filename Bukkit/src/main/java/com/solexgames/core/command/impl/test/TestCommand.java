@@ -1,7 +1,9 @@
 package com.solexgames.core.command.impl.test;
 
+import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.command.annotation.Command;
+import com.solexgames.core.player.global.NetworkPlayer;
 import com.solexgames.core.util.builder.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -18,6 +20,12 @@ public class TestCommand extends BaseCommand {
                 .setOwner("Melon")
                 .addItemFlags(ItemFlag.HIDE_DESTROYS)
                 .toButton((player, clickType) -> player.sendMessage("Melon"));
+
+        for (NetworkPlayer networkPlayer : CorePlugin.getInstance().getPlayerManager().getAllNetworkProfiles()) {
+            sender.sendMessage(CorePlugin.GSON.toJson(networkPlayer));
+        }
+
+        sender.sendMessage(String.valueOf(CorePlugin.getInstance().getPlayerManager().getAllNetworkProfiles().size()));
 
         return false;
     }

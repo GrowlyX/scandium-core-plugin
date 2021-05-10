@@ -29,11 +29,12 @@ public class CoreCommand extends BaseCommand {
 
         if (args.length == 0) {
             this.getHelpMessage(1, sender,
-                    "/" + label + "debug",
-                    "/" + label + "panel",
-                    "/" + label + "threads"
+                    "/" + label + " debug",
+                    "/" + label + " panel",
+                    "/" + label + " threads"
             );
         }
+
         if (args.length > 0) {
             switch (args[0]) {
                 case "threads":

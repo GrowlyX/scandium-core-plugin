@@ -19,10 +19,6 @@ public class UnSyncCommand extends BaseCommand {
 
     @Override
     public boolean command(CommandSender sender, String label, String[] args) {
-        if (!Bukkit.getPluginManager().isPluginEnabled("dRobot")) {
-            return false;
-        }
-
         if (!(sender instanceof Player)) {
             sender.sendMessage(ONLY_PLAYERS);
             return false;
@@ -30,17 +26,21 @@ public class UnSyncCommand extends BaseCommand {
 
         final Player player = (Player) sender;
 
-        if (args.length == 0) {
-            final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+        if (!Bukkit.getPluginManager().isPluginEnabled("Indium")) {
+            player.sendMessage(ChatColor.RED + "Error: This command is disabled on this server.");
+            return false;
+        }
 
-            if (potPlayer.isSynced() && (potPlayer.getSyncDiscord() != null)) {
-                potPlayer.setSynced(false);
-                potPlayer.setSyncDiscord(null);
+        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
-                player.sendMessage(ChatColor.GREEN + Color.translate("Un-synced your account!"));
-            } else {
-                player.sendMessage(ChatColor.RED + ("Error: You are not synced to a discord account."));
-            }
+        if (potPlayer.isSynced()) {
+            potPlayer.setSynced(false);
+            potPlayer.setSyncDiscord(null);
+
+            player.sendMessage(Color.SECONDARY_COLOR + "You've un-synced your " + ChatColor.BLUE + "Discord" + Color.SECONDARY_COLOR + " account.");
+            player.sendMessage(ChatColor.GRAY + ChatColor.ITALIC.toString() + "To re-sync, please follow the instructions provided when doing /sync!");
+        } else {
+            player.sendMessage(ChatColor.RED + "Error: You are not synced to a discord account.");
         }
 
         return false;
