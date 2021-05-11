@@ -222,6 +222,7 @@ public class PotPlayer {
         document.put("experience", this.experience);
         document.put("blacklisted", this.currentlyBlacklisted);
         document.put("restricted", this.currentlyRestricted);
+        document.put("currentlyOn", CorePlugin.getInstance().getServerName());
 
         return document;
     }
@@ -284,6 +285,17 @@ public class PotPlayer {
                     }
 
                     this.name = this.getName();
+                    if (profile.getBoolean("isSynced") != null) {
+                        this.setSynced(profile.getBoolean("isSynced"));
+                    }
+                    if (profile.getString("syncDiscord") != null) {
+                        this.setSyncDiscord(profile.getString("syncDiscord"));
+                    }
+                    if (profile.getString("discordSyncCode") != null) {
+                        this.setSyncCode(profile.getString("discordSyncCode"));
+                    } else {
+                        this.setSyncCode(SaltUtil.getRandomSaltedString());
+                    }
                     if (profile.getBoolean("canSeeStaffMessages") != null) {
                         this.canSeeStaffMessages = profile.getBoolean("canSeeStaffMessages");
                     }
@@ -390,30 +402,12 @@ public class PotPlayer {
                             this.userPermissions.addAll(permissions);
                         }
                     }
-                    if (profile.getBoolean("isSynced") != null) {
-                        this.setSynced(profile.getBoolean("isSynced"));
-                    }
-                    if (profile.getString("syncDiscord") != null) {
-                        this.setSyncDiscord(profile.getString("syncDiscord"));
-                    }
-                    if (profile.getString("discordSyncCode") != null) {
-                        this.setSyncCode(profile.getString("discordSyncCode"));
-                    } else {
-                        this.setSyncCode(SaltUtil.getRandomSaltedString());
-                    }
-                    if (profile.getString("achievementData") != null) {
-                        this.achievementData = CorePlugin.GSON.fromJson(profile.getString("achievementData"), AchievementData.class);
-                    } else {
-                        this.achievementData = new AchievementData();
-                    }
-
-                    RedisUtil.publishAsync(RedisUtil.addGlobalPlayer(this));
-                    CorePlugin.getInstance().getPlayerManager().getAllSyncCodes().put(this.syncCode, this.getName());
 
                     this.currentlyOnline = true;
                     this.hasLoaded = true;
                 });
 
+        Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> RedisUtil.publishAsync(RedisUtil.addGlobalPlayer(this)), 10L);
         Bukkit.getScheduler().runTaskLaterAsynchronously(CorePlugin.getInstance(), this::saveWithoutRemove, 60L);
     }
 

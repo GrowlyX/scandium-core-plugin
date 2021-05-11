@@ -235,7 +235,7 @@ public final class RedisUtil {
     public static String addGlobalPlayer(PotPlayer potPlayer) {
         return new JsonAppender(RedisAction.GLOBAL_PLAYER_ADDITION)
                 .put("UUID", potPlayer.getUuid().toString())
-                .put("NAME", potPlayer.getPlayer().getName())
+                .put("NAME", potPlayer.getName())
                 .put("SERVER", CorePlugin.getInstance().getServerName())
                 .put("RANK", potPlayer.getActiveGrant().getRank().getName())
                 .put("SYNC_CODE", potPlayer.getSyncCode())

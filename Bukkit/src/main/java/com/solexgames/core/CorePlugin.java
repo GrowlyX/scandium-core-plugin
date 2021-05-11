@@ -303,7 +303,7 @@ public final class CorePlugin extends JavaPlugin {
             if (commandMap != null) {
                 commandMap.register(this.pluginName, new CoreCommand());
 
-                if (this.getServerManager().getNetwork().equals(ServerType.BLARE)) {
+                if (this.getServerManager().getNetwork().equals(ServerType.PVPBAR)) {
                     commandMap.register("lib", new WebPostCommand());
                 }
             } else {

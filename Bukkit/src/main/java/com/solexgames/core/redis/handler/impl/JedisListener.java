@@ -69,32 +69,28 @@ public class JedisListener implements JedisHandler {
 
     @JedisSubscription(action = RedisAction.GLOBAL_PLAYER_ADDITION)
     public void onGlobalPlayerAddition(JsonAppender jsonAppender) {
-        try {
-            final UUID uuid = UUID.fromString(jsonAppender.getParam("UUID"));
-            final String name = jsonAppender.getParam("NAME");
-            final Rank rank = Rank.getByName(jsonAppender.getParam("RANK"));
-            final String globalServer = jsonAppender.getParam("SERVER");
-            final String syncCode = jsonAppender.getParam("SYNC_CODE");
+        final UUID uuid = UUID.fromString(jsonAppender.getParam("UUID"));
+        final String name = jsonAppender.getParam("NAME");
+        final Rank rank = Rank.getByName(jsonAppender.getParam("RANK"));
+        final String globalServer = jsonAppender.getParam("SERVER");
+        final String syncCode = jsonAppender.getParam("SYNC_CODE");
 
-            final boolean dmsEnabled = Boolean.parseBoolean(jsonAppender.getParam("DMS_ENABLED"));
-            final boolean isSynced = Boolean.parseBoolean(jsonAppender.getParam("IS_SYNCED"));
+        final boolean dmsEnabled = Boolean.parseBoolean(jsonAppender.getParam("DMS_ENABLED"));
+        final boolean isSynced = Boolean.parseBoolean(jsonAppender.getParam("IS_SYNCED"));
 
-            final NetworkPlayer networkPlayer = new NetworkPlayer(uuid, "", name, globalServer, rank.getName(), syncCode, dmsEnabled, isSynced);
+        final NetworkPlayer networkPlayer = new NetworkPlayer(uuid, "", name, globalServer, rank.getName(), syncCode, dmsEnabled, isSynced);
 
-            if (CorePlugin.getInstance().getPlayerManager().isOnline(name)) {
-                final NetworkPlayer oldPlayer = CorePlugin.getInstance().getPlayerManager().getNetworkPlayer(name);
+        if (CorePlugin.getInstance().getPlayerManager().isOnline(name)) {
+            final NetworkPlayer oldPlayer = CorePlugin.getInstance().getPlayerManager().getNetworkPlayer(name);
 
-                oldPlayer.setServerName(globalServer);
-                oldPlayer.setSynced(isSynced);
-            } else {
-                CorePlugin.getInstance().getPlayerManager().getAllNetworkProfiles().add(networkPlayer);
-            }
+            oldPlayer.setServerName(globalServer);
+            oldPlayer.setSynced(isSynced);
+        } else {
+            CorePlugin.getInstance().getPlayerManager().getAllNetworkProfiles().add(networkPlayer);
+        }
 
-            if (!CorePlugin.getInstance().getUuidCache().containsValue(uuid)) {
-                CorePlugin.getInstance().getUuidCache().put(name, uuid);
-            }
-        } catch (Exception exception) {
-            exception.printStackTrace();
+        if (!CorePlugin.getInstance().getUuidCache().containsValue(uuid)) {
+            CorePlugin.getInstance().getUuidCache().put(name, uuid);
         }
     }
 
