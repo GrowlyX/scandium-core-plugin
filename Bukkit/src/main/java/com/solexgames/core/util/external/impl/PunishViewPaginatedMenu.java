@@ -11,6 +11,7 @@ import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.util.external.Button;
 import com.solexgames.core.util.external.pagination.PaginatedMenu;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -52,61 +53,12 @@ public class PunishViewPaginatedMenu extends PaginatedMenu {
 
     @Override
     public Map<Integer, Button> getAllPagesButtons(Player player) {
-        final HashMap<Integer, Button> buttons = new HashMap<>();
-        final AtomicInteger i = new AtomicInteger(0);
+        final Map<Integer, Button> buttonMap = new HashMap<>();
+        final AtomicInteger atomicInteger = new AtomicInteger();
 
-        this.getSortedPunishmentsByType().forEach(punishment -> {
-            OfflinePlayer issuerOfflinePlayer;
+        this.getSortedPunishmentsByType().forEach(punishment -> buttonMap.put(atomicInteger.getAndIncrement(), new PunishmentButton(punishment)));
 
-            if (punishment.getIssuer() != null) {
-                issuerOfflinePlayer = Bukkit.getOfflinePlayer(punishment.getIssuer());
-            } else {
-                issuerOfflinePlayer = null;
-            }
-
-            OfflinePlayer targetOfflinePlayer = Bukkit.getOfflinePlayer(punishment.getTarget());
-            ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
-            List<String> lore = new ArrayList<>();
-            String statusLore = punishment.isRemoved() ? ChatColor.RED + "[Removed]" : (punishment.isActive() ? ChatColor.GREEN + "[Active]" : ChatColor.GOLD + "[Expired]");
-
-            lore.add(network.getMainColor() + "&m------------------------------------");
-            lore.add("&ePunish By: &b" + network.getMainColor() + (issuerOfflinePlayer != null ? issuerOfflinePlayer.getName() : "&4Console"));
-            lore.add("&ePunish To: &b" + network.getMainColor() + targetOfflinePlayer.getName());
-            lore.add("&ePunish On: &b" + network.getMainColor() + CorePlugin.FORMAT.format(punishment.getCreatedAt()));
-            lore.add("&ePunish Reason: &b" + network.getMainColor() + punishment.getReason());
-            lore.add(network.getMainColor() + "&m------------------------------------");
-            lore.add("&ePunish Type: &b" + network.getMainColor() + punishment.getPunishmentType().getName());
-            lore.add("&ePunish Expiring: &b" + network.getMainColor() + punishment.getExpirationString());
-            lore.add(network.getMainColor() + "&m------------------------------------");
-
-            if (punishment.isRemoved()) {
-                lore.add("&eRemoved By: &b" + network.getMainColor() + (punishment.getRemoverName() != null ? (punishment.getRemoverName().equals("Console") ? "&4Console" : CorePlugin.getInstance().getUuidCache().getUsernameFromUuid(punishment.getTarget())) : "Not recorded"));
-                lore.add("&eRemoved Reason: &b" + network.getMainColor() + punishment.getRemovalReason());
-                lore.add(network.getMainColor() + "&m------------------------------------");
-            }
-
-            buttons.put(i.get(), new Button() {
-                @Override
-                public ItemStack getButtonItem(Player player) {
-                    return new ItemBuilder(XMaterial.LIME_WOOL.parseMaterial(), (punishment.isActive() ? 5 : (punishment.isRemoved() ? 1 : 14)))
-                            .setDisplayName(statusLore + " " + CorePlugin.FORMAT.format(punishment.getIssuingDate()))
-                            .addLore(Color.translate(lore))
-                            .create();
-                }
-
-                @Override
-                public void clicked(Player player, ClickType clickType) {
-                    if (clickType.equals(ClickType.RIGHT)) {
-                        new PunishRemoveConfirmMenu(player, target, punishment).open(player);
-                        setClosedByMenu(true);
-                    }
-                }
-            });
-
-            i.getAndIncrement();
-        });
-
-        return buttons;
+        return buttonMap;
     }
 
     private List<Punishment> getSortedPunishmentsByType() {
@@ -114,5 +66,45 @@ public class PunishViewPaginatedMenu extends PaginatedMenu {
                 .filter(punishment -> punishment != null && punishment.getPunishmentType().equals(this.punishmentType) && punishment.getTarget().equals(this.getTargetUuid()))
                 .sorted(Comparator.comparingLong(Punishment::getCreatedAtLong).reversed())
                 .collect(Collectors.toList());
+    }
+
+    @RequiredArgsConstructor
+    private class PunishmentButton extends Button {
+
+        private final Punishment punishment;
+
+        @Override
+        public ItemStack getButtonItem(Player player) {
+            final List<String> lore = new ArrayList<>();
+            final String statusLore = this.punishment.isRemoved() ? ChatColor.RED + "[Removed]" : (this.punishment.isActive() ? ChatColor.GREEN + "[Active]" : ChatColor.GOLD + "[Expired]");
+
+            lore.add(Color.MAIN_COLOR + ChatColor.STRIKETHROUGH.toString() + "------------------------------------");
+            lore.add(Color.SECONDARY_COLOR + "Punish By: " + Color.MAIN_COLOR + (this.punishment.getIssuer() == null ? ChatColor.DARK_RED + "Console" : this.punishment.getIssuerName()));
+            lore.add(Color.SECONDARY_COLOR + "Punish To: " + Color.MAIN_COLOR + PunishViewPaginatedMenu.this.target);
+            lore.add(Color.SECONDARY_COLOR + "Punish On: " + Color.MAIN_COLOR + CorePlugin.FORMAT.format(this.punishment.getCreatedAt()));
+            lore.add(Color.SECONDARY_COLOR + "Punish Reason: " + Color.MAIN_COLOR + this.punishment.getReason());
+            lore.add(Color.MAIN_COLOR + ChatColor.STRIKETHROUGH.toString() + "------------------------------------");
+            lore.add(Color.SECONDARY_COLOR + "Punish Type: " + Color.MAIN_COLOR + this.punishment.getPunishmentType().getName());
+            lore.add(Color.SECONDARY_COLOR + "Punish Expiring: " + Color.MAIN_COLOR + this.punishment.getExpirationString());
+            lore.add(Color.MAIN_COLOR + ChatColor.STRIKETHROUGH.toString() + "------------------------------------");
+
+            if (this.punishment.isRemoved()) {
+                lore.add(Color.SECONDARY_COLOR + "Removed By: " + Color.MAIN_COLOR + (this.punishment.getRemover() != null ? (this.punishment.getRemoverName().equals("Console") ? ChatColor.DARK_RED + "Console" : PunishViewPaginatedMenu.this.target) : ChatColor.DARK_RED + "Console"));
+                lore.add(Color.SECONDARY_COLOR + "Removed Reason: " + Color.MAIN_COLOR + this.punishment.getRemovalReason());
+                lore.add(Color.MAIN_COLOR + ChatColor.STRIKETHROUGH.toString() + "------------------------------------");
+            }
+
+            return new ItemBuilder(XMaterial.LIME_WOOL.parseMaterial(), this.punishment.isActive() ? 5 : (this.punishment.isRemoved() ? 1 : 14))
+                    .setDisplayName(statusLore + " " + ChatColor.BOLD.toString() + CorePlugin.FORMAT.format(this.punishment.getIssuingDate()))
+                    .addLore(lore).create();
+        }
+
+        @Override
+        public void clicked(Player player, ClickType clickType) {
+            if (clickType.equals(ClickType.RIGHT)) {
+                new PunishRemoveConfirmMenu(player, PunishViewPaginatedMenu.this.target, this.punishment).open(player);
+                PunishViewPaginatedMenu.this.setClosedByMenu(true);
+            }
+        }
     }
 }

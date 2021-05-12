@@ -62,9 +62,15 @@ import java.util.logging.Logger;
 @Setter
 public final class CorePlugin extends JavaPlugin {
 
-    public static SimpleDateFormat FORMAT;
-    public static Random RANDOM;
-    public static Gson GSON;
+    public static final SimpleDateFormat FORMAT = new SimpleDateFormat("MM/dd/yyyy HH:mma");
+    public static final Random RANDOM = new Random();
+    public static final Gson GSON = new GsonBuilder()
+                .registerTypeAdapter(PotionEffect.class, new PotionEffectTypeAdapter())
+                .registerTypeAdapter(Location.class, new LocationTypeAdapter())
+                .registerTypeAdapter(Date.class, new DateTypeAdapter())
+                .setPrettyPrinting()
+                .disableHtmlEscaping()
+                .create();
 
     @Getter
     private static CorePlugin instance;
@@ -115,15 +121,6 @@ public final class CorePlugin extends JavaPlugin {
 
         final long milli = System.currentTimeMillis();
 
-        RANDOM = new Random();
-        GSON = new GsonBuilder()
-                .registerTypeAdapter(PotionEffect.class, new PotionEffectTypeAdapter())
-                .registerTypeAdapter(Location.class, new LocationTypeAdapter())
-                .registerTypeAdapter(Date.class, new DateTypeAdapter())
-                .setPrettyPrinting()
-                .disableHtmlEscaping()
-                .create();
-
         this.httpClient = new DefaultHttpClient();
 
         this.saveDefaultConfig();
@@ -131,8 +128,7 @@ public final class CorePlugin extends JavaPlugin {
 
         this.pluginName = this.getConfig().getString("core-settings.command-name");
 
-        FORMAT = new SimpleDateFormat("MM/dd/yyyy HH:mma");
-        FORMAT.setTimeZone(TimeZone.getTimeZone(this.getConfig().getString("settings.time-zone")));
+        CorePlugin.FORMAT.setTimeZone(TimeZone.getTimeZone(this.getConfig().getString("settings.time-zone")));
 
         this.ranksConfig = new FileConfig("ranks");
         this.databaseConfig = new FileConfig("database");

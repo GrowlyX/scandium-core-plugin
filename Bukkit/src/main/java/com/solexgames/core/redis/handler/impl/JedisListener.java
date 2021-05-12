@@ -342,7 +342,7 @@ public class JedisListener implements JedisHandler {
         if (!removeServer.equals(CorePlugin.getInstance().getServerName())) {
             final Punishment finalPunishment = Punishment.getByIdentification(jsonAppender.getParam("ID"));
 
-            final UUID removerUuid = UUID.fromString(jsonAppender.getParam("REMOVERUUID"));
+            final UUID removerUuid = jsonAppender.getParam("REMOVERUUID") != null ? UUID.fromString(jsonAppender.getParam("REMOVERUUID")) : null;
             final String removerName = jsonAppender.getParam("REMOVERNAME");
             final String removerDisplayName = jsonAppender.getParam("REMOVERDISPLAYNAME");
             final String reason = jsonAppender.getParam("REASON");
