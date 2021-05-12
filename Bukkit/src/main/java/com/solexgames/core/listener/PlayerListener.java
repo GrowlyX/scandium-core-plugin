@@ -2,6 +2,7 @@ package com.solexgames.core.listener;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ChatChannelType;
+import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.manager.ServerManager;
 import com.solexgames.core.menu.IMenu;
 import com.solexgames.core.player.PotPlayer;
@@ -102,7 +103,7 @@ public class PlayerListener implements Listener {
                 }
             }
 
-            if (event.getPlayer().hasPermission("scandium.staff")) {
+            if (event.getPlayer().hasPermission("scandium.staff") && !CorePlugin.getInstance().getServerManager().getNetwork().equals(ServerType.PVPBAR)) {
                 CorePlugin.getInstance().getServerManager().getStaffInformation().forEach(s -> event.getPlayer().sendMessage(s
                         .replace("<nice_char>", Character.toString('»'))
                         .replace("<channel>", ChatColor.RED + "None")
@@ -116,10 +117,10 @@ public class PlayerListener implements Listener {
             if (potPlayer.isAutoVanish()) {
                 potPlayer.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getServerManager().getAutomaticallyPutInto().replace("<value>", "vanish")));
 
-                CorePlugin.getInstance().getPlayerManager().vanishPlayerRaw(potPlayer.getPlayer());
+                Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getPlayerManager().vanishPlayerRaw(potPlayer.getPlayer()), 10L);
             }
 
-            if (potPlayer.isAutoModMode()) {
+            if (potPlayer.isAutoModMode() && !CorePlugin.getInstance().getServerName().contains("hub")) {
                 potPlayer.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getServerManager().getAutomaticallyPutInto().replace("<value>", "mod mode")));
 
                 CorePlugin.getInstance().getPlayerManager().modModeRaw(potPlayer.getPlayer());

@@ -78,9 +78,11 @@ public class PunishmentManager {
         this.punishments.add(punishment);
 
         if (issuer != null) {
-            final Player issuingPlayer = Bukkit.getPlayerExact(issuer);
+            final Player issuingPlayer = Bukkit.getPlayer(issuer);
 
-            issuingPlayer.sendMessage(Color.translate((silent ? ChatColor.GRAY + "[Silent] " : "") + ChatColor.GREEN + "You've " + punishmentExplanation + " " + playerFormattedName + ChatColor.GREEN + durationFormat));
+            if (issuingPlayer != null) {
+                issuingPlayer.sendMessage(Color.translate((silent ? ChatColor.GRAY + "[Silent] " : "") + ChatColor.GREEN + "You've " + punishmentExplanation + " " + playerFormattedName + ChatColor.GREEN + durationFormat));
+            }
         }
 
         CompletableFuture.runAsync(() -> {

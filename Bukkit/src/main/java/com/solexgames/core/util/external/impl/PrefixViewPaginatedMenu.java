@@ -52,7 +52,7 @@ public class PrefixViewPaginatedMenu extends PaginatedMenu {
 
                 potPlayer.setAppliedPrefix(null);
 
-                player.sendMessage(ChatColor.GREEN + "Reset your prefix to default!");
+                player.sendMessage(Color.SECONDARY_COLOR + "You've reset your prefix to default.");
                 player.closeInventory();
             }
         });

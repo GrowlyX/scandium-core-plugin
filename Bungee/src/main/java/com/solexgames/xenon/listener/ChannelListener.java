@@ -15,7 +15,7 @@ public class ChannelListener implements Listener {
     public void onMessage(PluginMessageEvent event) {
         try {
             switch (event.getTag().toLowerCase()) {
-                case "core-permissions":
+                case "core:permissions":
                     final DataInputStream dataInputStream = new DataInputStream(new ByteArrayInputStream(event.getData()));
                     final ProxiedPlayer player = ProxyServer.getInstance().getPlayer(dataInputStream.readUTF());
 
@@ -27,10 +27,9 @@ public class ChannelListener implements Listener {
                         }
                     }
                     break;
-                case "core-update":
+                case "core:update":
                     break;
                 default:
-                    System.out.println("[Messenger] Could not identify the tag \"" + event.getTag() + "\"!");
                     break;
             }
         } catch (Exception exception) {

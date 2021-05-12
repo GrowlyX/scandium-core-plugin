@@ -1,5 +1,6 @@
 package com.solexgames.xenon;
 
+import co.aikar.commands.BungeeCommandManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.solexgames.xenon.command.*;
@@ -90,14 +91,6 @@ public class CorePlugin extends Plugin {
         this.configuration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(configurationFile);
         this.redisConfig = ConfigurationProvider.getProvider(YamlConfiguration.class).load(redisConfigFile);
 
-/*        this.proxyManager = new ProxyManager();
-        this.redisManager = new RedisManager(new RedisSettings(
-                this.redisConfig.getString("redis.host"),
-                this.redisConfig.getInt("redis.port"),
-                this.redisConfig.getBoolean("redis.authentication.enabled"),
-                this.redisConfig.getString("redis.authentication.password")
-        ));*/
-
         this.maintenance = this.configuration.getBoolean("maintenance");
 
         this.minProtocol = this.configuration.getInt("minimum-protocol");
@@ -119,18 +112,21 @@ public class CorePlugin extends Plugin {
                 .filter(serverInfo -> (serverInfo.getName().contains("hub") || serverInfo.getName().contains("Hub") || serverInfo.getName().contains("Lobby") || serverInfo.getName().contains("lobby")) && !(serverInfo.getName().contains("Restricted") || serverInfo.getName().contains("restricted")))
                 .forEach(serverInfo -> this.hubServers.add(serverInfo));
 
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new GlobalListCommand());
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new StaffListCommand());
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new XenonCommand());
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new HubCommand(this));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new MaintenanceCommand());
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new ProxyStatusCommand());
+        final BungeeCommandManager manager = new BungeeCommandManager(this);
+
+        manager.registerCommand(new HubCommand());
+        manager.registerCommand(new ListCommand());
+        manager.registerCommand(new MaintenanceCommand());
+        manager.registerCommand(new XenonCommand());
+        manager.registerCommand(new ProxyStatusCommand());
+
+        manager.enableUnstableAPI("help");
 
         this.getProxy().registerChannel("core:permissions");
         this.getProxy().registerChannel("core:update");
 
         this.getProxy().getPluginManager().registerListener(this, new PlayerListener());
-//        this.getProxy().getPluginManager().registerListener(this, new ChannelListener());
+        this.getProxy().getPluginManager().registerListener(this, new ChannelListener());
     }
 
     private void createConfig() {

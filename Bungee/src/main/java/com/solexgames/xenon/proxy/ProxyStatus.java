@@ -1,10 +1,12 @@
 package com.solexgames.xenon.proxy;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.beans.ConstructorProperties;
 
 @Getter
+@RequiredArgsConstructor
 public enum ProxyStatus {
 
     BOOTING("Booting", "&6Booting..."),
@@ -15,9 +17,4 @@ public enum ProxyStatus {
     public final String serverStatusString;
     public final String serverStatusFancyString;
 
-    @ConstructorProperties({"serverTypeString", "serverStatusFancyString"})
-    ProxyStatus(String serverStatusString, String serverStatusFancyString) {
-        this.serverStatusString = serverStatusString;
-        this.serverStatusFancyString = serverStatusFancyString;
-    }
 }

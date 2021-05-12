@@ -110,6 +110,11 @@ public class PlayerManager {
     }
 
     public void modModePlayer(Player player) {
+        if (CorePlugin.getInstance().getServerName().contains("hub")) {
+            player.sendMessage(ChatColor.RED + "You cannot mod mode in hubs.");
+            return;
+        }
+
         final ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
         final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 

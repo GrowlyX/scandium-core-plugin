@@ -19,8 +19,6 @@ public class ProxyManager {
     }
 
     public int getOnlineAllProxies() {
-        int[] online = new int[1];
-        this.proxies.forEach(proxy -> online[0] = online[0] + proxy.getOnlinePlayers());
-        return online[0];
+        return this.proxies.stream().mapToInt(Proxy::getOnlinePlayers).sum();
     }
 }

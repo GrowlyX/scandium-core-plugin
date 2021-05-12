@@ -1,88 +1,60 @@
 package com.solexgames.xenon.command;
 
+import co.aikar.commands.BaseCommand;
+import co.aikar.commands.CommandHelp;
+import co.aikar.commands.annotation.CommandAlias;
+import co.aikar.commands.annotation.CommandPermission;
+import co.aikar.commands.annotation.HelpCommand;
+import co.aikar.commands.annotation.Subcommand;
 import com.solexgames.xenon.CorePlugin;
-import com.solexgames.xenon.util.Color;
 import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.plugin.Command;
-
-import static net.md_5.bungee.api.ChatColor.translateAlternateColorCodes;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 /**
  * @author GrowlyX
  * @since 3/5/2021
  */
 
-public class MaintenanceCommand extends Command {
+@CommandAlias("globalwl|maintenance")
+@CommandPermission("xenon.command.maintenance")
+public class MaintenanceCommand extends BaseCommand {
 
-    protected final String ONLY_PLAYERS = ChatColor.RED + "Only players can execute this command.";
-    protected final String NO_PERMISSION = ChatColor.RED + "I'm sorry, but you do not have permission to perform this command.";
-
-    public MaintenanceCommand() {
-        super("maintenance");
+    @HelpCommand
+    public void doHelp(ProxiedPlayer proxiedPlayer, CommandHelp help) {
+        help.showHelp();
     }
 
-    @Override
-    public void execute(CommandSender sender, String[] args) {
-        if (sender.hasPermission("xenon.network.maintenance")) {
-            if (args.length == 0) {
-                sender.sendMessage(TextComponent.fromLegacyText(translateAlternateColorCodes('&', "&3Usage: &b/maintenance &f<enable/disable/add/remove> <player>")));
-            }
+    @Subcommand("toggle")
+    @CommandPermission("xenon.command.maintenance.subcommand.toggle")
+    public void onToggle(ProxiedPlayer proxiedPlayer) {
+        CorePlugin.getInstance().setMaintenance(!CorePlugin.getInstance().isMaintenance());
 
-            if (args.length > 0) {
-                switch (args[0]) {
-                    case "enable":
-                        CorePlugin.getInstance().setMaintenance(true);
-                        sender.sendMessage(TextComponent.fromLegacyText(translateAlternateColorCodes('&', "&aEnabled network maintenance.")));
-                        break;
-                    case "disable":
-                        CorePlugin.getInstance().setMaintenance(false);
-                        sender.sendMessage(TextComponent.fromLegacyText(translateAlternateColorCodes('&', "&cDisabled network maintenance.")));
-                        break;
-                    case "toggle":
-                        CorePlugin.getInstance().setMaintenance(!CorePlugin.getInstance().isMaintenance());
-                        if (CorePlugin.getInstance().isMaintenance()) {
-                            sender.sendMessage(TextComponent.fromLegacyText(translateAlternateColorCodes('&', "&aEnabled network maintenance.")));
-                        } else {
-                            sender.sendMessage(TextComponent.fromLegacyText(translateAlternateColorCodes('&', "&aDisabled network maintenance.")));
-                        }
-                        break;
-                    case "add":
-                        if (args.length == 1) {
-                            sender.sendMessage(TextComponent.fromLegacyText(translateAlternateColorCodes('&', "&3Usage: &b/maintenance &f<add/remove> <player>")));
-                        }
-                        if (args.length == 2) {
-                            String player = args[1];
-                            if (CorePlugin.getInstance().getWhitelistedPlayers().contains(player)) {
-                                sender.sendMessage(TextComponent.fromLegacyText(translateAlternateColorCodes('&', "&cThat player is already whitelisted!")));
-                            } else {
-                                CorePlugin.getInstance().getWhitelistedPlayers().add(player);
-                                sender.sendMessage(TextComponent.fromLegacyText(translateAlternateColorCodes('&', "&aAdded &f" + player + ChatColor.GREEN + " to the network maintenance.")));
-                            }
-                        }
-                        break;
-                    case "remove":
-                        if (args.length == 1) {
-                            sender.sendMessage(TextComponent.fromLegacyText(translateAlternateColorCodes('&', "&3Usage: &b/maintenance &f<add/remove> <player>")));
-                        }
-                        if (args.length == 2) {
-                            String player = args[1];
-                            if (!CorePlugin.getInstance().getWhitelistedPlayers().contains(player)) {
-                                sender.sendMessage(TextComponent.fromLegacyText(translateAlternateColorCodes('&', "&cThat player is not on the maintenance!")));
-                            } else {
-                                CorePlugin.getInstance().getWhitelistedPlayers().remove(player);
-                                sender.sendMessage(TextComponent.fromLegacyText(translateAlternateColorCodes('&', "&aRemoved &f" + player + ChatColor.GREEN + " from the network maintenance.")));
-                            }
-                        }
-                        break;
-                    default:
-                        sender.sendMessage(TextComponent.fromLegacyText(translateAlternateColorCodes('&', "&3Usage: &b/maintenance &f<enable/disable/add/remove> <player>")));
-                        break;
-                }
-            }
+        if (CorePlugin.getInstance().isMaintenance()) {
+            proxiedPlayer.sendMessage(ChatColor.GREEN + "You've enabled network maintenance!");
         } else {
-            sender.sendMessage(NO_PERMISSION);
+            proxiedPlayer.sendMessage(ChatColor.GREEN + "You've disabled network maintenance!");
+        }
+    }
+
+    @Subcommand("add")
+    @CommandPermission("xenon.command.maintenance.subcommand.add")
+    public void onAdd(ProxiedPlayer proxiedPlayer, String player) {
+        if (CorePlugin.getInstance().getWhitelistedPlayers().contains(player)) {
+            proxiedPlayer.sendMessage(ChatColor.RED + "I'm sorry, but that player is already on the maintenance list.");
+        } else {
+            CorePlugin.getInstance().getWhitelistedPlayers().add(player);
+            proxiedPlayer.sendMessage(ChatColor.GREEN + "You've added " + ChatColor.YELLOW + player + ChatColor.GREEN + " to the maintenance list.");
+        }
+    }
+
+    @Subcommand("remove")
+    @CommandPermission("xenon.command.maintenance.subcommand.remove")
+    public void onRemove(ProxiedPlayer proxiedPlayer, String player) {
+        if (!CorePlugin.getInstance().getWhitelistedPlayers().contains(player)) {
+            proxiedPlayer.sendMessage(ChatColor.RED + "I'm sorry, but that player is not on the maintenance list.");
+        } else {
+            CorePlugin.getInstance().getWhitelistedPlayers().remove(player);
+            proxiedPlayer.sendMessage(ChatColor.GREEN + "You've removed " + ChatColor.YELLOW + player + ChatColor.GREEN + " from the maintenance list.");
         }
     }
 }
