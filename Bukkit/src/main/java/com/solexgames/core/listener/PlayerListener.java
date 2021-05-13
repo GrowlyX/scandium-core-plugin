@@ -126,7 +126,7 @@ public class PlayerListener implements Listener {
                 CorePlugin.getInstance().getPlayerManager().modModeRaw(potPlayer.getPlayer());
             }
 
-            if (potPlayer.isCurrentlyRestricted()) {
+            if (potPlayer.isCurrentlyRestricted() || potPlayer.isCurrentlyBlacklisted()) {
                 event.getPlayer().sendMessage(potPlayer.getRestrictionMessage());
             }
 

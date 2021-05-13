@@ -13,7 +13,7 @@ public class DefaultChatFormat implements IChatFormat {
     public String getFormatted(Player sender, Player receiver, String message) {
         final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(sender);
         final String defaultFormat = Color.translate(CorePlugin.getInstance().getServerSettings().getChatFormat()
-                .replace("<prefix>", " " + (potPlayer.getAppliedPrefix() != null ? potPlayer.getAppliedPrefix().getPrefix() : ""))
+                .replace("<prefix>", (potPlayer.getAppliedPrefix() != null ? " " + potPlayer.getAppliedPrefix().getPrefix() : ""))
                 .replace("<rank_prefix>", (potPlayer.getDisguiseRank() != null ? potPlayer.getDisguiseRank().getPrefix() : potPlayer.getActiveGrant().getRank().getPrefix()))
                 .replace("<rank_suffix>", (potPlayer.getDisguiseRank() != null ? potPlayer.getDisguiseRank().getSuffix() : potPlayer.getActiveGrant().getRank().getSuffix()))
                 .replace("<rank_color>", (potPlayer.getDisguiseRank() != null ? potPlayer.getDisguiseRank().getColor() : potPlayer.getActiveGrant().getRank().getColor()))

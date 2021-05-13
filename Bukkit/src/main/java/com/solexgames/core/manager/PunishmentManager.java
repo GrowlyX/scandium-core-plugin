@@ -1,5 +1,7 @@
 package com.solexgames.core.manager;
 
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.ReplaceOptions;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.punishment.Punishment;
@@ -219,6 +221,7 @@ public class PunishmentManager {
                             targetPlayer.sendMessage(ChatColor.RED + "Your warning has been removed by a staff member.");
                             break;
                         case BLACKLIST:
+                            potPlayer.setCurrentlyBlacklisted(false);
                         case IP_BAN:
                         case BAN:
                             targetPlayer.sendMessage(ChatColor.RED + "You've been unrestricted by a staff member.");
@@ -227,6 +230,23 @@ public class PunishmentManager {
                     }
                 }
             });
+
+            String field = null;
+
+            switch (punishmentType) {
+                case BLACKLIST:
+                    field = "blacklisted";
+                    break;
+                case BAN:
+                    field = "restricted";
+                    break;
+            }
+
+            if (field != null) {
+                document.replace(field, false);
+
+                CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("uuid", document.getString("uuid")), document, new ReplaceOptions().upsert(true));
+            }
         });
     }
 }

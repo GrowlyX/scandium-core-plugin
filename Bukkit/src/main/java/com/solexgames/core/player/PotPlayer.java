@@ -234,7 +234,7 @@ public class PotPlayer {
     public void savePlayerData() {
         RedisUtil.publishAsync(RedisUtil.removeGlobalPlayer(this.uuid));
 
-        CorePlugin.getInstance().getPlayerManager().getAllNetworkProfiles().remove(this.uuid);
+        CorePlugin.getInstance().getPlayerManager().getAllNetworkProfiles().remove(CorePlugin.getInstance().getPlayerManager().getNetworkPlayer(this.originalName));
         CorePlugin.getInstance().getPlayerManager().getAllProfiles().remove(this.uuid);
 
         CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", this.uuid), this.getDocument(true), new ReplaceOptions().upsert(true)));
@@ -414,45 +414,28 @@ public class PotPlayer {
     public boolean findIpRelative(AsyncPlayerPreLoginEvent loginEvent, boolean hub) {
         final AtomicBoolean atomicBoolean = new AtomicBoolean(false);
 
+        if (this.currentlyBlacklisted) {
+            return false;
+        }
+
         CompletableFuture.supplyAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("previousIpAddress", this.encryptedIpAddress)).iterator())
                 .thenAcceptAsync(documentIterator -> {
-                    while (documentIterator.hasNext()) {
-                        final Document document = documentIterator.next();
+                    if (!documentIterator.hasNext()) {
+                        return;
+                    }
 
-                        if (document.getBoolean("blacklisted") != null && document.getBoolean("blacklisted") && !this.currentlyBlacklisted && !document.getString("name").equalsIgnoreCase(loginEvent.getName())) {
-                            this.currentlyBlacklisted = true;
-                            this.currentlyRestricted = true;
-                            this.relatedToBlacklist = true;
-                            this.relatedTo = document.getString("name");
+                    final Document document = documentIterator.next();
 
-                            final Date date = new Date();
-                            final Punishment punishment = new Punishment(
-                                    PunishmentType.BLACKLIST,
-                                    null,
-                                    this.uuid,
-                                    this.name,
-                                    "Related to Blacklisted Player (" + this.relatedTo + ")",
-                                    date,
-                                    date.getTime() - DateUtil.parseDateDiff("1d", false),
-                                    true,
-                                    date,
-                                    UUID.randomUUID(),
-                                    SaltUtil.getRandomSaltedString(7),
-                                    true
-                            );
+                    if (document.getBoolean("blacklisted") != null && document.getBoolean("blacklisted") && !document.getString("name").equalsIgnoreCase(loginEvent.getName())) {
+                        this.currentlyBlacklisted = true;
+                        this.relatedToBlacklist = true;
+                        this.relatedTo = document.getString("name");
 
-                            punishment.savePunishment();
-
-                            this.restrictionPunishment = punishment;
-
-                            if (!hub) {
-                                loginEvent.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, Color.translate(PunishmentStrings.BLACK_LIST_RELATION_MESSAGE.replace("<player>", document.getString("name"))));
-                            }
-
-                            atomicBoolean.set(true);
-
-                            return;
+                        if (!hub) {
+                            loginEvent.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, Color.translate(PunishmentStrings.BLACK_LIST_RELATION_MESSAGE.replace("<player>", this.relatedTo)));
                         }
+
+                        atomicBoolean.set(true);
                     }
                 });
 
@@ -545,12 +528,11 @@ public class PotPlayer {
                 .sorted(Comparator.comparingLong(Grant::getDateAdded).reversed())
                 .collect(Collectors.toList()).stream()
                 .filter(grant -> grant != null && grant.getRank() != null && !grant.isRemoved() && grant.isActive() && !grant.getRank().isHidden() && (grant.getScope() == null || grant.isGlobal() || grant.isApplicable()))
-                .findFirst()
-                .orElseGet(this::getDefaultGrant);
+                .findFirst().orElseGet(this::getDefaultGrant);
     }
 
     public Grant getDefaultGrant() {
-        return new Grant(null, Objects.requireNonNull(Rank.getDefault()), System.currentTimeMillis(), -1L, "Automatic Grant (Default)", true, true);
+        return new Grant(null, Rank.getDefault(), System.currentTimeMillis(), -1L, "Automatic Grant (Default)", true, true);
     }
 
     public void setupPlayer() {

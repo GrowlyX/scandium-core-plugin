@@ -128,8 +128,7 @@ public class Rank {
     public static Rank getDefault() {
         return Rank.getRanks().stream()
                 .filter(Rank::isDefaultRank)
-                .findFirst()
-                .orElseGet(() -> new Rank("Default"));
+                .findFirst().orElseGet(() -> new Rank("Default"));
     }
 
     public static Rank getByName(String name) {
