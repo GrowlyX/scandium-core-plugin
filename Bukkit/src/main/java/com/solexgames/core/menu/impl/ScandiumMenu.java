@@ -24,8 +24,6 @@ public class ScandiumMenu extends AbstractInventoryMenu {
         super("Control Panel", 9);
 
         this.player = player;
-
-        this.update();
     }
 
     public void update() {
@@ -35,7 +33,7 @@ public class ScandiumMenu extends AbstractInventoryMenu {
                         "&7Would you like to reload",
                         "&7configurations?",
                         "",
-                        "&aClick to reload files."
+                        "&e[Click to Reload files]"
                 )
                 .create()
         );
@@ -45,11 +43,8 @@ public class ScandiumMenu extends AbstractInventoryMenu {
                 .addLore(
                         "&7You are currently running",
                         "&7Scandium core by GrowlyX!",
-                        "  ",
-                        "&7Support: &6GrowlyX#1337",
-                        "&7Pricing: &b$50",
                         "",
-                        "&aClick to contact GrowlyX."
+                        "&e[Click to view contact information]"
                 )
                 .create()
         );

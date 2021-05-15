@@ -34,14 +34,14 @@ public class TurnCommand extends BaseCommand {
                 player.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/crasher " + ChatColor.WHITE + "<player>.");
             }
             if (args.length == 1) {
-                final Player target = Bukkit.getPlayerExact(args[0]);
+                final Player target = Bukkit.getPlayer(args[0]);
 
                 if (target != null) {
                     CorePlugin.getInstance().getPacketHandler().turnPlayer(target);
 
                     player.sendMessage(Color.SECONDARY_COLOR + "Turned that player 180 degrees!");
                 } else {
-                    player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
+                    player.sendMessage(ChatColor.RED + "Error: That player does not exist.");
                 }
             }
 

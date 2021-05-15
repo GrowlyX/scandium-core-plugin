@@ -24,7 +24,7 @@ public class LanguageMenu extends AbstractInventoryMenu {
     public LanguageMenu(Player player) {
         super("Language", 9);
         this.player = player;
-        this.update();
+
     }
 
     public void update() {

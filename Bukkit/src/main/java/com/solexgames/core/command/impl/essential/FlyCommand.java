@@ -47,7 +47,7 @@ public class FlyCommand extends BaseCommand {
             }
         }
         if (args.length == 1) {
-            final Player target = Bukkit.getPlayerExact(args[0]);
+            final Player target = Bukkit.getPlayer(args[0]);
 
             if (target != null) {
                 if (target.isFlying()) {
@@ -62,7 +62,7 @@ public class FlyCommand extends BaseCommand {
                     PlayerUtil.sendAlert(player, "enabled flight for " + target.getName());
                 }
             } else {
-                player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
+                player.sendMessage(ChatColor.RED + "Error: That player does not exist.");
             }
         }
 

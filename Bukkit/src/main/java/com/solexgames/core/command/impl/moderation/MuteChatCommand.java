@@ -1,4 +1,4 @@
-package com.solexgames.core.command.impl.essential;
+package com.solexgames.core.command.impl.moderation;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;

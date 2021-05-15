@@ -36,10 +36,10 @@ public class FeedCommand extends BaseCommand {
         }
 
         if (args.length > 0) {
-            final Player target = Bukkit.getPlayerExact(args[0]);
+            final Player target = Bukkit.getPlayer(args[0]);
 
             if (target == null) {
-                player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
+                player.sendMessage(ChatColor.RED + "Error: That player does not exist.");
             } else {
                 target.setFoodLevel(20);
                 player.sendMessage(Color.SECONDARY_COLOR + "You've reset " + target.getDisplayName() + Color.SECONDARY_COLOR + "'s " + Color.MAIN_COLOR + "food level" + Color.SECONDARY_COLOR + ".");

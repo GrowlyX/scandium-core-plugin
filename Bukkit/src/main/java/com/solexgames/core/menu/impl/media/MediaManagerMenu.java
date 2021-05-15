@@ -22,7 +22,7 @@ public class MediaManagerMenu extends AbstractInventoryMenu {
     public MediaManagerMenu(Player player) {
         super("Social Media", 9);
         this.player = player;
-        this.update();
+
     }
 
     public void update() {

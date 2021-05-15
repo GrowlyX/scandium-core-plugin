@@ -38,7 +38,7 @@ public class EnderChestCommand extends BaseCommand {
                 return false;
             }
 
-            final Player target = Bukkit.getPlayerExact(args[0]);
+            final Player target = Bukkit.getPlayer(args[0]);
 
             if (target != null) {
                 player.openInventory(target.getEnderChest());

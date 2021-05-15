@@ -29,12 +29,12 @@ public class MediaCommand extends BaseCommand {
             new MediaManagerMenu(player).open(player);
         }
         if (args.length == 1) {
-            final Player target = Bukkit.getPlayerExact(args[0]);
+            final Player target = Bukkit.getPlayer(args[0]);
 
             if (target != null) {
                 new MediaViewMenu(target).open(player);
             } else {
-                player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
+                player.sendMessage(ChatColor.RED + "Error: That player does not exist.");
             }
         }
 

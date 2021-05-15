@@ -20,12 +20,15 @@ public class ListCommand extends BaseCommand {
 
     @Override
     public boolean command(CommandSender sender, String label, String[] args) {
+        final List<Player> playerList = new ArrayList<>(this.getOnlinePlayers(false, false));
+        final boolean split = Bukkit.getOnlinePlayers().size() > 350;
+
         if (sender instanceof ConsoleCommandSender) {
             final String ranks = Rank.getRanks().stream()
                     .sorted(Comparator.comparingInt(rank -> -rank.getWeight()))
                     .map(rank -> Color.translate((rank.isHidden() ? "&7*" : "") + rank.getColor() + rank.getItalic() + rank.getName()))
                     .collect(Collectors.joining(ChatColor.WHITE + ", "));
-            final String players = this.getOnlinePlayers(false).stream()
+            final String players = playerList.stream()
                     .map(player -> CorePlugin.getInstance().getPlayerManager().getPlayer(player.getUniqueId()))
                     .sorted(Comparator.comparingInt(potPlayer -> -(potPlayer.getDisguiseRank() != null ? potPlayer.getDisguiseRank().getWeight() : potPlayer.getActiveGrant().getRank().getWeight())))
                     .map(potPlayer -> Color.translate((potPlayer.isStaffMode() ? "&7[S] " : "") + (potPlayer.isVanished() ? "&7[V] " : "") + potPlayer.getActiveGrant().getRank().getColor() + potPlayer.getName()))
@@ -33,20 +36,19 @@ public class ListCommand extends BaseCommand {
 
             sender.sendMessage(new String[]{
                     ranks,
-                    Color.translate("&f(" + this.getOnlinePlayers(false).size() + "/" + Bukkit.getMaxPlayers() + ") ") + players
+                    Color.translate("&f(" + playerList.size() + "/" + Bukkit.getMaxPlayers() + ") ") + players
             });
 
             return false;
         }
 
         final Player player = (Player) sender;
-
         final String ranks = Rank.getRanks().stream()
                 .filter(rank -> !rank.isHidden())
                 .sorted(Comparator.comparingInt(rank -> -rank.getWeight()))
                 .map(rank -> Color.translate(rank.getColor() + rank.getItalic() + rank.getName()))
                 .collect(Collectors.joining(ChatColor.WHITE + ", "));
-        final String players = this.getOnlinePlayers(!player.hasPermission("scandium.staff")).stream()
+        final String players = this.getOnlinePlayers(!player.hasPermission("scandium.staff"), split).stream()
                 .map(player1 -> CorePlugin.getInstance().getPlayerManager().getPlayer(player1.getUniqueId()))
                 .sorted(Comparator.comparingInt(potPlayer -> -(potPlayer.getDisguiseRank() != null ? potPlayer.getDisguiseRank().getWeight() : potPlayer.getActiveGrant().getRank().getWeight())))
                 .map(potPlayer -> this.getFormattedName(potPlayer, player))
@@ -54,8 +56,12 @@ public class ListCommand extends BaseCommand {
 
         sender.sendMessage(new String[]{
                 ranks,
-                Color.translate("&f(" + this.getOnlinePlayers(true).size() + "/" + Bukkit.getMaxPlayers() + ") ") + players
+                Color.translate("&f(" + this.getOnlinePlayers(true, split).size() + "/" + Bukkit.getMaxPlayers() + ") ") + players
         });
+
+        if (split) {
+            sender.sendMessage(ChatColor.RED + "(Only displaying the first " + ChatColor.BOLD.toString() + "350 players" + ChatColor.RED + ")");
+        }
 
         return false;
     }
@@ -64,14 +70,18 @@ public class ListCommand extends BaseCommand {
         return Color.translate((viewer.hasPermission("scandium.staff") ? (potPlayer.isStaffMode() ? "&7[S] " : "") + (potPlayer.isVanished() ? "&7[V] " : "") : "") + (potPlayer.getDisguiseRank() != null ? potPlayer.getDisguiseRank().getColor() : potPlayer.getActiveGrant().getRank().getColor()) + potPlayer.getName());
     }
 
-    private Collection<Player> getOnlinePlayers(boolean filter) {
+    private Collection<Player> getOnlinePlayers(boolean filter, boolean split) {
+        final List<Player> playerList = new ArrayList<>(Bukkit.getOnlinePlayers());
+
         if (!filter) {
-            return new ArrayList<>(Bukkit.getOnlinePlayers());
+            return split ? playerList.subList(0, 350) : playerList;
         } else {
-            return Bukkit.getOnlinePlayers().stream()
+            final List<Player> finalList = playerList.stream()
                     .filter(player -> !CorePlugin.getInstance().getPlayerManager().getPlayer(player).isVanished())
                     .filter(player -> !CorePlugin.getInstance().getPlayerManager().getPlayer(player).isStaffMode())
                     .collect(Collectors.toList());
+
+            return split ? finalList.subList(0, 350) : finalList;
         }
     }
 }

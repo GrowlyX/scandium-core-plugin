@@ -41,7 +41,7 @@ public class GmspCommand extends BaseCommand {
             PlayerUtil.sendAlert(player, "gamemode spectator");
         }
         if (args.length == 1) {
-            final Player target = Bukkit.getPlayerExact(args[0]);
+            final Player target = Bukkit.getPlayer(args[0]);
 
             if (target != null) {
                 target.setGameMode(GameMode.SPECTATOR);
@@ -49,7 +49,7 @@ public class GmspCommand extends BaseCommand {
 
                 PlayerUtil.sendAlert(player, "gamemode spectator for " + target.getName());
             } else {
-                player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
+                player.sendMessage(ChatColor.RED + "Error: That player does not exist.");
             }
         }
 

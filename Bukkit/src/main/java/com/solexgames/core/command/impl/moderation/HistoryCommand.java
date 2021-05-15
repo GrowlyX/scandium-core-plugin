@@ -1,5 +1,6 @@
-package com.solexgames.core.command.impl.essential;
+package com.solexgames.core.command.impl.moderation;
 
+import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.menu.impl.punish.history.PunishHistoryViewMainMenu;
@@ -7,6 +8,8 @@ import com.solexgames.core.util.Color;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.concurrent.CompletableFuture;
 
 @Command(label = "history", aliases = "c")
 public class HistoryCommand extends BaseCommand {
@@ -29,7 +32,12 @@ public class HistoryCommand extends BaseCommand {
             player.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player>.");
         }
         if (args.length == 1) {
-            new PunishHistoryViewMainMenu(player, args[0]).open(player);
+            CompletableFuture.supplyAsync(() -> CorePlugin.getInstance().getUuidCache().getUuidFromUsername(args[0]))
+                    .thenAccept(uuid -> {
+                        player.sendMessage(Color.SECONDARY_COLOR + "Viewing punishment history for: " + Color.MAIN_COLOR + args[0]);
+
+                        new PunishHistoryViewMainMenu(player, uuid, args[0]).open(player);
+                    });
         }
 
         return false;

@@ -24,8 +24,10 @@ public class SettingsMenu extends AbstractInventoryMenu {
 
     public SettingsMenu(Player player) {
         super("Settings", 9);
+
         this.player = player;
-        this.update();
+
+
     }
 
     public void update() {
@@ -147,7 +149,7 @@ public class SettingsMenu extends AbstractInventoryMenu {
                     potPlayer.setCanReceiveDmsSounds(!potPlayer.isCanReceiveDmsSounds());
                     break;
                 case 6:
-                    if (potPlayer.getPlayer().hasPermission("scandium.staff")) {
+                    if (player.hasPermission("scandium.staff")) {
                         potPlayer.setCanSeeStaffMessages(!potPlayer.isCanSeeStaffMessages());
                     } else {
                         potPlayer.setCanSeeBroadcasts(!potPlayer.isCanSeeBroadcasts());
@@ -155,7 +157,7 @@ public class SettingsMenu extends AbstractInventoryMenu {
                     break;
             }
 
-            this.update();
+
         }
     }
 }

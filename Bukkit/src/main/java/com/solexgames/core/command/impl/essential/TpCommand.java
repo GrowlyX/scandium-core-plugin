@@ -34,7 +34,7 @@ public class TpCommand extends BaseCommand {
         }
 
         if (args.length == 1) {
-            final Player target = Bukkit.getPlayerExact(args[0]);
+            final Player target = Bukkit.getPlayer(args[0]);
 
             if (target != null) {
                 player.teleport(target.getLocation());
@@ -43,7 +43,7 @@ public class TpCommand extends BaseCommand {
 
                 PlayerUtil.sendAlert(player, "teleported to " + target.getName());
             } else {
-                player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
+                player.sendMessage(ChatColor.RED + "Error: That player does not exist.");
             }
         }
         return false;

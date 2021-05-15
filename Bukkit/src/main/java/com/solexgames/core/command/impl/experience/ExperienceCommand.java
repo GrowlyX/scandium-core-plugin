@@ -42,7 +42,7 @@ public class ExperienceCommand extends BaseCommand {
                         this.sendHelpMessage(sender);
                     }
                     if (args.length == 3) {
-                        final Player target = Bukkit.getPlayerExact(args[1]);
+                        final Player target = Bukkit.getPlayer(args[1]);
                         int amount;
 
                         if (target != null) {
@@ -71,7 +71,7 @@ public class ExperienceCommand extends BaseCommand {
                         this.sendHelpMessage(sender);
                     }
                     if (args.length == 3) {
-                        final Player target = Bukkit.getPlayerExact(args[1]);
+                        final Player target = Bukkit.getPlayer(args[1]);
                         int amount;
 
                         if (target != null) {
@@ -100,7 +100,7 @@ public class ExperienceCommand extends BaseCommand {
                         this.sendHelpMessage(sender);
                     }
                     if (args.length == 3) {
-                        final Player target = Bukkit.getPlayerExact(args[1]);
+                        final Player target = Bukkit.getPlayer(args[1]);
                         int amount;
 
                         if (target != null) {

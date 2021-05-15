@@ -7,8 +7,11 @@ import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.player.global.NetworkPlayer;
 import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.util.Color;
+import com.solexgames.core.util.clickable.Clickable;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,10 +41,19 @@ public class FindCommand extends BaseCommand {
             if (networkPlayer == null) {
                 sender.sendMessage(ChatColor.RED + "Error: The player with the specified name does not exist.");
             } else {
-                Rank rank = Rank.getByName(networkPlayer.getRankName());
-                String displayName = Color.translate((rank != null ? rank.getColor() + rank.getItalic() : ChatColor.GRAY) + networkPlayer.getName());
+                final Rank rank = Rank.getByName(networkPlayer.getRankName());
+                final String displayName = Color.translate((rank != null ? rank.getColor() + rank.getItalic() : ChatColor.GRAY) + networkPlayer.getName());
 
-                sender.sendMessage(Color.MAIN_COLOR + displayName + Color.SECONDARY_COLOR + " is currently online " + Color.MAIN_COLOR + networkPlayer.getServerName() + Color.SECONDARY_COLOR + "!");
+                if (sender instanceof Player && sender.hasPermission("scandium.staff")) {
+                    final Player player = (Player) sender;
+                    final Clickable clickable = new Clickable("");
+
+                    clickable.add(Color.MAIN_COLOR + displayName + Color.SECONDARY_COLOR + " is currently online " + Color.MAIN_COLOR + networkPlayer.getServerName() + Color.SECONDARY_COLOR + "!", Color.SECONDARY_COLOR + "Click to jump to " + ChatColor.GREEN + networkPlayer.getServerName() + Color.SECONDARY_COLOR + "!", "/jump " + networkPlayer.getServerName(), ClickEvent.Action.RUN_COMMAND);
+
+                    player.spigot().sendMessage(clickable.asComponents());
+                } else {
+                    sender.sendMessage(Color.MAIN_COLOR + displayName + Color.SECONDARY_COLOR + " is currently online " + Color.MAIN_COLOR + networkPlayer.getServerName() + Color.SECONDARY_COLOR + "!");
+                }
             }
         }
 

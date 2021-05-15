@@ -36,7 +36,7 @@ public class ClearCommand extends BaseCommand {
             PlayerUtil.sendAlert(player, "cleared inventory");
         }
         if (args.length == 1) {
-            final Player target = Bukkit.getPlayerExact(args[0]);
+            final Player target = Bukkit.getPlayer(args[0]);
 
             if (target != null) {
                 player.getInventory().clear();
@@ -45,7 +45,7 @@ public class ClearCommand extends BaseCommand {
 
                 PlayerUtil.sendAlert(player, "cleared inventory for " + target.getName());
             } else {
-                player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
+                player.sendMessage(ChatColor.RED + "Error: That player does not exist.");
             }
         }
         return false;

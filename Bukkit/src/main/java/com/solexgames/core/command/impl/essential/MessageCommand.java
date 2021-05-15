@@ -31,11 +31,11 @@ public class MessageCommand extends BaseCommand {
             player.sendMessage(Color.translate(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player> <message>."));
         }
         if (args.length > 1) {
-            final Player target = Bukkit.getPlayerExact(args[0]);
+            final Player target = Bukkit.getPlayer(args[0]);
             final String message = StringUtil.buildMessage(args, 1);
 
             if (target == null) {
-                player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
+                player.sendMessage(ChatColor.RED + "Error: That player does not exist.");
                 return false;
             }
 
@@ -43,7 +43,7 @@ public class MessageCommand extends BaseCommand {
             final PotPlayer potTarget = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
 
             if (potTarget == null) {
-                player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
+                player.sendMessage(ChatColor.RED + "Error: That player does not exist.");
                 return false;
             }
             if (potTarget == potPlayer) {
@@ -51,7 +51,7 @@ public class MessageCommand extends BaseCommand {
                 return false;
             }
             if (potTarget.isVanished() && (potPlayer.getActiveGrant().getRank().getWeight() < potTarget.getActiveGrant().getRank().getWeight())) {
-                player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
+                player.sendMessage(ChatColor.RED + "Error: That player does not exist.");
                 return false;
             }
             if (!potTarget.isIgnoring(potPlayer.getPlayer())) {

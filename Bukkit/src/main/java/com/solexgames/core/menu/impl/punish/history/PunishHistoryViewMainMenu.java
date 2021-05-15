@@ -1,7 +1,9 @@
 package com.solexgames.core.menu.impl.punish.history;
 
 import com.cryptomorin.xseries.XMaterial;
+import com.solexgames.core.CorePlugin;
 import com.solexgames.core.menu.AbstractInventoryMenu;
+import com.solexgames.core.player.punishment.Punishment;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.player.punishment.PunishmentType;
 import com.solexgames.core.util.external.impl.PunishViewPaginatedMenu;
@@ -13,18 +15,24 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 public class PunishHistoryViewMainMenu extends AbstractInventoryMenu {
 
     private Player player;
     private String target;
+    private UUID targetUuid;
 
-    public PunishHistoryViewMainMenu(Player player, String target) {
-        super("Punishment history of: " + (Bukkit.getPlayerExact(target) != null ? Bukkit.getPlayerExact(target).getDisplayName() : target), 9);
+    public PunishHistoryViewMainMenu(Player player, UUID targetUuid, String target) {
+        super("Punishments for: " + (Bukkit.getPlayer(target) != null ? Bukkit.getPlayer(target).getDisplayName() : target), 9);
+
         this.player = player;
         this.target = target;
-        this.update();
+        this.targetUuid = targetUuid;
+
+
     }
 
     public void update() {
@@ -78,26 +86,32 @@ public class PunishHistoryViewMainMenu extends AbstractInventoryMenu {
         if (topInventory.equals(clickedInventory)) {
             event.setCancelled(true);
 
-            ItemStack item = event.getCurrentItem();
+            final ItemStack item = event.getCurrentItem();
 
-            if (item == null || item.getType() == XMaterial.AIR.parseMaterial()) return;
-            switch (event.getRawSlot()) {
-                case 2:
-                    new PunishViewPaginatedMenu(this.player, this.target, PunishmentType.WARN).openMenu(this.player);
-                    break;
-                case 3:
-                    new PunishViewPaginatedMenu(this.player, this.target, PunishmentType.KICK).openMenu(this.player);
-                    break;
-                case 4:
-                    new PunishViewPaginatedMenu(this.player, this.target, PunishmentType.MUTE).openMenu(this.player);
-                    break;
-                case 5:
-                    new PunishViewPaginatedMenu(this.player, this.target, PunishmentType.BAN).openMenu(this.player);
-                    break;
-                case 6:
-                    new PunishViewPaginatedMenu(this.player, this.target, PunishmentType.BLACKLIST).openMenu(this.player);
-                    break;
+            if (item == null || item.getType() == XMaterial.AIR.parseMaterial()) {
+                return;
             }
+
+            final PunishmentType punishmentType = this.getByInt(event.getRawSlot());
+
+            if (punishmentType != null) {
+                new PunishViewPaginatedMenu(this.player, this.target, this.targetUuid, punishmentType).openMenu(this.player);
+            }
+        }
+    }
+
+    public PunishmentType getByInt(int slot) {
+        switch (slot) {
+            case 2:
+                return PunishmentType.WARN;
+            case 4:
+                return PunishmentType.MUTE;
+            case 5:
+                return PunishmentType.BAN;
+            case 6:
+                return PunishmentType.BLACKLIST;
+            default:
+                return PunishmentType.KICK;
         }
     }
 }

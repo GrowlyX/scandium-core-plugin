@@ -54,7 +54,7 @@ public class PlayerManager {
     }
 
     public PotPlayer getPlayer(String name) {
-        final Player player = Bukkit.getPlayerExact(name);
+        final Player player = Bukkit.getPlayer(name);
 
         if (player == null) {
             return null;
@@ -330,6 +330,10 @@ public class PlayerManager {
         for (String string : strings) {
             RedisUtil.publishAsync(RedisUtil.onGlobalBroadcastPermission(Color.translate(string), "scandium.staff"));
         }
+    }
+
+    public void sendToNetworkStaffFormatted(String s) {
+        RedisUtil.publishAsync(RedisUtil.onGlobalBroadcastPermission(Color.translate("&3[S] &7[" + CorePlugin.getInstance().getServerName() + "] " + s), "scandium.staff"));
     }
 
     public void sendFreezeMessage(Player player) {

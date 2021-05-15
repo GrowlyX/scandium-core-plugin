@@ -32,12 +32,12 @@ public class ReportCommand extends BaseCommand {
         }
 
         if (args.length == 1) {
-            Player target = Bukkit.getPlayerExact(args[0]);
+            Player target = Bukkit.getPlayer(args[0]);
 
             if (target != null) {
                 new ReportMenu(player, target).open(player);
             } else {
-                player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
+                player.sendMessage(ChatColor.RED + "Error: That player does not exist.");
             }
         }
 

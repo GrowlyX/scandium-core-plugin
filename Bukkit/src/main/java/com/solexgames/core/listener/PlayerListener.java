@@ -4,7 +4,7 @@ import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ChatChannelType;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.manager.ServerManager;
-import com.solexgames.core.menu.IMenu;
+import com.solexgames.core.menu.AbstractInventoryMenu;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.punishment.PunishmentStrings;
 import com.solexgames.core.server.NetworkServer;
@@ -114,12 +114,6 @@ public class PlayerListener implements Listener {
                 ));
             }
 
-            if (potPlayer.isAutoVanish()) {
-                potPlayer.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getServerManager().getAutomaticallyPutInto().replace("<value>", "vanish")));
-
-                Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getPlayerManager().vanishPlayerRaw(potPlayer.getPlayer()), 10L);
-            }
-
             if (potPlayer.isAutoModMode() && !CorePlugin.getInstance().getServerName().contains("hub")) {
                 potPlayer.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getServerManager().getAutomaticallyPutInto().replace("<value>", "mod mode")));
 
@@ -138,6 +132,12 @@ public class PlayerListener implements Listener {
                 event.getPlayer().sendMessage(Color.SECONDARY_COLOR + "You've been automatically disguised as " + potPlayer.getColorByRankColor() + potPlayer.getDisguiseRank().getName() + Color.SECONDARY_COLOR + "!");
             }
         });
+
+        if (potPlayer.isAutoVanish()) {
+            potPlayer.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getServerManager().getAutomaticallyPutInto().replace("<value>", "vanish")));
+
+            Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getPlayerManager().vanishPlayerRaw(potPlayer.getPlayer()), 2L);
+        }
 
         CorePlugin.getInstance().getNMS().setupTablist(event.getPlayer());
     }
@@ -165,23 +165,23 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
-    public void onInventoryClick(InventoryClickEvent event) throws IOException, ParseException {
-        if (event.getInventory().getHolder() instanceof IMenu) {
-            ((IMenu) event.getInventory().getHolder()).onInventoryClick(event);
+    public void onInventoryClick(InventoryClickEvent event) {
+        if (event.getInventory().getHolder() instanceof AbstractInventoryMenu) {
+            ((AbstractInventoryMenu) event.getInventory().getHolder()).onInventoryClick(event);
         }
     }
 
     @EventHandler
     public void onInventoryDrag(InventoryDragEvent event) {
-        if (event.getInventory().getHolder() instanceof IMenu) {
-            ((IMenu) event.getInventory().getHolder()).onInventoryDrag(event);
+        if (event.getInventory().getHolder() instanceof AbstractInventoryMenu) {
+            ((AbstractInventoryMenu) event.getInventory().getHolder()).onInventoryDrag(event);
         }
     }
 
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent event) {
-        if (event.getInventory().getHolder() instanceof IMenu) {
-            ((IMenu) event.getInventory().getHolder()).onInventoryClose(event);
+        if (event.getInventory().getHolder() instanceof AbstractInventoryMenu) {
+            ((AbstractInventoryMenu) event.getInventory().getHolder()).onInventoryClose(event);
         }
     }
 
@@ -394,7 +394,7 @@ public class PlayerListener implements Listener {
         });
 
         if (event.getPlayer().hasPermission("scandium.staff")) {
-            new SwitchTask(event.getPlayer().getDisplayName()).runTaskLaterAsynchronously(CorePlugin.getInstance(), 60L);
+            new SwitchTask(event.getPlayer().getDisplayName()).runTaskLaterAsynchronously(CorePlugin.getInstance(), 20L);
         }
     }
 
@@ -411,7 +411,7 @@ public class PlayerListener implements Listener {
                 if (!server.getServerName().equals(CorePlugin.getInstance().getServerName())) {
                     RedisUtil.publishAsync(RedisUtil.onSwitchServer(this.displayName, server.getServerName()));
                 } else {
-                    new SwitchTask(this.displayName).runTaskLaterAsynchronously(CorePlugin.getInstance(), 60L);
+                    new SwitchTask(this.displayName).runTaskLaterAsynchronously(CorePlugin.getInstance(), 20L);
                 }
             } else {
                 RedisUtil.publishAsync(RedisUtil.onDisconnect(this.displayName));

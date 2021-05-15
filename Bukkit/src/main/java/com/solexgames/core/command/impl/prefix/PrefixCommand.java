@@ -30,7 +30,7 @@ public class PrefixCommand extends BaseCommand {
                 sender.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player> <tag>.");
             }
             if (args.length == 2) {
-                final Player target = Bukkit.getPlayerExact(args[0]);
+                final Player target = Bukkit.getPlayer(args[0]);
 
                 if (target == null) {
                     sender.sendMessage(ChatColor.RED + "That player does not exist.");
@@ -108,7 +108,7 @@ public class PrefixCommand extends BaseCommand {
                         this.sendHelp(player);
                     }
                     if (args.length >= 3) {
-                        final Player target = Bukkit.getPlayerExact(args[1]);
+                        final Player target = Bukkit.getPlayer(args[1]);
 
                         if (target != null) {
                             final Prefix prefix = Prefix.getByName(args[2]);
@@ -122,7 +122,7 @@ public class PrefixCommand extends BaseCommand {
                                 player.sendMessage(ChatColor.RED + ("Error: That prefix does not exist."));
                             }
                         } else {
-                            player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
+                            player.sendMessage(ChatColor.RED + "Error: That player does not exist.");
                         }
                     }
                     break;
@@ -131,7 +131,7 @@ public class PrefixCommand extends BaseCommand {
                         this.sendHelp(player);
                     }
                     if (args.length >= 3) {
-                        final Player target = Bukkit.getPlayerExact(args[1]);
+                        final Player target = Bukkit.getPlayer(args[1]);
 
                         if (target != null) {
                             final Prefix prefix = Prefix.getByName(args[2]);
@@ -147,7 +147,7 @@ public class PrefixCommand extends BaseCommand {
                                 player.sendMessage(ChatColor.RED + ("Error: That prefix does not exist."));
                             }
                         } else {
-                            player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
+                            player.sendMessage(ChatColor.RED + "Error: That player does not exist.");
                         }
                     }
                     break;

@@ -1,18 +1,19 @@
-package com.solexgames.core.command.impl.essential;
+package com.solexgames.core.command.impl.inactive;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.manager.ServerManager;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Command(label = "spawn", hidden = false)
-public class SpawnCommand extends BaseCommand {
+@Command(label = "setspawn")
+public class SetSpawnCommand extends BaseCommand {
 
     @Override
     public boolean command(CommandSender sender, String label, String[] args) {
@@ -23,19 +24,20 @@ public class SpawnCommand extends BaseCommand {
 
         final Player player = (Player) sender;
 
-        if (!player.hasPermission("scandium.command.spawn")) {
+        if (!player.hasPermission("scandium.command.setspawn")) {
             player.sendMessage(NO_PERMISSION);
             return false;
         }
 
         final ServerManager manager = CorePlugin.getInstance().getServerManager();
+        final String location = CorePlugin.GSON.toJson(player.getLocation());
 
-        if (manager.getSpawnLocation() != null) {
-            player.teleport(manager.getSpawnLocation());
-            player.sendMessage(ChatColor.GREEN + "You've been teleported to spawn!");
-        } else {
-            player.sendMessage(ChatColor.RED + "The spawn location hasn't been set on this server!");
-        }
+        manager.setSpawnLocation(player.getLocation());
+
+        CorePlugin.getInstance().getConfig().set("locations.spawnpoint", location);
+        CorePlugin.getInstance().saveConfig();
+
+        player.sendMessage(ChatColor.GREEN + "The spawn location has been set to your current location!");
 
         return false;
     }

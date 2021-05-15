@@ -85,7 +85,7 @@ public class AltsCommand extends BaseCommand {
             return stringBuilder.toString();
         }
 
-        if (Bukkit.getPlayerExact(document.getString("name")) != null) {
+        if (Bukkit.getPlayer(document.getString("name")) != null) {
             stringBuilder.append(ChatColor.GREEN);
         } else {
             stringBuilder.append(ChatColor.RED);

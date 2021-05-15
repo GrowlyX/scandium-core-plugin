@@ -237,7 +237,7 @@ public class JedisListener implements JedisHandler {
 
     @JedisSubscription(action = RedisAction.RANK_CREATE_UPDATE)
     public void onRankCreateUpdate(JsonAppender jsonAppender) {
-        final Player rankCreatePlayer = Bukkit.getPlayerExact(jsonAppender.getParam("PLAYER"));
+        final Player rankCreatePlayer = Bukkit.getPlayer(jsonAppender.getParam("PLAYER"));
         final String rankCreateName = jsonAppender.getParam("NAME");
         final UUID rankCreateUuid = UUID.fromString(jsonAppender.getParam("UUID"));
         final Rank rankCreate = new Rank(rankCreateUuid, rankCreateName);
@@ -291,7 +291,7 @@ public class JedisListener implements JedisHandler {
         final Rank rankRemove = Rank.getByName(jsonAppender.getParam("RANK"));
 
         if (rankRemove != null) {
-            final Player rankRemovePlayer = Bukkit.getPlayerExact(jsonAppender.getParam("PLAYER"));
+            final Player rankRemovePlayer = Bukkit.getPlayer(jsonAppender.getParam("PLAYER"));
 
             if (rankRemovePlayer != null) {
                 rankRemovePlayer.sendMessage(Color.SECONDARY_COLOR + "You've deleted the rank with the name " + ChatColor.GRAY + rankRemove.getColor() + rankRemove.getItalic() + rankRemove.getName() + Color.SECONDARY_COLOR + "!");

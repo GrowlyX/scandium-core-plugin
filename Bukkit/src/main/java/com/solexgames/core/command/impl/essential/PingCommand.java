@@ -30,7 +30,7 @@ public class PingCommand extends BaseCommand {
         }
 
         if (args.length == 1) {
-            final Player target = Bukkit.getPlayerExact(args[0]);
+            final Player target = Bukkit.getPlayer(args[0]);
 
             if (target != null) {
                 player.sendMessage(target.getDisplayName() + Color.SECONDARY_COLOR + "'s ping is currently: " + Color.MAIN_COLOR + PlayerUtil.getPing(target) + "ms" + Color.SECONDARY_COLOR + "!");

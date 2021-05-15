@@ -35,7 +35,7 @@ public class FreezeCommand extends BaseCommand {
             sender.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player>.");
         }
         if (args.length == 1) {
-            final Player target = Bukkit.getPlayerExact(args[0]);
+            final Player target = Bukkit.getPlayer(args[0]);
 
             if (target != null) {
                 final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
@@ -63,7 +63,7 @@ public class FreezeCommand extends BaseCommand {
                     }
                 }
             } else {
-                player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
+                player.sendMessage(ChatColor.RED + "Error: That player does not exist.");
             }
         }
         return false;

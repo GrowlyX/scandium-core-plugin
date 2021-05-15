@@ -25,7 +25,7 @@ public class SudoCommand extends BaseCommand {
         }
 
         if (args.length > 1) {
-            final Player target = Bukkit.getPlayerExact(args[0]);
+            final Player target = Bukkit.getPlayer(args[0]);
             final String message = StringUtil.buildMessage(args, 1);
 
             if (target != null) {

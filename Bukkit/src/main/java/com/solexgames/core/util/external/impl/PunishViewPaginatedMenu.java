@@ -32,13 +32,13 @@ public class PunishViewPaginatedMenu extends PaginatedMenu {
 
     private final UUID targetUuid;
 
-    public PunishViewPaginatedMenu(Player player, String target, PunishmentType punishmentType) {
+    public PunishViewPaginatedMenu(Player player, String target, UUID targetUuid, PunishmentType punishmentType) {
         super(9);
 
         this.player = player;
         this.target = target;
         this.punishmentType = punishmentType;
-        this.targetUuid = CorePlugin.getInstance().getUuidCache().getUuidFromUsername(target);
+        this.targetUuid = targetUuid;
     }
 
     @Override
@@ -48,7 +48,7 @@ public class PunishViewPaginatedMenu extends PaginatedMenu {
 
     @Override
     public String getPrePaginatedTitle(Player player) {
-        return "Applicable punishments of: " + (Bukkit.getPlayerExact(target) != null ? Bukkit.getPlayerExact(target).getDisplayName() : target);
+        return this.punishmentType.getName() + "s for: " + (Bukkit.getPlayer(this.target) != null ? Bukkit.getPlayer(this.target).getDisplayName() : this.target);
     }
 
     @Override
@@ -102,7 +102,7 @@ public class PunishViewPaginatedMenu extends PaginatedMenu {
         @Override
         public void clicked(Player player, ClickType clickType) {
             if (clickType.equals(ClickType.RIGHT)) {
-                new PunishRemoveConfirmMenu(player, PunishViewPaginatedMenu.this.target, this.punishment).open(player);
+                new PunishRemoveConfirmMenu(player, PunishViewPaginatedMenu.this.target, PunishViewPaginatedMenu.this.targetUuid, this.punishment).open(player);
                 PunishViewPaginatedMenu.this.setClosedByMenu(true);
             }
         }

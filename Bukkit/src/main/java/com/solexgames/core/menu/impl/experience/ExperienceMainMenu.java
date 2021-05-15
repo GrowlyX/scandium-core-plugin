@@ -21,7 +21,7 @@ public class ExperienceMainMenu extends AbstractInventoryMenu {
     public ExperienceMainMenu(Player player) {
         super("Experience", 9);
         this.player = player;
-        this.update();
+
     }
 
     @Override

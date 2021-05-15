@@ -27,7 +27,7 @@ public class AuthBypassCommand extends BaseCommand {
             return false;
         }
 
-        final Player target = Bukkit.getPlayerExact(args[0]);
+        final Player target = Bukkit.getPlayer(args[0]);
 
         if (target == null) {
             sender.sendMessage(ChatColor.RED + "Error: A player by that name couldn't be found.");

@@ -39,8 +39,6 @@ public class ReportMenu extends AbstractInventoryMenu {
 
         this.player = player;
         this.target = target;
-
-        this.update();
     }
 
     public void update() {

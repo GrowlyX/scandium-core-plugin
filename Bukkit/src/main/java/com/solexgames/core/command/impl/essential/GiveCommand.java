@@ -33,7 +33,7 @@ public class GiveCommand extends BaseCommand {
             player.sendMessage(Color.translate(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player> <amount> <item>."));
         }
         if (args.length > 2) {
-            final Player target = Bukkit.getPlayerExact(args[0]);
+            final Player target = Bukkit.getPlayer(args[0]);
 
             int amount;
             try {
@@ -46,7 +46,7 @@ public class GiveCommand extends BaseCommand {
             final String message = StringUtil.buildMessage(args, 2);
 
             if (target == null) {
-                player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
+                player.sendMessage(ChatColor.RED + "Error: That player does not exist.");
                 return false;
             }
 

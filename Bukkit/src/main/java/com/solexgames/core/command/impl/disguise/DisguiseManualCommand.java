@@ -39,7 +39,7 @@ public class DisguiseManualCommand extends BaseCommand {
            player.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/disguisemanual " + ChatColor.WHITE + "<rank> <name> <player>");
         }
         if (args.length == 3) {
-            final Player target = Bukkit.getPlayerExact(args[2]);
+            final Player target = Bukkit.getPlayer(args[2]);
 
             if (target != null) {
                 final Rank rank = Rank.getByName(args[0]);
@@ -77,7 +77,7 @@ public class DisguiseManualCommand extends BaseCommand {
                     player.sendMessage(Color.SECONDARY_COLOR + "You've disguised " + Color.MAIN_COLOR + player.getDisplayName() + Color.SECONDARY_COLOR + " as " + Color.translate(rank.getColor() + rank.getItalic()) + generatedData.getName() + ChatColor.GRAY + " (with a random skin)" + Color.SECONDARY_COLOR + ".");
                 }
             } else {
-                player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
+                player.sendMessage(ChatColor.RED + "Error: That player does not exist.");
             }
         }
 

@@ -15,7 +15,7 @@ public class ExperienceShopMainMenu extends AbstractInventoryMenu {
 
     public ExperienceShopMainMenu() {
         super("Purchase", 9);
-        this.update();
+
     }
 
     @Override

@@ -42,16 +42,16 @@ public class ReplyCommand extends BaseCommand {
             final PotPlayer potTarget = CorePlugin.getInstance().getPlayerManager().getPlayer(potPlayer.getLastRecipient());
 
             if (potTarget == null) {
-                player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
+                player.sendMessage(ChatColor.RED + "Error: That player does not exist.");
                 return false;
             }
 
             if (!potPlayer.getLastRecipient().isOnline()) {
-                player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
+                player.sendMessage(ChatColor.RED + "Error: That player does not exist.");
                 return false;
             }
             if (potTarget.isVanished() && (potPlayer.getActiveGrant().getRank().getWeight() < potTarget.getActiveGrant().getRank().getWeight())) {
-                player.sendMessage(ChatColor.RED + ("Error: That player does not exist."));
+                player.sendMessage(ChatColor.RED + "Error: That player does not exist.");
                 return false;
             }
             if (!potTarget.isIgnoring(potPlayer.getPlayer())) {

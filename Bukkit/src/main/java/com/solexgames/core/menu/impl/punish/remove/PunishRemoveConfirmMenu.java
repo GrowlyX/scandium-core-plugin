@@ -10,6 +10,7 @@ import com.solexgames.core.util.RedisUtil;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.util.external.impl.PunishViewPaginatedMenu;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -17,6 +18,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 @Getter
@@ -25,13 +27,17 @@ public class PunishRemoveConfirmMenu extends AbstractInventoryMenu {
     public Player player;
     public String target;
     public Punishment punishment;
+    public UUID uuid;
 
-    public PunishRemoveConfirmMenu(Player player, String target, Punishment punishment) {
-        super("Punishment removal for: &b" + target, 9 * 5);
+    public PunishRemoveConfirmMenu(Player player, String target, UUID uuid, Punishment punishment) {
+        super("Punishment removal for: &e" + (Bukkit.getPlayer(target) != null ? Bukkit.getPlayer(target).getDisplayName() : target), 9 * 5);
+
         this.punishment = punishment;
         this.player = player;
         this.target = target;
-        this.update();
+        this.uuid = uuid;
+
+
     }
 
     @Override
@@ -87,7 +93,7 @@ public class PunishRemoveConfirmMenu extends AbstractInventoryMenu {
 
                 player.sendMessage(Color.SECONDARY_COLOR + "You've removed the grant with the ID: " + Color.MAIN_COLOR + "#" + punishment.getPunishIdentification() + Color.SECONDARY_COLOR + " from " + Color.MAIN_COLOR + target + Color.SECONDARY_COLOR + "'s history!");
 
-                new PunishViewPaginatedMenu(player, this.target, this.punishment.getPunishmentType()).openMenu(player);
+                new PunishViewPaginatedMenu(player, this.target, this.uuid, this.punishment.getPunishmentType()).openMenu(player);
             } else if (ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()).contains("Cancel")) {
                 player.sendMessage(ChatColor.RED + ("You've cancelled the current punishment remove process."));
                 player.closeInventory();

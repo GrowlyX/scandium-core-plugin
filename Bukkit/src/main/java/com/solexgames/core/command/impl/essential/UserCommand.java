@@ -58,7 +58,7 @@ public class UserCommand extends BaseCommand {
                                 }
                                 if (args.length == 4) {
                                     final String permission = args[3];
-                                    final Player target = Bukkit.getPlayerExact(args[2]);
+                                    final Player target = Bukkit.getPlayer(args[2]);
 
                                     if (target != null) {
                                         final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
@@ -83,7 +83,7 @@ public class UserCommand extends BaseCommand {
                                 }
                                 if (args.length == 4) {
                                     final String permission = args[3];
-                                    final Player target = Bukkit.getPlayerExact(args[2]);
+                                    final Player target = Bukkit.getPlayer(args[2]);
 
                                     if (target != null) {
                                         final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
@@ -106,7 +106,7 @@ public class UserCommand extends BaseCommand {
                                     this.sendHelp(sender);
                                 }
                                 if (args.length == 3) {
-                                    final Player target = Bukkit.getPlayerExact(args[2]);
+                                    final Player target = Bukkit.getPlayer(args[2]);
 
                                     if (target != null) {
                                         final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
@@ -132,7 +132,7 @@ public class UserCommand extends BaseCommand {
                         this.sendHelp(sender);
                     }
                     if (args.length == 3) {
-                        final Player target = Bukkit.getPlayerExact(args[1]);
+                        final Player target = Bukkit.getPlayer(args[1]);
                         final Rank rank = Rank.getByName(args[2]);
 
                         if (target != null) {

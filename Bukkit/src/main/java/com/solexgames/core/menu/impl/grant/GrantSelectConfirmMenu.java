@@ -38,7 +38,7 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
     private final String scope;
 
     public GrantSelectConfirmMenu(Player player, Document document, Rank rank, long duration, String reason, boolean permanent, String scope) {
-        super("Confirm grant for: &b" + (Bukkit.getPlayerExact(document.getString("name")) != null ? Bukkit.getPlayerExact(document.getString("name")).getDisplayName() : document.getString("name")), 9 * 5);
+        super("Confirm grant for: &b" + (Bukkit.getPlayer(document.getString("name")) != null ? Bukkit.getPlayer(document.getString("name")).getDisplayName() : document.getString("name")), 9 * 5);
 
         this.player = player;
         this.document = document;
@@ -48,7 +48,7 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
         this.permanent = permanent;
         this.scope = scope;
 
-        this.update();
+
     }
 
     public void update() {
@@ -61,7 +61,7 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
             this.inventory.setItem(i, new ItemBuilder(XMaterial.GREEN_TERRACOTTA.parseMaterial(), 13).setDisplayName("&a&lConfirm Grant").addLore(Arrays.asList(
                     network.getMainColor() + "&m--------------------------------",
                     network.getSecondaryColor() + "Issuer: " + network.getMainColor() + player.getDisplayName(),
-                    network.getSecondaryColor() + "Target: " + network.getMainColor() + (Bukkit.getPlayerExact(document.getString("name")) != null ? Bukkit.getPlayerExact(document.getString("name")).getDisplayName() : document.getString("name")),
+                    network.getSecondaryColor() + "Target: " + network.getMainColor() + (Bukkit.getPlayer(document.getString("name")) != null ? Bukkit.getPlayer(document.getString("name")).getDisplayName() : document.getString("name")),
                     network.getSecondaryColor() + "Rank: " + network.getMainColor() + rank.getColor() + rank.getItalic() + rank.getName(),
                     network.getSecondaryColor() + "Duration: " + network.getMainColor() + (isPermanent() ? "&4Forever" : DurationFormatUtils.formatDurationWords(duration, true, true)),
                     network.getSecondaryColor() + "Reason: " + network.getMainColor() + reason,
