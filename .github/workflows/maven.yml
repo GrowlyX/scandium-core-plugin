@@ -24,4 +24,4 @@ jobs:
       run: mvn -B package --file pom.xml
       
     - name: action-maven
-      uses: GrowlyX/Scandium@vLATEST
+      uses: GrowlyX/Scandium@master
