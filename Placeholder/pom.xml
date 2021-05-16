@@ -6,12 +6,10 @@
 
     <parent>
         <groupId>com.solexgames</groupId>
-        <artifactId>Scandium-parent</artifactId>
+        <artifactId>Scandium</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <artifactId>Placeholders</artifactId>
-
-    <name>Placeholders</name>
+    <artifactId>Placeholder</artifactId>
 
     <properties>
         <java.version>1.8</java.version>
@@ -78,7 +76,7 @@
         </dependency>
         <dependency>
             <groupId>com.solexgames</groupId>
-            <artifactId>Scandium-legacy</artifactId>
+            <artifactId>Bukkit</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>

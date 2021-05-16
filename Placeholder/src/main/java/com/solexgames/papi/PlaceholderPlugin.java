@@ -18,7 +18,7 @@ public final class PlaceholderPlugin extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
-        CoreExtension coreExtension = new CoreExtension();
+        final CoreExtension coreExtension = new CoreExtension();
 
         if (coreExtension.canRegister()) {
             coreExtension.register();

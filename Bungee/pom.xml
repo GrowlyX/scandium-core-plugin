@@ -6,10 +6,10 @@
 
     <parent>
         <groupId>com.solexgames</groupId>
-        <artifactId>Scandium-parent</artifactId>
+        <artifactId>Scandium</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <artifactId>Scandium-bungee</artifactId>
+    <artifactId>Bungee</artifactId>
 
     <properties>
         <java.version>1.8</java.version>

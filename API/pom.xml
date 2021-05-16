@@ -6,7 +6,7 @@
 
     <parent>
         <groupId>com.solexgames</groupId>
-        <artifactId>Scandium-parent</artifactId>
+        <artifactId>Scandium</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <artifactId>API</artifactId>
@@ -16,7 +16,7 @@
     <dependencies>
         <dependency>
             <groupId>com.solexgames</groupId>
-            <artifactId>Scandium-legacy</artifactId>
+            <artifactId>Bukkit</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
