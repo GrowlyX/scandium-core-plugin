@@ -51,7 +51,7 @@ public abstract class BaseCommand extends Command {
 
         this.setLabel(command.label());
         this.setName(command.label());
-        this.setAliases(Arrays.asList(command.aliases().clone()));
+        this.setAliases(Arrays.asList(command.aliases()));
 
         CorePlugin.getInstance().registerCommand(this);
         Bukkit.getHelpMap().addTopic(new CustomHelpTopic(this, Sets.newHashSet(this.getAliases())));
