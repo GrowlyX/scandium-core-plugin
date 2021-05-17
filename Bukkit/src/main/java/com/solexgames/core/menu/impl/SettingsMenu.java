@@ -33,7 +33,7 @@ public class SettingsMenu extends AbstractInventoryMenu {
     public void update() {
         final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(this.player);
 
-        this.inventory.setItem(2, new ItemBuilder(XMaterial.PAPER.parseMaterial())
+        this.inventory.setItem(0, new ItemBuilder(XMaterial.PAPER.parseMaterial())
                 .addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS)
                 .setDisplayName(Color.MAIN_COLOR + ChatColor.BOLD.toString() + "Global Chat")
                 .addLore(
@@ -47,7 +47,7 @@ public class SettingsMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(3, new ItemBuilder(XMaterial.EXPERIENCE_BOTTLE.parseMaterial())
+        this.inventory.setItem(1, new ItemBuilder(XMaterial.EXPERIENCE_BOTTLE.parseMaterial())
                 .setDisplayName(Color.MAIN_COLOR + ChatColor.BOLD.toString() + "Server Tips")
                 .addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS)
                 .addLore(
@@ -61,7 +61,7 @@ public class SettingsMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(4, new ItemBuilder(XMaterial.EMERALD.parseMaterial())
+        this.inventory.setItem(2, new ItemBuilder(XMaterial.EMERALD.parseMaterial())
                 .setDisplayName(Color.MAIN_COLOR + ChatColor.BOLD.toString() + "Receive DMs")
                 .addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS)
                 .addLore(
@@ -75,7 +75,7 @@ public class SettingsMenu extends AbstractInventoryMenu {
                 )
                 .create()
         );
-        this.inventory.setItem(5, new ItemBuilder(XMaterial.JUKEBOX.parseMaterial())
+        this.inventory.setItem(3, new ItemBuilder(XMaterial.JUKEBOX.parseMaterial())
                 .setDisplayName(Color.MAIN_COLOR + ChatColor.BOLD.toString() + "DMs Sounds")
                 .addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS)
                 .addLore(
@@ -90,7 +90,7 @@ public class SettingsMenu extends AbstractInventoryMenu {
                 .create()
         );
         if (player.hasPermission("scandium.staff")) {
-            this.inventory.setItem(6, new ItemBuilder(XMaterial.BLAZE_POWDER.parseMaterial())
+            this.inventory.setItem(4, new ItemBuilder(XMaterial.BLAZE_POWDER.parseMaterial())
                     .setDisplayName(Color.MAIN_COLOR + ChatColor.BOLD.toString() + "Staff Messages")
                     .addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS)
                     .addLore(
@@ -105,7 +105,7 @@ public class SettingsMenu extends AbstractInventoryMenu {
                     .create()
             );
         } else {
-            this.inventory.setItem(6, new ItemBuilder(XMaterial.BLAZE_POWDER.parseMaterial())
+            this.inventory.setItem(4, new ItemBuilder(XMaterial.BLAZE_POWDER.parseMaterial())
                     .setDisplayName(Color.MAIN_COLOR + ChatColor.BOLD.toString() + "Global Broadcasts")
                     .addLore(
                             "",
@@ -136,19 +136,19 @@ public class SettingsMenu extends AbstractInventoryMenu {
 
             if (item == null || item.getType() == XMaterial.AIR.parseMaterial()) return;
             switch (event.getRawSlot()) {
-                case 2:
+                case 0:
                     potPlayer.setCanSeeGlobalChat(!potPlayer.isCanSeeGlobalChat());
                     break;
-                case 3:
+                case 1:
                     potPlayer.setCanSeeTips(!potPlayer.isCanSeeTips());
                     break;
-                case 4:
+                case 2:
                     potPlayer.setCanReceiveDms(!potPlayer.isCanReceiveDms());
                     break;
-                case 5:
+                case 3:
                     potPlayer.setCanReceiveDmsSounds(!potPlayer.isCanReceiveDmsSounds());
                     break;
-                case 6:
+                case 4:
                     if (player.hasPermission("scandium.staff")) {
                         potPlayer.setCanSeeStaffMessages(!potPlayer.isCanSeeStaffMessages());
                     } else {
@@ -157,7 +157,7 @@ public class SettingsMenu extends AbstractInventoryMenu {
                     break;
             }
 
-
+            this.update();
         }
     }
 }

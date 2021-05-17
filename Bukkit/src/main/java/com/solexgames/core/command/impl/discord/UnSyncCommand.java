@@ -25,12 +25,6 @@ public class UnSyncCommand extends BaseCommand {
         }
 
         final Player player = (Player) sender;
-
-        if (!Bukkit.getPluginManager().isPluginEnabled("Indium")) {
-            player.sendMessage(ChatColor.RED + "Error: This command is disabled on this server.");
-            return false;
-        }
-
         final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
         if (potPlayer.isSynced()) {

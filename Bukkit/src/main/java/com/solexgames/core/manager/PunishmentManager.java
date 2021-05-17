@@ -65,10 +65,6 @@ public class PunishmentManager {
         }));
     }
 
-    public void savePunishments() {
-        this.punishments.forEach(Punishment::savePunishment);
-    }
-
     public void handlePunishment(Punishment punishment, String issuer, Document targetDocument, boolean silent) {
         final String name = targetDocument.getString("name");
         final Rank rank = Rank.getByName(targetDocument.getString("rankName"));
@@ -94,12 +90,15 @@ public class PunishmentManager {
                 final Rank playerRank = Rank.getByName(document.getString("rankName"));
                 final String formattedName = playerRank.getColor() + playerRank.getItalic() + document.get("name");
                 final String issuerName = (issuer != null ? formattedName : "&4Console");
-                final String clickableLore = Color.SECONDARY_COLOR + ChatColor.STRIKETHROUGH.toString() + "---------------------------------\n" + Color.SECONDARY_COLOR + "Added by: " + issuerName + "\n" + Color.SECONDARY_COLOR + "Added for: " + ChatColor.WHITE + punishment.getReason() + ChatColor.GRAY + "(" + punishment.getExpirationString() + ")\n" + Color.SECONDARY_COLOR + ChatColor.STRIKETHROUGH.toString() + "---------------------------------";
+                final String clickableLore = Color.SECONDARY_COLOR + ChatColor.STRIKETHROUGH.toString() + "---------------------------------\n" +
+                        Color.SECONDARY_COLOR + "Added by: " + issuerName + "\n" +
+                        Color.SECONDARY_COLOR + "Added for: " + ChatColor.WHITE + punishment.getReason() + ChatColor.GRAY + "(" + punishment.getExpirationString() + ")\n" +
+                        Color.SECONDARY_COLOR + ChatColor.STRIKETHROUGH.toString() + "---------------------------------";
 
                 if (silent) {
-                    PlayerUtil.sendClickableTo("&7[Silent] " + playerFormattedName + " &awas " + punishmentExplanation + " by &4Console&a.",
+                    PlayerUtil.sendClickableTo("&7[Silent] " + playerFormattedName + " &awas " + punishmentExplanation + " by &4" + issuerName + "&a" + durationFormat,
                             clickableLore,
-                            "/c " + document.getString("name"),
+                            "/c " + targetDocument.getString("name"),
                             ClickEvent.Action.SUGGEST_COMMAND);
                 } else {
                     Bukkit.broadcastMessage(Color.translate(
@@ -107,10 +106,16 @@ public class PunishmentManager {
                     ));
                 }
             } else {
+                final String clickableLore = Color.SECONDARY_COLOR + ChatColor.STRIKETHROUGH.toString() + "---------------------------------\n" +
+                        Color.SECONDARY_COLOR + "Added by: " + ChatColor.DARK_RED + "Console" + "\n" +
+                        Color.SECONDARY_COLOR + "Added for: " + ChatColor.WHITE + punishment.getReason() + ChatColor.GRAY + "(" + punishment.getExpirationString() + ")\n" +
+                        Color.SECONDARY_COLOR + ChatColor.STRIKETHROUGH.toString() + "---------------------------------";
+
                 if (silent) {
-                    PlayerUtil.sendClickableTo("&7[Silent] " + playerFormattedName + " &awas " + punishmentExplanation + " by &4Console&a.",
-                            "",
-                            "", ClickEvent.Action.SUGGEST_COMMAND);
+                    PlayerUtil.sendClickableTo("&7[Silent] " + playerFormattedName + " &awas " + punishmentExplanation + " by &4Console&a" + durationFormat,
+                            clickableLore,
+                            "/c " + targetDocument.getString("name"),
+                            ClickEvent.Action.SUGGEST_COMMAND);
                 } else {
                     Bukkit.broadcastMessage(Color.translate(
                             playerFormattedName + " &awas " + punishmentExplanation + " by &4Console&a."
@@ -164,7 +169,7 @@ public class PunishmentManager {
                 if (player != null) {
                     player.sendMessage(ChatColor.RED + "Error: That player is not valid!");
                 } else {
-                    Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "That player is not valid!");
+                    Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Error: That player is not valid!");
                 }
 
                 return;
@@ -187,6 +192,15 @@ public class PunishmentManager {
                 return;
             }
 
+            final String formattedTarget = (playerRank != null ? playerRank.getColor() + playerRank.getItalic() : ChatColor.GRAY) + playerName;
+            final String responseMessage = message.endsWith("-s") ? ChatColor.GRAY + "[Silent] " : "" + ChatColor.GREEN + "You've un" + punishmentType.getEdName().toLowerCase() + " " + formattedTarget + " for " + Color.SECONDARY_COLOR + message + ChatColor.GREEN + ".";
+
+            if (player != null) {
+                player.sendMessage(responseMessage);
+            } else {
+                Bukkit.getConsoleSender().sendMessage(responseMessage);
+            }
+
             punishmentList.stream().findFirst().ifPresent(punishment -> {
                 punishment.setRemoved(true);
                 punishment.setRemovalReason(message.replace("-s", ""));
@@ -195,10 +209,10 @@ public class PunishmentManager {
                 punishment.setRemoverName((player != null ? player.getName() : null));
 
                 if (message.endsWith("-s")) {
-                    PlayerUtil.sendToStaff("&7[S] " + (playerRank != null ? playerRank.getColor() + playerRank.getItalic() : ChatColor.GRAY) + playerName + " &awas " + "un" + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (player != null ? player.getDisplayName() : "Console") + ChatColor.GREEN + ".");
+                    PlayerUtil.sendToStaff("&7[Silent] " + formattedTarget + " &awas " + "un" + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (player != null ? player.getDisplayName() : "Console") + ChatColor.GREEN + ".");
                 } else {
                     Bukkit.broadcastMessage(Color.translate(
-                            "&7" + (playerRank != null ? playerRank.getColor() + playerRank.getItalic() : ChatColor.GRAY) + playerName + " &awas un" + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (player != null ? player.getDisplayName() : "Console") + ChatColor.GREEN + "."
+                            "&7" + formattedTarget + " &awas un" + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (player != null ? player.getDisplayName() : "Console") + ChatColor.GREEN + "."
                     ));
                 }
 
