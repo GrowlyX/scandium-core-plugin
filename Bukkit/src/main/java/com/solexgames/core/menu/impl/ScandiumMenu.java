@@ -24,6 +24,8 @@ public class ScandiumMenu extends AbstractInventoryMenu {
         super("Control Panel", 9);
 
         this.player = player;
+
+        this.update();
     }
 
     public void update() {

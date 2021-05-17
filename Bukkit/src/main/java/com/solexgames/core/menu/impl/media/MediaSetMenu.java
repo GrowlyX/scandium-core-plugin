@@ -26,7 +26,7 @@ public class MediaSetMenu extends AbstractInventoryMenu {
     public MediaSetMenu(Player player) {
         super("Social Media", 9);
         this.player = player;
-
+        this.update();
     }
 
     public void update() {

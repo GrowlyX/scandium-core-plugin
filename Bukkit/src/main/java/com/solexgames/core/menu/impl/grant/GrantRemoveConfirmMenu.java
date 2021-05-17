@@ -38,7 +38,7 @@ public class GrantRemoveConfirmMenu extends AbstractInventoryMenu {
         this.target = target;
         this.reason = reason;
 
-
+        this.update();
     }
 
     @Override

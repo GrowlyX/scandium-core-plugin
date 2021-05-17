@@ -37,7 +37,7 @@ public class PunishRemoveConfirmMenu extends AbstractInventoryMenu {
         this.target = target;
         this.uuid = uuid;
 
-
+        this.update();
     }
 
     @Override

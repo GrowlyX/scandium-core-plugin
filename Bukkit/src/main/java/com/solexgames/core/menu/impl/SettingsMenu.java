@@ -27,7 +27,7 @@ public class SettingsMenu extends AbstractInventoryMenu {
 
         this.player = player;
 
-
+        this.update();
     }
 
     public void update() {

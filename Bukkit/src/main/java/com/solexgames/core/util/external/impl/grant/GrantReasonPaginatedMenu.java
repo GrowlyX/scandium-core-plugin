@@ -106,7 +106,7 @@ public class GrantReasonPaginatedMenu extends PaginatedMenu {
 
             @Override
             public void clicked(Player player, ClickType clickType) {
-                new ReasonButton(XMaterial.PAPER, 0, "Unspecified", GrantReasonPaginatedMenu.this).clicked(player, clickType);
+                new ReasonButton(XMaterial.PAPER, 0, "Unspecified").clicked(player, clickType);
             }
         });
 
@@ -122,24 +122,22 @@ public class GrantReasonPaginatedMenu extends PaginatedMenu {
     public Map<Integer, Button> getAllPagesButtons(Player player) {
         Map<Integer, Button> buttonMap = new HashMap<>();
 
-        buttonMap.put(0, new ReasonButton(XMaterial.WHITE_WOOL, 0, "Rank Migration", this));
-        buttonMap.put(1, new ReasonButton(XMaterial.ORANGE_WOOL, 1, "Buycraft Issues", this));
-        buttonMap.put(2, new ReasonButton(XMaterial.PINK_WOOL, 2, "Promotion", this));
-        buttonMap.put(3, new ReasonButton(XMaterial.LIGHT_BLUE_WOOL, 3, "Demotion", this));
-        buttonMap.put(4, new ReasonButton(XMaterial.YELLOW_WOOL, 4, "Giveaway Winner", this));
-        buttonMap.put(5, new ReasonButton(XMaterial.GREEN_WOOL, 5, "Event Winner", this));
+        buttonMap.put(0, new ReasonButton(XMaterial.WHITE_WOOL, 0, "Rank Migration"));
+        buttonMap.put(1, new ReasonButton(XMaterial.ORANGE_WOOL, 1, "Buycraft Issues"));
+        buttonMap.put(2, new ReasonButton(XMaterial.PINK_WOOL, 2, "Promotion"));
+        buttonMap.put(3, new ReasonButton(XMaterial.LIGHT_BLUE_WOOL, 3, "Demotion"));
+        buttonMap.put(4, new ReasonButton(XMaterial.YELLOW_WOOL, 4, "Giveaway Winner"));
+        buttonMap.put(5, new ReasonButton(XMaterial.GREEN_WOOL, 5, "Event Winner"));
 
         return buttonMap;
     }
 
     @AllArgsConstructor
-    public static class ReasonButton extends Button {
+    public class ReasonButton extends Button {
 
         private final XMaterial material;
         private final int data;
         private final String reason;
-
-        private final GrantReasonPaginatedMenu menuData;
 
         @Override
         public ItemStack getButtonItem(Player player) {
@@ -152,7 +150,7 @@ public class GrantReasonPaginatedMenu extends PaginatedMenu {
 
         @Override
         public void clicked(Player player, ClickType clickType) {
-            new GrantSelectConfirmMenu(menuData.getPlayer(), menuData.getDocument(), menuData.getRank(), menuData.getDuration(), this.reason, menuData.isPermanent(), menuData.getScope()).open(player);
+            new GrantSelectConfirmMenu(player, GrantReasonPaginatedMenu.this.getDocument(), GrantReasonPaginatedMenu.this.getRank(), GrantReasonPaginatedMenu.this.getDuration(), this.reason, GrantReasonPaginatedMenu.this.isPermanent(), GrantReasonPaginatedMenu.this.getScope()).open(player);
         }
     }
 }

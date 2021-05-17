@@ -32,7 +32,7 @@ public class PunishHistoryViewMainMenu extends AbstractInventoryMenu {
         this.target = target;
         this.targetUuid = targetUuid;
 
-
+        this.update();
     }
 
     public void update() {

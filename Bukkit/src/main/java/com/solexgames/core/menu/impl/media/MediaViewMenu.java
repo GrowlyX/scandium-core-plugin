@@ -19,6 +19,7 @@ public class MediaViewMenu extends AbstractInventoryMenu {
     public MediaViewMenu(Player player) {
         super("Social Media for: " + player.getDisplayName(), 9);
         this.player = player;
+        this.update();
     }
 
     public void update() {

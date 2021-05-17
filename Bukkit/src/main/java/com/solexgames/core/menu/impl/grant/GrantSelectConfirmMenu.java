@@ -48,7 +48,7 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
         this.permanent = permanent;
         this.scope = scope;
 
-
+        this.update();
     }
 
     public void update() {
