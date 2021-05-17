@@ -74,6 +74,10 @@ public abstract class BaseCommand extends Command {
         this.setName(command.label());
         this.setAliases(Arrays.asList(command.aliases().clone()));
 
+        this.registerToCommandMap(javaPlugin);
+    }
+
+    public void registerToCommandMap(JavaPlugin javaPlugin) {
         if (javaPlugin.getServer().getPluginManager() instanceof SimplePluginManager) {
             CommandMap commandMap = null;
 
