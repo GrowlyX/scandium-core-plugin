@@ -12,10 +12,9 @@ import com.solexgames.core.player.global.NetworkPlayer;
 import com.solexgames.core.player.punishment.Punishment;
 import com.solexgames.core.player.punishment.PunishmentType;
 import com.solexgames.core.player.ranks.Rank;
-import com.solexgames.core.redis.annotation.JedisSubscription;
+import com.solexgames.core.redis.annotation.Subscription;
 import com.solexgames.core.redis.handler.JedisHandler;
 import com.solexgames.core.redis.json.JsonAppender;
-import com.solexgames.core.redis.packet.RedisAction;
 import com.solexgames.core.server.NetworkServer;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.PlayerUtil;
@@ -33,7 +32,12 @@ import java.util.UUID;
 @SuppressWarnings("unused")
 public class JedisListener implements JedisHandler {
 
-    @JedisSubscription(action = RedisAction.DISGUISE_PROFILE_REMOVE)
+    @Subscription(action = "yes")
+    public void onYes(JsonAppender jsonAppender) {
+        System.out.println(jsonAppender.getParam("yes"));
+    }
+
+    @Subscription(action = "DISGUISE_PROFILE_REMOVE")
     public void onDisguiseProfileRemove(JsonAppender jsonAppender) {
         if (!jsonAppender.getParam("SERVER").equals(CorePlugin.getInstance().getServerName())) {
             final UUID disguiseRemoveUUID = UUID.fromString(jsonAppender.getParam("UUID"));
@@ -45,7 +49,7 @@ public class JedisListener implements JedisHandler {
         }
     }
 
-    @JedisSubscription(action = RedisAction.DISGUISE_PROFILE_CREATE)
+    @Subscription(action = "DISGUISE_PROFILE_CREATE")
     public void onDisguiseProfileCreate(JsonAppender jsonAppender) {
         if (!jsonAppender.getParam("SERVER").equals(CorePlugin.getInstance().getServerName())) {
             final String disguiseName = jsonAppender.getParam("NAME");
@@ -57,7 +61,7 @@ public class JedisListener implements JedisHandler {
         }
     }
 
-    @JedisSubscription(action = RedisAction.GLOBAL_PLAYER_REMOVE)
+    @Subscription(action = "GLOBAL_PLAYER_REMOVE")
     public void onGlobalPlayerRemove(JsonAppender jsonAppender) {
         final UUID removingPlayer = UUID.fromString(jsonAppender.getParam("UUID"));
         final String removalServer = jsonAppender.getParam("SERVER");
@@ -67,7 +71,7 @@ public class JedisListener implements JedisHandler {
         }
     }
 
-    @JedisSubscription(action = RedisAction.GLOBAL_PLAYER_ADDITION)
+    @Subscription(action = "GLOBAL_PLAYER_ADDITION")
     public void onGlobalPlayerAddition(JsonAppender jsonAppender) {
         final UUID uuid = UUID.fromString(jsonAppender.getParam("UUID"));
         final String name = jsonAppender.getParam("NAME");
@@ -94,7 +98,7 @@ public class JedisListener implements JedisHandler {
         }
     }
 
-    @JedisSubscription(action = RedisAction.SERVER_DATA_ONLINE)
+    @Subscription(action = "SERVER_DATA_ONLINE")
     public void onServerDataOnline(JsonAppender jsonAppender) {
         final String bootingServerName = jsonAppender.getParam("SERVER");
 
@@ -116,7 +120,7 @@ public class JedisListener implements JedisHandler {
         PlayerUtil.sendTo("&3[S] &e" + bootingServerName + " &bhas just come &aonline&b.", "scandium.network.alerts");
     }
 
-    @JedisSubscription(action = RedisAction.SERVER_DATA_UPDATE)
+    @Subscription(action = "SERVER_DATA_UPDATE")
     public void onServerDataUpdate(JsonAppender jsonAppender) {
         final String splitPlayers = jsonAppender.getParam("SPLITPLAYERS");
         final String serverName = jsonAppender.getParam("SERVER");
@@ -150,7 +154,7 @@ public class JedisListener implements JedisHandler {
         updatedServer.setLastUpdate(System.currentTimeMillis());
     }
 
-    @JedisSubscription(action = RedisAction.SERVER_DATA_OFFLINE)
+    @Subscription(action = "SERVER_DATA_OFFLINE")
     public void onServerDataOffline(JsonAppender jsonAppender) {
         final String offlineServerName = jsonAppender.getParam("SERVER");
         final NetworkServer networkServer = NetworkServer.getByName(offlineServerName);
@@ -162,7 +166,7 @@ public class JedisListener implements JedisHandler {
         PlayerUtil.sendTo("&3[S] &e" + offlineServerName + " &bhas just went &coffline&b.", "scandium.network.alerts");
     }
 
-    @JedisSubscription(action = RedisAction.PLAYER_CONNECT_UPDATE)
+    @Subscription(action = "PLAYER_CONNECT_UPDATE")
     public void onPlayerConnectUpdate(JsonAppender jsonAppender) {
         final String fromConnectServer = jsonAppender.getParam("SERVER");
         final String connectingPlayer = jsonAppender.getParam("PLAYER");
@@ -170,7 +174,7 @@ public class JedisListener implements JedisHandler {
         PlayerUtil.sendToStaff("&3[S] " + connectingPlayer + " &bconnected to &3" + fromConnectServer + "&b.");
     }
 
-    @JedisSubscription(action = RedisAction.PLAYER_SERVER_SWITCH_UPDATE)
+    @Subscription(action = "PLAYER_SERVER_SWITCH_UPDATE")
     public void onPlayerSwitchServerUpdate(JsonAppender jsonAppender) {
         final String newServer = jsonAppender.getParam("NEW_SERVER");
         final String fromSwitchingServer = jsonAppender.getParam("SERVER");
@@ -179,7 +183,7 @@ public class JedisListener implements JedisHandler {
         PlayerUtil.sendToStaff("&3[S] " + switchingPlayer + " &bjoined &3" + newServer + "&b from &3" + fromSwitchingServer + "&b.");
     }
 
-    @JedisSubscription(action = RedisAction.PLAYER_DISCONNECT_UPDATE)
+    @Subscription(action = "PLAYER_DISCONNECT_UPDATE")
     public void onPlayerDisconnectServer(JsonAppender jsonAppender) {
         final String server = jsonAppender.getParam("SERVER");
         final String player = jsonAppender.getParam("PLAYER");
@@ -187,7 +191,7 @@ public class JedisListener implements JedisHandler {
         PlayerUtil.sendToStaff("&3[S] " + player + " &bdisconnected from &3" + server);
     }
 
-    @JedisSubscription(action = RedisAction.CHAT_CHANNEL_UPDATE)
+    @Subscription(action = "CHAT_CHANNEL_UPDATE")
     public void onChatChannelUpdate(JsonAppender jsonAppender) {
         final ChatChannelType chatChannel = ChatChannelType.valueOf(jsonAppender.getParam("CHANNEL"));
 
@@ -198,7 +202,7 @@ public class JedisListener implements JedisHandler {
         PlayerUtil.sendToStaff(CorePlugin.getInstance().getPlayerManager().formatChatChannel(chatChannel, sender, chatMessage, fromServer));
     }
 
-    @JedisSubscription(action = RedisAction.PLAYER_SERVER_UPDATE)
+    @Subscription(action = "PLAYER_SERVER_UPDATE")
     public void onPlayerServerUpdate(JsonAppender jsonAppender) {
         final StaffUpdateType updateType = StaffUpdateType.valueOf(jsonAppender.getParam("UPDATETYPE"));
 
@@ -235,7 +239,7 @@ public class JedisListener implements JedisHandler {
         }
     }
 
-    @JedisSubscription(action = RedisAction.RANK_CREATE_UPDATE)
+    @Subscription(action = "RANK_CREATE_UPDATE")
     public void onRankCreateUpdate(JsonAppender jsonAppender) {
         final Player rankCreatePlayer = Bukkit.getPlayer(jsonAppender.getParam("PLAYER"));
         final String rankCreateName = jsonAppender.getParam("NAME");
@@ -249,7 +253,7 @@ public class JedisListener implements JedisHandler {
         rankCreate.saveRank();
     }
 
-    @JedisSubscription(action = RedisAction.RANK_SETTINGS_UPDATE)
+    @Subscription(action = "RANK_SETTINGS_UPDATE")
     public void onRankSettingsUpdate(JsonAppender jsonAppender) {
         final String rankSettingsServer = jsonAppender.getParam("SERVER");
         final String rankSettingsColor = jsonAppender.getParam("COLOR");
@@ -286,7 +290,7 @@ public class JedisListener implements JedisHandler {
         }
     }
 
-    @JedisSubscription(action = RedisAction.RANK_DELETE_UPDATE)
+    @Subscription(action = "RANK_DELETE_UPDATE")
     public void onRankDeleteUpdate(JsonAppender jsonAppender) {
         final Rank rankRemove = Rank.getByName(jsonAppender.getParam("RANK"));
 
@@ -301,7 +305,7 @@ public class JedisListener implements JedisHandler {
         }
     }
 
-    @JedisSubscription(action = RedisAction.PUNISHMENT_EXECUTE_UPDATE)
+    @Subscription(action = "PUNISHMENT_EXECUTE_UPDATE")
     public void onPunishmentExecution(JsonAppender jsonAppender) {
         final String punishmentServer = jsonAppender.getParam("SERVER");
 
@@ -335,7 +339,7 @@ public class JedisListener implements JedisHandler {
         }
     }
 
-    @JedisSubscription(action = RedisAction.PUNISHMENT_REMOVE_UPDATE)
+    @Subscription(action = "PUNISHMENT_REMOVE_UPDATE")
     public void onPunishmentRemoval(JsonAppender jsonAppender) {
         final String removeServer = jsonAppender.getParam("SERVER");
 
@@ -391,7 +395,7 @@ public class JedisListener implements JedisHandler {
         }
     }
 
-    @JedisSubscription(action = RedisAction.PUNISHMENT_F_REMOVE_UPDATE)
+    @Subscription(action = "PUNISHMENT_F_REMOVE_UPDATE")
     public void onPunishmentForceRemovalUpdate(JsonAppender jsonAppender) {
         final String punishmentRemoveServer = jsonAppender.getParam("SERVER");
 
@@ -405,7 +409,7 @@ public class JedisListener implements JedisHandler {
         }
     }
 
-    @JedisSubscription(action = RedisAction.DISCORD_SYNC_UPDATE)
+    @Subscription(action = "DISCORD_SYNC_UPDATE")
     public void onDiscordSyncUpdate(JsonAppender jsonAppender) {
         final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(jsonAppender.getParam("NAME"));
 
@@ -429,14 +433,14 @@ public class JedisListener implements JedisHandler {
         }
     }
 
-    @JedisSubscription(action = RedisAction.NETWORK_BROADCAST_UPDATE)
+    @Subscription(action = "NETWORK_BROADCAST_UPDATE")
     public void onNetworkBroadcastUpdate(JsonAppender jsonAppender) {
         final String broadcastMessage = jsonAppender.getParam("MESSAGE");
 
         Bukkit.broadcastMessage(CorePlugin.getInstance().getPlayerManager().formatBroadcast(broadcastMessage));
     }
 
-    @JedisSubscription(action = RedisAction.NETWORK_BROADCAST_PERMISSION_UPDATE)
+    @Subscription(action = "NETWORK_BROADCAST_PERMISSION_UPDATE")
     public void onNetworkBroadcastWithPermissionUpdate(JsonAppender jsonAppender) {
         final String broadcast = jsonAppender.getParam("MESSAGE");
         final String permission = jsonAppender.getParam("PERMISSION");

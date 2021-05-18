@@ -8,7 +8,7 @@ import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.punishment.Punishment;
 import com.solexgames.core.player.punishment.PunishmentType;
 import com.solexgames.core.player.ranks.Rank;
-import com.solexgames.core.redis.packet.RedisAction;
+import com.solexgames.core.redis.packet.JedisAction;
 import com.solexgames.core.redis.json.JsonAppender;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -31,7 +31,7 @@ public final class RedisUtil {
     }
 
     public static String onServerUpdate() {
-        return new JsonAppender(RedisAction.SERVER_DATA_UPDATE)
+        return new JsonAppender(JedisAction.SERVER_DATA_UPDATE.name())
                 .put("SPLITPLAYERS", (Bukkit.getOnlinePlayers().isEmpty() ? "" : Bukkit.getOnlinePlayers().stream().map(Player::getName).collect(Collectors.joining(" "))))
                 .put("SERVER", CorePlugin.getInstance().getServerName())
                 .put("SERVER_TYPE", CorePlugin.getInstance().getConfig().getString("server-type"))
@@ -40,112 +40,112 @@ public final class RedisUtil {
                 .put("WHITELIST", String.valueOf(Bukkit.getServer().hasWhitelist()))
                 .put("TPS", getTicksPerSecondFormatted())
                 .put("TPSSIMPLE", getTicksPerSecondFormatted())
-                .getAppended();
+                .getAsJson();
     }
 
     public static String onDisguiseProfileCreate(DisguiseData disguiseData) {
-        return new JsonAppender(RedisAction.DISGUISE_PROFILE_CREATE)
+        return new JsonAppender(JedisAction.DISGUISE_PROFILE_CREATE.name())
                 .put("SERVER", CorePlugin.getInstance().getServerName())
                 .put("NAME", disguiseData.getName())
                 .put("SKIN", disguiseData.getSkin())
                 .put("SIGNATURE", disguiseData.getSignature())
                 .put("UUID", disguiseData.getUuid().toString())
-                .getAppended();
+                .getAsJson();
     }
 
     public static String onDisguiseProfileRemove(DisguiseData disguiseData) {
-        return new JsonAppender(RedisAction.DISGUISE_PROFILE_CREATE)
+        return new JsonAppender(JedisAction.DISGUISE_PROFILE_CREATE.name())
                 .put("SERVER", CorePlugin.getInstance().getServerName())
                 .put("UUID", disguiseData.getUuid().toString())
-                .getAppended();
+                .getAsJson();
     }
 
     public static String onServerOffline() {
-        return new JsonAppender(RedisAction.SERVER_DATA_OFFLINE)
+        return new JsonAppender(JedisAction.SERVER_DATA_OFFLINE.name())
                 .put("SERVER", CorePlugin.getInstance().getServerName())
-                .getAppended();
+                .getAsJson();
     }
 
     public static String onServerOnline() {
-        return new JsonAppender(RedisAction.SERVER_DATA_ONLINE)
+        return new JsonAppender(JedisAction.SERVER_DATA_ONLINE.name())
                 .put("SERVER", CorePlugin.getInstance().getServerName())
-                .getAppended();
+                .getAsJson();
     }
 
     public static String onChatChannel(ChatChannelType chatChannel, String message, Player player) {
-        return new JsonAppender(RedisAction.CHAT_CHANNEL_UPDATE)
+        return new JsonAppender(JedisAction.CHAT_CHANNEL_UPDATE.name())
                 .put("CHANNEL", chatChannel.name())
                 .put("MESSAGE", message)
                 .put("SERVER", CorePlugin.getInstance().getServerName())
                 .put("PLAYER", player.getDisplayName())
-                .getAppended();
+                .getAsJson();
     }
 
     public static String onGlobalBroadcast(String message) {
-        return new JsonAppender(RedisAction.NETWORK_BROADCAST_UPDATE)
+        return new JsonAppender(JedisAction.NETWORK_BROADCAST_UPDATE.name())
                 .put("MESSAGE", message)
-                .getAppended();
+                .getAsJson();
     }
 
     public static String onGlobalBroadcastPermission(String message, String permission) {
-        return new JsonAppender(RedisAction.NETWORK_BROADCAST_PERMISSION_UPDATE)
+        return new JsonAppender(JedisAction.NETWORK_BROADCAST_PERMISSION_UPDATE.name())
                 .put("MESSAGE", message)
                 .put("PERMISSION", permission)
-                .getAppended();
+                .getAsJson();
     }
 
     public static String onDisconnect(String player) {
-        return new JsonAppender(RedisAction.PLAYER_DISCONNECT_UPDATE)
+        return new JsonAppender(JedisAction.PLAYER_DISCONNECT_UPDATE.name())
                 .put("PLAYER", player)
                 .put("SERVER", CorePlugin.getInstance().getServerName())
-                .getAppended();
+                .getAsJson();
     }
 
     public static String onSwitchServer(String player, String newServer) {
-        return new JsonAppender(RedisAction.PLAYER_SERVER_SWITCH_UPDATE)
+        return new JsonAppender(JedisAction.PLAYER_SERVER_SWITCH_UPDATE.name())
                 .put("PLAYER", player)
                 .put("SERVER", CorePlugin.getInstance().getServerName())
                 .put("NEW_SERVER", newServer)
-                .getAppended();
+                .getAsJson();
     }
 
     public static String onConnect(Player player) {
-        return new JsonAppender(RedisAction.PLAYER_CONNECT_UPDATE)
+        return new JsonAppender(JedisAction.PLAYER_CONNECT_UPDATE.name())
                 .put("PLAYER", player.getDisplayName())
                 .put("SERVER", CorePlugin.getInstance().getServerName())
-                .getAppended();
+                .getAsJson();
     }
 
     public static String onHelpOp(Player player, String message) {
-        return new JsonAppender(RedisAction.PLAYER_SERVER_UPDATE)
+        return new JsonAppender(JedisAction.PLAYER_SERVER_UPDATE.name())
                 .put("MESSAGE", message)
                 .put("PLAYER", player.getDisplayName())
                 .put("SERVER", CorePlugin.getInstance().getServerName())
                 .put("UPDATETYPE", StaffUpdateType.HELPOP.getName())
-                .getAppended();
+                .getAsJson();
     }
 
     public static String onReport(Player player, Player target, String message) {
-        return new JsonAppender(RedisAction.PLAYER_SERVER_UPDATE)
+        return new JsonAppender(JedisAction.PLAYER_SERVER_UPDATE.name())
                 .put("MESSAGE", message)
                 .put("PLAYER", player.getDisplayName())
                 .put("TARGET", target.getDisplayName())
                 .put("SERVER", CorePlugin.getInstance().getServerName())
                 .put("UPDATETYPE", StaffUpdateType.REPORT.getName())
-                .getAppended();
+                .getAsJson();
     }
 
     public static String onFreeze(Player player, Player target) {
-        return new JsonAppender(RedisAction.PLAYER_SERVER_UPDATE)
+        return new JsonAppender(JedisAction.PLAYER_SERVER_UPDATE.name())
                 .put("PLAYER", player.getDisplayName())
                 .put("TARGET", target.getDisplayName())
                 .put("SERVER", CorePlugin.getInstance().getServerName())
                 .put("UPDATETYPE", StaffUpdateType.FREEZE.getName())
-                .getAppended();
+                .getAsJson();
     }
 
     public static String updateRank(Rank rank) {
-        return new JsonAppender(RedisAction.RANK_SETTINGS_UPDATE)
+        return new JsonAppender(JedisAction.RANK_SETTINGS_UPDATE.name())
                 .put("SERVER", CorePlugin.getInstance().getServerName())
                 .put("RANK", rank.getName())
                 .put("WEIGHT", String.valueOf(rank.getWeight()))
@@ -158,11 +158,11 @@ public final class RedisUtil {
                 .put("ITALIC", String.valueOf(rank.isItalic()))
                 .put("PERMISSIONS", String.join(" ", rank.getPermissions()))
                 .put("INHERITANCE", rank.getInheritance().stream().map(UUID::toString).collect(Collectors.joining(" ")))
-                .getAppended();
+                .getAsJson();
     }
 
     public static String executePunishment(PunishmentType punishmentType, UUID issuer, UUID target, String issuerName, String reason, Date issuingDate, long punishmentDuration, boolean permanent, Date createdAt, UUID uuid, String punishIdentification, boolean silent) {
-        return new JsonAppender(RedisAction.PUNISHMENT_EXECUTE_UPDATE)
+        return new JsonAppender(JedisAction.PUNISHMENT_EXECUTE_UPDATE.name())
                 .put("SERVER", CorePlugin.getInstance().getServerName())
                 .put("TYPE", punishmentType.toString())
                 .put("ISSUER", (issuer != null ? issuer.toString() : null))
@@ -176,64 +176,64 @@ public final class RedisUtil {
                 .put("UUID", uuid.toString())
                 .put("IDENTIFICATION", punishIdentification)
                 .put("SILENT", String.valueOf(silent))
-                .getAppended();
+                .getAsJson();
     }
 
     public static String fRemovePunishment(Punishment punishment) {
-        return new JsonAppender(RedisAction.PUNISHMENT_F_REMOVE_UPDATE)
+        return new JsonAppender(JedisAction.PUNISHMENT_F_REMOVE_UPDATE.name())
                 .put("ID", punishment.getPunishIdentification())
                 .put("SERVER", CorePlugin.getInstance().getServerName())
-                .getAppended();
+                .getAsJson();
     }
 
     public static String removePunishment(Player remover, Punishment punishment, String message) {
         if (remover != null) {
-            return new JsonAppender(RedisAction.PUNISHMENT_REMOVE_UPDATE)
+            return new JsonAppender(JedisAction.PUNISHMENT_REMOVE_UPDATE.name())
                     .put("REMOVERUUID", remover.getUniqueId().toString())
                     .put("REMOVERNAME", remover.getName())
                     .put("REMOVERDISPLAYNAME", remover.getDisplayName())
                     .put("REASON", message)
                     .put("SERVER", CorePlugin.getInstance().getServerName())
                     .put("ID", punishment.getPunishIdentification())
-                    .getAppended();
+                    .getAsJson();
         } else {
-            return new JsonAppender(RedisAction.PUNISHMENT_REMOVE_UPDATE)
+            return new JsonAppender(JedisAction.PUNISHMENT_REMOVE_UPDATE.name())
                     .put("REMOVERUUID", null)
                     .put("REMOVERNAME", null)
                     .put("REMOVERDISPLAYNAME", null)
                     .put("REASON", message)
                     .put("SERVER", CorePlugin.getInstance().getServerName())
                     .put("ID", punishment.getPunishIdentification())
-                    .getAppended();
+                    .getAsJson();
         }
     }
 
     public static String createRank(String name, Player player, String uuid) {
-        return new JsonAppender(RedisAction.RANK_CREATE_UPDATE)
+        return new JsonAppender(JedisAction.RANK_CREATE_UPDATE.name())
                 .put("NAME", name)
                 .put("UUID", uuid)
                 .put("PLAYER", player.getName())
-                .getAppended();
+                .getAsJson();
     }
 
     public static String deleteRank(String rank, Player player) {
-        return new JsonAppender(RedisAction.RANK_DELETE_UPDATE)
+        return new JsonAppender(JedisAction.RANK_DELETE_UPDATE.name())
                 .put("RANK", rank)
                 .put("PLAYER", player.getName())
-                .getAppended();
+                .getAsJson();
     }
 
     public static String onUnfreeze(Player player, Player target) {
-        return new JsonAppender(RedisAction.PLAYER_SERVER_UPDATE)
+        return new JsonAppender(JedisAction.PLAYER_SERVER_UPDATE.name())
                 .put("PLAYER", player.getDisplayName())
                 .put("SERVER", CorePlugin.getInstance().getServerName())
                 .put("TARGET", target.getDisplayName())
                 .put("UPDATETYPE", StaffUpdateType.UNFREEZE.getName())
-                .getAppended();
+                .getAsJson();
     }
 
     public static String addGlobalPlayer(PotPlayer potPlayer) {
-        return new JsonAppender(RedisAction.GLOBAL_PLAYER_ADDITION)
+        return new JsonAppender(JedisAction.GLOBAL_PLAYER_ADDITION.name())
                 .put("UUID", potPlayer.getUuid().toString())
                 .put("NAME", potPlayer.getName())
                 .put("SERVER", CorePlugin.getInstance().getServerName())
@@ -241,21 +241,21 @@ public final class RedisUtil {
                 .put("SYNC_CODE", potPlayer.getSyncCode())
                 .put("IS_SYNCED", String.valueOf(potPlayer.isSynced()))
                 .put("DMS_ENABLED", String.valueOf(potPlayer.isCanReceiveDms()))
-                .getAppended();
+                .getAsJson();
     }
 
     public static String removeGlobalPlayer(UUID uuid) {
-        return new JsonAppender(RedisAction.GLOBAL_PLAYER_REMOVE)
+        return new JsonAppender(JedisAction.GLOBAL_PLAYER_REMOVE.name())
                 .put("UUID", uuid.toString())
                 .put("SERVER", CorePlugin.getInstance().getServerName())
-                .getAppended();
+                .getAsJson();
     }
 
     public static String syncDiscord(String discord, String name) {
-        return new JsonAppender(RedisAction.DISCORD_SYNC_UPDATE)
+        return new JsonAppender(JedisAction.DISCORD_SYNC_UPDATE.name())
                 .put("DISCORD", discord)
                 .put("NAME", name)
-                .getAppended();
+                .getAsJson();
     }
 
     public static void publishAsync(String message) {

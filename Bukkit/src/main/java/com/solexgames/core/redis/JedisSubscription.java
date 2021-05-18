@@ -2,13 +2,20 @@ package com.solexgames.core.redis;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.redis.json.JsonAppender;
-import com.solexgames.core.redis.packet.RedisAction;
 import lombok.RequiredArgsConstructor;
 import redis.clients.jedis.JedisPubSub;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
+
+/**
+ * @author GrowlyX
+ * @since 5/18/2021
+ * <p>
+ * Handles all incoming packets from the jedis subscription
+ * defined in the {@link JedisManager} instance.
+ */
 
 @RequiredArgsConstructor
 public class JedisSubscription extends JedisPubSub {
@@ -18,7 +25,7 @@ public class JedisSubscription extends JedisPubSub {
     @Override
     public void onMessage(String channel, String message) {
         final JsonAppender jsonAppender = CorePlugin.GSON.fromJson(message, JsonAppender.class);
-        final RedisAction redisAction = jsonAppender.getPacket();
+        final String redisAction = jsonAppender.getPacket();
         final Method method = this.jedisManager.getJedisActionHandlers().get(redisAction);
 
         if (method != null) {
@@ -28,11 +35,11 @@ public class JedisSubscription extends JedisPubSub {
                 } catch (Exception exception) {
                     exception.printStackTrace();
 
-                    Logger.getGlobal().severe("Couldn't handle this packet: " + redisAction.getPacketDataName());
+                    Logger.getGlobal().severe("Couldn't handle this packet: " + redisAction);
                 }
             });
         } else {
-            Logger.getGlobal().severe("Couldn't handle this packet as a handler does not exist: " + redisAction.getPacketDataName());
+            Logger.getGlobal().severe("Couldn't handle this packet as a handler does not exist: " + redisAction);
         }
     }
 }

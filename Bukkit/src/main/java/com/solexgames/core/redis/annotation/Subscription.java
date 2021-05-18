@@ -1,16 +1,21 @@
 package com.solexgames.core.redis.annotation;
 
-import com.solexgames.core.redis.packet.RedisAction;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * @author GrowlyX
+ * @since 5/18/2021
+ * <p>
+ * Holds information for a jedis subscription method
+ */
+
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface JedisSubscription {
+public @interface Subscription {
 
-    RedisAction action();
+    String action();
 
 }

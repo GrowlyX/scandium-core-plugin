@@ -7,15 +7,14 @@ import java.beans.ConstructorProperties;
 
 /**
  * @author GrowlyX
- * @since 2021
+ * @since 1/1/2021
  */
 
 @Getter
 @RequiredArgsConstructor
-public enum RedisAction {
+public enum JedisAction {
 
     CHAT_CHANNEL_UPDATE("ChatChannelUpdate"),
-    EMILY_KICK_EVENT("ChatChannelUpdate"),
 
     PLAYER_SERVER_UPDATE("PlayerServerUpdate"),
     PLAYER_SERVER_SWITCH_UPDATE("PlayerServerSwitchUpdate"),

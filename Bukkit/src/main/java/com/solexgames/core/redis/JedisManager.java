@@ -1,9 +1,9 @@
 package com.solexgames.core.redis;
 
-import com.solexgames.core.redis.exception.InvalidHandlerException;
+import com.solexgames.core.redis.annotation.Subscription;
+import com.solexgames.core.redis.exception.InvalidSubscriptionException;
 import com.solexgames.core.redis.handler.JedisHandler;
 import com.solexgames.core.redis.json.JsonAppender;
-import com.solexgames.core.redis.packet.RedisAction;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
@@ -16,28 +16,35 @@ import java.util.HashMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 
+/**
+ * @author GrowlyX
+ * @since 5/18/2021
+ * <p>
+ * Management for the jedis system
+ */
+
 @Getter
 @Setter
 public class JedisManager {
 
-    private final HashMap<RedisAction, Method> jedisActionHandlers = new HashMap<>();
+    private final HashMap<String, Method> jedisActionHandlers = new HashMap<>();
 
     private final String channel;
-    private final RedisSettings settings;
+    private final JedisSettings settings;
 
     private JedisPool jedisPool;
     private JedisHandler jedisHandler;
     private JedisPubSub jedisPubSub;
 
     @SneakyThrows
-    public JedisManager(String channel, RedisSettings settings, JedisHandler jedisHandler) {
+    public JedisManager(String channel, JedisSettings settings, JedisHandler jedisHandler) {
         this.settings = settings;
         this.channel = channel;
         this.jedisHandler = jedisHandler;
 
         this.jedisPool = new JedisPool(this.settings.getHostAddress(), this.settings.getPort());
 
-        this.registerJedisHandlerMethods();
+        this.registerSubscriptions();
         this.connect();
     }
 
@@ -46,15 +53,17 @@ public class JedisManager {
 
         CompletableFuture.runAsync(() -> {
             try (final Jedis jedis = this.jedisPool.getResource()) {
-                this.authenticate(jedis);
+                if (this.jedisPubSub != null) {
+                    this.authenticate(jedis);
 
-                try {
-                    jedis.subscribe(this.jedisPubSub, this.channel);
-                } finally {
-                    jedis.connect();
+                    try {
+                        jedis.subscribe(this.jedisPubSub, this.channel);
+                    } finally {
+                        jedis.connect();
+                    }
+
+                    Logger.getGlobal().info("Now reading on jedis channel \"" + this.channel + "\"");
                 }
-
-                Logger.getGlobal().info("Now reading on jedis channel \"" + this.channel + "\"");
             } catch (Exception exception) {
                 exception.printStackTrace();
 
@@ -92,19 +101,23 @@ public class JedisManager {
         }
     }
 
-    public void registerJedisHandlerMethods() throws InvalidHandlerException {
+    public void registerSubscriptions() throws InvalidSubscriptionException {
         final Method[] methodList = this.jedisHandler.getClass().getMethods();
 
         for (Method method : methodList) {
-            if (method.isAnnotationPresent(com.solexgames.core.redis.annotation.JedisSubscription.class)) {
-                final com.solexgames.core.redis.annotation.JedisSubscription subscription = method.getAnnotation(com.solexgames.core.redis.annotation.JedisSubscription.class);
+            if (method.isAnnotationPresent(Subscription.class)) {
+                final Subscription subscription = method.getAnnotation(Subscription.class);
 
                 if (method.getParameterTypes().length > 1) {
-                    throw new InvalidHandlerException("Handler has more than 1 parameter");
+                    throw new InvalidSubscriptionException("Handler has more than 1 parameter");
                 }
 
                 if (method.getParameterTypes()[0] != JsonAppender.class) {
-                    throw new InvalidHandlerException("Handler parameter is not JsonAppender");
+                    throw new InvalidSubscriptionException("Handler parameter is not JsonAppender");
+                }
+
+                if (!method.getName().startsWith("on")) {
+                    throw new InvalidSubscriptionException("Handler method does not match with naming conventions (on<incomingPacket>)");
                 }
 
                 this.jedisActionHandlers.put(subscription.action(), method);

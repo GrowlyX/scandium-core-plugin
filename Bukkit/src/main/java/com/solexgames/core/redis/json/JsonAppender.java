@@ -1,7 +1,6 @@
 package com.solexgames.core.redis.json;
 
 import com.solexgames.core.CorePlugin;
-import com.solexgames.core.redis.packet.RedisAction;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -11,6 +10,8 @@ import java.util.Map;
 /**
  * @author GrowlyX
  * @since 3/1/2021
+ * <p>
+ * Creates a JSON chain of all the available parameters
  */
 
 @Getter
@@ -19,7 +20,7 @@ public class JsonAppender {
 
     private final Map<String, String> parameters = new HashMap<>();
 
-    private final RedisAction packet;
+    private final String packet;
 
     public JsonAppender put(String key, String value) {
         this.parameters.put(key, value);
@@ -34,12 +35,7 @@ public class JsonAppender {
         return null;
     }
 
-    /**
-     * Get the Json Appended String from the JsonAppender instance
-     *
-     * @return The appended json string
-     */
-    public String getAppended() {
+    public String getAsJson() {
         return CorePlugin.GSON.toJson(this);
     }
 }

@@ -18,8 +18,9 @@ import com.solexgames.core.hooks.protocol.AbstractPacketHandler;
 import com.solexgames.core.hooks.protocol.impl.ProtocolPacketHandler;
 import com.solexgames.core.manager.*;
 import com.solexgames.core.player.punishment.PunishmentStrings;
+import com.solexgames.core.redis.JedisBuilder;
 import com.solexgames.core.redis.JedisManager;
-import com.solexgames.core.redis.RedisSettings;
+import com.solexgames.core.redis.JedisSettings;
 import com.solexgames.core.redis.handler.impl.JedisListener;
 import com.solexgames.core.serializer.DataLibrary;
 import com.solexgames.core.serializer.impl.ItemStackSerializer;
@@ -168,13 +169,18 @@ public final class CorePlugin extends JavaPlugin {
         this.nameTagManager = new NameTagManager();
         this.disguiseManager = new DisguiseManager();
 
-        final RedisSettings redisSettings = new RedisSettings(
+        final JedisSettings jedisSettings = new JedisSettings(
                 this.databaseConfig.getString("redis.host"),
                 this.databaseConfig.getInt("redis.port"),
                 this.databaseConfig.getBoolean("redis.authentication.enabled"),
                 this.databaseConfig.getString("redis.authentication.password")
         );
-        this.jedisManager = new JedisManager("Scandium:BUKKIT", redisSettings, new JedisListener());
+
+        this.jedisManager = new JedisBuilder()
+                .withChannel("scandium:bukkit")
+                .withSettings(jedisSettings)
+                .withHandler(new JedisListener())
+                .build();
 
         this.setupExtra();
         this.logInformation(milli);
