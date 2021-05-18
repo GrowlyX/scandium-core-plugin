@@ -11,6 +11,10 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author GrowlyX
@@ -151,5 +155,115 @@ public final class StringUtil {
 
             player.sendMessage(sb.toString() + message.replace("%PLAYER%", player.getDisplayName()));
         });
+    }
+
+    public static List<String> wordWrap(String s, int lineSize) {
+        return wordWrap(s, lineSize, lineSize);
+    }
+
+    public static List<String> wordWrap(String s, int firstSegment, int lineSize) {
+        String format = getFormat(s);
+        if (format == null || !s.startsWith(format)) {
+            format = "";
+        }
+
+        List<String> words = new ArrayList();
+        int numChars = firstSegment;
+        int ix = 0;
+        int jx = 0;
+
+        while(ix < s.length()) {
+            ix = s.indexOf(32, ix + 1);
+            if (ix == -1) {
+                break;
+            }
+
+            String subString = s.substring(jx, ix).trim();
+            String f = getFormat(subString);
+            int chars = stripFormatting(subString).length() + 1;
+            if (chars >= numChars) {
+                if (f != null) {
+                    format = f;
+                }
+
+                if (!subString.isEmpty()) {
+                    words.add(withFormat(format, subString));
+                    numChars = lineSize;
+                    jx = ix + 1;
+                }
+            }
+        }
+
+        words.add(withFormat(format, s.substring(jx).trim()));
+        return words;
+    }
+
+    public static String stripFormatting(String format) {
+        return format != null && !format.trim().isEmpty() ? format.replaceAll("(§|&)[0-9a-fklmor]", "") : "";
+    }
+
+    private static String withFormat(String format, String subString) {
+        String sf = null;
+        if (!subString.startsWith("§")) {
+            sf = format + subString;
+        } else {
+            sf = subString;
+        }
+
+        return sf;
+    }
+
+    private static final Pattern FORMATTING = Pattern.compile("^.*(?<format>(§[0-9a-fklmor])+).*");
+
+    private static String getFormat(String s) {
+        Matcher m = FORMATTING.matcher(s);
+        String format = null;
+        if (m.matches() && m.group("format") != null) {
+            format = m.group("format");
+        }
+
+        return format;
+    }
+
+    public static String join(List<String> list, String separator) {
+        String joined = "";
+
+        String s;
+        for(Iterator var3 = list.iterator(); var3.hasNext(); joined = joined + s + separator) {
+            s = (String)var3.next();
+        }
+
+        joined = !list.isEmpty() ? joined.substring(0, joined.length() - separator.length()) : joined;
+        return joined;
+    }
+
+    public static List<String> prefix(List<String> list, String prefix) {
+        List<String> prefixed = new ArrayList(list.size());
+        Iterator var3 = list.iterator();
+
+        while(var3.hasNext()) {
+            String s = (String)var3.next();
+            prefixed.add(prefix + s);
+        }
+
+        return prefixed;
+    }
+
+    public static String camelcase(String name) {
+        if (name != null && !name.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            String[] var2 = name.split("[ _]");
+            int var3 = var2.length;
+
+            for(int var4 = 0; var4 < var3; ++var4) {
+                String part = var2[var4];
+                sb.append(Character.toUpperCase(part.charAt(0)));
+                sb.append(part.substring(1).toLowerCase());
+            }
+
+            return sb.toString();
+        } else {
+            return "";
+        }
     }
 }

@@ -24,7 +24,7 @@ public class ViewAllPagesMenu extends Menu {
         final HashMap<Integer, Button> buttons = new HashMap<>();
 
         int index = 0;
-        for (int i = 1; i <= menu.getPages(player); i++) {
+        for (int i = 1; i <= this.menu.getPages(player); i++) {
             buttons.put(index++, new JumpToPageButton(i, this.menu, this.menu.getPage() == i));
         }
 

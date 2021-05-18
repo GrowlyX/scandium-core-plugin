@@ -80,7 +80,7 @@ public class ReportViewPaginatedMenu extends PaginatedMenu {
 
         @Override
         public ItemStack getButtonItem(Player player) {
-            return new ItemBuilder(Material.PAPER)
+            return new ItemBuilder(XMaterial.PAPER.parseMaterial())
                     .setDisplayName(ChatColor.DARK_GRAY + "#" + report.getId() + " " + (report.isResolved() ? ChatColor.GREEN + "[Resolved]" : ChatColor.GOLD + "[Pending]"))
                     .addLore(
                             Color.MAIN_COLOR + "&m------------------------------------",

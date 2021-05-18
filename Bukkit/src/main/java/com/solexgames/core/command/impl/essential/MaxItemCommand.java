@@ -1,5 +1,6 @@
 package com.solexgames.core.command.impl.essential;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.command.annotation.Command;
 import org.bukkit.ChatColor;
@@ -30,7 +31,7 @@ public class MaxItemCommand extends BaseCommand {
 
         final ItemStack itemStack = player.getItemInHand();
 
-        if (itemStack != null && !itemStack.getType().equals(Material.AIR)) {
+        if (itemStack != null && !itemStack.getType().equals(XMaterial.AIR.parseMaterial())) {
             itemStack.setAmount(itemStack.getMaxStackSize());
             player.updateInventory();
         } else {

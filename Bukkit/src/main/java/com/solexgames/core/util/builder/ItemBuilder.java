@@ -55,6 +55,11 @@ public class ItemBuilder {
         this.itemMeta = itemStack.getItemMeta();
     }
 
+    public ItemBuilder(XMaterial material) {
+        this.itemStack = new ItemStack(material.parseMaterial());
+        this.itemMeta = itemStack.getItemMeta();
+    }
+
     public ItemBuilder setAmount(int amount) {
         this.itemStack.setAmount(amount);
         return this;
@@ -166,6 +171,21 @@ public class ItemBuilder {
             @Override
             public void clicked(Player player, ClickType clickType) {
                 runnable.call(player, clickType);
+            }
+        };
+    }
+
+    public Button toUpdatingButton(MenuClickCallback runnable) {
+        return new Button() {
+            @Override
+            public ItemStack getButtonItem(Player player) {
+                return ItemBuilder.this.create();
+            }
+
+            @Override
+            public boolean shouldUpdate(Player player, ClickType clickType) {
+                runnable.call(player, clickType);
+                return true;
             }
         };
     }

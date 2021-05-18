@@ -85,7 +85,7 @@ public class ViewPlayerMenu extends Menu {
 
         @Override
         public ItemStack getButtonItem(Player player) {
-            return new ItemBuilder(Material.MELON)
+            return new ItemBuilder(XMaterial.MELON_SLICE.parseMaterial())
                     .setDisplayName(Color.SECONDARY_COLOR + "Health: " + Color.MAIN_COLOR + this.health + "/10 ")
                     .setAmount(this.health == 0 ? 1 : this.health)
                     .create();
@@ -99,7 +99,7 @@ public class ViewPlayerMenu extends Menu {
 
         @Override
         public ItemStack getButtonItem(Player player) {
-            return new ItemBuilder(Material.COOKED_BEEF)
+            return new ItemBuilder(XMaterial.BEEF.parseMaterial())
                     .setDisplayName(Color.SECONDARY_COLOR + "Hunger: " + Color.MAIN_COLOR + this.hunger + "/10 ")
                     .setAmount(this.hunger == 0 ? 1 : this.hunger)
                     .create();
@@ -114,7 +114,7 @@ public class ViewPlayerMenu extends Menu {
 
         @Override
         public ItemStack getButtonItem(Player player) {
-            final ItemBuilder builder = new ItemBuilder(Material.POTION).setDisplayName(Color.MAIN_COLOR + ChatColor.BOLD.toString() + "Potion Effects");
+            final ItemBuilder builder = new ItemBuilder(XMaterial.POTION.parseMaterial()).setDisplayName(Color.MAIN_COLOR + ChatColor.BOLD.toString() + "Potion Effects");
 
             if (this.effects.isEmpty()) {
                 builder.addLore(ChatColor.GRAY + "No effects!");

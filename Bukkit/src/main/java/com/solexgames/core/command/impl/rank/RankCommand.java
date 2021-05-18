@@ -9,6 +9,7 @@ import com.solexgames.core.util.Color;
 import com.solexgames.core.util.RedisUtil;
 import com.solexgames.core.util.StringUtil;
 import com.solexgames.core.util.builder.PageListBuilder;
+import com.solexgames.core.util.external.impl.editor.RankEditorMainMenu;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -23,6 +24,7 @@ public class RankCommand extends BaseCommand {
 
     public void sendHelp(Player player, int page) {
         this.getHelpMessage(page, player,
+                "/rank editor",
                 "/rank create <name>",
                 "/rank delete <name>",
                 "/rank addperm <name> <permission>",
@@ -71,6 +73,9 @@ public class RankCommand extends BaseCommand {
             }
 
             switch (args[0]) {
+                case "editor":
+                    new RankEditorMainMenu().openMenu(player);
+                    break;
                 case "info":
                     if (args.length == 1) {
                         player.sendMessage(this.getUsageMessage("info", "<name>"));

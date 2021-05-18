@@ -1,6 +1,7 @@
 package com.solexgames.core.util.external.button;
 
 import com.cryptomorin.xseries.XMaterial;
+import com.solexgames.core.util.Color;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.util.external.Button;
 import com.solexgames.core.util.external.pagination.PaginatedMenu;
@@ -22,7 +23,7 @@ public class JumpToPageButton extends Button {
 
     @Override
     public ItemStack getButtonItem(Player player) {
-        List<String> stringList = new ArrayList<>();
+        final List<String> stringList = new ArrayList<>();
 
         stringList.add(ChatColor.GRAY + "Click to switch to this menu!");
 
@@ -33,7 +34,7 @@ public class JumpToPageButton extends Button {
 
         return new ItemBuilder(this.current ? XMaterial.ENCHANTED_BOOK.parseMaterial() : XMaterial.BOOK.parseMaterial())
                 .addLore(stringList)
-                .setDisplayName(ChatColor.YELLOW + "Page " + this.page)
+                .setDisplayName(Color.SECONDARY_COLOR + "Page " + this.page)
                 .create();
     }
 

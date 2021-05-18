@@ -26,6 +26,7 @@ public abstract class Menu {
     private boolean updateAfterClick = true;
     private boolean closedByMenu = false;
     private boolean placeholder = false;
+    private boolean fillBorders = false;
 
     public void openMenu(Player player) {
         this.buttons = this.getButtons(player);
@@ -67,19 +68,22 @@ public abstract class Menu {
 
         Menu.currentlyOpenedMenus.put(player.getName(), this);
 
+        final Button placeholderButton = new ItemBuilder(XMaterial.GLASS_PANE.parseMaterial())
+                .setDurability(15)
+                .setDisplayName("  ")
+                .toButton();
+
+        if (this.fillBorders) {
+            for (int i = 0; i < this.getSize(); i++) {
+                if (i < 9 || i >= this.getSize() - 9 || i % 9 == 0 || i % 9 == 8) {
+                    inventory.setItem(i, placeholderButton.getButtonItem(player));
+                }
+            }
+        }
+
         for (Map.Entry<Integer, Button> buttonEntry : this.buttons.entrySet()) {
             inventory.setItem(buttonEntry.getKey(), buttonEntry.getValue().getButtonItem(player));
         }
-
-        final Button placeholderButton = new Button() {
-            @Override
-            public ItemStack getButtonItem(Player player) {
-                return new ItemBuilder(XMaterial.GLASS_PANE.parseMaterial())
-                        .setDurability(15)
-                        .setDisplayName("  ")
-                        .create();
-            }
-        };
 
         if (this.isPlaceholder()) {
             for (int index = 0; index < size; index++) {
@@ -112,7 +116,9 @@ public abstract class Menu {
         return (int) (Math.ceil((highest + 1) / 9D) * 9D);
     }
 
-    public void onClose(Player player) { }
+    public void onClose(Player player) {
+
+    }
 
     public int getSize() {
         return -1;

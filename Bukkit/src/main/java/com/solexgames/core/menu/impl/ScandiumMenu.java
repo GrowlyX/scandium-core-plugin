@@ -4,8 +4,11 @@ import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.menu.AbstractInventoryMenu;
+import com.solexgames.core.util.StringUtil;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.util.Color;
+import com.solexgames.core.util.external.impl.network.NetworkServerInfoMenu;
+import com.solexgames.core.util.external.impl.network.NetworkServerMainMenu;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.ChatColor;
@@ -14,6 +17,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.stream.Collectors;
+
 @Getter
 @Setter
 public class ScandiumMenu extends AbstractInventoryMenu {
@@ -21,7 +26,7 @@ public class ScandiumMenu extends AbstractInventoryMenu {
     private Player player;
 
     public ScandiumMenu(Player player) {
-        super("Control Panel", 9);
+        super("Control panel", 9);
 
         this.player = player;
 
@@ -29,40 +34,40 @@ public class ScandiumMenu extends AbstractInventoryMenu {
     }
 
     public void update() {
-        this.inventory.setItem(2, new ItemBuilder(XMaterial.YELLOW_DYE.parseMaterial(), 11)
-                .setDisplayName("&6Reload Files")
-                .addLore(
-                        "&7Would you like to reload",
-                        "&7configurations?",
-                        "",
-                        "&e[Click to Reload files]"
-                )
-                .create()
-        );
-
-        this.inventory.setItem(4, new ItemBuilder(XMaterial.CYAN_DYE.parseMaterial(), 6)
-                .setDisplayName("&bScandium Core")
-                .addLore(
-                        "&7You are currently running",
-                        "&7Scandium core by GrowlyX!",
-                        "",
-                        "&e[Click to view contact information]"
-                )
-                .create()
-        );
-
         final ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
-        this.inventory.setItem(6, new ItemBuilder(XMaterial.ORANGE_DYE.parseMaterial(), 14)
-                .setDisplayName("&b&lInformation &7(" + network.getServerName() + ")")
+
+        this.inventory.setItem(3, new ItemBuilder(XMaterial.PISTON.parseMaterial(), 6)
+                .setDisplayName(Color.MAIN_COLOR + ChatColor.BOLD.toString() + network.getServerName())
                 .addLore(
-                        "&7Server Name: &f" + network.getServerName(),
-                        "&7Server ID: &f" + network.getServerId(),
-                        "&7Primary Color: &f" + network.getMainColor() + "Color One",
-                        "&7Secondary Color: &f" + network.getSecondaryColor() + "Color Two",
-                        "&7Discord Link: &f" + network.getDiscordLink(),
-                        "&7Store Link: &f" + network.getStoreLink(),
-                        "&7Twitter Link: &f" + network.getTwitterLink(),
-                        "&7Website Link: &f" + network.getWebsiteLink()
+                        "&7Thanks for using Scandium!",
+                        "&7Below is some of the information",
+                        "&7we store about your network.",
+                        "",
+                        "&7Primary: " + Color.SECONDARY_COLOR + ChatColor.BOLD.toString() + "■",
+                        "&7Secondary: " + Color.MAIN_COLOR + ChatColor.BOLD.toString() + "■",
+                        "",
+                        "&7Domain: " + ChatColor.WHITE + network.getWebsiteLink(),
+                        "&7Store: " + ChatColor.WHITE + network.getStoreLink(),
+                        "&7Discord: " + ChatColor.WHITE + network.getDiscordLink(),
+                        "",
+                        "&7Version: " + Color.SECONDARY_COLOR + CorePlugin.getInstance().getDescription().getVersion(),
+                        "",
+                        "&e[Click to reload config files]"
+                )
+                .create()
+        );
+
+        this.inventory.setItem(5, new ItemBuilder(XMaterial.REDSTONE_LAMP.parseMaterial(), 11)
+                .setDisplayName(Color.MAIN_COLOR + ChatColor.BOLD.toString() + "Instances")
+                .addLore(
+                        "&7Would you like to view",
+                        "&7all server instances ",
+                        "&7currently running scandium?",
+                        "",
+                        "&f&oOnly applies to this",
+                        "&f&ojedis instance!",
+                        "",
+                        "&e[Click to view instances]"
                 )
                 .create()
         );
@@ -81,12 +86,14 @@ public class ScandiumMenu extends AbstractInventoryMenu {
             final Player player = (Player) event.getWhoClicked();
 
             if (item == null || item.getType() == XMaterial.AIR.parseMaterial()) return;
-            if (event.getRawSlot() == 2) {
+            if (event.getRawSlot() == 3) {
                 CorePlugin.getInstance().reloadConfig();
-                player.sendMessage(ChatColor.GREEN + Color.translate("Reloaded the main config!"));
+                player.sendMessage(ChatColor.GREEN + "The main config has been reloaded.");
+
+                player.closeInventory();
             }
-            if (event.getRawSlot() == 4) {
-                player.sendMessage(ChatColor.GREEN + Color.translate("Contact: &6https://dsc.bio/GrowlyX/."));
+            if (event.getRawSlot() == 5) {
+                new NetworkServerMainMenu().openMenu(player);
             }
         }
     }

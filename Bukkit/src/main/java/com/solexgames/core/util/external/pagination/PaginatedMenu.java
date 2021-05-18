@@ -72,39 +72,34 @@ public abstract class PaginatedMenu extends Menu {
 
     @Override
     public final Map<Integer, Button> getButtons(Player player) {
-        int minIndex = (int) ((double) (page - 1) * maxPerPage);
-        int maxIndex = (int) ((double) (page) * maxPerPage);
+        final int minIndex = (int) ((double) (this.page - 1) * this.maxPerPage);
+        final int maxIndex = (int) ((double) (this.page) * this.maxPerPage);
 
-        HashMap<Integer, Button> buttons = new HashMap<>();
+        final HashMap<Integer, Button> buttons = new HashMap<>();
 
         for (int i = 1; i <= 7; i++) {
-            buttons.put(i, new Button() {
-                @Override
-                public ItemStack getButtonItem(Player player) {
-                    return new ItemBuilder(XMaterial.GRAY_STAINED_GLASS_PANE.parseMaterial())
-                            .setDurability(7)
-                            .setDisplayName(" ")
-                            .create();
-                }
-            });
+            buttons.put(i, new ItemBuilder(XMaterial.GRAY_STAINED_GLASS_PANE.parseMaterial())
+                    .setDurability(7)
+                    .setDisplayName(" ")
+                    .toButton());
         }
 
         buttons.put(0, new PageButton(-1, this));
         buttons.put(8, new PageButton(1, this));
 
-        for (Map.Entry<Integer, Button> entry : this.getAllPagesButtons(player).entrySet()) {
+        for (final Map.Entry<Integer, Button> entry : this.getAllPagesButtons(player).entrySet()) {
             int ind = entry.getKey();
 
             if (ind >= minIndex && ind < maxIndex) {
-                ind -= (int) ((double) (this.maxPerPage) * (page - 1)) - 9;
+                ind -= (int) ((double) (this.maxPerPage) * (this.page - 1)) - 9;
                 buttons.put(ind, entry.getValue());
             }
         }
 
-        Map<Integer, Button> global = this.getGlobalButtons(player);
+        final Map<Integer, Button> global = this.getGlobalButtons(player);
 
         if (global != null) {
-            for (Map.Entry<Integer, Button> gent : global.entrySet()) {
+            for (final Map.Entry<Integer, Button> gent : global.entrySet()) {
                 buttons.put(gent.getKey(), gent.getValue());
             }
         }
@@ -130,7 +125,6 @@ public abstract class PaginatedMenu extends Menu {
      */
     public abstract Map<Integer, Button> getAllPagesButtons(Player player);
 
-
     @AllArgsConstructor
     public static class PageButton extends Button {
 
@@ -155,7 +149,7 @@ public abstract class PaginatedMenu extends Menu {
 
         @Override
         public void clicked(Player player, ClickType clickType) {
-            if (clickType.equals(ClickType.RIGHT) && !this.hasNext(player)) {
+            if (clickType.equals(ClickType.RIGHT) && this.hasNext(player)) {
                 new ViewAllPagesMenu(this.menu).openMenu(player);
             } else {
                 if (this.hasNext(player)) {

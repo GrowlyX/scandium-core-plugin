@@ -4,6 +4,7 @@ main: com.solexgames.core.CorePlugin
 
 load: STARTUP
 api-version: "1.13"
+description: ${git.commit.message.full}
 
 author: SolexGames
 website: https://www.solexgames.com

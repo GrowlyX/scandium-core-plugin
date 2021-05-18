@@ -51,59 +51,57 @@ public class GrantMainPaginatedMenu extends PaginatedMenu {
         AtomicInteger i = new AtomicInteger(0);
         ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
-        this.getSortedRanks().forEach(rank -> {
-            buttons.put(i.getAndIncrement(), new Button() {
-                @Override
-                public ItemStack getButtonItem(Player player) {
-                    return new ItemBuilder(XMaterial.RED_WOOL.parseMaterial(), ((rank.getColor() != null) ? (ChatColor.getByChar(Color.translate(rank.getColor().replace("&", "").replace("§", ""))) != null) ? WoolUtil.getByColor(ChatColor.getByChar(Color.translate(rank.getColor().replace("&", "").replace("§", "")))) : 0 : 0))
-                            .addLore(Arrays.asList(
-                                    network.getMainColor() + "&m--------------------------------",
-                                    network.getSecondaryColor() + "Priority: " + network.getMainColor() + rank.getWeight(),
-                                    network.getSecondaryColor() + "Prefix: " + network.getMainColor() + rank.getPrefix(),
-                                    network.getSecondaryColor() + "Suffix: " + network.getMainColor() + rank.getSuffix(),
-                                    network.getSecondaryColor() + "Visible: " + network.getMainColor() + rank.isHidden(),
-                                    network.getSecondaryColor() + "Color: " + network.getMainColor() + rank.getColor() + rank.getItalic() + "Example",
-                                    "",
-                                    ChatColor.GREEN + "Left-Click to grant the " + rank.getColor() + rank.getItalic() + rank.getName() + ChatColor.GREEN + " rank!",
-                                    ChatColor.GREEN + "Right-Click to grant with scope selection.",
-                                    network.getMainColor() + "&m--------------------------------"
-                            ))
-                            .setDisplayName(rank.getColor() + rank.getItalic() + rank.getName())
-                            .create();
-                }
+        this.getSortedRanks().forEach(rank -> buttons.put(i.getAndIncrement(), new Button() {
+            @Override
+            public ItemStack getButtonItem(Player player) {
+                return new ItemBuilder(XMaterial.RED_WOOL.parseMaterial(), ((rank.getColor() != null) ? (ChatColor.getByChar(Color.translate(rank.getColor().replace("&", "").replace("§", ""))) != null) ? WoolUtil.getByColor(ChatColor.getByChar(Color.translate(rank.getColor().replace("&", "").replace("§", "")))) : 0 : 0))
+                        .addLore(Arrays.asList(
+                                network.getMainColor() + "&m--------------------------------",
+                                network.getSecondaryColor() + "Priority: " + network.getMainColor() + rank.getWeight(),
+                                network.getSecondaryColor() + "Prefix: " + network.getMainColor() + rank.getPrefix(),
+                                network.getSecondaryColor() + "Suffix: " + network.getMainColor() + rank.getSuffix(),
+                                network.getSecondaryColor() + "Visible: " + network.getMainColor() + rank.isHidden(),
+                                network.getSecondaryColor() + "Color: " + network.getMainColor() + rank.getColor() + rank.getItalic() + "Example",
+                                "",
+                                ChatColor.GREEN + "Left-Click to grant the " + rank.getColor() + rank.getItalic() + rank.getName() + ChatColor.GREEN + " rank!",
+                                ChatColor.GREEN + "Right-Click to grant with scope selection.",
+                                network.getMainColor() + "&m--------------------------------"
+                        ))
+                        .setDisplayName(rank.getColor() + rank.getItalic() + rank.getName())
+                        .create();
+            }
 
-                @Override
-                public void clicked(Player player, ClickType clickType) {
-                    String display = ChatColor.stripColor(Color.translate(getButtonItem(player).getItemMeta().getDisplayName()));
-                    Rank rank = Rank.getByName(display);
-                    PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+            @Override
+            public void clicked(Player player, ClickType clickType) {
+                String display = ChatColor.stripColor(Color.translate(getButtonItem(player).getItemMeta().getDisplayName()));
+                Rank rank = Rank.getByName(display);
+                PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
-                    if (clickType == ClickType.RIGHT) {
-                        if (rank != null) {
-                            if ((potPlayer.getActiveGrant().getRank().getWeight() >= rank.getWeight()) && !player.isOp()) {
-                                new GrantScopePaginatedMenu(player, document, rank).openMenu(player);
-                            } else if ((potPlayer.getActiveGrant().getRank().getWeight() >= rank.getWeight()) && player.isOp()) {
-                                new GrantScopePaginatedMenu(player, document, rank).openMenu(player);
-                            } else {
-                                player.sendMessage(ChatColor.RED + ("You cannot grant a rank weight a weight that is higher than yours."));
-                                player.closeInventory();
-                            }
+                if (clickType == ClickType.RIGHT) {
+                    if (rank != null) {
+                        if ((potPlayer.getActiveGrant().getRank().getWeight() >= rank.getWeight()) && !player.isOp()) {
+                            new GrantScopePaginatedMenu(player, document, rank).openMenu(player);
+                        } else if ((potPlayer.getActiveGrant().getRank().getWeight() >= rank.getWeight()) && player.isOp()) {
+                            new GrantScopePaginatedMenu(player, document, rank).openMenu(player);
+                        } else {
+                            player.sendMessage(ChatColor.RED + ("You cannot grant a rank weight a weight that is higher than yours."));
+                            player.closeInventory();
                         }
-                    } else if (clickType == ClickType.LEFT) {
-                        if (rank != null) {
-                            if ((potPlayer.getActiveGrant().getRank().getWeight() >= rank.getWeight()) && !player.isOp()) {
-                                new GrantDurationPaginatedMenu(player, getDocument(), rank, "global").openMenu(player);
-                            } else if ((potPlayer.getActiveGrant().getRank().getWeight() >= rank.getWeight()) && player.isOp()) {
-                                new GrantDurationPaginatedMenu(player, getDocument(), rank, "global").openMenu(player);
-                            } else {
-                                player.sendMessage(ChatColor.RED + ("You cannot grant a rank weight a weight that is higher than yours."));
-                                player.closeInventory();
-                            }
+                    }
+                } else if (clickType == ClickType.LEFT) {
+                    if (rank != null) {
+                        if ((potPlayer.getActiveGrant().getRank().getWeight() >= rank.getWeight()) && !player.isOp()) {
+                            new GrantDurationPaginatedMenu(player, getDocument(), rank, "global").openMenu(player);
+                        } else if ((potPlayer.getActiveGrant().getRank().getWeight() >= rank.getWeight()) && player.isOp()) {
+                            new GrantDurationPaginatedMenu(player, getDocument(), rank, "global").openMenu(player);
+                        } else {
+                            player.sendMessage(ChatColor.RED + ("You cannot grant a rank weight a weight that is higher than yours."));
+                            player.closeInventory();
                         }
                     }
                 }
-            });
-        });
+            }
+        }));
 
         return buttons;
     }

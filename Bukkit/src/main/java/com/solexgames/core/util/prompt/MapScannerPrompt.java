@@ -1,5 +1,6 @@
 package com.solexgames.core.util.prompt;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.google.common.escape.Escaper;
 import com.google.common.net.UrlEscapers;
 import com.solexgames.core.CorePlugin;
@@ -48,7 +49,7 @@ public class MapScannerPrompt extends StringPrompt {
                     mapView.getRenderers().forEach(mapView::removeRenderer);
                     mapView.addRenderer(new QrCodeMap(image, player.getUniqueId()));
 
-                    ItemStack mapItem = new ItemStack(Material.MAP, 1, mapView.getId());
+                    ItemStack mapItem = new ItemStack(XMaterial.MAP.parseMaterial(), 1, mapView.getId());
                     ItemMeta mapMeta = mapItem.getItemMeta();
 
                     mapMeta.setLore(Collections.singletonList("QR Code Map"));
