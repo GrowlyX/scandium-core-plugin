@@ -78,7 +78,6 @@ public final class CorePlugin extends JavaPlugin {
 
     private ServerManager serverManager;
     private ReportManager reportManager;
-    private WarpManager warpManager;
     private PlayerManager playerManager;
     private RankManager rankManager;
     private ShutdownManager shutdownManager;
@@ -164,22 +163,19 @@ public final class CorePlugin extends JavaPlugin {
         this.playerManager = new PlayerManager();
         this.discordManager = new DiscordManager();
         this.filterManager = new FilterManager();
-        this.warpManager = new WarpManager();
         this.shutdownManager = new ShutdownManager();
         this.nameTagManager = new NameTagManager();
         this.disguiseManager = new DisguiseManager();
 
-        final JedisSettings jedisSettings = new JedisSettings(
-                this.databaseConfig.getString("redis.host"),
-                this.databaseConfig.getInt("redis.port"),
-                this.databaseConfig.getBoolean("redis.authentication.enabled"),
-                this.databaseConfig.getString("redis.authentication.password")
-        );
-
         this.jedisManager = new JedisBuilder()
                 .withChannel("scandium:bukkit")
-                .withSettings(jedisSettings)
-                .withHandler(new JedisListener())
+                .withSettings(new JedisSettings(
+                        this.databaseConfig.getString("redis.host"),
+                        this.databaseConfig.getInt("redis.port"),
+                        this.databaseConfig.getBoolean("redis.authentication.enabled"),
+                        this.databaseConfig.getString("redis.authentication.password")
+                ))
+                .withHandler(JedisListener.class)
                 .build();
 
         this.setupExtra();
@@ -244,11 +240,6 @@ public final class CorePlugin extends JavaPlugin {
         }
 
         new PunishmentStrings().setupMessages();
-        new Color().setupMessages();
-
-        if (this.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-            this.logConsole("&a[PAPI] &eSetup the &6ScandiumPAPI &ePlaceholderAPI Hook!");
-        }
 
         BukkitUtil.registerListenersIn("com.solexgames.core.listener");
 
@@ -266,7 +257,7 @@ public final class CorePlugin extends JavaPlugin {
                 "Moderation", "Network", "Other",
                 "Prefix", "Punish", "Rank",
                 "Shutdown", "Server", "Toggle",
-                "Warps", "Disguise", "Library", "Test"
+                "Disguise", "Library", "Test"
         );
     }
 

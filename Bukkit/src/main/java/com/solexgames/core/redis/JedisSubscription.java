@@ -24,12 +24,12 @@ public class JedisSubscription extends JedisPubSub {
 
     @Override
     public void onMessage(String channel, String message) {
-        final JsonAppender jsonAppender = CorePlugin.GSON.fromJson(message, JsonAppender.class);
-        final String redisAction = jsonAppender.getPacket();
-        final Method method = this.jedisManager.getJedisActionHandlers().get(redisAction);
+        CompletableFuture.runAsync(() -> {
+            final JsonAppender jsonAppender = CorePlugin.GSON.fromJson(message, JsonAppender.class);
+            final String redisAction = jsonAppender.getPacket();
+            final Method method = this.jedisManager.getJedisActionHandlers().get(redisAction);
 
-        if (method != null) {
-            CompletableFuture.runAsync(() -> {
+            if (method != null) {
                 try {
                     method.invoke(this.jedisManager.getJedisHandler(), jsonAppender);
                 } catch (Exception exception) {
@@ -37,9 +37,9 @@ public class JedisSubscription extends JedisPubSub {
 
                     Logger.getGlobal().severe("Couldn't handle this packet: " + redisAction);
                 }
-            });
-        } else {
-            Logger.getGlobal().severe("Couldn't handle this packet as a handler does not exist: " + redisAction);
-        }
+            } else {
+                Logger.getGlobal().severe("Couldn't handle this packet as a handler does not exist: " + redisAction);
+            }
+        });
     }
 }

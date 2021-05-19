@@ -42,7 +42,7 @@ public class JumpCommand extends BaseCommand {
                 player.sendMessage(Color.SECONDARY_COLOR + "You're being jumped to " + Color.MAIN_COLOR + networkPlayer.getName() + Color.SECONDARY_COLOR + "'s server...");
 
                 BungeeUtil.sendToServer(player, networkPlayer.getServerName(), CorePlugin.getInstance());
-                CorePlugin.getInstance().getPlayerManager().sendToNetworkStaffFormatted(player.getDisplayName() + "&b has jumped to &a" + networkPlayer.getName() + "&b.");
+                CorePlugin.getInstance().getPlayerManager().sendToNetworkStaffFormatted(player.getDisplayName() + "&b has jumped to &e" + networkPlayer.getName() + "&b.");
             } else {
                 player.sendMessage(ChatColor.RED + "Error: That player does not exist.");
             }

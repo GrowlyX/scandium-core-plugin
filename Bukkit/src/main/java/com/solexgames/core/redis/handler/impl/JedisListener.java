@@ -32,11 +32,6 @@ import java.util.UUID;
 @SuppressWarnings("unused")
 public class JedisListener implements JedisHandler {
 
-    @Subscription(action = "yes")
-    public void onYes(JsonAppender jsonAppender) {
-        System.out.println(jsonAppender.getParam("yes"));
-    }
-
     @Subscription(action = "DISGUISE_PROFILE_REMOVE")
     public void onDisguiseProfileRemove(JsonAppender jsonAppender) {
         if (!jsonAppender.getParam("SERVER").equals(CorePlugin.getInstance().getServerName())) {

@@ -2,10 +2,7 @@ package com.solexgames.core.util.builder;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.util.Color;
-import com.solexgames.core.util.callback.MenuClickCallback;
 import com.solexgames.core.util.external.Button;
-import lombok.Getter;
-import lombok.Setter;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -16,11 +13,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Future;
+import java.util.*;
+import java.util.function.BiConsumer;
 
 public class ItemBuilder {
 
@@ -56,7 +50,7 @@ public class ItemBuilder {
     }
 
     public ItemBuilder(XMaterial material) {
-        this.itemStack = new ItemStack(material.parseMaterial());
+        this.itemStack = new ItemStack(Objects.requireNonNull(material.parseMaterial()));
         this.itemMeta = itemStack.getItemMeta();
     }
 
@@ -161,7 +155,7 @@ public class ItemBuilder {
         };
     }
 
-    public Button toButton(MenuClickCallback runnable) {
+    public Button toButton(BiConsumer<Player, ClickType> consumer) {
         return new Button() {
             @Override
             public ItemStack getButtonItem(Player player) {
@@ -170,12 +164,12 @@ public class ItemBuilder {
 
             @Override
             public void clicked(Player player, ClickType clickType) {
-                runnable.call(player, clickType);
+                consumer.accept(player, clickType);
             }
         };
     }
 
-    public Button toUpdatingButton(MenuClickCallback runnable) {
+    public Button toUpdatingButton(BiConsumer<Player, ClickType> consumer) {
         return new Button() {
             @Override
             public ItemStack getButtonItem(Player player) {
@@ -184,7 +178,7 @@ public class ItemBuilder {
 
             @Override
             public boolean shouldUpdate(Player player, ClickType clickType) {
-                runnable.call(player, clickType);
+                consumer.accept(player, clickType);
                 return true;
             }
         };

@@ -36,8 +36,7 @@ public class JedisManager {
     private JedisHandler jedisHandler;
     private JedisPubSub jedisPubSub;
 
-    @SneakyThrows
-    public JedisManager(String channel, JedisSettings settings, JedisHandler jedisHandler) {
+    public JedisManager(String channel, JedisSettings settings, JedisHandler jedisHandler) throws InvalidSubscriptionException {
         this.settings = settings;
         this.channel = channel;
         this.jedisHandler = jedisHandler;

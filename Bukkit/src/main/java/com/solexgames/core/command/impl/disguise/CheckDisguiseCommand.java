@@ -1,4 +1,4 @@
-package com.solexgames.core.command.impl.library;
+package com.solexgames.core.command.impl.disguise;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;

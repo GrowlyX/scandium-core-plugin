@@ -10,15 +10,15 @@ import com.solexgames.core.board.ScoreBoard;
 import com.solexgames.core.disguise.DisguiseData;
 import com.solexgames.core.enums.ChatChannelType;
 import com.solexgames.core.enums.LanguageType;
-import com.solexgames.core.player.media.Media;
-import com.solexgames.core.player.grant.Grant;
 import com.solexgames.core.player.achievement.AchievementData;
+import com.solexgames.core.player.grant.Grant;
+import com.solexgames.core.player.media.Media;
+import com.solexgames.core.player.meta.MetaDataEntry;
+import com.solexgames.core.player.meta.MetaDataValue;
 import com.solexgames.core.player.prefixes.Prefix;
 import com.solexgames.core.player.punishment.Punishment;
 import com.solexgames.core.player.punishment.PunishmentStrings;
-import com.solexgames.core.player.punishment.PunishmentType;
 import com.solexgames.core.player.ranks.Rank;
-import com.solexgames.core.player.global.NetworkPlayer;
 import com.solexgames.core.util.*;
 import com.solexgames.core.util.rainbow.RainbowNametag;
 import lombok.Getter;
@@ -30,7 +30,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.PermissionAttachment;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Scoreboard;
 
 import java.net.InetAddress;
@@ -48,9 +47,10 @@ public class PotPlayer {
     private List<Grant> allGrants = new ArrayList<>();
     private List<String> allPrefixes = new ArrayList<>();
     private List<String> allIgnoring = new ArrayList<>();
-    private List<String> allFriends = new ArrayList<>();
     private List<String> userPermissions = new ArrayList<>();
     private List<String> bungeePermissions = new ArrayList<>();
+
+    private Map<String, MetaDataEntry> metaDataEntryMap = new HashMap<>();
 
     @SerializedName("_id")
     private UUID uuid;
@@ -164,7 +164,7 @@ public class PotPlayer {
     public Document getDocument(boolean removing) {
         final Document document = new Document("_id", this.uuid);
 
-        document.put("name", this.getName());
+        document.put("name", this.getOriginalName());
         document.put("uuid", this.uuid.toString());
         document.put("hasSetup2FA", this.hasSetup2FA);
         document.put("securityKey", this.authSecret);
@@ -178,6 +178,12 @@ public class PotPlayer {
         document.put("lastJoined", CorePlugin.FORMAT.format(new Date()));
         document.put("firstJoined", this.firstJoin);
         document.put("disguiseRank", (this.disguiseRank == null ? null : this.disguiseRank.getName()));
+
+        final Map<String, String> stringStringMap = new HashMap<>();
+
+        this.getMetaDataEntryMap().forEach((k, v) -> stringStringMap.put(k, CorePlugin.GSON.toJson(v)));
+
+        document.put("metaData", stringStringMap);
 
         final List<String> grantStrings = new ArrayList<>();
         this.getAllGrants().forEach(grant -> grantStrings.add(grant.toJson()));
@@ -278,129 +284,134 @@ public class PotPlayer {
                     if (this.profile == null) {
                         this.saveWithoutRemove();
                         this.hasLoaded = true;
-
-                        CorePlugin.getInstance().getLogger().info("[Debug] " + this.name + (this.name.endsWith("s") ? "'" : "'s") + " document was just created.");
-
                         return;
                     }
 
-                    this.name = this.getName();
-                    if (profile.getBoolean("isSynced") != null) {
-                        this.setSynced(profile.getBoolean("isSynced"));
+                    if (this.profile.getBoolean("isSynced") != null) {
+                        this.setSynced(this.profile.getBoolean("isSynced"));
                     }
-                    if (profile.getString("syncDiscord") != null) {
-                        this.setSyncDiscord(profile.getString("syncDiscord"));
+                    if (this.profile.getString("syncDiscord") != null) {
+                        this.setSyncDiscord(this.profile.getString("syncDiscord"));
                     }
-                    if (profile.getString("discordSyncCode") != null) {
-                        this.setSyncCode(profile.getString("discordSyncCode"));
+                    if (this.profile.getString("discordSyncCode") != null) {
+                        this.setSyncCode(this.profile.getString("discordSyncCode"));
                     } else {
                         this.setSyncCode(SaltUtil.getRandomSaltedString());
                     }
-                    if (profile.getBoolean("canSeeStaffMessages") != null) {
+                    if (this.profile.getBoolean("canSeeStaffMessages") != null) {
                         this.canSeeStaffMessages = profile.getBoolean("canSeeStaffMessages");
                     }
-                    if (profile.getBoolean("canSeeTips") != null) {
+                    if (this.profile.getBoolean("canSeeTips") != null) {
                         this.canSeeTips = profile.getBoolean("canSeeTips");
                     }
-                    if (profile.getBoolean("canReceiveDms") != null) {
+                    if (this.profile.getBoolean("canReceiveDms") != null) {
                         this.canReceiveDms = profile.getBoolean("canReceiveDms");
                     }
-                    if (profile.getBoolean("canSeeFiltered") != null) {
+                    if (this.profile.getBoolean("canSeeFiltered") != null) {
                         this.canSeeFiltered = profile.getBoolean("canSeeFiltered");
                     }
-                    if (profile.getBoolean("canSeeBroadcasts") != null) {
+                    if (this.profile.getBoolean("canSeeBroadcasts") != null) {
                         this.canSeeBroadcasts = profile.getBoolean("canSeeBroadcasts");
                     }
-                    if (profile.getBoolean("canSeeGlobalChat") != null) {
+                    if (this.profile.getBoolean("canSeeGlobalChat") != null) {
                         this.canSeeGlobalChat = profile.getBoolean("canSeeGlobalChat");
                     }
-                    if (profile.getBoolean("hasVoted") != null) {
+                    if (this.profile.getBoolean("hasVoted") != null) {
                         this.hasVoted = profile.getBoolean("hasVoted");
                     }
-                    if (profile.getBoolean("autoModMode") != null) {
+                    if (this.profile.getBoolean("autoModMode") != null) {
                         this.isAutoModMode = profile.getBoolean("autoModMode");
                     }
-                    if (profile.getString("previousIpAddress") != null) {
-                        this.previousIpAddress = CorePlugin.getInstance().getCryptoManager().decrypt(profile.getString("previousIpAddress"));
+                    if (this.profile.getString("previousIpAddress") != null) {
+                        this.previousIpAddress = CorePlugin.getInstance().getCryptoManager().decrypt(this.profile.getString("previousIpAddress"));
                     } else {
                         this.previousIpAddress = "";
                     }
-                    if (profile.getString("privateKey") != null) {
+                    if (this.profile.getString("privateKey") != null) {
                         this.authSecret = profile.getString("privateKey");
                     }
-                    if (profile.getBoolean("autoVanish") != null) {
+                    if (this.profile.getBoolean("autoVanish") != null) {
                         this.isAutoVanish = profile.getBoolean("autoVanish");
                     }
-                    if (profile.getBoolean("canReceiveDmsSounds") != null) {
+                    if (this.profile.getBoolean("canReceiveDmsSounds") != null) {
                         this.canReceiveDmsSounds = profile.getBoolean("canReceiveDmsSounds");
                     }
-                    if (profile.getBoolean("hasSetup2FA") != null) {
+                    if (this.profile.getBoolean("hasSetup2FA") != null) {
                         this.hasSetup2FA = profile.getBoolean("hasSetup2FA");
                     } else {
                         this.hasSetup2FA = false;
                     }
-                    if (profile.getString("firstJoined") != null) {
+                    if (this.profile.getString("firstJoined") != null) {
                         this.firstJoin = profile.getString("firstJoined");
                     } else {
                         this.firstJoin = CorePlugin.FORMAT.format(new Date());
                     }
-                    if (profile.getString("language") != null) {
-                        this.language = LanguageType.getByName(profile.getString("language"));
+                    if (this.profile.getString("language") != null) {
+                        this.language = LanguageType.getByName(this.profile.getString("language"));
                     } else {
                         this.language = LanguageType.ENGLISH;
                     }
-                    if (profile.getInteger("experience") != null) {
+                    if (this.profile.getInteger("experience") != null) {
                         this.experience = profile.getInteger("experience");
                     } else {
                         this.experience = 0;
                     }
-                    if (profile.getString("customColor") != null) {
-                        this.customColor = ChatColor.valueOf(profile.getString("customColor"));
+                    if (this.profile.getString("customColor") != null) {
+                        this.customColor = ChatColor.valueOf(this.profile.getString("customColor"));
                     }
-                    if (profile.getString("discord") != null) {
-                        this.media.setDiscord(profile.getString("discord"));
+                    if (this.profile.getString("discord") != null) {
+                        this.media.setDiscord(this.profile.getString("discord"));
                     } else {
                         this.media.setDiscord("N/A");
                     }
-                    if (profile.getString("twitter") != null) {
-                        this.media.setTwitter(profile.getString("twitter"));
+                    if (this.profile.getString("twitter") != null) {
+                        this.media.setTwitter(this.profile.getString("twitter"));
                     } else {
                         this.media.setTwitter("N/A");
                     }
-                    if (profile.getString("youtube") != null) {
-                        this.media.setYoutubeLink(profile.getString("youtube"));
+                    if (this.profile.getString("youtube") != null) {
+                        this.media.setYoutubeLink(this.profile.getString("youtube"));
                     } else {
                         this.media.setYoutubeLink("N/A");
                     }
-                    if (profile.getString("instagram") != null) {
-                        this.media.setInstagram(profile.getString("instagram"));
+                    if (this.profile.getString("instagram") != null) {
+                        this.media.setInstagram(this.profile.getString("instagram"));
                     } else {
                         this.media.setInstagram("N/A");
                     }
-                    if (profile.getList("allGrants", String.class).isEmpty()) {
-                        this.allGrants.add(new Grant(null, Objects.requireNonNull(Rank.getDefault()), new Date().getTime(), -1L, "Automatic Grant (Default)", true, true));
+                    if (this.profile.getList("allGrants", String.class).isEmpty()) {
+                        this.allGrants.add(this.getDefaultGrant());
                     } else {
                         final List<String> allGrants = profile.getList("allGrants", String.class);
                         allGrants.forEach(s -> this.allGrants.add(CorePlugin.GSON.fromJson(s, Grant.class)));
                     }
-                    if ((profile.getString("appliedPrefix") != null) && !profile.getString("appliedPrefix").equals("Default")) {
-                        this.appliedPrefix = Prefix.getByName(profile.getString("appliedPrefix"));
+
+                    final String appliedPrefix = this.profile.getString("appliedPrefix");
+                    if (appliedPrefix != null && !appliedPrefix.equals("Default")) {
+                        this.appliedPrefix = Prefix.getByName(appliedPrefix);
                     } else {
                         this.appliedPrefix = null;
                     }
-                    if (profile.get("allIgnored") != null) {
-                        final List<String> ignoring = profile.getList("allIgnored", String.class);
+
+                    if (this.profile.get("allIgnored") != null) {
+                        final List<String> ignoring = this.profile.getList("allIgnored", String.class);
 
                         if (!ignoring.isEmpty()) {
                             this.allIgnoring.addAll(ignoring);
                         }
                     }
-                    if (profile.get("allPermissions") != null) {
-                        final List<String> permissions = profile.getList("allPermissions", String.class);
+
+                    if (this.profile.get("allPermissions") != null) {
+                        final List<String> permissions = this.profile.getList("allPermissions", String.class);
 
                         if (!permissions.isEmpty()) {
                             this.userPermissions.addAll(permissions);
                         }
+                    }
+                    if (this.profile.get("metaData") != null) {
+                        final Map<?, ?> serializedMetaData = this.profile.get("metaData", Map.class);
+
+                        serializedMetaData.forEach((k, v) -> this.metaDataEntryMap.put((String) k, CorePlugin.GSON.fromJson((String) v, MetaDataEntry.class)));
                     }
 
                     this.currentlyOnline = true;
@@ -420,22 +431,20 @@ public class PotPlayer {
 
         CompletableFuture.supplyAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("previousIpAddress", this.encryptedIpAddress)).iterator())
                 .thenAcceptAsync(documentIterator -> {
-                    if (!documentIterator.hasNext()) {
-                        return;
-                    }
+                    if (documentIterator.hasNext()) {
+                        final Document document = documentIterator.next();
 
-                    final Document document = documentIterator.next();
+                        if (document.getBoolean("blacklisted") != null && document.getBoolean("blacklisted") && !document.getString("name").equalsIgnoreCase(loginEvent.getName())) {
+                            this.currentlyBlacklisted = true;
+                            this.relatedToBlacklist = true;
+                            this.relatedTo = document.getString("name");
 
-                    if (document.getBoolean("blacklisted") != null && document.getBoolean("blacklisted") && !document.getString("name").equalsIgnoreCase(loginEvent.getName())) {
-                        this.currentlyBlacklisted = true;
-                        this.relatedToBlacklist = true;
-                        this.relatedTo = document.getString("name");
+                            if (!hub) {
+                                loginEvent.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, Color.translate(PunishmentStrings.BLACK_LIST_RELATION_MESSAGE.replace("<player>", this.relatedTo)));
+                            }
 
-                        if (!hub) {
-                            loginEvent.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, Color.translate(PunishmentStrings.BLACK_LIST_RELATION_MESSAGE.replace("<player>", this.relatedTo)));
+                            atomicBoolean.set(true);
                         }
-
-                        atomicBoolean.set(true);
                     }
                 });
 
@@ -675,25 +684,43 @@ public class PotPlayer {
             if (!this.hasVoted) {
                 if (VotingUtil.hasVoted(this.uuid.toString())) {
                     this.hasVoted = true;
-                    this.getAllPrefixes().add("Liked");
+                    this.allPrefixes.add("Liked");
 
-                    if (this.getAppliedPrefix() == null) {
+                    if (this.appliedPrefix == null) {
                         this.appliedPrefix = Prefix.getByName("Liked");
                     }
                     if (this.player != null) {
-                        this.player.sendMessage(ChatColor.GREEN + Color.translate("Thanks for voting for us on &6NameMC&a!"));
-                        this.player.sendMessage(ChatColor.GREEN + Color.translate("You've been granted the &b✔ &7(Liked)&a prefix!"));
+                        this.player.sendMessage(new String[]{
+                                Color.SECONDARY_COLOR + "Thanks for voting for our server on " + ChatColor.AQUA + "NameMC" + Color.SECONDARY_COLOR + "!",
+                                Color.SECONDARY_COLOR + "You've been granted the " + ChatColor.AQUA + "✔ " + ChatColor.GRAY + "(Liked)" + Color.SECONDARY_COLOR + " prefix!"
+                        });
                     }
                 }
             } else {
                 if (!VotingUtil.hasVoted(this.uuid.toString())) {
                     this.hasVoted = false;
-                    this.getAllPrefixes().remove("Liked");
+                    this.allPrefixes.remove("Liked");
 
                     this.player.sendMessage(ChatColor.RED + Color.translate("Your permission to access the &b✔ &7(Liked) &ctag has been revoked as You've unliked our server on NameMC!"));
                     this.player.sendMessage(ChatColor.RED + Color.translate("To gain your tag back, like us on NameMC again!"));
                 }
             }
         });
+    }
+
+    public boolean hasMetaData(String key) {
+        return this.metaDataEntryMap.containsKey(key);
+    }
+
+    public MetaDataEntry getMetaData(String key) {
+        return this.metaDataEntryMap.getOrDefault(key, null);
+    }
+
+    public void addMetaData(String key, MetaDataValue value) {
+        this.metaDataEntryMap.put(key, new MetaDataEntry(key, value));
+    }
+
+    public void deleteMetaData(String key) {
+        this.metaDataEntryMap.remove(key);
     }
 }

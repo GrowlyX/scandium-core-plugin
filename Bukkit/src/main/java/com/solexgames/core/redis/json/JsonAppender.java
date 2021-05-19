@@ -15,15 +15,57 @@ import java.util.Map;
  */
 
 @Getter
-@RequiredArgsConstructor
 public class JsonAppender {
 
     private final Map<String, String> parameters = new HashMap<>();
 
     private final String packet;
 
+    public JsonAppender(String packet) {
+        this.packet = packet;
+    }
+
+    public JsonAppender(Enum<?> aEnum) {
+        this.packet = aEnum.name();
+    }
+
+    public JsonAppender put(String key, Object value) {
+        this.parameters.put(key, value == null ? null : value.toString());
+        return this;
+    }
+
     public JsonAppender put(String key, String value) {
         this.parameters.put(key, value);
+        return this;
+    }
+
+    public JsonAppender put(String key, Boolean value) {
+        this.parameters.put(key, value.toString());
+        return this;
+    }
+
+    public JsonAppender put(String key, Integer value) {
+        this.parameters.put(key, value.toString());
+        return this;
+    }
+
+    public JsonAppender put(String key, Character value) {
+        this.parameters.put(key, value.toString());
+        return this;
+    }
+
+    public JsonAppender put(String key, Long value) {
+        this.parameters.put(key, value.toString());
+        return this;
+    }
+
+    public JsonAppender put(String key, Float value) {
+        this.parameters.put(key, value.toString());
+        return this;
+    }
+
+    public JsonAppender put(String key, Double value) {
+        this.parameters.put(key, value.toString());
         return this;
     }
 
