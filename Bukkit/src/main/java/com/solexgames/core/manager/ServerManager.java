@@ -93,7 +93,9 @@ public class ServerManager {
         try {
             this.network = ServerType.valueOf(CorePlugin.getInstance().getConfig().getString("server.settings.server-id"));
         } catch (Exception ignored) {
-            CorePlugin.getInstance().logConsole("&cYour Server ID is not correct! &7Please check your config and try again.");
+            CorePlugin.getInstance().logConsole("&7I'm sorry, but I couldn't identify your server id.");
+            CorePlugin.getInstance().logConsole("&f&oPlease double check your config or message &eSolexGames &7&omanagement.");
+
             CorePlugin.getInstance().getServer().shutdown();
         }
     }
