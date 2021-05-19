@@ -71,7 +71,7 @@ public class PunishmentManager {
 
         final String playerFormattedName = (rank != null ? rank.getColor() + rank.getItalic() : ChatColor.GRAY) + name;
         final String punishmentExplanation = (!punishment.isPermanent() && !punishment.getPunishmentType().equals(PunishmentType.KICK) ? "temporarily " : "") + punishment.getPunishmentType().getEdName().toLowerCase();
-        final String durationFormat = (punishment.isPermanent() ? "." : " for " + punishment.getDurationString() + ".");
+        final String durationFormat = punishment.getPunishmentType().equals(PunishmentType.KICK) ? "." : (punishment.isPermanent() ? "." : " for " + punishment.getDurationString() + ".");
 
         this.punishments.add(punishment);
 
@@ -192,7 +192,7 @@ public class PunishmentManager {
                 return;
             }
 
-            final String formattedTarget = (playerRank != null ? playerRank.getColor() + playerRank.getItalic() : ChatColor.GRAY) + playerName;
+            final String formattedTarget = Color.translate((playerRank != null ? playerRank.getColor() + playerRank.getItalic() : ChatColor.GRAY) + playerName);
             final String responseMessage = message.endsWith("-s") ? ChatColor.GRAY + "[Silent] " : "" + ChatColor.GREEN + "You've un" + punishmentType.getEdName().toLowerCase() + " " + formattedTarget + " for " + Color.SECONDARY_COLOR + message + ChatColor.GREEN + ".";
 
             if (player != null) {

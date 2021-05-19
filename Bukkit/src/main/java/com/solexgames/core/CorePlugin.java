@@ -175,7 +175,7 @@ public final class CorePlugin extends JavaPlugin {
                         this.databaseConfig.getBoolean("redis.authentication.enabled"),
                         this.databaseConfig.getString("redis.authentication.password")
                 ))
-                .withHandler(JedisListener.class)
+                .withHandler(new JedisListener())
                 .build();
 
         this.setupExtra();
@@ -240,6 +240,7 @@ public final class CorePlugin extends JavaPlugin {
         }
 
         new PunishmentStrings().setupMessages();
+        Color.setup();
 
         BukkitUtil.registerListenersIn("com.solexgames.core.listener");
 

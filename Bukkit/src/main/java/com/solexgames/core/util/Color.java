@@ -13,13 +13,13 @@ import java.util.List;
 
 public final class Color {
 
-    static {
+    public static void setup() {
         MAIN_COLOR = CorePlugin.getInstance().getServerManager().getNetwork().getMainColor().toString();
         SECONDARY_COLOR = CorePlugin.getInstance().getServerManager().getNetwork().getSecondaryColor().toString();
     }
 
-    public static final String MAIN_COLOR;
-    public static final String SECONDARY_COLOR;
+    public static String MAIN_COLOR;
+    public static String SECONDARY_COLOR;
 
     public static String translate(String text) {
         return ChatColor.translateAlternateColorCodes('&', text);

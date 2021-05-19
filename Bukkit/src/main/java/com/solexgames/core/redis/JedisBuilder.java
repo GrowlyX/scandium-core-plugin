@@ -21,23 +21,18 @@ public class JedisBuilder {
 
     private String channel;
 
-    public JedisBuilder withChannel(String channel) {
-        this.channel = channel;
-        return this;
-    }
-
     public JedisBuilder withSettings(JedisSettings settings) {
         this.settings = settings;
         return this;
     }
 
-    public JedisBuilder withHandler(Class<? extends JedisHandler> clazz) {
-        try {
-            this.handler = clazz.newInstance();
-        } catch (IllegalAccessException | InstantiationException exception) {
-            exception.printStackTrace();
-        }
+    public JedisBuilder withHandler(JedisHandler handler) {
+        this.handler = handler;
+        return this;
+    }
 
+    public JedisBuilder withChannel(String channel) {
+        this.channel = channel;
         return this;
     }
 

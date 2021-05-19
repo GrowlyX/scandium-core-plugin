@@ -46,7 +46,7 @@ public class ListCommand extends BaseCommand {
         final String ranks = Rank.getRanks().stream()
                 .filter(rank -> !rank.isHidden())
                 .sorted(Comparator.comparingInt(rank -> -rank.getWeight()))
-                .map(rank -> Color.translate(rank.getColor() + rank.getItalic() + rank.getName()))
+                .map(rank -> Color.translate(rank.getColor() + rank.getItalic() + rank.getName().replace("-", " ")))
                 .collect(Collectors.joining(ChatColor.WHITE + ", "));
         final String players = this.getOnlinePlayers(!player.hasPermission("scandium.staff"), split).stream()
                 .map(player1 -> CorePlugin.getInstance().getPlayerManager().getPlayer(player1.getUniqueId()))
