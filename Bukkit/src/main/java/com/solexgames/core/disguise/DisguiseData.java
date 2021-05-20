@@ -33,7 +33,11 @@ public class DisguiseData {
 
     public void saveData() {
         CompletableFuture.runAsync(() ->
-                CorePlugin.getInstance().getCoreDatabase().getDisguiseCollection().replaceOne(Filters.eq("_id", this.uuid), this.getDocument(), new ReplaceOptions().upsert(true))
+                CorePlugin.getInstance().getCoreDatabase().getDisguiseCollection().replaceOne(
+                        Filters.eq("_id", this.uuid),
+                        this.getDocument(),
+                        new ReplaceOptions().upsert(true)
+                )
         );
     }
 }

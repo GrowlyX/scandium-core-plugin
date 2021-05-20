@@ -33,14 +33,14 @@ public class AuthSetupCommand extends BaseCommand {
 
         CompletableFuture.runAsync(() -> {
             if (potPlayer.getAuthSecret() != null) {
-                player.sendMessage(ChatColor.RED + "You already have 2FA setup!");
+                player.sendMessage(ChatColor.RED + "Error: You've already setup two-factor authentication.");
                 return;
             }
 
-            ConversationFactory factory = new ConversationFactory(CorePlugin.getInstance())
+            final ConversationFactory factory = CorePlugin.getInstance().getConversationFactory()
                     .withFirstPrompt(new DisclaimerPrompt())
                     .withLocalEcho(false)
-                    .thatExcludesNonPlayersWithMessage(ChatColor.RED + "NO CONSOLE YOU NUB");
+                    .thatExcludesNonPlayersWithMessage(this.ONLY_PLAYERS);
 
             player.beginConversation(factory.buildConversation(player));
         });

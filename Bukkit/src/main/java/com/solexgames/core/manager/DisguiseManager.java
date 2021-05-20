@@ -33,13 +33,16 @@ public class DisguiseManager {
     }
 
     public void loadToCache() {
-        CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getDisguiseCollection().find().forEach((Block<? super Document>) document -> {
-            CorePlugin.getInstance().getDisguiseCache().registerNewDataPair(new DisguiseData(UUID.fromString(document.getString("uuid")), document.getString("name"), document.getString("skin"), document.getString("signature")));
-        }));
+        CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getDisguiseCollection().find().forEach((Block<? super Document>) document -> CorePlugin.getInstance().getDisguiseCache().registerNewDataPair(new DisguiseData(UUID.fromString(document.getString("uuid")), document.getString("name"), document.getString("skin"), document.getString("signature")))));
     }
 
     public void disguise(Player player, DisguiseData disguiseData, DisguiseData skinData, Rank rank) {
         final PotPlayer potPlayer = this.plugin.getPlayerManager().getPlayer(player);
+
+        if (Bukkit.getPlayer(disguiseData.getName()) != null) {
+            player.sendMessage(ChatColor.RED + "Error: A player with the name " + ChatColor.YELLOW + disguiseData.getName() + ChatColor.RED + " is already online.");
+            return;
+        }
 
         if (disguiseData.getUuid() != null && potPlayer != null) {
             potPlayer.setDisguiseRank(rank);
@@ -61,6 +64,11 @@ public class DisguiseManager {
 
     public void disguiseOther(Player player, DisguiseData disguiseData, DisguiseData skinData, Rank rank) {
         final PotPlayer potPlayer = this.plugin.getPlayerManager().getPlayer(player);
+
+        if (Bukkit.getPlayer(disguiseData.getName()) != null) {
+            player.sendMessage(ChatColor.RED + "Error: A player with the name " + ChatColor.YELLOW + disguiseData.getName() + ChatColor.RED + " is already online.");
+            return;
+        }
 
         if (disguiseData.getUuid() != null && potPlayer != null) {
             potPlayer.setDisguiseRank(rank);

@@ -12,6 +12,10 @@ public class MetaDataValue {
 
     private final Object object;
 
+    public <T> T get(String key, Class<T> type) {
+        return type.cast(this.object);
+    }
+
     public String getAsString() {
         return (String) this.object;
     }

@@ -89,6 +89,9 @@ public final class CorePlugin extends JavaPlugin {
     private NameTagManager nameTagManager;
     private DisguiseManager disguiseManager;
 
+    private JedisManager jedisManager;
+    private JedisSettings defaultJedisSettings;
+
     private UUIDCache uuidCache;
     private DisguiseCache disguiseCache;
     private ServerSettings serverSettings;
@@ -96,7 +99,6 @@ public final class CorePlugin extends JavaPlugin {
     private String serverName;
     private HttpClient httpClient;
     private Database coreDatabase;
-    private JedisManager jedisManager;
     private String pluginName;
 
     private FileConfig ranksConfig;
@@ -167,14 +169,16 @@ public final class CorePlugin extends JavaPlugin {
         this.nameTagManager = new NameTagManager();
         this.disguiseManager = new DisguiseManager();
 
+        this.defaultJedisSettings = new JedisSettings(
+                this.databaseConfig.getString("redis.host"),
+                this.databaseConfig.getInt("redis.port"),
+                this.databaseConfig.getBoolean("redis.authentication.enabled"),
+                this.databaseConfig.getString("redis.authentication.password")
+        );
+
         this.jedisManager = new JedisBuilder()
                 .withChannel("scandium:bukkit")
-                .withSettings(new JedisSettings(
-                        this.databaseConfig.getString("redis.host"),
-                        this.databaseConfig.getInt("redis.port"),
-                        this.databaseConfig.getBoolean("redis.authentication.enabled"),
-                        this.databaseConfig.getString("redis.authentication.password")
-                ))
+                .withSettings(this.defaultJedisSettings)
                 .withHandler(new JedisListener())
                 .build();
 

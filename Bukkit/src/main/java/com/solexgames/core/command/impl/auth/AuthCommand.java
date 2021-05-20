@@ -44,18 +44,18 @@ public class AuthCommand extends BaseCommand {
         try {
             code = Integer.parseInt(input);
         } catch (NumberFormatException e) {
-            player.sendMessage(ChatColor.RED + "I'm sorry, but the code you've entered is invalid.");
+            player.sendMessage(ChatColor.RED + "I'm sorry, but we couldn't verify your identity. Maybe check the code you entered and try again?");
             return false;
         }
 
         CompletableFuture.runAsync(() -> {
-            boolean valid = potPlayer.isAuthValid(code);
+            final boolean valid = potPlayer.isAuthValid(code);
 
             if (valid) {
                 LockedState.release(player);
 
-                player.sendMessage(ChatColor.GREEN + "You've verified your identity and have been unlocked.");
-                player.sendMessage(ChatColor.GREEN + "Thank you for keeping your account and our server safe!");
+                player.sendMessage(ChatColor.DARK_AQUA + "[2FA] " + ChatColor.YELLOW + "You've " + ChatColor.GREEN + "verified" + ChatColor.YELLOW + " your identity!");
+                player.sendMessage(ChatColor.DARK_AQUA + "[2FA] " + ChatColor.YELLOW + "Thanks for helping us keep our server save! " + ChatColor.RED + "<3");
             } else {
                 player.sendMessage(ChatColor.RED + "I'm sorry, but we couldn't verify your identity. Maybe check the code you entered and try again?");
             }

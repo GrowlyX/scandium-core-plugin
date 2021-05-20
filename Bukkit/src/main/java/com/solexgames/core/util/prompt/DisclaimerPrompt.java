@@ -9,7 +9,7 @@ public class DisclaimerPrompt extends StringPrompt {
 
     @Override
     public String getPromptText(ConversationContext context) {
-        return ChatColor.GRAY + "Would you like to setup Two Factor Authentication? If yes, please type \"yes\" in chat, otherwise, type anything else.";
+        return ChatColor.DARK_AQUA + "[2FA]" + ChatColor.YELLOW + " Would you like to setup two-factor authentication? " + ChatColor.AQUA + "If yes, please type \"yes\" in chat, otherwise, type anything else.";
     }
 
     @Override
@@ -18,7 +18,7 @@ public class DisclaimerPrompt extends StringPrompt {
             return new MapScannerPrompt();
         }
 
-        context.getForWhom().sendRawMessage(ChatColor.GREEN + "You've aborted the 2FA Setup.");
+        context.getForWhom().sendRawMessage(ChatColor.DARK_AQUA + "[2FA]" + ChatColor.YELLOW + " You've aborted the two-factor authentication setup process!");
 
         return Prompt.END_OF_CONVERSATION;
     }

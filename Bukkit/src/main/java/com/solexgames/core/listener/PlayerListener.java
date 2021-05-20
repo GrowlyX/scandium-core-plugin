@@ -10,6 +10,7 @@ import com.solexgames.core.player.punishment.PunishmentStrings;
 import com.solexgames.core.server.NetworkServer;
 import com.solexgames.core.util.*;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -131,6 +132,24 @@ public class PlayerListener implements Listener {
             if (potPlayer.getDisguiseRank() != null) {
                 event.getPlayer().sendMessage(Color.SECONDARY_COLOR + "You've been automatically disguised as " + potPlayer.getColorByRankColor() + potPlayer.getDisguiseRank().getName() + Color.SECONDARY_COLOR + "!");
             }
+
+            if (event.getPlayer().hasPermission("scandium.2fa.forced")) {
+                CompletableFuture.runAsync(() -> {
+                    if (potPlayer.isHasSetup2FA()) {
+                        if (potPlayer.getPreviousIpAddress().equals(potPlayer.getEncryptedIpAddress())) {
+                            final String message = ChatColor.DARK_AQUA + "[2FA] " + ChatColor.YELLOW + "Please authenticate via " + ChatColor.AQUA + "/auth " + ChatColor.WHITE + "<code>" + ChatColor.YELLOW + ".";
+
+                            potPlayer.getPlayer().sendMessage(message);
+                            LockedState.lock(potPlayer.getPlayer(), message);
+                        }
+                    } else {
+                        final String message = ChatColor.DARK_AQUA + "[2FA] " + ChatColor.YELLOW + "Please setup two-factor authentication via " + ChatColor.AQUA + "/auth" + ChatColor.YELLOW + ".";
+
+                        potPlayer.getPlayer().sendMessage(message);
+                        LockedState.lock(potPlayer.getPlayer(), message);
+                    }
+                });
+            }
         });
 
         if (potPlayer.isAutoVanish()) {
@@ -198,12 +217,11 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (LockedState.isLocked(player)) {
+        if (LockedState.isLocked(event.getPlayer())) {
+            player.sendMessage(ChatColor.RED + "You cannot perform this action right now as you're auth locked.");
+            player.sendMessage(ChatColor.RED + "The only action you can perform is " + ChatColor.RED + ChatColor.BOLD.toString() + "/2fa" + ChatColor.RED + "!");
+
             event.setCancelled(true);
-
-            player.sendMessage(ChatColor.RED + "You cannot perform this action right now!");
-            player.sendMessage(ChatColor.RED + "The only action you can perform is " + ChatColor.DARK_RED + "/2fa" + ChatColor.RED + "!");
-
             return;
         }
 
@@ -301,9 +319,9 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (LockedState.isLocked(event.getPlayer())) {
-            player.sendMessage(ChatColor.RED + "You cannot perform this action right now!");
-            player.sendMessage(ChatColor.RED + "The only action you can perform is " + ChatColor.RED + ChatColor.BOLD.toString() + "/2fa" + ChatColor.RED + "!");
+        if (LockedState.isLocked(event.getPlayer()) && !(event.getMessage().equals("/2fa") || event.getMessage().equals("/auth") || event.getMessage().equals("/authsetup"))) {
+            player.sendMessage(ChatColor.RED + "You cannot perform this action right now as you're auth locked.");
+            player.sendMessage(ChatColor.RED + "The only action you can perform is " + ChatColor.RED + ChatColor.BOLD.toString() + "/2fa or /authsetup" + ChatColor.RED + "!");
 
             event.setCancelled(true);
         }
@@ -314,7 +332,7 @@ public class PlayerListener implements Listener {
         }
 
         if (potPlayer.isCurrentlyRestricted() && !event.getMessage().startsWith("/discord")) {
-            player.sendMessage(ChatColor.RED + "You cannot perform this command as you are currently banned.");
+            player.sendMessage(ChatColor.RED + "You cannot perform this command as you're currently banned.");
             player.sendMessage(ChatColor.RED + "The only command you can perform is " + ChatColor.RED + ChatColor.BOLD.toString() + "/discord" + ChatColor.RED + "!");
 
             event.setCancelled(true);
@@ -364,7 +382,7 @@ public class PlayerListener implements Listener {
 
         if (LockedState.isLocked(player)) {
             for (ItemStack itemStack : player.getInventory().getContents()) {
-                if (itemStack.getType() == Material.MAP && itemStack.getItemMeta().hasLore()) {
+                if (itemStack != null && itemStack.getType() == Material.MAP && itemStack.getItemMeta().hasLore()) {
                     final List<String> lore = itemStack.getItemMeta().getLore();
 
                     if (!lore.isEmpty() && lore.get(0).equalsIgnoreCase("QR Code Map")) {

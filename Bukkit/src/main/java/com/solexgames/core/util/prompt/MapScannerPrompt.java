@@ -40,32 +40,31 @@ public class MapScannerPrompt extends StringPrompt {
         final Player player = (Player) context.getForWhom();
 
         if (this.failures == 0) {
-            CompletableFuture.runAsync(() -> {
-                final String secret = generateSecret();
-                final BufferedImage image = generateImage(player, secret);
+            final String secret = generateSecret();
+            final BufferedImage image = generateImage(player, secret);
 
-                if (image != null) {
-                    MapView mapView = Bukkit.getServer().createMap(player.getWorld());
-                    mapView.getRenderers().forEach(mapView::removeRenderer);
-                    mapView.addRenderer(new QrCodeMap(image, player.getUniqueId()));
+            if (image != null) {
+                MapView mapView = Bukkit.getServer().createMap(player.getWorld());
+                mapView.getRenderers().forEach(mapView::removeRenderer);
+                mapView.addRenderer(new QrCodeMap(image, player.getUniqueId()));
 
-                    ItemStack mapItem = new ItemStack(XMaterial.MAP.parseMaterial(), 1, mapView.getId());
-                    ItemMeta mapMeta = mapItem.getItemMeta();
+                ItemStack mapItem = new ItemStack(Material.MAP, 1, mapView.getId());
+                ItemMeta mapMeta = mapItem.getItemMeta();
 
-                    mapMeta.setLore(Collections.singletonList("QR Code Map"));
-                    mapItem.setItemMeta(mapMeta);
+                mapMeta.setDisplayName(ChatColor.DARK_AQUA + ChatColor.BOLD.toString() + "2FA Code");
+                mapMeta.setLore(Collections.singletonList("QR Code Map"));
+                mapItem.setItemMeta(mapMeta);
 
-                    context.setSessionData("secret", secret);
-                    context.setSessionData("map", mapItem);
+                context.setSessionData("secret", secret);
+                context.setSessionData("map", mapItem);
 
-                    player.sendMap(mapView);
-                    player.getInventory().addItem(mapItem);
-                    player.updateInventory();
-                }
-            });
+                player.sendMap(mapView);
+                player.getInventory().addItem(mapItem);
+                player.updateInventory();
+            }
         }
 
-        return ChatColor.GREEN + "Scan the QR Code on the map which was provided to you and type the code you receive from your 2FA application in chat!";
+        return ChatColor.DARK_AQUA + "[2FA] " + ChatColor.YELLOW + "Scan the QR Code on the map which was provided to you and type the code you receive from your 2FA application in chat!";
     }
 
     @Override
@@ -86,17 +85,17 @@ public class MapScannerPrompt extends StringPrompt {
             int attempts = this.failures++;
 
             if (attempts >= 3) {
-                player.sendMessage(ChatColor.RED + "You've exceeded the amount of attempts that you had!");
-                player.sendMessage(ChatColor.RED + "The 2FA setup has been cancelled.");
+                context.getForWhom().sendRawMessage(ChatColor.RED + "You've exceeded the amount of attempts that you had!");
+                context.getForWhom().sendRawMessage(ChatColor.RED + "The 2FA setup has been cancelled.");
 
                 return Prompt.END_OF_CONVERSATION;
             }
 
-            player.sendMessage("  ");
-            player.sendMessage(ChatColor.RED + "I'm sorry, but the code you provided us is not valid.");
-            player.sendMessage(ChatColor.RED + "Please try again and enter a new code in chat.");
-            player.sendMessage(ChatColor.RED + "You currently have " + ChatColor.WHITE.toString() + (3 - attempts) + ChatColor.RED + " attempts left.");
-            player.sendMessage("  ");
+            context.getForWhom().sendRawMessage("  ");
+            context.getForWhom().sendRawMessage(ChatColor.RED + "I'm sorry, but the code you provided us is not valid.");
+            context.getForWhom().sendRawMessage(ChatColor.RED + "Please try again and enter a new code in chat.");
+            context.getForWhom().sendRawMessage(ChatColor.RED + "You currently have " + ChatColor.WHITE.toString() + (3 - attempts) + ChatColor.RED + " attempts left.");
+            context.getForWhom().sendRawMessage("  ");
 
             return this;
         }
@@ -105,27 +104,28 @@ public class MapScannerPrompt extends StringPrompt {
             int attempts = this.failures++;
 
             if (attempts >= 3) {
-                player.sendMessage(ChatColor.RED + "You've exceeded the amount of attempts that you had!");
-                player.sendMessage(ChatColor.RED + "The 2FA setup has been cancelled.");
+                context.getForWhom().sendRawMessage(ChatColor.RED + "You've exceeded the amount of attempts that you had!");
+                context.getForWhom().sendRawMessage(ChatColor.RED + "The 2FA setup has been cancelled.");
 
                 return Prompt.END_OF_CONVERSATION;
             }
 
-            player.sendMessage("  ");
-            player.sendMessage(ChatColor.RED + "I'm sorry, but the code you provided us is not valid.");
-            player.sendMessage(ChatColor.RED + "Please try again and enter a new code in chat.");
-            player.sendMessage(ChatColor.RED + "You currently have " + ChatColor.WHITE.toString() + (3 - attempts) + ChatColor.RED + " attempts left.");
-            player.sendMessage("  ");
+            context.getForWhom().sendRawMessage("  ");
+            context.getForWhom().sendRawMessage(ChatColor.RED + "I'm sorry, but the code you provided us is not valid.");
+            context.getForWhom().sendRawMessage(ChatColor.RED + "Please try again and enter a new code in chat.");
+            context.getForWhom().sendRawMessage(ChatColor.RED + "You currently have " + ChatColor.WHITE.toString() + (3 - attempts) + ChatColor.RED + " attempts left.");
+            context.getForWhom().sendRawMessage("  ");
 
             return this;
         }
 
         LockedState.release(player);
 
+        potPlayer.setHasSetup2FA(true);
         potPlayer.setAuthSecret(secret);
 
-        player.sendMessage(ChatColor.GREEN + "You've finished the 2FA Setup!");
-        player.sendMessage(ChatColor.GREEN + "Thank you for keeping your account and our server safe!");
+        context.getForWhom().sendRawMessage(ChatColor.DARK_AQUA + "[2FA] " + ChatColor.YELLOW + "You've " + ChatColor.GREEN + "verified" + ChatColor.YELLOW + " your identity!");
+        context.getForWhom().sendRawMessage(ChatColor.DARK_AQUA + "[2FA] " + ChatColor.YELLOW + "Thanks for helping us keep our server save! " + ChatColor.RED + "<3");
 
         return Prompt.END_OF_CONVERSATION;
     }

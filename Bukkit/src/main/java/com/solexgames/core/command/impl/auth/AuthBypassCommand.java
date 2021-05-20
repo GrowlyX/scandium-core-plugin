@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
-@Command(label = "authbypass", aliases = {"remove2fa", "bypass2fa"})
+@Command(label = "authbypass", aliases = {"remove2fa", "2fabypass"})
 public class AuthBypassCommand extends BaseCommand {
 
     @Override
@@ -35,14 +35,14 @@ public class AuthBypassCommand extends BaseCommand {
         }
 
         if (!LockedState.isLocked(target)) {
-            sender.sendMessage(ChatColor.RED + "Error: That player does not have to by bypassed.");
+            sender.sendMessage(ChatColor.RED + "Error: That player does not have to be bypassed.");
             return true;
         }
 
         LockedState.release(target);
-        target.sendMessage(ChatColor.GREEN + "An administrator has granted you Two-Factor Authentication bypass.");
+        target.sendMessage(ChatColor.GREEN + "An administrator has granted you two-factor authentication bypass.");
 
-        sender.sendMessage(ChatColor.GREEN + "You've just granted " + target.getName() + " 2FA bypass.");
+        sender.sendMessage(ChatColor.DARK_AQUA + "[2FA]" + ChatColor.YELLOW + " You've just granted " + ChatColor.AQUA + target.getName() + ChatColor.YELLOW + " two-factor authentication bypass.");
 
         return true;
     }

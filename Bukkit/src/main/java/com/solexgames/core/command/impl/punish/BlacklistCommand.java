@@ -39,8 +39,8 @@ public class BlacklistCommand extends BaseCommand {
                 if (document == null) {
                     sender.sendMessage(ChatColor.RED + "Error: That player does not exist in our database.");
                 } else {
-                    UUID playerId = CorePlugin.getInstance().getUuidCache().getUuidFromUsername(document.getString("name"));
-                    List<Punishment> punishmentList = Punishment.getAllPunishments().stream()
+                    final UUID playerId = CorePlugin.getInstance().getUuidCache().getUuidFromUsername(document.getString("name"));
+                    final List<Punishment> punishmentList = Punishment.getAllPunishments().stream()
                             .filter(Objects::nonNull)
                             .filter(Punishment::isActive)
                             .filter(punishment -> punishment.getPunishmentType().equals(PunishmentType.BLACKLIST))
@@ -51,63 +51,58 @@ public class BlacklistCommand extends BaseCommand {
                     if (punishmentList.size() > 0) {
                         sender.sendMessage(ChatColor.RED + "Error: That player already has an active blacklist!");
                     } else {
-                        Date newIssuingDate = new Date();
-                        UUID newPunishmentUuid = UUID.randomUUID();
-                        String newPunishmentId = SaltUtil.getRandomSaltedString(7);
+                        final Date newIssuingDate = new Date();
+                        final UUID newPunishmentUuid = UUID.randomUUID();
+                        final String newPunishmentId = SaltUtil.getRandomSaltedString(7);
 
-                        String targetName = args[0];
-                        UUID targetUuid = UUID.fromString(document.getString("uuid"));
-                        String reason = StringUtil.buildMessage(args, 1);
+                        final String targetName = args[0];
+                        final UUID targetUuid = UUID.fromString(document.getString("uuid"));
+                        final String reason = StringUtil.buildMessage(args, 1);
 
-                        String issuerName = (sender instanceof Player ? ((Player) sender).getName() : "Console");
-                        String issuerNameNull = (sender instanceof Player ? ((Player) sender).getName() : null);
-                        UUID issuerUuid = (sender instanceof Player ? ((Player) sender).getUniqueId() : null);
+                        final String issuerName = (sender instanceof Player ? ((Player) sender).getName() : "Console");
+                        final String issuerNameNull = (sender instanceof Player ? ((Player) sender).getName() : null);
+                        final UUID issuerUuid = (sender instanceof Player ? ((Player) sender).getUniqueId() : null);
 
-                        boolean isSilent = reason.endsWith("-s");
+                        final boolean isSilent = reason.endsWith("-s");
 
-                        try {
-                            Punishment punishment = new Punishment(
-                                    PunishmentType.BLACKLIST,
-                                    issuerUuid,
-                                    targetUuid,
-                                    issuerName,
-                                    reason.replace("-s", ""),
-                                    newIssuingDate,
-                                    newIssuingDate.getTime() - DateUtil.parseDateDiff("1d", false),
-                                    true,
-                                    newIssuingDate,
-                                    newPunishmentUuid,
-                                    newPunishmentId,
-                                    true
-                            );
-                            punishment.savePunishment();
+                        final Punishment punishment = new Punishment(
+                                PunishmentType.BLACKLIST,
+                                issuerUuid,
+                                targetUuid,
+                                issuerName,
+                                reason.replace("-s", ""),
+                                newIssuingDate,
+                                0L,
+                                true,
+                                newIssuingDate,
+                                newPunishmentUuid,
+                                newPunishmentId,
+                                true
+                        );
 
-                            PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(targetName);
+                        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(targetName);
 
-                            CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, issuerNameNull, document, isSilent);
+                        CorePlugin.getInstance().getPunishmentManager().handlePunishment(punishment, issuerNameNull, document, isSilent);
 
-                            if (potPlayer != null) {
-                                potPlayer.getPunishments().add(punishment);
-                                potPlayer.saveWithoutRemove();
-                            }
-
-                            RedisUtil.publishAsync(RedisUtil.executePunishment(
-                                    PunishmentType.BLACKLIST,
-                                    issuerUuid,
-                                    targetUuid,
-                                    issuerName,
-                                    reason.replace("-s", ""),
-                                    newIssuingDate,
-                                    newIssuingDate.getTime() - DateUtil.parseDateDiff("1d", false),
-                                    true,
-                                    newIssuingDate,
-                                    newPunishmentUuid,
-                                    newPunishmentId,
-                                    false
-                            ));
-                        } catch (Exception ignored) {
-                            sender.sendMessage(ChatColor.RED + "Error: That is not a valid duration!");
+                        if (potPlayer != null) {
+                            potPlayer.getPunishments().add(punishment);
+                            potPlayer.saveWithoutRemove();
                         }
+
+                        RedisUtil.publishAsync(RedisUtil.executePunishment(
+                                PunishmentType.BLACKLIST,
+                                issuerUuid,
+                                targetUuid,
+                                issuerName,
+                                reason.replace("-s", ""),
+                                newIssuingDate,
+                                0L,
+                                true,
+                                newIssuingDate,
+                                newPunishmentUuid,
+                                newPunishmentId,
+                                false
+                        ));
                     }
                 }
             });

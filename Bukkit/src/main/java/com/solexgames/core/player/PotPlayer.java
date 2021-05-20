@@ -10,7 +10,6 @@ import com.solexgames.core.board.ScoreBoard;
 import com.solexgames.core.disguise.DisguiseData;
 import com.solexgames.core.enums.ChatChannelType;
 import com.solexgames.core.enums.LanguageType;
-import com.solexgames.core.player.achievement.AchievementData;
 import com.solexgames.core.player.grant.Grant;
 import com.solexgames.core.player.media.Media;
 import com.solexgames.core.player.meta.MetaDataEntry;
@@ -134,7 +133,6 @@ public class PotPlayer {
 
     private Punishment warningPunishment;
     private Punishment restrictionPunishment;
-    private AchievementData achievementData;
 
     private Rank disguiseRank;
     private RainbowNametag rainbowNametag;
@@ -219,8 +217,6 @@ public class PotPlayer {
         document.put("twitter", this.media.getTwitter());
         document.put("instagram", this.media.getInstagram());
         document.put("youtube", this.media.getYoutubeLink());
-
-        document.put("achievementData", CorePlugin.GSON.toJson(this.achievementData));
 
         document.put("autoVanish", this.isAutoVanish);
         document.put("autoModMode", this.isAutoModMode);
@@ -718,6 +714,14 @@ public class PotPlayer {
 
     public void addMetaData(String key, MetaDataValue value) {
         this.metaDataEntryMap.put(key, new MetaDataEntry(key, value));
+    }
+
+    public void setMetaData(String key, MetaDataEntry value) {
+        if (this.hasMetaData(key)) {
+            this.metaDataEntryMap.replace(key, value);
+        } else {
+            this.metaDataEntryMap.put(key, value);
+        }
     }
 
     public void deleteMetaData(String key) {

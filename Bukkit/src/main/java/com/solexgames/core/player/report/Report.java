@@ -39,8 +39,6 @@ public class Report {
         this.targetName = target.getName();
         this.targetUuid = target.getUniqueId();
 
-        // test
-
         CorePlugin.getInstance().getReportManager().registerReport(this);
     }
 }
