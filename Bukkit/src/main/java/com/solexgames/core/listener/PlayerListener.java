@@ -323,7 +323,7 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (LockedState.isLocked(event.getPlayer()) && !(event.getMessage().equals("/2fa") || event.getMessage().equals("/auth") || event.getMessage().equals("/authsetup"))) {
+        if (LockedState.isLocked(event.getPlayer()) && !(event.getMessage().startsWith("/2fa") || event.getMessage().startsWith("/auth") || event.getMessage().startsWith("/authsetup"))) {
             player.sendMessage(ChatColor.RED + "You cannot perform this action right now as you're auth locked.");
             player.sendMessage(ChatColor.RED + "The only action you can perform is " + ChatColor.RED + ChatColor.BOLD.toString() + "/2fa or /authsetup" + ChatColor.RED + "!");
 

@@ -33,7 +33,7 @@ public class GrantViewPaginatedMenu extends PaginatedMenu {
         super(18);
 
         this.player = player;
-        this.potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player).getActiveGrant().getRank().getWeight() ;
+        this.potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player).getActiveGrant().getRank().getWeight();
         this.target = target;
     }
 
@@ -89,6 +89,7 @@ public class GrantViewPaginatedMenu extends PaginatedMenu {
                     arrayList.add(Color.SECONDARY_COLOR + "Removed By&7: " + Color.MAIN_COLOR + this.grant.getRemovedBy());
                     arrayList.add(Color.SECONDARY_COLOR + "Removed Reason&7: " + Color.MAIN_COLOR + this.grant.getRemovedFor());
                 }
+
                 arrayList.add(Color.MAIN_COLOR + "&m------------------------------------");
             }
 
@@ -101,21 +102,33 @@ public class GrantViewPaginatedMenu extends PaginatedMenu {
         @Override
         public void clicked(Player player, ClickType clickType) {
             if (clickType.equals(ClickType.RIGHT) ) {
-                if (potPlayer >= grant.getRank().getWeight() && !this.grant.isRemoved() && !this.grant.isExpired()) {
-                    final Conversation conversation = CorePlugin.getInstance().getConversationFactory()
-                            .withFirstPrompt(new GrantRemovalPrompt(this.grant, player, target))
-                            .withLocalEcho(false)
-                            .buildConversation(player);
-
-                    conversation.begin();
-
-                    player.closeInventory();
-
-                    setClosedByMenu(true);
-                } else {
+                if (!(potPlayer >= grant.getRank().getWeight() || player.isOp())) {
                     player.sendMessage(ChatColor.RED + "You don't have permission to remove this grant.");
                     player.closeInventory();
+                    return;
                 }
+
+                if (this.grant.isRemoved()) {
+                    player.sendMessage(ChatColor.RED + "This grant has already been removed.");
+                    player.closeInventory();
+                    return;
+                }
+
+                if (this.grant.isExpired()) {
+                    player.sendMessage(ChatColor.RED + "This grant has expired.");
+                    player.closeInventory();
+                    return;
+                }
+
+                final Conversation conversation = CorePlugin.getInstance().getConversationFactory()
+                        .withFirstPrompt(new GrantRemovalPrompt(this.grant, player, target))
+                        .withLocalEcho(false)
+                        .buildConversation(player);
+
+                conversation.begin();
+                setClosedByMenu(true);
+
+                player.closeInventory();
             }
         }
     }

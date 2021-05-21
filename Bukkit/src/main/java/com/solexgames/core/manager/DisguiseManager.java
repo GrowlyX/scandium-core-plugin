@@ -56,6 +56,7 @@ public class DisguiseManager {
             }
 
             potPlayer.setupPlayer();
+            potPlayer.saveWithoutRemove();
 
             player.sendMessage(Color.SECONDARY_COLOR + "You've disguised as " + Color.MAIN_COLOR + disguiseData.getName() + ChatColor.GRAY + " (with a random skin)" + Color.SECONDARY_COLOR + ".");
         }
@@ -81,6 +82,7 @@ public class DisguiseManager {
             }
 
             potPlayer.setupPlayer();
+            potPlayer.saveWithoutRemove();
         }
     }
 
@@ -144,12 +146,13 @@ public class DisguiseManager {
 
             disguisePlayer.setupPlayerTag();
             disguisePlayer.setupPlayerList();
+            disguisePlayer.saveWithoutRemove();
 
             if (player.hasMetadata("disguised")) {
                 player.removeMetadata("disguised", this.plugin);
             }
 
-            player.sendMessage(Color.SECONDARY_COLOR + "You've been undisguised and reset to your default skin.");
+            player.sendMessage(Color.SECONDARY_COLOR + "You've been " + ChatColor.RED + "undisguised" + Color.SECONDARY_COLOR + " and reset to your default skin.");
         } catch (Exception e) {
             plugin.getLogger().info("Something went wrong while trying to modify \"" + player.getName() + "\"'s GameProfile!");
             e.printStackTrace();

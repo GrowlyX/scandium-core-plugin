@@ -125,6 +125,7 @@ public class MapScannerPrompt extends StringPrompt {
         potPlayer.setAuthSecret(secret);
         potPlayer.setRequiredToAuth(false);
         potPlayer.setLastAuth(System.currentTimeMillis());
+        potPlayer.saveWithoutRemove();
 
         context.getForWhom().sendRawMessage(ChatColor.DARK_AQUA + "[2FA] " + ChatColor.YELLOW + "You've " + ChatColor.GREEN + "verified" + ChatColor.YELLOW + " your identity!");
         context.getForWhom().sendRawMessage(ChatColor.DARK_AQUA + "[2FA] " + ChatColor.YELLOW + "Thanks for helping us keep our server save! " + ChatColor.RED + "<3");
