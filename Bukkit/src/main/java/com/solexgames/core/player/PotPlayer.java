@@ -543,25 +543,23 @@ public class PotPlayer {
     public void setupPlayer() {
         this.resetPermissions();
         this.setupPermissions();
-        this.setupDisplay();
 
         Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> {
             this.setupPlayerTag();
             this.setupPlayerList();
-        }, 38L);
-    }
-
-    public void setupDisplay() {
-        this.player.setDisplayName(Color.translate(this.getActiveGrant().getRank().getColor()) + this.getName());
+        }, 20L);
     }
 
     public void setupPlayerList() {
-        this.player.setPlayerListName(Color.translate((this.getActiveGrant().getRank().getColor() == null ? ChatColor.GRAY.toString() : this.getActiveGrant().getRank().getColor()) + (this.customColor != null ? this.customColor : "") + this.getName()));
+        final String listFormatted = Color.translate(
+                this.disguiseRank != null ? this.disguiseRank.getColor() : this.getActiveGrant().getRank().getColor() + this.getName()
+        );
+
+        this.player.setPlayerListName(listFormatted);
+        this.player.setDisplayName(listFormatted);
 
         if (CorePlugin.getInstance().getServerSettings().isTabEnabled()) {
-            try {
-                CorePlugin.getInstance().getNMS().updateTablist();
-            } catch (Exception ignored) { }
+            CorePlugin.getInstance().getNMS().updateTablist();
         }
     }
 

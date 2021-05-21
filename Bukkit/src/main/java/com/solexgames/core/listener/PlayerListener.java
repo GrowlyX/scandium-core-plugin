@@ -137,7 +137,7 @@ public class PlayerListener implements Listener {
                 CompletableFuture.runAsync(() -> {
                     if (potPlayer.isHasSetup2FA()) {
                         if (potPlayer.getPreviousIpAddress().equals(potPlayer.getEncryptedIpAddress())) {
-                            final String message = ChatColor.DARK_AQUA + "[2FA] " + ChatColor.YELLOW + "Please authenticate via " + ChatColor.AQUA + "/auth " + ChatColor.WHITE + "<code>" + ChatColor.YELLOW + ".";
+                            final String message = ChatColor.DARK_AQUA + "[2FA] " + ChatColor.YELLOW + "Please authenticate via " + ChatColor.AQUA + "/auth " + ChatColor.WHITE + "<code>" + ChatColor.WHITE + " or " + ChatColor.AQUA + "/authsetup" + ChatColor.YELLOW + ".";
 
                             potPlayer.getPlayer().sendMessage(message);
                             LockedState.lock(potPlayer.getPlayer(), message);
@@ -155,7 +155,7 @@ public class PlayerListener implements Listener {
         if (potPlayer.isAutoVanish()) {
             event.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getServerManager().getAutomaticallyPutInto().replace("<value>", "vanish")));
 
-            Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getPlayerManager().vanishPlayerRaw(event.getPlayer()), 2L);
+            Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getPlayerManager().vanishPlayerRaw(event.getPlayer()), 7L);
         }
 
         CorePlugin.getInstance().getNMS().setupTablist(event.getPlayer());

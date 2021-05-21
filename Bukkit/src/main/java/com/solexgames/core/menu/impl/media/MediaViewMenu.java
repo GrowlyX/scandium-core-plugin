@@ -23,13 +23,14 @@ public class MediaViewMenu extends AbstractInventoryMenu {
     }
 
     public void update() {
-        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(this.player);
+        final boolean disguised = potPlayer.isDisguised();
 
         this.inventory.setItem(1, new ItemBuilder(XMaterial.BLUE_DYE.parseMaterial())
                 .setDurability(4)
                 .setDisplayName("&9&lDiscord")
                 .addLore(
-                        ChatColor.GRAY + potPlayer.getMedia().getDiscord(),
+                        ChatColor.GRAY + (disguised ? "N/A" : potPlayer.getMedia().getDiscord()),
                         "",
                         "&e[Click to view in chat]"
                 )
@@ -39,7 +40,7 @@ public class MediaViewMenu extends AbstractInventoryMenu {
                 .setDurability(1)
                 .setDisplayName("&c&lYouTube")
                 .addLore(
-                        ChatColor.GRAY + potPlayer.getMedia().getYoutubeLink(),
+                        ChatColor.GRAY + (disguised ? "N/A" : potPlayer.getMedia().getYoutubeLink()),
                         "",
                         "&e[Click to view in chat]"
                 )
@@ -49,7 +50,7 @@ public class MediaViewMenu extends AbstractInventoryMenu {
                 .setDurability(12)
                 .setDisplayName("&b&lTwitter")
                 .addLore(
-                        ChatColor.GRAY + potPlayer.getMedia().getTwitter(),
+                        ChatColor.GRAY + (disguised ? "N/A" : potPlayer.getMedia().getTwitter()),
                         "",
                         "&e[Click to view in chat]"
                 )
@@ -59,7 +60,7 @@ public class MediaViewMenu extends AbstractInventoryMenu {
                 .setDurability(14)
                 .setDisplayName("&6&lInstagram")
                 .addLore(
-                        ChatColor.GRAY + potPlayer.getMedia().getInstagram(),
+                        ChatColor.GRAY + (disguised ? "N/A" : potPlayer.getMedia().getInstagram()),
                         "",
                         "&e[Click to view in chat]"
                 )
@@ -69,8 +70,9 @@ public class MediaViewMenu extends AbstractInventoryMenu {
 
     @Override
     public void onInventoryClick(InventoryClickEvent event) {
-        Inventory clickedInventory = event.getClickedInventory();
-        Inventory topInventory = event.getView().getTopInventory();
+        final Inventory clickedInventory = event.getClickedInventory();
+        final Inventory topInventory = event.getView().getTopInventory();
+
         if (!topInventory.equals(this.inventory)) return;
         if (topInventory.equals(clickedInventory)) {
             event.setCancelled(true);

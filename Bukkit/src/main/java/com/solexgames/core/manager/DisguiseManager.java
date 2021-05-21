@@ -55,8 +55,7 @@ public class DisguiseManager {
                 player.setMetadata("disguised", new FixedMetadataValue(this.plugin, true));
             }
 
-            potPlayer.setupPlayerTag();
-            potPlayer.setupPlayerList();
+            potPlayer.setupPlayer();
 
             player.sendMessage(Color.SECONDARY_COLOR + "You've disguised as " + Color.MAIN_COLOR + disguiseData.getName() + ChatColor.GRAY + " (with a random skin)" + Color.SECONDARY_COLOR + ".");
         }
@@ -81,8 +80,7 @@ public class DisguiseManager {
                 player.setMetadata("disguised", new FixedMetadataValue(this.plugin, true));
             }
 
-            potPlayer.setupPlayerTag();
-            potPlayer.setupPlayerList();
+            potPlayer.setupPlayer();
         }
     }
 
