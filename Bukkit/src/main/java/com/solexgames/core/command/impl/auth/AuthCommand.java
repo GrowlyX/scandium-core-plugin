@@ -54,6 +54,9 @@ public class AuthCommand extends BaseCommand {
             if (valid) {
                 LockedState.release(player);
 
+                potPlayer.setRequiredToAuth(false);
+                potPlayer.setLastAuth(System.currentTimeMillis());
+
                 player.sendMessage(ChatColor.DARK_AQUA + "[2FA] " + ChatColor.YELLOW + "You've " + ChatColor.GREEN + "verified" + ChatColor.YELLOW + " your identity!");
                 player.sendMessage(ChatColor.DARK_AQUA + "[2FA] " + ChatColor.YELLOW + "Thanks for helping us keep our server save! " + ChatColor.RED + "<3");
             } else {

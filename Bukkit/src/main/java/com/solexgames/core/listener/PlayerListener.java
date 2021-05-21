@@ -43,6 +43,8 @@ public class PlayerListener implements Listener {
 
     public ServerManager serverManager = CorePlugin.getInstance().getServerManager();
 
+    public static final long HOUR = 3600 * 1000;
+
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPreLogin(AsyncPlayerPreLoginEvent event) {
         if (!CorePlugin.getInstance().getServerSettings().isCanJoin()) {
@@ -136,17 +138,19 @@ public class PlayerListener implements Listener {
             if (event.getPlayer().hasPermission("scandium.2fa.forced")) {
                 CompletableFuture.runAsync(() -> {
                     if (potPlayer.isHasSetup2FA()) {
-                        if (!potPlayer.getPreviousIpAddress().equals(potPlayer.getIpAddress())) {
-                            final String message = ChatColor.DARK_AQUA + "[2FA] " + ChatColor.YELLOW + "Please authenticate via " + ChatColor.AQUA + "/auth " + ChatColor.WHITE + "<code>" + ChatColor.WHITE + " or " + ChatColor.AQUA + "/authsetup" + ChatColor.YELLOW + ".";
+                        if (!potPlayer.getPreviousIpAddress().equals(potPlayer.getIpAddress()) || potPlayer.isRequiredToAuth() || (potPlayer.getLastAuth() + (HOUR * 6L)) < System.currentTimeMillis()) {
+                            final String message = ChatColor.DARK_AQUA + "[2FA] " + ChatColor.YELLOW + "Please authenticate via " + ChatColor.AQUA + "/auth " + ChatColor.WHITE + "<code>" + ChatColor.YELLOW + ".";
 
-                            potPlayer.getPlayer().sendMessage(message);
-                            LockedState.lock(potPlayer.getPlayer(), message);
+                            event.getPlayer().sendMessage(message);
+                            LockedState.lock(event.getPlayer(), message);
+
+                            potPlayer.setRequiredToAuth(true);
                         }
                     } else {
-                        final String message = ChatColor.DARK_AQUA + "[2FA] " + ChatColor.YELLOW + "Please setup two-factor authentication via " + ChatColor.AQUA + "/auth" + ChatColor.YELLOW + ".";
+                        final String message = ChatColor.DARK_AQUA + "[2FA] " + ChatColor.YELLOW + "Please setup two-factor authentication via " + ChatColor.AQUA + "/authsetup" + ChatColor.YELLOW + ".";
 
-                        potPlayer.getPlayer().sendMessage(message);
-                        LockedState.lock(potPlayer.getPlayer(), message);
+                        event.getPlayer().sendMessage(message);
+                        LockedState.lock(event.getPlayer(), message);
                     }
                 });
             }

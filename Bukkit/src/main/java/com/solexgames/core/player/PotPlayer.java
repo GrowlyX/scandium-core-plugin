@@ -97,6 +97,7 @@ public class PotPlayer {
     private boolean isAutoModMode = false;
     private boolean isDisguised = false;
     private boolean isAcceptingFriends = false;
+    private boolean requiredToAuth = false;
 
     private boolean currentlyMuted;
     private boolean currentlyRestricted;
@@ -136,6 +137,7 @@ public class PotPlayer {
     private RainbowNametag rainbowNametag;
 
     private int experience;
+    private long lastAuth = 0L;
 
     private boolean hasLoaded;
 
@@ -162,7 +164,6 @@ public class PotPlayer {
 
         document.put("name", this.getOriginalName());
         document.put("uuid", this.uuid.toString());
-        document.put("hasSetup2FA", this.hasSetup2FA);
         document.put("securityKey", this.authSecret);
         document.put("canSeeStaffMessages", this.canSeeStaffMessages);
         document.put("canSeeTips", this.canSeeTips);
@@ -210,6 +211,10 @@ public class PotPlayer {
         document.put("language", (this.language != null ? this.language.getLanguageName() : LanguageType.ENGLISH.getLanguageName()));
         document.put("currentlyOnline", !removing);
         document.put("currentlyDisguised", this.isDisguised);
+
+        document.put("requiredToAuth", this.requiredToAuth);
+        document.put("lastAuth", this.lastAuth);
+        document.put("hasSetup2FA", this.hasSetup2FA);
 
         document.put("discord", this.media.getDiscord());
         document.put("twitter", this.media.getTwitter());
@@ -295,28 +300,34 @@ public class PotPlayer {
                         this.setSyncCode(SaltUtil.getRandomSaltedString());
                     }
                     if (this.profile.getBoolean("canSeeStaffMessages") != null) {
-                        this.canSeeStaffMessages = profile.getBoolean("canSeeStaffMessages");
+                        this.canSeeStaffMessages = this.profile.getBoolean("canSeeStaffMessages");
                     }
                     if (this.profile.getBoolean("canSeeTips") != null) {
-                        this.canSeeTips = profile.getBoolean("canSeeTips");
+                        this.canSeeTips = this.profile.getBoolean("canSeeTips");
                     }
                     if (this.profile.getBoolean("canReceiveDms") != null) {
-                        this.canReceiveDms = profile.getBoolean("canReceiveDms");
+                        this.canReceiveDms = this.profile.getBoolean("canReceiveDms");
                     }
                     if (this.profile.getBoolean("canSeeFiltered") != null) {
-                        this.canSeeFiltered = profile.getBoolean("canSeeFiltered");
+                        this.canSeeFiltered = this.profile.getBoolean("canSeeFiltered");
                     }
                     if (this.profile.getBoolean("canSeeBroadcasts") != null) {
-                        this.canSeeBroadcasts = profile.getBoolean("canSeeBroadcasts");
+                        this.canSeeBroadcasts = this.profile.getBoolean("canSeeBroadcasts");
                     }
                     if (this.profile.getBoolean("canSeeGlobalChat") != null) {
-                        this.canSeeGlobalChat = profile.getBoolean("canSeeGlobalChat");
+                        this.canSeeGlobalChat = this.profile.getBoolean("canSeeGlobalChat");
                     }
                     if (this.profile.getBoolean("hasVoted") != null) {
-                        this.hasVoted = profile.getBoolean("hasVoted");
+                        this.hasVoted = this.profile.getBoolean("hasVoted");
+                    }
+                    if (this.profile.getLong("lastAuth") != null) {
+                        this.lastAuth = this.profile.getLong("lastAuth");
+                    }
+                    if (this.profile.getBoolean("requiredToAuth") != null) {
+                        this.requiredToAuth = this.profile.getBoolean("requiredToAuth");
                     }
                     if (this.profile.getBoolean("autoModMode") != null) {
-                        this.isAutoModMode = profile.getBoolean("autoModMode");
+                        this.isAutoModMode = this.profile.getBoolean("autoModMode");
                     }
                     if (this.profile.getString("previousIpAddress") != null) {
                         this.previousIpAddress = CorePlugin.getInstance().getCryptoManager().decrypt(this.profile.getString("previousIpAddress"));
@@ -324,21 +335,19 @@ public class PotPlayer {
                         this.previousIpAddress = "NOT_AVAILABLE";
                     }
                     if (this.profile.getString("privateKey") != null) {
-                        this.authSecret = profile.getString("privateKey");
+                        this.authSecret = this.profile.getString("privateKey");
                     }
                     if (this.profile.getBoolean("autoVanish") != null) {
-                        this.isAutoVanish = profile.getBoolean("autoVanish");
+                        this.isAutoVanish = this.profile.getBoolean("autoVanish");
                     }
                     if (this.profile.getBoolean("canReceiveDmsSounds") != null) {
-                        this.canReceiveDmsSounds = profile.getBoolean("canReceiveDmsSounds");
+                        this.canReceiveDmsSounds = this.profile.getBoolean("canReceiveDmsSounds");
                     }
                     if (this.profile.getBoolean("hasSetup2FA") != null) {
-                        this.hasSetup2FA = profile.getBoolean("hasSetup2FA");
-                    } else {
-                        this.hasSetup2FA = false;
+                        this.hasSetup2FA = this.profile.getBoolean("hasSetup2FA");
                     }
                     if (this.profile.getString("firstJoined") != null) {
-                        this.firstJoin = profile.getString("firstJoined");
+                        this.firstJoin = this.profile.getString("firstJoined");
                     } else {
                         this.firstJoin = CorePlugin.FORMAT.format(new Date());
                     }
@@ -348,9 +357,7 @@ public class PotPlayer {
                         this.language = LanguageType.ENGLISH;
                     }
                     if (this.profile.getInteger("experience") != null) {
-                        this.experience = profile.getInteger("experience");
-                    } else {
-                        this.experience = 0;
+                        this.experience = this.profile.getInteger("experience");
                     }
                     if (this.profile.getString("customColor") != null) {
                         this.customColor = ChatColor.valueOf(this.profile.getString("customColor"));
@@ -378,15 +385,14 @@ public class PotPlayer {
                     if (this.profile.getList("allGrants", String.class).isEmpty()) {
                         this.allGrants.add(this.getDefaultGrant());
                     } else {
-                        final List<String> allGrants = profile.getList("allGrants", String.class);
+                        final List<String> allGrants = this.profile.getList("allGrants", String.class);
                         allGrants.forEach(s -> this.allGrants.add(CorePlugin.GSON.fromJson(s, Grant.class)));
                     }
 
                     final String appliedPrefix = this.profile.getString("appliedPrefix");
+
                     if (appliedPrefix != null && !appliedPrefix.equals("Default")) {
                         this.appliedPrefix = Prefix.getByName(appliedPrefix);
-                    } else {
-                        this.appliedPrefix = null;
                     }
 
                     if (this.profile.get("allIgnored") != null) {
@@ -404,6 +410,7 @@ public class PotPlayer {
                             this.userPermissions.addAll(permissions);
                         }
                     }
+
                     if (this.profile.get("metaData") != null) {
                         final Map<?, ?> serializedMetaData = this.profile.get("metaData", Map.class);
 
