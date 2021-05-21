@@ -136,7 +136,7 @@ public class PlayerListener implements Listener {
             if (event.getPlayer().hasPermission("scandium.2fa.forced")) {
                 CompletableFuture.runAsync(() -> {
                     if (potPlayer.isHasSetup2FA()) {
-                        if (potPlayer.getPreviousIpAddress().equals(potPlayer.getEncryptedIpAddress())) {
+                        if (!potPlayer.getPreviousIpAddress().equals(potPlayer.getIpAddress())) {
                             final String message = ChatColor.DARK_AQUA + "[2FA] " + ChatColor.YELLOW + "Please authenticate via " + ChatColor.AQUA + "/auth " + ChatColor.WHITE + "<code>" + ChatColor.WHITE + " or " + ChatColor.AQUA + "/authsetup" + ChatColor.YELLOW + ".";
 
                             potPlayer.getPlayer().sendMessage(message);

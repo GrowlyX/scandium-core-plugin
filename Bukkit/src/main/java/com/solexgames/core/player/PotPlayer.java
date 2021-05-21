@@ -321,7 +321,7 @@ public class PotPlayer {
                     if (this.profile.getString("previousIpAddress") != null) {
                         this.previousIpAddress = CorePlugin.getInstance().getCryptoManager().decrypt(this.profile.getString("previousIpAddress"));
                     } else {
-                        this.previousIpAddress = "";
+                        this.previousIpAddress = "NOT_AVAILABLE";
                     }
                     if (this.profile.getString("privateKey") != null) {
                         this.authSecret = profile.getString("privateKey");
@@ -552,7 +552,7 @@ public class PotPlayer {
 
     public void setupPlayerList() {
         final String listFormatted = Color.translate(
-                this.disguiseRank != null ? this.disguiseRank.getColor() : this.getActiveGrant().getRank().getColor() + this.getName()
+                (this.disguiseRank != null ? this.disguiseRank.getColor() : this.getActiveGrant().getRank().getColor()) + this.getName()
         );
 
         this.player.setPlayerListName(listFormatted);
