@@ -34,6 +34,8 @@ public class ServerLoadingTask extends BukkitRunnable {
 
                 CorePlugin.getInstance().getServerSettings().setCanJoin(true);
                 CorePlugin.getInstance().logConsole(Color.MAIN_COLOR + "The server's now available!");
+
+                this.cancel();
                 break;
         }
     }

@@ -127,8 +127,6 @@ public class PotPlayer {
     private ItemStack lastItem;
 
     private Date lastJoined;
-
-    private String lastJoin;
     private String firstJoin;
 
     private Punishment warningPunishment;
@@ -230,7 +228,9 @@ public class PotPlayer {
     }
 
     public void saveWithoutRemove() {
-        CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", this.uuid), this.getDocument(false), new ReplaceOptions().upsert(true)));
+        CompletableFuture.runAsync(() ->
+                CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", this.uuid), this.getDocument(false), new ReplaceOptions().upsert(true))
+        );
     }
 
     public void savePlayerData() {

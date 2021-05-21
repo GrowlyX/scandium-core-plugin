@@ -18,5 +18,6 @@ public class ServerSettings {
     private boolean antiSpamEnabled = true;
     private boolean antiCommandSpamEnabled = true;
     private boolean staffAlertsEnabled = false;
+    private boolean twoFactorEnabled = true;
 
 }

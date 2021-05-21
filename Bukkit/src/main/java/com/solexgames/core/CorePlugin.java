@@ -206,6 +206,7 @@ public final class CorePlugin extends JavaPlugin {
         this.serverSettings.setAntiSpamEnabled(this.getConfig().getBoolean("settings.anti-chat-spam"));
         this.serverSettings.setAntiCommandSpamEnabled(this.getConfig().getBoolean("settings.anti-command-spam"));
         this.serverSettings.setStaffAlertsEnabled(this.getConfig().getBoolean("settings.staff-command-alerts"));
+        this.serverSettings.setTwoFactorEnabled(this.getConfig().getBoolean("settings.two-factor-auth"));
         this.serverSettings.setAlertFormat(Color.translate(this.getConfig().getString("settings.staff-command-alerts-format")));
     }
 

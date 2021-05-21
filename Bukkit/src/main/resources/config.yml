@@ -21,6 +21,7 @@ settings:
   vanish-tag: "&7[V] "
   punish-gui-enabled: false
   chat-format-enabled: true
+  two-factor-auth: true
   chat-format-type: "NORMAL" # PAPI, NORMAL (The placeholders available in NORMAL won't be available in papi)
   chat-format: "<prefix><rank_prefix><rank_color><custom_color><player_name>&f: &f<message>"
 

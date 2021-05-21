@@ -153,9 +153,9 @@ public class PlayerListener implements Listener {
         });
 
         if (potPlayer.isAutoVanish()) {
-            potPlayer.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getServerManager().getAutomaticallyPutInto().replace("<value>", "vanish")));
+            event.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getServerManager().getAutomaticallyPutInto().replace("<value>", "vanish")));
 
-            Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getPlayerManager().vanishPlayerRaw(potPlayer.getPlayer()), 2L);
+            Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getPlayerManager().vanishPlayerRaw(event.getPlayer()), 2L);
         }
 
         CorePlugin.getInstance().getNMS().setupTablist(event.getPlayer());

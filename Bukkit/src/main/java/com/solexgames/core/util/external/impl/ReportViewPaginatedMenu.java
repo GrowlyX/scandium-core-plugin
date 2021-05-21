@@ -65,9 +65,12 @@ public class ReportViewPaginatedMenu extends PaginatedMenu {
         final AtomicInteger i = new AtomicInteger(0);
 
         if (onlyResolved) {
-            CorePlugin.getInstance().getReportManager().getReports().stream().filter(Report::isResolved).forEach(report -> buttons.put(i.getAndIncrement(), new ReportButton(report)));
+            CorePlugin.getInstance().getReportManager().getReports().stream()
+                    .filter(Report::isResolved)
+                    .forEach(report -> buttons.put(i.getAndIncrement(), new ReportButton(report)));
         } else {
-            CorePlugin.getInstance().getReportManager().getReports().forEach(report -> buttons.put(i.getAndIncrement(), new ReportButton(report)));
+            CorePlugin.getInstance().getReportManager().getReports()
+                    .forEach(report -> buttons.put(i.getAndIncrement(), new ReportButton(report)));
         }
 
         return buttons;
@@ -81,7 +84,7 @@ public class ReportViewPaginatedMenu extends PaginatedMenu {
         @Override
         public ItemStack getButtonItem(Player player) {
             return new ItemBuilder(XMaterial.PAPER.parseMaterial())
-                    .setDisplayName(ChatColor.DARK_GRAY + "#" + report.getId() + " " + (report.isResolved() ? ChatColor.GREEN + "[Resolved]" : ChatColor.GOLD + "[Pending]"))
+                    .setDisplayName(ChatColor.DARK_GRAY + "#" + this.report.getId() + " " + (this.report.isResolved() ? ChatColor.GREEN + "[Resolved]" : ChatColor.GOLD + "[Pending]"))
                     .addLore(
                             Color.MAIN_COLOR + "&m------------------------------------",
                             Color.SECONDARY_COLOR + "Reporter: " + Color.MAIN_COLOR + report.getReporterName(),
@@ -97,16 +100,16 @@ public class ReportViewPaginatedMenu extends PaginatedMenu {
 
         @Override
         public void clicked(Player player, ClickType clickType) {
-            if (report.isResolved()) {
+            if (this.report.isResolved()) {
                 return;
             }
 
             if (clickType.equals(ClickType.SHIFT_LEFT)) {
-                report.setResolverName(player.getName());
-                report.setResolverUuid(player.getUniqueId());
-                report.setResolved(true);
+                this.report.setResolverName(player.getName());
+                this.report.setResolverUuid(player.getUniqueId());
+                this.report.setResolved(true);
 
-                player.sendMessage(Color.SECONDARY_COLOR + "You've resolved the report with the ID: " + Color.MAIN_COLOR + "#" + report.getId() + Color.SECONDARY_COLOR + "!");
+                player.sendMessage(Color.SECONDARY_COLOR + "You've resolved the report with the ID: " + Color.MAIN_COLOR + "#" + this.report.getId() + Color.SECONDARY_COLOR + "!");
                 player.closeInventory();
             }
         }
