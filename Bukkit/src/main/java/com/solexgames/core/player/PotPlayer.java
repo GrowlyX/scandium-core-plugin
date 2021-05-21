@@ -334,8 +334,8 @@ public class PotPlayer {
                     } else {
                         this.previousIpAddress = "NOT_AVAILABLE";
                     }
-                    if (this.profile.getString("privateKey") != null) {
-                        this.authSecret = this.profile.getString("privateKey");
+                    if (this.profile.getString("securityKey") != null) {
+                        this.authSecret = this.profile.getString("securityKey");
                     }
                     if (this.profile.getBoolean("autoVanish") != null) {
                         this.isAutoVanish = this.profile.getBoolean("autoVanish");

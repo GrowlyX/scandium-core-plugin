@@ -25,7 +25,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Getter
 public class GrantViewPaginatedMenu extends PaginatedMenu {
 
-    private final int potPlayer;
     private final Player player;
     private final Player target;
 
@@ -33,7 +32,6 @@ public class GrantViewPaginatedMenu extends PaginatedMenu {
         super(18);
 
         this.player = player;
-        this.potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player).getActiveGrant().getRank().getWeight();
         this.target = target;
     }
 
@@ -84,7 +82,7 @@ public class GrantViewPaginatedMenu extends PaginatedMenu {
 
             if (!grant.isExpired()) {
                 if (!this.grant.isRemoved()) {
-                    arrayList.add((potPlayer >= grant.getRank().getWeight() ? ChatColor.GREEN + "Right-click to remove this grant!" : ChatColor.RED + "You don't have permission to remove this grant!"));
+                    arrayList.add(CorePlugin.getInstance().getPlayerManager().getPlayer(player).getActiveGrant().getRank().getWeight() > this.grant.getRank().getWeight() || player.isOp() ? ChatColor.GREEN + "Right-click to remove this grant!" : ChatColor.RED + "You don't have permission to remove this grant!");
                 } else {
                     arrayList.add(Color.SECONDARY_COLOR + "Removed By&7: " + Color.MAIN_COLOR + this.grant.getRemovedBy());
                     arrayList.add(Color.SECONDARY_COLOR + "Removed Reason&7: " + Color.MAIN_COLOR + this.grant.getRemovedFor());
@@ -102,7 +100,7 @@ public class GrantViewPaginatedMenu extends PaginatedMenu {
         @Override
         public void clicked(Player player, ClickType clickType) {
             if (clickType.equals(ClickType.RIGHT) ) {
-                if (!(potPlayer >= grant.getRank().getWeight() || player.isOp())) {
+                if (CorePlugin.getInstance().getPlayerManager().getPlayer(player).getActiveGrant().getRank().getWeight() < this.grant.getRank().getWeight() || !player.isOp()) {
                     player.sendMessage(ChatColor.RED + "You don't have permission to remove this grant.");
                     player.closeInventory();
                     return;
