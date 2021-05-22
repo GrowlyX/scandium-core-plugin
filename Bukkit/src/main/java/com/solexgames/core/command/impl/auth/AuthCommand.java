@@ -44,7 +44,7 @@ public class AuthCommand extends BaseCommand {
         try {
             code = Integer.parseInt(input);
         } catch (NumberFormatException e) {
-            player.sendMessage(ChatColor.RED + "I'm sorry, but we couldn't verify your identity. Maybe check the code you entered and try again?");
+            player.sendMessage(ChatColor.RED + "Error: " + ChatColor.YELLOW + input + ChatColor.RED + " is not an integer.");
             return false;
         }
 

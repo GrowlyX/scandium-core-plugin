@@ -344,12 +344,9 @@ public final class CorePlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        RedisUtil.publishAsync(RedisUtil.onServerOffline());
+
         this.serverSettings.setCanJoin(false);
-
-        RedisUtil.publishSync(RedisUtil.onServerOffline());
-
-        this.getServer().getOnlinePlayers().forEach(player -> player.kickPlayer(ChatColor.RED + "The server is currently rebooting...\n" + ChatColor.GRAY + "Please rejoin in a few minutes."));
-
         this.prefixManager.savePrefixes();
 
         if (this.jedisManager != null) {

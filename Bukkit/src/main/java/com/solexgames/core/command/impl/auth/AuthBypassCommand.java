@@ -18,7 +18,7 @@ public class AuthBypassCommand extends BaseCommand {
     @Override
     public boolean command(CommandSender sender, String label, String[] args) {
         if (sender instanceof Player) {
-            sender.sendMessage(ChatColor.RED + "Only players can execute this command.");
+            sender.sendMessage(ChatColor.RED + "Only console can execute this command.");
             return true;
         }
 
@@ -40,7 +40,7 @@ public class AuthBypassCommand extends BaseCommand {
         }
 
         LockedState.release(target);
-        target.sendMessage(ChatColor.GREEN + "An administrator has granted you two-factor authentication bypass.");
+        target.sendMessage(ChatColor.DARK_AQUA + "[2FA]" + ChatColor.GREEN + " An administrator has granted you two-factor authentication bypass for this log on session.");
 
         sender.sendMessage(ChatColor.DARK_AQUA + "[2FA]" + ChatColor.YELLOW + " You've just granted " + ChatColor.AQUA + target.getName() + ChatColor.YELLOW + " two-factor authentication bypass.");
 

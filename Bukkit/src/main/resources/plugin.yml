@@ -3,6 +3,8 @@ version: ${git.commit.id.abbrev}
 main: com.solexgames.core.CorePlugin
 
 load: STARTUP
+loadbefore:
+  - practice
 api-version: "1.13"
 description: ${git.commit.message.full}
 

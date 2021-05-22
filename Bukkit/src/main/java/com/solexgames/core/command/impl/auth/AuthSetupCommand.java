@@ -32,8 +32,9 @@ public class AuthSetupCommand extends BaseCommand {
         }
 
         CompletableFuture.runAsync(() -> {
-            if (potPlayer.getAuthSecret() != null) {
-                player.sendMessage(ChatColor.RED + "Error: You've already setup two-factor authentication.");
+            if (potPlayer.isHasSetup2FA() || potPlayer.getAuthSecret() != null) {
+                player.sendMessage(ChatColor.RED + "You've already setup two-factor authentication.");
+                player.sendMessage(ChatColor.RED + "Contact a developer or management member to reset your 2FA.");
                 return;
             }
 
