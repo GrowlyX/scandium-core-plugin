@@ -1,18 +1,13 @@
-package com.solexgames.core.command.impl.discord;
+package com.solexgames.core.command.impl.syncing;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @Command(label = "unsync")
 public class UnSyncCommand extends BaseCommand {

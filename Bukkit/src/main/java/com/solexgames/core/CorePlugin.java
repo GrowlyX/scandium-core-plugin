@@ -258,12 +258,12 @@ public final class CorePlugin extends JavaPlugin {
 
     private void registerSpigotCommands() {
         BukkitUtil.registerCommandModules(
-                "Auth", "Discord", "Essential",
+                "Auth", "Essential", "Syncing",
                 "Experience", "Grant", "Library",
                 "Moderation", "Network", "Other",
                 "Prefix", "Punish", "Rank",
                 "Shutdown", "Server", "Toggle",
-                "Disguise", "Library", "Test"
+                "Disguise", "Library"
         );
     }
 

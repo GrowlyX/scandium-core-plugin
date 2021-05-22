@@ -109,7 +109,8 @@ public class JedisListener implements JedisHandler {
             server.setLastUpdate(System.currentTimeMillis());
 
             final ServerRetrieveEvent retrieveEvent = new ServerRetrieveEvent(server);
-            CorePlugin.getInstance().getServer().getPluginManager().callEvent(retrieveEvent);
+
+            Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getServer().getPluginManager().callEvent(retrieveEvent));
         }
 
         PlayerUtil.sendTo("&3[S] &e" + bootingServerName + " &bhas just come &aonline&b.", "scandium.network.alerts");
@@ -138,7 +139,8 @@ public class JedisListener implements JedisHandler {
             server.setTicksPerSecondSimplified(ticksPerSecondSimple);
 
             final ServerRetrieveEvent retrieveEvent = new ServerRetrieveEvent(server);
-            CorePlugin.getInstance().getServer().getPluginManager().callEvent(retrieveEvent);
+
+            Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getServer().getPluginManager().callEvent(retrieveEvent));
         }
 
         final NetworkServer updatedServer = NetworkServer.getByName(serverName);
