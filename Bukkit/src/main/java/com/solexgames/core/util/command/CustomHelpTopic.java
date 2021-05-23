@@ -2,6 +2,7 @@ package com.solexgames.core.util.command;
 
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.util.Color;
+import lombok.Getter;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -11,17 +12,28 @@ import java.util.Set;
 
 public class CustomHelpTopic extends HelpTopic {
 
+    private final BaseCommand baseCommand;
+
     public CustomHelpTopic(BaseCommand baseCommand, Set<String> aliases) {
+        this.baseCommand = baseCommand;
         this.name = "/" + baseCommand.getName();
         this.shortText = "";
 
         final StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder.append(Color.SECONDARY_COLOR);
+        stringBuilder.append("Label: ");
+        stringBuilder.append(Color.MAIN_COLOR);
+        stringBuilder.append(this.name);
+        stringBuilder.append("\n");
+
+        stringBuilder.append(Color.SECONDARY_COLOR);
         stringBuilder.append("Description: ");
         stringBuilder.append(Color.MAIN_COLOR);
-        stringBuilder.append("No description set for this command.");
+        stringBuilder.append(StringUtils.capitalize(baseCommand.getName()));
+        stringBuilder.append(" command.");
         stringBuilder.append("\n");
+
         stringBuilder.append(Color.SECONDARY_COLOR);
         stringBuilder.append("Usage: ");
         stringBuilder.append(Color.MAIN_COLOR);
@@ -40,6 +52,6 @@ public class CustomHelpTopic extends HelpTopic {
 
     @Override
     public boolean canSee(CommandSender commandSender) {
-        return commandSender.hasPermission("scandium.staff");
+        return baseCommand.getPermissionNode() == null || baseCommand.getPermissionNode().equals("") || commandSender.hasPermission(baseCommand.getPermissionNode());
     }
 }

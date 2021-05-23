@@ -1,7 +1,9 @@
 package com.solexgames.core.command.impl.auth;
 
+import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.command.annotation.Command;
+import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.LockedState;
 import org.bukkit.Bukkit;
@@ -34,15 +36,20 @@ public class AuthBypassCommand extends BaseCommand {
             return true;
         }
 
-        if (!LockedState.isLocked(target)) {
-            sender.sendMessage(ChatColor.RED + "Error: That player does not have to be bypassed.");
-            return true;
+        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
+
+        if (!potPlayer.isAuthBypassed()) {
+            target.sendMessage(ChatColor.DARK_AQUA + "[2FA]" + ChatColor.GREEN + " An administrator has granted you two-factor authentication bypass.");
+            sender.sendMessage(ChatColor.DARK_AQUA + "[2FA]" + ChatColor.YELLOW + " You've just granted " + ChatColor.AQUA + target.getName() + ChatColor.YELLOW + " two-factor authentication bypass.");
+        } else {
+            target.sendMessage(ChatColor.DARK_AQUA + "[2FA]" + ChatColor.GREEN + " An administrator has removed your two-factor authentication bypass.");
+            sender.sendMessage(ChatColor.DARK_AQUA + "[2FA]" + ChatColor.YELLOW + " You've just removed " + ChatColor.AQUA + target.getName() + ChatColor.YELLOW + "'s two-factor authentication bypass.");
         }
 
-        LockedState.release(target);
-        target.sendMessage(ChatColor.DARK_AQUA + "[2FA]" + ChatColor.GREEN + " An administrator has granted you two-factor authentication bypass for this log on session.");
+        potPlayer.saveWithoutRemove();
+        potPlayer.setAuthBypassed(!potPlayer.isAuthBypassed());
 
-        sender.sendMessage(ChatColor.DARK_AQUA + "[2FA]" + ChatColor.YELLOW + " You've just granted " + ChatColor.AQUA + target.getName() + ChatColor.YELLOW + " two-factor authentication bypass.");
+        LockedState.release(target);
 
         return true;
     }

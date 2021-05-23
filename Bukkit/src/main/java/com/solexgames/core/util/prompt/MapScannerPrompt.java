@@ -1,12 +1,10 @@
 package com.solexgames.core.util.prompt;
 
-import com.cryptomorin.xseries.XMaterial;
 import com.google.common.escape.Escaper;
 import com.google.common.net.UrlEscapers;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.LockedState;
-import com.solexgames.core.util.TotpUtil;
 import com.solexgames.core.util.map.QrCodeMap;
 import org.apache.commons.codec.binary.Base32;
 import org.bukkit.Bukkit;
@@ -29,13 +27,13 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 import java.util.Collections;
-import java.util.concurrent.CompletableFuture;
 
 public class MapScannerPrompt extends StringPrompt {
 
     private int failures = 0;
 
     @Override
+    @SuppressWarnings("deprecation")
     public String getPromptText(ConversationContext context) {
         final Player player = (Player) context.getForWhom();
 
@@ -44,12 +42,13 @@ public class MapScannerPrompt extends StringPrompt {
             final BufferedImage image = generateImage(player, secret);
 
             if (image != null) {
-                MapView mapView = Bukkit.getServer().createMap(player.getWorld());
+                final MapView mapView = Bukkit.getServer().createMap(player.getWorld());
+
                 mapView.getRenderers().forEach(mapView::removeRenderer);
                 mapView.addRenderer(new QrCodeMap(image, player.getUniqueId()));
 
-                ItemStack mapItem = new ItemStack(Material.MAP, 1, mapView.getId());
-                ItemMeta mapMeta = mapItem.getItemMeta();
+                final ItemStack mapItem = new ItemStack(Material.MAP, 1, mapView.getId());
+                final ItemMeta mapMeta = mapItem.getItemMeta();
 
                 mapMeta.setDisplayName(ChatColor.DARK_AQUA + ChatColor.BOLD.toString() + "2FA Code");
                 mapMeta.setLore(Collections.singletonList("QR Code Map"));
@@ -64,7 +63,7 @@ public class MapScannerPrompt extends StringPrompt {
             }
         }
 
-        return ChatColor.DARK_AQUA + "[2FA] " + ChatColor.YELLOW + "Scan the QR Code on the map which was provided to you and type the code you receive from your 2FA application in chat!";
+        return ChatColor.DARK_AQUA + "[2FA] " + ChatColor.GREEN + "Great! " + ChatColor.YELLOW + "Scan the QR Code on the map which was provided to you and type the code you receive from your 2FA application in chat!";
     }
 
     @Override
@@ -82,41 +81,11 @@ public class MapScannerPrompt extends StringPrompt {
         try {
             code = Integer.parseInt(input.replace(" ", ""));
         } catch (NumberFormatException e) {
-            int attempts = this.failures++;
-
-            if (attempts >= 3) {
-                context.getForWhom().sendRawMessage(ChatColor.RED + "You've exceeded the amount of attempts that you had!");
-                context.getForWhom().sendRawMessage(ChatColor.RED + "The 2FA setup has been cancelled.");
-
-                return Prompt.END_OF_CONVERSATION;
-            }
-
-            context.getForWhom().sendRawMessage("  ");
-            context.getForWhom().sendRawMessage(ChatColor.RED + "I'm sorry, but the code you provided us is not valid.");
-            context.getForWhom().sendRawMessage(ChatColor.RED + "Please try again and enter a new code in chat.");
-            context.getForWhom().sendRawMessage(ChatColor.RED + "You currently have " + ChatColor.WHITE.toString() + (3 - attempts) + ChatColor.RED + " attempts left.");
-            context.getForWhom().sendRawMessage("  ");
-
-            return this;
+            return incrementAttempts(context);
         }
 
         if (!potPlayer.isAuthValid(secret, code)) {
-            int attempts = this.failures++;
-
-            if (attempts >= 3) {
-                context.getForWhom().sendRawMessage(ChatColor.RED + "You've exceeded the amount of attempts that you had!");
-                context.getForWhom().sendRawMessage(ChatColor.RED + "The 2FA setup has been cancelled.");
-
-                return Prompt.END_OF_CONVERSATION;
-            }
-
-            context.getForWhom().sendRawMessage("  ");
-            context.getForWhom().sendRawMessage(ChatColor.RED + "I'm sorry, but the code you provided us is not valid.");
-            context.getForWhom().sendRawMessage(ChatColor.RED + "Please try again and enter a new code in chat.");
-            context.getForWhom().sendRawMessage(ChatColor.RED + "You currently have " + ChatColor.WHITE.toString() + (3 - attempts) + ChatColor.RED + " attempts left.");
-            context.getForWhom().sendRawMessage("  ");
-
-            return this;
+            return incrementAttempts(context);
         }
 
         LockedState.release(player);
@@ -128,16 +97,33 @@ public class MapScannerPrompt extends StringPrompt {
         potPlayer.saveWithoutRemove();
 
         context.getForWhom().sendRawMessage(ChatColor.DARK_AQUA + "[2FA] " + ChatColor.YELLOW + "You've " + ChatColor.GREEN + "verified" + ChatColor.YELLOW + " your identity!");
-        context.getForWhom().sendRawMessage(ChatColor.DARK_AQUA + "[2FA] " + ChatColor.YELLOW + "Thanks for helping us keep our server save! " + ChatColor.RED + "<3");
+        context.getForWhom().sendRawMessage(ChatColor.DARK_AQUA + "[2FA] " + ChatColor.YELLOW + "Thanks for helping us keep our server save! " + ChatColor.RED + "❤");
 
         return Prompt.END_OF_CONVERSATION;
     }
 
+    private Prompt incrementAttempts(ConversationContext context) {
+        final int attempts = this.failures++;
+
+        if (attempts >= 3) {
+            context.getForWhom().sendRawMessage(ChatColor.RED + "You've exceeded the amount of attempts that you had!");
+            context.getForWhom().sendRawMessage(ChatColor.RED + "The 2FA setup has been cancelled.");
+
+            return Prompt.END_OF_CONVERSATION;
+        }
+
+        context.getForWhom().sendRawMessage(ChatColor.RED + "I'm sorry, but the code you provided us is not valid. Please try again and enter a new code in chat.");
+        context.getForWhom().sendRawMessage(ChatColor.RED + "You currently have " + ChatColor.YELLOW + (3 - attempts) + ChatColor.RED + " attempts left.");
+
+        return this;
+    }
+
+    @SuppressWarnings("deprecation")
     private BufferedImage generateImage(Player player, String secret) {
-        final Escaper urlEscaper = UrlEscapers.urlFragmentEscaper();
+        final Escaper urlEscape = UrlEscapers.urlFragmentEscaper();
 
         final String issuer = CorePlugin.getInstance().getServerManager().getNetwork().getServerName();
-        final String url = "otpauth://totp/" + urlEscaper.escape(player.getName()) + "?secret=" + secret + "&issuer=" + urlEscaper.escape(issuer);
+        final String url = "otpauth://totp/" + urlEscape.escape(player.getName()) + "?secret=" + secret + "&issuer=" + urlEscape.escape(issuer);
         final String imageUrl = String.format(IMAGE_URL_FORMAT, URLEncoder.encode(url));
 
         try {
@@ -156,7 +142,7 @@ public class MapScannerPrompt extends StringPrompt {
         try {
             SECURE_RANDOM = SecureRandom.getInstance("SHA1PRNG", "SUN");
         } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
-            throw new RuntimeException("This should never happen");
+            throw new RuntimeException("Algorithm does not exist.");
         }
     }
 

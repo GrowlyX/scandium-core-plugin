@@ -137,7 +137,9 @@ public class PlayerListener implements Listener {
 
             if (event.getPlayer().hasPermission("scandium.2fa.forced")) {
                 CompletableFuture.runAsync(() -> {
-                    if (potPlayer.isHasSetup2FA()) {
+                    if (potPlayer.isAuthBypassed()) {
+                        event.getPlayer().sendMessage(ChatColor.DARK_AQUA + "[2FA] " + ChatColor.YELLOW + "You've been exempted from authentication as you are 2FA bypassed.");
+                    } else if (potPlayer.isHasSetup2FA()) {
                         if (!potPlayer.getPreviousIpAddress().equals(potPlayer.getIpAddress()) || potPlayer.isRequiredToAuth() || (potPlayer.getLastAuth() + (HOUR * 6L)) < System.currentTimeMillis()) {
                             final String message = ChatColor.DARK_AQUA + "[2FA] " + ChatColor.YELLOW + "Please authenticate via " + ChatColor.AQUA + "/auth " + ChatColor.WHITE + "<code>" + ChatColor.YELLOW + ".";
 
@@ -298,11 +300,15 @@ public class PlayerListener implements Listener {
         } else {
             final long slowChat = CorePlugin.getInstance().getServerManager().getChatSlow();
 
-            if ((System.currentTimeMillis() < potPlayer.getChatCooldown())) {
+            if (System.currentTimeMillis() < potPlayer.getChatCooldown()) {
                 if (player.hasPermission("scandium.chat.cooldown.bypass")) {
                     this.checkThenSend(event, player, potPlayer, slowChat);
                 } else {
-                    player.sendMessage(slowChat > 0L ? Color.translate(PunishmentStrings.SLOW_CHAT_MESSAGE.replace("<amount>", DurationFormatUtils.formatDurationWords(slowChat, true, true))) : Color.translate(PunishmentStrings.COOL_DOWN_MESSAGE));
+                    player.sendMessage(slowChat > 0L ?
+                            PunishmentStrings.SLOW_CHAT_MESSAGE.replace("<amount>", DurationFormatUtils.formatDurationWords(potPlayer.getChatCooldown() - System.currentTimeMillis(), true, true)) :
+                            PunishmentStrings.COOL_DOWN_MESSAGE.replace("<amount>", DurationFormatUtils.formatDurationWords(potPlayer.getChatCooldown() - System.currentTimeMillis(), true, true))
+                    );
+
                     event.setCancelled(true);
                 }
             } else {
@@ -349,16 +355,17 @@ public class PlayerListener implements Listener {
             event.setCancelled(true);
         }
 
-        final long commandCoolDown = 1L;
+        final long commandCoolDown = 20L;
+
         if (System.currentTimeMillis() < potPlayer.getCommandCooldown()) {
-            if (!event.getPlayer().hasPermission("scandium.command.cooldown.bypass")) {
-                event.getPlayer().sendMessage(Color.translate(PunishmentStrings.CMD_CHAT_MESSAGE.replace("<amount>", DurationFormatUtils.formatDurationWords(commandCoolDown, true, true))));
+            if (!player.hasPermission("scandium.command.cooldown.bypass")) {
+                player.sendMessage(Color.translate(PunishmentStrings.CMD_CHAT_MESSAGE.replace("<amount>", DurationFormatUtils.formatDurationWords(potPlayer.getCommandCooldown() - System.currentTimeMillis(), true, true))));
                 event.setCancelled(true);
             }
         }
 
         if (CorePlugin.getInstance().getServerSettings().isAntiCommandSpamEnabled()) {
-            potPlayer.setCommandCooldown(System.currentTimeMillis() + 1L);
+            potPlayer.setCommandCooldown(System.currentTimeMillis() + commandCoolDown);
         } else {
             potPlayer.setCommandCooldown(0L);
         }
@@ -371,7 +378,7 @@ public class PlayerListener implements Listener {
                 .forEach(potPlayer1 -> potPlayer1.getPlayer().sendMessage(CorePlugin.getInstance().getServerManager().getChatFormat().getFormatted(player, potPlayer1.getPlayer(), event.getMessage())));
 
         if (CorePlugin.getInstance().getServerSettings().isAntiSpamEnabled()) {
-            potPlayer.setChatCooldown(System.currentTimeMillis() + (slowChat > 0L ? slowChat : 3000L));
+            potPlayer.setChatCooldown(System.currentTimeMillis() + (slowChat > 0L ? slowChat : 2000L));
         } else {
             potPlayer.setChatCooldown(0L);
         }
@@ -381,8 +388,8 @@ public class PlayerListener implements Listener {
     public void onDisconnect(PlayerQuitEvent event) {
         event.setQuitMessage(null);
 
-        PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer().getUniqueId());
-        Player player = event.getPlayer();
+        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer().getUniqueId());
+        final Player player = event.getPlayer();
 
         if (LockedState.isLocked(player)) {
             for (ItemStack itemStack : player.getInventory().getContents()) {

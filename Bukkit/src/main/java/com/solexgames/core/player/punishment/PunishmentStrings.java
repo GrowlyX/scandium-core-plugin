@@ -39,9 +39,9 @@ public final class PunishmentStrings {
     public static String MUTE_MESSAGE = ChatColor.RED + "You cannot speak as you are currently muted.";
     public static String KICK_MESSAGE = ChatColor.RED + "You were kicked for: " + ChatColor.GRAY + "<reason>";
 
-    public static String SLOW_CHAT_MESSAGE = ChatColor.RED + "Please wait another <amount> before chatting again.";
+    public static String SLOW_CHAT_MESSAGE = ChatColor.RED + "Chat is currently slowed, please wait <amount> before chatting again.";
     public static String CMD_CHAT_MESSAGE = ChatColor.RED + "You're on command cooldown, please wait <amount>.";
-    public static String COOL_DOWN_MESSAGE = ChatColor.RED + "Please wait before chatting again.";
+    public static String COOL_DOWN_MESSAGE = ChatColor.RED + "You're on chat cooldown, please wait <amount>.";
 
     public static String PLAYER_DATA_LOAD = ChatColor.RED + "An error occurred while trying to load your data.\n" + ChatColor.RED + "Please try again later or contact a staff member.";
     public static String SERVER_NOT_LOADED = ChatColor.RED + "The server you've tried to connect to has not loaded.\n" + ChatColor.RED + "Please try again in a few seconds or contact staff.";

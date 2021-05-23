@@ -77,7 +77,6 @@ public class PotPlayer {
     private boolean canSeeGlobalChat = true;
     private boolean canReceiveDms = true;
     private boolean canReceiveDmsSounds = true;
-    private boolean canSeeBroadcasts = true;
     private boolean canSeeFiltered = true;
     private boolean canSeeTips = true;
     private boolean canReport = true;
@@ -96,8 +95,9 @@ public class PotPlayer {
     private boolean isAutoVanish = false;
     private boolean isAutoModMode = false;
     private boolean isDisguised = false;
-    private boolean isAcceptingFriends = false;
+
     private boolean requiredToAuth = false;
+    private boolean authBypassed = false;
 
     private boolean currentlyMuted;
     private boolean currentlyRestricted;
@@ -123,9 +123,6 @@ public class PotPlayer {
 
     private long chatCooldown = 1L;
     private long commandCooldown = 1L;
-
-    private int lastItemSlot;
-    private ItemStack lastItem;
 
     private Date lastJoined;
     private String firstJoin;
@@ -171,7 +168,6 @@ public class PotPlayer {
         document.put("canSeeGlobalChat", this.canSeeGlobalChat);
         document.put("canSeeFiltered", this.canSeeFiltered);
         document.put("canReceiveDmsSounds", this.canReceiveDmsSounds);
-        document.put("canSeeBroadcasts", this.canSeeBroadcasts);
         document.put("lastJoined", CorePlugin.FORMAT.format(new Date()));
         document.put("firstJoined", this.firstJoin);
         document.put("disguiseRank", (this.disguiseRank == null ? null : this.disguiseRank.getName()));
@@ -215,6 +211,7 @@ public class PotPlayer {
         document.put("requiredToAuth", this.requiredToAuth);
         document.put("lastAuth", this.lastAuth);
         document.put("hasSetup2FA", this.hasSetup2FA);
+        document.put("authBypassed", this.authBypassed);
 
         document.put("discord", this.media.getDiscord());
         document.put("twitter", this.media.getTwitter());
@@ -311,8 +308,8 @@ public class PotPlayer {
                     if (this.profile.getBoolean("canSeeFiltered") != null) {
                         this.canSeeFiltered = this.profile.getBoolean("canSeeFiltered");
                     }
-                    if (this.profile.getBoolean("canSeeBroadcasts") != null) {
-                        this.canSeeBroadcasts = this.profile.getBoolean("canSeeBroadcasts");
+                    if (this.profile.getBoolean("authBypassed") != null) {
+                        this.authBypassed = this.profile.getBoolean("authBypassed");
                     }
                     if (this.profile.getBoolean("canSeeGlobalChat") != null) {
                         this.canSeeGlobalChat = this.profile.getBoolean("canSeeGlobalChat");

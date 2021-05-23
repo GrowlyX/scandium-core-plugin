@@ -10,7 +10,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-@Command(label = "core", aliases = {"scandium"})
+@Command(label = "core", permission = "scandium.command.core")
 public class CoreCommand extends BaseCommand {
 
     @Override
@@ -21,12 +21,6 @@ public class CoreCommand extends BaseCommand {
         }
 
         final Player player = (Player) sender;
-
-        if (!player.isOp()) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
-
         if (args.length == 0) {
             this.getHelpMessage(1, sender,
                     "/" + label + " debug",

@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-@Command(label = "cgrant", consoleOnly = true)
+@Command(label = "cgrant", permission = "scandium.command.cgrant", consoleOnly = true)
 public class CGrantCommand extends BaseCommand {
 
     @SneakyThrows
