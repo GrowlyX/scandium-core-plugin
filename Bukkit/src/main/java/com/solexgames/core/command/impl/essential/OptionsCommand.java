@@ -20,7 +20,7 @@ public class OptionsCommand extends BaseCommand {
         }
 
         final Player player = (Player) sender;
-        new SettingsMenu(player).open(player);
+        new SettingsMenu(player).openMenu(player);
 
         return false;
     }

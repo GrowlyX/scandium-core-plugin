@@ -26,6 +26,7 @@ import com.solexgames.core.serializer.DataLibrary;
 import com.solexgames.core.serializer.impl.ItemStackSerializer;
 import com.solexgames.core.serializer.impl.LocationSerializer;
 import com.solexgames.core.settings.ServerSettings;
+import com.solexgames.core.settings.player.ISettings;
 import com.solexgames.core.task.*;
 import com.solexgames.core.util.BukkitUtil;
 import com.solexgames.core.util.Color;
@@ -48,9 +49,7 @@ import org.bukkit.potion.PotionEffect;
 
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Random;
-import java.util.TimeZone;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -116,6 +115,8 @@ public final class CorePlugin extends JavaPlugin {
 
     private final ConversationFactory conversationFactory = new ConversationFactory(this);
     private final TPSUpdateTask tpsRunnable = new TPSUpdateTask();
+
+    private final List<ISettings> settingsList = new ArrayList<>();
 
     @Override
     public void onEnable() {
@@ -340,6 +341,10 @@ public final class CorePlugin extends JavaPlugin {
 
     public void logConsole(String message) {
         this.getServer().getConsoleSender().sendMessage(Color.translate(message));
+    }
+
+    public void addNewSettingHandler(ISettings settings) {
+        this.getSettingsList().add(settings);
     }
 
     @Override

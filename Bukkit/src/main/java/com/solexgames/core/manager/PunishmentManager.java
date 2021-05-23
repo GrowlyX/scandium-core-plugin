@@ -193,7 +193,7 @@ public class PunishmentManager {
             }
 
             final String formattedTarget = Color.translate((playerRank != null ? playerRank.getColor() + playerRank.getItalic() : ChatColor.GRAY) + playerName);
-            final String responseMessage = message.endsWith("-s") ? ChatColor.GRAY + "[Silent] " : "" + ChatColor.GREEN + "You've un" + punishmentType.getEdName().toLowerCase() + " " + formattedTarget + " for " + Color.SECONDARY_COLOR + message + ChatColor.GREEN + ".";
+            final String responseMessage = message.endsWith("-s") ? ChatColor.GRAY + "[Silent] " : "" + ChatColor.GREEN + "You've un" + punishmentType.getEdName().toLowerCase() + " " + formattedTarget + ChatColor.GREEN + " for " + Color.SECONDARY_COLOR + message + ChatColor.GREEN + ".";
 
             if (player != null) {
                 player.sendMessage(responseMessage);
