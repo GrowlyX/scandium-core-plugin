@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
-@Command(label = "viewinv", aliases = {"inv", "inventory"})
+@Command(label = "viewinv", permission = "scandium.command.viewinv", aliases = {"inv", "inventory"})
 public class ViewInvCommand extends BaseCommand {
 
     @Override
@@ -22,11 +22,6 @@ public class ViewInvCommand extends BaseCommand {
         }
 
         final Player player = (Player) sender;
-
-        if (!player.hasPermission("scandium.command.viewinv")) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
 
         if (args.length == 0) {
             new ViewPlayerMenu(player).openMenu(player);

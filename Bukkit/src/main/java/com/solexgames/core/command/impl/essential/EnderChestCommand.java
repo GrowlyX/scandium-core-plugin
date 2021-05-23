@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Command(label = "enderchest", aliases = "echest")
+@Command(label = "enderchest", aliases = "echest", permission = "scandium.command.echest")
 public class EnderChestCommand extends BaseCommand {
 
     @Override
@@ -22,11 +22,6 @@ public class EnderChestCommand extends BaseCommand {
         }
 
         final Player player = (Player) sender;
-
-        if (!player.hasPermission("scandium.command.echest")) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
 
         if (args.length == 0) {
             player.openInventory(player.getEnderChest());

@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-@Command(label = "gmc")
+@Command(label = "gmc", permission = "scandium.command.gmc")
 public class GmcCommand extends BaseCommand {
 
     @Override
@@ -24,11 +24,6 @@ public class GmcCommand extends BaseCommand {
         }
 
         final Player player = (Player) sender;
-
-        if (!player.hasPermission("scandium.command.gmc")) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
 
         if (args.length == 0) {
             player.setGameMode(GameMode.CREATIVE);

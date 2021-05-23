@@ -80,12 +80,11 @@ public class PunishHistoryViewMainMenu extends AbstractInventoryMenu {
 
     @Override
     public void onInventoryClick(InventoryClickEvent event) {
-        Inventory clickedInventory = event.getClickedInventory();
-        Inventory topInventory = event.getView().getTopInventory();
+        final Inventory clickedInventory = event.getClickedInventory();
+        final Inventory topInventory = event.getView().getTopInventory();
+
         if (!topInventory.equals(this.inventory)) return;
         if (topInventory.equals(clickedInventory)) {
-            event.setCancelled(true);
-
             final ItemStack item = event.getCurrentItem();
 
             if (item == null || item.getType() == XMaterial.AIR.parseMaterial()) {
@@ -97,6 +96,8 @@ public class PunishHistoryViewMainMenu extends AbstractInventoryMenu {
             if (punishmentType != null) {
                 new PunishViewPaginatedMenu(this.player, this.target, this.targetUuid, punishmentType).openMenu(this.player);
             }
+
+            event.setCancelled(true);
         }
     }
 

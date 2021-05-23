@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-@Command(label = "auth", aliases = {"2fa"})
+@Command(label = "auth", permission = "scandium.2fa", aliases = {"2fa"})
 public class AuthCommand extends BaseCommand {
 
     @Override
@@ -27,11 +27,6 @@ public class AuthCommand extends BaseCommand {
 
         final Player player = (Player) sender;
         final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-
-        if (!player.hasPermission("scandium.2fa")) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
 
         if (!LockedState.isLocked(player)) {
             player.sendMessage(ChatColor.RED + "I'm sorry, but you cannot perform this action right now.");

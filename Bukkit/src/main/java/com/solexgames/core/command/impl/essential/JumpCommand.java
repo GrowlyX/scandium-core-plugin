@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
  * @since 5/14/2021
  */
 
-@Command(label = "jump", aliases = "jtp")
+@Command(label = "jump", permission = "scandium.command.jump", aliases = "jtp")
 public class JumpCommand extends BaseCommand {
 
     @Override
@@ -27,13 +27,8 @@ public class JumpCommand extends BaseCommand {
 
         final Player player = (Player) sender;
 
-        if (!player.hasPermission("scandium.command.jump")) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
-
         if (args.length == 0) {
-            player.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player>.");
+            player.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player>");
         }
         if (args.length == 1) {
             final NetworkPlayer networkPlayer = CorePlugin.getInstance().getPlayerManager().getNetworkPlayer(args[0]);

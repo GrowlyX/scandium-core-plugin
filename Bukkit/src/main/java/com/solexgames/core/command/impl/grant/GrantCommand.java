@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-@Command(label = "grant")
+@Command(label = "grant", permission = "scandium.command.grant")
 public class GrantCommand extends BaseCommand {
 
     @Override
@@ -25,13 +25,8 @@ public class GrantCommand extends BaseCommand {
 
         final Player player = (Player) sender;
 
-        if (!player.hasPermission("scandium.command.grant")) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
-
         if (args.length == 0) {
-            sender.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player>.");
+            sender.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player>");
         }
         if (args.length > 0) {
             final UUID uuid = CorePlugin.getInstance().getUuidCache().getUuidFromUsername(args[0]);

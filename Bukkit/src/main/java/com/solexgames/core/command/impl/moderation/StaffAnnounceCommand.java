@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
-@Command(label = "staffannounce")
+@Command(label = "staffannounce", permission = "scandium.command.staffannounce")
 public class StaffAnnounceCommand extends BaseCommand {
 
     @Override
@@ -25,13 +25,8 @@ public class StaffAnnounceCommand extends BaseCommand {
 
         final Player player = (Player) sender;
 
-        if (!player.hasPermission("scandium.command.staffannounce")) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
-
         if (args.length == 0) {
-            sender.sendMessage(Color.translate(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <message>."));
+            sender.sendMessage(Color.translate(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <message>"));
         }
         if (args.length > 0) {
             final String message = StringUtil.buildMessage(args, 0);

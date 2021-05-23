@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
-@Command(label = "clear", aliases = {"ci", "clearinv", "clearinventory"})
+@Command(label = "clear", permission = "scandium.command.clear", aliases = {"ci", "clearinv", "clearinventory"})
 public class ClearCommand extends BaseCommand {
 
     @Override
@@ -23,11 +23,6 @@ public class ClearCommand extends BaseCommand {
         }
 
         final Player player = (Player) sender;
-
-        if (!player.hasPermission("scandium.command.clear")) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
 
         if (args.length == 0) {
             player.getInventory().clear();

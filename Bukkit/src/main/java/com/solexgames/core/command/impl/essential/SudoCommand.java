@@ -10,7 +10,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-@Command(label = "sudo")
+@Command(label = "sudo", permission = "scandium.command.sudo")
 public class SudoCommand extends BaseCommand {
 
     @Override
@@ -21,7 +21,7 @@ public class SudoCommand extends BaseCommand {
         }
 
         if (args.length <= 1) {
-            sender.sendMessage(Color.translate(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " [c:] [e:] <message>."));
+            sender.sendMessage(Color.translate(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " [c:] [e:] <message>"));
         }
 
         if (args.length > 1) {

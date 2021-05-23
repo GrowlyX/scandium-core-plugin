@@ -16,16 +16,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-@Command(label = "kick")
+@Command(label = "kick", permission = "scandium.command.kick")
 public class KickCommand extends BaseCommand {
 
     @Override
     public boolean command(CommandSender sender, String label, String[] args) {
-        if (!sender.hasPermission("scandium.command.kick")) {
-            sender.sendMessage(NO_PERMISSION);
-            return false;
-        }
-
         if (args.length < 2) {
             sender.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player> <reason> " + ChatColor.GRAY + "[-s]" + ChatColor.WHITE + ".");
         }

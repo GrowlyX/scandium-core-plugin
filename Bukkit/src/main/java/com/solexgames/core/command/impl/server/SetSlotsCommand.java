@@ -19,7 +19,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.List;
 
-@Command(label = "setslots")
+@Command(label = "setslots", permission = "scandium.command.setslots")
 public class SetSlotsCommand extends BaseCommand {
 
     @Override
@@ -31,13 +31,8 @@ public class SetSlotsCommand extends BaseCommand {
 
         final Player player = (Player) sender;
 
-        if (!player.hasPermission("scandium.command.setslots")) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
-
         if (args.length == 0) {
-            sender.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <int>.");
+            sender.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <int>");
         }
         if (args.length == 1) {
             try {

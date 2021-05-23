@@ -18,7 +18,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-@Command(label = "disguiseadmin", aliases = {"nickadmin"}, async = true)
+@Command(label = "disguiseadmin", permission = "scandium.command.disguiseadmin", aliases = {"nickadmin"}, async = true)
 public class DisguiseAdminCommand extends BaseCommand {
 
     @Override
@@ -29,11 +29,6 @@ public class DisguiseAdminCommand extends BaseCommand {
         }
 
         final Player player = (Player) sender;
-
-        if (!player.hasPermission("scandium.command.disguiseadmin")) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
 
         if (args.length == 0) {
             this.getHelpMessage(1, sender,

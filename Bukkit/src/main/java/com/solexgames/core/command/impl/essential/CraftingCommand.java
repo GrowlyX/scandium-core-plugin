@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
-@Command(label = "craft", aliases = {"crafting"})
+@Command(label = "craft", permission = "scandium.command.craft", aliases = {"crafting"})
 public class CraftingCommand extends BaseCommand {
 
     @Override
@@ -19,11 +19,6 @@ public class CraftingCommand extends BaseCommand {
         }
 
         final Player player = (Player) sender;
-
-        if (!player.hasPermission("scandium.command.crafting")) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
 
         player.openWorkbench(player.getLocation(), true);
 

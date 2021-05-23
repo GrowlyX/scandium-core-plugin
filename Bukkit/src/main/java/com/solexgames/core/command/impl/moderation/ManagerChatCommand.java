@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
-@Command(label = "managerchat", aliases = "mc")
+@Command(label = "managerchat", permission = "scandium.channels.manager", aliases = "mc")
 public class ManagerChatCommand extends BaseCommand {
 
     @Override
@@ -27,11 +27,6 @@ public class ManagerChatCommand extends BaseCommand {
 
         final Player player = (Player) sender;
         final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-
-        if (!player.hasPermission(ChatChannelType.MANAGER.getPermission())) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
 
         if (args.length == 0) {
             if (potPlayer.getChannel() == null || !potPlayer.getChannel().equals(ChatChannelType.MANAGER)) {

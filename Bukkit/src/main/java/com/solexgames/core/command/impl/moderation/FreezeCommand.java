@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
-@Command(label = "freeze", aliases = "ss")
+@Command(label = "freeze", permission = "scandium.command.freeze", aliases = "ss")
 public class FreezeCommand extends BaseCommand {
 
     @Override
@@ -26,14 +26,10 @@ public class FreezeCommand extends BaseCommand {
 
         final Player player = (Player) sender;
 
-        if (!player.hasPermission("scandium.command.freeze")) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
+        if (args.length == 0) {
+            sender.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player>");
         }
 
-        if (args.length == 0) {
-            sender.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player>.");
-        }
         if (args.length == 1) {
             final Player target = Bukkit.getPlayer(args[0]);
 
@@ -45,18 +41,18 @@ public class FreezeCommand extends BaseCommand {
 
                     RedisUtil.publishAsync(RedisUtil.onUnfreeze(player, target));
 
-                    player.sendMessage(ChatColor.GREEN + Color.translate("Unfroze " + target.getDisplayName() + ChatColor.GREEN + "."));
+                    player.sendMessage(Color.SECONDARY_COLOR + "You've unfrozen " + target.getDisplayName() + Color.SECONDARY_COLOR + ".");
                 } else {
                     final PotPlayer mainPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-                    final  PotPlayer targetPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
+                    final PotPlayer targetPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
 
                     if (mainPotPlayer.getActiveGrant().getRank() != null) {
-                        if ((mainPotPlayer.getActiveGrant().getRank().getWeight() >= targetPotPlayer.getActiveGrant().getRank().getWeight()) || player.isOp()) {
+                        if (player.isOp() || (mainPotPlayer.getActiveGrant().getRank().getWeight() >= targetPotPlayer.getActiveGrant().getRank().getWeight())) {
                             targetPotPlayer.setFrozen(true);
 
                             RedisUtil.publishAsync(RedisUtil.onFreeze(player, target));
 
-                            player.sendMessage(ChatColor.GREEN + Color.translate("Froze " + target.getDisplayName() + ChatColor.GREEN + "."));
+                            player.sendMessage(Color.SECONDARY_COLOR + "You've frozen " + target.getDisplayName() + Color.SECONDARY_COLOR + ".");
                         } else {
                             player.sendMessage(ChatColor.RED + ("You cannot freeze this player as their rank weight is higher than yours!"));
                         }

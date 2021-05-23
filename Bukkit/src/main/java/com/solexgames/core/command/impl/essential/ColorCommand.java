@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
-@Command(label = "color", aliases = {"chatcolor"}, hidden = false)
+@Command(label = "color", permission = "scandium.chat.colors", aliases = {"chatcolor"}, hidden = false)
 public class ColorCommand extends BaseCommand {
 
     @Override
@@ -20,11 +20,6 @@ public class ColorCommand extends BaseCommand {
         }
 
         final Player player = (Player) sender;
-
-        if (!player.hasPermission("scandium.chat.colors")) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
 
         new NameColorSelectMenu().openMenu(player);
 

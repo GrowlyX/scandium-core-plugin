@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-@Command(label = "gmsp")
+@Command(label = "gmsp", permission = "scandium.command.gmsp")
 public class GmspCommand extends BaseCommand {
 
     @Override
@@ -24,11 +24,6 @@ public class GmspCommand extends BaseCommand {
         }
 
         final Player player = (Player) sender;
-
-        if (!player.hasPermission("scandium.command.gmsp")) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
 
         if (Bukkit.getServer().getVersion().contains("1.7")) {
             return false;

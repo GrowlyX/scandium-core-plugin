@@ -12,16 +12,16 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
-@Command(label = "authbypass", aliases = {"remove2fa", "2fabypass"})
+@Command(
+        label = "authbypass",
+        permission = "scandium.command.authbypass",
+        aliases = {"remove2fa", "2fabypass"},
+        consoleOnly = true
+)
 public class AuthBypassCommand extends BaseCommand {
 
     @Override
     public boolean command(CommandSender sender, String label, String[] args) {
-        if (sender instanceof Player) {
-            sender.sendMessage(ChatColor.RED + "Only console can execute this command.");
-            return true;
-        }
-
         if (args.length == 0) {
             sender.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player>");
             return false;

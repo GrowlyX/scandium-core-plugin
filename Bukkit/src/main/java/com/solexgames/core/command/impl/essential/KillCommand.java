@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Command(label = "kill")
+@Command(label = "kill", permission = "scandium.command.kill")
 public class KillCommand extends BaseCommand {
 
     @Override
@@ -25,17 +25,13 @@ public class KillCommand extends BaseCommand {
 
         final Player player = (Player) sender;
 
-        if (!player.hasPermission("scandium.command.kill")) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
-
         if (args.length == 0) {
             player.setHealth(0);
             player.sendMessage(Color.SECONDARY_COLOR + ("You've killed yourself."));
 
             PlayerUtil.sendAlert(player, "killed themself");
         }
+
         if (args.length > 0) {
             final Player target = Bukkit.getPlayer(args[0]);
 

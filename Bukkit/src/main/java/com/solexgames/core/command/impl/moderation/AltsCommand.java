@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-@Command(label = "alts")
+@Command(label = "alts", permission = "scandium.command.alts")
 public class AltsCommand extends BaseCommand {
 
     @Override
@@ -31,13 +31,8 @@ public class AltsCommand extends BaseCommand {
             return false;
         }
 
-        if (!sender.hasPermission("scandium.command.alts")) {
-            sender.sendMessage(NO_PERMISSION);
-            return false;
-        }
-
         if (args.length == 0) {
-            sender.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player>.");
+            sender.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player>");
         }
         if (args.length == 1) {
             final String target = args[0];
@@ -59,6 +54,11 @@ public class AltsCommand extends BaseCommand {
                             .map(this::getFancyName)
                             .collect(Collectors.joining(ChatColor.WHITE + ", "));
                     final int altsAmount = potentialAlts.size();
+
+                    if (altsAmount > 100) {
+                        sender.sendMessage(ChatColor.RED + "This player has more than 100 alts, if we show all of them to you, you'll be disconnected.");
+                        return;
+                    }
 
                     sender.sendMessage(new String[]{
                             "",

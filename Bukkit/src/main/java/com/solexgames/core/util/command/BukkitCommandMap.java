@@ -4,14 +4,12 @@ import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.command.EBaseCommand;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Server;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandException;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -29,7 +27,7 @@ public class BukkitCommandMap extends SimpleCommandMap {
         Validate.notNull(sender, "Sender cannot be null");
         Validate.notNull(cmdLine, "Command line cannot null");
 
-        int spaceIndex = cmdLine.indexOf(' ');
+        final int spaceIndex = cmdLine.indexOf(' ');
 
         if (spaceIndex == -1) {
             final ArrayList<String> completions = new ArrayList<>();
@@ -37,7 +35,7 @@ public class BukkitCommandMap extends SimpleCommandMap {
 
             final String prefix = (sender instanceof Player ? "/" : "");
 
-            for (Map.Entry<String, Command> commandEntry : knownCommands.entrySet()) {
+            for (final Map.Entry<String, Command> commandEntry : knownCommands.entrySet()) {
                 final Command command = commandEntry.getValue();
 
                 if (!command.testPermissionSilent(sender)) {
@@ -48,18 +46,13 @@ public class BukkitCommandMap extends SimpleCommandMap {
 
                 if (command instanceof BaseCommand) {
                     final BaseCommand baseCommand = (BaseCommand) command;
+                    final String permissionNode = (baseCommand.getPermissionNode() == null || baseCommand.getPermissionNode().equals("") ? "scandium.staff" : baseCommand.getPermissionNode());
 
-                    if (!baseCommand.isHidden()) {
+                    if (baseCommand.isConsoleOnly() && sender instanceof ConsoleCommandSender) {
                         completions.add(prefix + name);
-                    } else if (baseCommand.isHidden() && sender.hasPermission("scandium.staff")) {
+                    } else if (!baseCommand.isHidden() && baseCommand.getPermissionNode().equals(""))  {
                         completions.add(prefix + name);
-                    }
-                } else if (command instanceof EBaseCommand) {
-                    final EBaseCommand baseCommand = (EBaseCommand) command;
-
-                    if (!baseCommand.isHidden()) {
-                        completions.add(prefix + name);
-                    } else if (baseCommand.isHidden() && sender.hasPermission("scandium.staff")) {
+                    } else if (baseCommand.isHidden() && sender.hasPermission(permissionNode)) {
                         completions.add(prefix + name);
                     }
                 } else if (StringUtil.startsWithIgnoreCase(name, cmdLine)) {
@@ -67,7 +60,7 @@ public class BukkitCommandMap extends SimpleCommandMap {
                 }
             }
 
-            completions.sort(String.CASE_INSENSITIVE_ORDER);
+            Collections.sort(completions, String.CASE_INSENSITIVE_ORDER);
             return completions;
         }
 
@@ -82,7 +75,7 @@ public class BukkitCommandMap extends SimpleCommandMap {
             return null;
         }
 
-        final String argLine = cmdLine.substring(spaceIndex + 1);
+        final String argLine = cmdLine.substring(spaceIndex + 1, cmdLine.length());
         final String[] args = PATTERN_ON_SPACE.split(argLine, -1);
 
         try {

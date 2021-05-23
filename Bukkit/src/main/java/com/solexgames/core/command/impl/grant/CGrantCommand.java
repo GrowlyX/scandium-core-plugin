@@ -15,18 +15,14 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-@Command(label = "cgrant")
+@Command(label = "cgrant", consoleOnly = true)
 public class CGrantCommand extends BaseCommand {
 
     @SneakyThrows
     @Override
     public boolean command(CommandSender sender, String label, String[] args) {
-        if (sender instanceof Player) {
-            return false;
-        }
-
         if (args.length <= 2) {
-            sender.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player> <rank> <duration> <reason>.");
+            sender.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player> <rank> <duration> <reason>");
         }
         if (args.length > 2) {
             final UUID uuid = CorePlugin.getInstance().getUuidCache().getUuidFromUsername(args[0]);
@@ -44,6 +40,7 @@ public class CGrantCommand extends BaseCommand {
                         }
 
                         final Rank rank = Rank.getByName(args[1]);
+
                         if (rank == null) {
                             sender.sendMessage(ChatColor.RED + "Error: That rank does not exist.");
                             return;

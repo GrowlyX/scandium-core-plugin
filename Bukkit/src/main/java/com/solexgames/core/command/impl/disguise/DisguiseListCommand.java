@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Command(label = "disguiselist", aliases = {"nicklist"})
+@Command(label = "disguiselist", permission = "scandium.command.disguiselist", aliases = {"nicklist"})
 public class DisguiseListCommand extends BaseCommand {
 
     @Override
@@ -23,12 +23,6 @@ public class DisguiseListCommand extends BaseCommand {
         }
 
         final Player player = (Player) sender;
-
-        if (!player.hasPermission("scandium.command.disguiselist")) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
-
         final PageListBuilder pageListBuilder = new PageListBuilder(10, "Disguised Players");
         final List<String> stringList = CorePlugin.getInstance().getPlayerManager().getAllProfiles().values().stream()
                 .filter(uuidPotPlayerEntry -> uuidPotPlayerEntry != null && uuidPotPlayerEntry.isDisguised())

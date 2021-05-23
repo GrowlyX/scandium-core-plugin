@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-@Command(label = "tppos")
+@Command(label = "tppos", permission = "scandium.command.tppos")
 public class TpPosCommand extends BaseCommand {
 
     @Override
@@ -30,7 +30,7 @@ public class TpPosCommand extends BaseCommand {
         }
 
         if (args.length <= 2) {
-            player.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <x> <y> <z>.");
+            player.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <x> <y> <z>");
         }
         if (args.length == 3) {
             try {

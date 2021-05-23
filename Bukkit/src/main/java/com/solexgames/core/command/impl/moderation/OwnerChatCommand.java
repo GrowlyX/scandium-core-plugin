@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
-@Command(label = "ownerchat", aliases = {"oc"})
+@Command(label = "ownerchat", permission = "scandium.channels.owner", aliases = {"oc"})
 public class OwnerChatCommand extends BaseCommand {
 
     @Override
@@ -27,11 +27,6 @@ public class OwnerChatCommand extends BaseCommand {
 
         final Player player = (Player) sender;
         final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-
-        if (!player.hasPermission(ChatChannelType.OWNER.getPermission())) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
 
         if (args.length == 0) {
             if (potPlayer.getChannel() == null || !potPlayer.getChannel().equals(ChatChannelType.OWNER)) {

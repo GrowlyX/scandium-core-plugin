@@ -13,33 +13,28 @@ import org.bukkit.entity.Player;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
-@Command(label = "import")
+@Command(label = "import", permission = "scandium.command.import", consoleOnly = true)
 public class ImportCommand extends BaseCommand {
 
     @Override
     public boolean command(CommandSender sender, String label, String[] args) {
-        if (!(sender instanceof Player)) {
-            if (args.length == 0) {
-                sender.sendMessage(new String[]{
-                        "",
-                        ChatColor.GREEN + ChatColor.BOLD.toString() + "Would you like to import the ranks from the ranks.yml?",
-                        ChatColor.GRAY + "If you proceed, make sure to understand all the current",
-                        ChatColor.GRAY + "ranks will be deleted and replaced with the new ones.",
-                        "",
-                        ChatColor.YELLOW + "[Use /import confirm to start the rank importation]",
-                });
-            }
-            if (args.length == 1) {
-                if (args[0].equalsIgnoreCase("import")) {
-                    sender.sendMessage(ChatColor.GRAY + "Importing ranks from the configuration...");
+        if (args.length == 0) {
+            sender.sendMessage(new String[]{
+                    "",
+                    ChatColor.GREEN + ChatColor.BOLD.toString() + "Would you like to import the ranks from the ranks.yml?",
+                    ChatColor.GRAY + "If you proceed, make sure to understand all the current",
+                    ChatColor.GRAY + "ranks will be deleted and replaced with the new ones.",
+                    "",
+                    ChatColor.YELLOW + "[Use /import confirm to start the rank importation]",
+            });
+        }
+        if (args.length == 1) {
+            if (args[0].equalsIgnoreCase("import")) {
+                sender.sendMessage(ChatColor.GRAY + "Importing ranks from the configuration...");
 
-                    CompletableFuture.supplyAsync(this::handleImport)
-                            .thenAccept(aBoolean -> sender.sendMessage(ChatColor.GREEN + "Successfully imported all ranks!"));
-                }
+                CompletableFuture.supplyAsync(this::handleImport)
+                        .thenAccept(aBoolean -> sender.sendMessage(ChatColor.GREEN + "Successfully imported all ranks!"));
             }
-            return false;
-        } else {
-            sender.sendMessage(NO_PERMISSION);
         }
 
         return false;

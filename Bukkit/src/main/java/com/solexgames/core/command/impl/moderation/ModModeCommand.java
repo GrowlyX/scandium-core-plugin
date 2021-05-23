@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
-@Command(label = "modmode", aliases = {"mm", "staffmode", "mod", "staff"})
+@Command(label = "modmode", permission = "scandium.command.modmode", aliases = {"mm", "staffmode", "mod", "staff"})
 public class ModModeCommand extends BaseCommand {
 
     @Override
@@ -24,11 +24,6 @@ public class ModModeCommand extends BaseCommand {
         final Player player = (Player) sender;
         final PlayerManager playerManager = CorePlugin.getInstance().getPlayerManager();
         final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-
-        if (!player.hasPermission("scandium.command.modmode")) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
 
         if (potPlayer.isStaffMode()) {
             playerManager.unModModePlayer(player);

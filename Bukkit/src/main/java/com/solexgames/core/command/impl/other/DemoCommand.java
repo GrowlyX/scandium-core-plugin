@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-@Command(label = "demo")
+@Command(label = "demo", permission = "scandium.command.demo")
 public class DemoCommand extends BaseCommand {
 
     @Override
@@ -22,11 +22,6 @@ public class DemoCommand extends BaseCommand {
         }
 
         final Player player = (Player) sender;
-
-        if (!player.hasPermission("scandium.command.demo")) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
 
         if (CorePlugin.getInstance().getPacketHandler() != null) {
             if (args.length == 0) {
@@ -45,9 +40,8 @@ public class DemoCommand extends BaseCommand {
                     player.sendMessage(ChatColor.RED + "Error: That player does not exist.");
                 }
             }
-
         } else {
-            sender.sendMessage(ChatColor.RED + "Please install ProtocolLib to use this feature.");
+            sender.sendMessage(ChatColor.RED + "This feature is currently disabled.");
         }
 
         return false;

@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
-@Command(label = "toggleautomodmode", aliases = "tamod")
+@Command(label = "toggleautomodmode", permission = "scandium.staff", aliases = "tamod")
 public class ToggleAutoModModeCommand extends BaseCommand {
 
     @Override
@@ -24,11 +24,6 @@ public class ToggleAutoModModeCommand extends BaseCommand {
 
         final Player player = (Player) sender;
         final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-
-        if (!player.hasPermission("scandium.staff")) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
 
         if (potPlayer.isAutoModMode()) {
             player.sendMessage(ChatColor.RED + ("You've disabled auto mod mode."));

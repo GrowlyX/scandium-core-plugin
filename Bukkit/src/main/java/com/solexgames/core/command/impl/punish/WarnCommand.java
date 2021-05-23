@@ -15,7 +15,7 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-@Command(label = "warn")
+@Command(label = "warn", permission = "scandium.command.warn")
 public class WarnCommand extends BaseCommand {
 
     @Override

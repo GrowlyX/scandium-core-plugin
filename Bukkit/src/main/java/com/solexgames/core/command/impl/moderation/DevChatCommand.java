@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
-@Command(label = "devchat", aliases = {"dc"})
+@Command(label = "devchat", permission = "scandium.channels.dev", aliases = {"dc"})
 public class DevChatCommand extends BaseCommand {
 
     @Override
@@ -27,11 +27,6 @@ public class DevChatCommand extends BaseCommand {
 
         final Player player = (Player) sender;
         final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-
-        if (!player.hasPermission(ChatChannelType.DEV.getPermission())) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
 
         if (args.length == 0) {
             if (potPlayer.getChannel() == null || !potPlayer.getChannel().equals(ChatChannelType.DEV)) {

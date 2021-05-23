@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Command(label = "mute", aliases = {"tempmute", "tmute"})
+@Command(label = "mute", permission = "scandium.command.mute", aliases = {"tempmute", "tmute"})
 public class MuteCommand extends BaseCommand {
 
     @Override

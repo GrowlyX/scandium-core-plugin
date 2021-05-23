@@ -28,7 +28,7 @@ public class ReplyCommand extends BaseCommand {
         final Player player = (Player) sender;
 
         if (args.length == 0) {
-            player.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <message>.");
+            player.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <message>");
         }
         if (args.length > 0) {
             final String message = StringUtil.buildMessage(args, 0);

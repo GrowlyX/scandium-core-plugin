@@ -9,7 +9,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-@Command(label = "heal")
+@Command(label = "heal", permission = "scandium.command.heal")
 public class HealCommand extends BaseCommand {
 
     @Override
@@ -20,11 +20,6 @@ public class HealCommand extends BaseCommand {
         }
 
         final Player player = (Player) sender;
-
-        if (!player.hasPermission("scandium.command.heal")) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
 
         if (args.length == 0) {
             player.setHealth(20);

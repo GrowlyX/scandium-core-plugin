@@ -10,7 +10,7 @@ import org.bukkit.GameMode;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-@Command(label = "gms")
+@Command(label = "gms", permission = "scandium.command.gms")
 public class GmsCommand extends BaseCommand {
 
     @Override
@@ -21,12 +21,6 @@ public class GmsCommand extends BaseCommand {
         }
 
         final Player player = (Player) sender;
-
-        if (!player.hasPermission("scandium.command.gms")) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
-
         if (args.length == 0) {
             player.setGameMode(GameMode.SURVIVAL);
             player.sendMessage(Color.SECONDARY_COLOR + "You've set your gamemode to " + Color.MAIN_COLOR + "survival" + Color.SECONDARY_COLOR + ".");

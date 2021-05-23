@@ -9,7 +9,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-@Command(label = "feed")
+@Command(label = "feed", permission = "scandium.command.feed")
 public class FeedCommand extends BaseCommand {
 
     @Override
@@ -20,11 +20,6 @@ public class FeedCommand extends BaseCommand {
         }
 
         final Player player = (Player) sender;
-
-        if (!player.hasPermission("scandium.command.feed")) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
 
         if (args.length == 0) {
             player.setFoodLevel(20);

@@ -16,18 +16,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-@Command(label = "checkdisguise")
+@Command(label = "checkdisguise", permission = "scandium.command.checkdisguise")
 public class CheckDisguiseCommand extends BaseCommand {
 
     @Override
     public boolean command(CommandSender sender, String label, String[] args) {
-        if (!sender.hasPermission("scandium.command.checkdisguise")) {
-            sender.sendMessage(NO_PERMISSION);
-            return false;
-        }
-
         if (args.length == 0) {
-            sender.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player>.");
+            sender.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player>");
         }
 
         if (args.length > 0) {

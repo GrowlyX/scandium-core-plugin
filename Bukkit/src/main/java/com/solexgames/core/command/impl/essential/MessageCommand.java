@@ -28,7 +28,7 @@ public class MessageCommand extends BaseCommand {
         final Player player = (Player) sender;
 
         if (args.length < 1) {
-            player.sendMessage(Color.translate(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player> <message>."));
+            player.sendMessage(Color.translate(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player> <message>"));
         }
         if (args.length > 1) {
             final Player target = Bukkit.getPlayer(args[0]);

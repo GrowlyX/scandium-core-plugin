@@ -35,6 +35,9 @@ public abstract class BaseCommand extends Command {
 
     private boolean async;
     private boolean hidden;
+    private boolean consoleOnly;
+
+    private String permissionNode;
 
     protected BaseCommand() {
         super("");
@@ -48,6 +51,8 @@ public abstract class BaseCommand extends Command {
 
         this.async = command.async();
         this.hidden = command.hidden();
+        this.consoleOnly = command.consoleOnly();
+        this.permissionNode = command.permission();
 
         this.setLabel(command.label());
         this.setName(command.label());
@@ -69,6 +74,8 @@ public abstract class BaseCommand extends Command {
 
         this.async = command.async();
         this.hidden = command.hidden();
+        this.consoleOnly = command.consoleOnly();
+        this.permissionNode = command.permission();
 
         this.setLabel(command.label());
         this.setName(command.label());
@@ -107,6 +114,16 @@ public abstract class BaseCommand extends Command {
 
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
+        if (!(sender instanceof ConsoleCommandSender) && this.isConsoleOnly()) {
+            sender.sendMessage(this.NO_PERMISSION);
+            return false;
+        }
+
+        if (this.permissionNode != null && !this.permissionNode.equals("") && !sender.hasPermission(this.permissionNode)) {
+            sender.sendMessage(this.NO_PERMISSION);
+            return false;
+        }
+
         if (this.async) {
             CompletableFuture.runAsync(() -> this.command(sender, label, args));
         } else {
@@ -123,6 +140,6 @@ public abstract class BaseCommand extends Command {
     }
 
     public String getUsageMessage(String subCommand, String... arguments) {
-        return Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + this.getLabel() + " " + ChatColor.WHITE + subCommand + " " + String.join(" ", arguments) + ".";
+        return Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + this.getLabel() + " " + ChatColor.WHITE + subCommand + " " + String.join(" ", arguments) + "";
     }
 }

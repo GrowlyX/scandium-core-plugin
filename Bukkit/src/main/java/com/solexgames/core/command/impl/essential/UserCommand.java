@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
-@Command(label = "user")
+@Command(label = "user", permission = "scandium.command.user")
 public class UserCommand extends BaseCommand {
 
     public final ServerType NETWORK = CorePlugin.getInstance().getServerManager().getNetwork();
@@ -32,11 +32,6 @@ public class UserCommand extends BaseCommand {
 
     @Override
     public boolean command(CommandSender sender, String label, String[] args) {
-        if (!sender.hasPermission("scandium.command.user")) {
-            sender.sendMessage(NO_PERMISSION);
-            return false;
-        }
-
         /*
          * Prepare for spaghetti code!
          */

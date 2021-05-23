@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
-@Command(label = "enchant")
+@Command(label = "enchant", permission = "scandium.command.enchant")
 public class EnchantCommand extends BaseCommand {
 
     @Override

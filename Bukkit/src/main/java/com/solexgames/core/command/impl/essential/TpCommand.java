@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
-@Command(label = "tp", aliases = "teleport")
+@Command(label = "tp", aliases = "teleport", permission = "scandium.command.tp")
 public class TpCommand extends BaseCommand {
 
     @Override
@@ -24,13 +24,8 @@ public class TpCommand extends BaseCommand {
 
         final Player player = (Player) sender;
 
-        if (!sender.hasPermission("scandium.command.tp")) {
-            sender.sendMessage(NO_PERMISSION);
-            return false;
-        }
-
         if (args.length == 0) {
-            sender.sendMessage(Color.translate(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player>."));
+            sender.sendMessage(Color.translate(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player>"));
         }
 
         if (args.length == 1) {

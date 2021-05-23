@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
-@Command(label = "shutdown")
+@Command(label = "shutdown", permission = "scandium.command.shutdown")
 public class ShutdownCommand extends BaseCommand {
 
     @Override
@@ -26,15 +26,10 @@ public class ShutdownCommand extends BaseCommand {
         final Player player = (Player) sender;
         final ShutdownManager shutdownManager = CorePlugin.getInstance().getShutdownManager();
 
-        if (!player.hasPermission("scandium.command.shutdown")) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
-
         if (args.length == 0) {
             this.getHelpMessage(1, player,
-                    "/shutdown <start>",
-                    "/shutdown <cancel>"
+                    "/shutdown start",
+                    "/shutdown cancel"
             );
         }
         if (args.length == 1) {
@@ -56,7 +51,7 @@ public class ShutdownCommand extends BaseCommand {
                     }
                     break;
                 default:
-                    sender.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <start|cancel>.");
+                    sender.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <start|cancel>");
                     break;
             }
         }

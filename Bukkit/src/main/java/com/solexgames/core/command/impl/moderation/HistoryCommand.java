@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 
 import java.util.concurrent.CompletableFuture;
 
-@Command(label = "history", aliases = "c")
+@Command(label = "history", permission = "scandium.command.history", aliases = "c")
 public class HistoryCommand extends BaseCommand {
 
     @Override
@@ -22,14 +22,8 @@ public class HistoryCommand extends BaseCommand {
         }
 
         final Player player = (Player) sender;
-
-        if (!player.hasPermission("scandium.command.history")) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
-
         if (args.length == 0) {
-            player.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player>.");
+            player.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player>");
         }
         if (args.length == 1) {
             CompletableFuture.supplyAsync(() -> CorePlugin.getInstance().getUuidCache().getUuidFromUsername(args[0]))

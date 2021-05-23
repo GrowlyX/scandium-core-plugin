@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
-@Command(label = "toggleautovanish", aliases = "tav")
+@Command(label = "toggleautovanish", permission = "scandium.staff", aliases = "tav")
 public class ToggleAutoVanishCommand extends BaseCommand {
 
     @Override
@@ -24,11 +24,6 @@ public class ToggleAutoVanishCommand extends BaseCommand {
 
         final Player player = (Player) sender;
         final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-
-        if (!player.hasPermission("scandium.staff")) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
 
         if (potPlayer.isAutoVanish()) {
             player.sendMessage(ChatColor.RED + ("You've disabled auto vanish."));

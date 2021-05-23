@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Command(label = "fly", aliases = "flight")
+@Command(label = "fly", aliases = "flight", permission = "scandium.command.fly")
 public class FlyCommand extends BaseCommand {
 
     @Override
@@ -24,11 +24,6 @@ public class FlyCommand extends BaseCommand {
         }
 
         final Player player = (Player) sender;
-
-        if (!player.hasPermission("scandium.command.fly")) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
 
         if (args.length == 0) {
             if (player.isFlying()) {
@@ -48,6 +43,11 @@ public class FlyCommand extends BaseCommand {
         }
         if (args.length == 1) {
             final Player target = Bukkit.getPlayer(args[0]);
+
+            if (!player.hasPermission("scandium.command.fly.others")) {
+                player.sendMessage(this.NO_PERMISSION);
+                return false;
+            }
 
             if (target != null) {
                 if (target.isFlying()) {

@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Command(label = "network")
+@Command(label = "network", permission = "scandium.command.network", aliases = "environment")
 public class NetworkCommand extends BaseCommand {
 
     @Override
@@ -24,11 +24,6 @@ public class NetworkCommand extends BaseCommand {
         if (sender instanceof Player) {
             new NetworkServerMainMenu().openMenu((Player) sender);
 
-            return false;
-        }
-
-        if (!sender.hasPermission("scandium.command.network")) {
-            sender.sendMessage(NO_PERMISSION);
             return false;
         }
 

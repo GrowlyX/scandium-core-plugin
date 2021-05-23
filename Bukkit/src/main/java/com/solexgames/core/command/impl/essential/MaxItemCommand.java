@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Arrays;
 import java.util.List;
 
-@Command(label = "maxitem", aliases = "more")
+@Command(label = "maxitem", permission = "scandium.command.maxitem", aliases = "more")
 public class MaxItemCommand extends BaseCommand {
 
     @Override

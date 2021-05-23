@@ -12,7 +12,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-@Command(label = "staffchat", aliases = "sc")
+@Command(label = "staffchat", permission = "scandium.channels.staff", aliases = "sc")
 public class StaffChatCommand extends BaseCommand {
 
     @Override

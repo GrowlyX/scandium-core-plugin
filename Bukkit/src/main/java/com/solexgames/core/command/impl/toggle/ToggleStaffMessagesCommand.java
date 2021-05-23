@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
-@Command(label = "togglestaffmessages", aliases = "tsm")
+@Command(label = "togglestaffmessages", permission = "scandium.staff", aliases = "tsm")
 public class ToggleStaffMessagesCommand extends BaseCommand {
 
     @Override
@@ -24,11 +24,6 @@ public class ToggleStaffMessagesCommand extends BaseCommand {
 
         final Player player = (Player) sender;
         final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-
-        if (!player.hasPermission("scandium.staff")) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
 
         if (potPlayer.isCanSeeStaffMessages()) {
             player.sendMessage(ChatColor.RED + ("You've disabled staff messages."));

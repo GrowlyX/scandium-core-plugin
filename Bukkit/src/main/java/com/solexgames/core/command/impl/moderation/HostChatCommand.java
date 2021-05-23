@@ -1,4 +1,4 @@
-package com.solexgames.core.command.impl.essential;
+package com.solexgames.core.command.impl.moderation;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
-@Command(label = "hostchat", aliases = "hc")
+@Command(label = "hostchat", aliases = "hc", permission = "scandium.channels.host")
 public class HostChatCommand extends BaseCommand {
 
     @Override
@@ -27,11 +27,6 @@ public class HostChatCommand extends BaseCommand {
 
         final Player player = (Player) sender;
         final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-
-        if (!player.hasPermission(ChatChannelType.HOST.getPermission())) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
 
         if (args.length == 0) {
             if (potPlayer.getChannel() == null || !potPlayer.getChannel().equals(ChatChannelType.HOST)) {

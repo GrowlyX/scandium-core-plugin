@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Command(label = "permissions", aliases = {"perms"})
+@Command(label = "permissions", permission = "scandium.command.permissions", aliases = {"perms"})
 public class PermissionsCommand extends BaseCommand {
 
     @Override
@@ -25,11 +25,6 @@ public class PermissionsCommand extends BaseCommand {
         }
 
         final Player player = (Player) sender;
-
-        if (!player.hasPermission("scandium.command.permissions")) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
 
         final List<String> permissions = player.getEffectivePermissions().stream()
                 .map(PermissionAttachmentInfo::getPermission)

@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-@Command(label = "turn")
+@Command(label = "turn", permission = "scandium.command.turn")
 public class TurnCommand extends BaseCommand {
 
     @Override
@@ -24,14 +24,9 @@ public class TurnCommand extends BaseCommand {
 
         final Player player = (Player) sender;
 
-        if (!player.hasPermission("scandium.command.crasher")) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
-
         if (CorePlugin.getInstance().getPacketHandler() != null) {
             if (args.length == 0) {
-                player.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/crasher " + ChatColor.WHITE + "<player>.");
+                player.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/turn " + ChatColor.WHITE + "<player>");
             }
             if (args.length == 1) {
                 final Player target = Bukkit.getPlayer(args[0]);

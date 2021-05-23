@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
-@Command(label = "broadcast", aliases = {"bc", "alert", "galert", "rgalert"})
+@Command(label = "broadcast", permission = "scandium.command.broadcast", aliases = {"bc", "alert", "galert", "rgalert"})
 public class BroadcastCommand extends BaseCommand {
 
     @Override
@@ -25,13 +25,8 @@ public class BroadcastCommand extends BaseCommand {
 
         final Player player = (Player) sender;
 
-        if (!player.hasPermission("scandium.command.broadcast")) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
-
         if (args.length == 0) {
-            player.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " [l:] [g:] <message>.");
+            player.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " [l:] [g:] <message>");
         }
         if (args.length > 0) {
             String message = StringUtil.buildMessage(args, 0);

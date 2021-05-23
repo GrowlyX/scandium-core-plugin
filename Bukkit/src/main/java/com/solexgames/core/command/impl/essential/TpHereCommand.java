@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Command(label = "tphere", aliases = "s")
+@Command(label = "tphere", permission = "scandium.command.tphere", aliases = "s")
 public class TpHereCommand extends BaseCommand {
 
     @Override
@@ -31,7 +31,7 @@ public class TpHereCommand extends BaseCommand {
         }
 
         if (args.length == 0) {
-            player.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player>.");
+            player.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player>");
         }
         if (args.length == 1) {
             final Player target = Bukkit.getPlayer(args[0]);

@@ -12,8 +12,10 @@ public @interface Command {
     String label();
 
     String[] aliases() default {};
+    String permission() default "";
 
     boolean async() default false;
+    boolean consoleOnly() default false;
     boolean hidden() default true;
 
 }

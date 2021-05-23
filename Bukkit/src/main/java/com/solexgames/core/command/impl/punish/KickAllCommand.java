@@ -11,16 +11,11 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-@Command(label = "kickall")
+@Command(label = "kickall", permission = "scandium.command.kickall")
 public class KickAllCommand extends BaseCommand {
 
     @Override
     public boolean command(CommandSender sender, String label, String[] args) {
-        if (!sender.hasPermission("scandium.punishments.kickall")) {
-            sender.sendMessage(NO_PERMISSION);
-            return false;
-        }
-
         final NetworkServer server = CorePlugin.getInstance().getServerManager().getNetworkServers().stream()
                 .filter(networkServer -> networkServer.getServerType().equals(NetworkServerType.HUB))
                 .findFirst().orElse(null);

@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Command(label = "vanish", aliases = "v")
+@Command(label = "vanish", permission = "scandium.command.vanish", aliases = "v")
 public class VanishCommand extends BaseCommand {
 
     @Override
@@ -29,11 +29,6 @@ public class VanishCommand extends BaseCommand {
         final Player player = (Player) sender;
         final PlayerManager vanishManager = CorePlugin.getInstance().getPlayerManager();
         final ServerManager manager = CorePlugin.getInstance().getServerManager();
-
-        if (!player.hasPermission("scandium.command.vanish")) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
 
         if (args.length == 0) {
             if (manager.getVanishedPlayers().contains(player)) {

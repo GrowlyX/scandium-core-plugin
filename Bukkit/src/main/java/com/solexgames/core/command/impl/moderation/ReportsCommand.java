@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
-@Command(label = "reports")
+@Command(label = "reports", permission = "scandium.command.reports")
 public class ReportsCommand extends BaseCommand {
 
     @Override
@@ -20,11 +20,6 @@ public class ReportsCommand extends BaseCommand {
         }
 
         final Player player = (Player) sender;
-
-        if (!player.hasPermission("scandium.commands.reports")) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
 
         new ReportViewPaginatedMenu().openMenu(player);
 

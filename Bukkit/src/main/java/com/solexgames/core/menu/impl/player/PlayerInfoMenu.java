@@ -10,6 +10,7 @@ import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.util.external.impl.network.NetworkServerMainMenu;
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -50,7 +51,8 @@ public class PlayerInfoMenu extends AbstractInventoryMenu {
                         "&7Last seen: &f" + CorePlugin.FORMAT.format(potPlayer.getLastJoined()),
                         "",
                         "&7Experience: &f" + Color.SECONDARY_COLOR + potPlayer.getExperience(),
-                        "&7Prefix: &f" + Color.SECONDARY_COLOR + (currentlyDisguised ? "None" : potPlayer.getAppliedPrefix().getName()),
+                        "&7Prefix: &f" + Color.SECONDARY_COLOR + (currentlyDisguised ? "None" : potPlayer.getAppliedPrefix() == null ? "None" : potPlayer.getAppliedPrefix().getName()),
+                        "&7Chat Color: &f" + Color.SECONDARY_COLOR + (currentlyDisguised ? "None" : potPlayer.getCustomColor() == null ? "None" : potPlayer.getCustomColor() + StringUtils.upperCase(potPlayer.getCustomColor().name().replace("_", " ").toLowerCase())),
                         "",
                         "&7Status: &f" + this.getStatusByPlayer(potPlayer),
                         "&7Synced: &f" + (potPlayer.isSynced() ? ChatColor.GREEN + "Yes" : ChatColor.RED + "No")

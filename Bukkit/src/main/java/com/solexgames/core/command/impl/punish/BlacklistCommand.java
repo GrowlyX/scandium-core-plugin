@@ -14,16 +14,11 @@ import org.bukkit.entity.Player;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Command(label = "blacklist")
+@Command(label = "blacklist", permission = "scandium.command.blacklist")
 public class BlacklistCommand extends BaseCommand {
 
     @Override
     public boolean command(CommandSender sender, String label, String[] args) {
-        if (!sender.hasPermission("scandium.command.mute")) {
-            sender.sendMessage(NO_PERMISSION);
-            return false;
-        }
-
         if (args.length < 2) {
             sender.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player> <reason> " + ChatColor.GRAY + "[-s]" + ChatColor.WHITE + ".");
         }

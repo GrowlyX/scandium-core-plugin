@@ -19,7 +19,7 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-@Command(label = "rank", async = true)
+@Command(label = "rank", permission = "scandium.command.rank", async = true)
 public class RankCommand extends BaseCommand {
 
     public void sendHelp(Player player, int page) {
@@ -52,11 +52,6 @@ public class RankCommand extends BaseCommand {
         }
 
         final Player player = (Player) sender;
-
-        if (!player.hasPermission("scandium.command.rank")) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
 
         if (args.length == 0) {
             this.sendHelp(player, 1);

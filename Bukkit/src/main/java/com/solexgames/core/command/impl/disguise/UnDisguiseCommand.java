@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
-@Command(label = "undisguise", aliases = {"unnick"})
+@Command(label = "undisguise", permission = "scandium.command.undisguise", aliases = {"unnick"})
 public class UnDisguiseCommand extends BaseCommand {
 
     @Override
@@ -23,12 +23,6 @@ public class UnDisguiseCommand extends BaseCommand {
         }
 
         final Player player = (Player) sender;
-
-        if (!player.hasPermission("scandium.command.undisguise")) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
-
         final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
         if (!potPlayer.isDisguised()) {

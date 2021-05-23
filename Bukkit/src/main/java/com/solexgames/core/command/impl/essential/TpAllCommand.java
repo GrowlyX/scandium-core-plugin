@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Command(label = "tpall")
+@Command(label = "tpall", permission = "scandium.command.tpall")
 public class TpAllCommand extends BaseCommand {
 
     @Override
@@ -23,11 +23,6 @@ public class TpAllCommand extends BaseCommand {
         }
 
         final Player player = (Player) sender;
-
-        if (!player.hasPermission("scandium.command.tpall")) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
 
         Bukkit.getOnlinePlayers().forEach(player1 -> player1.teleport(player.getLocation()));
 

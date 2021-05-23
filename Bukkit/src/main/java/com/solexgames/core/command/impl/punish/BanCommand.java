@@ -14,15 +14,11 @@ import org.bukkit.entity.Player;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Command(label = "ban", aliases = {"tempban", "tban"})
+@Command(label = "ban", permission = "scandium.command.ban", aliases = {"tempban", "tban"})
 public class BanCommand extends BaseCommand {
 
     @Override
     public boolean command(CommandSender sender, String label, String[] args) {
-        if (!sender.hasPermission("scandium.command.ban")) {
-            sender.sendMessage(NO_PERMISSION);
-            return false;
-        }
 
         if (args.length < 3) {
             sender.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player> <time> <reason> " + ChatColor.GRAY + "[-s]" + ChatColor.WHITE + ".");

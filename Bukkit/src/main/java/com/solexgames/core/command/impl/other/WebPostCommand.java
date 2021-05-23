@@ -21,12 +21,12 @@ public class WebPostCommand extends BukkitCommand {
 
     @Override
     public boolean execute(CommandSender sender, String s, String[] args) {
-        if (!sender.hasPermission("xlib.command.webbc")) {
+        if (!sender.hasPermission("scandium.command.webbc")) {
             return false;
         }
 
         if (args.length < 1) {
-            sender.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + s + ChatColor.WHITE + " <title|split with _> <content>.");
+            sender.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + s + ChatColor.WHITE + " <title|split with _> <content>");
         }
         if (args.length > 1) {
             final UUID uuid = UUID.randomUUID();

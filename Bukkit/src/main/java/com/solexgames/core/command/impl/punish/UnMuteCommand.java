@@ -15,16 +15,11 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-@Command(label = "unmute")
+@Command(label = "unmute", permission = "scandium.command.unmute")
 public class UnMuteCommand extends BaseCommand {
 
     @Override
     public boolean command(CommandSender sender, String label, String[] args) {
-        if (!sender.hasPermission("scandium.command.unmute")) {
-            sender.sendMessage(NO_PERMISSION);
-            return false;
-        }
-
         if (args.length < 2) {
             sender.sendMessage(Color.translate(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player> <reason> &7[-s]."));
         }

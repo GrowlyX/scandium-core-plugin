@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Command(label = "nametag")
+@Command(label = "nametag", permission = "scandium.command.nametag")
 public class NametagCommand extends BaseCommand {
 
     @Override
@@ -23,11 +23,6 @@ public class NametagCommand extends BaseCommand {
         }
 
         final Player player = (Player) sender;
-
-        if (!player.hasPermission("scandium.command.nametag")) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
 
         if (args.length == 0) {
             final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);

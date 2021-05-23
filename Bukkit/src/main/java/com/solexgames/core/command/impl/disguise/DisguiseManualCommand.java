@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-@Command(label = "disguisemanual", async = true)
+@Command(label = "disguisemanual", permission = "scandium.command.disguisemanual", async = true)
 public class DisguiseManualCommand extends BaseCommand {
 
     @Override
@@ -29,11 +29,6 @@ public class DisguiseManualCommand extends BaseCommand {
         }
 
         final Player player = (Player) sender;
-
-        if (!player.hasPermission("scandium.command.disguise")) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
 
         if (args.length < 3) {
            player.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/disguisemanual " + ChatColor.WHITE + "<rank> <name> <player>");

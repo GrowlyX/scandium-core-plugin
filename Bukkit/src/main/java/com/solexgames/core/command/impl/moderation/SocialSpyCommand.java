@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
-@Command(label = "socialspy")
+@Command(label = "socialspy", permission = "scandium.command.socialspy")
 public class SocialSpyCommand extends BaseCommand {
 
     @Override
@@ -24,17 +24,11 @@ public class SocialSpyCommand extends BaseCommand {
 
         final Player player = (Player) sender;
         final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-
-        if (!player.hasPermission("scandium.command.socialspy")) {
-            player.sendMessage(NO_PERMISSION);
-            return false;
-        }
-
         if (potPlayer.isSocialSpy()) {
-            player.sendMessage(ChatColor.RED + ("You've disabled social spy."));
+            player.sendMessage(ChatColor.RED + "You've disabled social spy.");
             potPlayer.setSocialSpy(false);
         } else {
-            player.sendMessage(ChatColor.GREEN + Color.translate("You've enabled social spy."));
+            player.sendMessage(ChatColor.GREEN + "You've enabled social spy.");
             potPlayer.setSocialSpy(true);
         }
 

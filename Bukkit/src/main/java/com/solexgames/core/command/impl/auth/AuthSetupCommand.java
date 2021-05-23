@@ -14,22 +14,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-@Command(label = "authsetup", aliases = {"setupauth", "setup2fa"})
+@Command(label = "authsetup", permission = "scandium.2fa", aliases = {"setupauth", "setup2fa"})
 public class AuthSetupCommand extends BaseCommand {
 
     @Override
     public boolean command(CommandSender sender, String label, String[] args) {
         if (!(sender instanceof Player)) {
+            sender.sendMessage(this.ONLY_PLAYERS);
             return true;
         }
 
         final Player player = (Player) sender;
         final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-
-        if (!player.hasPermission("scandium.2fa")) {
-            player.sendMessage(ChatColor.RED + "You don't have permission to setup 2FA.");
-            return true;
-        }
 
         CompletableFuture.runAsync(() -> {
             if (potPlayer.isHasSetup2FA() || potPlayer.getAuthSecret() != null) {

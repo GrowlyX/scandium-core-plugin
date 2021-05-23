@@ -13,17 +13,12 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-@Command(label = "slowchat", aliases = "chatdelay")
+@Command(label = "slowchat", permission = "scandium.command.slowchat", aliases = "chatdelay")
 public class SlowChatCommand extends BaseCommand {
 
     @Override
     public boolean command(CommandSender sender, String label, String[] args) {
         final String displayName = ((sender instanceof Player) ? ((Player) sender).getDisplayName() : ChatColor.DARK_RED + "Console");
-
-        if (!sender.hasPermission("scandium.command.slowchat")) {
-            sender.sendMessage(NO_PERMISSION);
-            return false;
-        }
 
         if (args.length == 0) {
             sender.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <time> " + ChatColor.GRAY + "(Use 0 to disable slow chat)");
@@ -36,9 +31,9 @@ public class SlowChatCommand extends BaseCommand {
                 CorePlugin.getInstance().getServerManager().setChatSlow(time * 1000L);
                 Bukkit.broadcastMessage(CorePlugin.getInstance().getServerManager().getChatSlow() > 0L ? ChatColor.GREEN + "Public chat is now in slow mode. " + ChatColor.GRAY + "(" + time + " seconds)" : ChatColor.RED + "Public chat is no longer in slow mode.");
 
-                CorePlugin.getInstance().getPlayerManager().sendToNetworkStaff("&3[S] " + "&7[" + CorePlugin.getInstance().getServerName() + "] " + displayName + " &bhas slowed the chat to &e" + time + " seconds&b.");
+                CorePlugin.getInstance().getPlayerManager().sendToNetworkStaffFormatted(displayName + " &bhas slowed the chat to &e" + time + " seconds&b.");
             } catch (NumberFormatException e) {
-                sender.sendMessage(ChatColor.RED + "Error: That's not a valid number.");
+                sender.sendMessage(ChatColor.RED + "Error: That's not a valid integer.");
             }
         }
         return false;
