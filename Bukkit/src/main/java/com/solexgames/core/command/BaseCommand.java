@@ -75,8 +75,9 @@ public abstract class BaseCommand extends Command {
         this.async = command.async();
         this.hidden = command.hidden();
         this.consoleOnly = command.consoleOnly();
-        this.permissionNode = command.permission();
+        this.permissionNode = consoleOnly ? "console" : command.permission();
 
+        this.setPermission(this.permissionNode);
         this.setLabel(command.label());
         this.setName(command.label());
         this.setAliases(Arrays.asList(command.aliases().clone()));
@@ -111,6 +112,27 @@ public abstract class BaseCommand extends Command {
     }
 
     public abstract boolean command(CommandSender sender, String label, String[] args);
+
+    public boolean canShowOnTabCompletion(CommandSender sender) {
+        if (this.permissionNode == null || this.permissionNode.equals("")) {
+            return true;
+        }
+
+        if (this.hidden) {
+            return sender instanceof ConsoleCommandSender || sender.hasPermission(this.permissionNode) || sender.isOp();
+        }
+
+        switch (this.permissionNode) {
+            case "console":
+                return sender instanceof ConsoleCommandSender;
+            case "op":
+                return sender.isOp();
+            case "":
+                return true;
+        }
+
+        return sender.hasPermission(this.permissionNode);
+    }
 
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {

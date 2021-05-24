@@ -1,10 +1,7 @@
 package com.solexgames.core.enums;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import java.beans.ConstructorProperties;
 
 @Getter
 @RequiredArgsConstructor

@@ -46,13 +46,8 @@ public class BukkitCommandMap extends SimpleCommandMap {
 
                 if (command instanceof BaseCommand) {
                     final BaseCommand baseCommand = (BaseCommand) command;
-                    final String permissionNode = (baseCommand.getPermissionNode() == null || baseCommand.getPermissionNode().equals("") ? "scandium.staff" : baseCommand.getPermissionNode());
 
-                    if (baseCommand.isConsoleOnly() && sender instanceof ConsoleCommandSender) {
-                        completions.add(prefix + name);
-                    } else if (!baseCommand.isHidden() && baseCommand.getPermissionNode().equals(""))  {
-                        completions.add(prefix + name);
-                    } else if (baseCommand.isHidden() && sender.hasPermission(permissionNode)) {
+                    if (baseCommand.canShowOnTabCompletion(sender)) {
                         completions.add(prefix + name);
                     }
                 } else if (StringUtil.startsWithIgnoreCase(name, cmdLine)) {
@@ -61,6 +56,7 @@ public class BukkitCommandMap extends SimpleCommandMap {
             }
 
             Collections.sort(completions, String.CASE_INSENSITIVE_ORDER);
+
             return completions;
         }
 

@@ -58,7 +58,7 @@ public class ScandiumMenu extends AbstractInventoryMenu {
         );
 
         this.inventory.setItem(5, new ItemBuilder(XMaterial.REDSTONE_LAMP.parseMaterial(), 11)
-                .setDisplayName(Color.MAIN_COLOR + ChatColor.BOLD.toString() + "Instances")
+                .setDisplayName(Color.MAIN_COLOR + ChatColor.BOLD.toString() + "Enviornment")
                 .addLore(
                         "&7Would you like to view",
                         "&7all server instances ",
