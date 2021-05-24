@@ -65,7 +65,6 @@ public final class CorePlugin extends JavaPlugin {
     public static final SimpleDateFormat FORMAT = new SimpleDateFormat("MM/dd/yyyy HH:mma");
     public static final Random RANDOM = new Random();
     public static final Gson GSON = new GsonBuilder()
-                .registerTypeAdapter(PotionEffect.class, new PotionEffectTypeAdapter())
                 .registerTypeAdapter(Location.class, new LocationTypeAdapter())
                 .registerTypeAdapter(Date.class, new DateTypeAdapter())
                 .setPrettyPrinting()
