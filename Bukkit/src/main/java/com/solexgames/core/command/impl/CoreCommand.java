@@ -10,7 +10,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-@Command(label = "core", permission = "scandium.command.core")
+@Command(label = "scandium", permission = "scandium.command.core")
 public class CoreCommand extends BaseCommand {
 
     @Override

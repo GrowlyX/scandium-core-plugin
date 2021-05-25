@@ -23,7 +23,9 @@ public enum ServerType {
     PVPBAR("PvPBar", "18", ChatColor.GOLD, ChatColor.YELLOW, "https://pvp.bar/discord", "PvPBarMC", "https://store.pvp.bar", "pvp.bar"),
     MAGE("Mage Network", "19", ChatColor.DARK_PURPLE, ChatColor.LIGHT_PURPLE, "https://discord.mage.rip", "", "https://store.mage.rip/", "mage.rip"),
     FROSTPVP("FrostPvP", "20", ChatColor.AQUA, ChatColor.WHITE, "https://frostpvp.net/discord", "FrostPvPs", "https://store.frostpvp.net/", "frostpvp.net"),
-    AURAPVP("AuraPvP", "21", ChatColor.DARK_RED, ChatColor.GRAY, "https://discord.aurapvp.com", "AuraPvPCOM", "https://store.aurapvp.com/", "aurapvp.com");
+    AURAPVP("AuraPvP", "21", ChatColor.DARK_RED, ChatColor.GRAY, "https://discord.aurapvp.com", "AuraPvPCOM", "https://store.aurapvp.com/", "aurapvp.com"),
+    CURSEDMC("CursedMC", "22", ChatColor.DARK_RED, ChatColor.RED, "https://discord.gg/TVcHvykG", "CursedMCRip", "https://store.cursedmc.rip/", "cursedmc.rip"),
+    TWISTMC("TwistMC", "23", ChatColor.LIGHT_PURPLE, ChatColor.GREEN, "https://discord.gg/6E9q4VgKPz", "TwistBedWars", "https://store.twistmc.net/", "play.twistmc.net");
 
     private final String serverName;
     private final String serverId;

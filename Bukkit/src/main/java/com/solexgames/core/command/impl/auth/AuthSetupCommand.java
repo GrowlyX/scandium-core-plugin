@@ -27,20 +27,18 @@ public class AuthSetupCommand extends BaseCommand {
         final Player player = (Player) sender;
         final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
-        CompletableFuture.runAsync(() -> {
-            if (potPlayer.isHasSetup2FA() || potPlayer.getAuthSecret() != null) {
-                player.sendMessage(ChatColor.RED + "You've already setup two-factor authentication.");
-                player.sendMessage(ChatColor.RED + "Contact a developer or management member to reset your 2FA.");
-                return;
-            }
+        if (potPlayer.isHasSetup2FA() || potPlayer.getAuthSecret() != null) {
+            player.sendMessage(ChatColor.RED + "You've already setup two-factor authentication.");
+            player.sendMessage(ChatColor.RED + "Contact a developer or management member to reset your 2FA.");
+            return false;
+        }
 
-            final ConversationFactory factory = CorePlugin.getInstance().getConversationFactory()
-                    .withFirstPrompt(new DisclaimerPrompt())
-                    .withLocalEcho(false)
-                    .thatExcludesNonPlayersWithMessage(this.ONLY_PLAYERS);
+        final ConversationFactory factory = CorePlugin.getInstance().getConversationFactory()
+                .withFirstPrompt(new DisclaimerPrompt())
+                .withLocalEcho(false)
+                .thatExcludesNonPlayersWithMessage(this.ONLY_PLAYERS);
 
-            player.beginConversation(factory.buildConversation(player));
-        });
+        player.beginConversation(factory.buildConversation(player));
 
         return true;
     }

@@ -52,11 +52,12 @@ public abstract class BaseCommand extends Command {
         this.async = command.async();
         this.hidden = command.hidden();
         this.consoleOnly = command.consoleOnly();
-        this.permissionNode = command.permission();
+        this.permissionNode = consoleOnly ? "console" : command.permission();
 
+        this.setPermission(this.permissionNode);
         this.setLabel(command.label());
         this.setName(command.label());
-        this.setAliases(Arrays.asList(command.aliases()));
+        this.setAliases(Arrays.asList(command.aliases().clone()));
 
         CorePlugin.getInstance().registerCommand(this);
         Bukkit.getHelpMap().addTopic(new CustomHelpTopic(this, Sets.newHashSet(this.getAliases())));

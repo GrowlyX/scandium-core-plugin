@@ -1,6 +1,7 @@
 package com.solexgames.core.listener;
 
 import com.solexgames.core.CorePlugin;
+import com.solexgames.core.chat.IChatCheck;
 import com.solexgames.core.enums.ChatChannelType;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.manager.ServerManager;
@@ -257,8 +258,13 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (player.hasMetadata("spectator")) {
-            event.setCancelled(true);
+        for (IChatCheck chatCheck : CorePlugin.getInstance().getChatCheckList()) {
+            if (!event.isCancelled()) {
+                chatCheck.check(event, potPlayer);
+            }
+        }
+
+        if (event.isCancelled()) {
             return;
         }
 

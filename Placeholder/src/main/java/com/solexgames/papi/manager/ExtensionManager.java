@@ -19,7 +19,7 @@ public class ExtensionManager {
     }
 
     public void removePlaceholder(NetworkServer server) {
-        ServerExtension extension = this.placeholders.get(server);
+        final ServerExtension extension = this.placeholders.get(server);
 
         if (extension != null) {
             this.placeholders.remove(server);

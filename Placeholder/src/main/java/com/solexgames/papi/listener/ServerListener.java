@@ -16,11 +16,11 @@ public class ServerListener implements Listener {
 
     @EventHandler
     public void onRetrieve(ServerRetrieveEvent event) {
-        NetworkServer server = event.getServer();
+        final NetworkServer server = event.getServer();
 
         if (server != null) {
             if (!server.getServerName().toLowerCase().contains("event")) {
-                ServerExtension extension = new ServerExtension(server);
+                final ServerExtension extension = new ServerExtension(server);
 
                 if (extension.canRegister()) {
                     extension.register();

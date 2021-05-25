@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.solexgames.core.adapter.DateTypeAdapter;
 import com.solexgames.core.adapter.LocationTypeAdapter;
 import com.solexgames.core.adapter.PotionEffectTypeAdapter;
+import com.solexgames.core.chat.IChatCheck;
 import com.solexgames.core.command.impl.CoreCommand;
 import com.solexgames.core.command.impl.other.WebPostCommand;
 import com.solexgames.core.database.Database;
@@ -116,6 +117,7 @@ public final class CorePlugin extends JavaPlugin {
     private final TPSUpdateTask tpsRunnable = new TPSUpdateTask();
 
     private final List<ISettings> settingsList = new ArrayList<>();
+    private final List<IChatCheck> chatCheckList = new ArrayList<>();
 
     @Override
     public void onEnable() {
@@ -344,6 +346,10 @@ public final class CorePlugin extends JavaPlugin {
 
     public void addNewSettingHandler(ISettings settings) {
         this.getSettingsList().add(settings);
+    }
+
+    public void addNewChatCheck(IChatCheck chatCheck) {
+        this.getChatCheckList().add(chatCheck);
     }
 
     @Override
