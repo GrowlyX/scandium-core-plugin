@@ -200,8 +200,8 @@ public final class CorePlugin extends JavaPlugin {
 
     private void setupSettings() {
         this.serverSettings.setTabEnabled(this.getConfig().getBoolean("tablist.enabled"));
-        this.serverSettings.setTabHeader(Color.translate(this.getConfig().getString("tablist.header").replace("<nl>", "\n").replace("<server-name>", this.getConfig().getString("server-id"))));
-        this.serverSettings.setTabFooter(Color.translate(this.getConfig().getString("tablist.footer").replace("<nl>", "\n").replace("<server-name>", this.getConfig().getString("server-id"))));
+        this.serverSettings.setTabHeader(Color.translate(this.getConfig().getString("tablist.header").replace("<nl>", "\n").replace("<server-name>", this.serverName)));
+        this.serverSettings.setTabFooter(Color.translate(this.getConfig().getString("tablist.footer").replace("<nl>", "\n").replace("<server-name>", this.serverName)));
         this.serverSettings.setChatFormat(this.getConfig().getString("chat.format"));
         this.serverSettings.setChatFormatEnabled(this.getConfig().getBoolean("chat.enabled"));
         this.serverSettings.setNameMcEnabled(this.getConfig().getBoolean("name-mc.rewards"));
