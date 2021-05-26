@@ -20,7 +20,7 @@ public abstract class AbstractInventoryMenu implements InventoryHolder {
     protected Inventory inventory;
 
     protected AbstractInventoryMenu(String title, int size) {
-        this.inventory = CorePlugin.getInstance().getServer().createInventory(this, size, Color.translate(title));
+        this.inventory = CorePlugin.getInstance().getServer().createInventory(this, size, Color.translate(title.length() > 32 ? title.substring(0, 32) : title));
     }
 
     public abstract void update();

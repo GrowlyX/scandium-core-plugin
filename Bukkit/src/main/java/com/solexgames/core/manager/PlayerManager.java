@@ -242,15 +242,10 @@ public class PlayerManager {
 
             if (document == null) {
                 final PotPlayer potPlayer = new PotPlayer(uuid, playerName, null);
-                final AtomicDocument atomicDocument = new AtomicDocument();
 
-                CompletableFuture.supplyAsync(() -> {
-                    potPlayer.savePlayerData();
-                    return true;
-                }).thenRunAsync(() -> CompletableFuture.supplyAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("_id", uuid)).first())
-                        .thenAcceptAsync(atomicDocument::setDocument));
+                potPlayer.saveWithoutRemove();
 
-                return atomicDocument.getDocument();
+                return potPlayer.getDocument(true);
             } else {
                 return document;
             }

@@ -24,7 +24,7 @@ public class ListCommand extends BaseCommand {
         final boolean split = Bukkit.getOnlinePlayers().size() > 350;
 
         if (sender instanceof ConsoleCommandSender) {
-            final String ranks = Rank.getRanks().stream()
+            final String ranks = CorePlugin.getInstance().getRankManager().getRanks().stream()
                     .sorted(Comparator.comparingInt(rank -> -rank.getWeight()))
                     .map(rank -> Color.translate((rank.isHidden() ? "&7*" : "") + rank.getColor() + rank.getItalic() + rank.getName()))
                     .collect(Collectors.joining(ChatColor.WHITE + ", "));
@@ -43,7 +43,7 @@ public class ListCommand extends BaseCommand {
         }
 
         final Player player = (Player) sender;
-        final String ranks = Rank.getRanks().stream()
+        final String ranks = CorePlugin.getInstance().getRankManager().getRanks().stream()
                 .filter(rank -> !rank.isHidden())
                 .sorted(Comparator.comparingInt(rank -> -rank.getWeight()))
                 .map(rank -> Color.translate(rank.getColor() + rank.getItalic() + rank.getName().replace("-", " ")))

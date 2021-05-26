@@ -200,7 +200,7 @@ public class RankCommand extends BaseCommand {
                     break;
                 case "list":
                     final PageListBuilder pageListBuilder = new PageListBuilder(10, "Ranks");
-                    final List<String> rankList = this.getSortedRanks().stream()
+                    final List<String> rankList = CorePlugin.getInstance().getRankManager().getSortedRanks().stream()
                             .map(rank -> Color.translate(rank.getColor() + rank.getItalic() + rank.getName() + " &7(" + rank.getWeight() + ") (" + rank.getPrefix() + "&7)" + " (" + rank.getColor() + rank.getItalic() + "E&7)"))
                             .collect(Collectors.toList());
 
@@ -466,11 +466,5 @@ public class RankCommand extends BaseCommand {
         }
 
         return false;
-    }
-
-    private List<Rank> getSortedRanks() {
-        return Rank.getRanks().stream()
-                .sorted(Comparator.comparingInt(Rank::getWeight).reversed())
-                .collect(Collectors.toList());
     }
 }

@@ -46,12 +46,11 @@ public class GrantMainPaginatedMenu extends PaginatedMenu {
 
     @Override
     public Map<Integer, Button> getAllPagesButtons(Player player) {
-        HashMap<Integer, Button> buttons = new HashMap<>();
+        final HashMap<Integer, Button> buttons = new HashMap<>();
+        final AtomicInteger i = new AtomicInteger();
+        final  ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
-        AtomicInteger i = new AtomicInteger(0);
-        ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
-
-        this.getSortedRanks().forEach(rank -> buttons.put(i.getAndIncrement(), new Button() {
+        CorePlugin.getInstance().getRankManager().getSortedRanks().forEach(rank -> buttons.put(i.getAndIncrement(), new Button() {
             @Override
             public ItemStack getButtonItem(Player player) {
                 return new ItemBuilder(XMaterial.RED_WOOL.parseMaterial(), ((rank.getColor() != null) ? (ChatColor.getByChar(Color.translate(rank.getColor().replace("&", "").replace("§", ""))) != null) ? WoolUtil.getByColor(ChatColor.getByChar(Color.translate(rank.getColor().replace("&", "").replace("§", "")))) : 0 : 0))
@@ -104,9 +103,5 @@ public class GrantMainPaginatedMenu extends PaginatedMenu {
         }));
 
         return buttons;
-    }
-
-    private List<Rank> getSortedRanks() {
-        return Rank.getRanks().stream().sorted(Comparator.comparingInt(Rank::getWeight).reversed()).collect(Collectors.toList());
     }
 }

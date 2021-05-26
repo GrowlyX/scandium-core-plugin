@@ -4,13 +4,17 @@ import com.mongodb.Block;
 import com.mongodb.client.model.Filters;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.player.ranks.Rank;
+import lombok.Getter;
 import org.bson.Document;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
+@Getter
 public class RankManager {
+
+    private final List<Rank> ranks = new ArrayList<>();
 
     public RankManager() {
         this.createDefaultRanks();
@@ -71,7 +75,7 @@ public class RankManager {
     }
 
     public List<Rank> getSortedRanks() {
-        return Rank.getRanks().stream()
+        return this.ranks.stream()
                 .sorted(Comparator.comparingInt(Rank::getWeight))
                 .collect(Collectors.toList());
     }

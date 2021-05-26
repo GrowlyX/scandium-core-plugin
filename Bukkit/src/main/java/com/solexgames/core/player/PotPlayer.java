@@ -140,7 +140,7 @@ public class PotPlayer {
 
     public PotPlayer(UUID uuid, String name, InetAddress inetAddress) {
         this.uuid = uuid;
-        this.ipAddress = (inetAddress != null ? inetAddress.getHostAddress() : null);
+        this.ipAddress = (inetAddress != null ? inetAddress.getHostAddress() : "");
         this.name = name;
         this.originalName = name;
 

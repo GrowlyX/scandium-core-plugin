@@ -43,7 +43,7 @@ public class ImportCommand extends BaseCommand {
     private boolean handleImport() {
         final FileConfig config = CorePlugin.getInstance().getRanksConfig();
 
-        Rank.getRanks().clear();
+        CorePlugin.getInstance().getRankManager().getRanks().clear();
         CorePlugin.getInstance().getCoreDatabase().getRankCollection().drop();
 
         config.getConfiguration().getKeys(false).forEach(key -> {

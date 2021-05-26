@@ -136,7 +136,7 @@ public class PlayerListener implements Listener {
                 event.getPlayer().sendMessage(Color.SECONDARY_COLOR + "You've been automatically disguised as " + potPlayer.getColorByRankColor() + potPlayer.getDisguiseRank().getName() + Color.SECONDARY_COLOR + "!");
             }
 
-            if (event.getPlayer().hasPermission("scandium.2fa.forced")) {
+            if (event.getPlayer().hasPermission("scandium.2fa.forced") && CorePlugin.getInstance().getServerSettings().isTwoFactorEnabled()) {
                 CompletableFuture.runAsync(() -> {
                     if (potPlayer.isAuthBypassed()) {
                         event.getPlayer().sendMessage(ChatColor.DARK_AQUA + "[2FA] " + ChatColor.YELLOW + "You've been exempted from authentication as you are 2FA bypassed.");

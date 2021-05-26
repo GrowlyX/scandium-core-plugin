@@ -23,9 +23,6 @@ import java.util.concurrent.CompletableFuture;
 @Setter
 public class Rank {
 
-    @Getter
-    private static final List<Rank> ranks = new ArrayList<>();
-
     private List<UUID> inheritance;
     private List<String> permissions;
 
@@ -58,7 +55,7 @@ public class Rank {
         this.defaultRank = defaultRank;
         this.weight = weight;
 
-        ranks.add(this);
+        CorePlugin.getInstance().getRankManager().getRanks().add(this);
     }
 
     public Rank(String name) {
@@ -72,7 +69,7 @@ public class Rank {
         this.defaultRank = true;
         this.weight = 0;
 
-        ranks.add(this);
+        CorePlugin.getInstance().getRankManager().getRanks().add(this);
     }
 
     public Rank(UUID uuid, String name) {
@@ -86,7 +83,7 @@ public class Rank {
         this.defaultRank = true;
         this.weight = 0;
 
-        ranks.add(this);
+        CorePlugin.getInstance().getRankManager().getRanks().add(this);
     }
 
     public boolean isItalic() {
@@ -126,19 +123,19 @@ public class Rank {
     }
 
     public static Rank getDefault() {
-        return Rank.getRanks().stream()
+        return CorePlugin.getInstance().getRankManager().getRanks().stream()
                 .filter(Rank::isDefaultRank)
                 .findFirst().orElseGet(() -> new Rank("Default"));
     }
 
     public static Rank getByName(String name) {
-        return getRanks().stream()
+        return CorePlugin.getInstance().getRankManager().getRanks().stream()
                 .filter(rank -> rank.getName().equalsIgnoreCase(name))
                 .findFirst().orElse(null);
     }
 
     public static Rank getByUuid(UUID uuid) {
-        return getRanks().stream()
+        return CorePlugin.getInstance().getRankManager().getRanks().stream()
                 .filter(rank -> rank.getUuid().equals(uuid))
                 .findFirst().orElse(null);
     }

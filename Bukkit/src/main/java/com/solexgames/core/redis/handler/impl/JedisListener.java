@@ -298,7 +298,7 @@ public class JedisListener implements JedisHandler {
                 rankRemovePlayer.sendMessage(Color.SECONDARY_COLOR + "You've deleted the rank with the name " + ChatColor.GRAY + rankRemove.getColor() + rankRemove.getItalic() + rankRemove.getName() + Color.SECONDARY_COLOR + "!");
             }
 
-            Rank.getRanks().remove(rankRemove);
+            CorePlugin.getInstance().getRankManager().getRanks().remove(rankRemove);
         }
     }
 
