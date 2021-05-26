@@ -25,7 +25,8 @@ public enum ServerType {
     FROSTPVP("FrostPvP", "20", ChatColor.AQUA, ChatColor.WHITE, "https://frostpvp.net/discord", "FrostPvPs", "https://store.frostpvp.net/", "frostpvp.net"),
     AURAPVP("AuraPvP", "21", ChatColor.DARK_RED, ChatColor.GRAY, "https://discord.aurapvp.com", "AuraPvPCOM", "https://store.aurapvp.com/", "aurapvp.com"),
     CURSEDMC("CursedMC", "22", ChatColor.DARK_RED, ChatColor.RED, "https://discord.gg/TVcHvykG", "CursedMCRip", "https://store.cursedmc.rip/", "cursedmc.rip"),
-    TWISTMC("TwistMC", "23", ChatColor.LIGHT_PURPLE, ChatColor.GREEN, "https://discord.gg/6E9q4VgKPz", "TwistBedWars", "https://store.twistmc.net/", "play.twistmc.net");
+    TWISTMC("TwistMC", "23", ChatColor.LIGHT_PURPLE, ChatColor.GREEN, "https://discord.gg/6E9q4VgKPz", "TwistBedWars", "https://store.twistmc.net/", "play.twistmc.net"),
+    INVISPVP("InvisPvP", "24", ChatColor.GOLD, ChatColor.GRAY, "https://discord.invispvp.com", "InvisPvP", "https://store.invispvp.com/", "invispvp.com");
 
     private final String serverName;
     private final String serverId;
