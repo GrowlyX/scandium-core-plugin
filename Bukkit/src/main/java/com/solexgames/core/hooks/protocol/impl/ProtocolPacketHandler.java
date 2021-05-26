@@ -24,15 +24,18 @@ public class ProtocolPacketHandler extends AbstractPacketHandler {
     protected PacketAdapter outPlay;
 
     protected String[] returnString;
+    protected boolean returnEnabled;
 
     @Override
     public void initializePacketHandlers() {
-        this.returnString = CorePlugin.getInstance().getConfig().getStringList("tab-block.return").toArray(new String[0]);
+        this.returnString = CorePlugin.getInstance().getConfig().getStringList("tab-block.callback.return").toArray(new String[0]);
+        this.returnEnabled = CorePlugin.getInstance().getConfig().getBoolean("tab-block.callback.enabled");
+
         this.adapter = new PacketAdapter(CorePlugin.getInstance(), ListenerPriority.HIGHEST, PacketType.Play.Client.TAB_COMPLETE) {
             public void onPacketReceiving(PacketEvent event) {
                 if (event.getPacketType().equals(PacketType.Play.Client.TAB_COMPLETE)) {
                     try {
-                        if (event.getPlayer().hasPermission("scandium.tabcomplete.bypass")) return;
+                        if (event.getPlayer().hasPermission("scandium.completion.bypass")) return;
 
                         final PacketContainer packet = event.getPacket();
                         final String message = packet.getSpecificModifier(String.class).read(0).toLowerCase();
@@ -46,20 +49,10 @@ public class ProtocolPacketHandler extends AbstractPacketHandler {
             }
         };
 
-        this.outPlay = new PacketAdapter(CorePlugin.getInstance(), ListenerPriority.HIGHEST, PacketType.Status.Server.OUT_SERVER_INFO) {
-            @Override
-            public void onPacketSending(PacketEvent event) {
-                final WrappedServerPing serverPing = event.getPacket().getServerPings().read(0);
-
-                serverPing.setVersionProtocol(-1332);
-                serverPing.setVersionName("CheatBreaker");
-            }
-        };
-
         this.sendAdapter = new PacketAdapter(CorePlugin.getInstance(), ListenerPriority.NORMAL, PacketType.Play.Server.TAB_COMPLETE) {
             public void onPacketSending(PacketEvent e) {
                 if (e.getPacketType() == PacketType.Play.Server.TAB_COMPLETE) {
-                    if (!e.getPlayer().hasPermission("scandium.tabcomplete.bypass")) {
+                    if (!e.getPlayer().hasPermission("scandium.completion.bypass")) {
                         e.getPacket().getStringArrays().write(0, returnString);
                     }
                 }
@@ -69,7 +62,7 @@ public class ProtocolPacketHandler extends AbstractPacketHandler {
         if (this.getConfig().getBoolean("tab-block.enabled")) {
             ProtocolLibrary.getProtocolManager().addPacketListener(this.adapter);
         }
-        if (this.getConfig().getBoolean("tab-block.return-enabled")) {
+        if (this.returnEnabled) {
             ProtocolLibrary.getProtocolManager().addPacketListener(this.sendAdapter);
         }
     }

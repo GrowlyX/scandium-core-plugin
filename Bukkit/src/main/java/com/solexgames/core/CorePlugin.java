@@ -130,7 +130,7 @@ public final class CorePlugin extends JavaPlugin {
         this.saveDefaultConfig();
         this.getConfig().options().copyDefaults();
 
-        this.pluginName = this.getConfig().getString("core-settings.command-name");
+        this.pluginName = this.getConfig().getString("theming.command-prefix");
 
         CorePlugin.FORMAT.setTimeZone(TimeZone.getTimeZone(this.getConfig().getString("settings.time-zone")));
 
@@ -147,7 +147,7 @@ public final class CorePlugin extends JavaPlugin {
         this.setupSettings();
         this.setupHooks();
 
-        this.serverName = this.getConfig().getString("server-id");
+        this.serverName = this.getConfig().getString("server.id");
         this.debugging = false;
         this.disallow = false;
 
@@ -202,27 +202,22 @@ public final class CorePlugin extends JavaPlugin {
         this.serverSettings.setTabEnabled(this.getConfig().getBoolean("tablist.enabled"));
         this.serverSettings.setTabHeader(Color.translate(this.getConfig().getString("tablist.header").replace("<nl>", "\n").replace("<server-name>", this.getConfig().getString("server-id"))));
         this.serverSettings.setTabFooter(Color.translate(this.getConfig().getString("tablist.footer").replace("<nl>", "\n").replace("<server-name>", this.getConfig().getString("server-id"))));
-        this.serverSettings.setChatFormat(this.getConfig().getString("settings.chat-format"));
-        this.serverSettings.setChatFormatEnabled(this.getConfig().getBoolean("settings.chat-format-enabled"));
-        this.serverSettings.setNameMcEnabled(this.getConfig().getBoolean("settings.namemc-rewards"));
-        this.serverSettings.setAntiSpamEnabled(this.getConfig().getBoolean("settings.anti-chat-spam"));
-        this.serverSettings.setAntiCommandSpamEnabled(this.getConfig().getBoolean("settings.anti-command-spam"));
-        this.serverSettings.setStaffAlertsEnabled(this.getConfig().getBoolean("settings.staff-command-alerts"));
-        this.serverSettings.setTwoFactorEnabled(this.getConfig().getBoolean("settings.two-factor-auth"));
-        this.serverSettings.setAlertFormat(Color.translate(this.getConfig().getString("settings.staff-command-alerts-format")));
+        this.serverSettings.setChatFormat(this.getConfig().getString("chat.format"));
+        this.serverSettings.setChatFormatEnabled(this.getConfig().getBoolean("chat.enabled"));
+        this.serverSettings.setNameMcEnabled(this.getConfig().getBoolean("name-mc.rewards"));
+        this.serverSettings.setAntiSpamEnabled(this.getConfig().getBoolean("anti-spam.chat"));
+        this.serverSettings.setAntiCommandSpamEnabled(this.getConfig().getBoolean("anti-spam.command"));
+        this.serverSettings.setStaffAlertsEnabled(this.getConfig().getBoolean("staff.command-alerts.enabled"));
+        this.serverSettings.setTwoFactorEnabled(this.getConfig().getBoolean("two-factor-auth.enabled"));
+        this.serverSettings.setAlertFormat(Color.translate(this.getConfig().getString("staff.command-alerts.format")));
     }
 
     private void setupHooks() {
         if (this.getServer().getPluginManager().isPluginEnabled("ProtocolLib")) {
             this.packetHandler = new ProtocolPacketHandler();
-        } else {
-            this.getLogger().info("[Protocol] Could not find ProtocolLib! Chat tab block will not work without it!");
         }
-
         if (this.getServer().getPluginManager().isPluginEnabled("LunarClient-API")) {
             this.clientHook = new LunarClientImpl();
-        } else {
-            this.getLogger().info("[Protocol] Could not find LunarClient-API! The /lunar command will not work without it!");
         }
 
         if (this.getServer().getVersion().contains("1.7")) {
@@ -270,7 +265,7 @@ public final class CorePlugin extends JavaPlugin {
     }
 
     private void registerDefaultTasks() {
-        if (this.getConfig().getBoolean("tips.enabled")) {
+        if (this.getConfig().getBoolean("tip-broadcasts.enabled")) {
             new AutoMessageTask();
         }
 

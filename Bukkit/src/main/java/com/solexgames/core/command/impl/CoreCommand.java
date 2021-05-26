@@ -39,7 +39,7 @@ public class CoreCommand extends BaseCommand {
                 case "debug":
                     player.sendMessage(new String[] {
                             "  ",
-                            StringUtil.getCentered(Color.MAIN_COLOR + ChatColor.BOLD.toString() + CorePlugin.getInstance().getConfig().getString("core-settings.name") + " Server Instance:"),
+                            StringUtil.getCentered(Color.MAIN_COLOR + ChatColor.BOLD.toString() + CorePlugin.getInstance().getConfig().getString("theming.core-name") + " Server Instance:"),
                             "",
                             StringUtil.getCentered(Color.SECONDARY_COLOR + "Current Threads: " + Color.MAIN_COLOR + Thread.getAllStackTraces().keySet().stream().filter(thread -> thread.isAlive() && thread.isDaemon()).count()),
                             StringUtil.getCentered(Color.SECONDARY_COLOR + "Jedis Active: " + Color.MAIN_COLOR + CorePlugin.getInstance().getJedisManager().getJedisPool().getNumActive()),

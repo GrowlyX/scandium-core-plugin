@@ -11,7 +11,10 @@ import java.util.concurrent.CompletableFuture;
 public class PrefixManager {
 
     public PrefixManager() {
-        this.createDefaultPrefixes();
+        if (CorePlugin.getInstance().getConfig().getBoolean("chat-tags.add-default")) {
+            this.createDefaultPrefixes();
+        }
+
         this.loadPrefixes();
     }
 

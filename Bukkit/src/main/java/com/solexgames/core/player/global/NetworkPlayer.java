@@ -26,4 +26,6 @@ public class NetworkPlayer {
     private boolean receivingDms;
     private boolean synced;
 
+    private long connectionTime;
+
 }

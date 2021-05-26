@@ -25,16 +25,16 @@ public class AutoMessageTask extends BukkitRunnable {
     private int lastCount;
 
     public AutoMessageTask() {
-        this.tipPrefix = Color.translate(CorePlugin.getInstance().getConfig().getString("tips.prefix"));
-        this.padding = CorePlugin.getInstance().getConfig().getBoolean("tips.padding");
-        this.prefix = CorePlugin.getInstance().getConfig().getBoolean("tips.use-prefix");
+        this.tipPrefix = Color.translate(CorePlugin.getInstance().getConfig().getString("tip-broadcasts.prefix"));
+        this.padding = CorePlugin.getInstance().getConfig().getBoolean("tip-broadcasts.padding");
+        this.prefix = CorePlugin.getInstance().getConfig().getBoolean("tip-broadcasts.use-prefix");
 
-        this.allTips.addAll(CorePlugin.getInstance().getConfig().getStringList("tips.messages"));
+        this.allTips.addAll(CorePlugin.getInstance().getConfig().getStringList("tip-broadcasts.messages"));
 
         this.runTaskTimerAsynchronously(
                 CorePlugin.getInstance(),
                 20L,
-                CorePlugin.getInstance().getConfig().getInt("tips.interval") * 20L
+                CorePlugin.getInstance().getConfig().getInt("tip-broadcasts.interval") * 20L
         );
     }
 

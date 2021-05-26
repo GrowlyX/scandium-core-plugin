@@ -77,7 +77,7 @@ public class JedisListener implements JedisHandler {
         final boolean dmsEnabled = Boolean.parseBoolean(jsonAppender.getParam("DMS_ENABLED"));
         final boolean isSynced = Boolean.parseBoolean(jsonAppender.getParam("IS_SYNCED"));
 
-        final NetworkPlayer networkPlayer = new NetworkPlayer(uuid, "", name, globalServer, rank.getName(), syncCode, dmsEnabled, isSynced);
+        final NetworkPlayer networkPlayer = new NetworkPlayer(uuid, "", name, globalServer, rank.getName(), syncCode, dmsEnabled, isSynced, System.currentTimeMillis());
 
         if (CorePlugin.getInstance().getPlayerManager().isOnline(name)) {
             final NetworkPlayer oldPlayer = CorePlugin.getInstance().getPlayerManager().getNetworkPlayer(name);

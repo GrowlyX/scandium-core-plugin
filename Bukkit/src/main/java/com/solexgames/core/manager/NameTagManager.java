@@ -70,7 +70,7 @@ public class NameTagManager {
         final Scoreboard scoreboard = this.getScoreboard(player);
         final Team team = this.getTeam(ChatColor.STRIKETHROUGH, scoreboard);
 
-        team.setPrefix(Color.translate(CorePlugin.getInstance().getConfig().getString("settings.vanish-tag")));
+        team.setPrefix(Color.translate(CorePlugin.getInstance().getConfig().getString("nametags.vanished")));
 
         if (!team.hasEntry(target.getName())) {
             this.resetNameTag(player, target);
@@ -85,7 +85,7 @@ public class NameTagManager {
         final Scoreboard scoreboard = this.getScoreboard(player);
         final Team team = this.getTeam(ChatColor.STRIKETHROUGH, scoreboard);
 
-        team.setPrefix(Color.translate(CorePlugin.getInstance().getConfig().getString("settings.mod-mode-tag")));
+        team.setPrefix(Color.translate(CorePlugin.getInstance().getConfig().getString("nametags.mod-mode")));
 
         if (!team.hasEntry(target.getName())) {
             this.resetNameTag(player, target);

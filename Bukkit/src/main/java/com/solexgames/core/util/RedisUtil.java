@@ -34,7 +34,7 @@ public final class RedisUtil {
         return new JsonAppender(JedisAction.SERVER_DATA_UPDATE)
                 .put("SPLITPLAYERS", (Bukkit.getOnlinePlayers().isEmpty() ? "" : Bukkit.getOnlinePlayers().stream().map(Player::getName).collect(Collectors.joining(" "))))
                 .put("SERVER", CorePlugin.getInstance().getServerName())
-                .put("SERVER_TYPE", CorePlugin.getInstance().getConfig().getString("server-type"))
+                .put("SERVER_TYPE", CorePlugin.getInstance().getConfig().getString("server.group"))
                 .put("ONLINEPLAYERS", String.valueOf(Bukkit.getOnlinePlayers().size()))
                 .put("MAXPLAYERS", String.valueOf(Bukkit.getMaxPlayers()))
                 .put("WHITELIST", String.valueOf(Bukkit.getServer().hasWhitelist()))

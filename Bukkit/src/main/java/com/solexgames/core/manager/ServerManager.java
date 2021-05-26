@@ -37,31 +37,34 @@ public class ServerManager {
     private IChatFormat chatFormat;
     private ServerType network;
     private String automaticallyPutInto;
+    private String commandCallback;
 
     private boolean chatEnabled = true;
 
     private boolean clearChatJoin;
     private boolean joinMessageEnabled;
     private boolean joinMessageCentered;
-
-    private Location spawnLocation;
+    private boolean joinStaffEnabled;
 
     private long chatSlow;
 
     public ServerManager() {
         final CorePlugin plugin = CorePlugin.getInstance();
 
-        this.joinMessage = plugin.getConfig().getStringList("player-join.join-message.message");
-        this.clearChatJoin = plugin.getConfig().getBoolean("player-join.clear-chat");
-        this.joinMessageEnabled = plugin.getConfig().getBoolean("player-join.join-message.enabled");
-        this.joinMessageCentered = plugin.getConfig().getBoolean("player-join.join-message.centered");
-        this.automaticallyPutInto = plugin.getConfig().getString("settings.automatic-string");
-        this.blockedCommands = plugin.getConfig().getStringList("block-commands.list");
+        this.joinMessage = plugin.getConfig().getStringList("on-join.join-message.message");
+        this.clearChatJoin = plugin.getConfig().getBoolean("on-join.clear-chat");
+        this.joinMessageEnabled = plugin.getConfig().getBoolean("on-join.join-message.enabled");
+        this.joinMessageCentered = plugin.getConfig().getBoolean("on-join.join-message.centered");
+        this.automaticallyPutInto = plugin.getConfig().getString("language.automatic-string");
 
-        this.chatFormat = plugin.getConfig().getString("settings.chat-format-type").equals("PAPI") ? new PAPIChatFormat() : new DefaultChatFormat();
+        this.blockedCommands = plugin.getConfig().getStringList("command-block.affected");
+        this.commandCallback = plugin.getConfig().getString("command-block.callback");
 
-        this.staffInformation = Color.translate(plugin.getConfig().getStringList("staff-information"));
-        this.spawnLocation = CorePlugin.GSON.fromJson(plugin.getConfig().getString("locations.spawnpoint"), Location.class);
+        this.chatFormat = plugin.getConfig().getString("chat.type")
+                .equals("PAPI") ? new PAPIChatFormat() : new DefaultChatFormat();
+
+        this.joinStaffEnabled = plugin.getConfig().getBoolean("staff.join-information.enabled");
+        this.staffInformation = Color.translate(plugin.getConfig().getStringList("staff.staff-information.message"));
 
         this.setupServerType();
     }

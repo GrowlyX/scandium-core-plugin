@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public final class VotingUtil {
 
     public static final String NAME_MC_URL = "https://api.namemc.com/server/$ip/likes?profile=$uuid";
-    public static final String SERVER_IP = CorePlugin.getInstance().getConfig().getString("settings.namemc-ip");
+    public static final String SERVER_IP = CorePlugin.getInstance().getConfig().getString("name-mc.address");
 
     /**
      * Fetches a player's Voting Status via NameMC's api

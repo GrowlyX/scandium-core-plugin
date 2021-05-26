@@ -1,120 +1,56 @@
-#
-#  Scandium - by SolexGames (GrowlyX)
-#
-region: "EU"
-server-type: "PRACTICE"
-server-id: "eu-practice"
-refresh-time: 5
-
+#  If you have any questions, pm me @ GrowlyX#4953 or ping us in your channel.
 settings:
-  color-gui: true
-  namemc-rewards: true
-  namemc-ip: "demo.solexgames.com"
+  network-id: "SCANDIUM"
   time-zone: "EST"
-  anti-chat-spam: true
-  anti-command-spam: true
-  automatic-string: "&e&lYou've been automatically put into <value>."
-  staff-command-alerts: true
-  staff-command-alerts-format: "&7&o[<playername>: &e<message>&7&o]"
-  staff-command-alerts-permission: "scandium.staff"
-  mod-mode-tag: "&7[S] "
-  vanish-tag: "&7[V] "
-  punish-gui-enabled: false
-  chat-format-enabled: true
-  two-factor-auth: true
-  chat-format-type: "NORMAL" # PAPI, NORMAL (The placeholders available in NORMAL won't be available in papi)
-  chat-format: "<prefix><rank_prefix><rank_color><custom_color><player_name>&f: &f<message>"
-
-server:
-  settings:
-    server-id: "SCANDIUM"
-
-messages:
-  load-error: "&cAn error occurred while trying to load your data.<nl>&cPlease try again later or contact a staff member."
-  server-not-loaded: "&cThe server you've tried to connect to has not loaded.<nl>&cPlease try again in a few seconds or contact staff."
-  chat-cooldown: "&cPlease wait another <amount> before chatting again."
-  command-cooldown: "&cYou're on command cooldown, please wait <amount>."
-  chat-delay-cooldown: "&cPlease wait before chatting again."
-  kick-message: "&cYou were kicked for: &7<reason>"
-  mute-restricted: "&cYou cannot speak as you are currently muted."
-
+anti-spam:
+  chat: true
+  command: true
+chat-tags:
+  # If this is false, we won't enable the default Verified & Liked chat-tags.
+  add-default: true
+theming:
+  core-name: "Scandium"
+  command-prefix: "scandium"
+security:
+  key: "gamessolex" # The crypto key should be a randomly generated string.
+name-mc:
+  rewards: true
+  address: "demo.solexgames.com"
 tablist:
   enabled: true
-  header: "&7<nl>&e&lMine&3&lArcade<nl>&7www.minearcade.org<nl>&7"
-  footer: "&7<nl>&7store.minearcade.org<nl>&7 &7You're currently on &3<server-name>&7! &7<nl>&7"
-
+  header: "&7Hey there, welcome to our server."
+  footer: "&ePurchase ranks and more on our store!"
+two-factor-auth:
+  enabled: true
+server:
+  id: "na-practice"
+  group: "PRACTICE"
+nametags:
+  mod-mode: "&7[S] "
+  vanished: "&7[V] "
+staff:
+  join-information:
+    enabled: true
+    message:
+      - "&6&lStaff Information"
+      - "&6&lStaff &7<nice_char> &eChannel: <channel>"
+      - "&6&lStaff &7<nice_char> &eMessages: <messages> &7(/tsm)"
+      - "&6&lStaff &7<nice_char> &eFilter: <filter> &7(/tfm)"
+      - "&6&lStaff &7<nice_char> &eMod Mode: <modmode> &7(/mod)"
+      - "&6&lStaff &7<nice_char> &eVanish: <vanish> &7(/vanish)"
+  command-alerts:
+    enabled: true
+    format: "&7&o[<playername>: &e<message>&7&o]"
+chat:
+  enabled: true
+  format: "<rank_prefix><rank_color><custom_color><player_name><prefix>&f: &f<message>"
+  type: "NORMAL" # PAPI, NORMAL (The placeholders available in NORMAL won't be available in papi) | You can add more via the developer API | I suggest using NORMAL instead of PAPI
 discord:
+  # We'll send punishments, reports, and requests through this.
+  # Make sure this is only enabled on one server!
   enabled: false
   webhook: ""
-
-core-settings:
-  name: "Scandium"
-  command-name: "scandium"
-
-# The crypto key should be a randomly generated string.
-crypto:
-  key: "JRzRsNGvutZbcrrTklcSJsWSQNImMJSqxLZZ"
-
-# Sends to players with the permission "scandium.staff" on join
-staff-information:
-  - "&b&lStaff &7<nice_char> &3Channel: <channel>"
-  - "&b&lStaff &7<nice_char> &3Messages: <messages> &7(/tsm)"
-  - "&b&lStaff &7<nice_char> &3Filter: <filter> &7(/tfm)"
-  - "&b&lStaff &7<nice_char> &3Mod Mode: <modmode> &7(/mod)"
-  - "&b&lStaff &7<nice_char> &3Vanish: <vanish> &7(/vanish)"
-
-tab-block:
-  return-enabled: true
-  enabled: true
-  return:
-    - "/scandium:who"
-    - "/scandium:list"
-  message:
-    enabled: false
-    string: "&f/scandium:settings, &f/scandium:media"
-
-block-commands:
-  enabled: true
-  message: 'Unknown command. Type \"/help\" for help.'
-  list:
-    - "bukkit:plugins"
-    - "bukkit:?"
-    - "bukkit:help"
-    - "bukkit:ver"
-    - "bukkit:version"
-    - "bukkit:about"
-    - "bukkit:pl"
-    - "bukkit:msg"
-    - "bukkit:kill"
-    - "bukkit:tell"
-    - "bukkit:me"
-    - "minecraft:me"
-    - "pl"
-    - "plugins"
-    - "me"
-    - "about"
-    - "version"
-    - "ver"
-    - "icanhasbukkit"
-
-player-join:
-  clear-chat: false
-  join-message:
-    enabled: false
-    centered: false
-    message:
-      - '&6&lWelcome to the Scandium Network!'
-
-freeze-message:
-  - " "
-  - "&4&lDo not disconnect!"
-  - "&cIf you disconnect, you will be punished!"
-  - ""
-  - "&7You've been frozen by a staff member!"
-  - "&7Please connect to &fTeamSpeak &7within &f3 minutes &7or you will"
-  - "&7be banned for &cRefusing to Screenshare&7!"
-  - " "
-tips:
+tip-broadcasts:
   enabled: true
   padding: true
   interval: 120
@@ -124,3 +60,47 @@ tips:
     - "Don't like the pre-made tip broadcasts? &6Check the config!"
     - "Purchase Scandium by contacting one of SolexGame staff! &6GrowlyX#4953"
     - "Want to seek support regarding Scandium? &6Contact GrowlyX#4953"
+on-join:
+  clear-chat: false
+  join-message:
+    enabled: false
+    centered: false
+    message:
+      - "Hey!"
+language:
+  automatic-string: "&eYou've been automatically put into &6<value>&e."
+  load-error: "&cAn error occurred while trying to load your data.<nl>&cPlease try again later or contact a staff member."
+  server-not-loaded: "&cThe server you've tried to connect to has not loaded.<nl>&cPlease try again in a few seconds or contact staff."
+  chat-cooldown: "&cChat is currently slowed, please wait <amount> before chatting again."
+  command-cooldown: "&cYou're on command cooldown, please wait <amount>."
+  chat-delay-cooldown: "&cYou're on chat cooldown, please wait <amount>."
+  kick-message: "&cYou were kicked from this proxy."
+  mute-restricted: "&cYou cannot speak as you are currently muted."
+  freeze-message:
+    - " "
+    - "&4&lDo not disconnect!"
+    - "&cIf you disconnect, you will be punished!"
+    - ""
+    - "&7You've been frozen by a staff member!"
+    - "&7Please connect to &fTeamSpeak &7within &f3 minutes &7or you will"
+    - "&7be banned for &cRefusing to Screenshare&7!"
+    - " "
+tab-block:
+  enabled: false
+  callback: # These are the command which will be sent to you instead of the default tab message
+    enabled: false
+    commands:
+      - "/scandium:who"
+      - "/scandium:list"
+command-block:
+  enabled: false
+  callback: "&cI'm sorry, but you do not have permission to perform this command."
+  affected:
+    # - "bukkit:plugins" - You don't have to add these as commands with semi-colons are blocked by default for non-operators.
+    - "pl"
+    - "plugins"
+    - "me"
+    - "about"
+    - "version"
+    - "ver"
+    - "icanhasbukkit"

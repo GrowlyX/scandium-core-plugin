@@ -28,7 +28,7 @@ public class CryptoManager {
     private final int iterationCount = 19;
 
     public CryptoManager() {
-        this.secretKey = CorePlugin.getInstance().getConfig().getString("crypto.key");
+        this.secretKey = CorePlugin.getInstance().getConfig().getString("security.key");
     }
 
     public String encrypt(String plainText) {

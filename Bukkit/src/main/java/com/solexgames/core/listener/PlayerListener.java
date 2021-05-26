@@ -107,7 +107,7 @@ public class PlayerListener implements Listener {
                 }
             }
 
-            if (event.getPlayer().hasPermission("scandium.staff") && !CorePlugin.getInstance().getServerManager().getNetwork().equals(ServerType.PVPBAR)) {
+            if (event.getPlayer().hasPermission("scandium.staff") && CorePlugin.getInstance().getServerManager().isJoinStaffEnabled()) {
                 CorePlugin.getInstance().getServerManager().getStaffInformation().forEach(s -> event.getPlayer().sendMessage(s
                         .replace("<nice_char>", Character.toString('»'))
                         .replace("<channel>", ChatColor.RED + "None")

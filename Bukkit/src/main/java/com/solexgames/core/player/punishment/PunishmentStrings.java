@@ -52,12 +52,12 @@ public final class PunishmentStrings {
     public void setupMessages() {
         final FileConfiguration configuration = CorePlugin.getInstance().getConfig();
 
-        PunishmentStrings.PLAYER_DATA_LOAD = Color.translate(configuration.getString("messages.load-error").replace("<nl>", "\n"));
-        PunishmentStrings.SERVER_NOT_LOADED = Color.translate(configuration.getString("messages.server-not-loaded").replace("<nl>", "\n"));
-        PunishmentStrings.SLOW_CHAT_MESSAGE = Color.translate(configuration.getString("messages.chat-cooldown").replace("<nl>", "\n"));
-        PunishmentStrings.CMD_CHAT_MESSAGE = Color.translate(configuration.getString("messages.command-cooldown").replace("<nl>", "\n"));
-        PunishmentStrings.COOL_DOWN_MESSAGE = Color.translate(configuration.getString("messages.chat-delay-cooldown").replace("<nl>", "\n"));
-        PunishmentStrings.KICK_MESSAGE = Color.translate(configuration.getString("messages.kick-message").replace("<nl>", "\n"));
-        PunishmentStrings.MUTE_MESSAGE = Color.translate(configuration.getString("messages.mute-restricted").replace("<nl>", "\n"));
+        PunishmentStrings.PLAYER_DATA_LOAD = Color.translate(configuration.getString("language.load-error").replace("<nl>", "\n"));
+        PunishmentStrings.SERVER_NOT_LOADED = Color.translate(configuration.getString("language.server-not-loaded").replace("<nl>", "\n"));
+        PunishmentStrings.SLOW_CHAT_MESSAGE = Color.translate(configuration.getString("language.chat-cooldown").replace("<nl>", "\n"));
+        PunishmentStrings.CMD_CHAT_MESSAGE = Color.translate(configuration.getString("language.command-cooldown").replace("<nl>", "\n"));
+        PunishmentStrings.COOL_DOWN_MESSAGE = Color.translate(configuration.getString("language.chat-delay-cooldown").replace("<nl>", "\n"));
+        PunishmentStrings.KICK_MESSAGE = Color.translate(configuration.getString("language.kick-message").replace("<nl>", "\n"));
+        PunishmentStrings.MUTE_MESSAGE = Color.translate(configuration.getString("language.mute-restricted").replace("<nl>", "\n"));
     }
 }
