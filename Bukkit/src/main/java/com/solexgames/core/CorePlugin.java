@@ -144,10 +144,11 @@ public final class CorePlugin extends JavaPlugin {
         this.library.getDataManager().registerSerializer(new LocationSerializer());
         this.library.getDataManager().registerSerializer(new ItemStackSerializer());
 
+        this.serverName = this.getConfig().getString("server.id");
+
         this.setupSettings();
         this.setupHooks();
 
-        this.serverName = this.getConfig().getString("server.id");
         this.debugging = false;
         this.disallow = false;
 
