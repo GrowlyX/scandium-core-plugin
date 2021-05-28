@@ -37,10 +37,12 @@ public class CheckDisguiseCommand extends BaseCommand {
             if (potPlayer == null) {
                 sender.sendMessage(ChatColor.RED + "Error: That player does not exist.");
             } else {
-                if (potPlayer.getDisguiseRank() != null) {
-                    sender.sendMessage(potPlayer.getColorByRankColor() + potPlayer.getName() + Color.SECONDARY_COLOR + " is disguised as " + Color.translate(potPlayer.getDisguiseRank().getColor() + potPlayer.getDisguiseRank().getName()) + Color.SECONDARY_COLOR + "!");
+                final boolean disguised = potPlayer.isDisguised();
+
+                if (disguised) {
+                    sender.sendMessage(potPlayer.getColorByRankColor() + potPlayer.getOriginalName() + Color.SECONDARY_COLOR + " is disguised as " + Color.translate(potPlayer.getDisguiseRank().getColor()) + potPlayer.getName() + Color.SECONDARY_COLOR + " with the rank " + Color.translate(potPlayer.getDisguiseRank().getColor() + potPlayer.getDisguiseRank().getName()) + Color.SECONDARY_COLOR + ".");
                 } else {
-                    sender.sendMessage(ChatColor.RED + "Error: That player is not disguised.");
+                    sender.sendMessage(target.getDisplayName() + ChatColor.RED + " is not disguised.");
                 }
             }
         }
