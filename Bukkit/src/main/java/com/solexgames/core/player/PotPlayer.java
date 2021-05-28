@@ -230,9 +230,15 @@ public class PotPlayer {
     }
 
     public void saveWithoutRemove() {
+        this.saveMeta();
+
         CompletableFuture.runAsync(() ->
                 CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", this.uuid), this.getDocument(false), new ReplaceOptions().upsert(true))
         );
+    }
+
+    private void saveMeta() {
+        this.setMetaData("chat-channel", new MetaDataValue(this.channel == null ? "NONE" : this.channel.name()));
     }
 
     public void savePlayerData() {
@@ -240,6 +246,8 @@ public class PotPlayer {
 
         CorePlugin.getInstance().getPlayerManager().getAllNetworkProfiles().remove(CorePlugin.getInstance().getPlayerManager().getNetworkPlayer(this.originalName));
         CorePlugin.getInstance().getPlayerManager().getAllProfiles().remove(this.uuid);
+
+        this.saveMeta();
 
         CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", this.uuid), this.getDocument(true), new ReplaceOptions().upsert(true)));
     }
@@ -412,6 +420,10 @@ public class PotPlayer {
                         final Map<?, ?> serializedMetaData = this.profile.get("metaData", Map.class);
 
                         serializedMetaData.forEach((k, v) -> this.metaDataEntryMap.put((String) k, CorePlugin.GSON.fromJson((String) v, MetaDataEntry.class)));
+                    }
+
+                    if (this.getMetaData("chat-channel").getValue() != null && !this.getMetaData("chat-channel").getValue().getAsString().equals("NONE")) {
+                        this.setChannel(ChatChannelType.valueOf(this.getMetaData("chat-channel").getValue().getAsString()));
                     }
 
                     this.currentlyOnline = true;
@@ -715,7 +727,7 @@ public class PotPlayer {
     }
 
     public void addMetaData(String key, MetaDataValue value) {
-        this.metaDataEntryMap.put(key, new MetaDataEntry(key, value));
+        this.metaDataEntryMap.put(key, new MetaDataEntry(value));
     }
 
     public void setMetaData(String key, MetaDataEntry value) {
@@ -723,6 +735,14 @@ public class PotPlayer {
             this.metaDataEntryMap.replace(key, value);
         } else {
             this.metaDataEntryMap.put(key, value);
+        }
+    }
+
+    public void setMetaData(String key, MetaDataValue value) {
+        if (this.hasMetaData(key)) {
+            this.metaDataEntryMap.replace(key, new MetaDataEntry(value));
+        } else {
+            this.metaDataEntryMap.put(key, new MetaDataEntry(value));
         }
     }
 

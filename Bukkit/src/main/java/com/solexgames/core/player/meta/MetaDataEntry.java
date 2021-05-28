@@ -10,7 +10,6 @@ import lombok.Data;
 @Data
 public class MetaDataEntry {
 
-    private final String key;
     private final MetaDataValue value;
 
 }

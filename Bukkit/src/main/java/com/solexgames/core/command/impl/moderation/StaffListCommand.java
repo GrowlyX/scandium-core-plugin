@@ -11,6 +11,7 @@ import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -49,7 +50,7 @@ public class StaffListCommand extends BaseCommand {
             sender.sendMessage(Color.translate(rank.getColor() + rank.getItalic()) + ChatColor.BOLD.toString() + rank.getName() + ":");
 
             playersWithSpecifiedRank.stream()
-                    .map(networkPlayer -> ChatColor.GRAY + " * " + Color.SECONDARY_COLOR + networkPlayer.getName() + ChatColor.GRAY + " (" + DurationFormatUtils.formatDurationWords(System.currentTimeMillis() - networkPlayer.getConnectionTime(), true, true) + ") (" + networkPlayer.getServerName() + ")")
+                    .map(networkPlayer -> ChatColor.GRAY + " * " + Color.SECONDARY_COLOR + networkPlayer.getName() + ChatColor.GRAY + "(" + CorePlugin.FORMAT.format(new Date(networkPlayer.getConnectionTime())) + ") (" + DurationFormatUtils.formatDurationWords(System.currentTimeMillis() - networkPlayer.getConnectionTime(), true, true) + ") (" + networkPlayer.getServerName() + ")")
                     .collect(Collectors.toList())
                     .forEach(sender::sendMessage);
 
