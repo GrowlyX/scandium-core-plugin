@@ -9,6 +9,7 @@ import com.solexgames.core.enums.StaffUpdateType;
 import com.solexgames.core.listener.custom.ServerRetrieveEvent;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.global.NetworkPlayer;
+import com.solexgames.core.player.prefixes.Prefix;
 import com.solexgames.core.player.punishment.Punishment;
 import com.solexgames.core.player.punishment.PunishmentType;
 import com.solexgames.core.player.ranks.Rank;
@@ -31,6 +32,32 @@ import java.util.UUID;
 
 @SuppressWarnings("unused")
 public class JedisListener implements JedisHandler {
+
+    @Subscription(action = "PREFIX_SETTINGS_UPDATE")
+    public void onPrefixSettingsUpdate(JsonAppender jsonAppender) {
+        if (!jsonAppender.getParam("SERVER").equals(CorePlugin.getInstance().getServerName())) {
+            final Prefix existingPrefix = Prefix.getByName(jsonAppender.getParam("PREFIX"));
+
+            if (existingPrefix != null) {
+                existingPrefix.setId(jsonAppender.getParam("ID"));
+                existingPrefix.setPrefix(jsonAppender.getParam("DESIGN"));
+            } else {
+                final Prefix newPrefix = new Prefix(jsonAppender.getParam("PREFIX"), jsonAppender.getParam("DESIGN"));
+                newPrefix.setId(jsonAppender.getParam("ID"));
+            }
+        }
+    }
+
+    @Subscription(action = "PREFIX_DELETE_UPDATE")
+    public void onPrefixDeleteUpdate(JsonAppender jsonAppender) {
+        if (!jsonAppender.getParam("SERVER").equals(CorePlugin.getInstance().getServerName())) {
+            final Prefix existingPrefix = Prefix.getByName(jsonAppender.getParam("PREFIX"));
+
+            if (existingPrefix != null) {
+                Prefix.getPrefixes().remove(existingPrefix);
+            }
+        }
+    }
 
     @Subscription(action = "DISGUISE_PROFILE_REMOVE")
     public void onDisguiseProfileRemove(JsonAppender jsonAppender) {

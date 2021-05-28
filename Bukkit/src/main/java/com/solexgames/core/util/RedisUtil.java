@@ -5,6 +5,7 @@ import com.solexgames.core.disguise.DisguiseData;
 import com.solexgames.core.enums.ChatChannelType;
 import com.solexgames.core.enums.StaffUpdateType;
 import com.solexgames.core.player.PotPlayer;
+import com.solexgames.core.player.prefixes.Prefix;
 import com.solexgames.core.player.punishment.Punishment;
 import com.solexgames.core.player.punishment.PunishmentType;
 import com.solexgames.core.player.ranks.Rank;
@@ -158,6 +159,22 @@ public final class RedisUtil {
                 .put("ITALIC", String.valueOf(rank.isItalic()))
                 .put("PERMISSIONS", String.join(" ", rank.getPermissions()))
                 .put("INHERITANCE", rank.getInheritance().stream().map(UUID::toString).collect(Collectors.joining(" ")))
+                .getAsJson();
+    }
+
+    public static String updatePrefix(Prefix prefix) {
+        return new JsonAppender(JedisAction.PREFIX_SETTINGS_UPDATE)
+                .put("SERVER", CorePlugin.getInstance().getServerName())
+                .put("PREFIX", prefix.getName())
+                .put("ID", prefix.getId())
+                .put("DESIGN", prefix.getPrefix())
+                .getAsJson();
+    }
+
+    public static String deletePrefix(Prefix prefix) {
+        return new JsonAppender(JedisAction.PREFIX_DELETE_UPDATE)
+                .put("SERVER", CorePlugin.getInstance().getServerName())
+                .put("PREFIX", prefix.getName())
                 .getAsJson();
     }
 

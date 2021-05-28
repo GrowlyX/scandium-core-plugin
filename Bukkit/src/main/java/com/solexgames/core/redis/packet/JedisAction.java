@@ -40,7 +40,6 @@ public enum JedisAction {
     RANK_CREATE_UPDATE("RankCreateUpdate"),
     RANK_DELETE_UPDATE("RankDeleteUpdate"),
 
-    PREFIX_CREATE_UPDATE("PrefixCreateUpdate"),
     PREFIX_DELETE_UPDATE("PrefixDeleteUpdate"),
     PREFIX_SETTINGS_UPDATE("PrefixSettingsUpdate"),
 

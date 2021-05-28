@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import com.solexgames.core.CorePlugin;
+import com.solexgames.core.util.RedisUtil;
 import com.solexgames.core.util.SaltUtil;
 import lombok.Getter;
 import lombok.Setter;
@@ -60,6 +61,7 @@ public class Prefix {
     }
 
     public void savePrefix() {
+        RedisUtil.publishAsync(RedisUtil.updatePrefix(this));
         CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPrefixCollection().replaceOne(Filters.eq("_id", this.id), this.getDocument(), new ReplaceOptions().upsert(true)));
     }
 

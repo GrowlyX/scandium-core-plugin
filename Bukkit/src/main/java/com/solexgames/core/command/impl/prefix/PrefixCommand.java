@@ -7,6 +7,7 @@ import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.prefixes.Prefix;
 import com.solexgames.core.util.Color;
+import com.solexgames.core.util.RedisUtil;
 import com.solexgames.core.util.StringUtil;
 import com.solexgames.core.util.builder.PageListBuilder;
 import com.solexgames.core.util.external.impl.PrefixViewPaginatedMenu;
@@ -168,6 +169,7 @@ public class PrefixCommand extends BaseCommand {
                             CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPrefixCollection().deleteOne(document));
                         }
 
+                        RedisUtil.publishAsync(RedisUtil.deletePrefix(existingPrefix));
                         Prefix.getPrefixes().remove(existingPrefix);
 
                         sender.sendMessage(Color.SECONDARY_COLOR + "You've deleted the prefix with the name " + Color.MAIN_COLOR + prefixName + Color.SECONDARY_COLOR + ".");
