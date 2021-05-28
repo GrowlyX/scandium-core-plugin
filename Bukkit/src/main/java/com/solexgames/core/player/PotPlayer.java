@@ -677,6 +677,10 @@ public class PotPlayer {
         }
     }
 
+    public ChatColor getOriginalRankColor() {
+        return ChatColor.getByChar(this.getActiveGrant().getRank().getColor().replace("&", "").replace("§", ""));
+    }
+
     public Grant getByDate(long date) {
         return this.getAllGrants().stream().filter(grant -> grant.getDateAdded() == date).findFirst().orElse(null);
     }

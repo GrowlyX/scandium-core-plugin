@@ -40,7 +40,7 @@ public class CheckDisguiseCommand extends BaseCommand {
                 final boolean disguised = potPlayer.isDisguised();
 
                 if (disguised) {
-                    sender.sendMessage(potPlayer.getColorByRankColor() + potPlayer.getOriginalName() + Color.SECONDARY_COLOR + " is disguised as " + Color.translate(potPlayer.getDisguiseRank().getColor()) + potPlayer.getName() + Color.SECONDARY_COLOR + " with the rank " + Color.translate(potPlayer.getDisguiseRank().getColor() + potPlayer.getDisguiseRank().getName()) + Color.SECONDARY_COLOR + ".");
+                    sender.sendMessage(potPlayer.getOriginalRankColor() + potPlayer.getOriginalName() + Color.SECONDARY_COLOR + " is disguised as " + Color.translate(potPlayer.getDisguiseRank().getColor()) + potPlayer.getName() + Color.SECONDARY_COLOR + " with the rank " + Color.translate(potPlayer.getDisguiseRank().getColor() + potPlayer.getDisguiseRank().getName()) + Color.SECONDARY_COLOR + ".");
                 } else {
                     sender.sendMessage(target.getDisplayName() + ChatColor.RED + " is not disguised.");
                 }

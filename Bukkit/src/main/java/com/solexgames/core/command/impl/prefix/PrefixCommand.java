@@ -8,194 +8,227 @@ import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.prefixes.Prefix;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.StringUtil;
+import com.solexgames.core.util.builder.PageListBuilder;
 import com.solexgames.core.util.external.impl.PrefixViewPaginatedMenu;
-import org.apache.commons.lang.StringUtils;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
-@Command(label = "prefix", aliases = {"tags", "tag", "chattags"}, hidden = false)
+/**
+ * @author GrowlyX
+ * @since 5/28/2021
+ */
+
+@Command(
+        label = "prefix",
+        aliases = {"tag", "tags", "chattags"},
+        hidden = false
+)
 public class PrefixCommand extends BaseCommand {
 
     @Override
     public boolean command(CommandSender sender, String label, String[] args) {
-        if (!(sender instanceof Player)) {
-            if (args.length < 2) {
-                sender.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player> <tag>");
-            }
-            if (args.length == 2) {
-                final Player target = Bukkit.getPlayer(args[0]);
+        if (args.length == 0 && sender instanceof Player) {
+            final Player player = (Player) sender;
 
-                if (target == null) {
-                    sender.sendMessage(ChatColor.RED + "That player does not exist.");
-                    return false;
-                }
-
-                final Prefix prefix = Prefix.getByName(args[1]);
-
-                if (prefix == null) {
-                    sender.sendMessage(ChatColor.RED + "That prefix does not exist!");
-                    return false;
-                }
-
-                final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
-
-                potPlayer.getAllPrefixes().add(prefix.getName());
-
-                sender.sendMessage(ChatColor.GREEN + "Added the prefix " + prefix.getName() + " to " + ChatColor.GREEN + target.getDisplayName());
-                target.sendMessage(ChatColor.GREEN + "You've been given access to the " + prefix.getPrefix() + ChatColor.GREEN + " prefix.");
-            }
-            return false;
+            new PrefixViewPaginatedMenu(player).openMenu(player);
+        } else {
+            this.sendHelp(sender);
         }
 
-        final Player player = (Player) sender;
+        if (!sender.hasPermission("scandium.command.prefix") && sender instanceof Player) {
+            final Player player = (Player) sender;
 
-        if (args.length == 0) {
             new PrefixViewPaginatedMenu(player).openMenu(player);
             return false;
+        } else {
+            this.sendHelp(sender);
         }
 
-        if (!player.hasPermission("scandium.command.prefix")) {
-            new PrefixViewPaginatedMenu(player).openMenu(player);
-            return false;
-        }
+        switch (args[0].toLowerCase()) {
+            case "create":
+                if (args.length < 3) {
+                    sender.sendMessage(this.getUsageMessage("create", "<name> <design>"));
+                }
+                if (args.length >= 3) {
+                    final String prefixName = args[1];
+                    final String prefixDesign = Color.translate(StringUtil.buildMessage(args, 2));
+                    final Prefix existingPrefix = Prefix.getByName(prefixName);
 
-        switch (args[0]) {
-            case "purchasable":
-                if (args.length == 1)
-                    player.sendMessage(ChatColor.RED + ("Usage: /prefix purchasable <name>"));
-                if (args.length == 2) {
-                    final String name = args[1];
-                    final Prefix rank = Prefix.getByName(name);
+                    if (existingPrefix == null) {
+                        final Prefix prefix = new Prefix(prefixName, prefixDesign);
+                        prefix.savePrefix();
 
-                    if (rank != null) {
-                        final String displayName = Color.translate(rank.getName());
-
-                        if (rank.isPurchasable()) {
-                            rank.setPurchasable(false);
-                            player.sendMessage(ChatColor.GREEN + Color.translate("Set the " + displayName + ChatColor.GREEN + " prefix purchasable mode to false!"));
-                        } else {
-                            rank.setPurchasable(true);
-                            player.sendMessage(ChatColor.GREEN + Color.translate("Set the " + displayName + ChatColor.GREEN + " prefix purchasable mode to true!"));
-                        }
-
-                        rank.savePrefix();
+                        sender.sendMessage(Color.SECONDARY_COLOR + "You've created a new prefix with the name " + Color.MAIN_COLOR + prefixName + Color.SECONDARY_COLOR + " and the design " + Color.MAIN_COLOR + prefixDesign + Color.SECONDARY_COLOR + ".");
                     } else {
-                        player.sendMessage(ChatColor.RED + ("Error: That rank does not exist!"));
+                        sender.sendMessage(ChatColor.RED + "Error: A prefix with the name " + ChatColor.YELLOW + prefixName + ChatColor.RED + " already exists.");
                     }
                 }
                 break;
-            case "create":
+            case "design":
                 if (args.length < 3) {
-                    this.sendHelp(player);
+                    sender.sendMessage(this.getUsageMessage("design", "<name> <design>"));
                 }
                 if (args.length >= 3) {
-                    final String name = args[1];
-                    final String prefix = StringUtil.buildMessage(args, 2);
+                    final String prefixName = args[1];
+                    final String prefixDesign = Color.translate(StringUtil.buildMessage(args, 2));
+                    final Prefix existingPrefix = Prefix.getByName(prefixName);
 
-                    final Prefix newPrefix = new Prefix(name, prefix);
-                    newPrefix.savePrefix();
+                    if (existingPrefix != null) {
+                        existingPrefix.setPrefix(prefixDesign);
+                        existingPrefix.savePrefix();
 
-                    player.sendMessage(ChatColor.GREEN + Color.translate("Created a new prefix with the name &6" + name + ChatColor.GREEN + " and the design &b" + prefix + ChatColor.GREEN + "."));
+                        sender.sendMessage(Color.SECONDARY_COLOR + "You've set the design of the " + Color.MAIN_COLOR + prefixName + Color.SECONDARY_COLOR + " prefix to " + Color.MAIN_COLOR + prefixDesign + Color.SECONDARY_COLOR + ".");
+                    } else {
+                        sender.sendMessage(ChatColor.RED + "Error: The prefix with the name " + ChatColor.YELLOW + prefixName + ChatColor.RED + " does not exist.");
+                    }
                 }
                 break;
             case "add":
                 if (args.length < 3) {
-                    this.sendHelp(player);
+                    sender.sendMessage(this.getUsageMessage("add", "<name> <player>"));
                 }
                 if (args.length >= 3) {
-                    final Player target = Bukkit.getPlayer(args[1]);
+                    final String prefixName = args[1];
+                    final Player target = Bukkit.getPlayer(args[2]);
+                    final Prefix existingPrefix = Prefix.getByName(prefixName);
 
-                    if (target != null) {
-                        final Prefix prefix = Prefix.getByName(args[2]);
+                    if (existingPrefix != null) {
+                        if (target == null) {
+                            sender.sendMessage(ChatColor.RED + "Error: That player does not exist.");
+                            return false;
+                        }
 
-                        if (prefix != null) {
-                            final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
+                        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
 
-                            potPlayer.getAllPrefixes().add(prefix.getName());
-                            player.sendMessage(ChatColor.GREEN + Color.translate("Added the prefix " + prefix.getName() + " to " + target.getDisplayName()));
+                        if (potPlayer.getAllPrefixes().contains(prefixName)) {
+                            potPlayer.getAllPrefixes().add(prefixName);
+                            potPlayer.saveWithoutRemove();
+
+                            target.sendMessage(ChatColor.GREEN + "You've been given access to the " + existingPrefix.getPrefix() + ChatColor.GREEN + " prefix.");
+                            sender.sendMessage(Color.SECONDARY_COLOR + "You've given " + target.getDisplayName() + Color.SECONDARY_COLOR + " access to the " + Color.MAIN_COLOR + prefixName + Color.SECONDARY_COLOR + " prefix.");
                         } else {
-                            player.sendMessage(ChatColor.RED + ("Error: That prefix does not exist."));
+                            sender.sendMessage(ChatColor.RED + "Error: That player already has the " + ChatColor.YELLOW + prefixName + ChatColor.RED + " prefix.");
                         }
                     } else {
-                        player.sendMessage(ChatColor.RED + "Error: That player does not exist.");
+                        sender.sendMessage(ChatColor.RED + "Error: The prefix with the name " + ChatColor.YELLOW + prefixName + ChatColor.RED + " does not exist.");
                     }
                 }
                 break;
             case "remove":
                 if (args.length < 3) {
-                    this.sendHelp(player);
+                    sender.sendMessage(this.getUsageMessage("remove", "<name> <player>"));
                 }
                 if (args.length >= 3) {
-                    final Player target = Bukkit.getPlayer(args[1]);
+                    final String prefixName = args[1];
+                    final Player target = Bukkit.getPlayer(args[2]);
+                    final Prefix existingPrefix = Prefix.getByName(prefixName);
 
-                    if (target != null) {
-                        final Prefix prefix = Prefix.getByName(args[2]);
+                    if (existingPrefix != null) {
+                        if (target == null) {
+                            sender.sendMessage(ChatColor.RED + "Error: That player does not exist.");
+                            return false;
+                        }
 
-                        if (prefix != null) {
-                            final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
+                        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
 
-                            potPlayer.getAllPrefixes().remove(prefix.getName());
-                            CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPrefixCollection().deleteOne(Filters.eq("_id", prefix.getId())));
+                        if (potPlayer.getAllPrefixes().contains(prefixName)) {
+                            potPlayer.getAllPrefixes().remove(prefixName);
+                            potPlayer.saveWithoutRemove();
 
-                            player.sendMessage(ChatColor.GREEN + Color.translate("Removed the prefix " + prefix.getName() + " from " + target.getDisplayName()));
+                            target.sendMessage(ChatColor.GREEN + "Your access to the " + existingPrefix.getPrefix() + ChatColor.GREEN + " prefix has been removed.");
+                            sender.sendMessage(Color.SECONDARY_COLOR + "You've removed " + target.getDisplayName() + "'s" + Color.SECONDARY_COLOR + " access to the " + Color.MAIN_COLOR + prefixName + Color.SECONDARY_COLOR + " prefix.");
                         } else {
-                            player.sendMessage(ChatColor.RED + ("Error: That prefix does not exist."));
+                            sender.sendMessage(ChatColor.RED + "Error: That player does not have the " + ChatColor.YELLOW + prefixName + ChatColor.RED + " prefix.");
                         }
                     } else {
-                        player.sendMessage(ChatColor.RED + "Error: That player does not exist.");
+                        sender.sendMessage(ChatColor.RED + "Error: The prefix with the name " + ChatColor.YELLOW + prefixName + ChatColor.RED + " does not exist.");
                     }
                 }
                 break;
             case "delete":
-                if (args.length == 1) {
-                    this.sendHelp(player);
+                if (args.length < 2) {
+                    sender.sendMessage(this.getUsageMessage("design", "<name>"));
                 }
                 if (args.length == 2) {
-                    final String name = args[1];
-                    final Prefix prefix = Prefix.getByName(name);
+                    final String prefixName = args[1];
+                    final Prefix existingPrefix = Prefix.getByName(prefixName);
 
-                    if (prefix != null) {
-                        final Document document = CorePlugin.getInstance().getCoreDatabase().getPrefixCollection().find(Filters.eq("name", prefix.getName())).first();
+                    if (existingPrefix != null) {
+                        final Document document = CorePlugin.getInstance().getCoreDatabase().getPrefixCollection()
+                                .find(Filters.eq("name", existingPrefix.getName())).first();
 
                         if (document != null) {
                             CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPrefixCollection().deleteOne(document));
                         }
 
-                        Prefix.getPrefixes().remove(prefix);
-                        CorePlugin.getInstance().getPrefixManager().savePrefixes();
+                        Prefix.getPrefixes().remove(existingPrefix);
 
-                        player.sendMessage(ChatColor.RED + ("Deleted the prefix with the name '" + name + "'."));
+                        sender.sendMessage(Color.SECONDARY_COLOR + "You've deleted the prefix with the name " + Color.MAIN_COLOR + prefixName + Color.SECONDARY_COLOR + ".");
+                    } else {
+                        sender.sendMessage(ChatColor.RED + "Error: The prefix with the name " + ChatColor.YELLOW + prefixName + ChatColor.RED + " does not exist.");
+                    }
+                }
+                break;
+            case "purchasable":
+                if (args.length < 2) {
+                    sender.sendMessage(this.getUsageMessage("purchasable", "<name>"));
+                }
+                if (args.length == 2) {
+                    final String prefixName = args[1];
+                    final Prefix existingPrefix = Prefix.getByName(prefixName);
+
+                    if (existingPrefix != null) {
+                        existingPrefix.setPurchasable(!existingPrefix.isPurchasable());
+                        existingPrefix.savePrefix();
+
+                        sender.sendMessage(Color.SECONDARY_COLOR + "You've " + (existingPrefix.isPurchasable() ? ChatColor.GREEN + "enabled" : ChatColor.RED + "disabled") + Color.SECONDARY_COLOR + " purchasable mode for " + Color.MAIN_COLOR + prefixName + Color.SECONDARY_COLOR + ".");
+                    } else {
+                        sender.sendMessage(ChatColor.RED + "Error: The prefix with the name " + ChatColor.YELLOW + prefixName + ChatColor.RED + " does not exist.");
                     }
                 }
                 break;
             case "list":
-                player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
-                player.sendMessage(Color.translate(Color.MAIN_COLOR + ChatColor.BOLD.toString() + "Prefixes:"));
-                Prefix.getPrefixes().forEach(prefix -> player.sendMessage(Color.translate(" &7- &e" + prefix.getName() + " &7(&d#" + prefix.getId() + "&7) &7(" + prefix.getPrefix() + "&7)")));
-                player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
+                final PageListBuilder listBuilder = new PageListBuilder(10, "Prefixes");
+                final List<String> stringList = Prefix.getPrefixes().stream()
+                        .map(prefix -> prefix.getName() + ChatColor.GRAY + " (" + prefix.getPrefix() + ChatColor.GRAY + ")")
+                        .collect(Collectors.toList());
+
+                if (args.length < 2) {
+                    listBuilder.display(sender, 1, stringList);
+                } else {
+                    try {
+                        final int integer = Integer.parseInt(args[1]);
+
+                        listBuilder.display(sender, integer, stringList);
+                    } catch (Exception ignored) {
+                        sender.sendMessage(ChatColor.RED + "Error: That is not a valid integer!");
+                    }
+                }
                 break;
             default:
-                this.sendHelp(player);
+                this.sendHelp(sender);
+                break;
         }
 
         return false;
     }
 
-    public void sendHelp(Player player) {
+    public void sendHelp(CommandSender player) {
         this.getHelpMessage(1, player,
                 "/prefix create <name> <design>",
+                "/prefix design <name> <design>",
                 "/prefix delete <name>",
                 "/prefix add <player> <prefix>",
                 "/prefix remove <player> <prefix>",
-                "/prefix purchasable <prefix> <boolean>",
-                "/prefix list"
+                "/prefix purchasable <prefix>",
+                "/prefix list <page>"
         );
     }
 }

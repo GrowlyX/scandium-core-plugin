@@ -63,10 +63,6 @@ public class Prefix {
         CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPrefixCollection().replaceOne(Filters.eq("_id", this.id), this.getDocument(), new ReplaceOptions().upsert(true)));
     }
 
-    public void savePrefixMainThread() {
-        CorePlugin.getInstance().getCoreDatabase().getPrefixCollection().replaceOne(Filters.eq("_id", this.id), this.getDocument(), new ReplaceOptions().upsert(true));
-    }
-
     public static Prefix getByName(String name) {
         return Prefix.getPrefixes().stream()
                 .filter(prefix -> prefix.getName().equals(name))

@@ -168,7 +168,7 @@ public class JedisListener implements JedisHandler {
         final String fromConnectServer = jsonAppender.getParam("SERVER");
         final String connectingPlayer = jsonAppender.getParam("PLAYER");
 
-        PlayerUtil.sendToStaff("&3[S] " + connectingPlayer + " &bconnected to &3" + fromConnectServer + "&b.");
+        PlayerUtil.sendToStaff("&3[S] " + connectingPlayer + " &bjoined &3" + fromConnectServer + "&b.");
     }
 
     @Subscription(action = "PLAYER_SERVER_SWITCH_UPDATE")
@@ -185,7 +185,7 @@ public class JedisListener implements JedisHandler {
         final String server = jsonAppender.getParam("SERVER");
         final String player = jsonAppender.getParam("PLAYER");
 
-        PlayerUtil.sendToStaff("&3[S] " + player + " &bdisconnected from &3" + server);
+        PlayerUtil.sendToStaff("&3[S] " + player + " &bdisconnected from &3" + server + "&b.");
     }
 
     @Subscription(action = "CHAT_CHANNEL_UPDATE")
