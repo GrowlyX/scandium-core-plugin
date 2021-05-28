@@ -35,21 +35,16 @@ public class PrefixCommand extends BaseCommand {
 
     @Override
     public boolean command(CommandSender sender, String label, String[] args) {
-        if (args.length == 0 && sender instanceof Player) {
-            final Player player = (Player) sender;
-
-            new PrefixViewPaginatedMenu(player).openMenu(player);
-        } else {
-            this.sendHelp(sender);
-        }
-
-        if (!sender.hasPermission("scandium.command.prefix") && sender instanceof Player) {
+        if (args.length == 0) {
             final Player player = (Player) sender;
 
             new PrefixViewPaginatedMenu(player).openMenu(player);
             return false;
-        } else {
-            this.sendHelp(sender);
+        }
+
+        if (!sender.hasPermission("scandium.command.prefix")) {
+            sender.sendMessage(this.NO_PERMISSION);
+            return false;
         }
 
         switch (args[0].toLowerCase()) {
@@ -108,7 +103,7 @@ public class PrefixCommand extends BaseCommand {
 
                         final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
 
-                        if (potPlayer.getAllPrefixes().contains(prefixName)) {
+                        if (!potPlayer.getAllPrefixes().contains(prefixName)) {
                             potPlayer.getAllPrefixes().add(prefixName);
                             potPlayer.saveWithoutRemove();
 
@@ -199,7 +194,7 @@ public class PrefixCommand extends BaseCommand {
             case "list":
                 final PageListBuilder listBuilder = new PageListBuilder(10, "Prefixes");
                 final List<String> stringList = Prefix.getPrefixes().stream()
-                        .map(prefix -> prefix.getName() + ChatColor.GRAY + " (" + prefix.getPrefix() + ChatColor.GRAY + ")")
+                        .map(prefix -> prefix.getName() + ChatColor.GRAY + " (" + Color.translate(prefix.getPrefix()) + ChatColor.GRAY + ")")
                         .collect(Collectors.toList());
 
                 if (args.length < 2) {

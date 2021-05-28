@@ -84,10 +84,8 @@ public class PrefixViewPaginatedMenu extends PaginatedMenu {
 
         @Override
         public ItemStack getButtonItem(Player player) {
-            ArrayList<String> lore = new ArrayList<>();
-            boolean hasPrefix = this.potPlayer.getAllPrefixes().contains(this.prefix.getName());
-
-            lore.add("  ");
+            final ArrayList<String> lore = new ArrayList<>();
+            final boolean hasPrefix = this.potPlayer.getAllPrefixes().contains(this.prefix.getName());
 
             if (hasPrefix) {
                 lore.add("&7You own this prefix and it");
@@ -101,10 +99,10 @@ public class PrefixViewPaginatedMenu extends PaginatedMenu {
             lore.add("&7Appears in chat as:");
             lore.add(this.prefix.getPrefix());
             lore.add("  ");
-            lore.add((hasPrefix ? "&aClick to equip this prefix." : "&cYou don't own this prefix."));
+            lore.add(hasPrefix ? "&e[Click to equip this prefix]" : "&c[You don't own this prefix]");
 
             return new ItemBuilder((this.potPlayer.getAllPrefixes().contains(this.prefix.getName()) ? XMaterial.LIME_DYE.parseMaterial() : XMaterial.RED_DYE.parseMaterial()), (this.potPlayer.getAllPrefixes().contains(this.prefix.getName()) ? 10 : 1))
-                    .setDisplayName((hasPrefix ? "&e" : "&c") + this.prefix.getName())
+                    .setDisplayName((hasPrefix ? "&a" : "&c") + this.prefix.getName())
                     .addLore(Color.translate(lore))
                     .create();
         }
@@ -115,8 +113,10 @@ public class PrefixViewPaginatedMenu extends PaginatedMenu {
                 this.potPlayer.setAppliedPrefix(this.prefix);
                 player.sendMessage(Color.SECONDARY_COLOR + "You've updated your chat prefix to " + Color.MAIN_COLOR + this.prefix.getName() + ChatColor.GRAY + " (" + Color.translate(this.prefix.getPrefix()) + ChatColor.GRAY + ")" + Color.SECONDARY_COLOR + ".");
             } else {
-                player.sendMessage(ChatColor.RED + ("You do not own this prefix!"));
-                player.sendMessage(ChatColor.RED + ("You can purchase this prefix at " + CorePlugin.getInstance().getServerManager().getNetwork().getStoreLink() + "!"));
+                player.sendMessage(new String[]{
+                        ChatColor.RED + "I'm sorry, but you don't own this prefix.",
+                        ChatColor.RED + "You can purchase this prefix at " + ChatColor.YELLOW + CorePlugin.getInstance().getServerManager().getNetwork().getStoreLink() + ChatColor.RED + "!",
+                });
             }
 
             player.closeInventory();
