@@ -4,6 +4,7 @@ import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.player.PotPlayer;
+import com.solexgames.core.util.Color;
 import com.solexgames.core.util.LockedState;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
@@ -30,6 +31,11 @@ public class AuthCommand extends BaseCommand {
 
         if (!LockedState.isLocked(player)) {
             player.sendMessage(ChatColor.RED + "I'm sorry, but you cannot perform this action right now.");
+            return false;
+        }
+
+        if (args.length == 0) {
+            player.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <otp>");
             return false;
         }
 
