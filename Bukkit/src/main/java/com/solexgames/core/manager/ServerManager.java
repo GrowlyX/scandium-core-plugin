@@ -109,14 +109,14 @@ public class ServerManager {
             final DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream);
 
             try {
-                dataOutputStream.writeUTF("core-permissions");
+                dataOutputStream.writeUTF("core:permissions");
                 dataOutputStream.writeUTF(player.getName());
                 dataOutputStream.writeUTF(String.join(":", permissions));
+
+                player.sendPluginMessage(CorePlugin.getInstance(), "core:permissions", byteArrayOutputStream.toByteArray());
             } catch (Exception exception) {
                 System.out.println("[Messenger] Failed to sync permissions: " + exception.getMessage());
             }
-
-            player.sendPluginMessage(CorePlugin.getInstance(), "core-permissions", byteArrayOutputStream.toByteArray());
         }
     }
 }
