@@ -58,9 +58,13 @@ public abstract class BaseCommand extends Command {
         this.setLabel(command.label());
 
         try {
-            this.getClass().getField("name").set(this, command.label());
+            final Field declaredField = Command.class.getDeclaredField("name");
+
+            declaredField.setAccessible(true);
+            declaredField.set(this, command.label());
         } catch (Exception exception) {
             System.out.println("Error: " + exception.getMessage());
+            System.out.println("Error: " + exception.getClass().getName());
         }
 
         this.setAliases(Arrays.asList(command.aliases().clone()));
