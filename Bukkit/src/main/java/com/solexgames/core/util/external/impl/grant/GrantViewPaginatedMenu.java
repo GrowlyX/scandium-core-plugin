@@ -68,7 +68,7 @@ public class GrantViewPaginatedMenu extends PaginatedMenu {
 
             arrayList.add(Color.MAIN_COLOR + "&m------------------------------------");
             arrayList.add(Color.SECONDARY_COLOR + "Target&7: " + Color.MAIN_COLOR + target.getDisplayName());
-            arrayList.add(Color.SECONDARY_COLOR + "Rank&7: " + Color.MAIN_COLOR + this.grant.getRank().getColor() + this.grant.getRank().getName());
+            arrayList.add(Color.SECONDARY_COLOR + "Rank&7: " + Color.MAIN_COLOR + (this.grant.getRank() == null ? "" : this.grant.getRank().getColor() + this.grant.getRank().getName()));
             arrayList.add(Color.SECONDARY_COLOR + "Duration&7: " + Color.MAIN_COLOR + (this.grant.isPermanent() ? "&4Forever" : DurationFormatUtils.formatDurationWords(this.grant.getDuration(), true, true)));
             arrayList.add(Color.SECONDARY_COLOR + "Expires On&7: " + Color.MAIN_COLOR + CorePlugin.FORMAT.format(new Date(this.grant.getDateAdded() + this.grant.getDuration())));
             arrayList.add(Color.MAIN_COLOR + "&m------------------------------------");

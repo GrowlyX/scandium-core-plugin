@@ -56,7 +56,13 @@ public abstract class BaseCommand extends Command {
 
         this.setPermission(this.permissionNode);
         this.setLabel(command.label());
-        this.setName(command.label());
+
+        try {
+            this.getClass().getField("name").set(this, command.label());
+        } catch (Exception exception) {
+            System.out.println("Error: " + exception.getMessage());
+        }
+
         this.setAliases(Arrays.asList(command.aliases().clone()));
 
         CorePlugin.getInstance().registerCommand(this);
