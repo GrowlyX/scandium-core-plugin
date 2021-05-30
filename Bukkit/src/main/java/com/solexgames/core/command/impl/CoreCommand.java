@@ -21,6 +21,7 @@ public class CoreCommand extends BaseCommand {
         }
 
         final Player player = (Player) sender;
+
         if (args.length == 0) {
             this.getHelpMessage(1, sender,
                     "/" + label + " debug",

@@ -351,9 +351,5 @@ public final class CorePlugin extends JavaPlugin {
 
         this.serverSettings.setCanJoin(false);
         this.prefixManager.savePrefixes();
-
-        if (this.jedisManager != null) {
-            this.jedisManager.disconnect();
-        }
     }
 }

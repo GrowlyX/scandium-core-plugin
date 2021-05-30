@@ -36,11 +36,13 @@ public class GrantDurationPrompt extends StringPrompt {
 
             new GrantReasonPaginatedMenu(this.granter, this.target, -1L, this.rank, true, this.scope).openMenu(this.granter);
         } else {
-            try {
-                new GrantReasonPaginatedMenu(this.granter, this.target, System.currentTimeMillis() - DateUtil.parseDateDiff(input, false), this.rank, false, this.scope).openMenu(this.granter);
+            final long diff = DateUtil.parseDateDiff(input, false);
 
-                context.getForWhom().sendRawMessage(Color.SECONDARY_COLOR + "Grant duration set to " + Color.MAIN_COLOR + DurationFormatUtils.formatDurationWords(System.currentTimeMillis() - DateUtil.parseDateDiff(input, false), true, true) + Color.SECONDARY_COLOR + ".");
-            } catch (Exception ignored) {
+            if (diff != -1L) {
+                new GrantReasonPaginatedMenu(this.granter, this.target, System.currentTimeMillis() - diff, this.rank, false, this.scope).openMenu(this.granter);
+
+                context.getForWhom().sendRawMessage(Color.SECONDARY_COLOR + "Grant duration set to " + Color.MAIN_COLOR + DurationFormatUtils.formatDurationWords(System.currentTimeMillis() - diff, true, true) + Color.SECONDARY_COLOR + ".");
+            } else {
                 context.getForWhom().sendRawMessage(ChatColor.RED + "That's not a valid duration! Please try again, or type cancel to stop the granting process.");
 
                 return this;

@@ -22,7 +22,7 @@ public class FileConfig {
         this.file = new File(CorePlugin.getInstance().getDataFolder(), name + ".yml");
 
         if (!this.file.exists()) {
-            this.file.getParentFile().mkdirs();
+            this.file.getParentFile().mkdir();
 
             if (CorePlugin.getInstance().getResource(name + ".yml") == null) {
                 try {

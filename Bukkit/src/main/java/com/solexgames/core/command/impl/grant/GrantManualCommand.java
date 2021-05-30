@@ -15,10 +15,9 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-@Command(label = "cgrant", permission = "scandium.command.cgrant", consoleOnly = true)
-public class CGrantCommand extends BaseCommand {
+@Command(label = "grantmanual", permission = "scandium.command.grantmanual")
+public class GrantManualCommand extends BaseCommand {
 
-    @SneakyThrows
     @Override
     public boolean command(CommandSender sender, String label, String[] args) {
         if (args.length <= 2) {
@@ -54,7 +53,14 @@ public class CGrantCommand extends BaseCommand {
                                 newGrant.setPermanent(true);
                                 break;
                             default:
-                                final long duration = System.currentTimeMillis() - DateUtil.parseDateDiff(args[2], false);
+                                final long date = DateUtil.parseDateDiff(args[2], false);
+
+                                if (date == -1L) {
+                                    newGrant.setPermanent(true);
+                                    break;
+                                }
+
+                                final long duration = System.currentTimeMillis() - date;
 
                                 newGrant.setDuration(duration);
                                 break;

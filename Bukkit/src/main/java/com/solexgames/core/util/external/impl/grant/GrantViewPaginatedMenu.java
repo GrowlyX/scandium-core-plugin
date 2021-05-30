@@ -101,19 +101,19 @@ public class GrantViewPaginatedMenu extends PaginatedMenu {
         public void clicked(Player player, ClickType clickType) {
             if (clickType.equals(ClickType.RIGHT) ) {
                 if (CorePlugin.getInstance().getPlayerManager().getPlayer(player).getActiveGrant().getRank().getWeight() < this.grant.getRank().getWeight() || !player.isOp()) {
-                    player.sendMessage(ChatColor.RED + "Error: You don't have permission to remove this grant.");
+                    player.sendMessage(ChatColor.RED + "You don't have permission to remove this grant.");
                     player.closeInventory();
                     return;
                 }
 
                 if (this.grant.isRemoved()) {
-                    player.sendMessage(ChatColor.RED + "Error: This grant has already been removed.");
+                    player.sendMessage(ChatColor.RED + "This grant has already been removed.");
                     player.closeInventory();
                     return;
                 }
 
                 if (this.grant.isExpired() && !this.grant.isPermanent()) {
-                    player.sendMessage(ChatColor.RED + "Error: This grant has expired.");
+                    player.sendMessage(ChatColor.RED + "This grant has already expired.");
                     player.closeInventory();
                     return;
                 }

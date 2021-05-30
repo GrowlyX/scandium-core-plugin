@@ -36,6 +36,7 @@ public class SlowChatCommand extends BaseCommand {
                 sender.sendMessage(ChatColor.RED + "Error: That's not a valid integer.");
             }
         }
+
         return false;
     }
 }

@@ -27,8 +27,9 @@ public class GrantsCommand extends BaseCommand {
         if (args.length == 0) {
             sender.sendMessage(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player>");
         }
+
         if (args.length == 1) {
-            Player target = Bukkit.getPlayer(args[0]);
+            final Player target = Bukkit.getPlayer(args[0]);
 
             if (target != null) {
                 new GrantViewPaginatedMenu(player, target).openMenu(player);

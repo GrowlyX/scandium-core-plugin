@@ -242,8 +242,7 @@ public class PlayerManager {
 
             if (document == null) {
                 final PotPlayer potPlayer = new PotPlayer(uuid, playerName, null);
-
-                potPlayer.saveWithoutRemove();
+                potPlayer.savePlayerData();
 
                 return potPlayer.getDocument(true);
             } else {

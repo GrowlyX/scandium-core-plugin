@@ -24,6 +24,7 @@ public class SocialSpyCommand extends BaseCommand {
 
         final Player player = (Player) sender;
         final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+
         if (potPlayer.isSocialSpy()) {
             player.sendMessage(ChatColor.RED + "You've disabled social spy.");
             potPlayer.setSocialSpy(false);
