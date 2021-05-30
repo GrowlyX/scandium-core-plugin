@@ -19,7 +19,7 @@ name-mc:
 tablist:
   enabled: true
   header: "&7Hey there, welcome to our server."
-  footer: "&ePurchase ranks and more on our store!"
+  footer: "&ePurchase rankjs and more on our store!"
 two-factor-auth:
   enabled: true
 server:

@@ -51,11 +51,11 @@ public class ServerManager {
     public ServerManager() {
         final CorePlugin plugin = CorePlugin.getInstance();
 
-        this.joinMessage = plugin.getConfig().getStringList("on-join.join-message.message");
+        this.joinMessage = Color.translate(plugin.getConfig().getStringList("on-join.join-message.message"));
         this.clearChatJoin = plugin.getConfig().getBoolean("on-join.clear-chat");
         this.joinMessageEnabled = plugin.getConfig().getBoolean("on-join.join-message.enabled");
         this.joinMessageCentered = plugin.getConfig().getBoolean("on-join.join-message.centered");
-        this.automaticallyPutInto = plugin.getConfig().getString("language.automatic-string");
+        this.automaticallyPutInto = Color.translate(plugin.getConfig().getString("language.automatic-string"));
 
         this.blockedCommands = plugin.getConfig().getStringList("command-block.affected");
         this.commandCallback = plugin.getConfig().getString("command-block.callback");

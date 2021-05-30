@@ -252,7 +252,7 @@ public class PotPlayer {
         CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", this.uuid), this.getDocument(true), new ReplaceOptions().upsert(true)));
     }
 
-    public void loadPlayerData() {
+    public void loadPunishmentData() {
         CompletableFuture.runAsync(() -> {
             CorePlugin.getInstance().getPunishmentManager().getPunishments().stream()
                     .filter(punishment -> punishment.getTarget().equals(this.uuid))
@@ -282,6 +282,10 @@ public class PotPlayer {
                         }
                     });
         });
+    }
+
+    public void loadPlayerData() {
+        this.loadPunishmentData();
 
         CompletableFuture.supplyAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("_id", this.uuid)).first())
                 .thenAcceptAsync(document -> {
@@ -422,7 +426,7 @@ public class PotPlayer {
                         serializedMetaData.forEach((k, v) -> this.metaDataEntryMap.put((String) k, CorePlugin.GSON.fromJson((String) v, MetaDataEntry.class)));
                     }
 
-                    if (this.getMetaData("chat-channel").getValue() != null && !this.getMetaData("chat-channel").getValue().getAsString().equals("NONE")) {
+                    if (this.getMetaData("chat-channel") != null && !this.getMetaData("chat-channel").getValue().getAsString().equals("NONE")) {
                         this.setChannel(ChatChannelType.valueOf(this.getMetaData("chat-channel").getValue().getAsString()));
                     }
 
@@ -525,7 +529,7 @@ public class PotPlayer {
     }
 
     public String getWarningMessage() {
-        return ChatColor.RED + "You currently have an active warning for " + this.warningPunishment.getReason() + ".\n" + ChatColor.RED + "This warning will expire in " + ChatColor.RED + ChatColor.BOLD.toString() + this.warningPunishment.getDurationString() + ChatColor.RED + ".";
+        return ChatColor.RED + "You currently have an active warning for " + this.warningPunishment.getReason() + ".\n" + ChatColor.RED + "This warning will expire in " + ChatColor.YELLOW + this.warningPunishment.getDurationString() + ChatColor.RED + ".";
     }
 
     public String getRestrictionMessage() {

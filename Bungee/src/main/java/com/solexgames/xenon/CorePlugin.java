@@ -7,14 +7,15 @@ import com.solexgames.xenon.command.*;
 import com.solexgames.xenon.listener.ChannelListener;
 import com.solexgames.xenon.listener.PlayerListener;
 import com.solexgames.xenon.proxy.ProxyManager;
-import com.solexgames.xenon.redis.RedisManager;
-import com.solexgames.xenon.redis.RedisSettings;
+import com.solexgames.xenon.redis.JedisBuilder;
+import com.solexgames.xenon.redis.JedisManager;
+import com.solexgames.xenon.redis.JedisSettings;
+import com.solexgames.xenon.redis.handler.impl.JedisListener;
 import com.solexgames.xenon.util.Color;
 import com.solexgames.xenon.util.MOTDUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
-import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
@@ -46,8 +47,10 @@ public class CorePlugin extends Plugin {
     @Getter
     private static CorePlugin instance;
 
-    public static Gson GSON;
-    public static GsonBuilder GSONBUILDER;
+    public static final Gson GSON = new GsonBuilder()
+                .setPrettyPrinting()
+                .disableHtmlEscaping()
+                .create();
 
     private ArrayList<String> whitelistedPlayers = new ArrayList<>();
     private ArrayList<ServerInfo> hubServers = new ArrayList<>();
@@ -57,16 +60,13 @@ public class CorePlugin extends Plugin {
     private File configurationFile;
     private File redisConfigFile;
 
-    private ProxyManager proxyManager;
-    private RedisManager redisManager;
+    private JedisManager jedisManager;
 
     private boolean maintenance;
 
     private String maintenanceMotd;
     private String normalMotd;
     private String maintenanceMessage;
-
-    private Executor redisExecutor;
 
     private int minProtocol;
     private String minVersion;
@@ -76,20 +76,19 @@ public class CorePlugin extends Plugin {
     public void onEnable() {
         instance = this;
 
-        GSONBUILDER = new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting();
-        GSON = GSONBUILDER.create();
-
         createConfig();
-
-        this.redisExecutor = Executors.newFixedThreadPool(1);
 
         this.configurationFile = new File("Xenon", "settings.yml");
         this.redisConfigFile = new File("Xenon", "data.yml");
 
         this.configuration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(configurationFile);
         this.redisConfig = ConfigurationProvider.getProvider(YamlConfiguration.class).load(redisConfigFile);
+
+        this.jedisManager = new JedisBuilder()
+                .withChannel("scandium:bukkit")
+                .withSettings(new JedisSettings("", 6379, true, ""))
+                .withHandler(new JedisListener())
+                .build();
 
         this.maintenance = this.configuration.getBoolean("maintenance");
 
@@ -163,10 +162,8 @@ public class CorePlugin extends Plugin {
     @SneakyThrows
     @Override
     public void onDisable() {
-        if (this.redisManager != null) {
-            if (this.redisManager.isActive()) {
-                this.redisManager.unsubscribe();
-            }
+        if (this.jedisManager != null) {
+            this.jedisManager.disconnect();
         }
 
         this.configuration.set("whitelistedPlayers", whitelistedPlayers);

@@ -1,7 +1,6 @@
 package com.solexgames.xenon.redis.json;
 
-import com.google.gson.Gson;
-import com.solexgames.xenon.redis.action.RedisAction;
+import com.solexgames.xenon.CorePlugin;
 import lombok.Getter;
 
 import java.util.HashMap;
@@ -11,23 +10,27 @@ import java.util.Map;
  * @author GrowlyX
  * @since 3/1/2021
  * <p>
- * Holds instances to anything redis related.
+ * Creates a JSON chain of all the available parameters
  */
 
 @Getter
 public class JsonAppender {
 
-    private final Map<String, String> parameters;
-    private final RedisAction packet;
+    private final Map<String, String> parameters = new HashMap<>();
 
-    /**
-     * Creates a new instance of {@link JsonAppender} with a packet type {@link RedisAction}
-     *
-     * @param packet Redis packet type for this instance.
-     */
-    public JsonAppender(RedisAction packet) {
+    private final String packet;
+
+    public JsonAppender(String packet) {
         this.packet = packet;
-        this.parameters = new HashMap<>();
+    }
+
+    public JsonAppender(Enum<?> aEnum) {
+        this.packet = aEnum.name();
+    }
+
+    public JsonAppender put(String key, Object value) {
+        this.parameters.put(key, value == null ? null : value.toString());
+        return this;
     }
 
     public JsonAppender put(String key, String value) {
@@ -35,23 +38,45 @@ public class JsonAppender {
         return this;
     }
 
+    public JsonAppender put(String key, Boolean value) {
+        this.parameters.put(key, value.toString());
+        return this;
+    }
+
+    public JsonAppender put(String key, Integer value) {
+        this.parameters.put(key, value.toString());
+        return this;
+    }
+
+    public JsonAppender put(String key, Character value) {
+        this.parameters.put(key, value.toString());
+        return this;
+    }
+
+    public JsonAppender put(String key, Long value) {
+        this.parameters.put(key, value.toString());
+        return this;
+    }
+
+    public JsonAppender put(String key, Float value) {
+        this.parameters.put(key, value.toString());
+        return this;
+    }
+
+    public JsonAppender put(String key, Double value) {
+        this.parameters.put(key, value.toString());
+        return this;
+    }
+
     public String getParam(String key) {
-        if (containsParam(key)) {
+        if (this.parameters.containsKey(key)) {
             return this.parameters.get(key);
         }
+
         return null;
     }
 
-    public boolean containsParam(String key) {
-        return this.parameters.containsKey(key);
-    }
-
-    /**
-     * Get the Json Appended String from the JsonAppender instance
-     *
-     * @return The appended json string
-     */
-    public String getAppended() {
-        return new Gson().toJson(this);
+    public String getAsJson() {
+        return CorePlugin.GSON.toJson(this);
     }
 }

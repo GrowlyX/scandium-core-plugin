@@ -101,7 +101,7 @@ public class PlayerListener implements Listener {
 
             if (this.serverManager.isJoinMessageEnabled()) {
                 if (this.serverManager.isJoinMessageCentered()) {
-                    this.serverManager.getJoinMessage().forEach(s -> event.getPlayer().sendMessage(Color.translate(s.replace("%PLAYER%", event.getPlayer().getDisplayName()))));
+                    this.serverManager.getJoinMessage().forEach(s -> event.getPlayer().sendMessage(s.replace("%PLAYER%", event.getPlayer().getDisplayName())));
                 } else {
                     StringUtil.sendCenteredMessage(event.getPlayer(), (ArrayList<String>) this.serverManager.getJoinMessage());
                 }
@@ -137,35 +137,33 @@ public class PlayerListener implements Listener {
             }
 
             if (event.getPlayer().hasPermission("scandium.2fa.forced") && CorePlugin.getInstance().getServerSettings().isTwoFactorEnabled()) {
-                CompletableFuture.runAsync(() -> {
-                    if (potPlayer.isAuthBypassed()) {
-                        event.getPlayer().sendMessage(ChatColor.DARK_AQUA + "[2FA] " + ChatColor.YELLOW + "You've been exempted from authentication as you are 2FA bypassed.");
-                    } else if (potPlayer.isHasSetup2FA()) {
-                        if (!potPlayer.getPreviousIpAddress().equals(potPlayer.getIpAddress()) || potPlayer.isRequiredToAuth() || (potPlayer.getLastAuth() + (HOUR * 6L)) < System.currentTimeMillis()) {
-                            final String message = ChatColor.DARK_AQUA + "[2FA] " + ChatColor.YELLOW + "Please authenticate via " + ChatColor.AQUA + "/auth " + ChatColor.WHITE + "<code>" + ChatColor.YELLOW + ".";
-
-                            event.getPlayer().sendMessage(message);
-                            LockedState.lock(event.getPlayer(), message);
-
-                            potPlayer.setRequiredToAuth(true);
-                        }
-                    } else {
-                        final String message = ChatColor.DARK_AQUA + "[2FA] " + ChatColor.YELLOW + "Please setup two-factor authentication via " + ChatColor.AQUA + "/authsetup" + ChatColor.YELLOW + ".";
+                if (potPlayer.isAuthBypassed()) {
+                    event.getPlayer().sendMessage(ChatColor.DARK_AQUA + "[2FA] " + ChatColor.YELLOW + "You've been exempted from authentication as you are 2FA bypassed.");
+                } else if (potPlayer.isHasSetup2FA()) {
+                    if (!potPlayer.getPreviousIpAddress().equals(potPlayer.getIpAddress()) || potPlayer.isRequiredToAuth() || (potPlayer.getLastAuth() + (HOUR * 6L)) < System.currentTimeMillis()) {
+                        final String message = ChatColor.DARK_AQUA + "[2FA] " + ChatColor.YELLOW + "Please authenticate via " + ChatColor.AQUA + "/auth " + ChatColor.WHITE + "<code>" + ChatColor.YELLOW + ".";
 
                         event.getPlayer().sendMessage(message);
                         LockedState.lock(event.getPlayer(), message);
+
+                        potPlayer.setRequiredToAuth(true);
                     }
-                });
+                } else {
+                    final String message = ChatColor.DARK_AQUA + "[2FA] " + ChatColor.YELLOW + "Please setup two-factor authentication via " + ChatColor.AQUA + "/authsetup" + ChatColor.YELLOW + ".";
+
+                    event.getPlayer().sendMessage(message);
+                    LockedState.lock(event.getPlayer(), message);
+                }
             }
         });
 
+        CorePlugin.getInstance().getNMS().setupTablist(event.getPlayer());
+
         if (potPlayer.isAutoVanish()) {
-            event.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getServerManager().getAutomaticallyPutInto().replace("<value>", "vanish")));
+            event.getPlayer().sendMessage(CorePlugin.getInstance().getServerManager().getAutomaticallyPutInto().replace("<value>", "vanish"));
 
             Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getPlayerManager().vanishPlayerRaw(event.getPlayer()), 7L);
         }
-
-        CorePlugin.getInstance().getNMS().setupTablist(event.getPlayer());
     }
 
     @EventHandler
