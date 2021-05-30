@@ -60,7 +60,7 @@ public class PotPlayer {
     private Media media;
     private Prefix appliedPrefix;
 
-    private Player lastRecipient;
+    private String lastRecipient;
 
     private ChatColor customColor;
 
@@ -239,6 +239,7 @@ public class PotPlayer {
 
     private void saveMeta() {
         this.setMetaData("chat-channel", new MetaDataValue(this.channel == null ? "NONE" : this.channel.name()));
+        this.setMetaData("last-messenger", new MetaDataValue(this.lastRecipient == null ? "NONE" : this.lastRecipient));
     }
 
     public void savePlayerData() {
@@ -426,16 +427,25 @@ public class PotPlayer {
                         serializedMetaData.forEach((k, v) -> this.metaDataEntryMap.put((String) k, CorePlugin.GSON.fromJson((String) v, MetaDataEntry.class)));
                     }
 
-                    if (this.getMetaData("chat-channel") != null && !this.getMetaData("chat-channel").getValue().getAsString().equals("NONE")) {
-                        this.setChannel(ChatChannelType.valueOf(this.getMetaData("chat-channel").getValue().getAsString()));
-                    }
+                    this.loadMetaData();
 
                     this.currentlyOnline = true;
                     this.hasLoaded = true;
                 });
 
+
         Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> RedisUtil.publishAsync(RedisUtil.addGlobalPlayer(this)), 10L);
         Bukkit.getScheduler().runTaskLaterAsynchronously(CorePlugin.getInstance(), this::saveWithoutRemove, 60L);
+    }
+
+    private void loadMetaData() {
+        if (this.getMetaData("chat-channel") != null && !this.getMetaData("chat-channel").getValue().getAsString().equals("NONE")) {
+            this.setChannel(ChatChannelType.valueOf(this.getMetaData("chat-channel").getValue().getAsString()));
+        }
+
+        if (this.getMetaData("last-messenger") != null && !this.getMetaData("last-messenger").getValue().getAsString().equals("NONE")) {
+            this.lastRecipient = this.getMetaData("last-messenger").getValue().getAsString();
+        }
     }
 
     public boolean findIpRelative(AsyncPlayerPreLoginEvent loginEvent, boolean hub) {

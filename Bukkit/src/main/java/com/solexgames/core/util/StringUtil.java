@@ -24,7 +24,10 @@ import java.util.regex.Pattern;
 @UtilityClass
 public final class StringUtil {
 
+    private final String PLAYER_NOT_FOUND = ChatColor.RED + "No player matching " + ChatColor.YELLOW + "{0}" + ChatColor.RED + " is connected to this server.";
+
     private final static int CENTER_PX = 154;
+    private static final Pattern FORMATTING = Pattern.compile("^.*(?<format>(§[0-9a-fklmor])+).*");
 
     public static String buildMessage(String[] args, int start) {
         return start >= args.length ? "" : String.join(" ", Arrays.copyOfRange(args, start, args.length));
@@ -172,7 +175,7 @@ public final class StringUtil {
         int ix = 0;
         int jx = 0;
 
-        while(ix < s.length()) {
+        while (ix < s.length()) {
             ix = s.indexOf(32, ix + 1);
             if (ix == -1) {
                 break;
@@ -213,8 +216,6 @@ public final class StringUtil {
         return sf;
     }
 
-    private static final Pattern FORMATTING = Pattern.compile("^.*(?<format>(§[0-9a-fklmor])+).*");
-
     private static String getFormat(String s) {
         Matcher m = FORMATTING.matcher(s);
         String format = null;
@@ -229,8 +230,8 @@ public final class StringUtil {
         String joined = "";
 
         String s;
-        for(Iterator var3 = list.iterator(); var3.hasNext(); joined = joined + s + separator) {
-            s = (String)var3.next();
+        for (Iterator var3 = list.iterator(); var3.hasNext(); joined = joined + s + separator) {
+            s = (String) var3.next();
         }
 
         joined = !list.isEmpty() ? joined.substring(0, joined.length() - separator.length()) : joined;
@@ -241,8 +242,8 @@ public final class StringUtil {
         List<String> prefixed = new ArrayList(list.size());
         Iterator var3 = list.iterator();
 
-        while(var3.hasNext()) {
-            String s = (String)var3.next();
+        while (var3.hasNext()) {
+            String s = (String) var3.next();
             prefixed.add(prefix + s);
         }
 
@@ -255,7 +256,7 @@ public final class StringUtil {
             String[] var2 = name.split("[ _]");
             int var3 = var2.length;
 
-            for(int var4 = 0; var4 < var3; ++var4) {
+            for (int var4 = 0; var4 < var3; ++var4) {
                 String part = var2[var4];
                 sb.append(Character.toUpperCase(part.charAt(0)));
                 sb.append(part.substring(1).toLowerCase());
