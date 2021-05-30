@@ -1,4 +1,4 @@
-package com.solexgames.core.redis.handler.impl;
+package com.solexgames.core.redis.handler;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.disguise.DisguiseData;
@@ -13,9 +13,9 @@ import com.solexgames.core.player.prefixes.Prefix;
 import com.solexgames.core.player.punishment.Punishment;
 import com.solexgames.core.player.punishment.PunishmentType;
 import com.solexgames.core.player.ranks.Rank;
-import com.solexgames.core.redis.annotation.Subscription;
-import com.solexgames.core.redis.handler.JedisHandler;
-import com.solexgames.core.redis.json.JsonAppender;
+import com.solexgames.lib.commons.redis.annotation.Subscription;
+import com.solexgames.lib.commons.redis.handler.JedisHandler;
+import com.solexgames.lib.commons.redis.json.JsonAppender;
 import com.solexgames.core.server.NetworkServer;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.PlayerUtil;

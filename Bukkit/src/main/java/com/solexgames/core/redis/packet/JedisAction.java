@@ -1,4 +1,4 @@
-package com.solexgames.core.redis.packet;
+package com.solexgames.lib.commons.redis.packet;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
