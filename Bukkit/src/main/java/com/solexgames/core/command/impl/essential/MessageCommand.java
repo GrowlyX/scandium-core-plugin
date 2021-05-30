@@ -85,8 +85,8 @@ public class MessageCommand extends BaseCommand {
 
             StringUtil.sendPrivateMessage(player, target, message);
 
-            potPlayer.setLastRecipient(target);
-            potTarget.setLastRecipient(player);
+            potPlayer.setLastRecipient(target.getName());
+            potTarget.setLastRecipient(player.getName());
         }
 
         return false;

@@ -41,6 +41,7 @@ public final class StringUtil {
         target.sendMessage(fromMessage);
 
         final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
+
         if (potPlayer.isCanReceiveDmsSounds()) {
             target.playSound(target.getLocation(), XSound.BLOCK_NOTE_BLOCK_PLING.parseSound(), 1.0F, 1.0F);
         }
