@@ -103,20 +103,19 @@ public class ServerManager {
         }
     }
 
-    public void syncPermissions(Player player, List<String> permissions) {
-        if (!permissions.isEmpty()) {
-            final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            final DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream);
+    public void syncPermissions(Player player, String displayName, List<String> permissions) {
+        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        final DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream);
 
-            try {
-                dataOutputStream.writeUTF("core:permissions");
-                dataOutputStream.writeUTF(player.getName());
-                dataOutputStream.writeUTF(String.join(":", permissions));
+        try {
+            dataOutputStream.writeUTF("core:permissions");
+            dataOutputStream.writeUTF(player.getName());
+            dataOutputStream.writeUTF(displayName);
+            dataOutputStream.writeUTF(permissions.isEmpty() ? "NONE" : String.join(":", permissions));
 
-                player.sendPluginMessage(CorePlugin.getInstance(), "core:permissions", byteArrayOutputStream.toByteArray());
-            } catch (Exception exception) {
-                System.out.println("[Messenger] Failed to sync permissions: " + exception.getMessage());
-            }
+            player.sendPluginMessage(CorePlugin.getInstance(), "core:permissions", byteArrayOutputStream.toByteArray());
+        } catch (Exception exception) {
+            System.out.println("[Messenger] Failed to sync permissions: " + exception.getMessage());
         }
     }
 }

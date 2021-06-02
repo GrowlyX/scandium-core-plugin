@@ -188,7 +188,6 @@ public final class CorePlugin extends JavaPlugin {
         new ServerLoadingTask();
 
         this.getServer().getMessenger().registerOutgoingPluginChannel(this, "core:permissions");
-        this.getServer().getMessenger().registerOutgoingPluginChannel(this, "core:update");
     }
 
     private void disableLoggers() {
@@ -207,6 +206,7 @@ public final class CorePlugin extends JavaPlugin {
         this.serverSettings.setAntiCommandSpamEnabled(this.getConfig().getBoolean("anti-spam.command"));
         this.serverSettings.setStaffAlertsEnabled(this.getConfig().getBoolean("staff.command-alerts.enabled"));
         this.serverSettings.setTwoFactorEnabled(this.getConfig().getBoolean("two-factor-auth.enabled"));
+        this.serverSettings.setUsingXenon(this.getConfig().getBoolean("settings.using-xenon"));
         this.serverSettings.setAlertFormat(Color.translate(this.getConfig().getString("staff.command-alerts.format")));
     }
 

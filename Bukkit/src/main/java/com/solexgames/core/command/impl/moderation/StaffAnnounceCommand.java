@@ -23,14 +23,12 @@ public class StaffAnnounceCommand extends BaseCommand {
             return false;
         }
 
-        final Player player = (Player) sender;
-
         if (args.length == 0) {
             sender.sendMessage(Color.translate(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <message>"));
         }
         if (args.length > 0) {
             final String message = StringUtil.buildMessage(args, 0);
-            CorePlugin.getInstance().getPlayerManager().sendToNetworkStaff("&3[S] &c[Alert]&f: &b" + message);
+            CorePlugin.getInstance().getPlayerManager().sendToNetworkStaff("&b[S] &c[Alert]&f: &b" + message);
         }
 
         return false;

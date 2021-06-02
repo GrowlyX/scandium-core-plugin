@@ -140,7 +140,7 @@ public class JedisListener implements JedisHandler {
             Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getServer().getPluginManager().callEvent(retrieveEvent));
         }
 
-        PlayerUtil.sendTo("&3[S] &e" + bootingServerName + " &bhas just come &aonline&b.", "scandium.network.alerts");
+        PlayerUtil.sendTo("&b[S] &3[" + bootingServerName + "] &b" + bootingServerName + " &3has just booted.", "scandium.network.alerts");
     }
 
     @Subscription(action = "SERVER_DATA_UPDATE")
@@ -187,7 +187,7 @@ public class JedisListener implements JedisHandler {
             CorePlugin.getInstance().getServerManager().removeNetworkServer(NetworkServer.getByName(offlineServerName));
         }
 
-        PlayerUtil.sendTo("&3[S] &e" + offlineServerName + " &bhas just went &coffline&b.", "scandium.network.alerts");
+        PlayerUtil.sendTo("&b[S] &3[" + offlineServerName + "] &b" + offlineServerName + " &3has just shut down.", "scandium.network.alerts");
     }
 
     @Subscription(action = "PLAYER_CONNECT_UPDATE")
@@ -195,7 +195,7 @@ public class JedisListener implements JedisHandler {
         final String fromConnectServer = jsonAppender.getParam("SERVER");
         final String connectingPlayer = jsonAppender.getParam("PLAYER");
 
-        PlayerUtil.sendToStaff("&3[S] " + connectingPlayer + " &bconnected to &3" + fromConnectServer + "&b.");
+        PlayerUtil.sendToStaff("&b[S] " + connectingPlayer + " &3connected to &b" + fromConnectServer + "&3.");
     }
 
     @Subscription(action = "PLAYER_SERVER_SWITCH_UPDATE")
@@ -204,7 +204,7 @@ public class JedisListener implements JedisHandler {
         final String fromSwitchingServer = jsonAppender.getParam("SERVER");
         final String switchingPlayer = jsonAppender.getParam("PLAYER");
 
-        PlayerUtil.sendToStaff("&3[S] " + switchingPlayer + " &bjoined &3" + newServer + "&b from &3" + fromSwitchingServer + "&b.");
+        PlayerUtil.sendToStaff("&b[S] " + switchingPlayer + " &3joined &b" + newServer + "&3 from &b" + fromSwitchingServer + "&3.");
     }
 
     @Subscription(action = "PLAYER_DISCONNECT_UPDATE")
@@ -212,7 +212,7 @@ public class JedisListener implements JedisHandler {
         final String server = jsonAppender.getParam("SERVER");
         final String player = jsonAppender.getParam("PLAYER");
 
-        PlayerUtil.sendToStaff("&3[S] " + player + " &bdisconnected from &3" + server + "&b.");
+        PlayerUtil.sendToStaff("&b[S] " + player + " &3disconnected from &b" + server + "&3.");
     }
 
     @Subscription(action = "CHAT_CHANNEL_UPDATE")
@@ -236,21 +236,21 @@ public class JedisListener implements JedisHandler {
                 final String freezeServer = jsonAppender.getParam("SERVER");
                 final String freezeTarget = jsonAppender.getParam("TARGET");
 
-                PlayerUtil.sendToStaff(updateType.getPrefix() + "&7[" + freezeServer + "] " + "&3" + freezePlayer + " &bhas frozen &3" + freezeTarget + "&b.");
+                PlayerUtil.sendToStaff(updateType.getPrefix() + "&3[" + freezeServer + "] &b" + freezePlayer + " &3froze &b" + freezeTarget + "&3.");
                 break;
             case UNFREEZE:
                 final String unFreezePlayer = jsonAppender.getParam("PLAYER");
                 final String unFreezeTarget = jsonAppender.getParam("TARGET");
                 final String unFreezeServer = jsonAppender.getParam("SERVER");
 
-                PlayerUtil.sendToStaff(updateType.getPrefix() + "&7[" + unFreezeServer + "] " + "&3" + unFreezePlayer + " &bhas unfrozen &3" + unFreezeTarget + "&b.");
+                PlayerUtil.sendToStaff(updateType.getPrefix() + "&3[" + unFreezeServer + "] &b" + unFreezePlayer + " &3unfroze &b" + unFreezeTarget + "&3.");
                 break;
-            case HELPOP:
+            case REQUEST:
                 final String requestMessage = jsonAppender.getParam("MESSAGE");
                 final String requestPlayer = jsonAppender.getParam("PLAYER");
                 final String requestServer = jsonAppender.getParam("SERVER");
 
-                PlayerUtil.sendToStaff(updateType.getPrefix() + "&7[" + requestServer + "] " + "&3" + requestPlayer + " &bhas requested assistance: &e" + requestMessage + "&b.");
+                PlayerUtil.sendToStaff(updateType.getPrefix() + "&3[" + requestServer + "] &b" + requestPlayer + " &chas requested assistance: &e" + requestMessage + "&c.");
                 break;
             case REPORT:
                 final String reportMessage = jsonAppender.getParam("MESSAGE");
@@ -258,7 +258,7 @@ public class JedisListener implements JedisHandler {
                 final String reportTarget = jsonAppender.getParam("TARGET");
                 final String reportServer = jsonAppender.getParam("SERVER");
 
-                PlayerUtil.sendToStaff(updateType.getPrefix() + "&7[" + reportServer + "] " + "&3" + reportPlayer + " &bhas reported &3" + reportTarget + "&b for &e" + reportMessage + "&b.");
+                PlayerUtil.sendToStaff(updateType.getPrefix() + "&3[" + reportServer + "] &b" + reportPlayer + " &chas reported &6" + reportTarget + "&c for &e" + reportMessage + "&c.");
                 break;
         }
     }

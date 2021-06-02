@@ -67,7 +67,7 @@ public class PlayerManager {
         final int power = ints[0] != null ? ints[0] : 0;
 
         this.vanishPlayerRaw(player, power);
-        player.sendMessage(ChatColor.DARK_AQUA + "[S] " + ChatColor.AQUA + "You are now vanished with a power of " + ChatColor.DARK_AQUA + power + ChatColor.AQUA + ".");
+        player.sendMessage(ChatColor.AQUA + "[S] " + ChatColor.DARK_AQUA + "You are now vanished with a power of " + ChatColor.AQUA + power + ChatColor.DARK_AQUA + ".");
     }
 
     public void modModePlayer(Player player) {
@@ -78,7 +78,7 @@ public class PlayerManager {
 
         this.modModeRaw(player);
 
-        player.sendMessage(ChatColor.DARK_AQUA + "[S] " + ChatColor.AQUA + "You've entered mod mode.");
+        player.sendMessage(ChatColor.AQUA + "[S] " + ChatColor.DARK_AQUA + "You've entered mod mode.");
     }
 
     public void vanishPlayerRaw(Player player, int power) {
@@ -162,7 +162,7 @@ public class PlayerManager {
             CorePlugin.getInstance().getServerManager().getVanishedPlayers().remove(player);
         });
 
-        player.sendMessage(ChatColor.DARK_AQUA + "[S] " + ChatColor.AQUA + "You are no longer vanished.");
+        player.sendMessage(ChatColor.AQUA + "[S] " + ChatColor.DARK_AQUA + "You are no longer vanished.");
     }
 
     public void unModModePlayer(Player player) {
@@ -191,7 +191,7 @@ public class PlayerManager {
 
         PlayerUtil.sendAlert(player, "left mod mode");
 
-        player.sendMessage(ChatColor.DARK_AQUA + "[S] " + ChatColor.AQUA + "You are no longer in mod mode.");
+        player.sendMessage(ChatColor.AQUA + "[S] " + ChatColor.DARK_AQUA + "You are no longer in mod mode.");
     }
 
     public NetworkPlayer getPlayerFromSyncCode(String syncCode) {
@@ -265,11 +265,11 @@ public class PlayerManager {
     }
 
     public String formatChatChannel(ChatChannelType chatChannel, String player, String message, String fromServer) {
-        return Color.translate(chatChannel.getPrefix() + "&7[" + fromServer + "] " + player + "&f: &b") + message;
+        return Color.translate(chatChannel.getPrefix() + "&3[" + fromServer + "] " + player + "&f: &b") + message;
     }
 
     public void sendDisconnectFreezeMessage(Player target) {
-        this.sendToNetworkStaff("&3[S] &7[" + CorePlugin.getInstance().getServerName() + "] &b" + target.getDisplayName() + " &cdisconnected whilst being frozen.");
+        this.sendToNetworkStaff("&b[S] &3[" + CorePlugin.getInstance().getServerName() + "] &b" + target.getDisplayName() + " &cdisconnected whilst being frozen.");
     }
 
     public void sendToNetworkStaff(String... strings) {
@@ -279,7 +279,7 @@ public class PlayerManager {
     }
 
     public void sendToNetworkStaffFormatted(String s) {
-        RedisUtil.publishAsync(RedisUtil.onGlobalBroadcastPermission(Color.translate("&3[S] &7[" + CorePlugin.getInstance().getServerName() + "] " + s), "scandium.staff"));
+        RedisUtil.publishAsync(RedisUtil.onGlobalBroadcastPermission(Color.translate("&b[S] &3[" + CorePlugin.getInstance().getServerName() + "] " + s), "scandium.staff"));
     }
 
     public void sendFreezeMessage(Player player) {

@@ -122,7 +122,7 @@ public final class RedisUtil {
                 .put("MESSAGE", message)
                 .put("PLAYER", player.getDisplayName())
                 .put("SERVER", CorePlugin.getInstance().getServerName())
-                .put("UPDATETYPE", StaffUpdateType.HELPOP.getName())
+                .put("UPDATETYPE", StaffUpdateType.REQUEST.name())
                 .getAsJson();
     }
 
@@ -132,7 +132,7 @@ public final class RedisUtil {
                 .put("PLAYER", player.getDisplayName())
                 .put("TARGET", target.getDisplayName())
                 .put("SERVER", CorePlugin.getInstance().getServerName())
-                .put("UPDATETYPE", StaffUpdateType.REPORT.getName())
+                .put("UPDATETYPE", StaffUpdateType.REPORT.name())
                 .getAsJson();
     }
 
@@ -141,7 +141,7 @@ public final class RedisUtil {
                 .put("PLAYER", player.getDisplayName())
                 .put("TARGET", target.getDisplayName())
                 .put("SERVER", CorePlugin.getInstance().getServerName())
-                .put("UPDATETYPE", StaffUpdateType.FREEZE.getName())
+                .put("UPDATETYPE", StaffUpdateType.FREEZE.name())
                 .getAsJson();
     }
 
@@ -245,7 +245,7 @@ public final class RedisUtil {
                 .put("PLAYER", player.getDisplayName())
                 .put("SERVER", CorePlugin.getInstance().getServerName())
                 .put("TARGET", target.getDisplayName())
-                .put("UPDATETYPE", StaffUpdateType.UNFREEZE.getName())
+                .put("UPDATETYPE", StaffUpdateType.UNFREEZE.name())
                 .getAsJson();
     }
 

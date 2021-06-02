@@ -37,9 +37,9 @@ public class JedisSubscription extends JedisPubSub {
 
                     Logger.getGlobal().severe("Couldn't handle this packet: " + redisAction);
                 }
-            } else {
-                Logger.getGlobal().severe("Couldn't handle this packet as a handler does not exist: " + redisAction);
             }
+
+            //                Logger.getGlobal().severe("Couldn't handle this packet as a handler does not exist: " + redisAction);
         });
     }
 }

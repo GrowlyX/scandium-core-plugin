@@ -334,7 +334,7 @@ public class PlayerListener implements Listener {
         }
 
         if (LockedState.isLocked(event.getPlayer()) && !(event.getMessage().startsWith("/2fa") || event.getMessage().startsWith("/auth") || event.getMessage().startsWith("/authsetup"))) {
-            player.sendMessage(ChatColor.RED + "You cannot perform this action right now as you're auth locked.");
+            player.sendMessage(ChatColor.RED + "You cannot issue commands as you are banned.");
             player.sendMessage(ChatColor.RED + "The only action you can perform is " + ChatColor.RED + ChatColor.BOLD.toString() + "/2fa or /authsetup" + ChatColor.RED + "!");
 
             event.setCancelled(true);
@@ -346,8 +346,8 @@ public class PlayerListener implements Listener {
         }
 
         if (potPlayer.isCurrentlyRestricted() && !event.getMessage().startsWith("/discord")) {
-            player.sendMessage(ChatColor.RED + "You cannot perform this command as you're currently banned.");
-            player.sendMessage(ChatColor.RED + "The only command you can perform is " + ChatColor.RED + ChatColor.BOLD.toString() + "/discord" + ChatColor.RED + "!");
+            player.sendMessage(ChatColor.RED + "You cannot issue commands as you are banned.");
+            player.sendMessage(ChatColor.RED + "The only command you can perform is " + ChatColor.YELLOW + "/discord" + ChatColor.RED + "!");
 
             event.setCancelled(true);
             return;
@@ -427,7 +427,9 @@ public class PlayerListener implements Listener {
         });
 
         if (event.getPlayer().hasPermission("scandium.staff")) {
-            new SwitchTask(event.getPlayer().getDisplayName()).runTaskLaterAsynchronously(CorePlugin.getInstance(), 20L);
+            if (!CorePlugin.getInstance().getServerSettings().isUsingXenon()) {
+                new SwitchTask(event.getPlayer().getDisplayName()).runTaskLaterAsynchronously(CorePlugin.getInstance(), 40L);
+            }
         }
     }
 

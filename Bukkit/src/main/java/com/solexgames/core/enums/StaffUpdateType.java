@@ -1,19 +1,19 @@
 package com.solexgames.core.enums;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import org.bukkit.ChatColor;
 
-@Getter
-@RequiredArgsConstructor
 public enum StaffUpdateType {
 
-    HELPOP("&2[H] ", "HELPOP", "scandium.staff"),
-    REPORT("&c[R] ", "REPORT", "scandium.staff"),
-    FREEZE("&3[S] ", "FREEZE", "scandium.staff"),
-    UNFREEZE("&3[S] ", "UNFREEZE", "scandium.staff");
+    REQUEST,
+    REPORT,
+    FREEZE,
+    UNFREEZE;
 
-    private final String prefix;
-    private final String name;
-    private final String permission;
+    public String getPermission() {
+        return "scandium.staff";
+    }
 
+    public String getPrefix() {
+        return ChatColor.AQUA + "[S] ";
+    }
 }

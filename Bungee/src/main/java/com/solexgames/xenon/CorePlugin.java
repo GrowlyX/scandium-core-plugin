@@ -86,7 +86,7 @@ public class CorePlugin extends Plugin {
 
         this.jedisManager = new JedisBuilder()
                 .withChannel("scandium:bukkit")
-                .withSettings(new JedisSettings("", 6379, true, ""))
+                .withSettings(new JedisSettings(this.redisConfig.getString("redis.host"), this.redisConfig.getInt("redis.port"), this.redisConfig.getBoolean("redis.authentication.enabled"), this.redisConfig.getString("redis.authentication.password")))
                 .withHandler(new JedisListener())
                 .build();
 
@@ -122,7 +122,6 @@ public class CorePlugin extends Plugin {
         manager.enableUnstableAPI("help");
 
         this.getProxy().registerChannel("core:permissions");
-        this.getProxy().registerChannel("core:update");
 
         this.getProxy().getPluginManager().registerListener(this, new PlayerListener());
         this.getProxy().getPluginManager().registerListener(this, new ChannelListener());

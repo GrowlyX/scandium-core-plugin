@@ -10,6 +10,7 @@ import com.solexgames.core.board.ScoreBoard;
 import com.solexgames.core.disguise.DisguiseData;
 import com.solexgames.core.enums.ChatChannelType;
 import com.solexgames.core.enums.LanguageType;
+import com.solexgames.core.listener.PlayerListener;
 import com.solexgames.core.player.grant.Grant;
 import com.solexgames.core.player.media.Media;
 import com.solexgames.core.player.meta.MetaDataEntry;
@@ -501,7 +502,9 @@ public class PotPlayer {
         });
 
         if (this.player.hasPermission("scandium.staff") && !CorePlugin.getInstance().getPlayerManager().isOnline(this.player.getName())) {
-            Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> RedisUtil.publishAsync(RedisUtil.onConnect(this.player)), 30L);
+            if (!CorePlugin.getInstance().getServerSettings().isUsingXenon()) {
+                Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> RedisUtil.publishAsync(RedisUtil.onConnect(this.player)), 30L);
+            }
         }
 
         if (this.profile == null) {
@@ -629,7 +632,11 @@ public class PotPlayer {
 
         this.player.recalculatePermissions();
 
-        CorePlugin.getInstance().getServerManager().syncPermissions(this.player, this.bungeePermissions);
+        final String listFormatted = Color.translate(
+                (this.disguiseRank != null ? this.disguiseRank.getColor() : this.getActiveGrant().getRank().getColor()) + this.getName()
+        );
+
+        Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getServerManager().syncPermissions(this.player, listFormatted, this.bungeePermissions));
     }
 
     public void setupPlayerTag() {

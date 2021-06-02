@@ -2,6 +2,8 @@
 settings:
   network-id: "SCANDIUM"
   time-zone: "EST"
+  # Make sure to enable this if you are using Xenon for better staff join, disconnect, and switch messages.
+  using-xenon: false
 anti-spam:
   chat: true
   command: true

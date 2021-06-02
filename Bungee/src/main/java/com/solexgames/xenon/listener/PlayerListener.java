@@ -1,7 +1,10 @@
 package com.solexgames.xenon.listener;
 
 import com.solexgames.xenon.CorePlugin;
+import com.solexgames.xenon.redis.json.JsonAppender;
+import com.solexgames.xenon.redis.packet.JedisAction;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.ServerPing;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -10,6 +13,9 @@ import net.md_5.bungee.api.event.*;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 import net.md_5.bungee.event.EventPriority;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 public class PlayerListener implements Listener {
 
@@ -46,17 +52,6 @@ public class PlayerListener implements Listener {
         event.getResponse().setVersion(responseProtocol);
     }
 
-    @EventHandler
-    public void onServerConnect(ServerConnectEvent event) {
-        if ((event.getReason().equals(ServerConnectEvent.Reason.JOIN_PROXY))) {
-            ServerInfo hub = this.plugin.getBestHub();
-
-            if (hub != null && hub != event.getTarget()) {
-                event.setTarget(hub);
-            }
-        }
-    }
-
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onLogin(PreLoginEvent event) {
         if (event.getConnection().getVersion() < CorePlugin.getInstance().getMinProtocol()) {
@@ -89,6 +84,51 @@ public class PlayerListener implements Listener {
             } catch (Exception ignored) {
                 CorePlugin.getInstance().getProxy().getConsole().sendMessage((new ComponentBuilder("§cCouldn't find a hub server!")).create());
                 event.getPlayer().disconnect((new ComponentBuilder("§cCould not find a hub server to connect you to.\n&7Please contact administration if you think this is a bug.")).create());
+            }
+        }
+    }
+
+    @EventHandler
+    public void onSwitch(ServerSwitchEvent event) {
+        if (event.getPlayer().hasPermission("scandium.staff")) {
+            ProxyServer.getInstance().getScheduler().schedule(CorePlugin.getInstance(), () -> CompletableFuture.runAsync(() -> CorePlugin.getInstance().getJedisManager().publish(new JsonAppender(JedisAction.PLAYER_SERVER_SWITCH_UPDATE)
+                    .put("PLAYER", event.getPlayer().getDisplayName())
+                    .put("SERVER", event.getFrom().getName())
+                    .put("NEW_SERVER", event.getPlayer().getServer().getInfo().getName())
+                    .getAsJson())), 2L, TimeUnit.SECONDS);
+        }
+    }
+
+    @EventHandler
+    public void onServerDisconnect(ServerDisconnectEvent event) {
+        if (event.getPlayer().hasPermission("scandium.staff")) {
+            ProxyServer.getInstance().getScheduler().schedule(CorePlugin.getInstance(), () -> {
+                CompletableFuture.runAsync(() -> {
+                    if (ProxyServer.getInstance().getPlayer(event.getPlayer().getName()) == null) {
+                        CorePlugin.getInstance().getJedisManager().publish(new JsonAppender(JedisAction.PLAYER_DISCONNECT_UPDATE)
+                                .put("PLAYER", event.getPlayer().getDisplayName())
+                                .put("SERVER", event.getTarget().getName())
+                                .getAsJson());
+                    }
+                });
+            }, 1L, TimeUnit.SECONDS);
+        }
+    }
+
+    @EventHandler
+    public void onServerConnect(ServerConnectEvent event) {
+        if ((event.getReason().equals(ServerConnectEvent.Reason.JOIN_PROXY))) {
+            final ServerInfo hub = this.plugin.getBestHub();
+
+            if (hub != null && hub != event.getTarget()) {
+                event.setTarget(hub);
+            }
+
+            if (event.getPlayer().hasPermission("scandium.staff")) {
+                ProxyServer.getInstance().getScheduler().schedule(CorePlugin.getInstance(), () -> CompletableFuture.runAsync(() -> CorePlugin.getInstance().getJedisManager().publish(new JsonAppender(JedisAction.PLAYER_CONNECT_UPDATE)
+                        .put("PLAYER", event.getPlayer().getDisplayName())
+                        .put("SERVER", event.getTarget().getName())
+                        .getAsJson())), 2L, TimeUnit.SECONDS);
             }
         }
     }

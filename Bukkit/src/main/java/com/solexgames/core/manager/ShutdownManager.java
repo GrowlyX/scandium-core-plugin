@@ -19,14 +19,14 @@ public class ShutdownManager {
 
     public void initiateShutdown(int seconds, Player initiator) {
         Bukkit.broadcastMessage(Color.SECONDARY_COLOR + "The server will be shutting down in " + Color.MAIN_COLOR + seconds + " seconds" + Color.SECONDARY_COLOR + ".");
-        CorePlugin.getInstance().getPlayerManager().sendToNetworkStaff("&3[S] " + "&7[" + CorePlugin.getInstance().getServerName() + "] " + initiator.getDisplayName() + " &bhas initiated a shutdown on &6" + CorePlugin.getInstance().getServerName() + "&b.");
+        CorePlugin.getInstance().getPlayerManager().sendToNetworkStaff("&b[S] " + "&e[" + CorePlugin.getInstance().getServerName() + "] " + initiator.getDisplayName() + " &3has scheduled a shutdown on &e" + CorePlugin.getInstance().getServerName() + "&3.");
 
         this.serverShutdownTask = new ServerShutdownTask(seconds);
         this.shutdownScheduled = true;
     }
 
     public void stopShutdown(Player stopper) {
-        CorePlugin.getInstance().getPlayerManager().sendToNetworkStaff("&3[S] " + "&7[" + CorePlugin.getInstance().getServerName() + "] " + stopper.getDisplayName() + " &bhas stopped a shutdown on &6" + CorePlugin.getInstance().getServerName() + "&b.");
+        CorePlugin.getInstance().getPlayerManager().sendToNetworkStaff("&b[S] " + "&e[" + CorePlugin.getInstance().getServerName() + "] " + stopper.getDisplayName() + " &3has stopped a shutdown on &e" + CorePlugin.getInstance().getServerName() + "&3.");
         Bukkit.broadcastMessage(Color.translate(ChatColor.RED + "The scheduled server shutdown has been cancelled."));
 
         this.serverShutdownTask.cancel();
