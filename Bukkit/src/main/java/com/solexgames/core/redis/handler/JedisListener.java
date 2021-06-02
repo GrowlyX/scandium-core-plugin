@@ -349,6 +349,7 @@ public class JedisListener implements JedisHandler {
                     jsonAppender.getParam("IDENTIFICATION"),
                     true
             );
+
             final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(punishment.getTarget());
             final Document document = CorePlugin.getInstance().getPlayerManager().getDocumentByUuid(punishment.getTarget()).orElse(null);
 
@@ -385,7 +386,7 @@ public class JedisListener implements JedisHandler {
                 final String punishedName = CorePlugin.getInstance().getUuidCache().getUsernameFromUuid(finalPunishment.getTarget());
 
                 if (reason.endsWith("-s")) {
-                    PlayerUtil.sendToStaff("&7[S] " + punishedName + " &awas " + "un" + finalPunishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (removerDisplayName != null ? removerDisplayName : "Console") + ChatColor.GREEN + ".");
+                    PlayerUtil.sendToStaff("&7[Silent] " + punishedName + " &awas " + "un" + finalPunishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (removerDisplayName != null ? removerDisplayName : "Console") + ChatColor.GREEN + ".");
                 } else {
                     Bukkit.broadcastMessage(Color.translate(
                             "&7" + punishedName + " &awas un" + finalPunishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (removerDisplayName != null ? removerDisplayName : "Console") + ChatColor.GREEN + "."
@@ -401,16 +402,18 @@ public class JedisListener implements JedisHandler {
 
                     switch (finalPunishment.getPunishmentType()) {
                         case MUTE:
-                            targetPlayer.sendMessage(ChatColor.RED + "You've been unmuted by a staff member.");
+                            targetPlayer.sendMessage(ChatColor.RED + "You've been un-muted by a staff member.");
                             potPlayer.setCurrentlyMuted(false);
                             break;
                         case WARN:
                             targetPlayer.sendMessage(ChatColor.RED + "Your warning has been removed by a staff member.");
                             break;
                         case BLACKLIST:
+                            potPlayer.setCurrentlyBlacklisted(false);
                         case IP_BAN:
+                            potPlayer.setCurrentlyIpRestricted(false);
                         case BAN:
-                            targetPlayer.sendMessage(ChatColor.RED + "You've been unrestricted by a staff member.");
+                            targetPlayer.sendMessage(ChatColor.RED + "You've been unbanned by a staff member.");
                             potPlayer.setCurrentlyRestricted(false);
                             break;
                     }

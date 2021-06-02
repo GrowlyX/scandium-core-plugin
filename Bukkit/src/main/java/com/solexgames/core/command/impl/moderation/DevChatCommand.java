@@ -42,6 +42,7 @@ public class DevChatCommand extends BaseCommand {
             final String message = StringUtil.buildMessage(args, 0);
             RedisUtil.publishAsync(RedisUtil.onChatChannel(ChatChannelType.DEV, message, player));
         }
+
         return false;
     }
 }

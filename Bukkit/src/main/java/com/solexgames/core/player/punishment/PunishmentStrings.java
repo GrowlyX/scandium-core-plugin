@@ -20,21 +20,26 @@ public final class PunishmentStrings {
     public final static String BAN_MESSAGE_TEMP =
             "&cYou are &4banned &cfrom " + SERVER_NAME + " for <time>." +
                     "\n&cYou were banned for: &7<reason>" +
-                    "\n&7If you feel this ban is unjustified, fill out an appeal at " + DISCORD_LINK + "." +
+                    "\n&7If you feel this ban is unjustified, crete a ticket at " + DISCORD_LINK + "." +
                     "\n&6You may also purchase an unban at " + STORE_LINK + ".";
     public final static String BAN_MESSAGE_PERM =
             "&cYou are permanently &4banned &cfrom " + SERVER_NAME + "." +
                     "\n&cYou were &4banned&c for: &7<reason>" +
-                    "\n&7If you feel this ban is unjustified, fill out an appeal at " + DISCORD_LINK + "." +
+                    "\n&7If you feel this ban is unjustified, crete a ticket at " + DISCORD_LINK + "." +
                     "\n&6You may also purchase an unban at " + STORE_LINK + ".";
     public final static String BLACK_LIST_MESSAGE =
             "&4You are blacklisted from " + SERVER_NAME + ".&7" +
                     "\n&cYou were blacklisted for: &7<reason>" +
                     "\n&7This punishment cannot be appealed or purchased.";
+    public final static String IP_BAN_RELATION_MESSAGE =
+            "&cYour IP is permanently &4banned &cfrom " + SERVER_NAME + "." +
+                    "\n&cYour blacklist is in relation to the account: &7<player>" +
+                    "\n&7If you feel this ban is unjustified, crete a ticket at " + DISCORD_LINK + "." +
+                    "\n&6You can purchase an unban for <player> &6at " + STORE_LINK + ".";
     public final static String BLACK_LIST_RELATION_MESSAGE =
-            "&4You are blacklisted from " + SERVER_NAME + ".&7" +
-                    "\n&cYou were blacklisted for being in relation with &7<player>" +
-                    "\n&7This punishment cannot be appealed or purchased.";
+            "&cYour IP is permanently &4blacklisted &cfrom " + SERVER_NAME + "." +
+                    "\n&cYour blacklist is in relation to the account: &7<player>" +
+                    "\n&7If you feel this ban is unjustified, crete a ticket at " + DISCORD_LINK + ".";
 
     public static String MUTE_MESSAGE = ChatColor.RED + "You cannot speak as you are currently muted.";
     public static String KICK_MESSAGE = ChatColor.RED + "You were kicked for: " + ChatColor.GRAY + "<reason>";

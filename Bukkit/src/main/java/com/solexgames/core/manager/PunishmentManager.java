@@ -140,12 +140,13 @@ public class PunishmentManager {
                         break;
                     case BLACKLIST:
                         potPlayer.setCurrentlyRestricted(true);
-                        potPlayer.getPlayer().kickPlayer(Color.translate(PunishmentStrings.BLACK_LIST_MESSAGE.replace("<reason>", punishment.getReason())));
+                        this.kickWithSameIP(potPlayer.getIpAddress(), Color.translate(PunishmentStrings.BLACK_LIST_MESSAGE.replace("<reason>", punishment.getReason())));
                         break;
                     case IP_BAN:
+                        potPlayer.setCurrentlyIpRestricted(true);
                     case BAN:
                         potPlayer.setCurrentlyRestricted(true);
-                        potPlayer.getPlayer().kickPlayer((punishment.isPermanent() ? Color.translate(PunishmentStrings.BAN_MESSAGE_PERM.replace("<reason>", punishment.getReason())) : Color.translate(PunishmentStrings.BAN_MESSAGE_TEMP.replace("<reason>", punishment.getReason()).replace("<time>", punishment.getDurationString()))));
+                        this.kickWithSameIP(potPlayer.getIpAddress(), (punishment.isPermanent() ? Color.translate(PunishmentStrings.BAN_MESSAGE_PERM.replace("<reason>", punishment.getReason())) : Color.translate(PunishmentStrings.BAN_MESSAGE_TEMP.replace("<reason>", punishment.getReason()).replace("<time>", punishment.getDurationString()))));
                         break;
                     case KICK:
                         potPlayer.getPlayer().kickPlayer(Color.translate(PunishmentStrings.KICK_MESSAGE.replace("<reason>", punishment.getReason())));
@@ -228,7 +229,7 @@ public class PunishmentManager {
 
                     switch (punishment.getPunishmentType()) {
                         case MUTE:
-                            targetPlayer.sendMessage(ChatColor.RED + "You've been unmuted by a staff member.");
+                            targetPlayer.sendMessage(ChatColor.RED + "You've been un-muted by a staff member.");
                             potPlayer.setCurrentlyMuted(false);
                             break;
                         case WARN:
@@ -237,8 +238,9 @@ public class PunishmentManager {
                         case BLACKLIST:
                             potPlayer.setCurrentlyBlacklisted(false);
                         case IP_BAN:
+                            potPlayer.setCurrentlyIpRestricted(false);
                         case BAN:
-                            targetPlayer.sendMessage(ChatColor.RED + "You've been unrestricted by a staff member.");
+                            targetPlayer.sendMessage(ChatColor.RED + "You've been unbanned by a staff member.");
                             potPlayer.setCurrentlyRestricted(false);
                             break;
                     }
@@ -254,6 +256,9 @@ public class PunishmentManager {
                 case BAN:
                     field = "restricted";
                     break;
+                case IP_BAN:
+                    field = "ipbanned";
+                    break;
             }
 
             if (field != null) {
@@ -262,5 +267,11 @@ public class PunishmentManager {
                 CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("uuid", document.getString("uuid")), document, new ReplaceOptions().upsert(true));
             }
         });
+    }
+
+    public void kickWithSameIP(String ipAddress, String kickMessage) {
+        CorePlugin.getInstance().getPlayerManager().getAllProfiles().values().stream()
+                .filter(potPlayer -> potPlayer.getIpAddress().equals(ipAddress))
+                .forEach(potPlayer -> potPlayer.getPlayer().kickPlayer(kickMessage));
     }
 }

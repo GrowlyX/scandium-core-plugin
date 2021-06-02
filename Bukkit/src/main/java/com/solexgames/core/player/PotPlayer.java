@@ -10,7 +10,6 @@ import com.solexgames.core.board.ScoreBoard;
 import com.solexgames.core.disguise.DisguiseData;
 import com.solexgames.core.enums.ChatChannelType;
 import com.solexgames.core.enums.LanguageType;
-import com.solexgames.core.listener.PlayerListener;
 import com.solexgames.core.player.grant.Grant;
 import com.solexgames.core.player.media.Media;
 import com.solexgames.core.player.meta.MetaDataEntry;
@@ -104,11 +103,15 @@ public class PotPlayer {
 
     private boolean currentlyMuted;
     private boolean currentlyRestricted;
+    private boolean currentlyIpRestricted;
     private boolean currentlyBlacklisted;
     private boolean currentlyOnline;
 
     private boolean relatedToBlacklist;
     private String relatedTo;
+
+    private boolean relatedToIpBanned;
+    private String relatedToIpBannedWho;
 
     private ItemStack[] itemHistory;
     private ItemStack[] armorHistory;
@@ -132,8 +135,6 @@ public class PotPlayer {
 
     private Punishment warningPunishment;
     private Punishment restrictionPunishment;
-
-    private Rank logonRank;
 
     private Rank disguiseRank;
     private RainbowNametag rainbowNametag;
@@ -229,6 +230,7 @@ public class PotPlayer {
         document.put("experience", this.experience);
         document.put("blacklisted", this.currentlyBlacklisted);
         document.put("restricted", this.currentlyRestricted);
+        document.put("ipbanned", this.currentlyIpRestricted);
         document.put("currentlyOn", CorePlugin.getInstance().getServerName());
 
         return document;
@@ -281,6 +283,7 @@ public class PotPlayer {
                                 this.currentlyRestricted = true;
                                 break;
                             case IP_BAN:
+                                this.currentlyIpRestricted = true;
                             case BAN:
                                 this.currentlyRestricted = true;
                                 this.restrictionPunishment = punishment;
@@ -404,9 +407,8 @@ public class PotPlayer {
                         allGrants.forEach(s -> this.allGrants.add(CorePlugin.GSON.fromJson(s, Grant.class)));
                     }
 
-                    this.logonRank = this.getActiveGrant().getRank();
-
                     final String appliedPrefix = this.profile.getString("appliedPrefix");
+
                     if (appliedPrefix != null && !appliedPrefix.equals("Default")) {
                         this.appliedPrefix = Prefix.getByName(appliedPrefix);
                     }
@@ -467,12 +469,34 @@ public class PotPlayer {
                         final Document document = documentIterator.next();
 
                         if (document.getBoolean("blacklisted") != null && document.getBoolean("blacklisted") && !document.getString("name").equalsIgnoreCase(loginEvent.getName())) {
+                            this.currentlyRestricted = true;
                             this.currentlyBlacklisted = true;
                             this.relatedToBlacklist = true;
-                            this.relatedTo = document.getString("name");
+
+                            final Rank rank = Rank.getByName(document.getString("rank"));
+                            final String fancyFormat = (rank != null ? Color.translate(rank.getColor()) : ChatColor.GRAY) + document.getString("name");
+
+                            this.relatedTo = fancyFormat;
 
                             if (!hub) {
-                                loginEvent.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, Color.translate(PunishmentStrings.BLACK_LIST_RELATION_MESSAGE.replace("<player>", this.relatedTo)));
+                                loginEvent.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, Color.translate(PunishmentStrings.BLACK_LIST_RELATION_MESSAGE.replace("<player>", fancyFormat)));
+                            }
+
+                            atomicBoolean.set(true);
+                        }
+
+                        if (document.getBoolean("ipbanned") != null && document.getBoolean("ipbanned") && !document.getString("name").equalsIgnoreCase(loginEvent.getName())) {
+                            this.currentlyRestricted = true;
+                            this.currentlyIpRestricted = true;
+                            this.relatedToIpBanned = true;
+
+                            final Rank rank = Rank.getByName(document.getString("rank"));
+                            final String fancyFormat = (rank != null ? Color.translate(rank.getColor()) : ChatColor.GRAY) + document.getString("name");
+
+                            this.relatedToIpBannedWho = fancyFormat;
+
+                            if (!hub) {
+                                loginEvent.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, Color.translate(PunishmentStrings.IP_BAN_RELATION_MESSAGE.replace("<player>", fancyFormat)));
                             }
 
                             atomicBoolean.set(true);
@@ -490,11 +514,11 @@ public class PotPlayer {
         this.rainbowNametag = new RainbowNametag(this.player, CorePlugin.getInstance());
 
         CompletableFuture.runAsync(() -> {
+            this.setupPlayer();
+
             if (CorePlugin.getInstance().getServerSettings().isNameMcEnabled()) {
                 this.checkVoting();
             }
-
-            this.setupPlayer();
 
             final Property property = this.gameProfile.getProperties().get("textures").stream().findFirst().orElse(null);
 
@@ -504,10 +528,8 @@ public class PotPlayer {
             }
         });
 
-        if (this.player.hasPermission("scandium.staff") && !CorePlugin.getInstance().getPlayerManager().isOnline(this.player.getName())) {
-            if (!CorePlugin.getInstance().getServerSettings().isUsingXenon()) {
-                Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> RedisUtil.publishAsync(RedisUtil.onConnect(this.player)), 30L);
-            }
+        if (this.player.hasPermission("scandium.staff") && !CorePlugin.getInstance().getPlayerManager().isOnline(this.player.getName()) && !CorePlugin.getInstance().getServerSettings().isUsingXenon()) {
+            Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> RedisUtil.publishAsync(RedisUtil.onConnect(this.player)), 30L);
         }
 
         if (this.profile == null) {
@@ -551,6 +573,10 @@ public class PotPlayer {
     }
 
     public String getRestrictionMessage() {
+        if (this.relatedToIpBanned) {
+            return Color.translate(PunishmentStrings.IP_BAN_RELATION_MESSAGE.replace("<player>", this.relatedToIpBannedWho));
+        }
+
         if (this.relatedToBlacklist) {
             return Color.translate(PunishmentStrings.BLACK_LIST_RELATION_MESSAGE.replace("<player>", this.relatedTo));
         }
@@ -579,8 +605,10 @@ public class PotPlayer {
     }
 
     public void setupPlayer() {
-        this.resetPermissions();
-        this.setupPermissions();
+        CompletableFuture.runAsync(() -> {
+            this.resetPermissions();
+            this.setupPermissions();
+        });
 
         Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> {
             this.setupPlayerTag();
@@ -635,11 +663,7 @@ public class PotPlayer {
 
         this.player.recalculatePermissions();
 
-        final String listFormatted = Color.translate(
-                (this.disguiseRank != null ? this.disguiseRank.getColor() : this.logonRank.getColor()) + this.getName()
-        );
-
-        Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getServerManager().syncPermissions(this.player, listFormatted, this.bungeePermissions));
+        Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getServerManager().syncPermissions(this.player, this.getColorByRankColor() + this.player.getName(), this.bungeePermissions));
     }
 
     public void setupPlayerTag() {

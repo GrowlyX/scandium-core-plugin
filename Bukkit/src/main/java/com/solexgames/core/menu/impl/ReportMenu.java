@@ -20,6 +20,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -83,12 +84,12 @@ public class ReportMenu extends AbstractInventoryMenu {
                 new Report(reportType.getName(), this.player, this.target);
 
                 Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> {
-                    PotPlayer updatedPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(this.player);
+                    final PotPlayer updatedPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(this.player);
 
                     if (updatedPotPlayer != null) {
                         updatedPotPlayer.setCanReport(true);
                     }
-                }, 60 * 20L);
+                }, TimeUnit.MINUTES.toMillis(1L));
 
                 this.player.sendMessage(Color.SECONDARY_COLOR + "You've reported " + this.target.getDisplayName() + Color.SECONDARY_COLOR + " for " + Color.MAIN_COLOR + reportType.getName() + Color.SECONDARY_COLOR + "!");
             } else {

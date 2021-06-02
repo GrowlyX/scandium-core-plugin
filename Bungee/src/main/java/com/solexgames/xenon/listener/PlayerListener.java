@@ -3,6 +3,7 @@ package com.solexgames.xenon.listener;
 import com.solexgames.xenon.CorePlugin;
 import com.solexgames.xenon.redis.json.JsonAppender;
 import com.solexgames.xenon.redis.packet.JedisAction;
+import lombok.RequiredArgsConstructor;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.ServerPing;
@@ -91,11 +92,7 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onSwitch(ServerSwitchEvent event) {
         if (event.getPlayer().hasPermission("scandium.staff")) {
-            ProxyServer.getInstance().getScheduler().schedule(CorePlugin.getInstance(), () -> CompletableFuture.runAsync(() -> CorePlugin.getInstance().getJedisManager().publish(new JsonAppender(JedisAction.PLAYER_SERVER_SWITCH_UPDATE)
-                    .put("PLAYER", event.getPlayer().getDisplayName())
-                    .put("SERVER", event.getFrom().getName())
-                    .put("NEW_SERVER", event.getPlayer().getServer().getInfo().getName())
-                    .getAsJson())), 2L, TimeUnit.SECONDS);
+            ProxyServer.getInstance().getScheduler().schedule(CorePlugin.getInstance(), new SwitchRunnable(event.getPlayer().getDisplayName(), event.getPlayer().getServer().getInfo().getName(), event.getFrom().getName()), 1L, TimeUnit.SECONDS);
         }
     }
 
@@ -117,7 +114,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onServerConnect(ServerConnectEvent event) {
-        if ((event.getReason().equals(ServerConnectEvent.Reason.JOIN_PROXY))) {
+        if (event.getReason().equals(ServerConnectEvent.Reason.JOIN_PROXY)) {
             final ServerInfo hub = this.plugin.getBestHub();
 
             if (hub != null && hub != event.getTarget()) {
@@ -130,6 +127,23 @@ public class PlayerListener implements Listener {
                         .put("SERVER", event.getTarget().getName())
                         .getAsJson())), 2L, TimeUnit.SECONDS);
             }
+        }
+    }
+
+    @RequiredArgsConstructor
+    public static class SwitchRunnable implements Runnable {
+
+        private final String player;
+        private final String target;
+        private final String from;
+
+        @Override
+        public void run() {
+            CompletableFuture.runAsync(() -> CorePlugin.getInstance().getJedisManager().publish(new JsonAppender(JedisAction.PLAYER_SERVER_SWITCH_UPDATE)
+                    .put("PLAYER", this.player)
+                    .put("SERVER", this.from)
+                    .put("NEW_SERVER", this.target)
+                    .getAsJson()));
         }
     }
 }
