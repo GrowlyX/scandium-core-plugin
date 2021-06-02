@@ -133,6 +133,8 @@ public class PotPlayer {
     private Punishment warningPunishment;
     private Punishment restrictionPunishment;
 
+    private Rank logonRank;
+
     private Rank disguiseRank;
     private RainbowNametag rainbowNametag;
 
@@ -402,8 +404,9 @@ public class PotPlayer {
                         allGrants.forEach(s -> this.allGrants.add(CorePlugin.GSON.fromJson(s, Grant.class)));
                     }
 
-                    final String appliedPrefix = this.profile.getString("appliedPrefix");
+                    this.logonRank = this.getActiveGrant().getRank();
 
+                    final String appliedPrefix = this.profile.getString("appliedPrefix");
                     if (appliedPrefix != null && !appliedPrefix.equals("Default")) {
                         this.appliedPrefix = Prefix.getByName(appliedPrefix);
                     }
@@ -633,7 +636,7 @@ public class PotPlayer {
         this.player.recalculatePermissions();
 
         final String listFormatted = Color.translate(
-                (this.disguiseRank != null ? this.disguiseRank.getColor() : this.getActiveGrant().getRank().getColor()) + this.getName()
+                (this.disguiseRank != null ? this.disguiseRank.getColor() : this.logonRank.getColor()) + this.getName()
         );
 
         Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getServerManager().syncPermissions(this.player, listFormatted, this.bungeePermissions));
