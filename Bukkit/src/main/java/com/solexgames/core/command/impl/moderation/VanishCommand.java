@@ -29,13 +29,13 @@ public class VanishCommand extends BaseCommand {
         final Player player = (Player) sender;
 
         if (args.length == 0) {
-            this.toggleVanish(player, player, 0);
+            this.toggleVanish(player, 0);
         }
 
         if (args.length == 1) {
             try {
                 final int power = Integer.parseInt(args[0]);
-                this.toggleVanish(player, player, power);
+                this.toggleVanish(player, power);
 
                 return false;
             } catch (Exception ignored) { }
@@ -48,9 +48,10 @@ public class VanishCommand extends BaseCommand {
             final Player target = Bukkit.getPlayer(args[0]);
 
             if (target != null) {
-                this.toggleVanish(player, target, 0);
+                final boolean vanished = CorePlugin.getInstance().getServerManager().getVanishedPlayers().contains(target);
+                this.toggleVanish(target, 0);
 
-                player.sendMessage(ChatColor.DARK_AQUA + "[S] " + ChatColor.AQUA + "You've vanished " + target.getDisplayName() + ChatColor.AQUA + " with a power of " + ChatColor.DARK_AQUA + 0 + ChatColor.AQUA + ".");
+                player.sendMessage(ChatColor.DARK_AQUA + "[S] " + (vanished ? ChatColor.AQUA + "You've unvanished " + target.getDisplayName() + ChatColor.AQUA + "." : ChatColor.AQUA + "You've vanished " + target.getDisplayName() + ChatColor.AQUA + " with a power of " + ChatColor.DARK_AQUA + 0 + ChatColor.AQUA + "."));
             } else {
                 player.sendMessage(ChatColor.RED + "Error: That player does not exist.");
             }
@@ -67,9 +68,10 @@ public class VanishCommand extends BaseCommand {
                 final int power = Integer.parseInt(args[1]);
 
                 if (target != null) {
-                    this.toggleVanish(player, target, power);
+                    final boolean vanished = CorePlugin.getInstance().getServerManager().getVanishedPlayers().contains(target);
+                    this.toggleVanish(target, power);
 
-                    player.sendMessage(ChatColor.DARK_AQUA + "[S] " + ChatColor.AQUA + "You've vanished " + target.getDisplayName() + ChatColor.AQUA + " with a power of " + ChatColor.DARK_AQUA + power + ChatColor.AQUA + ".");
+                    player.sendMessage(ChatColor.DARK_AQUA + "[S] " + (vanished ? ChatColor.AQUA + "You've unvanished " + target.getDisplayName() + ChatColor.AQUA + "." : ChatColor.AQUA + "You've vanished " + target.getDisplayName() + ChatColor.AQUA + " with a power of " + ChatColor.DARK_AQUA + power + ChatColor.AQUA + "."));
                 } else {
                     player.sendMessage(ChatColor.RED + "Error: That player does not exist.");
                 }
@@ -81,14 +83,12 @@ public class VanishCommand extends BaseCommand {
         return false;
     }
 
-    public void toggleVanish(Player issuer, Player target, int power) {
+    public void toggleVanish(Player target, int power) {
         final PlayerManager vanishManager = CorePlugin.getInstance().getPlayerManager();
         final ServerManager serverManager = CorePlugin.getInstance().getServerManager();
 
         final boolean vanished = serverManager.getVanishedPlayers().contains(target);
         final Runnable runnable = vanished ? () -> vanishManager.unVanishPlayer(target) : () -> vanishManager.vanishPlayer(target, power);
-
-        PlayerUtil.sendAlert(issuer, vanished ? "unvanished" : "vanished" + (issuer == target ? "" : " " + target.getName()));
 
         runnable.run();
     }

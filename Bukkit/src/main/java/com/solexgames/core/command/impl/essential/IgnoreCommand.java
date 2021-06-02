@@ -6,6 +6,7 @@ import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
+import com.solexgames.core.util.builder.PageListBuilder;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -46,7 +47,7 @@ public class IgnoreCommand extends BaseCommand {
 
             switch (label.toLowerCase()) {
                 case "unignore":
-                    if (!potPlayer.getName().equalsIgnoreCase(value)) {
+                    if (potPlayer.getName().equalsIgnoreCase(value)) {
                         player.sendMessage(ChatColor.RED + ("You cannot remove yourself from your ignore list!"));
                         return false;
                     }
@@ -67,10 +68,9 @@ public class IgnoreCommand extends BaseCommand {
                             return false;
                         }
 
-                        player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
-                        player.sendMessage(Color.translate(Color.MAIN_COLOR + ChatColor.BOLD.toString() + "Currently Ignoring:"));
-                        potPlayer.getAllIgnoring().forEach(s -> player.sendMessage(Color.translate(" &7* &e" + s)));
-                        player.sendMessage(Color.translate("&7&m" + StringUtils.repeat("-", 53)));
+                        final PageListBuilder listBuilder = new PageListBuilder(50, "Ignored players");
+
+                        listBuilder.display(sender, 1, potPlayer.getAllIgnoring());
                     } else {
                         if (potPlayer.getName().equalsIgnoreCase(value)) {
                             player.sendMessage(ChatColor.RED + ("You cannot add yourself to your ignore list!"));
