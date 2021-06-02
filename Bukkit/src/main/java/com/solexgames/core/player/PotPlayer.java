@@ -14,6 +14,7 @@ import com.solexgames.core.player.grant.Grant;
 import com.solexgames.core.player.media.Media;
 import com.solexgames.core.player.meta.MetaDataEntry;
 import com.solexgames.core.player.meta.MetaDataValue;
+import com.solexgames.core.player.notes.Note;
 import com.solexgames.core.player.prefixes.Prefix;
 import com.solexgames.core.player.punishment.Punishment;
 import com.solexgames.core.player.punishment.PunishmentStrings;
@@ -44,6 +45,7 @@ public class PotPlayer {
 
     private List<Punishment> punishments = new ArrayList<>();
     private List<Grant> allGrants = new ArrayList<>();
+    private List<Note> allNotes = new ArrayList<>();
     private List<String> allPrefixes = new ArrayList<>();
     private List<String> allIgnoring = new ArrayList<>();
     private List<String> userPermissions = new ArrayList<>();

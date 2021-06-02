@@ -63,93 +63,45 @@ public class PlayerManager {
         }
     }
 
-    public void vanishPlayer(Player player) {
-        final PotPlayer vanishedPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+    public void vanishPlayer(Player player, Integer... ints) {
+        final int power = ints[0] != null ? ints[0] : 0;
 
-        Bukkit.getOnlinePlayers()
-                .stream()
-                .filter(player1 -> player1 != player)
-                .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
-                .filter(Objects::nonNull)
-                .filter(potPlayer -> potPlayer.getActiveGrant().getRank().getWeight() < vanishedPotPlayer.getActiveGrant().getRank().getWeight())
-                .forEach(potPlayer -> potPlayer.getPlayer().hidePlayer(player));
-
-        CompletableFuture.runAsync(() -> {
-            CorePlugin.getInstance().getNMS().removeExecute(player);
-            CorePlugin.getInstance().getServerManager().getVanishedPlayers().add(player);
-
-            vanishedPotPlayer.setupPlayerTag();
-            vanishedPotPlayer.setupPlayerList();
-        });
-
-        vanishedPotPlayer.setVanished(true);
-
-        player.sendMessage(Color.SECONDARY_COLOR + "You are now vanished to all online players with a priority less than " + Color.MAIN_COLOR + vanishedPotPlayer.getActiveGrant().getRank().getWeight() + Color.SECONDARY_COLOR + ".");
-    }
-
-    public void vanishPlayerRaw(Player player) {
-        final PotPlayer vanishedPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-
-        Bukkit.getOnlinePlayers()
-                .stream()
-                .filter(player1 -> player1 != player)
-                .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
-                .filter(Objects::nonNull)
-                .filter(potPlayer -> potPlayer.getActiveGrant().getRank().getWeight() < vanishedPotPlayer.getActiveGrant().getRank().getWeight())
-                .forEach(potPlayer -> potPlayer.getPlayer().hidePlayer(player));
-
-        CompletableFuture.runAsync(() -> {
-            CorePlugin.getInstance().getNMS().removeExecute(player);
-            CorePlugin.getInstance().getServerManager().getVanishedPlayers().add(player);
-
-            vanishedPotPlayer.setupPlayerTag();
-            vanishedPotPlayer.setupPlayerList();
-        });
-
-        vanishedPotPlayer.setVanished(true);
+        this.vanishPlayerRaw(player, power);
+        player.sendMessage(ChatColor.DARK_AQUA + "[S] " + ChatColor.AQUA + "You are now vanished with a power of " + ChatColor.DARK_AQUA + power + ChatColor.AQUA + ".");
     }
 
     public void modModePlayer(Player player) {
+        this.modModeRaw(player);
+
+        player.sendMessage(ChatColor.DARK_AQUA + "[S] " + ChatColor.AQUA + "You've entered mod mode.");
+    }
+
+    public void vanishPlayerRaw(Player player, int power) {
+        final PotPlayer vanishedPotPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+
+        Bukkit.getOnlinePlayers().stream()
+                .filter(player1 -> player1 != player)
+                .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
+                .filter(potPlayer -> potPlayer != null && potPlayer.getActiveGrant().getRank().getWeight() < power)
+                .forEach(potPlayer -> potPlayer.getPlayer().hidePlayer(player));
+
+        CompletableFuture.runAsync(() -> {
+            CorePlugin.getInstance().getNMS().removeExecute(player);
+            CorePlugin.getInstance().getServerManager().getVanishedPlayers().add(player);
+
+            vanishedPotPlayer.setupPlayerTag();
+            vanishedPotPlayer.setupPlayerList();
+        });
+
+        vanishedPotPlayer.setVanished(true);
+    }
+
+    public void modModeRaw(Player player) {
         if (CorePlugin.getInstance().getServerName().contains("hub")) {
             player.sendMessage(ChatColor.RED + "You cannot mod mode in hubs.");
             return;
         }
 
-        final ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
-        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-
-        potPlayer.setStaffMode(true);
-        potPlayer.setArmorHistory(player.getInventory().getArmorContents());
-        potPlayer.setItemHistory(player.getInventory().getContents());
-        potPlayer.setPreviousBoard(player.getScoreboard());
-
-        final ModModeBoard modModeBoard = new ModModeBoard(player);
-        potPlayer.setModModeBoard(modModeBoard);
-
-        player.getInventory().clear();
-
-        player.getInventory().setItem(0, new ItemBuilder(XMaterial.COMPASS.parseMaterial()).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + "Push Forward").create());
-        player.getInventory().setItem(1, new ItemBuilder(XMaterial.SKELETON_SKULL.parseMaterial(), 1).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + "Online Staff").create());
-        player.getInventory().setItem(2, new ItemBuilder(XMaterial.NETHER_STAR.parseMaterial()).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + "Random Player").create());
-
-        player.getInventory().setItem(6, new ItemBuilder(XMaterial.BOOK.parseMaterial()).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + "Inspect Player").create());
-        player.getInventory().setItem(7, new ItemBuilder(XMaterial.PACKED_ICE.parseMaterial()).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + "Freeze Player").create());
-        player.getInventory().setItem(8, new ItemBuilder(XMaterial.INK_SAC.parseMaterial(), (potPlayer.isVanished() ? 10 : 8)).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + (potPlayer.isVanished() ? "Disable Vanish" : "Enable Vanish")).create());
-
-        player.updateInventory();
-
-        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 1000000, 3));
-
-        player.sendMessage(Color.SECONDARY_COLOR + "You've entered moderation mode!");
-
-        PlayerUtil.sendAlert(player, "modmoded");
-
-        if (CorePlugin.getInstance().getClientHook() != null) {
-            CorePlugin.getInstance().getClientHook().enableStaffModules(player);
-        }
-    }
-
-    public void modModeRaw(Player player) {
         final ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
         final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
@@ -193,6 +145,26 @@ public class PlayerManager {
         }
     }
 
+    public void unVanishPlayer(Player player) {
+        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+
+        Bukkit.getOnlinePlayers()
+                .stream()
+                .filter(player1 -> player1 != player)
+                .forEach(p -> p.showPlayer(player));
+
+        CompletableFuture.runAsync(() -> {
+            CorePlugin.getInstance().getNMS().addExecute(player);
+
+            potPlayer.setVanished(false);
+            potPlayer.setupPlayerTag();
+
+            CorePlugin.getInstance().getServerManager().getVanishedPlayers().remove(player);
+        });
+
+        player.sendMessage(ChatColor.DARK_AQUA + "[S] " + ChatColor.AQUA + "You are no longer vanished.");
+    }
+
     public void unModModePlayer(Player player) {
         final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
@@ -206,20 +178,20 @@ public class PlayerManager {
         potPlayer.setModModeBoard(null);
 
         player.setScoreboard(potPlayer.getPreviousBoard());
-        player.sendMessage(Color.translate(ChatColor.RED + "You've exited moderation mode."));
-
         player.setAllowFlight(false);
         player.setFlying(false);
 
         potPlayer.setPreviousBoard(null);
-
-        PlayerUtil.sendAlert(player, "unmodmoded");
 
         player.removePotionEffect(PotionEffectType.SPEED);
 
         if (CorePlugin.getInstance().getClientHook() != null) {
             CorePlugin.getInstance().getClientHook().disableStaffModules(player);
         }
+
+        PlayerUtil.sendAlert(player, "left mod mode");
+
+        player.sendMessage(ChatColor.DARK_AQUA + "[S] " + ChatColor.AQUA + "You are no longer in mod mode.");
     }
 
     public NetworkPlayer getPlayerFromSyncCode(String syncCode) {
@@ -249,26 +221,6 @@ public class PlayerManager {
                 return document;
             }
         });
-    }
-
-    public void unVanishPlayer(Player player) {
-        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-
-        Bukkit.getOnlinePlayers()
-                .stream()
-                .filter(player1 -> player1 != player)
-                .forEach(p -> p.showPlayer(player));
-
-        CompletableFuture.runAsync(() -> {
-            CorePlugin.getInstance().getNMS().addExecute(player);
-
-            potPlayer.setVanished(false);
-            potPlayer.setupPlayerTag();
-
-            CorePlugin.getInstance().getServerManager().getVanishedPlayers().remove(player);
-        });
-
-        player.sendMessage(ChatColor.GREEN + Color.translate("You are now visible to all online players."));
     }
 
     public void handleGrant(Grant grant, Document document, Player issuer, String issuedServer, boolean raw) {
@@ -317,7 +269,7 @@ public class PlayerManager {
     }
 
     public void sendDisconnectFreezeMessage(Player target) {
-        this.sendToNetworkStaff("&3[S] &7[" + CorePlugin.getInstance().getServerName() + "] &b" + target.getDisplayName() + " &cdisconnected whilst being frozen!");
+        this.sendToNetworkStaff("&3[S] &7[" + CorePlugin.getInstance().getServerName() + "] &b" + target.getDisplayName() + " &cdisconnected whilst being frozen.");
     }
 
     public void sendToNetworkStaff(String... strings) {
@@ -382,6 +334,6 @@ public class PlayerManager {
     }
 
     public String formatBroadcast(String message) {
-        return Color.translate("&8[&4Alert&8] &f" + message);
+        return ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + "Alert" + ChatColor.DARK_GRAY + "]" + ChatColor.RESET + " " + message;
     }
 }

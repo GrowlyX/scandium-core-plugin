@@ -27,21 +27,19 @@ public class VanishCommand extends BaseCommand {
         }
 
         final Player player = (Player) sender;
-        final PlayerManager vanishManager = CorePlugin.getInstance().getPlayerManager();
-        final ServerManager manager = CorePlugin.getInstance().getServerManager();
 
         if (args.length == 0) {
-            if (manager.getVanishedPlayers().contains(player)) {
-                vanishManager.unVanishPlayer(player);
-
-                PlayerUtil.sendAlert(player, "unvanished");
-            } else {
-                vanishManager.vanishPlayer(player);
-
-                PlayerUtil.sendAlert(player, "vanished");
-            }
+            this.toggleVanish(player, player, 0);
         }
+
         if (args.length == 1) {
+            try {
+                final int power = Integer.parseInt(args[0]);
+                this.toggleVanish(player, player, power);
+
+                return false;
+            } catch (Exception ignored) { }
+
             if (!player.hasPermission("scandium.command.vanish.other")) {
                 player.sendMessage(NO_PERMISSION);
                 return false;
@@ -50,22 +48,48 @@ public class VanishCommand extends BaseCommand {
             final Player target = Bukkit.getPlayer(args[0]);
 
             if (target != null) {
-                if (manager.getVanishedPlayers().contains(target)) {
-                    vanishManager.unVanishPlayer(target);
-                    player.sendMessage(ChatColor.GREEN + Color.translate("Unvanished " + target.getName() + "."));
+                this.toggleVanish(player, target, 0);
 
-                    PlayerUtil.sendAlert(player, "unvanished " + target.getName());
-                } else {
-                    vanishManager.vanishPlayer(target);
-                    player.sendMessage(ChatColor.GREEN + Color.translate("Vanished " + target.getName() + "."));
-
-                    PlayerUtil.sendAlert(player, "vanished " + target.getName());
-                }
+                player.sendMessage(ChatColor.DARK_AQUA + "[S] " + ChatColor.AQUA + "You've vanished " + target.getDisplayName() + ChatColor.AQUA + " with a power of " + ChatColor.DARK_AQUA + 0 + ChatColor.AQUA + ".");
             } else {
                 player.sendMessage(ChatColor.RED + "Error: That player does not exist.");
             }
         }
 
+        if (args.length == 2) {
+            if (!player.hasPermission("scandium.command.vanish.other")) {
+                player.sendMessage(NO_PERMISSION);
+                return false;
+            }
+
+            try {
+                final Player target = Bukkit.getPlayer(args[0]);
+                final int power = Integer.parseInt(args[1]);
+
+                if (target != null) {
+                    this.toggleVanish(player, target, power);
+
+                    player.sendMessage(ChatColor.DARK_AQUA + "[S] " + ChatColor.AQUA + "You've vanished " + target.getDisplayName() + ChatColor.AQUA + " with a power of " + ChatColor.DARK_AQUA + power + ChatColor.AQUA + ".");
+                } else {
+                    player.sendMessage(ChatColor.RED + "Error: That player does not exist.");
+                }
+            } catch (Exception ignored) {
+                player.sendMessage(ChatColor.RED + "Error: That's not a valid integer (power).");
+            }
+        }
+
         return false;
+    }
+
+    public void toggleVanish(Player issuer, Player target, int power) {
+        final PlayerManager vanishManager = CorePlugin.getInstance().getPlayerManager();
+        final ServerManager serverManager = CorePlugin.getInstance().getServerManager();
+
+        final boolean vanished = serverManager.getVanishedPlayers().contains(target);
+        final Runnable runnable = vanished ? () -> vanishManager.unVanishPlayer(target) : () -> vanishManager.vanishPlayer(target, power);
+
+        PlayerUtil.sendAlert(issuer, vanished ? "unvanished" : "vanished" + (issuer == target ? "" : " " + target.getName()));
+
+        runnable.run();
     }
 }

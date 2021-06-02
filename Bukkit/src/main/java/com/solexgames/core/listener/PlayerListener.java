@@ -162,7 +162,7 @@ public class PlayerListener implements Listener {
         if (potPlayer.isAutoVanish()) {
             event.getPlayer().sendMessage(CorePlugin.getInstance().getServerManager().getAutomaticallyPutInto().replace("<value>", "vanish"));
 
-            Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getPlayerManager().vanishPlayerRaw(event.getPlayer()), 7L);
+            Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getPlayerManager().vanishPlayerRaw(event.getPlayer(), 0), 7L);
         }
     }
 

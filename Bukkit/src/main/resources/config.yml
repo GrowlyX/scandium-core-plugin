@@ -19,7 +19,7 @@ name-mc:
 tablist:
   enabled: true
   header: "&7Hey there, welcome to our server."
-  footer: "&ePurchase rankjs and more on our store!"
+  footer: "&ePurchase ranks and more on our store!"
 two-factor-auth:
   enabled: true
 server:
@@ -68,6 +68,7 @@ on-join:
     message:
       - "Hey!"
 language:
+  staff-prefix: "&b&lStaff &7» "
   automatic-string: "&eYou've been automatically put into &6<value>&e."
   load-error: "&cAn error occurred while trying to load your data.<nl>&cPlease try again later or contact a staff member."
   server-not-loaded: "&cThe server you've tried to connect to has not loaded.<nl>&cPlease try again in a few seconds or contact staff."
