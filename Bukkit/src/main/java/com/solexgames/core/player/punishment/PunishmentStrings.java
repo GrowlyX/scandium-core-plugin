@@ -33,7 +33,7 @@ public final class PunishmentStrings {
                     "\n&7This punishment cannot be appealed or purchased.";
     public final static String IP_BAN_RELATION_MESSAGE =
             "&cYour IP is permanently &4banned &cfrom " + SERVER_NAME + "." +
-                    "\n&cYour blacklist is in relation to the account: &7<player>" +
+                    "\n&cYour ban is in relation to the account: &7<player>" +
                     "\n&7If you feel this ban is unjustified, crete a ticket at " + DISCORD_LINK + "." +
                     "\n&6You can purchase an unban for <player> &6at " + STORE_LINK + ".";
     public final static String BLACK_LIST_RELATION_MESSAGE =

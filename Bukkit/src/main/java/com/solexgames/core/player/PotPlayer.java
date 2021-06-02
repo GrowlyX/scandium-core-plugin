@@ -465,7 +465,7 @@ public class PotPlayer {
 
         CompletableFuture.supplyAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().find(Filters.eq("previousIpAddress", this.encryptedIpAddress)).iterator())
                 .thenAcceptAsync(documentIterator -> {
-                    if (documentIterator.hasNext()) {
+                    while (documentIterator.hasNext() && !atomicBoolean.get()) {
                         final Document document = documentIterator.next();
 
                         if (document.getBoolean("blacklisted") != null && document.getBoolean("blacklisted") && !document.getString("name").equalsIgnoreCase(loginEvent.getName())) {
@@ -485,7 +485,7 @@ public class PotPlayer {
                             atomicBoolean.set(true);
                         }
 
-                        if (document.getBoolean("ipbanned") != null && document.getBoolean("ipbanned") && !document.getString("name").equalsIgnoreCase(loginEvent.getName())) {
+                        if (document.getBoolean("restricted") != null && document.getBoolean("restricted") && !document.getString("name").equalsIgnoreCase(loginEvent.getName())) {
                             this.currentlyRestricted = true;
                             this.currentlyIpRestricted = true;
                             this.relatedToIpBanned = true;
