@@ -21,7 +21,7 @@ import com.solexgames.core.player.punishment.PunishmentStrings;
 import com.solexgames.lib.commons.redis.JedisBuilder;
 import com.solexgames.lib.commons.redis.JedisManager;
 import com.solexgames.lib.commons.redis.JedisSettings;
-import com.solexgames.core.redis.handler.JedisListener;
+import com.solexgames.core.redis.JedisAdapter;
 import com.solexgames.core.serializer.DataLibrary;
 import com.solexgames.core.serializer.impl.ItemStackSerializer;
 import com.solexgames.core.serializer.impl.LocationSerializer;
@@ -179,7 +179,7 @@ public final class CorePlugin extends JavaPlugin {
         this.jedisManager = new JedisBuilder()
                 .withChannel("scandium:bukkit")
                 .withSettings(this.defaultJedisSettings)
-                .withHandler(new JedisListener())
+                .withHandler(new JedisAdapter())
                 .build();
 
         this.setupExtra();

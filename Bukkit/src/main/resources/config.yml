@@ -2,6 +2,8 @@
 settings:
   network-id: "SCANDIUM"
   time-zone: "EST"
+  # Enable this if you're using Xenon BungeeCore for better staff join messages and bungee permissions
+  using-xenon: false
 anti-spam:
   chat: true
   command: true

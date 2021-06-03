@@ -1,4 +1,4 @@
-package com.solexgames.core.redis.handler;
+package com.solexgames.core.redis;
 
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.disguise.DisguiseData;
@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.UUID;
 
 @SuppressWarnings("unused")
-public class JedisListener implements JedisHandler {
+public class JedisAdapter implements JedisHandler {
 
     @Subscription(action = "PREFIX_SETTINGS_UPDATE")
     public void onPrefixSettingsUpdate(JsonAppender jsonAppender) {

@@ -334,10 +334,11 @@ public class PlayerListener implements Listener {
         }
 
         if (LockedState.isLocked(event.getPlayer()) && !(event.getMessage().startsWith("/2fa") || event.getMessage().startsWith("/auth") || event.getMessage().startsWith("/authsetup"))) {
-            player.sendMessage(ChatColor.RED + "You cannot issue commands as you are banned.");
-            player.sendMessage(ChatColor.RED + "The only action you can perform is " + ChatColor.RED + ChatColor.BOLD.toString() + "/2fa or /authsetup" + ChatColor.RED + "!");
+            player.sendMessage(ChatColor.RED + "You cannot issue commands as you haven't authenticated.");
+            player.sendMessage(ChatColor.RED + "The only command you can perform is " + ChatColor.RED + ChatColor.BOLD.toString() + "/2fa or /authsetup" + ChatColor.RED + "!");
 
             event.setCancelled(true);
+            return;
         }
 
         if (potPlayer.isFrozen()) {
@@ -357,6 +358,7 @@ public class PlayerListener implements Listener {
             player.sendMessage(ChatColor.RED + "You cannot execute commands with semi-colons.");
 
             event.setCancelled(true);
+            return;
         }
 
         final long commandCoolDown = 20L;

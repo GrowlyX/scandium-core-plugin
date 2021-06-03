@@ -21,7 +21,8 @@ public enum ServerType {
     CURSEDMC("CursedMC", ChatColor.DARK_RED, ChatColor.RED, "https://discord.gg/TVcHvykG", "CursedMCRip", "https://store.cursedmc.rip/", "cursedmc.rip"),
     TWISTMC("TwistMC", ChatColor.LIGHT_PURPLE, ChatColor.GREEN, "https://discord.gg/6E9q4VgKPz", "TwistBedWars", "https://store.twistmc.net/", "play.twistmc.net"),
     INVISPVP("InvisPvP", ChatColor.GOLD, ChatColor.GRAY, "https://discord.invispvp.com", "InvisPvP", "https://store.invispvp.com/", "invispvp.com"),
-    KRYPTIK("Kryptik", ChatColor.DARK_PURPLE, ChatColor.WHITE, "https://discord.gg/Q55aKR4kyZ ", "KryptikNetwork", "https://store.kryptikpvp.com", "kryptikpvp.com"),
+    KRYPTIK("Kryptik", ChatColor.DARK_PURPLE, ChatColor.WHITE, "https://discord.gg/Q55aKR4kyZ", "KryptikNetwork", "https://store.kryptikpvp.com", "kryptikpvp.com"),
+    FAKEMEN("FakemenClub", ChatColor.DARK_PURPLE, ChatColor.LIGHT_PURPLE, "https://discord.gg/fakemen", "FakemenNetwork", "https://store.fakemen.club/", "fakemen.club"),
     ;
 
     private final String serverName;

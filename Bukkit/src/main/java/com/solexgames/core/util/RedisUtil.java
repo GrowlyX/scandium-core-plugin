@@ -9,7 +9,7 @@ import com.solexgames.core.player.prefixes.Prefix;
 import com.solexgames.core.player.punishment.Punishment;
 import com.solexgames.core.player.punishment.PunishmentType;
 import com.solexgames.core.player.ranks.Rank;
-import com.solexgames.lib.commons.redis.packet.JedisAction;
+import com.solexgames.core.redis.JedisAction;
 import com.solexgames.lib.commons.redis.json.JsonAppender;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
