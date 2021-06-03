@@ -229,8 +229,8 @@ public class PotPlayer {
         document.put("previousIpAddress", this.encryptedIpAddress);
         document.put("experience", this.experience);
         document.put("blacklisted", this.currentlyBlacklisted);
-        document.put("restricted", this.currentlyRestricted);
-        document.put("ipbanned", this.currentlyIpRestricted);
+        document.put("restricted", this.relatedTo != null && this.currentlyRestricted);
+        document.put("ipbanned", this.relatedToIpBannedWho != null && this.currentlyRestricted);
         document.put("currentlyOn", CorePlugin.getInstance().getServerName());
 
         return document;
@@ -470,7 +470,6 @@ public class PotPlayer {
 
                         if (document.getBoolean("blacklisted") != null && document.getBoolean("blacklisted") && !document.getString("name").equalsIgnoreCase(loginEvent.getName())) {
                             this.currentlyRestricted = true;
-                            this.currentlyBlacklisted = true;
                             this.relatedToBlacklist = true;
 
                             final Rank rank = Rank.getByName(document.getString("rank"));
@@ -487,7 +486,6 @@ public class PotPlayer {
 
                         if (document.getBoolean("restricted") != null && document.getBoolean("restricted") && !document.getString("name").equalsIgnoreCase(loginEvent.getName())) {
                             this.currentlyRestricted = true;
-                            this.currentlyIpRestricted = true;
                             this.relatedToIpBanned = true;
 
                             final Rank rank = Rank.getByName(document.getString("rank"));

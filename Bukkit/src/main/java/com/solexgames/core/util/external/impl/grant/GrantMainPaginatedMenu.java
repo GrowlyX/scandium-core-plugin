@@ -50,7 +50,7 @@ public class GrantMainPaginatedMenu extends PaginatedMenu {
         final AtomicInteger i = new AtomicInteger();
         final  ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
 
-        CorePlugin.getInstance().getRankManager().getSortedRanks().forEach(rank -> buttons.put(i.getAndIncrement(), new Button() {
+        CorePlugin.getInstance().getRankManager().getSortedRanksFromTop().forEach(rank -> buttons.put(i.getAndIncrement(), new Button() {
             @Override
             public ItemStack getButtonItem(Player player) {
                 return new ItemBuilder(XMaterial.RED_WOOL.parseMaterial(), ((rank.getColor() != null) ? (ChatColor.getByChar(Color.translate(rank.getColor().replace("&", "").replace("§", ""))) != null) ? WoolUtil.getByColor(ChatColor.getByChar(Color.translate(rank.getColor().replace("&", "").replace("§", "")))) : 0 : 0))

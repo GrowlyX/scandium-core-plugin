@@ -77,7 +77,7 @@ public class RankEditorMainMenu extends PaginatedMenu {
         final HashMap<Integer, Button> buttons = new HashMap<>();
         final AtomicInteger i = new AtomicInteger(0);
 
-        CorePlugin.getInstance().getRankManager().getSortedRanks().forEach(rank -> buttons.put(i.getAndIncrement(), new RankButton(rank)));
+        CorePlugin.getInstance().getRankManager().getSortedRanksFromTop().forEach(rank -> buttons.put(i.getAndIncrement(), new RankButton(rank)));
 
         return buttons;
     }

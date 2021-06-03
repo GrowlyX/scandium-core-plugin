@@ -71,12 +71,18 @@ public class RankManager {
     }
 
     public void saveRanks() {
-        this.getSortedRanks().forEach(Rank::saveMainThread);
+        this.ranks.forEach(Rank::saveMainThread);
     }
 
     public List<Rank> getSortedRanks() {
         return this.ranks.stream()
                 .sorted(Comparator.comparingInt(Rank::getWeight))
+                .collect(Collectors.toList());
+    }
+
+    public List<Rank> getSortedRanksFromTop() {
+        return this.ranks.stream()
+                .sorted(Comparator.comparingInt(rank -> -rank.getWeight()))
                 .collect(Collectors.toList());
     }
 }

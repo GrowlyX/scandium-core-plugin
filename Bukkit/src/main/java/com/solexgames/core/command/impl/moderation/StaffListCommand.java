@@ -25,7 +25,7 @@ public class StaffListCommand extends BaseCommand {
 
     @Override
     public boolean command(CommandSender sender, String label, String[] args) {
-        final List<Rank> ranksWithStaffPermissions = CorePlugin.getInstance().getRankManager().getSortedRanks().stream()
+        final List<Rank> ranksWithStaffPermissions = CorePlugin.getInstance().getRankManager().getSortedRanksFromTop().stream()
                 .filter(rank -> rank.getPermissions().contains("scandium.staff"))
                 .collect(Collectors.toList());
 

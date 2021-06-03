@@ -27,7 +27,7 @@ public class MuteChatCommand extends BaseCommand {
         final String broadcast = silent ? ChatColor.RED + "The chat has been " + (serverManager.isChatEnabled() ? "enabled" : "disabled") + " by " + ChatColor.BOLD + "Staff" + ChatColor.RED + "." : ChatColor.GREEN + "The chat has been " + (serverManager.isChatEnabled() ? "enabled" : "disabled") + " by " + displayName + ".";
 
         Bukkit.broadcastMessage(broadcast);
-        CorePlugin.getInstance().getPlayerManager().sendToNetworkStaffFormatted(displayName + ChatColor.AQUA + " has " + (serverManager.isChatEnabled() ? ChatColor.GREEN + "enabled" : ChatColor.RED + "disabled") + ChatColor.AQUA + " chat.");
+        CorePlugin.getInstance().getPlayerManager().sendToNetworkStaffFormatted(displayName + ChatColor.DARK_AQUA + " has " + (serverManager.isChatEnabled() ? ChatColor.GREEN + "enabled" : ChatColor.RED + "disabled") + ChatColor.DARK_AQUA + " chat.");
 
         return false;
     }
