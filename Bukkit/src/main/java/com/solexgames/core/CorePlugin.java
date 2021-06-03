@@ -188,6 +188,7 @@ public final class CorePlugin extends JavaPlugin {
         new ServerLoadingTask();
 
         this.getServer().getMessenger().registerOutgoingPluginChannel(this, "core:permissions");
+        this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
     }
 
     private void disableLoggers() {
