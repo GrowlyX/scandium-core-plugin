@@ -41,7 +41,11 @@ public class GrantMainPaginatedMenu extends PaginatedMenu {
 
     @Override
     public String getPrePaginatedTitle(Player player) {
-        return "Grant for: " + (Bukkit.getPlayer(document.getString("name")) != null ? Bukkit.getPlayer(document.getString("name")).getDisplayName() : document.getString("name"));
+        final Rank rank = Rank.getByName(document.getString("rank"));
+        final String formatted = rank == null ? ChatColor.GRAY.toString() : rank.getColor();
+        final String name = formatted + document.getString("name");
+
+        return "Grant for: " + (Bukkit.getPlayer(document.getString("name")) != null ? Bukkit.getPlayer(document.getString("name")).getDisplayName() : name);
     }
 
     @Override

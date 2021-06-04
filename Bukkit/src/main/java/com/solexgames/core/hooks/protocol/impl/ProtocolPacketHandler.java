@@ -21,7 +21,6 @@ public class ProtocolPacketHandler extends AbstractPacketHandler {
 
     protected PacketAdapter adapter;
     protected PacketAdapter sendAdapter;
-    protected PacketAdapter outPlay;
 
     protected String[] returnString;
     protected boolean returnEnabled;

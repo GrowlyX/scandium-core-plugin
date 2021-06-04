@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import com.solexgames.xenon.command.*;
 import com.solexgames.xenon.listener.ChannelListener;
 import com.solexgames.xenon.listener.PlayerListener;
+import com.solexgames.xenon.manager.NetworkPlayerManager;
 import com.solexgames.xenon.proxy.ProxyManager;
 import com.solexgames.xenon.redis.JedisBuilder;
 import com.solexgames.xenon.redis.JedisManager;
@@ -61,6 +62,7 @@ public class CorePlugin extends Plugin {
     private File redisConfigFile;
 
     private JedisManager jedisManager;
+    private NetworkPlayerManager networkPlayerManager;
 
     private boolean maintenance;
 
@@ -95,6 +97,8 @@ public class CorePlugin extends Plugin {
         this.minProtocol = this.configuration.getInt("minimum-protocol");
         this.minVersion = this.configuration.getString("minimum-version");
 
+        this.networkPlayerManager = new NetworkPlayerManager();
+
         this.whitelistedPlayers.addAll(this.configuration.getStringList("whitelistedPlayers"));
 
         this.maintenanceMotd = Color.translate(MOTDUtil.getCenteredMotd(this.configuration.getString("motd.maintenance.line-1")) + "<nl>" + MOTDUtil.getCenteredMotd(this.configuration.getString("motd.maintenance.line-2")))
@@ -128,25 +132,27 @@ public class CorePlugin extends Plugin {
     }
 
     private void createConfig() {
-        if (!new File("Xenon").exists())
+        if (!new File("Xenon").exists()) {
             new File("Xenon").mkdir();
-        File file = new File("Xenon", "settings.yml");
+        }
+
+        final File file = new File("Xenon", "settings.yml");
+
         if (!file.exists()) {
             try (InputStream in = getResourceAsStream("config.yml")) {
                 Files.copy(in, file.toPath());
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException exception) {
+                exception.printStackTrace();
             }
         }
 
-        if (!new File("Xenon").exists())
-            new File("Xenon").mkdir();
-        File newFile = new File("Xenon", "data.yml");
+        final File newFile = new File("Xenon", "data.yml");
+
         if (!newFile.exists()) {
             try (InputStream in = getResourceAsStream("data.yml")) {
                 Files.copy(in, newFile.toPath());
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException exception) {
+                exception.printStackTrace();
             }
         }
     }

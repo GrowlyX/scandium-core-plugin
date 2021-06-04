@@ -63,8 +63,7 @@ public abstract class BaseCommand extends Command {
             declaredField.setAccessible(true);
             declaredField.set(this, command.label());
         } catch (Exception exception) {
-            System.out.println("Error: " + exception.getMessage());
-            System.out.println("Error: " + exception.getClass().getName());
+            return;
         }
 
         this.setAliases(Arrays.asList(command.aliases().clone()));
@@ -90,7 +89,16 @@ public abstract class BaseCommand extends Command {
 
         this.setPermission(this.permissionNode);
         this.setLabel(command.label());
-        this.setName(command.label());
+
+        try {
+            final Field declaredField = Command.class.getDeclaredField("name");
+
+            declaredField.setAccessible(true);
+            declaredField.set(this, command.label());
+        } catch (Exception exception) {
+            return;
+        }
+
         this.setAliases(Arrays.asList(command.aliases().clone()));
 
         this.registerToCommandMap(javaPlugin);

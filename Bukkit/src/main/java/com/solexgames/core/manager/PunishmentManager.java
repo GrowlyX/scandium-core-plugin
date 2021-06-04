@@ -4,6 +4,7 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.player.PotPlayer;
+import com.solexgames.core.player.global.NetworkPlayer;
 import com.solexgames.core.player.punishment.Punishment;
 import com.solexgames.core.player.punishment.PunishmentStrings;
 import com.solexgames.core.player.punishment.PunishmentType;
@@ -194,7 +195,7 @@ public class PunishmentManager {
             }
 
             final String formattedTarget = Color.translate((playerRank != null ? playerRank.getColor() + playerRank.getItalic() : ChatColor.GRAY) + playerName);
-            final String responseMessage = (message.endsWith("-s") ? ChatColor.GRAY + "[Silent] " : "") + ChatColor.GREEN + "You've un" + punishmentType.getEdName().toLowerCase() + " " + formattedTarget + ChatColor.GREEN + " for " + Color.SECONDARY_COLOR + message + ChatColor.GREEN + ".";
+            final String responseMessage = (message.endsWith("-s") ? ChatColor.GRAY + "[Silent] " : "") + ChatColor.GREEN + "You've un" + punishmentType.getEdName().toLowerCase() + " " + formattedTarget + ChatColor.GREEN + " for " + Color.SECONDARY_COLOR + message.replace(" -s", "") + ChatColor.GREEN + ".";
 
             if (player != null) {
                 player.sendMessage(responseMessage);

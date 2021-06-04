@@ -258,6 +258,7 @@ public final class RedisUtil {
                 .put("SYNC_CODE", potPlayer.getSyncCode())
                 .put("IS_SYNCED", String.valueOf(potPlayer.isSynced()))
                 .put("DMS_ENABLED", String.valueOf(potPlayer.isCanReceiveDms()))
+                .put("DISALLOWED", potPlayer.isCurrentlyRestricted() || potPlayer.isCurrentlyIpRestricted() || potPlayer.isCurrentlyBlacklisted() || potPlayer.isRelatedToBlacklist())
                 .getAsJson();
     }
 

@@ -5,6 +5,7 @@ import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.PlayerUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -16,7 +17,19 @@ public class ClearChatCommand extends BaseCommand {
     @Override
     public boolean command(CommandSender sender, String label, String[] args) {
         for (int lines = 0; lines < 250; lines++) {
-            Bukkit.broadcastMessage(Color.translate("  "));
+            Bukkit.broadcastMessage(StringUtils.repeat(" ", CorePlugin.RANDOM.nextInt(20)));
+        }
+
+        if (args.length == 0) {
+            final String broadcast = ChatColor.GREEN + "The chat has been cleared by " + (sender instanceof Player ? ((Player) sender).getDisplayName() : ChatColor.DARK_RED + "Console") + ChatColor.GREEN + ".";
+
+            Bukkit.broadcastMessage(broadcast);
+
+            if (sender instanceof Player) {
+                PlayerUtil.sendAlert((Player) sender, "cleared chat");
+            }
+
+            return false;
         }
 
         final boolean silent = args[0] != null && args[0].equals("-s");
