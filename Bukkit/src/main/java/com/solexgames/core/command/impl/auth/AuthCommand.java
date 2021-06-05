@@ -60,7 +60,7 @@ public class AuthCommand extends BaseCommand {
                 potPlayer.saveWithoutRemove();
 
                 player.sendMessage(ChatColor.DARK_AQUA + "[2FA] " + ChatColor.YELLOW + "You've " + ChatColor.GREEN + "verified" + ChatColor.YELLOW + " your identity!");
-                player.sendMessage(ChatColor.DARK_AQUA + "[2FA] " + ChatColor.YELLOW + "Thanks for helping us keep our server save! " + ChatColor.RED + "❤");
+                player.sendMessage(ChatColor.DARK_AQUA + "[2FA] " + ChatColor.YELLOW + "Thanks for helping us keep our server safe! " + ChatColor.RED + "❤");
             } else {
                 player.sendMessage(ChatColor.RED + "I'm sorry, but we couldn't verify your identity. Maybe check the code you entered and try again?");
             }
