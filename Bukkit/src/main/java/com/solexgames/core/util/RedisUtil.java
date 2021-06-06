@@ -10,6 +10,7 @@ import com.solexgames.core.player.punishment.Punishment;
 import com.solexgames.core.player.punishment.PunishmentType;
 import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.redis.JedisAction;
+import com.solexgames.core.util.clickable.Clickable;
 import com.solexgames.lib.commons.redis.json.JsonAppender;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -223,6 +224,12 @@ public final class RedisUtil {
                     .put("ID", punishment.getPunishIdentification())
                     .getAsJson();
         }
+    }
+
+    public static String sendClickable(Clickable clickable) {
+        return new JsonAppender("NETWORK_BROADCAST_CLICKABLE_UPDATE")
+                .put("CLICKABLE", CorePlugin.GSON.toJson(clickable))
+                .getAsJson();
     }
 
     public static String createRank(String name, Player player, String uuid) {

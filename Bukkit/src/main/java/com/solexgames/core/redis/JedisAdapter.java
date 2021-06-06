@@ -13,6 +13,7 @@ import com.solexgames.core.player.prefixes.Prefix;
 import com.solexgames.core.player.punishment.Punishment;
 import com.solexgames.core.player.punishment.PunishmentType;
 import com.solexgames.core.player.ranks.Rank;
+import com.solexgames.core.util.clickable.Clickable;
 import com.solexgames.lib.commons.redis.annotation.Subscription;
 import com.solexgames.lib.commons.redis.handler.JedisHandler;
 import com.solexgames.lib.commons.redis.json.JsonAppender;
@@ -465,6 +466,14 @@ public class JedisAdapter implements JedisHandler {
         final String broadcastMessage = jsonAppender.getParam("MESSAGE");
 
         Bukkit.broadcastMessage(CorePlugin.getInstance().getPlayerManager().formatBroadcast(broadcastMessage));
+    }
+
+    @Subscription(action = "NETWORK_BROADCAST_CLICKABLE_UPDATE")
+    public void onNetworkBroadcastClickableUpdate(JsonAppender jsonAppender) {
+        final Clickable clickable = CorePlugin.GSON.fromJson(jsonAppender.getParam("CLICKABLE"), Clickable.class);
+
+        Bukkit.getOnlinePlayers()
+                .forEach(player -> player.spigot().sendMessage(clickable.asComponents()));
     }
 
     @Subscription(action = "NETWORK_BROADCAST_PERMISSION_UPDATE")
