@@ -19,6 +19,7 @@ import org.bukkit.entity.Player;
 import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -226,9 +227,11 @@ public final class RedisUtil {
         }
     }
 
-    public static String sendClickable(Clickable clickable) {
+    public static String sendClickable(String message, String hover, String command) {
         return new JsonAppender("NETWORK_BROADCAST_CLICKABLE_UPDATE")
-                .put("CLICKABLE", CorePlugin.GSON.toJson(clickable))
+                .put("TEXT", message)
+                .put("HOVER", hover)
+                .put("COMMAND", command)
                 .getAsJson();
     }
 

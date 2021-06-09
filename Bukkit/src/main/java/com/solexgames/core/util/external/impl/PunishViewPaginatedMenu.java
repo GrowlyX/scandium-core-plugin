@@ -94,6 +94,11 @@ public class PunishViewPaginatedMenu extends PaginatedMenu {
                 lore.add(Color.MAIN_COLOR + ChatColor.STRIKETHROUGH.toString() + "------------------------------------");
             }
 
+            if (!player.hasPermission("scandium.punishments.remove")) {
+                lore.add(ChatColor.RED + "You don't have permission to remove this " + this.punishment.getPunishmentType().getName() + "!");
+                lore.add(Color.MAIN_COLOR + ChatColor.STRIKETHROUGH.toString() + "------------------------------------");
+            }
+
             return new ItemBuilder(XMaterial.LIME_WOOL.parseMaterial(), this.punishment.isActive() ? 5 : (this.punishment.isRemoved() ? 1 : 14))
                     .setDisplayName(statusLore + " " + ChatColor.BOLD.toString() + CorePlugin.FORMAT.format(this.punishment.getIssuingDate()))
                     .addLore(lore).create();
@@ -102,6 +107,11 @@ public class PunishViewPaginatedMenu extends PaginatedMenu {
         @Override
         public void clicked(Player player, ClickType clickType) {
             if (clickType.equals(ClickType.RIGHT)) {
+                if (!player.hasPermission("scandium.punishments.remove")) {
+                    player.sendMessage(ChatColor.RED + "You do not have permission to perform this action!");
+                    return;
+                }
+
                 new PunishRemoveConfirmMenu(player, PunishViewPaginatedMenu.this.target, PunishViewPaginatedMenu.this.targetUuid, this.punishment).open(player);
                 PunishViewPaginatedMenu.this.setClosedByMenu(true);
             }

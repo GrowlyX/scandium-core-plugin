@@ -23,7 +23,7 @@ public class MuteChatCommand extends BaseCommand {
 
         serverManager.setChatEnabled(!serverManager.isChatEnabled());
 
-        final boolean silent = args[0] != null && args[0].equals("-s");
+        final boolean silent = args.length > 0 && args[0] != null && args[0].equals("-s");
         final String broadcast = silent ? ChatColor.RED + "The chat has been " + (serverManager.isChatEnabled() ? "enabled" : "disabled") + " by " + ChatColor.BOLD + "Staff" + ChatColor.RED + "." : ChatColor.GREEN + "The chat has been " + (serverManager.isChatEnabled() ? "enabled" : "disabled") + " by " + displayName + ".";
 
         Bukkit.broadcastMessage(broadcast);

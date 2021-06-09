@@ -58,7 +58,7 @@ public class ServerManager {
         this.automaticallyPutInto = Color.translate(plugin.getConfig().getString("language.automatic-string"));
 
         this.blockedCommands = plugin.getConfig().getStringList("command-block.affected");
-        this.commandCallback = plugin.getConfig().getString("command-block.callback");
+        this.commandCallback = Color.translate(plugin.getConfig().getString("command-block.callback"));
 
         this.chatFormat = plugin.getConfig().getString("chat.type")
                 .equals("PAPI") ? new PAPIChatFormat() : new DefaultChatFormat();

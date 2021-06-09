@@ -36,7 +36,7 @@ public class PlayerListener implements Listener {
             responseProtocol.setProtocol(-1);
 
             event.getResponse().setDescription(this.plugin.getNormalMotd());
-            event.getResponse().setPlayers(new ServerPing.Players(0, 1, new ServerPing.PlayerInfo[] {}));
+            event.getResponse().setPlayers(new ServerPing.Players(0, 1, new ServerPing.PlayerInfo[]{}));
 
             return;
         }
@@ -46,7 +46,7 @@ public class PlayerListener implements Listener {
             responseProtocol.setProtocol(-1);
 
             event.getResponse().setDescription(this.plugin.getMaintenanceMotd());
-            event.getResponse().setPlayers(new ServerPing.Players(0, 1, new ServerPing.PlayerInfo[] {}));
+            event.getResponse().setPlayers(new ServerPing.Players(0, 1, new ServerPing.PlayerInfo[]{}));
         } else {
             event.getResponse().setDescription(this.plugin.getNormalMotd());
         }
@@ -90,21 +90,21 @@ public class PlayerListener implements Listener {
         }
     }
 
-    @EventHandler
-    public void onConnect(ServerConnectEvent event) {
-        final NetworkPlayer player = CorePlugin.getInstance().getNetworkPlayerManager().getByUuid(event.getPlayer().getUniqueId());
-
-        if (player != null && player.isDisallowed() && !(event.getTarget().getName().contains("hub") || event.getTarget().getName().contains("lobby"))) {
-            event.getPlayer().sendMessage(ChatColor.RED + "Your connection to " + ChatColor.BOLD + event.getTarget().getName() + ChatColor.RED + " has been blocked due to you being punished.");
-            event.setCancelled(true);
-            return;
-        }
-
-        if (!event.getTarget().canAccess(event.getPlayer())) {
-            event.getPlayer().sendMessage(ChatColor.RED + "Your connection to " + ChatColor.BOLD + event.getTarget().getName() + ChatColor.RED + " has been blocked due to you not having permission to access it.");
-            event.setCancelled(true);
-        }
-    }
+//    @EventHandler
+//    public void onConnect(ServerConnectEvent event) {
+//        final NetworkPlayer player = CorePlugin.getInstance().getNetworkPlayerManager().getByUuid(event.getPlayer().getUniqueId());
+//
+//        if (player != null && player.isDisallowed() && !(event.getTarget().getName().contains("hub") || event.getTarget().getName().contains("lobby"))) {
+//            event.getPlayer().sendMessage(ChatColor.RED + "Your connection to " + ChatColor.BOLD + event.getTarget().getName() + ChatColor.RED + " has been blocked due to you being punished.");
+//            event.setCancelled(true);
+//            return;
+//        }
+//
+//        if (!event.getTarget().canAccess(event.getPlayer())) {
+//            event.getPlayer().sendMessage(ChatColor.RED + "Your connection to " + ChatColor.BOLD + event.getTarget().getName() + ChatColor.RED + " has been blocked due to you not having permission to access it.");
+//            event.setCancelled(true);
+//        }
+//    }
 
     @EventHandler
     public void onSwitch(ServerSwitchEvent event) {
@@ -138,12 +138,14 @@ public class PlayerListener implements Listener {
                 event.setTarget(hub);
             }
 
-            if (event.getPlayer().hasPermission("scandium.staff")) {
-                ProxyServer.getInstance().getScheduler().schedule(CorePlugin.getInstance(), () -> CompletableFuture.runAsync(() -> CorePlugin.getInstance().getJedisManager().publish(new JsonAppender(JedisAction.PLAYER_CONNECT_UPDATE)
-                        .put("PLAYER", event.getPlayer().getDisplayName())
-                        .put("SERVER", event.getTarget().getName())
-                        .getAsJson())), 1L, TimeUnit.SECONDS);
-            }
+            ProxyServer.getInstance().getScheduler().schedule(CorePlugin.getInstance(), () -> {
+                if (event.getPlayer().hasPermission("scandium.staff")) {
+                    CompletableFuture.runAsync(() -> CorePlugin.getInstance().getJedisManager().publish(new JsonAppender(JedisAction.PLAYER_CONNECT_UPDATE)
+                            .put("PLAYER", event.getPlayer().getDisplayName())
+                            .put("SERVER", event.getTarget().getName())
+                            .getAsJson()));
+                }
+            }, 2L, TimeUnit.SECONDS);
         }
     }
 

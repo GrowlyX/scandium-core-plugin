@@ -10,6 +10,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.entity.Player;
 
+import java.awt.*;
+
 @Getter
 @Setter
 public class DiscordManager {
@@ -28,9 +30,9 @@ public class DiscordManager {
         final WebhookClientBuilder builder = new WebhookClientBuilder(CorePlugin.getInstance().getConfig().getString("discord.webhook"));
 
         builder.setThreadFactory(job -> {
-            Thread thread = new Thread(job);
+            final Thread thread = new Thread(job);
 
-            thread.setName(CorePlugin.getInstance().getServerManager().getNetwork().getServerName() + " Webhook");
+            thread.setName("Scandium Webhook Executor");
             thread.setDaemon(true);
 
             return thread;
@@ -43,31 +45,42 @@ public class DiscordManager {
     public void sendReport(Player player, Player target, String reason) {
         final WebhookEmbedBuilder embedBuilder = new WebhookEmbedBuilder();
 
-        embedBuilder.setTitle(new WebhookEmbed.EmbedTitle("New Report", null));
+        embedBuilder.setTitle(new WebhookEmbed.EmbedTitle("Reports", null));
 
-        embedBuilder.addField(new WebhookEmbed.EmbedField(true, "Player", player.getName()));
-        embedBuilder.addField(new WebhookEmbed.EmbedField(true, "Target", target.getName()));
-        embedBuilder.addField(new WebhookEmbed.EmbedField(true, "Reason", reason));
+        embedBuilder.setDescription(String.join("\n",
+                "We've received a report from **" + player.getName() + "**",
+                "with a target of **" + target.getName() + "** and with",
+                "the reason being `" + reason + "`.",
+                " ",
+                "*This report was sent from " + CorePlugin.getInstance().getServerName() + ".*"
+        ));
 
-        embedBuilder.setThumbnailUrl("https://visage.surgeplay.com/head/512/" + player.getUniqueId().toString());
-        embedBuilder.setColor(0xFF0000);
+        embedBuilder.setColor(0xffd700);
 
         this.client.send(embedBuilder.build());
     }
 
     public void sendPunishment(Punishment punishment) {
         final WebhookEmbedBuilder embedBuilder = new WebhookEmbedBuilder();
+        final String target = CorePlugin.getInstance().getUuidCache().getUsernameFromUuid(punishment.getTarget());
 
-        embedBuilder.setTitle(new WebhookEmbed.EmbedTitle("New " + punishment.getPunishmentType().getName(), null));
+        embedBuilder.setTitle(new WebhookEmbed.EmbedTitle(punishment.getPunishmentType().getName(), null));
 
-        embedBuilder.addField(new WebhookEmbed.EmbedField(true, "Issuer", punishment.getIssuerName()));
-        embedBuilder.addField(new WebhookEmbed.EmbedField(true, "Target", punishment.getTarget().toString()));
-        embedBuilder.addField(new WebhookEmbed.EmbedField(true, "Reason", punishment.getReason()));
-        embedBuilder.addField(new WebhookEmbed.EmbedField(true, "Duration", punishment.getDurationString()));
-        embedBuilder.addField(new WebhookEmbed.EmbedField(true, "Expiration", punishment.getExpirationString()));
+        embedBuilder.setDescription(String.join("\n",
+                "There's been a new " + punishment.getPunishmentType().getName() + " registered on",
+                CorePlugin.getInstance().getServerName() + ".",
+                " ",
+                "**__Details__**",
+                " • Issuer: `" + punishment.getIssuerName() + "`",
+                " • Target: `" + CorePlugin.getInstance().getUuidCache().getUsernameFromUuid(punishment.getTarget()) + "`",
+                " • Reason: `" + punishment.getReason() + "`",
+                " • Duration: `" + punishment.getDurationString() + "`",
+                " • Expiration: `" + punishment.getExpirationString() + "`",
+                "  ",
+                "*View this punishment via /c " + target + ".*"
+        ));
 
-        embedBuilder.setThumbnailUrl("https://visage.surgeplay.com/head/512/" + punishment.getTarget().toString());
-        embedBuilder.setColor(0xFF0000);
+        embedBuilder.setColor(0xffd700);
 
         this.client.send(embedBuilder.build());
     }
@@ -75,13 +88,16 @@ public class DiscordManager {
     public void sendRequest(Player player, String reason) {
         final WebhookEmbedBuilder embedBuilder = new WebhookEmbedBuilder();
 
-        embedBuilder.setTitle(new WebhookEmbed.EmbedTitle("New Request", null));
+        embedBuilder.setTitle(new WebhookEmbed.EmbedTitle("Requests", null));
 
-        embedBuilder.addField(new WebhookEmbed.EmbedField(true, "Player", player.getName()));
-        embedBuilder.addField(new WebhookEmbed.EmbedField(true, "Request", reason));
+        embedBuilder.setDescription(String.join("\n",
+                "We've received a request by **" + player.getName() + "**",
+                "with the reason being `" + reason + "`.",
+                " ",
+                "*This report was sent from " + CorePlugin.getInstance().getServerName() + ".*"
+        ));
 
-        embedBuilder.setThumbnailUrl("https://visage.surgeplay.com/head/512/" + player.getUniqueId().toString());
-        embedBuilder.setColor(0xFF0000);
+        embedBuilder.setColor(0xffd700);
 
         this.client.send(embedBuilder.build());
     }

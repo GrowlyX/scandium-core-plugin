@@ -199,7 +199,9 @@ public class PotPlayer {
         } else {
             document.put("appliedPrefix", "Default");
         }
+
         document.put("rankName", this.getActiveGrant().getRank().getName());
+
         if (this.customColor != null) {
             document.put("customColor", this.customColor.name());
         } else {
@@ -509,7 +511,6 @@ public class PotPlayer {
         this.player = Bukkit.getPlayer(this.uuid);
         this.attachment = this.player.addAttachment(CorePlugin.getInstance());
         this.gameProfile = CorePlugin.getInstance().getPlayerManager().getGameProfile(this.player);
-        this.rainbowNametag = new RainbowNametag(this.player, CorePlugin.getInstance());
 
         CompletableFuture.runAsync(() -> {
             this.setupPlayer();
@@ -654,9 +655,14 @@ public class PotPlayer {
                     .filter(grant -> grant != null && grant.isActive() && (grant.isApplicable() || grant.isGlobal()))
                     .forEach(grant -> {
                         grant.getRank().getPermissions().forEach(action);
-                        grant.getRank().getInheritance().stream().map(Rank::getByUuid).filter(Objects::nonNull).forEach(rank -> rank.getPermissions().forEach(action));
+                        grant.getRank().getInheritance().stream()
+                                .map(Rank::getByUuid)
+                                .filter(Objects::nonNull)
+                                .forEach(rank -> rank.getPermissions().forEach(action));
                     });
-            this.getUserPermissions().forEach(s -> this.attachment.setPermission(s.replace("*", ""), !s.startsWith("*")));
+
+            this.getUserPermissions()
+                    .forEach(s -> this.attachment.setPermission(s.replace("*", ""), !s.startsWith("*")));
         });
 
         this.player.recalculatePermissions();
@@ -666,13 +672,11 @@ public class PotPlayer {
 
     public void setupPlayerTag() {
         Bukkit.getOnlinePlayers().forEach(player -> {
-            if (this.isStaffMode()) {
-                if (player.hasPermission("scandium.staff")) {
+            if (player.hasPermission("scandium.staff")) {
+                if (this.isStaffMode()) {
                     CorePlugin.getInstance().getNameTagManager().setupStaffModeTag(player, this.player);
                     return;
-                }
-            } else if (this.isVanished()) {
-                if (player.hasPermission("scandium.staff")) {
+                } else if (this.isVanished()) {
                     CorePlugin.getInstance().getNameTagManager().setupVanishTag(player, this.player);
                     return;
                 }

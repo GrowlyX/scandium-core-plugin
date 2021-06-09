@@ -93,7 +93,7 @@ public class PunishmentManager {
                 final String issuerName = (issuer != null ? formattedName : "&4Console");
                 final String clickableLore = Color.SECONDARY_COLOR + ChatColor.STRIKETHROUGH.toString() + "---------------------------------\n" +
                         Color.SECONDARY_COLOR + "Added by: " + issuerName + "\n" +
-                        Color.SECONDARY_COLOR + "Added for: " + ChatColor.WHITE + punishment.getReason() + ChatColor.GRAY + "(" + punishment.getExpirationString() + ")\n" +
+                        Color.SECONDARY_COLOR + "Added for: " + ChatColor.WHITE + punishment.getReason() + ChatColor.GRAY + " (" + punishment.getExpirationString() + ")\n" +
                         Color.SECONDARY_COLOR + ChatColor.STRIKETHROUGH.toString() + "---------------------------------";
 
                 if (silent) {
@@ -109,7 +109,7 @@ public class PunishmentManager {
             } else {
                 final String clickableLore = Color.SECONDARY_COLOR + ChatColor.STRIKETHROUGH.toString() + "---------------------------------\n" +
                         Color.SECONDARY_COLOR + "Added by: " + ChatColor.DARK_RED + "Console" + "\n" +
-                        Color.SECONDARY_COLOR + "Added for: " + ChatColor.WHITE + punishment.getReason() + ChatColor.GRAY + "(" + punishment.getExpirationString() + ")\n" +
+                        Color.SECONDARY_COLOR + "Added for: " + ChatColor.WHITE + punishment.getReason() + ChatColor.GRAY + " (" + punishment.getExpirationString() + ")\n" +
                         Color.SECONDARY_COLOR + ChatColor.STRIKETHROUGH.toString() + "---------------------------------";
 
                 if (silent) {
@@ -205,16 +205,27 @@ public class PunishmentManager {
 
             punishmentList.stream().findFirst().ifPresent(punishment -> {
                 punishment.setRemoved(true);
-                punishment.setRemovalReason(message.replace("-s", ""));
+                punishment.setRemovalReason(message.replace(" -s", ""));
                 punishment.setRemover((player != null ? player.getUniqueId() : null));
                 punishment.setActive(false);
                 punishment.setRemoverName((player != null ? player.getName() : null));
 
-                if (message.endsWith("-s")) {
-                    PlayerUtil.sendToStaff("&7[Silent] " + formattedTarget + " &awas " + "un" + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (player != null ? player.getDisplayName() : "Console") + ChatColor.GREEN + ".");
+                final String punishmentExplanation = "un" + punishment.getPunishmentType().getEdName().toLowerCase();
+                final String issuer = (player != null ? player.getDisplayName() : ChatColor.DARK_RED + "Console");
+
+                if (message.endsWith(" -s")) {
+                    final String clickableLore = Color.SECONDARY_COLOR + ChatColor.STRIKETHROUGH.toString() + "---------------------------------\n" +
+                            Color.SECONDARY_COLOR + "Removed by: " + issuer + "\n" +
+                            Color.SECONDARY_COLOR + "Removed for: " + ChatColor.WHITE + punishment.getRemovalReason() + "\n" +
+                            Color.SECONDARY_COLOR + ChatColor.STRIKETHROUGH.toString() + "---------------------------------";
+
+                    PlayerUtil.sendClickableTo("&7[Silent] " + formattedTarget + " &awas " + punishmentExplanation + " by " + issuer + "&a.",
+                            clickableLore,
+                            null,
+                            null);
                 } else {
                     Bukkit.broadcastMessage(Color.translate(
-                            "&7" + formattedTarget + " &awas un" + punishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (player != null ? player.getDisplayName() : "Console") + ChatColor.GREEN + "."
+                            "&7" + formattedTarget + " &awas " + punishmentExplanation + " by " + issuer + ChatColor.GREEN + "."
                     ));
                 }
 

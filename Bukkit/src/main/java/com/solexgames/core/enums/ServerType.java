@@ -23,6 +23,7 @@ public enum ServerType {
     INVISPVP("InvisPvP", ChatColor.GOLD, ChatColor.GRAY, "https://discord.invispvp.com", "InvisPvP", "https://store.invispvp.com/", "invispvp.com"),
     KRYPTIK("Kryptik", ChatColor.DARK_PURPLE, ChatColor.WHITE, "https://discord.gg/Q55aKR4kyZ", "KryptikNetwork", "https://store.kryptikpvp.com", "kryptikpvp.com"),
     FAKEMEN("FakemenClub", ChatColor.DARK_PURPLE, ChatColor.LIGHT_PURPLE, "https://discord.gg/fakemen", "FakemenNetwork", "https://store.fakemen.club/", "fakemen.club"),
+    DEPHMC("DephMC", ChatColor.RED, ChatColor.YELLOW, "https://discord.gg/2VCvBjmhQJ ", "Dephinity", "N/A", "N/A"),
     ;
 
     private final String serverName;

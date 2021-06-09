@@ -98,6 +98,7 @@ public abstract class Menu {
         if (update) {
             player.updateInventory();
         } else {
+            this.onOpen(player);
             player.openInventory(inventory);
         }
 
@@ -117,6 +118,10 @@ public abstract class Menu {
     }
 
     public void onClose(Player player) {
+
+    }
+
+    public void onOpen(Player player) {
 
     }
 

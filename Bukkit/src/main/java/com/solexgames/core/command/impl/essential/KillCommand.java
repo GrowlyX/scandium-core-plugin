@@ -1,5 +1,6 @@
 package com.solexgames.core.command.impl.essential;
 
+import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.util.Color;
@@ -24,6 +25,11 @@ public class KillCommand extends BaseCommand {
         }
 
         final Player player = (Player) sender;
+
+        if (CorePlugin.getInstance().getServerName().contains("um")) {
+            player.sendMessage(ChatColor.RED + "Error: This command is disabled on UHC Meetup servers.");
+            return false;
+        }
 
         if (args.length == 0) {
             player.setHealth(0);

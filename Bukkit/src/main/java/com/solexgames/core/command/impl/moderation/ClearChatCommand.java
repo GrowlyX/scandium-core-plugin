@@ -20,36 +20,32 @@ public class ClearChatCommand extends BaseCommand {
             Bukkit.broadcastMessage(StringUtils.repeat(" ", CorePlugin.RANDOM.nextInt(20)));
         }
 
-        if (args.length == 0) {
-            final String broadcast = ChatColor.GREEN + "The chat has been cleared by " + (sender instanceof Player ? ((Player) sender).getDisplayName() : ChatColor.DARK_RED + "Console") + ChatColor.GREEN + ".";
-
-            Bukkit.broadcastMessage(broadcast);
-
-            if (sender instanceof Player) {
-                PlayerUtil.sendAlert((Player) sender, "cleared chat");
-            }
-
-            return false;
-        }
-
-        final boolean silent = args[0] != null && args[0].equals("-s");
-        final boolean randomized = args[1] != null && args[1].equals("-r");
-        final int amount = randomized ? CorePlugin.RANDOM.nextInt(250) : 250;
-        final String broadcast = silent ? ChatColor.RED + "The chat has been cleared by " + ChatColor.BOLD + "Staff" + ChatColor.RED + "." : "The chat has been cleared by " + (sender instanceof Player ? ((Player) sender).getDisplayName() : ChatColor.DARK_RED + "Console") + ChatColor.GREEN + ".";
-
-        Bukkit.getOnlinePlayers().stream()
-                .filter(player -> !player.hasPermission("scandium.staff"))
-                .forEach(player -> {
-                    for (int lines = 0; lines <= amount; lines++) {
-                        player.sendMessage("  ");
-                    }
-                });
+        final String broadcast = ChatColor.GREEN + "The chat has been cleared by " + (sender instanceof Player ? ((Player) sender).getDisplayName() : ChatColor.DARK_RED + "Console") + ChatColor.GREEN + ".";
 
         Bukkit.broadcastMessage(broadcast);
 
         if (sender instanceof Player) {
             PlayerUtil.sendAlert((Player) sender, "cleared chat");
         }
+
+//        final boolean silent = args[0] != null && args[0].equals("-s");
+//        final boolean randomized = args[1] != null && args[1].equals("-r");
+//        final int amount = randomized ? CorePlugin.RANDOM.nextInt(250) : 250;
+//        final String broadcast = silent ? ChatColor.RED + "The chat has been cleared by " + ChatColor.BOLD + "Staff" + ChatColor.RED + "." : "The chat has been cleared by " + (sender instanceof Player ? ((Player) sender).getDisplayName() : ChatColor.DARK_RED + "Console") + ChatColor.GREEN + ".";
+//
+//        Bukkit.getOnlinePlayers().stream()
+//                .filter(player -> !player.hasPermission("scandium.staff"))
+//                .forEach(player -> {
+//                    for (int lines = 0; lines <= amount; lines++) {
+//                        player.sendMessage("  ");
+//                    }
+//                });
+//
+//        Bukkit.broadcastMessage(broadcast);
+//
+//        if (sender instanceof Player) {
+//            PlayerUtil.sendAlert((Player) sender, "cleared chat");
+//        }
 
         return false;
     }

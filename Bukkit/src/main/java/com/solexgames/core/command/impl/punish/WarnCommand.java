@@ -51,13 +51,19 @@ public class WarnCommand extends BaseCommand {
 
                         final String targetName = args[0];
                         final UUID targetUuid = UUID.fromString(document.getString("uuid"));
-                        final String reason = StringUtil.buildMessage(args, 2);
+
+                        String reason = StringUtil.buildMessage(args, 2);
 
                         final String issuerName = (sender instanceof Player ? ((Player) sender).getName() : "Console");
                         final String issuerNameNull = (sender instanceof Player ? ((Player) sender).getName() : null);
                         final UUID issuerUuid = (sender instanceof Player ? ((Player) sender).getUniqueId() : null);
 
                         final long dateDiff = DateUtil.parseDateDiff(args[1], false);
+
+                        if (dateDiff == -1) {
+                            reason = StringUtil.buildMessage(args, 1);
+                        }
+
                         final boolean isPermanent = (args[1].equalsIgnoreCase("perm") || args[1].equalsIgnoreCase("permanent") || dateDiff == -1L);
                         final boolean isSilent = reason.endsWith("-s");
 
@@ -67,7 +73,7 @@ public class WarnCommand extends BaseCommand {
                                     issuerUuid,
                                     targetUuid,
                                     issuerName,
-                                    reason.replace("-s", ""),
+                                    reason.replace(" -s", ""),
                                     newIssuingDate,
                                     newIssuingDate.getTime() - dateDiff,
                                     isPermanent,
@@ -90,7 +96,7 @@ public class WarnCommand extends BaseCommand {
                                     issuerUuid,
                                     targetUuid,
                                     issuerName,
-                                    reason.replace("-s", ""),
+                                    reason.replace(" -s", ""),
                                     newIssuingDate,
                                     newIssuingDate.getTime() - dateDiff,
                                     isPermanent,

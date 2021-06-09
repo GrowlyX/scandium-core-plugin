@@ -361,6 +361,15 @@ public class PlayerListener implements Listener {
             return;
         }
 
+        for (String command : CorePlugin.getInstance().getServerManager().getBlockedCommands()) {
+            if (event.getMessage().startsWith("/" + command) && (event.getMessage().equals("/" + command) || event.getMessage().startsWith("/" + command + " "))) {
+                player.sendMessage(CorePlugin.getInstance().getServerManager().getCommandCallback());
+                event.setCancelled(true);
+
+                return;
+            }
+        }
+
         final long commandCoolDown = 20L;
 
         if (System.currentTimeMillis() < potPlayer.getCommandCooldown()) {

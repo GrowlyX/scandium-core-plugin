@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ChatChannelType {
 
-    STAFF("&b[S] ","scandium.channels.staff"),
+    STAFF("&b[S] ","scandium.staff"),
     ADMIN("&c[A] ","scandium.channels.admin"),
     HOST("&2[H] ","scandium.channels.host"),
     MANAGER("&4[M] ","scandium.channels.manager"),

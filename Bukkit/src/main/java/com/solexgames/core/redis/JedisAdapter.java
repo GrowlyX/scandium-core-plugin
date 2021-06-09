@@ -21,6 +21,7 @@ import com.solexgames.core.server.NetworkServer;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.PlayerUtil;
 import com.solexgames.core.util.RedisUtil;
+import net.md_5.bungee.api.chat.ClickEvent;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -224,7 +225,10 @@ public class JedisAdapter implements JedisHandler {
         final String chatMessage = jsonAppender.getParam("MESSAGE");
         final String fromServer = jsonAppender.getParam("SERVER");
 
-        PlayerUtil.sendToStaff(CorePlugin.getInstance().getPlayerManager().formatChatChannel(chatChannel, sender, chatMessage, fromServer));
+        PlayerUtil.sendTo(
+                CorePlugin.getInstance().getPlayerManager().formatChatChannel(chatChannel, sender, chatMessage, fromServer),
+                chatChannel.getPermission()
+        );
     }
 
     @Subscription(action = "PLAYER_SERVER_UPDATE")
@@ -379,7 +383,7 @@ public class JedisAdapter implements JedisHandler {
 
             if (finalPunishment != null) {
                 finalPunishment.setRemoved(true);
-                finalPunishment.setRemovalReason(reason.replace("-s", ""));
+                finalPunishment.setRemovalReason(reason.replace(" -s", ""));
                 finalPunishment.setRemover(removerUuid);
                 finalPunishment.setActive(false);
                 finalPunishment.setRemoverName(removerName);
@@ -470,7 +474,14 @@ public class JedisAdapter implements JedisHandler {
 
     @Subscription(action = "NETWORK_BROADCAST_CLICKABLE_UPDATE")
     public void onNetworkBroadcastClickableUpdate(JsonAppender jsonAppender) {
-        final Clickable clickable = CorePlugin.GSON.fromJson(jsonAppender.getParam("CLICKABLE"), Clickable.class);
+        final Clickable clickable = new Clickable("");
+
+        clickable.add(
+                jsonAppender.getParam("TEXT"),
+                jsonAppender.getParam("HOVER"),
+                jsonAppender.getParam("COMMAND"),
+                ClickEvent.Action.RUN_COMMAND
+        );
 
         Bukkit.getOnlinePlayers()
                 .forEach(player -> player.spigot().sendMessage(clickable.asComponents()));

@@ -6,6 +6,7 @@ import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.disguise.DisguiseData;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.ranks.Rank;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -37,7 +38,7 @@ public class DisguiseCommand extends BaseCommand {
         if (disguiseData != null && skinData != null) {
             CorePlugin.getInstance().getDisguiseManager().disguise(player, disguiseData, skinData, Rank.getDefault());
         } else {
-            player.sendMessage(ChatColor.RED + "There aren't any available disguises!");
+            player.sendMessage(ChatColor.RED + "Something went wrong while trying to disguise you.");
         }
 
         return false;

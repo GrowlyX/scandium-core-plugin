@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 @UtilityClass
 public final class DateUtil {
 
-    private final static Pattern TIME_PATTERN = Pattern.compile("(?:([0-9]+)\\s*y[a-z]*[,\\s]*)?(?:([0-9]+)\\s*mo[a-z]*[,\\s]*)?(?:([0-9]+)\\s*w[a-z]*[,\\s]*)?(?:([0-9]+)\\s*d[a-z]*[,\\s]*)?(?:([0-9]+)\\s*h[a-z]*[,\\s]*)?(?:([0-9]+)\\s*m[a-z]*[,\\s]*)?(?:([0-9]+)\\s*(?:s[a-z]*)?)?", Pattern.CASE_INSENSITIVE);
+    private final static Pattern TIME_PATTERN = Pattern.compile("(?:([0-9]+)\\s*y[a-z]*[,\\s]*)?(?:([0-9]+)\\s*mo[a-z]*[,\\s]*)?(?:([0-9]+)\\s*w[a-z]*[,\\s]*)?(?:([0-9]+)\\s*d[a-z]*[,\\s]*)?(?:([0-9]+)\\s*h[a-z]*[,\\s]*)?(?:([0-9]+)\\s*m[a-z]*[,\\s]*)?(?:([0-9]+)\\s*(?:s[a-z]*)?)?", 2);
 
     public static long parseDateDiff(final String time, final boolean future) {
         final Matcher matcher = DateUtil.TIME_PATTERN.matcher(time);
@@ -37,9 +37,11 @@ public final class DateUtil {
                         break;
                     }
                 }
+
                 if (!found) {
                     continue;
                 }
+
                 if (matcher.group(1) != null && !matcher.group(1).isEmpty()) {
                     years = Integer.parseInt(matcher.group(1));
                 }
@@ -62,6 +64,7 @@ public final class DateUtil {
                     seconds = Integer.parseInt(matcher.group(7));
                     break;
                 }
+
                 break;
             }
         }
