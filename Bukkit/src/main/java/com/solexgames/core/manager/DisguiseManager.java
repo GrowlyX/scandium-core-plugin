@@ -7,6 +7,7 @@ import com.mojang.authlib.properties.Property;
 import com.mongodb.Block;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.disguise.DisguiseData;
+import com.solexgames.core.listener.custom.PreDisguiseEvent;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.util.Color;
@@ -44,6 +45,12 @@ public class DisguiseManager {
             return;
         }
 
+        final PreDisguiseEvent disguiseEvent = new PreDisguiseEvent(player);
+
+        Bukkit.getPluginManager().callEvent(disguiseEvent);
+
+        assert !disguiseEvent.isCancelled();
+
         if (disguiseData.getUuid() != null && potPlayer != null) {
             potPlayer.setDisguiseRank(rank);
             potPlayer.setDisguised(true);
@@ -59,30 +66,6 @@ public class DisguiseManager {
             potPlayer.saveWithoutRemove();
 
             player.sendMessage(Color.SECONDARY_COLOR + "You've disguised as " + Color.MAIN_COLOR + disguiseData.getName() + ChatColor.GRAY + " (with a random skin)" + Color.SECONDARY_COLOR + ".");
-        }
-    }
-
-    public void disguiseOther(Player player, DisguiseData disguiseData, DisguiseData skinData, Rank rank) {
-        final PotPlayer potPlayer = this.plugin.getPlayerManager().getPlayer(player);
-
-        if (Bukkit.getPlayer(disguiseData.getName()) != null) {
-            player.sendMessage(ChatColor.RED + "Error: A player with the name " + ChatColor.YELLOW + disguiseData.getName() + ChatColor.RED + " is already online.");
-            return;
-        }
-
-        if (disguiseData.getUuid() != null && potPlayer != null) {
-            potPlayer.setDisguiseRank(rank);
-            potPlayer.setDisguised(true);
-            potPlayer.setName(disguiseData.getName());
-
-            this.setGameProfile(player, disguiseData, skinData);
-
-            if (!player.hasMetadata("disguised")) {
-                player.setMetadata("disguised", new FixedMetadataValue(this.plugin, true));
-            }
-
-            potPlayer.setupPlayer();
-            potPlayer.saveWithoutRemove();
         }
     }
 

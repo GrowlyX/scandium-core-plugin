@@ -67,7 +67,7 @@ public class DisguiseManualCommand extends BaseCommand {
 
                     final DisguiseData generatedData = CorePlugin.getInstance().getDisguiseManager().getDisguiseData(args[1], uuid);
 
-                    CorePlugin.getInstance().getDisguiseManager().disguiseOther(target, generatedData, generatedData, rank);
+                    CorePlugin.getInstance().getDisguiseManager().disguise(target, generatedData, generatedData, rank);
 
                     player.sendMessage(Color.SECONDARY_COLOR + "You've disguised " + Color.MAIN_COLOR + player.getDisplayName() + Color.SECONDARY_COLOR + " as " + Color.translate(rank.getColor() + rank.getItalic()) + generatedData.getName() + ChatColor.GRAY + " (with a random skin)" + Color.SECONDARY_COLOR + ".");
                 }
