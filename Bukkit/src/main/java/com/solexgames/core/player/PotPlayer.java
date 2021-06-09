@@ -143,6 +143,7 @@ public class PotPlayer {
     private long lastAuth = 0L;
 
     private boolean hasLoaded;
+    private boolean newPlayer;
 
     public PotPlayer(UUID uuid, String name, InetAddress inetAddress) {
         this.uuid = uuid;
@@ -304,7 +305,9 @@ public class PotPlayer {
 
                     if (this.profile == null) {
                         this.saveWithoutRemove();
+
                         this.hasLoaded = true;
+                        this.newPlayer = true;
                         return;
                     }
 

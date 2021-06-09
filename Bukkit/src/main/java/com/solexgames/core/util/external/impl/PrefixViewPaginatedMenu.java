@@ -86,7 +86,7 @@ public class PrefixViewPaginatedMenu extends PaginatedMenu {
         public ItemStack getButtonItem(Player player) {
             final ArrayList<String> lore = new ArrayList<>();
             final boolean hasPrefix = this.potPlayer.getAllPrefixes().contains(this.prefix.getName());
-            final boolean isEquipped = this.potPlayer.getAppliedPrefix().equals(this.prefix);
+            final boolean isEquipped = this.potPlayer.getAppliedPrefix() != null && this.potPlayer.getAppliedPrefix().equals(this.prefix);
 
             if (hasPrefix) {
                 lore.add("&7You own this prefix and it");
