@@ -46,7 +46,6 @@ public class DisguiseManager {
         }
 
         final PreDisguiseEvent disguiseEvent = new PreDisguiseEvent(player);
-
         Bukkit.getPluginManager().callEvent(disguiseEvent);
 
         assert !disguiseEvent.isCancelled();

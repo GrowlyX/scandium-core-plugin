@@ -67,12 +67,12 @@ public class WarnCommand extends BaseCommand {
 
                         final long dateDiff = DateUtil.parseDateDiff(args[1], false);
 
-                        if (dateDiff == -1) {
-                            reason = StringUtil.buildMessage(args, 1);
-                        }
-
                         final boolean isPermanent = (args[1].equalsIgnoreCase("perm") || args[1].equalsIgnoreCase("permanent") || dateDiff == -1L);
                         final boolean isSilent = reason.endsWith("-s");
+
+                        if (dateDiff == -1) {
+                            reason = StringUtil.buildMessage(args, args[1].equalsIgnoreCase("perm") || args[1].equalsIgnoreCase("permanent") ? 2 : 1);
+                        }
 
                         try {
                             Punishment punishment = new Punishment(
