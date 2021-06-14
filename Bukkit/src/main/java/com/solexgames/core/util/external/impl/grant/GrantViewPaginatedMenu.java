@@ -4,6 +4,7 @@ import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.grant.Grant;
+import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.util.external.Button;
@@ -12,6 +13,7 @@ import com.solexgames.core.util.prompt.GrantRemovalPrompt;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.apache.commons.lang3.time.DurationFormatUtils;
+import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.conversations.Conversation;
@@ -21,18 +23,21 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Getter
 public class GrantViewPaginatedMenu extends PaginatedMenu {
 
-    private final Player player;
-    private final Player target;
+    private final Document document;
+    private final String fancyName;
 
-    public GrantViewPaginatedMenu(Player player, Player target) {
+    public GrantViewPaginatedMenu(Document target) {
         super(18);
 
-        this.player = player;
-        this.target = target;
+        this.document = target;
+
+        final Rank rank = Rank.getByName(target.getString("rankName"));
+        this.fancyName = (rank != null ? rank.getColor() + rank.getItalic() : ChatColor.GRAY.toString()) + target.getString("name");
     }
 
     @Override
@@ -42,16 +47,18 @@ public class GrantViewPaginatedMenu extends PaginatedMenu {
 
     @Override
     public String getPrePaginatedTitle(Player player) {
-        return "Applicable grants for: " + target.getDisplayName();
+        return "Applicable grants for: " + this.fancyName;
     }
 
     @Override
     public Map<Integer, Button> getAllPagesButtons(Player player) {
         final HashMap<Integer, Button> buttons = new HashMap<>();
         final AtomicInteger atomicInteger = new AtomicInteger();
-        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
+        final List<Grant> grantList = this.document.getList("allGrants", String.class).stream()
+                .map(grant -> CorePlugin.GSON.fromJson(grant, Grant.class))
+                .filter(Objects::nonNull).collect(Collectors.toList());
 
-        potPlayer.getAllGrants().forEach(grant -> buttons.put(atomicInteger.getAndIncrement(), new GrantButton(grant)));
+        grantList.forEach(grant -> buttons.put(atomicInteger.getAndIncrement(), new GrantButton(grant)));
 
         return buttons;
     }
@@ -67,7 +74,7 @@ public class GrantViewPaginatedMenu extends PaginatedMenu {
             final String statusLore = this.grant.isRemoved() ? ChatColor.RED + "[Removed]" : this.grant.isActive() ? ChatColor.GREEN + "[Active]" : (this.grant.isExpired() ? ChatColor.GOLD + "[Expired]" : ChatColor.RED + "[Removed]");
 
             arrayList.add(Color.MAIN_COLOR + "&m------------------------------------");
-            arrayList.add(Color.SECONDARY_COLOR + "Target&7: " + Color.MAIN_COLOR + target.getDisplayName());
+            arrayList.add(Color.SECONDARY_COLOR + "Target&7: " + Color.MAIN_COLOR + fancyName);
             arrayList.add(Color.SECONDARY_COLOR + "Rank&7: " + Color.MAIN_COLOR + (this.grant.getRank() == null ? "" : this.grant.getRank().getColor() + this.grant.getRank().getName()));
             arrayList.add(Color.SECONDARY_COLOR + "Duration&7: " + Color.MAIN_COLOR + (this.grant.isPermanent() ? "&4Forever" : DurationFormatUtils.formatDurationWords(this.grant.getDuration(), true, true)));
             arrayList.add(Color.SECONDARY_COLOR + "Expires On&7: " + Color.MAIN_COLOR + CorePlugin.FORMAT.format(new Date(this.grant.getDateAdded() + this.grant.getDuration())));
@@ -119,7 +126,7 @@ public class GrantViewPaginatedMenu extends PaginatedMenu {
                 }
 
                 final Conversation conversation = CorePlugin.getInstance().getConversationFactory()
-                        .withFirstPrompt(new GrantRemovalPrompt(this.grant, player, target))
+                        .withFirstPrompt(new GrantRemovalPrompt(this.grant, player, document, fancyName))
                         .withLocalEcho(false)
                         .buildConversation(player);
 

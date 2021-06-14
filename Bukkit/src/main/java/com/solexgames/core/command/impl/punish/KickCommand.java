@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-@Command(label = "kick", permission = "scandium.command.kick")
+@Command(label = "kick", permission = "scandium.command.kick", aliases = "lattabitch")
 public class KickCommand extends BaseCommand {
 
     @Override

@@ -58,25 +58,23 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
         int[] intsDecline = new int[]{14, 15, 16, 23, 24, 25, 32, 33, 34};
 
         for (int i : intsConfirm) {
-            this.inventory.setItem(i, new ItemBuilder(XMaterial.GREEN_TERRACOTTA.parseMaterial(), 13).setDisplayName("&a&lConfirm Grant").addLore(Arrays.asList(
-                    network.getMainColor() + "&m--------------------------------",
-                    network.getSecondaryColor() + "Issuer: " + network.getMainColor() + player.getDisplayName(),
-                    network.getSecondaryColor() + "Target: " + network.getMainColor() + (Bukkit.getPlayer(document.getString("name")) != null ? Bukkit.getPlayer(document.getString("name")).getDisplayName() : document.getString("name")),
-                    network.getSecondaryColor() + "Rank: " + network.getMainColor() + rank.getColor() + rank.getItalic() + rank.getName(),
-                    network.getSecondaryColor() + "Duration: " + network.getMainColor() + (isPermanent() ? "&4Forever" : DurationFormatUtils.formatDurationWords(duration, true, true)),
-                    network.getSecondaryColor() + "Reason: " + network.getMainColor() + reason,
-                    network.getSecondaryColor() + "Scopes: " + network.getMainColor() + scope,
-                    "",
-                    "&aLeft-Click to confirm this grant!",
-                    network.getMainColor() + "&m--------------------------------"
-            )).create());
+            this.inventory.setItem(i, new ItemBuilder(XMaterial.GREEN_TERRACOTTA.parseMaterial(), 13)
+                    .setDisplayName("&aConfirm Grant")
+                    .addLore(
+                            ChatColor.GRAY + "Issuer: " + network.getMainColor() + player.getDisplayName(),
+                            ChatColor.GRAY + "Target: " + network.getMainColor() + (Bukkit.getPlayer(document.getString("name")) != null ? Bukkit.getPlayer(document.getString("name")).getDisplayName() : document.getString("name")),
+                            ChatColor.GRAY + "Rank: " + network.getMainColor() + rank.getColor() + rank.getItalic() + rank.getName(),
+                            ChatColor.GRAY + "Duration: " + network.getMainColor() + (isPermanent() ? "&4Forever" : DurationFormatUtils.formatDurationWords(duration, true, true)),
+                            ChatColor.GRAY + "Reason: " + network.getMainColor() + reason,
+                            ChatColor.GRAY + "Scopes: " + network.getMainColor() + scope,
+                            "",
+                            "&e[Right-click to confirm grant]"
+                    ).create());
         }
 
         for (int i : intsDecline) {
-            this.inventory.setItem(i, new ItemBuilder(XMaterial.RED_TERRACOTTA.parseMaterial(), 14).setDisplayName("&c&lCancel Grant").addLore(Arrays.asList(
-                    "",
-                    "&7Click to cancel this grant!"
-            )).create());
+            this.inventory.setItem(i, new ItemBuilder(XMaterial.RED_TERRACOTTA.parseMaterial(), 14)
+                    .setDisplayName("&cCancel Grant").create());
         }
     }
 
@@ -92,7 +90,8 @@ public class GrantSelectConfirmMenu extends AbstractInventoryMenu {
             if (event.getCurrentItem() == null || event.getCurrentItem().getType() == XMaterial.AIR.parseMaterial()) {
                 return;
             }
-            if (ChatColor.stripColor(Color.translate(event.getCurrentItem().getItemMeta().getDisplayName())).contains("Confirm")) {
+
+            if (event.getCurrentItem().getItemMeta().getDisplayName().contains("Confirm")) {
                 final Grant newGrant = new Grant(this.player.getUniqueId(), this.rank, System.currentTimeMillis(), this.duration, this.reason, true, this.permanent, this.scope);
 
                 CorePlugin.getInstance().getPlayerManager().handleGrant(newGrant, this.document, this.player, CorePlugin.getInstance().getServerName(), false);

@@ -6,6 +6,7 @@ import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.manager.PlayerManager;
 import com.solexgames.core.manager.ServerManager;
 import com.solexgames.core.util.Color;
+import com.solexgames.core.util.Constants;
 import com.solexgames.core.util.PlayerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -51,7 +52,9 @@ public class VanishCommand extends BaseCommand {
                 final boolean vanished = CorePlugin.getInstance().getServerManager().getVanishedPlayers().contains(target);
                 this.toggleVanish(target, 0);
 
-                player.sendMessage(ChatColor.DARK_AQUA + "[S] " + (vanished ? ChatColor.AQUA + "You've unvanished " + target.getDisplayName() + ChatColor.AQUA + "." : ChatColor.AQUA + "You've vanished " + target.getDisplayName() + ChatColor.AQUA + " with a power of " + ChatColor.DARK_AQUA + 0 + ChatColor.AQUA + "."));
+                player.sendMessage(Constants.STAFF_PREFIX +
+                        (vanished ? Color.SECONDARY_COLOR + "You've unvanished " + target.getDisplayName() + Color.SECONDARY_COLOR + "." :
+                                Color.SECONDARY_COLOR + "You've vanished " + target.getDisplayName() + Color.SECONDARY_COLOR + " with a power of " + Color.MAIN_COLOR + 0 + ChatColor.AQUA + "."));
             } else {
                 player.sendMessage(ChatColor.RED + "Error: That player does not exist.");
             }
@@ -71,7 +74,9 @@ public class VanishCommand extends BaseCommand {
                     final boolean vanished = CorePlugin.getInstance().getServerManager().getVanishedPlayers().contains(target);
                     this.toggleVanish(target, power);
 
-                    player.sendMessage(ChatColor.DARK_AQUA + "[S] " + (vanished ? ChatColor.AQUA + "You've unvanished " + target.getDisplayName() + ChatColor.AQUA + "." : ChatColor.AQUA + "You've vanished " + target.getDisplayName() + ChatColor.AQUA + " with a power of " + ChatColor.DARK_AQUA + power + ChatColor.AQUA + "."));
+                    player.sendMessage(Constants.STAFF_PREFIX +
+                            (vanished ? Color.SECONDARY_COLOR + "You've unvanished " + target.getDisplayName() + Color.SECONDARY_COLOR + "." :
+                                    Color.SECONDARY_COLOR + "You've vanished " + target.getDisplayName() + Color.SECONDARY_COLOR + " with a power of " + Color.MAIN_COLOR + power + ChatColor.AQUA + "."));
                 } else {
                     player.sendMessage(ChatColor.RED + "Error: That player does not exist.");
                 }

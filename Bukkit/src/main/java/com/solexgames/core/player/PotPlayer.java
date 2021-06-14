@@ -406,7 +406,7 @@ public class PotPlayer {
                         this.media.setInstagram("N/A");
                     }
                     if (this.profile.getList("allGrants", String.class).isEmpty()) {
-                        this.allGrants.add(this.getDefaultGrant());
+                        this.allGrants.add(GrantUtil.DEF_GRANT);
                     } else {
                         final List<String> allGrants = this.profile.getList("allGrants", String.class);
                         allGrants.forEach(s -> this.allGrants.add(CorePlugin.GSON.fromJson(s, Grant.class)));
@@ -595,15 +595,7 @@ public class PotPlayer {
     }
 
     public Grant getActiveGrant() {
-        return this.getAllGrants().stream()
-                .sorted(Comparator.comparingLong(Grant::getDateAdded).reversed())
-                .collect(Collectors.toList()).stream()
-                .filter(grant -> grant != null && grant.getRank() != null && !grant.isRemoved() && grant.isActive() && !grant.getRank().isHidden() && (grant.getScope() == null || grant.isGlobal() || grant.isApplicable()))
-                .findFirst().orElseGet(this::getDefaultGrant);
-    }
-
-    public Grant getDefaultGrant() {
-        return new Grant(null, Rank.getDefault(), System.currentTimeMillis(), -1L, "Automatic Grant (Default)", true, true);
+        return GrantUtil.getProminentGrant(this.allGrants);
     }
 
     public void setupPlayer() {

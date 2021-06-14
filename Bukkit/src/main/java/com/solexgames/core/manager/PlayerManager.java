@@ -11,9 +11,7 @@ import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.global.NetworkPlayer;
 import com.solexgames.core.player.grant.Grant;
-import com.solexgames.core.util.Color;
-import com.solexgames.core.util.PlayerUtil;
-import com.solexgames.core.util.RedisUtil;
+import com.solexgames.core.util.*;
 import com.solexgames.core.util.atomic.AtomicDocument;
 import com.solexgames.core.util.builder.ItemBuilder;
 import lombok.Getter;
@@ -30,6 +28,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 @Getter
 @RequiredArgsConstructor
@@ -67,7 +66,7 @@ public class PlayerManager {
         final int power = ints[0] != null ? ints[0] : 0;
 
         this.vanishPlayerRaw(player, power);
-        player.sendMessage(ChatColor.AQUA + "[S] " + ChatColor.DARK_AQUA + "You are now vanished with a power of " + ChatColor.AQUA + power + ChatColor.DARK_AQUA + ".");
+        player.sendMessage(Constants.STAFF_PREFIX + Color.SECONDARY_COLOR + "You're now vanished with a power of " + Color.MAIN_COLOR + power + Color.SECONDARY_COLOR + ".");
     }
 
     public void modModePlayer(Player player) {
@@ -78,7 +77,7 @@ public class PlayerManager {
 
         this.modModeRaw(player);
 
-        player.sendMessage(ChatColor.AQUA + "[S] " + ChatColor.DARK_AQUA + "You've entered mod mode.");
+        player.sendMessage(Constants.STAFF_PREFIX + ChatColor.GREEN + "You're now in moderation mode.");
     }
 
     public void vanishPlayerRaw(Player player, int power) {
@@ -162,7 +161,7 @@ public class PlayerManager {
             CorePlugin.getInstance().getServerManager().getVanishedPlayers().remove(player);
         });
 
-        player.sendMessage(ChatColor.AQUA + "[S] " + ChatColor.DARK_AQUA + "You are no longer vanished.");
+        player.sendMessage(Constants.STAFF_PREFIX + ChatColor.RED + "You're no longer in vanish.");
     }
 
     public void unModModePlayer(Player player) {
@@ -189,9 +188,7 @@ public class PlayerManager {
             CorePlugin.getInstance().getClientHook().disableStaffModules(player);
         }
 
-        PlayerUtil.sendAlert(player, "left mod mode");
-
-        player.sendMessage(ChatColor.AQUA + "[S] " + ChatColor.DARK_AQUA + "You are no longer in mod mode.");
+        player.sendMessage(Constants.STAFF_PREFIX + ChatColor.RED + "You're no longer in moderation mode.");
     }
 
     public NetworkPlayer getPlayerFromSyncCode(String syncCode) {
@@ -248,7 +245,12 @@ public class PlayerManager {
             final List<String> grantStrings = new ArrayList<>();
             allGrants.forEach(json -> grantStrings.add(json.toJson()));
 
-            document.put("allGrants", grantStrings);
+            final List<Grant> grants = document.getList("allGrants", String.class).stream()
+                    .map(string -> CorePlugin.GSON.fromJson(string, Grant.class))
+                    .filter(Objects::nonNull).collect(Collectors.toList());
+
+            document.replace("allGrants", grantStrings);
+            document.replace("rankName", GrantUtil.getProminentGrant(grants).getRank().getName());
 
             CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("uuid", document.getString("uuid")), document, new ReplaceOptions().upsert(true)));
         }

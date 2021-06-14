@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Command(label = "ban", permission = "scandium.command.ban", aliases = {"tempban", "tban", "b", "lattabitch"})
+@Command(label = "ban", permission = "scandium.command.ban", aliases = {"tempban", "tban", "b"})
 public class BanCommand extends BaseCommand {
 
     @Override

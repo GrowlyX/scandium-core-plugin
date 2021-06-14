@@ -4,6 +4,7 @@ import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.util.Color;
+import com.solexgames.core.util.Constants;
 import org.bson.Document;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -31,7 +32,7 @@ public class RemoveProfileCommand extends BaseCommand {
             if (document != null) {
                 CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().deleteOne(document);
 
-                sender.sendMessage(ChatColor.RED + "Deleted their profile.");
+                sender.sendMessage(Constants.STAFF_PREFIX + Color.SECONDARY_COLOR + "You've deleted the profile with the uuid " + Color.MAIN_COLOR + args[0] + Color.SECONDARY_COLOR + ".");
             } else {
                 sender.sendMessage(ChatColor.RED + "Failed to find that player.");
             }
