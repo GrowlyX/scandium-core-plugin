@@ -34,13 +34,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PlayerManager {
 
-    public final Map<UUID, PotPlayer> allProfiles = new HashMap<>();
+    private final Map<UUID, PotPlayer> allProfiles = new HashMap<>();
 
-    public final Map<String, String> allSyncCodes = new HashMap<>();
-    public final Map<String, String> all2FACodes = new HashMap<>();
+    private final Map<String, String> allSyncCodes = new HashMap<>();
+    private final Map<String, String> all2FACodes = new HashMap<>();
 
-    public final List<String> freezeMessage = CorePlugin.getInstance().getConfig().getStringList("language.freeze-message");
-    public final List<NetworkPlayer> allNetworkProfiles = new ArrayList<>();
+    private final List<String> freezeMessage = CorePlugin.getInstance().getConfig().getStringList("language.freeze-message");
+    private final List<NetworkPlayer> allNetworkProfiles = new ArrayList<>();
 
     public void setupPlayer(AsyncPlayerPreLoginEvent event) {
         new PotPlayer(event.getUniqueId(), event.getName(), event.getAddress());

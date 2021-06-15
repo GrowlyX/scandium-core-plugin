@@ -115,13 +115,19 @@ public class GrantRemoveConfirmMenu extends AbstractInventoryMenu {
                 this.target.replace("allGrants", grantStrings);
                 this.target.replace("rankName", GrantUtil.getProminentGrant(grantList).getRank().getName());
 
-                CompletableFuture.runAsync(() -> {
-                    CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("uuid", this.target.getString("uuid")), this.target, new ReplaceOptions().upsert(true));
-                }).thenRun(() -> {
-                    player.sendMessage(Color.SECONDARY_COLOR + "You've removed a grant from " + this.fancyName + Color.SECONDARY_COLOR + ".");
-                });
+                final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(this.target.getString("name"));
 
-                new GrantViewPaginatedMenu(this.target).openMenu(this.player);
+                if (potPlayer != null) {
+                    potPlayer.getAllGrants().remove(this.grant);
+                    potPlayer.setupPlayer();
+                } else {
+                    CompletableFuture.runAsync(() -> {
+                        CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("uuid", this.target.getString("uuid")), this.target, new ReplaceOptions().upsert(true));
+                    });
+                }
+
+                player.sendMessage(Color.SECONDARY_COLOR + "You've removed a grant from " + this.fancyName + Color.SECONDARY_COLOR + ".");
+                player.closeInventory();
             } else if (ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()).contains("Cancel")) {
                 player.sendMessage(ChatColor.RED + ("You've cancelled the current grant removal process."));
                 player.closeInventory();

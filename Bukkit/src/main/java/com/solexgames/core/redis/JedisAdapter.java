@@ -27,10 +27,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @SuppressWarnings("unused")
 public class JedisAdapter implements JedisHandler {
@@ -91,7 +88,10 @@ public class JedisAdapter implements JedisHandler {
         final String removalServer = jsonAppender.getParam("SERVER");
 
         if (!removalServer.equalsIgnoreCase(CorePlugin.getInstance().getServerName())) {
-            CorePlugin.getInstance().getPlayerManager().getAllNetworkProfiles().remove(CorePlugin.getInstance().getPlayerManager().getNetworkPlayer(removingPlayer));
+            final List<NetworkPlayer> networkPlayers = new ArrayList<>(CorePlugin.getInstance().getPlayerManager().getAllNetworkProfiles());
+
+            networkPlayers.stream().filter(nPlayer -> nPlayer.getUuid().equals(removingPlayer))
+                    .findFirst().ifPresent(networkPlayer -> CorePlugin.getInstance().getPlayerManager().getNetworkPlayer(removingPlayer));
         }
     }
 
