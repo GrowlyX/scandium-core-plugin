@@ -91,7 +91,7 @@ public class JedisAdapter implements JedisHandler {
             final List<NetworkPlayer> networkPlayers = new ArrayList<>(CorePlugin.getInstance().getPlayerManager().getAllNetworkProfiles());
 
             networkPlayers.stream().filter(nPlayer -> nPlayer.getUuid().equals(removingPlayer))
-                    .findFirst().ifPresent(networkPlayer -> CorePlugin.getInstance().getPlayerManager().getNetworkPlayer(removingPlayer));
+                    .findFirst().ifPresent(networkPlayer -> CorePlugin.getInstance().getPlayerManager().getAllNetworkProfiles().remove(networkPlayer));
         }
     }
 
@@ -206,7 +206,7 @@ public class JedisAdapter implements JedisHandler {
         final String fromSwitchingServer = jsonAppender.getParam("SERVER");
         final String switchingPlayer = jsonAppender.getParam("PLAYER");
 
-        PlayerUtil.sendToStaff("&b[S] " + switchingPlayer + " &3joined &b" + newServer + "&3 from &b" + fromSwitchingServer + "&3.");
+        PlayerUtil.sendToStaff("&b[S] " + switchingPlayer.replace(" ", "") + " &3joined &b" + newServer + "&3 from &b" + fromSwitchingServer + "&3.");
     }
 
     @Subscription(action = "PLAYER_DISCONNECT_UPDATE")

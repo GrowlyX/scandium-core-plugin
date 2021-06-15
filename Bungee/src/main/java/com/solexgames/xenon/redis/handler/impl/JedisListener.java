@@ -6,6 +6,8 @@ import com.solexgames.xenon.redis.annotation.Subscription;
 import com.solexgames.xenon.redis.handler.JedisHandler;
 import com.solexgames.xenon.redis.json.JsonAppender;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @SuppressWarnings("unused")
@@ -16,8 +18,10 @@ public class JedisListener implements JedisHandler {
         final UUID removingPlayer = UUID.fromString(jsonAppender.getParam("UUID"));
         final String removalServer = jsonAppender.getParam("SERVER");
 
-        CorePlugin.getInstance().getNetworkPlayerManager().getAllNetworkProfiles()
-                .remove(CorePlugin.getInstance().getNetworkPlayerManager().getByUuid(removingPlayer));
+        final List<NetworkPlayer> networkPlayers = new ArrayList<>(CorePlugin.getInstance().getNetworkPlayerManager().getAllNetworkProfiles());
+
+        networkPlayers.stream().filter(nPlayer -> nPlayer.getUuid().equals(removingPlayer))
+                .findFirst().ifPresent(networkPlayer -> CorePlugin.getInstance().getNetworkPlayerManager().getAllNetworkProfiles().remove(networkPlayer));
     }
 
     @Subscription(action = "GLOBAL_PLAYER_ADDITION")

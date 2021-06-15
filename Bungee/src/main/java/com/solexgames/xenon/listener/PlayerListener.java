@@ -73,59 +73,50 @@ public class PlayerListener implements Listener {
     public void onKick(ServerKickEvent event) {
         if (event.getCancelServer() != null && event.getCancelServer().getName() != null && !event.getCancelServer().getName().contains("hub") && !event.getKickedFrom().getName().contains("hub") && !event.getCancelServer().getName().contains("lobby") && !event.getKickedFrom().getName().contains("lobby")) {
             try {
-                ServerInfo hub = CorePlugin.getInstance().getBestHub();
+                final ServerInfo hub = CorePlugin.getInstance().getBestHub();
 
                 if (hub == null) {
-                    event.getPlayer().disconnect((new ComponentBuilder("§cCould not find a hub server to connect you to.\n§7Please contact administration if you think this is a bug.")).create());
+                    event.getPlayer().disconnect((new ComponentBuilder("§cThere aren't any hub servers available.")).create());
                     return;
                 }
 
                 event.setCancelServer(hub);
                 event.setCancelled(true);
+
                 event.getPlayer().sendMessage(event.getKickReasonComponent());
             } catch (Exception ignored) {
                 CorePlugin.getInstance().getProxy().getConsole().sendMessage((new ComponentBuilder("§cCouldn't find a hub server!")).create());
-                event.getPlayer().disconnect((new ComponentBuilder("§cCould not find a hub server to connect you to.\n&7Please contact administration if you think this is a bug.")).create());
+                event.getPlayer().disconnect((new ComponentBuilder("§cThere aren't any hub servers available.")).create());
             }
         }
     }
 
-//    @EventHandler
-//    public void onConnect(ServerConnectEvent event) {
-//        final NetworkPlayer player = CorePlugin.getInstance().getNetworkPlayerManager().getByUuid(event.getPlayer().getUniqueId());
-//
-//        if (player != null && player.isDisallowed() && !(event.getTarget().getName().contains("hub") || event.getTarget().getName().contains("lobby"))) {
-//            event.getPlayer().sendMessage(ChatColor.RED + "Your connection to " + ChatColor.BOLD + event.getTarget().getName() + ChatColor.RED + " has been blocked due to you being punished.");
-//            event.setCancelled(true);
-//            return;
-//        }
-//
-//        if (!event.getTarget().canAccess(event.getPlayer())) {
-//            event.getPlayer().sendMessage(ChatColor.RED + "Your connection to " + ChatColor.BOLD + event.getTarget().getName() + ChatColor.RED + " has been blocked due to you not having permission to access it.");
-//            event.setCancelled(true);
-//        }
-//    }
+    @EventHandler
+    public void onConnect(ServerConnectEvent event) {
+        if (!event.getTarget().canAccess(event.getPlayer())) {
+            event.getPlayer().sendMessage(ChatColor.RED + "Your connection to " + ChatColor.BOLD + event.getTarget().getName() + ChatColor.RED + " has been blocked due to you not having permission to access it.");
+            event.setCancelled(true);
+        }
+    }
 
     @EventHandler
     public void onSwitch(ServerSwitchEvent event) {
         if (event.getPlayer().hasPermission("scandium.staff")) {
-            ProxyServer.getInstance().getScheduler().schedule(CorePlugin.getInstance(), new SwitchRunnable(event.getPlayer().getDisplayName(), event.getPlayer().getServer().getInfo().getName(), event.getFrom().getName()), 1L, TimeUnit.SECONDS);
+            ProxyServer.getInstance().getScheduler().schedule(CorePlugin.getInstance(), new SwitchRunnable(event.getPlayer().getDisplayName(), event.getPlayer().getServer().getInfo().getName(), event.getFrom().getName()), 15L, TimeUnit.MILLISECONDS);
         }
     }
 
     @EventHandler
     public void onServerDisconnect(ServerDisconnectEvent event) {
         if (event.getPlayer().hasPermission("scandium.staff")) {
-            ProxyServer.getInstance().getScheduler().schedule(CorePlugin.getInstance(), () -> {
-                CompletableFuture.runAsync(() -> {
-                    if (ProxyServer.getInstance().getPlayer(event.getPlayer().getName()) == null) {
-                        CorePlugin.getInstance().getJedisManager().publish(new JsonAppender(JedisAction.PLAYER_DISCONNECT_UPDATE)
-                                .put("PLAYER", event.getPlayer().getDisplayName())
-                                .put("SERVER", event.getTarget().getName())
-                                .getAsJson());
-                    }
-                });
-            }, 1L, TimeUnit.SECONDS);
+            ProxyServer.getInstance().getScheduler().schedule(CorePlugin.getInstance(), () -> CompletableFuture.runAsync(() -> {
+                if (ProxyServer.getInstance().getPlayer(event.getPlayer().getName()) == null) {
+                    CorePlugin.getInstance().getJedisManager().publish(new JsonAppender(JedisAction.PLAYER_DISCONNECT_UPDATE)
+                            .put("PLAYER", event.getPlayer().getDisplayName())
+                            .put("SERVER", event.getTarget().getName())
+                            .getAsJson());
+                }
+            }), 1L, TimeUnit.SECONDS);
         }
     }
 
@@ -145,7 +136,7 @@ public class PlayerListener implements Listener {
                             .put("SERVER", event.getTarget().getName())
                             .getAsJson()));
                 }
-            }, 2L, TimeUnit.SECONDS);
+            }, 30L, TimeUnit.MILLISECONDS);
         }
     }
 

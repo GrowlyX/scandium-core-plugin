@@ -11,6 +11,8 @@ import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 public class GrantRemovalPrompt extends StringPrompt {
 
@@ -19,6 +21,8 @@ public class GrantRemovalPrompt extends StringPrompt {
     private final Document target;
     private final String fancyName;
 
+    private final List<Grant> grantList;
+
     @Override
     public String getPromptText(ConversationContext context) {
         return Color.SECONDARY_COLOR + "Please enter the grant removal reason for " + this.fancyName + Color.SECONDARY_COLOR + ".";
@@ -26,7 +30,7 @@ public class GrantRemovalPrompt extends StringPrompt {
 
     @Override
     public Prompt acceptInput(ConversationContext context, String input) {
-        new GrantRemoveConfirmMenu(this.remover, this.target, this.grant, input, this.fancyName).open(this.remover);
+        new GrantRemoveConfirmMenu(this.remover, this.target, this.grant, input, this.fancyName, this.grantList).open(this.remover);
 
         context.getForWhom().sendRawMessage(Color.SECONDARY_COLOR + "You've set the removal reason to:");
         context.getForWhom().sendRawMessage(Color.MAIN_COLOR + input);

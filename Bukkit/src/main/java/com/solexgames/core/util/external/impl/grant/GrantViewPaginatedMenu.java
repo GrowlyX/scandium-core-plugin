@@ -31,13 +31,19 @@ public class GrantViewPaginatedMenu extends PaginatedMenu {
     private final Document document;
     private final String fancyName;
 
+    private final List<Grant> grantList;
+
     public GrantViewPaginatedMenu(Document target) {
         super(18);
 
         this.document = target;
 
         final Rank rank = Rank.getByName(target.getString("rankName"));
+
         this.fancyName = (rank != null ? rank.getColor() + rank.getItalic() : ChatColor.GRAY.toString()) + target.getString("name");
+        this.grantList = this.document.getList("allGrants", String.class).stream()
+                .map(grant -> CorePlugin.GSON.fromJson(grant, Grant.class))
+                .filter(Objects::nonNull).collect(Collectors.toList());
     }
 
     @Override
@@ -54,11 +60,8 @@ public class GrantViewPaginatedMenu extends PaginatedMenu {
     public Map<Integer, Button> getAllPagesButtons(Player player) {
         final HashMap<Integer, Button> buttons = new HashMap<>();
         final AtomicInteger atomicInteger = new AtomicInteger();
-        final List<Grant> grantList = this.document.getList("allGrants", String.class).stream()
-                .map(grant -> CorePlugin.GSON.fromJson(grant, Grant.class))
-                .filter(Objects::nonNull).collect(Collectors.toList());
 
-        grantList.forEach(grant -> buttons.put(atomicInteger.getAndIncrement(), new GrantButton(grant)));
+        this.grantList.forEach(grant -> buttons.put(atomicInteger.getAndIncrement(), new GrantButton(grant)));
 
         return buttons;
     }
@@ -126,7 +129,7 @@ public class GrantViewPaginatedMenu extends PaginatedMenu {
                 }
 
                 final Conversation conversation = CorePlugin.getInstance().getConversationFactory()
-                        .withFirstPrompt(new GrantRemovalPrompt(this.grant, player, document, fancyName))
+                        .withFirstPrompt(new GrantRemovalPrompt(this.grant, player, document, fancyName, grantList))
                         .withLocalEcho(false)
                         .buildConversation(player);
 

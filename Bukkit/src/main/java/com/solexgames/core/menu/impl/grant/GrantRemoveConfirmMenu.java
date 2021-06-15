@@ -40,14 +40,17 @@ public class GrantRemoveConfirmMenu extends AbstractInventoryMenu {
     public String reason;
     public String fancyName;
 
-    public GrantRemoveConfirmMenu(Player player, Document target, Grant grant, String reason, String fancyName) {
-        super("Grant removal for: " + fancyName, 9*5);
+    public List<Grant> grantList;
+
+    public GrantRemoveConfirmMenu(Player player, Document target, Grant grant, String reason, String fancyName, List<Grant> grantList) {
+        super("Grant removal for: " + fancyName, 9 * 5);
 
         this.grant = grant;
         this.player = player;
         this.target = target;
         this.reason = reason;
         this.fancyName = fancyName;
+        this.grantList = grantList;
 
         this.update();
     }
@@ -99,18 +102,14 @@ public class GrantRemoveConfirmMenu extends AbstractInventoryMenu {
 
             if (item == null || item.getType() == XMaterial.AIR.parseMaterial()) return;
             if (ChatColor.stripColor(Color.translate(item.getItemMeta().getDisplayName())).contains("Confirm")) {
-                final List<Grant> grantList = this.target.getList("allGrants", String.class).stream()
-                        .map(grant -> CorePlugin.GSON.fromJson(grant, Grant.class))
-                        .filter(Objects::nonNull).collect(Collectors.toList());
-
                 this.grant.setRemoved(true);
                 this.grant.setRemovedBy(this.player.getDisplayName());
                 this.grant.setRemovedFor(this.reason);
 
-                grantList.remove(this.grant);
+                this.grantList.remove(this.grant);
 
                 final List<String> grantStrings = new ArrayList<>();
-                grantList.forEach(grant -> grantStrings.add(grant.toJson()));
+                this.grantList.forEach(grant -> grantStrings.add(grant.toJson()));
 
                 this.target.replace("allGrants", grantStrings);
                 this.target.replace("rankName", GrantUtil.getProminentGrant(grantList).getRank().getName());
@@ -118,15 +117,16 @@ public class GrantRemoveConfirmMenu extends AbstractInventoryMenu {
                 final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(this.target.getString("name"));
 
                 if (potPlayer != null) {
-                    potPlayer.getAllGrants().remove(this.grant);
+                    potPlayer.getAllGrants().remove(potPlayer.getById(this.grant.getId()));
+                    potPlayer.saveWithoutRemove();
                     potPlayer.setupPlayer();
                 } else {
-                    CompletableFuture.runAsync(() -> {
-                        CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("uuid", this.target.getString("uuid")), this.target, new ReplaceOptions().upsert(true));
-                    });
+                    CompletableFuture.runAsync(() -> CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("uuid", this.target.getString("uuid")), this.target, new ReplaceOptions().upsert(true)));
                 }
 
-                player.sendMessage(Color.SECONDARY_COLOR + "You've removed a grant from " + this.fancyName + Color.SECONDARY_COLOR + ".");
+                final String fancyRank = Color.translate(this.grant.getRank().getColor() + this.grant.getRank().getName());
+
+                player.sendMessage(Color.SECONDARY_COLOR + "You've removed a grant with the rank " + fancyRank + Color.SECONDARY_COLOR + " from " + this.fancyName + Color.SECONDARY_COLOR + ".");
                 player.closeInventory();
             } else if (ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()).contains("Cancel")) {
                 player.sendMessage(ChatColor.RED + ("You've cancelled the current grant removal process."));
