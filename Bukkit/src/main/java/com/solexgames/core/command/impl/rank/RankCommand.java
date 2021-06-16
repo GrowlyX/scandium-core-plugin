@@ -80,30 +80,36 @@ public class RankCommand extends BaseCommand {
                         final Rank rank = Rank.getByName(name);
 
                         if (rank != null) {
-                            String displayName = Color.translate(rank.getName());
+                            final String displayName = Color.translate(rank.getColor() + rank.getItalic() + rank.getName());
 
                             player.sendMessage(Color.translate(Color.MAIN_COLOR + "&m" + StringUtils.repeat("-", 53)));
                             player.sendMessage(Color.translate(Color.MAIN_COLOR + ChatColor.BOLD.toString() + "Rank Information:"));
                             player.sendMessage(Color.translate("  "));
-                            player.sendMessage(Color.translate("&7Name: &f" + displayName));
-                            player.sendMessage(Color.translate("&7Color: &f" + rank.getColor() + rank.getItalic() + "This Color"));
+                            player.sendMessage(Color.translate("&7Display: &f" + displayName));
                             player.sendMessage(Color.translate("&7Weight: &f" + rank.getWeight()));
-                            player.sendMessage(Color.translate("&7Default: &f" + rank.isDefaultRank()));
-                            player.sendMessage(Color.translate("&7Hidden: &f" + rank.isHidden()));
-                            player.sendMessage(Color.translate("&7Italic: &f" + rank.isItalic()));
-                            player.sendMessage(Color.translate("&7Purchasable: &f" + rank.isPurchasable()));
+                            player.sendMessage(Color.translate("&7Default: &f" + this.getResult(rank.isDefaultRank())));
+                            player.sendMessage(Color.translate("&7Hidden: &f" + this.getResult(rank.isHidden())));
+                            player.sendMessage(Color.translate("&7Italic: &f" + this.getResult(rank.isItalic())));
+                            player.sendMessage(Color.translate("&7Purchasable: &f" + this.getResult(rank.isPurchasable())));
                             player.sendMessage(Color.translate("&7Prefix: &f" + rank.getPrefix()));
                             player.sendMessage(Color.translate("&7Suffix: &f" + rank.getSuffix()));
-                            player.sendMessage(Color.translate("&7UUID: &f" + rank.getUuid().toString()));
-                            player.sendMessage(Color.translate("  "));
-                            player.sendMessage(Color.translate("&ePermissions:"));
-                            rank.getPermissions().forEach(s -> player.sendMessage(Color.translate(" &7* &f" + s)));
-                            player.sendMessage(Color.translate("  "));
-                            player.sendMessage(Color.translate("&eInheritances:"));
-                            rank.getInheritance().stream()
-                                    .map(Rank::getByUuid)
-                                    .filter(Objects::nonNull)
-                                    .forEach(s -> player.sendMessage(Color.translate(" &7* &f" + s.getName())));
+                            player.sendMessage(Color.translate("&7ID: &f" + rank.getUuid().toString()));
+
+                            if (!rank.getPermissions().isEmpty()) {
+                                player.sendMessage(Color.translate("  "));
+                                player.sendMessage(Color.translate(Color.SECONDARY_COLOR + "Permissions:"));
+                                rank.getPermissions().forEach(s -> player.sendMessage(Color.translate(" &7* &f" + s)));
+                            }
+
+                            if (!rank.getInheritance().isEmpty()) {
+                                player.sendMessage(Color.translate("  "));
+                                player.sendMessage(Color.translate(Color.SECONDARY_COLOR + "Inheritances:"));
+
+                                rank.getInheritance().stream()
+                                        .map(Rank::getByUuid).filter(Objects::nonNull)
+                                        .forEach(s -> player.sendMessage(Color.translate(" &7* &f" + s.getColor() + s.getItalic() + s.getName())));
+                            }
+
                             player.sendMessage(Color.translate(Color.MAIN_COLOR + "&m" + StringUtils.repeat("-", 53)));
                         } else {
                             player.sendMessage(ChatColor.RED + ("Error: That rank does not exist!"));
@@ -261,7 +267,7 @@ public class RankCommand extends BaseCommand {
                                 rank.getInheritance().add(addingRank.getUuid());
                                 rank.saveRank();
 
-                                player.sendMessage(Color.SECONDARY_COLOR + "You've added the inherited rank " + addDisplayName + Color.SECONDARY_COLOR + " from " + displayName + Color.SECONDARY_COLOR + "!");
+                                player.sendMessage(Color.SECONDARY_COLOR + "You've added the inherited rank " + addDisplayName + Color.SECONDARY_COLOR + " to " + displayName + Color.SECONDARY_COLOR + "!");
 
                                 RedisUtil.publishAsync(RedisUtil.updateRank(rank));
                             } else {
@@ -290,7 +296,7 @@ public class RankCommand extends BaseCommand {
                             rank.setPermissions(finalList);
                             rank.saveRank();
 
-                            player.sendMessage(Color.SECONDARY_COLOR + "You've removed the perk " + Color.MAIN_COLOR + value + Color.SECONDARY_COLOR + " from " + displayName + Color.SECONDARY_COLOR + "!");
+                            player.sendMessage(Color.SECONDARY_COLOR + "You've removed the permission " + Color.MAIN_COLOR + value + Color.SECONDARY_COLOR + " from " + displayName + Color.SECONDARY_COLOR + "!");
 
                             RedisUtil.publishAsync(RedisUtil.updateRank(rank));
                         } else {
@@ -317,7 +323,7 @@ public class RankCommand extends BaseCommand {
                                 rank.setPermissions(finalList);
                                 rank.saveRank();
 
-                                player.sendMessage(Color.SECONDARY_COLOR + "You've added the perk " + Color.MAIN_COLOR + value + Color.SECONDARY_COLOR + " to " + displayName + Color.SECONDARY_COLOR + "!");
+                                player.sendMessage(Color.SECONDARY_COLOR + "You've added the permission " + Color.MAIN_COLOR + value + Color.SECONDARY_COLOR + " to " + displayName + Color.SECONDARY_COLOR + "!");
 
                                 RedisUtil.publishAsync(RedisUtil.updateRank(rank));
                             } else {
@@ -466,5 +472,9 @@ public class RankCommand extends BaseCommand {
         }
 
         return false;
+    }
+
+    public String getResult(boolean input) {
+        return input ? ChatColor.GREEN + "Yes" : ChatColor.RED + "No";
     }
 }

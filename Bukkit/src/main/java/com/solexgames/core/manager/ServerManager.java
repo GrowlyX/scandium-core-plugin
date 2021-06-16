@@ -64,7 +64,7 @@ public class ServerManager {
                 .equals("PAPI") ? new PAPIChatFormat() : new DefaultChatFormat();
 
         this.joinStaffEnabled = plugin.getConfig().getBoolean("staff.join-information.enabled");
-        this.staffInformation = Color.translate(plugin.getConfig().getStringList("staff.staff-information.message"));
+        this.staffInformation = Color.translate(plugin.getConfig().getStringList("staff.join-information.message"));
 
         this.setupServerType();
     }
