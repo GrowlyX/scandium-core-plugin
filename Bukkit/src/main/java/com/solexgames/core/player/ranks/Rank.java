@@ -66,7 +66,7 @@ public class Rank {
         this.prefix = "&7";
         this.color = "&7";
         this.suffix = "";
-        this.defaultRank = true;
+        this.defaultRank = false;
         this.weight = 0;
 
         CorePlugin.getInstance().getRankManager().getRanks().add(this);

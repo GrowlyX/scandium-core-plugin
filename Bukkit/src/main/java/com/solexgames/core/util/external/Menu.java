@@ -68,7 +68,7 @@ public abstract class Menu {
 
         Menu.currentlyOpenedMenus.put(player.getName(), this);
 
-        final Button placeholderButton = new ItemBuilder(XMaterial.GLASS_PANE.parseMaterial())
+        final Button placeholderButton = new ItemBuilder(XMaterial.GRAY_STAINED_GLASS_PANE.parseMaterial())
                 .setDurability(15)
                 .setDisplayName("  ")
                 .toButton();

@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-@Command(label = "disguisemanual", permission = "scandium.command.disguisemanual", async = true)
+@Command(label = "disguisemanual", permission = "scandium.command.disguisemanual")
 public class DisguiseManualCommand extends BaseCommand {
 
     @Override

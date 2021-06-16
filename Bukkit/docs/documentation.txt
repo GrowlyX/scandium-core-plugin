@@ -1,0 +1,86 @@
+Auth - scandium.2fa
+AuthSetup - scandium.2fa
+Force authentication for player - scandium.2fa.forced
+StaffChat - scandium.channels.staff
+AdminChat - scandium.channels.admin
+DevChat - scandium.channels.dev
+ManagerChat - scandium.channels.manager
+HostChat - scandium.channels.host
+HelpOP
+Broadcast - scandium.command.broadcast
+Kill - scandium.command.kill
+Feed - scandium.command.feed
+Heal - scandium.command.heal
+TPPos - scandium.command.tppos
+SocialSpy - scandium.command.socialspy
+Sudo - scandium.command.sudo
+SudoAll - scandium.command.sudoall
+TPHere - scandium.command.tphere
+GMC - scandium.command.gmc
+GMS - scandium.command.gms
+GMSP - scandium.command.gmsp
+StaffAnnounce - scandium.command.staffannounce
+TP - scandium.command.tp
+Report
+ShutDown - scandium.command.shutdown
+Freeze - scandium.command.freeze
+Ignore
+CheckDisguise - scandium.command.checkdisguise
+Rank [And Other Rank Commands such as rank create] - scandium.command.rank
+Media
+Discord
+Import
+Experience - scandium.experience.management
+Alts - scandium.command.alts
+Options -
+History - scandium.command.history
+Twitter
+Website
+Permissions - scandium.command.permissions
+Find - scandium.command.find
+ForceUpdate - scandium.command.forceupdate
+Network - scandium.command.network
+Store
+Sync
+Unsync
+Reply
+Grant - scandium.command.grant
+cGrant
+Prefix - scandium.command.prefix
+Grants - scandium.command.grants
+SetSlots - scandium.command.setslots
+Clear - scandium.command.clear
+Vanish - scandium.command.vanish
+ModMode - scandium.command.modmode
+ClearChat - scandium.command.clearchat
+TPAll - scandium.command.tpall
+Color - scandium.chat.colors
+OwnerChat - scandium.channels.owner
+MuteChat - scandium.command.mutechat
+Fly - scandium.command.fly
+User - scandium.command.user
+Language
+Give - scandium.command.give
+Craft - scandium.command.crafting
+Enchant - scandium.command.enchant
+EnderChest - scandium.command.enchant.other [To view other peoples thing its scandium.command.crafting.other]
+MaxItem - scandium.command.maxitem
+SetSpawn - scandium.command.setspawn
+Spawn - scandium.command.spawn
+ToggleTips
+ToggleStaffMessages - scandium.staff
+ToggleAutoModMode - scandium.staff
+ToggleAutoVanish - scandium.staff
+ToggleFilteredMessages - scandium.staff
+SlowChat - scandium.command.slowchat
+Message
+List - To show up as staff like in vanish or staff mode or something they need this node scandium.staff
+Ping
+Ban - scandium.command.ban
+Blacklist - scandium.command.blacklist
+Kick - scandium.command.kick
+Mute - scandium.command.mute
+Warn - scandium.command.warn
+Unban - scandium.command.unban
+Unblacklist - scandium.command.unblacklist
+Unmute - scandium.command.unmute

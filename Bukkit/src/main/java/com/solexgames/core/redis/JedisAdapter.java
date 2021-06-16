@@ -388,14 +388,19 @@ public class JedisAdapter implements JedisHandler {
                 finalPunishment.setActive(false);
                 finalPunishment.setRemoverName(removerName);
 
-                final String punishedName = CorePlugin.getInstance().getUuidCache().getUsernameFromUuid(finalPunishment.getTarget());
+                final Document punished = CorePlugin.getInstance().getPlayerManager().getDocumentByUuid(finalPunishment.getTarget()).orElse(null);
 
-                if (reason.endsWith("-s")) {
-                    PlayerUtil.sendToStaff("&7[Silent] " + punishedName + " &awas " + "un" + finalPunishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (removerDisplayName != null ? removerDisplayName : "Console") + ChatColor.GREEN + ".");
-                } else {
-                    Bukkit.broadcastMessage(Color.translate(
-                            "&7" + punishedName + " &awas un" + finalPunishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (removerDisplayName != null ? removerDisplayName : "Console") + ChatColor.GREEN + "."
-                    ));
+                if (punished != null) {
+                    final Rank rank = Rank.getByName(punished.getString("rankName"));
+                    final String finalName = (rank != null ? rank.getColor() + rank.getItalic() : ChatColor.GRAY.toString()) + punished.getString("name");
+
+                    if (reason.endsWith("-s")) {
+                        PlayerUtil.sendToStaff("&7[Silent] " + finalName + " &awas " + "un" + finalPunishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (removerDisplayName != null ? removerDisplayName : "Console") + ChatColor.GREEN + ".");
+                    } else {
+                        Bukkit.broadcastMessage(Color.translate(
+                                "&7" + finalName + " &awas un" + finalPunishment.getPunishmentType().getEdName().toLowerCase() + " by &4" + (removerDisplayName != null ? removerDisplayName : "Console") + ChatColor.GREEN + "."
+                        ));
+                    }
                 }
 
                 finalPunishment.savePunishment();

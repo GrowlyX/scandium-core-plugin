@@ -215,6 +215,14 @@ public class PlayerListener implements Listener {
         final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
         final String message = event.getMessage();
 
+        if (potPlayer == null) {
+            player.sendMessage(ChatColor.RED + "Your account is temporarily blocked from performing actions.");
+            player.sendMessage(ChatColor.RED + "Please reconnect to resolve this issue.");
+
+            event.setCancelled(true);
+            return;
+        }
+
         if (potPlayer.isCurrentlyRestricted()) {
             player.sendMessage(ChatColor.RED + "You cannot chat as you are currently restricted.");
 

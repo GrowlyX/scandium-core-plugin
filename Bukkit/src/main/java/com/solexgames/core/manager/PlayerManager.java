@@ -47,7 +47,9 @@ public class PlayerManager {
     }
 
     public boolean isOnline(String player) {
-        return this.allNetworkProfiles.stream()
+        final List<NetworkPlayer> networkPlayers = new ArrayList<>(this.allNetworkProfiles);
+
+        return networkPlayers.stream()
                 .filter(networkPlayer -> networkPlayer.getName().equalsIgnoreCase(player))
                 .findFirst().orElse(null) != null;
     }

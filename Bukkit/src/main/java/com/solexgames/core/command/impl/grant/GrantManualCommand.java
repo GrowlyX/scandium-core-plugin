@@ -66,7 +66,7 @@ public class GrantManualCommand extends BaseCommand {
                                 break;
                         }
 
-                        CorePlugin.getInstance().getPlayerManager().handleGrant(newGrant, document, null, CorePlugin.getInstance().getServerName(), false);
+                        CorePlugin.getInstance().getPlayerManager().handleGrant(newGrant, document, sender instanceof Player ? (Player) sender : null, CorePlugin.getInstance().getServerName(), false);
                     });
         }
 

@@ -19,10 +19,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -283,7 +280,9 @@ public class PunishmentManager {
     }
 
     public void kickWithSameIP(String ipAddress, String kickMessage) {
-        CorePlugin.getInstance().getPlayerManager().getAllProfiles().values().stream()
+        final Map<UUID, PotPlayer> map = new HashMap<>(CorePlugin.getInstance().getPlayerManager().getAllProfiles());
+
+        map.values().stream()
                 .filter(potPlayer -> potPlayer.getIpAddress().equals(ipAddress))
                 .forEach(potPlayer -> potPlayer.getPlayer().kickPlayer(kickMessage));
     }

@@ -74,7 +74,7 @@ public class NetworkServerInfoMenu extends Menu {
                 .setDisplayName(Color.MAIN_COLOR + ChatColor.BOLD.toString() + "Other Information")
                 .addLore(
                         ChatColor.GRAY + "Whitelist: " + Color.SECONDARY_COLOR + this.networkServer.isWhitelistEnabled(),
-                        ChatColor.GRAY + "Last Update: " + ChatColor.WHITE + (System.currentTimeMillis() - this.networkServer.getLastUpdate()) + "ms ago. " + Color.SECONDARY_COLOR + "(" + CorePlugin.FORMAT.format(new Date(this.networkServer.getLastUpdate()) + ")")
+                        ChatColor.GRAY + "Last Update: " + ChatColor.WHITE + (System.currentTimeMillis() - this.networkServer.getLastUpdate()) + "ms ago. " + Color.SECONDARY_COLOR + "(" + CorePlugin.FORMAT.format(new Date(this.networkServer.getLastUpdate())) + ")"
                 )
                 .toButton()
         );
