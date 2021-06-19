@@ -8,19 +8,16 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 /**
- * @author GrowlyX
- * @since 6/9/2021
+ * @author puugz
+ * @since 19/6/2021 16:22
  */
-
 @Getter
 @RequiredArgsConstructor
-public class PreDisguiseEvent extends Event implements Cancellable {
+public class UnDisguiseEvent extends Event {
 
     private static final HandlerList HANDLERS  = new HandlerList();
 
     private final Player player;
-
-    private boolean cancelled;
 
     @Override
     public HandlerList getHandlers() {
@@ -29,15 +26,5 @@ public class PreDisguiseEvent extends Event implements Cancellable {
 
     public static HandlerList getHandlerList() {
         return HANDLERS;
-    }
-
-    @Override
-    public boolean isCancelled() {
-        return this.cancelled;
-    }
-
-    @Override
-    public void setCancelled(boolean b) {
-        this.cancelled = b;
     }
 }

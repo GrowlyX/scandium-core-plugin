@@ -8,6 +8,7 @@ import com.mongodb.Block;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.disguise.DisguiseData;
 import com.solexgames.core.listener.custom.PreDisguiseEvent;
+import com.solexgames.core.listener.custom.UnDisguiseEvent;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.player.ranks.Rank;
 import com.solexgames.core.util.Color;
@@ -97,6 +98,9 @@ public class DisguiseManager {
             final Class<?> entityHuman = entityPlayer.getClass().getSuperclass();
 
             Field declaredField;
+
+            final UnDisguiseEvent undisguiseEvent = new UnDisguiseEvent(player);
+            Bukkit.getPluginManager().callEvent(undisguiseEvent);
 
             int maxVersion = Integer.parseInt(Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3].replaceAll("(v|R[0-9]+)", "").split("_")[0]);
             int minVersion = Integer.parseInt(Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3].replaceAll("(v|R[0-9]+)", "").split("_")[1]);
