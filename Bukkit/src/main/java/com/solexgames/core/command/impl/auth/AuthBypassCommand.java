@@ -5,6 +5,7 @@ import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
+import com.solexgames.core.util.Constants;
 import com.solexgames.core.util.LockedState;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -39,11 +40,11 @@ public class AuthBypassCommand extends BaseCommand {
         final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(target);
 
         if (!potPlayer.isAuthBypassed()) {
-            target.sendMessage(ChatColor.DARK_AQUA + "[2FA]" + ChatColor.GREEN + " An administrator has granted you two-factor authentication bypass.");
-            sender.sendMessage(ChatColor.DARK_AQUA + "[2FA]" + ChatColor.YELLOW + " You've just granted " + ChatColor.AQUA + target.getName() + ChatColor.YELLOW + " two-factor authentication bypass.");
+            target.sendMessage(Constants.STAFF_PREFIX + ChatColor.GREEN + "An administrator has granted you two-factor authentication bypass.");
+            sender.sendMessage(Constants.STAFF_PREFIX + ChatColor.YELLOW + "You've just granted " + ChatColor.AQUA + target.getName() + ChatColor.YELLOW + " two-factor authentication bypass.");
         } else {
-            target.sendMessage(ChatColor.DARK_AQUA + "[2FA]" + ChatColor.GREEN + " An administrator has removed your two-factor authentication bypass.");
-            sender.sendMessage(ChatColor.DARK_AQUA + "[2FA]" + ChatColor.YELLOW + " You've just removed " + ChatColor.AQUA + target.getName() + ChatColor.YELLOW + "'s two-factor authentication bypass.");
+            target.sendMessage(Constants.STAFF_PREFIX + ChatColor.GREEN + "An administrator has removed your two-factor authentication bypass.");
+            sender.sendMessage(Constants.STAFF_PREFIX + ChatColor.YELLOW + "You've just removed " + ChatColor.AQUA + target.getName() + ChatColor.YELLOW + "'s two-factor authentication bypass.");
         }
 
         potPlayer.saveWithoutRemove();

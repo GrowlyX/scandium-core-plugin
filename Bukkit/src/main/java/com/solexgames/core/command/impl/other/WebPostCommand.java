@@ -47,7 +47,7 @@ public class WebPostCommand extends BukkitCommand {
                 return true;
             }).thenAccept(a -> {
                 sender.sendMessage(Color.SECONDARY_COLOR + "You've created a website post with the title: " + Color.MAIN_COLOR + title + Color.SECONDARY_COLOR + "!");
-                sender.sendMessage(Color.SECONDARY_COLOR + "View it via: " + Color.MAIN_COLOR + " https://blare.rip/");
+                sender.sendMessage(Color.SECONDARY_COLOR + "View it via: " + Color.MAIN_COLOR + " https://pvp.bar");
             });
         }
 

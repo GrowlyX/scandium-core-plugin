@@ -138,18 +138,20 @@ public class PlayerListener implements Listener {
 
             if (event.getPlayer().hasPermission("scandium.2fa.forced") && CorePlugin.getInstance().getServerSettings().isTwoFactorEnabled()) {
                 if (potPlayer.isAuthBypassed()) {
-                    event.getPlayer().sendMessage(ChatColor.DARK_AQUA + "[2FA] " + ChatColor.YELLOW + "You've been exempted from authentication as you are 2FA bypassed.");
+                    event.getPlayer().sendMessage(Constants.STAFF_PREFIX + Color.SECONDARY_COLOR + "You've been automatically authenticated.");
                 } else if (potPlayer.isHasSetup2FA()) {
                     if (!potPlayer.getPreviousIpAddress().equals(potPlayer.getIpAddress()) || potPlayer.isRequiredToAuth() || (potPlayer.getLastAuth() + (HOUR * 6L)) < System.currentTimeMillis()) {
-                        final String message = ChatColor.DARK_AQUA + "[2FA] " + ChatColor.YELLOW + "Please authenticate via " + ChatColor.AQUA + "/auth " + ChatColor.WHITE + "<code>" + ChatColor.YELLOW + ".";
+                        final String message = Constants.STAFF_PREFIX + Color.SECONDARY_COLOR + "Please authenticate via " + Color.MAIN_COLOR + "/auth " + ChatColor.WHITE + "<code>" + Color.SECONDARY_COLOR + ".";
 
                         event.getPlayer().sendMessage(message);
                         LockedState.lock(event.getPlayer(), message);
 
                         potPlayer.setRequiredToAuth(true);
+                    } else {
+                        event.getPlayer().sendMessage(Constants.STAFF_PREFIX + Color.SECONDARY_COLOR + "You've been automatically authenticated.");
                     }
                 } else {
-                    final String message = ChatColor.DARK_AQUA + "[2FA] " + ChatColor.YELLOW + "Please setup two-factor authentication via " + ChatColor.AQUA + "/authsetup" + ChatColor.YELLOW + ".";
+                    final String message = Constants.STAFF_PREFIX + Color.SECONDARY_COLOR + "Please setup two-factor authentication via " + Color.MAIN_COLOR + "/authsetup" + Color.SECONDARY_COLOR + ".";
 
                     event.getPlayer().sendMessage(message);
                     LockedState.lock(event.getPlayer(), message);

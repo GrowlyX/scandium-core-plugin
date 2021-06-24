@@ -1,7 +1,6 @@
 package com.solexgames.xenon.listener;
 
 import com.solexgames.xenon.CorePlugin;
-import com.solexgames.xenon.manager.NetworkPlayer;
 import com.solexgames.xenon.redis.json.JsonAppender;
 import com.solexgames.xenon.redis.packet.JedisAction;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +28,7 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        ServerPing.Protocol responseProtocol = event.getResponse().getVersion();
+        final ServerPing.Protocol responseProtocol = event.getResponse().getVersion();
 
         if (responseProtocol.getProtocol() < CorePlugin.getInstance().getMinProtocol()) {
             responseProtocol.setName(CorePlugin.getInstance().getMinVersion() + "+");
@@ -39,9 +38,7 @@ public class PlayerListener implements Listener {
             event.getResponse().setPlayers(new ServerPing.Players(0, 1, new ServerPing.PlayerInfo[]{}));
 
             return;
-        }
-
-        if (this.plugin.isMaintenance()) {
+        } else if (this.plugin.isMaintenance()) {
             responseProtocol.setName("Maintenance");
             responseProtocol.setProtocol(-1);
 
@@ -49,6 +46,10 @@ public class PlayerListener implements Listener {
             event.getResponse().setPlayers(new ServerPing.Players(0, 1, new ServerPing.PlayerInfo[]{}));
         } else {
             event.getResponse().setDescription(this.plugin.getNormalMotd());
+        }
+
+        if (CorePlugin.getInstance().getXenonTopicTimer().isActive()) {
+            event.getResponse().setDescription(CorePlugin.getInstance().getMotdTimerHeader() + "\n" + CorePlugin.getInstance().getMotdTimerFooter());
         }
 
         event.getResponse().setVersion(responseProtocol);

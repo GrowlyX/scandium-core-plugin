@@ -87,7 +87,7 @@ public final class PlayerUtil {
     public static void sendToSocialSpy(String message) {
         Bukkit.getOnlinePlayers().stream()
                 .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
-                .filter(potPlayer -> potPlayer != null && potPlayer.isSocialSpy() && potPlayer.getPlayer().hasPermission("scandium.socialspy"))
+                .filter(potPlayer -> potPlayer != null && potPlayer.isSocialSpy() && potPlayer.getPlayer() != null && potPlayer.getPlayer().hasPermission("scandium.socialspy"))
                 .forEach(potPlayer -> potPlayer.getPlayer().sendMessage(Color.translate(message)));
     }
 

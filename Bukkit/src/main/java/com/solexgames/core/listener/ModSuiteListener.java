@@ -114,7 +114,7 @@ public class ModSuiteListener implements Listener {
                                         event.getPlayer().teleport(player.getLocation());
                                         event.getPlayer().sendMessage(Color.SECONDARY_COLOR + "You've been teleported to a random player: " + player.getDisplayName());
                                     });
-                        } else if (materialName.contains("ink")) {
+                        } else if (materialName.contains("sac")) {
                             event.getPlayer().performCommand("vanish");
 
                             ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();

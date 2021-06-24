@@ -4,6 +4,8 @@ import com.google.common.escape.Escaper;
 import com.google.common.net.UrlEscapers;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.player.PotPlayer;
+import com.solexgames.core.util.Color;
+import com.solexgames.core.util.Constants;
 import com.solexgames.core.util.LockedState;
 import com.solexgames.core.util.map.QrCodeMap;
 import org.apache.commons.codec.binary.Base32;
@@ -63,7 +65,7 @@ public class MapScannerPrompt extends StringPrompt {
             }
         }
 
-        return ChatColor.DARK_AQUA + "[2FA] " + ChatColor.GREEN + "Great! " + ChatColor.YELLOW + "Scan the QR Code on the map which was provided to you and type the code you receive from your 2FA application in chat!";
+        return Constants.STAFF_PREFIX + ChatColor.GREEN + "Great! " + Color.SECONDARY_COLOR + "Scan the QR Code on the map which was provided to you and type the code you receive from your 2FA application in chat!";
     }
 
     @Override
@@ -96,8 +98,8 @@ public class MapScannerPrompt extends StringPrompt {
         potPlayer.setLastAuth(System.currentTimeMillis());
         potPlayer.saveWithoutRemove();
 
-        context.getForWhom().sendRawMessage(ChatColor.DARK_AQUA + "[2FA] " + ChatColor.YELLOW + "You've " + ChatColor.GREEN + "verified" + ChatColor.YELLOW + " your identity!");
-        context.getForWhom().sendRawMessage(ChatColor.DARK_AQUA + "[2FA] " + ChatColor.YELLOW + "Thanks for helping us keep our server safe! " + ChatColor.RED + "❤");
+        context.getForWhom().sendRawMessage(Constants.STAFF_PREFIX + ChatColor.YELLOW + "You've " + ChatColor.GREEN + "verified" + ChatColor.YELLOW + " your identity!");
+        context.getForWhom().sendRawMessage(Constants.STAFF_PREFIX + ChatColor.YELLOW + "Thanks for helping us keep our server safe! " + ChatColor.RED + "❤");
 
         return Prompt.END_OF_CONVERSATION;
     }
@@ -106,14 +108,14 @@ public class MapScannerPrompt extends StringPrompt {
         final int attempts = this.failures++;
 
         if (attempts >= 3) {
-            context.getForWhom().sendRawMessage(ChatColor.RED + "You've exceeded the amount of attempts that you had!");
-            context.getForWhom().sendRawMessage(ChatColor.RED + "The 2FA setup has been cancelled.");
+            context.getForWhom().sendRawMessage(Constants.STAFF_PREFIX + ChatColor.RED + "You've exceeded the amount of attempts that you had!");
+            context.getForWhom().sendRawMessage(Constants.STAFF_PREFIX + ChatColor.RED + "The 2FA setup has been cancelled.");
 
             return Prompt.END_OF_CONVERSATION;
         }
 
-        context.getForWhom().sendRawMessage(ChatColor.RED + "I'm sorry, but the code you provided us is not valid. Please try again and enter a new code in chat.");
-        context.getForWhom().sendRawMessage(ChatColor.RED + "You currently have " + ChatColor.YELLOW + (3 - attempts) + ChatColor.RED + " attempts left.");
+        context.getForWhom().sendRawMessage(Constants.STAFF_PREFIX + ChatColor.RED + "I'm sorry, but the code you provided us is not valid. Please try again and enter a new code in chat.");
+        context.getForWhom().sendRawMessage(Constants.STAFF_PREFIX + ChatColor.RED + "You currently have " + ChatColor.YELLOW + (3 - attempts) + ChatColor.RED + " attempts left.");
 
         return this;
     }

@@ -7,11 +7,12 @@ import com.solexgames.xenon.command.*;
 import com.solexgames.xenon.listener.ChannelListener;
 import com.solexgames.xenon.listener.PlayerListener;
 import com.solexgames.xenon.manager.NetworkPlayerManager;
-import com.solexgames.xenon.proxy.ProxyManager;
 import com.solexgames.xenon.redis.JedisBuilder;
 import com.solexgames.xenon.redis.JedisManager;
 import com.solexgames.xenon.redis.JedisSettings;
 import com.solexgames.xenon.redis.handler.impl.JedisListener;
+import com.solexgames.xenon.task.ActiveTimerFooterUpdateTask;
+import com.solexgames.xenon.timer.XenonTopicTimer;
 import com.solexgames.xenon.util.Color;
 import com.solexgames.xenon.util.MOTDUtil;
 import lombok.Getter;
@@ -30,8 +31,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Objects;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author GrowlyX
@@ -66,12 +66,17 @@ public class CorePlugin extends Plugin {
 
     private boolean maintenance;
 
+    private String motdTimerHeader;
+    private String motdTimerFooter;
+
     private String maintenanceMotd;
     private String normalMotd;
     private String maintenanceMessage;
 
     private int minProtocol;
     private String minVersion;
+
+    private XenonTopicTimer xenonTopicTimer = new XenonTopicTimer();
 
     @SneakyThrows
     @Override
@@ -110,6 +115,7 @@ public class CorePlugin extends Plugin {
         this.normalMotd = Color.translate(MOTDUtil.getCenteredMotd(this.configuration.getString("motd.normal.line-1")) + "<nl>" + MOTDUtil.getCenteredMotd(this.configuration.getString("motd.normal.line-2")))
                 .replace("<bar>", Character.toString('⎜'))
                 .replace("<nl>", "\n");
+        this.motdTimerHeader = Color.translate(MOTDUtil.getCenteredMotd(this.configuration.getString("motd.normal.line-1")));
 
         this.getProxy().getServers().values().stream()
                 .filter(serverInfo -> (serverInfo.getName().contains("hub") || serverInfo.getName().contains("Hub") || serverInfo.getName().contains("Lobby") || serverInfo.getName().contains("lobby")) && !(serverInfo.getName().contains("Restricted") || serverInfo.getName().contains("restricted")))
@@ -122,6 +128,7 @@ public class CorePlugin extends Plugin {
         manager.registerCommand(new MaintenanceCommand());
         manager.registerCommand(new XenonCommand());
         manager.registerCommand(new ProxyStatusCommand());
+        manager.registerCommand(new TimerCommand());
 
         manager.enableUnstableAPI("help");
 
@@ -129,6 +136,8 @@ public class CorePlugin extends Plugin {
 
         this.getProxy().getPluginManager().registerListener(this, new PlayerListener());
         this.getProxy().getPluginManager().registerListener(this, new ChannelListener());
+
+        this.getProxy().getScheduler().schedule(this, new ActiveTimerFooterUpdateTask(), 1L, 1L, TimeUnit.SECONDS);
     }
 
     private void createConfig() {
@@ -158,8 +167,7 @@ public class CorePlugin extends Plugin {
     }
 
     public ServerInfo getBestHub() {
-        return this.hubServers.stream()
-                .filter(Objects::nonNull)
+        return this.hubServers.stream().filter(Objects::nonNull)
                 .min(Comparator.comparingInt(server -> (int) + (long) server.getPlayers().size()))
                 .orElse(null);
     }
