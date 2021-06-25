@@ -4,6 +4,7 @@ import com.solexgames.core.CorePlugin;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.player.PotPlayer;
+import com.solexgames.core.util.Constants;
 import com.solexgames.core.util.prompt.DisclaimerPrompt;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -28,8 +29,8 @@ public class AuthSetupCommand extends BaseCommand {
         final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
         if (potPlayer.isHasSetup2FA() || potPlayer.getAuthSecret() != null) {
-            player.sendMessage(ChatColor.RED + "You've already setup two-factor authentication.");
-            player.sendMessage(ChatColor.RED + "Contact a developer or management member to reset your 2FA.");
+            player.sendMessage(Constants.STAFF_PREFIX + ChatColor.RED + "You've already setup two-factor authentication.");
+            player.sendMessage(Constants.STAFF_PREFIX + ChatColor.RED + "Contact a developer or management member to reset your 2FA.");
             return false;
         }
 

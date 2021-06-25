@@ -5,6 +5,7 @@ import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.player.PotPlayer;
 import com.solexgames.core.util.Color;
+import com.solexgames.core.util.Constants;
 import com.solexgames.core.util.LockedState;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
@@ -16,7 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-@Command(label = "auth", permission = "scandium.2fa", aliases = {"2fa"})
+@Command(label = "auth", permission = "scandium.2fa", aliases = {"2fa"}, async = true)
 public class AuthCommand extends BaseCommand {
 
     @Override
@@ -30,7 +31,7 @@ public class AuthCommand extends BaseCommand {
         final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
         if (!LockedState.isLocked(player)) {
-            player.sendMessage(ChatColor.RED + "I'm sorry, but you cannot perform this action right now.");
+            player.sendMessage(Constants.STAFF_PREFIX + ChatColor.RED + "You do not have to authenticate right now.");
             return false;
         }
 
@@ -49,22 +50,20 @@ public class AuthCommand extends BaseCommand {
             return false;
         }
 
-        CompletableFuture.runAsync(() -> {
-            final boolean valid = potPlayer.isAuthValid(code);
+        final boolean valid = potPlayer.isAuthValid(code);
 
-            if (valid) {
-                LockedState.release(player);
+        if (valid) {
+            LockedState.release(player);
 
-                potPlayer.setRequiredToAuth(false);
-                potPlayer.setLastAuth(System.currentTimeMillis());
-                potPlayer.saveWithoutRemove();
+            potPlayer.setRequiredToAuth(false);
+            potPlayer.setLastAuth(System.currentTimeMillis());
+            potPlayer.saveWithoutRemove();
 
-                player.sendMessage(ChatColor.DARK_AQUA + "[2FA] " + ChatColor.YELLOW + "You've " + ChatColor.GREEN + "verified" + ChatColor.YELLOW + " your identity!");
-                player.sendMessage(ChatColor.DARK_AQUA + "[2FA] " + ChatColor.YELLOW + "Thanks for helping us keep our server safe! " + ChatColor.RED + "❤");
-            } else {
-                player.sendMessage(ChatColor.RED + "I'm sorry, but we couldn't verify your identity. Maybe check the code you entered and try again?");
-            }
-        });
+            player.sendMessage(Constants.STAFF_PREFIX + ChatColor.YELLOW + "You've " + ChatColor.GREEN + "verified" + ChatColor.YELLOW + " your identity!");
+            player.sendMessage(Constants.STAFF_PREFIX + ChatColor.YELLOW + "Thanks for helping us keep our server safe! " + ChatColor.RED + "❤");
+        } else {
+            player.sendMessage(Constants.STAFF_PREFIX + ChatColor.RED + "The code you provided was invalid, please try again.");
+        }
 
         return true;
     }

@@ -9,6 +9,7 @@ import com.solexgames.core.command.impl.CoreCommand;
 import com.solexgames.core.command.impl.other.WebPostCommand;
 import com.solexgames.core.database.Database;
 import com.solexgames.core.disguise.DisguiseCache;
+import com.solexgames.core.enums.NetworkServerType;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.hooks.client.IClient;
 import com.solexgames.core.hooks.client.impl.LunarClientImpl;
@@ -18,6 +19,8 @@ import com.solexgames.core.hooks.protocol.AbstractPacketHandler;
 import com.solexgames.core.hooks.protocol.impl.ProtocolPacketHandler;
 import com.solexgames.core.manager.*;
 import com.solexgames.core.player.punishment.PunishmentStrings;
+import com.solexgames.core.server.NetworkServer;
+import com.solexgames.core.util.BungeeUtil;
 import com.solexgames.lib.commons.redis.JedisBuilder;
 import com.solexgames.lib.commons.redis.JedisManager;
 import com.solexgames.lib.commons.redis.JedisSettings;
@@ -38,6 +41,8 @@ import lombok.Setter;
 import org.apache.commons.lang.time.DurationFormatUtils;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
@@ -348,6 +353,17 @@ public final class CorePlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        this.serverManager.getNetworkServers().stream()
+                .filter(Objects::nonNull)
+                .filter(server -> server.getServerType().equals(NetworkServerType.HUB) && !server.getServerName().startsWith("ds"))
+                .min(Comparator.comparingInt(server -> (int) +(long) server.getOnlinePlayers()))
+                .ifPresent(networkServer -> Bukkit.getOnlinePlayers().forEach(player -> {
+                    player.sendMessage(ChatColor.RED + "The server you were previously on is now down for:");
+                    player.sendMessage(this.serverName + " is currently rebooting, we'll be back soon!");
+
+                    BungeeUtil.sendToServer(player, networkServer.getServerName(), this);
+                }));
+
         RedisUtil.publishAsync(RedisUtil.onServerOffline());
 
         this.serverSettings.setCanJoin(false);

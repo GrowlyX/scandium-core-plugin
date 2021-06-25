@@ -54,6 +54,7 @@ public class TimerCommand extends BaseCommand {
         date.set(Calendar.DAY_OF_MONTH, 24);
         date.set(Calendar.YEAR, 2021);
         date.set(Calendar.HOUR_OF_DAY, 16);
+        date.set(Calendar.MINUTE, 30);
 
         System.out.println("long=" + date.getTime().getTime());
         System.out.println("formatted=" + new SimpleDateFormat("MM/dd/yyyy HH:mma").format(date.getTime()));

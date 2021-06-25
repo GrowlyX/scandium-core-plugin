@@ -1,6 +1,7 @@
 package com.solexgames.xenon.task;
 
 import com.solexgames.xenon.CorePlugin;
+import com.solexgames.xenon.util.MOTDUtil;
 
 /**
  * @author GrowlyX
@@ -15,6 +16,6 @@ public class ActiveTimerFooterUpdateTask implements Runnable {
 
     @Override
     public void run() {
-        CorePlugin.getInstance().setMotdTimerFooter(CorePlugin.getInstance().getXenonTopicTimer().getFormattedFooter());
+        CorePlugin.getInstance().setMotdTimerFooter(MOTDUtil.getCenteredMotd(CorePlugin.getInstance().getXenonTopicTimer().getFormattedFooter()));
     }
 }
