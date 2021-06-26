@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class NetworkServerMainMenu extends PaginatedMenu {
 
     public NetworkServerMainMenu() {
-        super(18);
+        super(9);
     }
 
     @Override

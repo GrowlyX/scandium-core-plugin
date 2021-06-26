@@ -353,17 +353,6 @@ public final class CorePlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        this.serverManager.getNetworkServers().stream()
-                .filter(Objects::nonNull)
-                .filter(server -> server.getServerType().equals(NetworkServerType.HUB) && !server.getServerName().startsWith("ds"))
-                .min(Comparator.comparingInt(server -> (int) +(long) server.getOnlinePlayers()))
-                .ifPresent(networkServer -> Bukkit.getOnlinePlayers().forEach(player -> {
-                    player.sendMessage(ChatColor.RED + "The server you were previously on is now down for:");
-                    player.sendMessage(this.serverName + " is currently rebooting, we'll be back soon!");
-
-                    BungeeUtil.sendToServer(player, networkServer.getServerName(), this);
-                }));
-
         RedisUtil.publishAsync(RedisUtil.onServerOffline());
 
         this.serverSettings.setCanJoin(false);

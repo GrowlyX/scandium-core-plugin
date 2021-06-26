@@ -25,6 +25,7 @@ public enum ServerType {
     FAKEMEN("FakemenClub", ChatColor.DARK_PURPLE, ChatColor.LIGHT_PURPLE, "https://discord.gg/fakemen", "FakemenNetwork", "https://store.fakemen.club/", "fakemen.club"),
     DEPHMC("DephMC", ChatColor.RED, ChatColor.YELLOW, "https://discord.gg/2VCvBjmhQJ", "Dephinity", "N/A", "N/A"),
     PVPTEMPLE("PvPTemple", ChatColor.GOLD, ChatColor.YELLOW, "discord.gg/pvptemple", "ThePvPTemple", "https://shop.pvptemple.com/", "pvptemple.com"),
+    AUXPVP("AuxPvP", ChatColor.DARK_AQUA, ChatColor.AQUA, "dsc.gg/auxpvp", "AuxPvPCOM", "https://store.auxpvp.com/", "auxpvp.com"),
     ;
 
     private final String serverName;

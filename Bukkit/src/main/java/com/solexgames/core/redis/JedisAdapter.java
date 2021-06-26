@@ -142,7 +142,7 @@ public class JedisAdapter implements JedisHandler {
             Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getServer().getPluginManager().callEvent(retrieveEvent));
         }
 
-        PlayerUtil.sendTo("&b[S] &3[" + bootingServerName + "] &b" + bootingServerName + " &3has just booted.", "scandium.network.alerts");
+        PlayerUtil.sendTo("&3[S] &a" + bootingServerName + " &cis now online.", "scandium.network.alerts");
     }
 
     @Subscription(action = "SERVER_DATA_UPDATE")
@@ -189,7 +189,7 @@ public class JedisAdapter implements JedisHandler {
             CorePlugin.getInstance().getServerManager().removeNetworkServer(NetworkServer.getByName(offlineServerName));
         }
 
-        PlayerUtil.sendTo("&b[S] &3[" + offlineServerName + "] &b" + offlineServerName + " &3has just shut down.", "scandium.network.alerts");
+        PlayerUtil.sendTo("&3[S] &a" + offlineServerName + " &cis now offline.", "scandium.network.alerts");
     }
 
     @Subscription(action = "PLAYER_CONNECT_UPDATE")
