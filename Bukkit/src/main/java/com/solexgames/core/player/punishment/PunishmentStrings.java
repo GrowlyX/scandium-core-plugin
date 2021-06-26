@@ -28,9 +28,9 @@ public final class PunishmentStrings {
                     "\n&7If you feel this ban is unjustified, crete a ticket at " + DISCORD_LINK + "." +
                     "\n&6You may also purchase an unban at " + STORE_LINK + ".";
     public final static String BLACK_LIST_MESSAGE =
-            "&4You are blacklisted from " + SERVER_NAME + ".&7" +
-                    "\n&cYou were blacklisted for: &7<reason>" +
-                    "\n&7This punishment cannot be appealed or purchased.";
+            "&cYou are blacklisted from " + SERVER_NAME + ".&7" +
+                    "\n&7You may not appeal this type of punishment." +
+                    "\n&4You may also not purchase an unban for this type of ban.";
     public final static String IP_BAN_RELATION_MESSAGE =
             "&cYour IP is permanently &4banned &cfrom " + SERVER_NAME + "." +
                     "\n&cYour ban is in relation to the account: &7<player>" +

@@ -65,7 +65,12 @@ public class PlayerListener implements Listener {
             final boolean isHub = CorePlugin.getInstance().getServerName().toLowerCase().contains("hub") || CorePlugin.getInstance().getServerName().toLowerCase().contains("lobby");
 
             if (potPlayer != null) {
-                if (potPlayer.isCurrentlyRestricted() || potPlayer.isCurrentlyBlacklisted() && !isHub) {
+                if (potPlayer.isCurrentlyBlacklisted()) {
+                    event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, potPlayer.getRestrictionMessage());
+                    return;
+                }
+
+                if (potPlayer.isCurrentlyRestricted() && !isHub) {
                     event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, potPlayer.getRestrictionMessage());
                 } else if (!potPlayer.findIpRelative(event, isHub)) {
                     event.allow();
