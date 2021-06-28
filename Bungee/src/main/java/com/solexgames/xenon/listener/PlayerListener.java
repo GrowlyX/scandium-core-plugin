@@ -71,28 +71,6 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
-    public void onKick(ServerKickEvent event) {
-        if (event.getCancelServer() != null && event.getCancelServer().getName() != null && !event.getCancelServer().getName().contains("hub") && !event.getKickedFrom().getName().contains("hub") && !event.getCancelServer().getName().contains("lobby") && !event.getKickedFrom().getName().contains("lobby")) {
-            try {
-                final ServerInfo hub = CorePlugin.getInstance().getBestHub();
-
-                if (hub == null) {
-                    event.getPlayer().disconnect((new ComponentBuilder("§cThere aren't any hub servers available.")).create());
-                    return;
-                }
-
-                event.setCancelServer(hub);
-                event.setCancelled(true);
-
-                event.getPlayer().sendMessage(event.getKickReasonComponent());
-            } catch (Exception ignored) {
-                CorePlugin.getInstance().getProxy().getConsole().sendMessage((new ComponentBuilder("§cCouldn't find a hub server!")).create());
-                event.getPlayer().disconnect((new ComponentBuilder("§cThere aren't any hub servers available.")).create());
-            }
-        }
-    }
-
-    @EventHandler
     public void onConnect(ServerConnectEvent event) {
         if (!event.getTarget().canAccess(event.getPlayer())) {
             event.getPlayer().sendMessage(ChatColor.RED + "Your connection to " + ChatColor.BOLD + event.getTarget().getName() + ChatColor.RED + " has been blocked due to you not having permission to access it.");

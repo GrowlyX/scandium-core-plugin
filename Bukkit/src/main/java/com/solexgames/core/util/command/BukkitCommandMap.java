@@ -51,7 +51,9 @@ public class BukkitCommandMap extends SimpleCommandMap {
                         completions.add(prefix + name);
                     }
                 } else if (StringUtil.startsWithIgnoreCase(name, cmdLine)) {
-                    completions.add(prefix + name);
+                    if (!name.contains("buzz") || !name.contains("stellar")) {
+                        completions.add(prefix + name);
+                    }
                 }
             }
 

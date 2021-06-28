@@ -52,7 +52,7 @@ public class ReplyCommand extends BaseCommand {
                 return false;
             }
 
-            if (potTarget.isVanished() && (potPlayer.getActiveGrant().getRank().getWeight() < potTarget.getActiveGrant().getRank().getWeight())) {
+            if (potTarget.isVanished() || potTarget.isDisguised() && (potPlayer.getActiveGrant().getRank().getWeight() < potTarget.getActiveGrant().getRank().getWeight())) {
                 player.sendMessage(ChatColor.RED + "Error: That player does not exist.");
                 return false;
             }

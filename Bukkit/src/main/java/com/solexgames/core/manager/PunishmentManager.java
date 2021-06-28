@@ -111,7 +111,7 @@ public class PunishmentManager {
                         Color.SECONDARY_COLOR + ChatColor.STRIKETHROUGH.toString() + "---------------------------------";
 
                 if (silent) {
-                    PlayerUtil.sendClickableTo("&7[Silent] " + playerFormattedName + " &awas " + punishmentExplanation + " by &4&a" + durationFormat,
+                    PlayerUtil.sendClickableTo("&7[Silent] " + playerFormattedName + " &awas " + punishmentExplanation + " by &4Console&a" + durationFormat,
                             clickableLore,
                             "/c " + targetDocument.getString("name"),
                             ClickEvent.Action.SUGGEST_COMMAND);

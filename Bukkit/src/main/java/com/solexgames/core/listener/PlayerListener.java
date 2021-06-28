@@ -164,7 +164,7 @@ public class PlayerListener implements Listener {
             }
         });
 
-        CorePlugin.getInstance().getNMS().setupTablist(event.getPlayer());
+         CorePlugin.getInstance().getNMS().setupTablist(event.getPlayer());
 
         if (potPlayer.isAutoVanish()) {
             event.getPlayer().sendMessage(CorePlugin.getInstance().getServerManager().getAutomaticallyPutInto().replace("<value>", "vanish"));

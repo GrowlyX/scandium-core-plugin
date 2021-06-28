@@ -82,26 +82,26 @@ public class NMSAccess_v1_16 implements INMS {
 
     @Override
     public void setupTablist(Player player) {
-        if (CorePlugin.getInstance().getServerSettings().isTabEnabled()) {
-            IChatBaseComponent tabHeader = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + CorePlugin.getInstance().getServerSettings().getTabHeader() + "\"}");
-            IChatBaseComponent tabFooter = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + CorePlugin.getInstance().getServerSettings().getTabFooter() + "\"}");
-            PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter();
-
-            try {
-                Field headerField = packet.getClass().getDeclaredField("a");
-                headerField.setAccessible(true);
-                headerField.set(packet, tabHeader);
-                headerField.setAccessible(false);
-
-                Field footerField = packet.getClass().getDeclaredField("b");
-                footerField.setAccessible(true);
-                footerField.set(packet, tabFooter);
-                footerField.setAccessible(false);
-            } catch (Exception ignored) {
-            }
-
-            ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
-        }
+//        if (CorePlugin.getInstance().getServerSettings().isTabEnabled()) {
+//            IChatBaseComponent tabHeader = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + CorePlugin.getInstance().getServerSettings().getTabHeader() + "\"}");
+//            IChatBaseComponent tabFooter = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + CorePlugin.getInstance().getServerSettings().getTabFooter() + "\"}");
+//            PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter();
+//
+//            try {
+//                Field headerField = packet.getClass().getDeclaredField("a");
+//                headerField.setAccessible(true);
+//                headerField.set(packet, tabHeader);
+//                headerField.setAccessible(false);
+//
+//                Field footerField = packet.getClass().getDeclaredField("b");
+//                footerField.setAccessible(true);
+//                footerField.set(packet, tabFooter);
+//                footerField.setAccessible(false);
+//            } catch (Exception ignored) {
+//            }
+//
+//            ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+//        }
     }
 
     @Override
