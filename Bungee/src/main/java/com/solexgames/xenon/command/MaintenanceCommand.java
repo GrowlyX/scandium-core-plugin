@@ -8,6 +8,7 @@ import co.aikar.commands.annotation.HelpCommand;
 import co.aikar.commands.annotation.Subcommand;
 import com.solexgames.xenon.CorePlugin;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 /**
@@ -15,7 +16,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
  * @since 3/5/2021
  */
 
-@CommandAlias("globalwl|maintenance")
+@CommandAlias("maintenance")
 @CommandPermission("xenon.command.maintenance")
 public class MaintenanceCommand extends BaseCommand {
 
@@ -30,7 +31,13 @@ public class MaintenanceCommand extends BaseCommand {
         CorePlugin.getInstance().setMaintenance(!CorePlugin.getInstance().isMaintenance());
 
         if (CorePlugin.getInstance().isMaintenance()) {
-            proxiedPlayer.sendMessage(ChatColor.GREEN + "You've enabled network maintenance!");
+            proxiedPlayer.sendMessage(ChatColor.GREEN + "You've enabled network maintenance and all players who aren't whitelisted have been kicked.");
+
+            ProxyServer.getInstance().getPlayers().forEach(proxiedPlayer1 -> {
+                if (!CorePlugin.getInstance().getWhitelistedPlayers().contains(proxiedPlayer1.getName())) {
+                    proxiedPlayer1.disconnect(ChatColor.RED + "Sorry, but the server's now in maintenance.");
+                }
+            });
         } else {
             proxiedPlayer.sendMessage(ChatColor.GREEN + "You've disabled network maintenance!");
         }

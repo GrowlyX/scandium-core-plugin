@@ -132,7 +132,7 @@ public class CorePlugin extends Plugin {
         final BungeeCommandManager manager = new BungeeCommandManager(this);
 
         manager.registerCommand(new HubCommand());
-        manager.registerCommand(new ListCommand());
+//        manager.registerCommand(new ListCommand());
         manager.registerCommand(new MaintenanceCommand());
         manager.registerCommand(new XenonCommand());
         manager.registerCommand(new ProxyStatusCommand());

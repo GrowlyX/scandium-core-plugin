@@ -11,7 +11,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
  * @since 3/5/2021
  */
 
-@CommandAlias("xenon")
+@CommandAlias("xenon|xenonbungee|commonsbungee")
 public class XenonCommand extends BaseCommand {
 
     @Default

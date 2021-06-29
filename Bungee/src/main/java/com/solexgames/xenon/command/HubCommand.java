@@ -23,10 +23,10 @@ public class HubCommand extends BaseCommand {
             if (hub != null) {
                 player.connect(hub, ServerConnectEvent.Reason.COMMAND);
             } else {
-                player.sendMessage(TextComponent.fromLegacyText(ChatColor.RED + "There aren't any available hubs right now!"));
+                player.sendMessage(TextComponent.fromLegacyText(ChatColor.RED + "There aren't any hubs available."));
             }
         } else {
-            player.sendMessage(TextComponent.fromLegacyText(ChatColor.RED + "I'm sorry, but you're already in a hub."));
+            player.sendMessage(TextComponent.fromLegacyText(ChatColor.RED + "You are already on a hub."));
         }
     }
 }
