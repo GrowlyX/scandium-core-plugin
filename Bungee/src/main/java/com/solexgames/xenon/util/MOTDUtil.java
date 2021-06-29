@@ -11,7 +11,7 @@ public final class MOTDUtil {
             return "";
         message = Color.translate(message);
 
-        if (CorePlugin.getInstance().isCenterAuto()) {
+        if (!CorePlugin.getInstance().isCenterAuto()) {
             return message;
         }
 

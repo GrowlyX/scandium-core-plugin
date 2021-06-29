@@ -121,8 +121,8 @@ public class CorePlugin extends Plugin {
         this.normalMotd = Color.translate(MOTDUtil.getCenteredMotd(this.configuration.getString("motd.normal.line-1")) + "<nl>" + MOTDUtil.getCenteredMotd(this.configuration.getString("motd.normal.line-2")))
                 .replace("<bar>", Character.toString('⎜'))
                 .replace("<nl>", "\n");
-        this.timerFormatEnded = Color.translate(this.configuration.getString("timer-coundown.ended"));
-        this.timerFormatCountdown = Color.translate(this.configuration.getString("timer-coundown.countdown"));
+        this.timerFormatEnded = Color.translate(this.configuration.getString("timer-format.ended"));
+        this.timerFormatCountdown = Color.translate(this.configuration.getString("timer-format.countdown"));
         this.motdTimerHeader = Color.translate(MOTDUtil.getCenteredMotd(this.configuration.getString("motd.normal.line-1")));
 
         this.getProxy().getServers().values().stream()
