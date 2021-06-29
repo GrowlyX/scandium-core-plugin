@@ -109,13 +109,13 @@ public class PlayerListener implements Listener {
             }
 
             ProxyServer.getInstance().getScheduler().schedule(CorePlugin.getInstance(), () -> {
-                if (event.getPlayer().hasPermission("scandium.staff")) {
+                if (ProxyServer.getInstance().getPlayer(event.getPlayer().getName()).hasPermission("scandium.staff")) {
                     CompletableFuture.runAsync(() -> CorePlugin.getInstance().getJedisManager().publish(new JsonAppender(JedisAction.PLAYER_CONNECT_UPDATE)
                             .put("PLAYER", event.getPlayer().getDisplayName())
                             .put("SERVER", event.getTarget().getName())
                             .getAsJson()));
                 }
-            }, 30L, TimeUnit.MILLISECONDS);
+            }, 1L, TimeUnit.SECONDS);
         }
     }
 
