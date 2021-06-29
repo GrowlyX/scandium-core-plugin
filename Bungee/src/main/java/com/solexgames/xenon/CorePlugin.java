@@ -73,6 +73,9 @@ public class CorePlugin extends Plugin {
     private String normalMotd;
     private String maintenanceMessage;
 
+    private String timerFormatEnded;
+    private String timerFormatCountdown;
+
     private int minProtocol;
     private String minVersion;
     private boolean centerAuto;
@@ -102,6 +105,7 @@ public class CorePlugin extends Plugin {
 
         this.minProtocol = this.configuration.getInt("minimum-protocol");
         this.minVersion = this.configuration.getString("minimum-version");
+
         this.centerAuto = this.configuration.getBoolean("motd.center-automatic");
 
         this.networkPlayerManager = new NetworkPlayerManager();
@@ -117,6 +121,8 @@ public class CorePlugin extends Plugin {
         this.normalMotd = Color.translate(MOTDUtil.getCenteredMotd(this.configuration.getString("motd.normal.line-1")) + "<nl>" + MOTDUtil.getCenteredMotd(this.configuration.getString("motd.normal.line-2")))
                 .replace("<bar>", Character.toString('⎜'))
                 .replace("<nl>", "\n");
+        this.timerFormatEnded = Color.translate(this.configuration.getString("timer-coundown.ended"));
+        this.timerFormatCountdown = Color.translate(this.configuration.getString("timer-coundown.countdown"));
         this.motdTimerHeader = Color.translate(MOTDUtil.getCenteredMotd(this.configuration.getString("motd.normal.line-1")));
 
         this.getProxy().getServers().values().stream()

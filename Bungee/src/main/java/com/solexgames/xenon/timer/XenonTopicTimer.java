@@ -1,9 +1,9 @@
 package com.solexgames.xenon.timer;
 
+import com.solexgames.xenon.CorePlugin;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import net.md_5.bungee.api.ChatColor;
 import org.apache.commons.lang.time.DurationFormatUtils;
 
 import java.util.Date;
@@ -27,7 +27,7 @@ public class XenonTopicTimer {
         final String formatted = DurationFormatUtils.formatDurationWords(this.endsAt.getTime() - now.getTime(), true, true);
 
         return this.endsAt.before(now) ?
-                ChatColor.YELLOW + this.name + ChatColor.GRAY + " has commenced, have fun!" :
-                ChatColor.YELLOW + this.name + ChatColor.GRAY + " starts in " + ChatColor.GOLD + formatted;
+                String.format(CorePlugin.getInstance().getTimerFormatEnded(), this.name) :
+                String.format(CorePlugin.getInstance().getTimerFormatCountdown(), this.name, formatted);
     }
 }

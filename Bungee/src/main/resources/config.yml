@@ -15,3 +15,7 @@ maintenance-string: "&cSorry, but the server's in maintenance.<nl>&cPlease try l
 # https://wiki.vg/Protocol_version_numbers
 minimum-protocol: 335
 minimum-version: "1.12.x"
+
+timer-format:
+  ended: "&e➥ &6%s &7has commenced, have fun!"
+  countdown: "&e%s &7starts in &6%s"
