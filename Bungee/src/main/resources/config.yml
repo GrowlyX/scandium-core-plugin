@@ -1,11 +1,9 @@
-#
-#  Xenon - Created by SolexGames
-#
 region: "EU"
 maintenance: true
 whitelistedPlayers:
   - "GrowlyX"
 motd:
+  center-automatic: true
   maintenance:
     line-1: "&e&lMine&3&lArcade &7[1.8-1.16]"
     line-2: "&cWe're currently in maintenance mode!"

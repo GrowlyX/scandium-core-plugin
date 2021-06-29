@@ -33,8 +33,6 @@ public class ChannelListener implements Listener {
 
                 player.setDisplayName(fancyName);
             }
-
-            System.out.println(permissions);
         }
     }
 }

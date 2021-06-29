@@ -1,5 +1,7 @@
 package com.solexgames.xenon.util;
 
+import com.solexgames.xenon.CorePlugin;
+
 public final class MOTDUtil {
 
     private final static int CENTER_PX = 132;
@@ -8,6 +10,10 @@ public final class MOTDUtil {
         if (message == null || message.equals(""))
             return "";
         message = Color.translate(message);
+
+        if (CorePlugin.getInstance().isCenterAuto()) {
+            return message;
+        }
 
         int messagePxSize = 0;
         boolean previousCode = false;

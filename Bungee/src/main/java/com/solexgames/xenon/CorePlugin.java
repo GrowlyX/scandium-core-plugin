@@ -75,6 +75,7 @@ public class CorePlugin extends Plugin {
 
     private int minProtocol;
     private String minVersion;
+    private boolean centerAuto;
 
     private XenonTopicTimer xenonTopicTimer = new XenonTopicTimer();
 
@@ -101,6 +102,7 @@ public class CorePlugin extends Plugin {
 
         this.minProtocol = this.configuration.getInt("minimum-protocol");
         this.minVersion = this.configuration.getString("minimum-version");
+        this.centerAuto = this.configuration.getBoolean("motd.center-automatic");
 
         this.networkPlayerManager = new NetworkPlayerManager();
 

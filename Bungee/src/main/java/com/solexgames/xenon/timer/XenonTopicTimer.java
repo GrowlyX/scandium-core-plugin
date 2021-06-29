@@ -28,6 +28,6 @@ public class XenonTopicTimer {
 
         return this.endsAt.before(now) ?
                 ChatColor.YELLOW + this.name + ChatColor.GRAY + " has commenced, have fun!" :
-                ChatColor.YELLOW + this.name + ChatColor.GRAY + " will start in " + ChatColor.GOLD + formatted;
+                ChatColor.YELLOW + this.name + ChatColor.GRAY + " starts in " + ChatColor.GOLD + formatted;
     }
 }

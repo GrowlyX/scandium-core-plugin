@@ -31,7 +31,7 @@ public class PlayerListener implements Listener {
         final ServerPing.Protocol responseProtocol = event.getResponse().getVersion();
 
         if (responseProtocol.getProtocol() < CorePlugin.getInstance().getMinProtocol()) {
-            responseProtocol.setName(CorePlugin.getInstance().getMinVersion() + "+");
+            responseProtocol.setName("ReBungee " + CorePlugin.getInstance().getMinVersion() + "+");
             responseProtocol.setProtocol(-1);
 
             event.getResponse().setDescription(this.plugin.getNormalMotd());
@@ -64,7 +64,7 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (plugin.isMaintenance() && !plugin.getWhitelistedPlayers().contains(event.getConnection().getName())) {
+        if (this.plugin.isMaintenance() && !plugin.getWhitelistedPlayers().contains(event.getConnection().getName())) {
             event.setCancelReason(TextComponent.fromLegacyText(CorePlugin.getInstance().getMaintenanceMessage()));
             event.setCancelled(true);
         }

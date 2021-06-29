@@ -3,13 +3,8 @@ package com.solexgames.xenon.command;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.Default;
-import com.solexgames.xenon.CorePlugin;
 import com.solexgames.xenon.util.Color;
-import com.solexgames.xenon.util.StringUtil;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.api.plugin.Command;
 
 /**
  * @author GrowlyX
