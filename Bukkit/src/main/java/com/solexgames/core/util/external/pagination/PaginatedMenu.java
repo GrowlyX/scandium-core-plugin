@@ -35,6 +35,11 @@ public abstract class PaginatedMenu extends Menu {
         return getPrePaginatedTitle(player) + (pages == 1 ? "" : ChatColor.GRAY + " (" + Color.MAIN_COLOR + page + ChatColor.GRAY + "/" + Color.MAIN_COLOR + pages + ChatColor.GRAY + ")");
     }
 
+    @Override
+    public String getRawTitle(Player player) {
+        return this.getPrePaginatedTitle(player);
+    }
+
     /**
      * Changes the page number
      *

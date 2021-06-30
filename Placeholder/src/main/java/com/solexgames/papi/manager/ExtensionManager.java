@@ -32,14 +32,14 @@ public class ExtensionManager {
 
     public String getJoinableStatus(NetworkServer server) {
         if (server == null) {
-            return ChatColor.RED + "You cannot join this server.";
+            return ChatColor.RED + "[Currently cannot join]";
         }
 
         if (server.getServerStatus() == NetworkServerStatusType.ONLINE) {
-            return ChatColor.GREEN + "Online";
+            return ChatColor.YELLOW + "[Click to join queue]";
         }
 
-        return ChatColor.RED + "You cannot join this server.";
+        return ChatColor.RED + "[Currently cannot join]";
     }
 
     public String getShortStatus(NetworkServer server) {

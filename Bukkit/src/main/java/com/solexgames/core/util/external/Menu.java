@@ -50,6 +50,21 @@ public abstract class Menu {
             } else {
                 int previousSize = player.getOpenInventory().getTopInventory().getSize();
 
+                // int previousSize = player.getOpenInventory().getTopInventory().getSize();
+                //                String previousTitle = player.getOpenInventory().getTopInventory().getTitle();
+                //
+                //                System.out.println("previousTitle= " + previousTitle);
+                //                System.out.println("newTitle= " + this.getRawTitle(player));
+                ////                System.out.println("newTitleSubstring= " + (this.getRawTitle(player).substring(0, previousTitle.length())));
+                //
+                //                if ((previousTitle.substring(0, this.getRawTitle(player).length()).equalsIgnoreCase(this.getRawTitle(player))) || previousSize == size && player.getOpenInventory().getTopInventory().getTitle().equals(title)) {
+                //                    inventory = player.getOpenInventory().getTopInventory();
+                //                    update = true;
+                //                } else {
+                //                    previousMenu.setClosedByMenu(true);
+                //                    player.closeInventory();
+                //                }
+
                 if (previousSize == size && player.getOpenInventory().getTopInventory().getTitle().equals(title)) {
                     inventory = player.getOpenInventory().getTopInventory();
                     update = true;
@@ -130,6 +145,10 @@ public abstract class Menu {
     }
 
     public abstract String getTitle(Player player);
+
+    public String getRawTitle(Player player) {
+        return this.getTitle(player);
+    }
 
     public abstract Map<Integer, Button> getButtons(Player player);
 

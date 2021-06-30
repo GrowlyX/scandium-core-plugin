@@ -24,7 +24,7 @@ public class PrefixViewPaginatedMenu extends PaginatedMenu {
     private final Player player;
 
     public PrefixViewPaginatedMenu(Player player) {
-        super(27);
+        super(18);
         this.player = player;
     }
 
