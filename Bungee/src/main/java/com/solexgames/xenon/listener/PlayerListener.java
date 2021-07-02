@@ -89,6 +89,7 @@ public class PlayerListener implements Listener {
             event.setCancelReason(TextComponent.fromLegacyText(ChatColor.RED + "You cannot log on with a VPN!"));
             event.setCancelled(true);
 
+            CorePlugin.getInstance().getVpnUsers().put(event.getConnection().getName(), System.currentTimeMillis());
             ProxyServer.getInstance().getPlayers().stream()
                     .filter(proxiedPlayer -> proxiedPlayer.hasPermission(CorePlugin.getInstance().getAlertPermission()))
                     .forEach(proxiedPlayer -> {

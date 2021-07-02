@@ -29,9 +29,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Objects;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -56,6 +55,8 @@ public class CorePlugin extends Plugin {
 
     private ArrayList<String> whitelistedPlayers = new ArrayList<>();
     private ArrayList<ServerInfo> hubServers = new ArrayList<>();
+
+    private Map<String, Long> vpnUsers = new ConcurrentHashMap<>();
 
     private Configuration configuration;
     private Configuration redisConfig;
@@ -145,7 +146,7 @@ public class CorePlugin extends Plugin {
         final BungeeCommandManager manager = new BungeeCommandManager(this);
 
         manager.registerCommand(new HubCommand());
-//        manager.registerCommand(new ListCommand());
+        manager.registerCommand(new VpnCommand());
         manager.registerCommand(new MaintenanceCommand());
         manager.registerCommand(new XenonCommand());
         manager.registerCommand(new ProxyStatusCommand());
