@@ -1,6 +1,7 @@
 package com.solexgames.xenon.listener;
 
 import com.solexgames.xenon.CorePlugin;
+import com.solexgames.xenon.model.VpnRequestData;
 import com.solexgames.xenon.redis.json.JsonAppender;
 import com.solexgames.xenon.redis.packet.JedisAction;
 import lombok.RequiredArgsConstructor;
@@ -60,13 +61,39 @@ public class PlayerListener implements Listener {
         if (event.getConnection().getVersion() < CorePlugin.getInstance().getMinProtocol()) {
             event.setCancelReason(TextComponent.fromLegacyText(ChatColor.RED + "You're on an unsupported version!\n" + ChatColor.RED + "Please connect using at least " + CorePlugin.getInstance().getMinVersion() + "!"));
             event.setCancelled(true);
-
             return;
         }
 
         if (this.plugin.isMaintenance() && !plugin.getWhitelistedPlayers().contains(event.getConnection().getName())) {
             event.setCancelReason(TextComponent.fromLegacyText(CorePlugin.getInstance().getMaintenanceMessage()));
             event.setCancelled(true);
+            return;
+        }
+
+        final String representableIp = event.getConnection().getAddress().getAddress().toString().replace("/", "");
+        final VpnRequestData requestData = CorePlugin.getInstance().getVpnManager().fetchVpnData(representableIp);
+
+        if (requestData == null) {
+            event.setCancelReason(TextComponent.fromLegacyText(ChatColor.RED + "Failed to fetch data from the api: Connection Refused"));
+            event.setCancelled(true);
+            return;
+        }
+
+        if (requestData.getRequestStatus().equals("failed")) {
+            event.setCancelReason(TextComponent.fromLegacyText(ChatColor.RED + "Failed to fetch data from the api: " + requestData.getRequestFailedMessage()));
+            event.setCancelled(true);
+            return;
+        }
+
+        if (requestData.isUsingVpn()) {
+            event.setCancelReason(TextComponent.fromLegacyText(ChatColor.RED + "You cannot log on with a VPN!"));
+            event.setCancelled(true);
+
+            ProxyServer.getInstance().getPlayers().stream()
+                    .filter(proxiedPlayer -> proxiedPlayer.hasPermission(CorePlugin.getInstance().getAlertPermission()))
+                    .forEach(proxiedPlayer -> {
+                        proxiedPlayer.sendMessage(TextComponent.fromLegacyText(String.format(CorePlugin.getInstance().getAlertFormat(), event.getConnection().getName())));
+                    });
         }
     }
 

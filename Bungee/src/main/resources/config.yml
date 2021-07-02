@@ -19,3 +19,11 @@ minimum-version: "1.12.x"
 timer-format:
   ended: "&e➥ &6%s &7has commenced, have fun!"
   countdown: "&e%s &7starts in &6%s"
+
+vpn-detector:
+  # https://vpnblocker.net/
+  api-key: ""
+  kick-message: "&cYou cannot use a vpn on our network."
+  alerts:
+    permission: "xenon.vpn.alerts"
+    format: "&b[S] &3[na-proxy] &4$s &ctried to connect with a vpn."

@@ -231,9 +231,10 @@ public class PotPlayer {
         document.put("autoModMode", this.isAutoModMode);
         document.put("previousIpAddress", this.encryptedIpAddress);
         document.put("experience", this.experience);
+
         document.put("blacklisted", this.currentlyBlacklisted);
-        document.put("restricted", this.relatedTo != null && this.currentlyRestricted);
-        document.put("ipbanned", this.relatedToIpBannedWho != null && this.currentlyRestricted);
+        document.put("restricted", this.restrictionPunishment != null && this.currentlyRestricted);
+
         document.put("currentlyOn", CorePlugin.getInstance().getServerName());
 
         return document;
@@ -473,7 +474,7 @@ public class PotPlayer {
                     while (documentIterator.hasNext() && !atomicBoolean.get()) {
                         final Document document = documentIterator.next();
 
-                        if (document.getBoolean("blacklisted") != null && document.getBoolean("blacklisted") && !document.getString("name").equalsIgnoreCase(loginEvent.getName())) {
+                        if (document.getBoolean("blacklisted") && !document.getString("name").equalsIgnoreCase(loginEvent.getName())) {
                             this.currentlyRestricted = true;
                             this.relatedToBlacklist = true;
 
@@ -487,9 +488,11 @@ public class PotPlayer {
                             }
 
                             atomicBoolean.set(true);
+
+                            System.out.println("[Debug] Found blacklist evader, " + document.getString("name"));
                         }
 
-                        if (document.getBoolean("restricted") != null && document.getBoolean("restricted") && !document.getString("name").equalsIgnoreCase(loginEvent.getName())) {
+                        if (document.getBoolean("restricted") && !document.getString("name").equalsIgnoreCase(loginEvent.getName())) {
                             this.currentlyRestricted = true;
                             this.relatedToIpBanned = true;
 
@@ -503,6 +506,8 @@ public class PotPlayer {
                             }
 
                             atomicBoolean.set(true);
+
+                            System.out.println("[Debug] Found ban evader, " + document.getString("name"));
                         }
                     }
                 });
@@ -599,12 +604,12 @@ public class PotPlayer {
     }
 
     public void setupPlayer() {
-        CompletableFuture.runAsync(() -> {
-            this.resetPermissions();
-            this.setupPermissions();
-        });
-
         Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> {
+            CompletableFuture.runAsync(() -> {
+                this.resetPermissions();
+                this.setupPermissions();
+            });
+
             this.setupPlayerTag();
             this.setupPlayerList();
         }, 20L);

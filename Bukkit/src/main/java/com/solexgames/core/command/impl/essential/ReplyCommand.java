@@ -87,8 +87,8 @@ public class ReplyCommand extends BaseCommand {
                 return false;
             }
 
-            if (CorePlugin.getInstance().getFilterManager().isDmFiltered(player, potTarget.getName(), message)) {
-                player.sendMessage(ChatColor.RED + ("Error: You cannot use censored words in a direct message."));
+            if (!player.hasPermission("scandium.filter.bypass") && CorePlugin.getInstance().getFilterManager().isDmFiltered(player, potTarget.getName(), message)) {
+                player.sendMessage(ChatColor.RED + ("You cannot use censored words in a direct message."));
                 return false;
             }
 

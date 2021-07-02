@@ -28,6 +28,12 @@ public class MaintenanceCommand extends BaseCommand {
     @Subcommand("toggle")
     @CommandPermission("xenon.command.maintenance.subcommand.toggle")
     public void onToggle(ProxiedPlayer proxiedPlayer) {
+        proxiedPlayer.sendMessage(ChatColor.RED + "Please use " + ChatColor.YELLOW + "/maintenance toggle confirm" + ChatColor.RED + " to confirm this action.");
+    }
+
+    @Subcommand("toggle confirm")
+    @CommandPermission("xenon.command.maintenance.subcommand.toggle")
+    public void onToggleConfirm(ProxiedPlayer proxiedPlayer) {
         CorePlugin.getInstance().setMaintenance(!CorePlugin.getInstance().isMaintenance());
 
         if (CorePlugin.getInstance().isMaintenance()) {

@@ -51,7 +51,7 @@ public class TimerCommand extends BaseCommand {
         final Calendar date = new GregorianCalendar();
 
         date.set(Calendar.MONTH, 5);
-        date.set(Calendar.DAY_OF_MONTH, 26);
+        date.set(Calendar.DAY_OF_MONTH, 30);
         date.set(Calendar.YEAR, 2021);
         date.set(Calendar.HOUR_OF_DAY, 14);
         date.set(Calendar.MINUTE, 0);

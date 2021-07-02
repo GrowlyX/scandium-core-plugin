@@ -78,7 +78,7 @@ public class MessageCommand extends BaseCommand {
                 player.sendMessage(ChatColor.RED + ("Error: That player has their dms disabled."));
                 return false;
             }
-            if (CorePlugin.getInstance().getFilterManager().isDmFiltered(player, potTarget.getName(), message)) {
+            if (!player.hasPermission("scandium.filter.bypass") && CorePlugin.getInstance().getFilterManager().isDmFiltered(player, potTarget.getName(), message)) {
                 player.sendMessage(ChatColor.RED + ("You cannot use censored words in a direct message."));
                 return false;
             }

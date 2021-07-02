@@ -7,6 +7,7 @@ import com.solexgames.xenon.command.*;
 import com.solexgames.xenon.listener.ChannelListener;
 import com.solexgames.xenon.listener.PlayerListener;
 import com.solexgames.xenon.manager.NetworkPlayerManager;
+import com.solexgames.xenon.manager.VpnManager;
 import com.solexgames.xenon.redis.JedisBuilder;
 import com.solexgames.xenon.redis.JedisManager;
 import com.solexgames.xenon.redis.JedisSettings;
@@ -73,12 +74,18 @@ public class CorePlugin extends Plugin {
     private String normalMotd;
     private String maintenanceMessage;
 
+    private String apiKey;
+    private String alertPermission;
+    private String alertFormat;
+
     private String timerFormatEnded;
     private String timerFormatCountdown;
 
     private int minProtocol;
     private String minVersion;
     private boolean centerAuto;
+
+    private VpnManager vpnManager;
 
     private XenonTopicTimer xenonTopicTimer = new XenonTopicTimer();
 
@@ -108,6 +115,10 @@ public class CorePlugin extends Plugin {
 
         this.centerAuto = this.configuration.getBoolean("motd.center-automatic");
 
+        this.apiKey = this.configuration.getString("vpn-detector.api-key");
+        this.alertFormat = Color.translate(this.configuration.getString("vpn-detector.alerts.format"));
+        this.alertPermission = this.configuration.getString("vpn-detector.alerts.permission");
+
         this.networkPlayerManager = new NetworkPlayerManager();
 
         this.whitelistedPlayers.addAll(this.configuration.getStringList("whitelistedPlayers"));
@@ -128,6 +139,8 @@ public class CorePlugin extends Plugin {
         this.getProxy().getServers().values().stream()
                 .filter(serverInfo -> (serverInfo.getName().contains("hub") || serverInfo.getName().contains("Hub") || serverInfo.getName().contains("Lobby") || serverInfo.getName().contains("lobby")) && !(serverInfo.getName().contains("Restricted") || serverInfo.getName().contains("restricted")))
                 .forEach(serverInfo -> this.hubServers.add(serverInfo));
+
+        this.vpnManager = new VpnManager();
 
         final BungeeCommandManager manager = new BungeeCommandManager(this);
 

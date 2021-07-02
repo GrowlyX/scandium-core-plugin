@@ -129,18 +129,6 @@ public class PlayerListener implements Listener {
                 CorePlugin.getInstance().getPlayerManager().modModeRaw(potPlayer.getPlayer());
             }
 
-            if (potPlayer.isCurrentlyRestricted() || potPlayer.isCurrentlyBlacklisted()) {
-                event.getPlayer().sendMessage(potPlayer.getRestrictionMessage());
-            }
-
-            if (potPlayer.isHasActiveWarning()) {
-                event.getPlayer().sendMessage(potPlayer.getWarningMessage());
-            }
-
-            if (potPlayer.getDisguiseRank() != null) {
-                event.getPlayer().sendMessage(Color.SECONDARY_COLOR + "You've been automatically disguised as " + potPlayer.getColorByRankColor() + potPlayer.getDisguiseRank().getName() + Color.SECONDARY_COLOR + "!");
-            }
-
             if (event.getPlayer().hasPermission("scandium.2fa.forced") && CorePlugin.getInstance().getServerSettings().isTwoFactorEnabled()) {
                 if (potPlayer.isAuthBypassed()) {
                     event.getPlayer().sendMessage(Constants.STAFF_PREFIX + Color.SECONDARY_COLOR + "You've been automatically authenticated.");
@@ -161,6 +149,18 @@ public class PlayerListener implements Listener {
                     event.getPlayer().sendMessage(message);
                     LockedState.lock(event.getPlayer(), message);
                 }
+            }
+
+            if (potPlayer.isCurrentlyRestricted() || potPlayer.isCurrentlyBlacklisted()) {
+                event.getPlayer().sendMessage(potPlayer.getRestrictionMessage());
+            }
+
+            if (potPlayer.isHasActiveWarning()) {
+                event.getPlayer().sendMessage(potPlayer.getWarningMessage());
+            }
+
+            if (potPlayer.getDisguiseRank() != null) {
+                event.getPlayer().sendMessage(Color.SECONDARY_COLOR + "You've been automatically disguised as " + potPlayer.getColorByRankColor() + potPlayer.getDisguiseRank().getName() + Color.SECONDARY_COLOR + "!");
             }
         });
 
