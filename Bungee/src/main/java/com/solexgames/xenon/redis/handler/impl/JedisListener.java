@@ -13,6 +13,25 @@ import java.util.UUID;
 @SuppressWarnings("unused")
 public class JedisListener implements JedisHandler {
 
+    @Subscription(action = "MAINTENANCE_ADD")
+    public void onMaintenanceAdd(JsonAppender jsonAppender) {
+        final String addingPlayer = jsonAppender.getParam("PLAYER");
+
+        if (!CorePlugin.getInstance().getWhitelistedPlayers().contains(addingPlayer)) {
+            CorePlugin.getInstance().getWhitelistedPlayers().add(addingPlayer);
+        }
+
+        System.out.println("[Maintenance Update] Added " + addingPlayer + " to maintenance");
+    }
+
+    @Subscription(action = "MAINTENANCE_REMOVE")
+    public void onMaintenanceRemove(JsonAppender jsonAppender) {
+        final String addingPlayer = jsonAppender.getParam("PLAYER");
+        CorePlugin.getInstance().getWhitelistedPlayers().remove(addingPlayer);
+
+        System.out.println("[Maintenance Update] Removed " + addingPlayer + " from maintenance");
+    }
+
     @Subscription(action = "GLOBAL_PLAYER_REMOVE")
     public void onGlobalPlayerRemove(JsonAppender jsonAppender) {
         final UUID removingPlayer = UUID.fromString(jsonAppender.getParam("UUID"));

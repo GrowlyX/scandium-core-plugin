@@ -84,6 +84,10 @@ public class CorePlugin extends Plugin {
 
     private int minProtocol;
     private String minVersion;
+
+    private int maxProtocol;
+    private String maxVersion;
+
     private boolean centerAuto;
 
     private VpnManager vpnManager;
@@ -113,6 +117,9 @@ public class CorePlugin extends Plugin {
 
         this.minProtocol = this.configuration.getInt("minimum-protocol");
         this.minVersion = this.configuration.getString("minimum-version");
+
+        this.maxProtocol = this.configuration.getInt("maximum-protocol");
+        this.maxVersion = this.configuration.getString("maximum-version");
 
         this.centerAuto = this.configuration.getBoolean("motd.center-automatic");
 

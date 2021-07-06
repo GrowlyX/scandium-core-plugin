@@ -21,7 +21,7 @@ public class VpnManager {
 
     @SneakyThrows
     public VpnRequestData fetchVpnData(String ipv4Address) {
-        final HttpResponse<JsonNode> request = Unirest.get(String.format(API_FORMAT, ipv4Address)).asJson();
+        final HttpResponse<JsonNode> request = Unirest.get(String.format(API_FORMAT, ipv4Address)).asJsonAsync().get();
 
         return CorePlugin.GSON.fromJson(request.getBody().toString(), VpnRequestData.class);
     }

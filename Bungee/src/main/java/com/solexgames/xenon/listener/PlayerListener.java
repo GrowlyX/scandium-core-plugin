@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.ServerPing;
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.event.*;
@@ -23,6 +22,8 @@ public class PlayerListener implements Listener {
 
     private final CorePlugin plugin = CorePlugin.getInstance();
 
+    public static boolean VPN_CHECKS = true;
+
     @EventHandler(priority = EventPriority.HIGH)
     public void onProxyPing(ProxyPingEvent event) {
         if (event.getResponse() == null) {
@@ -31,20 +32,17 @@ public class PlayerListener implements Listener {
 
         final ServerPing.Protocol responseProtocol = event.getResponse().getVersion();
 
-        if (responseProtocol.getProtocol() < CorePlugin.getInstance().getMinProtocol()) {
-            responseProtocol.setName("ReBungee " + CorePlugin.getInstance().getMinVersion() + "+");
-            responseProtocol.setProtocol(-1);
-
-            event.getResponse().setDescription(this.plugin.getNormalMotd());
-            event.getResponse().setPlayers(new ServerPing.Players(0, 1, new ServerPing.PlayerInfo[]{}));
-
-            return;
-        } else if (this.plugin.isMaintenance()) {
+        if (this.plugin.isMaintenance()) {
             responseProtocol.setName("Maintenance");
             responseProtocol.setProtocol(-1);
 
             event.getResponse().setDescription(this.plugin.getMaintenanceMotd());
             event.getResponse().setPlayers(new ServerPing.Players(0, 1, new ServerPing.PlayerInfo[]{}));
+        } else if (responseProtocol.getProtocol() < CorePlugin.getInstance().getMinProtocol() || responseProtocol.getProtocol() > CorePlugin.getInstance().getMaxProtocol()) {
+            responseProtocol.setName("ReBungee " + CorePlugin.getInstance().getMinVersion() + " - " + CorePlugin.getInstance().getMaxVersion());
+            responseProtocol.setProtocol(-1);
+
+            event.getResponse().setDescription(this.plugin.getNormalMotd());
         } else {
             event.getResponse().setDescription(this.plugin.getNormalMotd());
         }
@@ -58,8 +56,8 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onLogin(PreLoginEvent event) {
-        if (event.getConnection().getVersion() < CorePlugin.getInstance().getMinProtocol()) {
-            event.setCancelReason(TextComponent.fromLegacyText(ChatColor.RED + "You're on an unsupported version!\n" + ChatColor.RED + "Please connect using at least " + CorePlugin.getInstance().getMinVersion() + "!"));
+        if (event.getConnection().getVersion() < CorePlugin.getInstance().getMinProtocol() || event.getConnection().getVersion() > CorePlugin.getInstance().getMaxProtocol()) {
+            event.setCancelReason(TextComponent.fromLegacyText(ChatColor.RED + "Please connect via " + CorePlugin.getInstance().getMinVersion() + " - " + CorePlugin.getInstance().getMaxVersion() + "."));
             event.setCancelled(true);
             return;
         }
@@ -70,30 +68,62 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        final String representableIp = event.getConnection().getAddress().getAddress().toString().replace("/", "");
-        final VpnRequestData requestData = CorePlugin.getInstance().getVpnManager().fetchVpnData(representableIp);
+        boolean shouldEnableChecks = false;
 
-        if (requestData == null) {
-            event.setCancelReason(TextComponent.fromLegacyText(ChatColor.RED + "Failed to fetch data from the api: Connection Refused"));
-            event.setCancelled(true);
-            return;
+        if (this.VPN_CHECKS) {
+            final String representableIp = event.getConnection().getAddress().getAddress().toString().replace("/", "");
+            final VpnRequestData requestData = CorePlugin.getInstance().getVpnManager().fetchVpnData(representableIp);
+
+            if (requestData == null) {
+                event.setCancelReason(TextComponent.fromLegacyText(ChatColor.RED + "The API is currently offline.\n" + ChatColor.RED + "Join discord.pvp.bar for more information."));
+                event.setCancelled(true);
+
+                this.VPN_CHECKS = false;
+
+                ProxyServer.getInstance().getPlayers().stream()
+                        .filter(proxiedPlayer -> proxiedPlayer.hasPermission(CorePlugin.getInstance().getAlertPermission()))
+                        .forEach(proxiedPlayer -> {
+                            proxiedPlayer.sendMessage(ChatColor.AQUA + "[D] " + ChatColor.DARK_AQUA + "[API] " + ChatColor.RED + "The API's currently offline! VPN checks have been automatically disabled to prevent players from being stuck on login.");
+                        });
+                return;
+            }
+
+            if (requestData.getRequestStatus().equals("failed")) {
+                event.setCancelReason(TextComponent.fromLegacyText(ChatColor.RED + "The API is currently offline.\n" + ChatColor.RED + "Join discord.pvp.bar for more information. " + ChatColor.GRAY + "(" + requestData.getRequestFailedMessage() + ")"));
+                event.setCancelled(true);
+
+                this.VPN_CHECKS = false;
+
+                ProxyServer.getInstance().getPlayers().stream()
+                        .filter(proxiedPlayer -> proxiedPlayer.hasPermission(CorePlugin.getInstance().getAlertPermission()))
+                        .forEach(proxiedPlayer -> {
+                            proxiedPlayer.sendMessage(ChatColor.AQUA + "[D] " + ChatColor.DARK_AQUA + "[API] " + ChatColor.RED + "The API's currently offline! VPN checks have been automatically disabled to prevent players from being stuck on login.");
+                        });
+                return;
+            }
+
+            if (requestData.isUsingVpn()) {
+                event.setCancelReason(TextComponent.fromLegacyText(ChatColor.RED + "You cannot log on with a VPN!"));
+                event.setCancelled(true);
+
+                CorePlugin.getInstance().getVpnUsers().put(event.getConnection().getName(), System.currentTimeMillis());
+                ProxyServer.getInstance().getPlayers().stream()
+                        .filter(proxiedPlayer -> proxiedPlayer.hasPermission(CorePlugin.getInstance().getAlertPermission()))
+                        .forEach(proxiedPlayer -> {
+                            proxiedPlayer.sendMessage(TextComponent.fromLegacyText(String.format(CorePlugin.getInstance().getAlertFormat(), event.getConnection().getName())));
+                        });
+            }
+
+            shouldEnableChecks = true;
         }
 
-        if (requestData.getRequestStatus().equals("failed")) {
-            event.setCancelReason(TextComponent.fromLegacyText(ChatColor.RED + "Failed to fetch data from the api: " + requestData.getRequestFailedMessage()));
-            event.setCancelled(true);
-            return;
-        }
+        if (shouldEnableChecks) {
+            this.VPN_CHECKS = true;
 
-        if (requestData.isUsingVpn()) {
-            event.setCancelReason(TextComponent.fromLegacyText(ChatColor.RED + "You cannot log on with a VPN!"));
-            event.setCancelled(true);
-
-            CorePlugin.getInstance().getVpnUsers().put(event.getConnection().getName(), System.currentTimeMillis());
             ProxyServer.getInstance().getPlayers().stream()
                     .filter(proxiedPlayer -> proxiedPlayer.hasPermission(CorePlugin.getInstance().getAlertPermission()))
                     .forEach(proxiedPlayer -> {
-                        proxiedPlayer.sendMessage(TextComponent.fromLegacyText(String.format(CorePlugin.getInstance().getAlertFormat(), event.getConnection().getName())));
+                        proxiedPlayer.sendMessage(ChatColor.AQUA + "[D] " + ChatColor.DARK_AQUA + "[API] " + ChatColor.RED + "API operations have been resumed.");
                     });
         }
     }

@@ -13,8 +13,12 @@ motd:
 maintenance-string: "&cSorry, but the server's in maintenance.<nl>&cPlease try logging back in later!"
 
 # https://wiki.vg/Protocol_version_numbers
-minimum-protocol: 335
-minimum-version: "1.12.x"
+minimum-protocol: 5
+minimum-version: "1.7.x"
+
+# https://wiki.vg/Protocol_version_numbers
+maximum-protocol: 47
+maximum-version: "1.8.x"
 
 timer-format:
   ended: "&e➥ &6%s &7has commenced, have fun!"
