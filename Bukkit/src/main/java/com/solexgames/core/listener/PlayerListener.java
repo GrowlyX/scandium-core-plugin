@@ -123,13 +123,7 @@ public class PlayerListener implements Listener {
                 ));
             }
 
-            if (potPlayer.isAutoModMode() && !CorePlugin.getInstance().getServerName().contains("hub")) {
-                potPlayer.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getServerManager().getAutomaticallyPutInto().replace("<value>", "mod mode")));
-
-                CorePlugin.getInstance().getPlayerManager().modModeRaw(potPlayer.getPlayer());
-            }
-
-            if (event.getPlayer().hasPermission("scandium.2fa.forced") && CorePlugin.getInstance().getServerSettings().isTwoFactorEnabled()) {
+            if (event.getPlayer().hasPermission("scandium.2fa") && CorePlugin.getInstance().getServerSettings().isTwoFactorEnabled()) {
                 if (potPlayer.isAuthBypassed()) {
                     event.getPlayer().sendMessage(Constants.STAFF_PREFIX + Color.SECONDARY_COLOR + "You've been automatically authenticated.");
                 } else if (potPlayer.isHasSetup2FA()) {
@@ -149,6 +143,12 @@ public class PlayerListener implements Listener {
                     event.getPlayer().sendMessage(message);
                     LockedState.lock(event.getPlayer(), message);
                 }
+            }
+
+            if (potPlayer.isAutoModMode() && !CorePlugin.getInstance().getServerName().contains("hub")) {
+                potPlayer.getPlayer().sendMessage(Color.translate(CorePlugin.getInstance().getServerManager().getAutomaticallyPutInto().replace("<value>", "mod mode")));
+
+                CorePlugin.getInstance().getPlayerManager().modModeRaw(potPlayer.getPlayer());
             }
 
             if (potPlayer.isCurrentlyRestricted() || potPlayer.isCurrentlyBlacklisted()) {

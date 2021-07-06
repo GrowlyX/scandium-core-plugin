@@ -41,7 +41,7 @@ public class FilterManager {
         return this.isStringFiltered(message);
     }
 
-    private boolean isStringFiltered(String message) {
+    public boolean isStringFiltered(String message) {
         String msg = message.toLowerCase()
                 .replace("3", "e")
                 .replace("1", "i")
@@ -79,7 +79,7 @@ public class FilterManager {
             matcher = this.urlRegex.matcher(word);
 
             if (matcher.matches()) {
-                return true;
+                return false;
             }
         }
 

@@ -16,7 +16,7 @@ public enum ServerType {
     POGPUBLIC("PogPublic", ChatColor.AQUA, ChatColor.GRAY, "https://discord.gg/U4EZ9eh9xd", "Pog_Public", "https://store.pogpublic.com/", "fun.pogpublic.com"),
     APPOLIX("AppolixMC", ChatColor.GOLD, ChatColor.YELLOW, "https://discord.gg/mtrWYcAp7c", "AppolixMC", "https://store.appolixmc.com/", "appolixmc.com"),
     KYRO("Kryo Network", ChatColor.BLUE, ChatColor.WHITE, "https://discord.kyro.rip", "KyroNetwork", "https://store.kyro.rip/", "kyro.rip"),
-    PVPBAR("PvPBar", ChatColor.GOLD, ChatColor.YELLOW, "https://pvp.bar/discord", "PvPBarMC", "https://store.pvp.bar", "pvp.bar"),
+    PVPBAR("PvPBar", ChatColor.GOLD, ChatColor.YELLOW, "discord.pvp.bar", "PvPBarMC", "store.pvp.bar", "pvp.bar"),
     FROSTPVP("FrostPvP", ChatColor.AQUA, ChatColor.WHITE, "https://frostpvp.net/discord", "FrostPvPs", "https://store.frostpvp.net/", "frostpvp.net"),
     CURSEDMC("CursedMC", ChatColor.DARK_RED, ChatColor.RED, "https://discord.gg/TVcHvykG", "CursedMCRip", "https://store.cursedmc.rip/", "cursedmc.rip"),
     TWISTMC("TwistMC", ChatColor.LIGHT_PURPLE, ChatColor.GREEN, "https://discord.gg/6E9q4VgKPz", "TwistBedWars", "https://store.twistmc.net/", "play.twistmc.net"),

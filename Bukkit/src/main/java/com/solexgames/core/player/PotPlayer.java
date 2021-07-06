@@ -609,7 +609,7 @@ public class PotPlayer {
                 this.resetPermissions();
                 this.setupPermissions();
             });
-
+            
             this.setupPlayerTag();
             this.setupPlayerList();
         }, 20L);
