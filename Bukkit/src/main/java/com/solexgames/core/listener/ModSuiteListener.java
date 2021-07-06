@@ -23,6 +23,11 @@ import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
+
 public class ModSuiteListener implements Listener {
 
     @EventHandler
@@ -107,9 +112,15 @@ public class ModSuiteListener implements Listener {
                         } else if (materialName.contains("skull")) {
                             new StaffViewPaginatedMenu(event.getPlayer()).openMenu(event.getPlayer());
                         } else if (materialName.contains("nether")) {
-                            Bukkit.getOnlinePlayers().stream()
+                            final List<Player> playerList = Bukkit.getOnlinePlayers().stream()
                                     .filter(player -> !player.hasPermission("scandium.staff") && player != event.getPlayer())
-                                    .findAny()
+                                    .collect(Collectors.toList());
+
+                            if (playerList.size() == 0) {
+                                return;
+                            }
+
+                            Optional.ofNullable(playerList.get(ThreadLocalRandom.current().nextInt(playerList.size())))
                                     .ifPresent(player -> {
                                         event.getPlayer().teleport(player.getLocation());
                                         event.getPlayer().sendMessage(Color.SECONDARY_COLOR + "You've been teleported to a random player: " + player.getDisplayName());
