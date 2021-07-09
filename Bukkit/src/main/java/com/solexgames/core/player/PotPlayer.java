@@ -107,6 +107,8 @@ public class PotPlayer {
     private boolean currentlyBlacklisted;
     private boolean currentlyOnline;
 
+    private boolean hasRegistered;
+
     private boolean relatedToBlacklist;
     private String relatedTo;
 
@@ -216,6 +218,8 @@ public class PotPlayer {
         document.put("language", (this.language != null ? this.language.getLanguageName() : LanguageType.ENGLISH.getLanguageName()));
         document.put("currentlyOnline", !removing);
         document.put("currentlyDisguised", this.isDisguised);
+
+        document.put("hasRegistered", this.hasRegistered);
 
         document.put("requiredToAuth", this.requiredToAuth);
         document.put("lastAuth", this.lastAuth);
@@ -340,6 +344,9 @@ public class PotPlayer {
                     }
                     if (this.profile.getBoolean("canSeeGlobalChat") != null) {
                         this.canSeeGlobalChat = this.profile.getBoolean("canSeeGlobalChat");
+                    }
+                    if (this.profile.getBoolean("hasRegistered") != null) {
+                        this.hasRegistered = this.profile.getBoolean("hasRegistered");
                     }
                     if (this.profile.getBoolean("hasVoted") != null) {
                         this.hasVoted = this.profile.getBoolean("hasVoted");
@@ -593,7 +600,7 @@ public class PotPlayer {
                 return Color.translate(PunishmentStrings.BLACK_LIST_MESSAGE.replace("<reason>", this.restrictionPunishment.getReason()));
             case IP_BAN:
             case BAN:
-                return (this.restrictionPunishment.isPermanent() ? Color.translate(PunishmentStrings.BAN_MESSAGE_PERM.replace("<reason>", this.restrictionPunishment.getReason())) : Color.translate(PunishmentStrings.BAN_MESSAGE_TEMP.replace("<reason>", this.restrictionPunishment.getReason()).replace("<time>", this.restrictionPunishment.getDurationString())));
+                return (this.restrictionPunishment.isPermanent() ? Color.translate(PunishmentStrings.BAN_MESSAGE_PERM.replace("<id>", this.restrictionPunishment.getPunishIdentification()).replace("<reason>", this.restrictionPunishment.getReason())) : Color.translate(PunishmentStrings.BAN_MESSAGE_TEMP.replace("<id>", this.restrictionPunishment.getPunishIdentification()).replace("<reason>", this.restrictionPunishment.getReason()).replace("<time>", this.restrictionPunishment.getDurationString())));
             default:
                 return "";
         }
@@ -609,7 +616,7 @@ public class PotPlayer {
                 this.resetPermissions();
                 this.setupPermissions();
             });
-            
+
             this.setupPlayerTag();
             this.setupPlayerList();
         }, 20L);

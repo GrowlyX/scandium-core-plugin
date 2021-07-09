@@ -145,7 +145,7 @@ public class PunishmentManager {
                         potPlayer.setCurrentlyIpRestricted(true);
                     case BAN:
                         potPlayer.setCurrentlyRestricted(true);
-                        this.kickWithSameIP(potPlayer.getIpAddress(), (punishment.isPermanent() ? Color.translate(PunishmentStrings.BAN_MESSAGE_PERM.replace("<reason>", punishment.getReason())) : Color.translate(PunishmentStrings.BAN_MESSAGE_TEMP.replace("<reason>", punishment.getReason()).replace("<time>", punishment.getDurationString()))));
+                        this.kickWithSameIP(potPlayer.getIpAddress(), (punishment.isPermanent() ? Color.translate(PunishmentStrings.BAN_MESSAGE_PERM.replace("<id>", punishment.getPunishIdentification()).replace("<reason>", punishment.getReason())) : Color.translate(PunishmentStrings.BAN_MESSAGE_TEMP.replace("<id>", punishment.getPunishIdentification()).replace("<reason>", punishment.getReason()).replace("<time>", punishment.getDurationString()))));
                         break;
                     case KICK:
                         potPlayer.getPlayer().kickPlayer(Color.translate(PunishmentStrings.KICK_MESSAGE.replace("<reason>", punishment.getReason())));

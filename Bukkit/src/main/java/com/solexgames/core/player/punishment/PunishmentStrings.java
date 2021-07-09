@@ -19,12 +19,12 @@ public final class PunishmentStrings {
 
     public final static String BAN_MESSAGE_TEMP =
             "&cYou are &4banned &cfrom " + SERVER_NAME + " for <time>." +
-                    "\n&cYou were banned for: &7<reason>" +
+                    "\n&cYou were banned for: &7<reason> (ID: #<id>)" +
                     "\n&7If you feel this ban is unjustified, crete a ticket at " + DISCORD_LINK + "." +
                     "\n&6You may also purchase an unban at " + STORE_LINK + ".";
     public final static String BAN_MESSAGE_PERM =
             "&cYou are permanently &4banned &cfrom " + SERVER_NAME + "." +
-                    "\n&cYou were &4banned&c for: &7<reason>" +
+                    "\n&cYou were &4banned&c for: &7<reason> (ID: #<id>)" +
                     "\n&7If you feel this ban is unjustified, crete a ticket at " + DISCORD_LINK + "." +
                     "\n&6You may also purchase an unban at " + STORE_LINK + ".";
     public final static String BLACK_LIST_MESSAGE =

@@ -32,6 +32,11 @@ import java.util.*;
 @SuppressWarnings("unused")
 public class JedisAdapter implements JedisHandler {
 
+    @Subscription(action = "SOMETHING")
+    public void onSomething(JsonAppender jsonAppender) {
+
+    }
+
     @Subscription(action = "PREFIX_SETTINGS_UPDATE")
     public void onPrefixSettingsUpdate(JsonAppender jsonAppender) {
         if (!jsonAppender.getParam("SERVER").equals(CorePlugin.getInstance().getServerName())) {

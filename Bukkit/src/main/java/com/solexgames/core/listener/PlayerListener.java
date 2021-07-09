@@ -362,9 +362,9 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (potPlayer.isCurrentlyRestricted() && !event.getMessage().startsWith("/discord")) {
+        if (potPlayer.isCurrentlyRestricted() && !event.getMessage().startsWith("/register")) {
             player.sendMessage(ChatColor.RED + "You cannot issue commands as you are banned.");
-            player.sendMessage(ChatColor.RED + "The only command you can perform is " + ChatColor.YELLOW + "/discord" + ChatColor.RED + "!");
+            player.sendMessage(ChatColor.RED + "The only command you can perform is " + ChatColor.YELLOW + "/register" + ChatColor.RED + "!");
 
             event.setCancelled(true);
             return;
