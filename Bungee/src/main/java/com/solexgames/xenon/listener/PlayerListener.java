@@ -70,7 +70,7 @@ public class PlayerListener implements Listener {
 
         boolean shouldEnableChecks = false;
 
-        if (this.VPN_CHECKS) {
+        if (VPN_CHECKS) {
             final String representableIp = event.getConnection().getAddress().getAddress().toString().replace("/", "");
             final VpnRequestData requestData = CorePlugin.getInstance().getVpnManager().fetchVpnData(representableIp);
 
@@ -78,7 +78,7 @@ public class PlayerListener implements Listener {
                 event.setCancelReason(TextComponent.fromLegacyText(ChatColor.RED + "The API is currently offline.\n" + ChatColor.RED + "Join discord.pvp.bar for more information."));
                 event.setCancelled(true);
 
-                this.VPN_CHECKS = false;
+                VPN_CHECKS = false;
 
                 ProxyServer.getInstance().getPlayers().stream()
                         .filter(proxiedPlayer -> proxiedPlayer.hasPermission(CorePlugin.getInstance().getAlertPermission()))
@@ -92,7 +92,7 @@ public class PlayerListener implements Listener {
                 event.setCancelReason(TextComponent.fromLegacyText(ChatColor.RED + "The API is currently offline.\n" + ChatColor.RED + "Join discord.pvp.bar for more information. " + ChatColor.GRAY + "(" + requestData.getRequestFailedMessage() + ")"));
                 event.setCancelled(true);
 
-                this.VPN_CHECKS = false;
+                VPN_CHECKS = false;
 
                 ProxyServer.getInstance().getPlayers().stream()
                         .filter(proxiedPlayer -> proxiedPlayer.hasPermission(CorePlugin.getInstance().getAlertPermission()))
@@ -117,8 +117,8 @@ public class PlayerListener implements Listener {
             shouldEnableChecks = true;
         }
 
-        if (shouldEnableChecks) {
-            this.VPN_CHECKS = true;
+        if (shouldEnableChecks && !VPN_CHECKS) {
+            VPN_CHECKS = true;
 
             ProxyServer.getInstance().getPlayers().stream()
                     .filter(proxiedPlayer -> proxiedPlayer.hasPermission(CorePlugin.getInstance().getAlertPermission()))

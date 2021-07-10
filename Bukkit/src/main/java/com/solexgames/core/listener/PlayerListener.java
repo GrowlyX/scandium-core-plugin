@@ -231,15 +231,14 @@ public class PlayerListener implements Listener {
         }
 
         if (potPlayer.isCurrentlyRestricted()) {
-            player.sendMessage(ChatColor.RED + "You cannot chat as you are currently restricted.");
+            player.sendMessage(ChatColor.RED + "You cannot chat as you're currently restricted.");
 
             event.setCancelled(true);
             return;
         }
 
         if (LockedState.isLocked(event.getPlayer())) {
-            player.sendMessage(ChatColor.RED + "You cannot perform this action right now as you're auth locked.");
-            player.sendMessage(ChatColor.RED + "The only action you can perform is " + ChatColor.RED + ChatColor.BOLD.toString() + "/2fa" + ChatColor.RED + "!");
+            player.sendMessage(ChatColor.RED + "You cannot chat as you need to authenticate.");
 
             event.setCancelled(true);
             return;
@@ -345,13 +344,16 @@ public class PlayerListener implements Listener {
         final Player player = event.getPlayer();
 
         if (potPlayer == null) {
+            player.sendMessage(ChatColor.RED + "Your account is temporarily blocked from performing actions.");
+            player.sendMessage(ChatColor.RED + "Please reconnect to resolve this issue.");
+
             event.setCancelled(true);
             return;
         }
 
         if (LockedState.isLocked(event.getPlayer()) && !(event.getMessage().startsWith("/2fa") || event.getMessage().startsWith("/auth") || event.getMessage().startsWith("/authsetup"))) {
             player.sendMessage(ChatColor.RED + "You cannot issue commands as you haven't authenticated.");
-            player.sendMessage(ChatColor.RED + "The only command you can perform is " + ChatColor.RED + ChatColor.BOLD.toString() + "/2fa or /authsetup" + ChatColor.RED + "!");
+            player.sendMessage(ChatColor.RED + "The only command you can perform is " + ChatColor.YELLOW + "/2fa or /authsetup" + ChatColor.RED + "!");
 
             event.setCancelled(true);
             return;
