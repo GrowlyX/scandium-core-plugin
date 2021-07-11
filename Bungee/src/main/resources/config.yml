@@ -2,6 +2,9 @@ region: "EU"
 maintenance: true
 whitelistedPlayers:
   - "GrowlyX"
+hardMaintenance: true
+hardWhitelistedPlayers:
+  - "GrowlyX"
 motd:
   center-automatic: true
   maintenance:
@@ -30,4 +33,4 @@ vpn-detector:
   kick-message: "&cYou cannot use a vpn on our network."
   alerts:
     permission: "xenon.vpn.alerts"
-    format: "&b[S] &3[na-proxy] &4$s &ctried to connect with a vpn."
+    format: "&b[S] &3[na-proxy] &4%s &ctried to connect with a vpn."

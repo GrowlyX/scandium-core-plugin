@@ -54,6 +54,7 @@ public class CorePlugin extends Plugin {
                 .create();
 
     private ArrayList<String> whitelistedPlayers = new ArrayList<>();
+    private ArrayList<String> hardWhitelistedPlayers = new ArrayList<>();
     private ArrayList<ServerInfo> hubServers = new ArrayList<>();
 
     private Map<String, Long> vpnUsers = new ConcurrentHashMap<>();
@@ -67,6 +68,7 @@ public class CorePlugin extends Plugin {
     private NetworkPlayerManager networkPlayerManager;
 
     private boolean maintenance;
+    private boolean hardMaintenance;
 
     private String motdTimerHeader;
     private String motdTimerFooter;
@@ -114,6 +116,7 @@ public class CorePlugin extends Plugin {
                 .build();
 
         this.maintenance = this.configuration.getBoolean("maintenance");
+        this.hardMaintenance = this.configuration.getBoolean("hardMaintenance");
 
         this.minProtocol = this.configuration.getInt("minimum-protocol");
         this.minVersion = this.configuration.getString("minimum-version");
@@ -130,6 +133,7 @@ public class CorePlugin extends Plugin {
         this.networkPlayerManager = new NetworkPlayerManager();
 
         this.whitelistedPlayers.addAll(this.configuration.getStringList("whitelistedPlayers"));
+        this.hardWhitelistedPlayers.addAll(this.configuration.getStringList("hardWhitelistedPlayers"));
 
         this.maintenanceMotd = Color.translate(MOTDUtil.getCenteredMotd(this.configuration.getString("motd.maintenance.line-1")) + "<nl>" + MOTDUtil.getCenteredMotd(this.configuration.getString("motd.maintenance.line-2")))
                 .replace("<bar>", Character.toString('⎜'))

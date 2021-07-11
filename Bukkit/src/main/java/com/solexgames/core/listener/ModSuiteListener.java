@@ -111,19 +111,26 @@ public class ModSuiteListener implements Listener {
                             event.getPlayer().setVelocity(event.getPlayer().getLocation().getDirection().multiply(2.5F));
                         } else if (materialName.contains("skull")) {
                             new StaffViewPaginatedMenu(event.getPlayer()).openMenu(event.getPlayer());
-                        } else if (materialName.contains("nether")) {
+                        } else if (materialName.contains("nether") && !(event.getItem().getItemMeta().getDisplayName().contains("Stop"))) {
                             final List<Player> playerList = Bukkit.getOnlinePlayers().stream()
                                     .filter(player -> !player.hasPermission("scandium.staff") && player != event.getPlayer())
                                     .collect(Collectors.toList());
 
                             if (playerList.size() == 0) {
+                                event.getPlayer().sendMessage(ChatColor.RED + "No one else is online except you.");
                                 return;
                             }
 
                             Optional.ofNullable(playerList.get(ThreadLocalRandom.current().nextInt(playerList.size())))
                                     .ifPresent(player -> {
-                                        event.getPlayer().teleport(player.getLocation());
-                                        event.getPlayer().sendMessage(Color.SECONDARY_COLOR + "You've been teleported to a random player: " + player.getDisplayName());
+                                        final boolean practice = CorePlugin.getInstance().getServerName().contains("practice");
+
+                                        if (practice) {
+                                            Bukkit.dispatchCommand(event.getPlayer(), "spectate " + player.getName());
+                                        } else {
+                                            event.getPlayer().teleport(player.getLocation());
+                                            event.getPlayer().sendMessage(Color.SECONDARY_COLOR + "You've been teleported to a random player: " + player.getDisplayName());
+                                        }
                                     });
                         } else if (materialName.contains("sac")) {
                             event.getPlayer().performCommand("vanish");
@@ -131,7 +138,7 @@ public class ModSuiteListener implements Listener {
                             ServerType network = CorePlugin.getInstance().getServerManager().getNetwork();
                             event.getPlayer().getInventory().setItem(8, new ItemBuilder((potPlayer.isVanished() ? XMaterial.LIME_DYE.parseMaterial() : XMaterial.LIGHT_GRAY_DYE.parseMaterial()), (potPlayer.isVanished() ? 10 : 8)).setDisplayName(network.getMainColor() + ChatColor.BOLD.toString() + (potPlayer.isVanished() ? "Disable Vanish" : "Enable Vanish")).create());
 
-                            event.getPlayer().updateInventory();
+                            Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> event.getPlayer().updateInventory(), 10L);
                         }
                     }
                 }

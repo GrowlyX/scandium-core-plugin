@@ -62,6 +62,12 @@ public class PlayerListener implements Listener {
             return;
         }
 
+        if (this.plugin.isHardMaintenance() && !plugin.getHardWhitelistedPlayers().contains(event.getConnection().getName())) {
+            event.setCancelReason(TextComponent.fromLegacyText(ChatColor.RED + "The server's currently whitelisted to management only.\n"));
+            event.setCancelled(true);
+            return;
+        }
+
         if (this.plugin.isMaintenance() && !plugin.getWhitelistedPlayers().contains(event.getConnection().getName())) {
             event.setCancelReason(TextComponent.fromLegacyText(CorePlugin.getInstance().getMaintenanceMessage()));
             event.setCancelled(true);
