@@ -159,6 +159,7 @@ public class CorePlugin extends Plugin {
         manager.registerCommand(new HubCommand());
         manager.registerCommand(new VpnCommand());
         manager.registerCommand(new MaintenanceCommand());
+        manager.registerCommand(new HardMaintenanceCommand());
         manager.registerCommand(new XenonCommand());
         manager.registerCommand(new ProxyStatusCommand());
         manager.registerCommand(new TimerCommand());

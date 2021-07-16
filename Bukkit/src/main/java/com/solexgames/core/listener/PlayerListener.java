@@ -372,7 +372,7 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (event.getMessage().contains(":") && !event.getPlayer().isOp()) {
+        if (event.getMessage().split(" ")[0].contains(":") && !event.getPlayer().isOp()) {
             player.sendMessage(ChatColor.RED + "You cannot execute commands with semi-colons.");
 
             event.setCancelled(true);

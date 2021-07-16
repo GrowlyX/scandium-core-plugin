@@ -10,6 +10,7 @@ import com.solexgames.core.board.ScoreBoard;
 import com.solexgames.core.disguise.DisguiseData;
 import com.solexgames.core.enums.ChatChannelType;
 import com.solexgames.core.enums.LanguageType;
+import com.solexgames.core.listener.custom.PlayerFreezeEvent;
 import com.solexgames.core.player.grant.Grant;
 import com.solexgames.core.player.media.Media;
 import com.solexgames.core.player.meta.MetaDataEntry;
@@ -250,6 +251,14 @@ public class PotPlayer {
         CompletableFuture.runAsync(() ->
                 CorePlugin.getInstance().getCoreDatabase().getPlayerCollection().replaceOne(Filters.eq("_id", this.uuid), this.getDocument(false), new ReplaceOptions().upsert(true))
         );
+    }
+
+    public void setFrozen(boolean frozen) {
+        this.isFrozen = frozen;
+
+        if (frozen) {
+            Bukkit.getPluginManager().callEvent(new PlayerFreezeEvent(this.player));
+        }
     }
 
     private void saveMeta() {

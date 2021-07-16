@@ -2,9 +2,11 @@ region: "EU"
 maintenance: true
 whitelistedPlayers:
   - "GrowlyX"
-hardMaintenance: true
+hardMaintenance: false
 hardWhitelistedPlayers:
   - "GrowlyX"
+  - "threazy"
+  - "Beverage"
 motd:
   center-automatic: true
   maintenance:
