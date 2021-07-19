@@ -678,11 +678,13 @@ public class PotPlayer {
 
             this.getUserPermissions()
                     .forEach(s -> this.attachment.setPermission(s.replace("*", ""), !s.startsWith("*")));
+
+            Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () -> {
+                this.player.recalculatePermissions();
+
+                CorePlugin.getInstance().getServerManager().syncPermissions(this.player, this.getColorByRankColor() + this.player.getName(), this.bungeePermissions);
+            });
         });
-
-        this.player.recalculatePermissions();
-
-        Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getServerManager().syncPermissions(this.player, this.getColorByRankColor() + this.player.getName(), this.bungeePermissions));
     }
 
     public void setupPlayerTag() {

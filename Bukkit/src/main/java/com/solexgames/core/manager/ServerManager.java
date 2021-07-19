@@ -7,6 +7,8 @@ import com.solexgames.core.chat.impl.PAPIChatFormat;
 import com.solexgames.core.enums.ServerType;
 import com.solexgames.core.server.NetworkServer;
 import com.solexgames.core.util.Color;
+import com.solexgames.core.util.RedisUtil;
+import com.solexgames.lib.commons.redis.json.JsonAppender;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
@@ -18,6 +20,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @Getter
@@ -104,18 +107,15 @@ public class ServerManager {
     }
 
     public void syncPermissions(Player player, String displayName, List<String> permissions) {
-        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        final DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream);
+        //         final String username = jsonAppender.getParam("PLAYER");
+        //        final String displayName = jsonAppender.getParam("DISPLAY");
+        //        final String[] permissions = jsonAppender.getParam("PERMISSIONS").split(":");
 
-        try {
-            dataOutputStream.writeUTF("core:permissions");
-            dataOutputStream.writeUTF(player.getName());
-            dataOutputStream.writeUTF(displayName);
-            dataOutputStream.writeUTF(permissions.isEmpty() ? "NONE" : String.join(":", permissions));
-
-            player.sendPluginMessage(CorePlugin.getInstance(), "core:permissions", byteArrayOutputStream.toByteArray());
-        } catch (Exception exception) {
-            System.out.println("[Messenger] Failed to sync permissions: " + exception.getMessage());
-        }
+        RedisUtil.publishAsync(new JsonAppender("PERMISSION_SYNC")
+                .put("PLAYER", player.getName())
+                .put("DISPLAY", player.getDisplayName())
+                .put("PERMISSIONS", permissions.isEmpty() ? "none" : String.join(":", permissions))
+                .getAsJson()
+        );
     }
 }

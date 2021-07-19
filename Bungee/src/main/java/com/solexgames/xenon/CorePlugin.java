@@ -4,7 +4,6 @@ import co.aikar.commands.BungeeCommandManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.solexgames.xenon.command.*;
-import com.solexgames.xenon.listener.ChannelListener;
 import com.solexgames.xenon.listener.PlayerListener;
 import com.solexgames.xenon.manager.NetworkPlayerManager;
 import com.solexgames.xenon.manager.VpnManager;
@@ -166,10 +165,8 @@ public class CorePlugin extends Plugin {
 
         manager.enableUnstableAPI("help");
 
-        this.getProxy().registerChannel("core:permissions");
 
         this.getProxy().getPluginManager().registerListener(this, new PlayerListener());
-        this.getProxy().getPluginManager().registerListener(this, new ChannelListener());
 
         this.getProxy().getScheduler().schedule(this, new ActiveTimerFooterUpdateTask(), 1L, 1L, TimeUnit.SECONDS);
     }

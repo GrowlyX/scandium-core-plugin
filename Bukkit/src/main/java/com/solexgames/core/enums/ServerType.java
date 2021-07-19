@@ -25,6 +25,8 @@ public enum ServerType {
     DEPHMC("DephMC", ChatColor.RED, ChatColor.YELLOW, "https://discord.gg/2VCvBjmhQJ", "Dephinity", "N/A", "N/A"),
     PVPTEMPLE("PvPTemple", ChatColor.GOLD, ChatColor.YELLOW, "discord.gg/pvptemple", "ThePvPTemple", "https://shop.pvptemple.com/", "pvptemple.com"),
     AUXPVP("AuxPvP", ChatColor.DARK_AQUA, ChatColor.AQUA, "dsc.gg/auxpvp", "AuxPvPCOM", "https://store.auxpvp.com/", "auxpvp.com"),
+
+    PVPBAR("PvPBar", ChatColor.GOLD, ChatColor.YELLOW, "discord.pvp.bar", "twitter.com/PvPBarMC", "https://store.pvp.bar/", "pvp.bar"),
     ;
 
     private final String serverName;

@@ -10,6 +10,7 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.ServerPing;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.*;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
@@ -39,7 +40,7 @@ public class PlayerListener implements Listener {
             event.getResponse().setDescription(this.plugin.getMaintenanceMotd());
             event.getResponse().setPlayers(new ServerPing.Players(0, 1, new ServerPing.PlayerInfo[]{}));
         } else if (responseProtocol.getProtocol() < CorePlugin.getInstance().getMinProtocol() || responseProtocol.getProtocol() > CorePlugin.getInstance().getMaxProtocol()) {
-            responseProtocol.setName("ReBungee " + CorePlugin.getInstance().getMinVersion() + " - " + CorePlugin.getInstance().getMaxVersion());
+            responseProtocol.setName("Xenon " + CorePlugin.getInstance().getMinVersion() + ", " + CorePlugin.getInstance().getMaxVersion());
             responseProtocol.setProtocol(-1);
 
             event.getResponse().setDescription(this.plugin.getNormalMotd());
@@ -80,22 +81,8 @@ public class PlayerListener implements Listener {
             final String representableIp = event.getConnection().getAddress().getAddress().toString().replace("/", "");
             final VpnRequestData requestData = CorePlugin.getInstance().getVpnManager().fetchVpnData(representableIp);
 
-            if (requestData == null) {
+            if (requestData == null || requestData.getRequestStatus().equals("failed")) {
                 event.setCancelReason(TextComponent.fromLegacyText(ChatColor.RED + "The API is currently offline.\n" + ChatColor.RED + "Join discord.pvp.bar for more information."));
-                event.setCancelled(true);
-
-                VPN_CHECKS = false;
-
-                ProxyServer.getInstance().getPlayers().stream()
-                        .filter(proxiedPlayer -> proxiedPlayer.hasPermission(CorePlugin.getInstance().getAlertPermission()))
-                        .forEach(proxiedPlayer -> {
-                            proxiedPlayer.sendMessage(ChatColor.AQUA + "[D] " + ChatColor.DARK_AQUA + "[API] " + ChatColor.RED + "The API's currently offline! VPN checks have been automatically disabled to prevent players from being stuck on login.");
-                        });
-                return;
-            }
-
-            if (requestData.getRequestStatus().equals("failed")) {
-                event.setCancelReason(TextComponent.fromLegacyText(ChatColor.RED + "The API is currently offline.\n" + ChatColor.RED + "Join discord.pvp.bar for more information. " + ChatColor.GRAY + "(" + requestData.getRequestFailedMessage() + ")"));
                 event.setCancelled(true);
 
                 VPN_CHECKS = false;
@@ -173,13 +160,15 @@ public class PlayerListener implements Listener {
             }
 
             ProxyServer.getInstance().getScheduler().schedule(CorePlugin.getInstance(), () -> {
-                if (ProxyServer.getInstance().getPlayer(event.getPlayer().getName()).hasPermission("scandium.staff")) {
+                final ProxiedPlayer proxiedPlayer = ProxyServer.getInstance().getPlayer(event.getPlayer().getName());
+
+                if (proxiedPlayer != null && proxiedPlayer.hasPermission("scandium.staff")) {
                     CompletableFuture.runAsync(() -> CorePlugin.getInstance().getJedisManager().publish(new JsonAppender(JedisAction.PLAYER_CONNECT_UPDATE)
                             .put("PLAYER", event.getPlayer().getDisplayName())
                             .put("SERVER", event.getTarget().getName())
                             .getAsJson()));
                 }
-            }, 1L, TimeUnit.SECONDS);
+            }, 40L, TimeUnit.MILLISECONDS);
         }
     }
 
@@ -196,7 +185,8 @@ public class PlayerListener implements Listener {
                     .put("PLAYER", this.player)
                     .put("SERVER", this.from)
                     .put("NEW_SERVER", this.target)
-                    .getAsJson()));
+                    .getAsJson())
+            );
         }
     }
 }

@@ -7,6 +7,7 @@ import com.solexgames.xenon.redis.handler.JedisHandler;
 import com.solexgames.xenon.redis.json.JsonAppender;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,25 @@ import java.util.UUID;
 
 @SuppressWarnings("unused")
 public class JedisListener implements JedisHandler {
+
+    @Subscription(action = "PERMISSION_SYNC")
+    public void onPermissionSync(JsonAppender jsonAppender) {
+        final String username = jsonAppender.getParam("PLAYER");
+        final String displayName = jsonAppender.getParam("DISPLAY");
+        final String combinedPermissions = jsonAppender.getParam("PERMISSIONS");
+
+        final ProxiedPlayer player = ProxyServer.getInstance().getPlayer(username);
+
+        if (player != null && !combinedPermissions.equals("none")) {
+            final String[] permissions = combinedPermissions.split(":");
+
+            for (String permission : permissions) {
+                player.setPermission(permission, true);
+            }
+
+            player.setDisplayName(displayName);
+        }
+    }
 
     @Subscription(action = "MAINTENANCE_ADD")
     public void onMaintenanceAdd(JsonAppender jsonAppender) {
