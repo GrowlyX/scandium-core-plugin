@@ -5,6 +5,8 @@ import com.solexgames.xenon.manager.NetworkPlayer;
 import com.solexgames.xenon.redis.annotation.Subscription;
 import com.solexgames.xenon.redis.handler.JedisHandler;
 import com.solexgames.xenon.redis.json.JsonAppender;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.ProxyServer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +32,25 @@ public class JedisListener implements JedisHandler {
         CorePlugin.getInstance().getWhitelistedPlayers().remove(addingPlayer);
 
         System.out.println("[Maintenance Update] Removed " + addingPlayer + " from maintenance");
+    }
+
+    @Subscription(action = "MAINTENANCE_UPDATE")
+    public void onMaintenanceUpdate(JsonAppender jsonAppender) {
+        final boolean togglingStatus = Boolean.parseBoolean(jsonAppender.getParam("TYPE"));
+
+        if (togglingStatus) {
+            System.out.println("[Maintenance Update] Maintenance has been enabled.");
+
+            ProxyServer.getInstance().getPlayers().forEach(proxiedPlayer1 -> {
+                if (!CorePlugin.getInstance().getWhitelistedPlayers().contains(proxiedPlayer1.getName())) {
+                    proxiedPlayer1.disconnect(ChatColor.RED + "Sorry, but the server's now in maintenance.");
+                }
+            });
+        } else {
+            System.out.println("[Maintenance Update] Maintenance has been disabled.");
+        }
+
+        CorePlugin.getInstance().setMaintenance(togglingStatus);
     }
 
     @Subscription(action = "GLOBAL_PLAYER_REMOVE")

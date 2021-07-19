@@ -114,6 +114,11 @@ public class PlayerInfoMenu extends AbstractInventoryMenu {
                 new MediaViewMenu(this.player).open(player);
             }
             if (event.getRawSlot() == 13) {
+                if (player.getUniqueId().equals(this.player.getUniqueId())) {
+                    this.player.sendMessage(ChatColor.RED + "You cannot report yourself.");
+                    return;
+                }
+
                 new ReportMenu(player, this.player).open(player);
             }
         }

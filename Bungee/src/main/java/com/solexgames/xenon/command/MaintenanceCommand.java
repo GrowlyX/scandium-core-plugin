@@ -7,6 +7,7 @@ import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.HelpCommand;
 import co.aikar.commands.annotation.Subcommand;
 import com.solexgames.xenon.CorePlugin;
+import com.solexgames.xenon.redis.json.JsonAppender;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -38,15 +39,15 @@ public class MaintenanceCommand extends BaseCommand {
 
         if (CorePlugin.getInstance().isMaintenance()) {
             proxiedPlayer.sendMessage(ChatColor.GREEN + "You've enabled network maintenance and all players who aren't whitelisted have been kicked.");
-
-            ProxyServer.getInstance().getPlayers().forEach(proxiedPlayer1 -> {
-                if (!CorePlugin.getInstance().getWhitelistedPlayers().contains(proxiedPlayer1.getName())) {
-                    proxiedPlayer1.disconnect(ChatColor.RED + "Sorry, but the server's now in maintenance.");
-                }
-            });
         } else {
             proxiedPlayer.sendMessage(ChatColor.GREEN + "You've disabled network maintenance!");
         }
+
+        CorePlugin.getInstance().getJedisManager().publish(
+                new JsonAppender("MAINTENANCE_UPDATE")
+                        .put("TYPE", CorePlugin.getInstance().isMaintenance())
+                        .getAsJson()
+        );
     }
 
     @Subcommand("add")
@@ -55,7 +56,12 @@ public class MaintenanceCommand extends BaseCommand {
         if (CorePlugin.getInstance().getWhitelistedPlayers().contains(player)) {
             proxiedPlayer.sendMessage(ChatColor.RED + "I'm sorry, but that player is already on the maintenance list.");
         } else {
-            CorePlugin.getInstance().getWhitelistedPlayers().add(player);
+            CorePlugin.getInstance().getJedisManager().publish(
+                    new JsonAppender("MAINTENANCE_ADD")
+                            .put("PLAYER", player)
+                            .getAsJson()
+            );
+
             proxiedPlayer.sendMessage(ChatColor.GREEN + "You've added " + ChatColor.YELLOW + player + ChatColor.GREEN + " to the maintenance list.");
         }
     }
@@ -66,7 +72,12 @@ public class MaintenanceCommand extends BaseCommand {
         if (!CorePlugin.getInstance().getWhitelistedPlayers().contains(player)) {
             proxiedPlayer.sendMessage(ChatColor.RED + "I'm sorry, but that player is not on the maintenance list.");
         } else {
-            CorePlugin.getInstance().getWhitelistedPlayers().remove(player);
+            CorePlugin.getInstance().getJedisManager().publish(
+                    new JsonAppender("MAINTENANCE_REMOVE")
+                            .put("PLAYER", player)
+                            .getAsJson()
+            );
+
             proxiedPlayer.sendMessage(ChatColor.GREEN + "You've removed " + ChatColor.YELLOW + player + ChatColor.GREEN + " from the maintenance list.");
         }
     }

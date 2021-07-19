@@ -10,6 +10,7 @@ import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.WrappedServerPing;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.hooks.protocol.AbstractPacketHandler;
+import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -31,18 +32,20 @@ public class ProtocolPacketHandler extends AbstractPacketHandler {
         this.returnEnabled = CorePlugin.getInstance().getConfig().getBoolean("tab-block.callback.enabled");
 
         this.adapter = new PacketAdapter(CorePlugin.getInstance(), ListenerPriority.HIGHEST, PacketType.Play.Client.TAB_COMPLETE) {
+
+            @Override
+            @SneakyThrows
             public void onPacketReceiving(PacketEvent event) {
                 if (event.getPacketType().equals(PacketType.Play.Client.TAB_COMPLETE)) {
-                    try {
-                        if (event.getPlayer().hasPermission("scandium.completion.bypass")) return;
+                    if (event.getPlayer().hasPermission("scandium.completion.bypass"))  {
+                        return;
+                    }
 
-                        final PacketContainer packet = event.getPacket();
-                        final String message = packet.getSpecificModifier(String.class).read(0).toLowerCase();
+                    final PacketContainer packet = event.getPacket();
+                    final String message = packet.getSpecificModifier(String.class).read(0).toLowerCase();
 
-                        if (((message.startsWith("/")) && (!message.contains(" "))) || ((message.startsWith("/ver")) && (!message.contains("  "))) || ((message.startsWith("/version")) && (!message.contains("  "))) || ((message.startsWith("/?")) && (!message.contains("  "))) || ((message.startsWith("/about")) && (!message.contains("  "))) || ((message.startsWith("/help")) && (!message.contains("  ")))) {
-                            event.setCancelled(true);
-                        }
-                    } catch (Exception ignored) {
+                    if (((message.startsWith("/")) && (!message.contains(" "))) || ((message.startsWith("/ver")) && (!message.contains("  "))) || ((message.startsWith("/version")) && (!message.contains("  "))) || ((message.startsWith("/?")) && (!message.contains("  "))) || ((message.startsWith("/about")) && (!message.contains("  "))) || ((message.startsWith("/help")) && (!message.contains("  ")))) {
+                        event.setCancelled(true);
                     }
                 }
             }
@@ -58,12 +61,11 @@ public class ProtocolPacketHandler extends AbstractPacketHandler {
             }
         };
 
-        if (this.getConfig().getBoolean("tab-block.enabled")) {
-            ProtocolLibrary.getProtocolManager().addPacketListener(this.adapter);
-        }
-        if (this.returnEnabled) {
-            ProtocolLibrary.getProtocolManager().addPacketListener(this.sendAdapter);
-        }
+        ProtocolLibrary.getProtocolManager().addPacketListener(this.adapter);
+
+//        if (this.returnEnabled) {
+//            ProtocolLibrary.getProtocolManager().addPacketListener(this.sendAdapter);
+//        }
     }
 
     /**

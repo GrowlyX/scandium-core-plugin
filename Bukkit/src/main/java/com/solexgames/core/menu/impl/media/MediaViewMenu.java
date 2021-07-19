@@ -30,9 +30,7 @@ public class MediaViewMenu extends AbstractInventoryMenu {
                 .setDurability(4)
                 .setDisplayName("&9&lDiscord")
                 .addLore(
-                        ChatColor.GRAY + (disguised ? "N/A" : potPlayer.getMedia().getDiscord()),
-                        "",
-                        "&e[Click to view in chat]"
+                        ChatColor.GRAY + (disguised ? "N/A" : potPlayer.getMedia().getDiscord())
                 )
                 .create()
         );
@@ -40,9 +38,7 @@ public class MediaViewMenu extends AbstractInventoryMenu {
                 .setDurability(1)
                 .setDisplayName("&c&lYouTube")
                 .addLore(
-                        ChatColor.GRAY + (disguised ? "N/A" : potPlayer.getMedia().getYoutubeLink()),
-                        "",
-                        "&e[Click to view in chat]"
+                        ChatColor.GRAY + (disguised ? "N/A" : potPlayer.getMedia().getYoutubeLink())
                 )
                 .create()
         );
@@ -50,9 +46,7 @@ public class MediaViewMenu extends AbstractInventoryMenu {
                 .setDurability(12)
                 .setDisplayName("&b&lTwitter")
                 .addLore(
-                        ChatColor.GRAY + (disguised ? "N/A" : potPlayer.getMedia().getTwitter()),
-                        "",
-                        "&e[Click to view in chat]"
+                        ChatColor.GRAY + (disguised ? "N/A" : potPlayer.getMedia().getTwitter())
                 )
                 .create()
         );
@@ -60,9 +54,7 @@ public class MediaViewMenu extends AbstractInventoryMenu {
                 .setDurability(14)
                 .setDisplayName("&6&lInstagram")
                 .addLore(
-                        ChatColor.GRAY + (disguised ? "N/A" : potPlayer.getMedia().getInstagram()),
-                        "",
-                        "&e[Click to view in chat]"
+                        ChatColor.GRAY + (disguised ? "N/A" : potPlayer.getMedia().getInstagram())
                 )
                 .create()
         );

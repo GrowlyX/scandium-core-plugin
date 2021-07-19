@@ -621,14 +621,13 @@ public class PotPlayer {
 
     public void setupPlayer() {
         Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> {
-            CompletableFuture.runAsync(() -> {
-                this.resetPermissions();
-                this.setupPermissions();
-            });
+            this.resetPermissions();
+
+            CompletableFuture.runAsync(this::setupPermissions);
 
             this.setupPlayerTag();
             this.setupPlayerList();
-        }, 20L);
+        }, 30L);
     }
 
     public void setupPlayerList() {

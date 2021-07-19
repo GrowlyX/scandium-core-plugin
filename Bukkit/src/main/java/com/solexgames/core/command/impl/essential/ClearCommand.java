@@ -43,6 +43,6 @@ public class ClearCommand extends BaseCommand {
                 player.sendMessage(ChatColor.RED + "Error: That player does not exist.");
             }
         }
-        return false;
+        return true;
     }
 }

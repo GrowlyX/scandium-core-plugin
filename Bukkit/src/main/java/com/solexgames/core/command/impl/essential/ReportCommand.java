@@ -24,17 +24,21 @@ public class ReportCommand extends BaseCommand {
             return false;
         }
 
-        Player player = (Player) sender;
-        ServerType serverType = CorePlugin.getInstance().getServerManager().getNetwork();
+        final Player player = (Player) sender;
 
         if (args.length == 0) {
             player.sendMessage(Color.translate(Color.SECONDARY_COLOR + "Usage: " + Color.MAIN_COLOR + "/" + label + ChatColor.WHITE + " <player>"));
         }
 
         if (args.length == 1) {
-            Player target = Bukkit.getPlayer(args[0]);
+            final Player target = Bukkit.getPlayer(args[0]);
 
             if (target != null) {
+                if (target == player) {
+                    player.sendMessage(ChatColor.RED + "You cannot report yourself.");
+                    return true;
+                }
+
                 new ReportMenu(player, target).open(player);
             } else {
                 player.sendMessage(ChatColor.RED + "Error: That player does not exist.");
