@@ -25,6 +25,8 @@ public class GrantExpireTask extends BukkitRunnable {
                 .filter(grant -> grant != null && grant.isExpired() && grant.isActive() && !grant.isPermanent())
                 .forEach(grant -> {
                     grant.setActive(false);
+
+                    potPlayer.recalculateGrants();
                     potPlayer.setupPlayer();
 
                     if (potPlayer.getPlayer() != null)

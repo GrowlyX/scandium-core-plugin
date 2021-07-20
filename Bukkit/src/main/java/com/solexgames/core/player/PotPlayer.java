@@ -38,7 +38,6 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -147,6 +146,8 @@ public class PotPlayer {
 
     private boolean hasLoaded;
     private boolean newPlayer;
+
+    private Grant activeGrant;
 
     public PotPlayer(UUID uuid, String name, InetAddress inetAddress) {
         this.uuid = uuid;
@@ -616,7 +617,11 @@ public class PotPlayer {
     }
 
     public Grant getActiveGrant() {
-        return GrantUtil.getProminentGrant(this.allGrants);
+        return this.activeGrant == null ? this.activeGrant = GrantUtil.getProminentGrant(this.allGrants) : this.activeGrant;
+    }
+
+    public void recalculateGrants() {
+        this.activeGrant = GrantUtil.getProminentGrant(this.allGrants);
     }
 
     public void setupPlayer() {

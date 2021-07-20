@@ -240,6 +240,7 @@ public class PlayerManager {
             targetPotPlayer.getAllGrants().add(grant);
             targetPotPlayer.setupPlayer();
             targetPotPlayer.saveWithoutRemove();
+            targetPotPlayer.recalculateGrants();
 
             targetPotPlayer.getPlayer().sendMessage(ChatColor.GREEN + "Your rank has been set to " + rankName + ChatColor.GREEN + ".");
         } else {
