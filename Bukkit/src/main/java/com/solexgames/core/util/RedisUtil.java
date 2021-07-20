@@ -76,11 +76,13 @@ public final class RedisUtil {
     }
 
     public static String onChatChannel(ChatChannelType chatChannel, String message, Player player) {
+        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+
         return new JsonAppender(JedisAction.CHAT_CHANNEL_UPDATE)
                 .put("CHANNEL", chatChannel.name())
                 .put("MESSAGE", message)
                 .put("SERVER", CorePlugin.getInstance().getServerName())
-                .put("PLAYER", player.getDisplayName())
+                .put("PLAYER", potPlayer.getOriginalRankColor() + potPlayer.getOriginalName())
                 .getAsJson();
     }
 

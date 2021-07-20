@@ -276,7 +276,7 @@ public final class CorePlugin extends JavaPlugin {
         new PunishExpireTask();
         new GrantExpireTask();
         new ServerUpdateTask();
-        new PunishSaveTask();
+//        new PunishSaveTask();
         new FrozenMessageTask();
         new BoardUpdateTask();
         new ServerTimeoutTask();
