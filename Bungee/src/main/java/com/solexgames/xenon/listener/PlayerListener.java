@@ -168,7 +168,7 @@ public class PlayerListener implements Listener {
                             .put("SERVER", event.getTarget().getName())
                             .getAsJson()));
                 }
-            }, 40L, TimeUnit.MILLISECONDS);
+            }, 2L, TimeUnit.SECONDS);
         }
     }
 

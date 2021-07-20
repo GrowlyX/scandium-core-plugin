@@ -107,13 +107,9 @@ public class ServerManager {
     }
 
     public void syncPermissions(Player player, String displayName, List<String> permissions) {
-        //         final String username = jsonAppender.getParam("PLAYER");
-        //        final String displayName = jsonAppender.getParam("DISPLAY");
-        //        final String[] permissions = jsonAppender.getParam("PERMISSIONS").split(":");
-
         RedisUtil.publishAsync(new JsonAppender("PERMISSION_SYNC")
                 .put("PLAYER", player.getName())
-                .put("DISPLAY", player.getDisplayName())
+                .put("DISPLAY", displayName)
                 .put("PERMISSIONS", permissions.isEmpty() ? "none" : String.join(":", permissions))
                 .getAsJson()
         );

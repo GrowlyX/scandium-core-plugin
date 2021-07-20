@@ -10,6 +10,7 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,7 +25,7 @@ public class JedisListener implements JedisHandler {
 
         final ProxiedPlayer player = ProxyServer.getInstance().getPlayer(username);
 
-        if (player != null && !combinedPermissions.equals("none")) {
+        if (player != null) {
             final String[] permissions = combinedPermissions.split(":");
 
             for (String permission : permissions) {

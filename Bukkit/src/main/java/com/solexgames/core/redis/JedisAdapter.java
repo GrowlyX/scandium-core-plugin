@@ -32,10 +32,8 @@ import java.util.*;
 @SuppressWarnings("unused")
 public class JedisAdapter implements JedisHandler {
 
-    @Subscription(action = "SOMETHING")
-    public void onSomething(JsonAppender jsonAppender) {
-
-    }
+    @Subscription(action = "PERMISSION_SYNC")
+    public void onSomething(JsonAppender jsonAppender) { }
 
     @Subscription(action = "PREFIX_SETTINGS_UPDATE")
     public void onPrefixSettingsUpdate(JsonAppender jsonAppender) {

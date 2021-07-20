@@ -622,8 +622,7 @@ public class PotPlayer {
     public void setupPlayer() {
         Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> {
             this.resetPermissions();
-
-            CompletableFuture.runAsync(this::setupPermissions);
+            this.setupPermissions();
 
             this.setupPlayerTag();
             this.setupPlayerList();
@@ -669,21 +668,30 @@ public class PotPlayer {
             this.getAllGrants().stream()
                     .filter(grant -> grant != null && grant.isActive() && (grant.isApplicable() || grant.isGlobal()))
                     .forEach(grant -> {
-                        grant.getRank().getPermissions().forEach(action);
-                        grant.getRank().getInheritance().stream()
-                                .map(Rank::getByUuid)
-                                .filter(Objects::nonNull)
-                                .forEach(rank -> rank.getPermissions().forEach(action));
-                    });
+                        final Rank rank = grant.getRank();
 
+                        if (rank != null) {
+                            if (rank.getPermissions() != null) {
+                                rank.getPermissions().forEach(action);
+                            }
+
+                            if (rank.getInheritance() != null) {
+                                rank.getInheritance().stream()
+                                        .map(Rank::getByUuid)
+                                        .filter(Objects::nonNull)
+                                        .forEach(otherRank -> otherRank.getPermissions().forEach(action));
+                            }
+                        }
+                    });
             this.getUserPermissions()
                     .forEach(s -> this.attachment.setPermission(s.replace("*", ""), !s.startsWith("*")));
+        }).whenComplete((aVoid, error) -> {
+            if (error != null) {
+                error.printStackTrace();
+            }
 
-            Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () -> {
-                this.player.recalculatePermissions();
-
-                CorePlugin.getInstance().getServerManager().syncPermissions(this.player, this.getColorByRankColor() + this.player.getName(), this.bungeePermissions);
-            });
+            this.player.recalculatePermissions();
+            CorePlugin.getInstance().getServerManager().syncPermissions(this.player, this.getColorByRankColor() + this.player.getName(), this.bungeePermissions);
         });
     }
 
