@@ -282,8 +282,7 @@ public class PunishmentManager {
     public void kickWithSameIP(String ipAddress, String kickMessage) {
         final Map<UUID, PotPlayer> map = new HashMap<>(CorePlugin.getInstance().getPlayerManager().getAllProfiles());
 
-        map.values().stream()
-                .filter(potPlayer -> potPlayer.getIpAddress().equals(ipAddress))
+        map.values().stream().filter(potPlayer -> potPlayer.getIpAddress().equals(ipAddress))
                 .forEach(potPlayer -> potPlayer.getPlayer().kickPlayer(kickMessage));
     }
 }
