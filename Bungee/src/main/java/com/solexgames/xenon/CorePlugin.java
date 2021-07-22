@@ -171,14 +171,21 @@ public class CorePlugin extends Plugin {
 
         manager.enableUnstableAPI("help");
 
-        final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        executor.scheduleAtFixedRate(() -> {
-            this.jedisManager.get().hset(CorePlugin.JEDIS_KEY_NETWORK_PLAYERS, "global", String.valueOf(RedisBungee.getApi().getPlayerCount()));
-        }, 0L, 5L, TimeUnit.SECONDS);
+
 
         this.getProxy().getPluginManager().registerListener(this, new PlayerListener());
 
+
         this.getProxy().getScheduler().schedule(this, new ActiveTimerFooterUpdateTask(), 1L, 1L, TimeUnit.SECONDS);
+        this.getProxy().getScheduler().schedule(this, () -> {
+            this.jedisManager.get((jedis, throwable) -> {
+                jedis.hset(CorePlugin.JEDIS_KEY_NETWORK_PLAYERS, "global", String.valueOf(RedisBungee.getApi().getPlayerCount()));
+
+                this.getProxy().getServers().forEach((s, serverInfo) -> {
+                    jedis.hset(CorePlugin.JEDIS_KEY_NETWORK_PLAYERS, s, String.valueOf(serverInfo.getPlayers().size()));
+                });
+            });
+        }, 1L, 5L, TimeUnit.SECONDS);
     }
 
     private void createConfig() {

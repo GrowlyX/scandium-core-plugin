@@ -6,6 +6,7 @@ import com.solexgames.xenon.redis.handler.JedisHandler;
 import com.solexgames.xenon.redis.json.JsonAppender;
 import lombok.Getter;
 import lombok.Setter;
+import net.md_5.bungee.api.Callback;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPubSub;
@@ -101,11 +102,11 @@ public class JedisManager {
         }
     }
 
-    public Jedis get() {
+    public void get(Callback<Jedis> jedisCallback) {
         try (final Jedis jedis = this.jedisPool.getResource()) {
             this.authenticate(jedis);
 
-            return jedis;
+            jedisCallback.done(jedis, null);
         }
     }
 
