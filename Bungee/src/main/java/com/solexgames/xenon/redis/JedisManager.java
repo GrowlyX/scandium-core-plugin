@@ -101,6 +101,14 @@ public class JedisManager {
         }
     }
 
+    public Jedis get() {
+        try (final Jedis jedis = this.jedisPool.getResource()) {
+            this.authenticate(jedis);
+
+            return jedis;
+        }
+    }
+
     public void registerSubscriptions() throws InvalidSubscriptionException {
         final Method[] methodList = this.jedisHandler.getClass().getMethods();
 

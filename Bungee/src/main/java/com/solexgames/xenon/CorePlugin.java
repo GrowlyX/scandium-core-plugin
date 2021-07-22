@@ -3,6 +3,8 @@ package com.solexgames.xenon;
 import co.aikar.commands.BungeeCommandManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.imaginarycode.minecraft.redisbungee.RedisBungee;
+import com.imaginarycode.minecraft.redisbungee.RedisBungeeAPI;
 import com.solexgames.xenon.command.*;
 import com.solexgames.xenon.listener.PlayerListener;
 import com.solexgames.xenon.manager.NetworkPlayerManager;
@@ -30,6 +32,8 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -51,6 +55,8 @@ public class CorePlugin extends Plugin {
                 .setPrettyPrinting()
                 .disableHtmlEscaping()
                 .create();
+
+    public static final String JEDIS_KEY_NETWORK_PLAYERS = "xenon_network_dataupdates";
 
     private ArrayList<String> whitelistedPlayers = new ArrayList<>();
     private ArrayList<String> hardWhitelistedPlayers = new ArrayList<>();
@@ -165,6 +171,10 @@ public class CorePlugin extends Plugin {
 
         manager.enableUnstableAPI("help");
 
+        final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+        executor.scheduleAtFixedRate(() -> {
+            this.jedisManager.get().hset(CorePlugin.JEDIS_KEY_NETWORK_PLAYERS, "global", String.valueOf(RedisBungee.getApi().getPlayerCount()));
+        }, 0L, 5L, TimeUnit.SECONDS);
 
         this.getProxy().getPluginManager().registerListener(this, new PlayerListener());
 

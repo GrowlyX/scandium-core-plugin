@@ -75,6 +75,13 @@
             <systemPath>${basedir}/lib/BungeeCord.jar</systemPath>
         </dependency>
         <dependency>
+            <groupId>net.md-6</groupId>
+            <artifactId>bungeecord-server</artifactId>
+            <version>1.12-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/RedisBungee-0.5.jar</systemPath>
+        </dependency>
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.20</version>
