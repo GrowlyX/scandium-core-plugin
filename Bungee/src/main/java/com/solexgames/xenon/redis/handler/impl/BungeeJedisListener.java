@@ -5,7 +5,6 @@ import com.solexgames.xenon.redis.handler.JedisHandler;
 import com.solexgames.xenon.redis.json.JsonAppender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
-import org.slf4j.Logger;
 
 import java.net.InetSocketAddress;
 

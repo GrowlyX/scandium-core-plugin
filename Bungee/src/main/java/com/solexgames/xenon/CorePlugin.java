@@ -4,7 +4,6 @@ import co.aikar.commands.BungeeCommandManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.imaginarycode.minecraft.redisbungee.RedisBungee;
-import com.imaginarycode.minecraft.redisbungee.RedisBungeeAPI;
 import com.solexgames.xenon.command.*;
 import com.solexgames.xenon.listener.PlayerListener;
 import com.solexgames.xenon.manager.NetworkPlayerManager;
@@ -30,10 +29,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
