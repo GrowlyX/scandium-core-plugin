@@ -32,6 +32,19 @@ public class MaintenanceCommand extends BaseCommand {
         proxiedPlayer.sendMessage(ChatColor.RED + "Please use " + ChatColor.YELLOW + "/maintenance toggle confirm" + ChatColor.RED + " to confirm this action.");
     }
 
+    @Subcommand("list")
+    public void onList(ProxiedPlayer proxiedPlayer) {
+        final int blockedLogins = CorePlugin.getInstance().getWhitelistedPlayers().size();
+
+        proxiedPlayer.sendMessage(ChatColor.GOLD + ChatColor.BOLD.toString() + "Xenon Maintenance Information:");
+        proxiedPlayer.sendMessage(ChatColor.WHITE.toString() + blockedLogins + ChatColor.GRAY + " player" + (blockedLogins == 1 ? "" : "s") + " are whitelisted.");
+        proxiedPlayer.sendMessage(" ");
+
+        CorePlugin.getInstance().getWhitelistedPlayers().forEach(s -> {
+            proxiedPlayer.sendMessage(ChatColor.GRAY + " - " + ChatColor.YELLOW + s);
+        });
+    }
+
     @Subcommand("toggle confirm")
     @CommandPermission("xenon.command.maintenance.subcommand.toggle")
     public void onToggleConfirm(ProxiedPlayer proxiedPlayer) {

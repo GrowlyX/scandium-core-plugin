@@ -99,7 +99,16 @@ public class PlayerListener implements Listener {
                 event.setCancelReason(TextComponent.fromLegacyText(ChatColor.RED + "You cannot log on with a VPN!"));
                 event.setCancelled(true);
 
-                CorePlugin.getInstance().getVpnUsers().put(event.getConnection().getName(), System.currentTimeMillis());
+                CompletableFuture.runAsync(() -> {
+                   CorePlugin.getInstance().getJedisManager().get((jedis, throwable) -> {
+                       jedis.hset(CorePlugin.JEDIS_KEY_NETWORK_VPN_USERS, event.getConnection().getName(), String.valueOf(System.currentTimeMillis()));
+                   });
+                }).whenComplete((unused, throwable) -> {
+                    if (throwable != null) {
+                        throwable.printStackTrace();
+                    }
+                });
+
                 ProxyServer.getInstance().getPlayers().stream()
                         .filter(proxiedPlayer -> proxiedPlayer.hasPermission(CorePlugin.getInstance().getAlertPermission()))
                         .forEach(proxiedPlayer -> {

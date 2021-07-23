@@ -57,12 +57,11 @@ public class CorePlugin extends Plugin {
                 .create();
 
     public static final String JEDIS_KEY_NETWORK_PLAYERS = "xenon_network_dataupdates";
+    public static final String JEDIS_KEY_NETWORK_VPN_USERS = "xenon_network_vpntracker";
 
     private ArrayList<String> whitelistedPlayers = new ArrayList<>();
     private ArrayList<String> hardWhitelistedPlayers = new ArrayList<>();
     private ArrayList<ServerInfo> hubServers = new ArrayList<>();
-
-    private Map<String, Long> vpnUsers = new ConcurrentHashMap<>();
 
     private Configuration configuration;
     private Configuration redisConfig;
@@ -171,12 +170,19 @@ public class CorePlugin extends Plugin {
 
         manager.enableUnstableAPI("help");
 
-
-
         this.getProxy().getPluginManager().registerListener(this, new PlayerListener());
-
-
         this.getProxy().getScheduler().schedule(this, new ActiveTimerFooterUpdateTask(), 1L, 1L, TimeUnit.SECONDS);
+
+        if (RedisBungee.getApi() != null && RedisBungee.getApi().getServerId() != null && RedisBungee.getApi().getServerId().equals("na-proxy-1")) {
+            this.enableUpdateTask();
+
+            System.out.println("[Xenon] Enabled jedis server update task.");
+        } else {
+            this.enableUpdateTask();
+        }
+    }
+
+    public void enableUpdateTask() {
         this.getProxy().getScheduler().schedule(this, () -> {
             this.jedisManager.get((jedis, throwable) -> {
                 jedis.hset(CorePlugin.JEDIS_KEY_NETWORK_PLAYERS, "global", String.valueOf(RedisBungee.getApi().getPlayerCount()));
