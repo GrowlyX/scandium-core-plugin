@@ -4,7 +4,9 @@ import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.command.annotation.Command;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.PlayerUtil;
+import io.papermc.lib.PaperLib;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -24,7 +26,16 @@ public class TpAllCommand extends BaseCommand {
 
         final Player player = (Player) sender;
 
-        Bukkit.getOnlinePlayers().forEach(player1 -> player1.teleport(player.getLocation()));
+        Bukkit.getOnlinePlayers().forEach(player1 -> {
+            PaperLib.teleportAsync(player1, player.getLocation())
+                    .whenComplete((aBoolean, throwable) -> {
+                       if (aBoolean) {
+                           player1.sendMessage(ChatColor.GREEN + "You've been teleported to " + player.getDisplayName() + ChatColor.GREEN + ".");
+                       } else {
+                           player1.sendMessage(ChatColor.RED + "Sorry, we couldn't teleport you to " + player.getDisplayName() + ChatColor.RED + ".");
+                       }
+                    });
+        });
 
         player.sendMessage(Color.SECONDARY_COLOR + "You've teleported all online players to you.");
 
