@@ -27,6 +27,7 @@ public enum ServerType {
     AUXPVP("AuxPvP", ChatColor.DARK_AQUA, ChatColor.AQUA, "dsc.gg/auxpvp", "AuxPvPCOM", "https://store.auxpvp.com/", "auxpvp.com"),
 
     PVPBAR("PvPBar", ChatColor.GOLD, ChatColor.YELLOW, "discord.pvp.bar", "twitter.com/PvPBarMC", "https://store.pvp.bar/", "pvp.bar"),
+    EXLODE("Exlode", ChatColor.AQUA, ChatColor.YELLOW, "exlode.org/discord", "twitter.com/ExlodeNetworkMC", "https://shop.exlode.org/", "exlode.org"),
     ;
 
     private final String serverName;

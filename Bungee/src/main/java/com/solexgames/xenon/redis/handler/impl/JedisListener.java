@@ -7,6 +7,7 @@ import com.solexgames.xenon.redis.handler.JedisHandler;
 import com.solexgames.xenon.redis.json.JsonAppender;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.util.ArrayList;
@@ -16,6 +17,20 @@ import java.util.UUID;
 
 @SuppressWarnings("unused")
 public class JedisListener implements JedisHandler {
+
+    @Subscription(action = "SEND_SERVER")
+    public void onSendServer(JsonAppender jsonAppender) {
+        final ProxiedPlayer proxiedPlayer = ProxyServer.getInstance()
+                .getPlayer(UUID.fromString(jsonAppender.getParam("PLAYER")));
+
+        if (proxiedPlayer != null) {
+            final ServerInfo serverInfo = ProxyServer.getInstance().getServerInfo(jsonAppender.getParam("SERVER"));
+
+            if (serverInfo != null) {
+                proxiedPlayer.connect(serverInfo);
+            }
+        }
+    }
 
     @Subscription(action = "PERMISSION_SYNC")
     public void onPermissionSync(JsonAppender jsonAppender) {
