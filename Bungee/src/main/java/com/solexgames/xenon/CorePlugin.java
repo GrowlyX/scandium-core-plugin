@@ -11,6 +11,7 @@ import com.solexgames.xenon.manager.VpnManager;
 import com.solexgames.xenon.redis.JedisBuilder;
 import com.solexgames.xenon.redis.JedisManager;
 import com.solexgames.xenon.redis.JedisSettings;
+import com.solexgames.xenon.redis.handler.impl.BungeeJedisListener;
 import com.solexgames.xenon.redis.handler.impl.JedisListener;
 import com.solexgames.xenon.task.ActiveTimerFooterUpdateTask;
 import com.solexgames.xenon.timer.XenonTopicTimer;
@@ -69,6 +70,7 @@ public class CorePlugin extends Plugin {
     private File redisConfigFile;
 
     private JedisManager jedisManager;
+    private JedisManager bungeeJedisManager;
     private NetworkPlayerManager networkPlayerManager;
 
     private boolean maintenance;
@@ -117,6 +119,12 @@ public class CorePlugin extends Plugin {
                 .withChannel("scandium:bukkit")
                 .withSettings(new JedisSettings(this.redisConfig.getString("redis.host"), this.redisConfig.getInt("redis.port"), this.redisConfig.getBoolean("redis.authentication.enabled"), this.redisConfig.getString("redis.authentication.password")))
                 .withHandler(new JedisListener())
+                .build();
+
+        this.bungeeJedisManager = new JedisBuilder()
+                .withChannel("scandium:bungee")
+                .withSettings(new JedisSettings(this.redisConfig.getString("redis.host"), this.redisConfig.getInt("redis.port"), this.redisConfig.getBoolean("redis.authentication.enabled"), this.redisConfig.getString("redis.authentication.password")))
+                .withHandler(new BungeeJedisListener())
                 .build();
 
         this.maintenance = this.configuration.getBoolean("maintenance");

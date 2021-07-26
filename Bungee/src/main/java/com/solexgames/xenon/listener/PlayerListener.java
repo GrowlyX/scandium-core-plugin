@@ -21,9 +21,8 @@ import java.util.concurrent.TimeUnit;
 
 public class PlayerListener implements Listener {
 
-    private final CorePlugin plugin = CorePlugin.getInstance();
-
     public static boolean VPN_CHECKS = true;
+    private final CorePlugin plugin = CorePlugin.getInstance();
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onProxyPing(ProxyPingEvent event) {
@@ -100,9 +99,9 @@ public class PlayerListener implements Listener {
                 event.setCancelled(true);
 
                 CompletableFuture.runAsync(() -> {
-                   CorePlugin.getInstance().getJedisManager().get((jedis, throwable) -> {
-                       jedis.hset(CorePlugin.JEDIS_KEY_NETWORK_VPN_USERS, event.getConnection().getName(), String.valueOf(System.currentTimeMillis()));
-                   });
+                    CorePlugin.getInstance().getJedisManager().get((jedis, throwable) -> {
+                        jedis.hset(CorePlugin.JEDIS_KEY_NETWORK_VPN_USERS, event.getConnection().getName(), String.valueOf(System.currentTimeMillis()));
+                    });
                 }).whenComplete((unused, throwable) -> {
                     if (throwable != null) {
                         throwable.printStackTrace();
@@ -147,16 +146,24 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onServerDisconnect(ServerDisconnectEvent event) {
-        if (event.getPlayer().hasPermission("scandium.staff")) {
-            ProxyServer.getInstance().getScheduler().schedule(CorePlugin.getInstance(), () -> CompletableFuture.runAsync(() -> {
-                if (ProxyServer.getInstance().getPlayer(event.getPlayer().getName()) == null) {
-                    CorePlugin.getInstance().getJedisManager().publish(new JsonAppender(JedisAction.PLAYER_DISCONNECT_UPDATE)
-                            .put("PLAYER", event.getPlayer().getDisplayName())
-                            .put("SERVER", event.getTarget().getName())
-                            .getAsJson());
+        ProxyServer.getInstance().getScheduler().schedule(CorePlugin.getInstance(), () -> CompletableFuture.runAsync(() -> {
+            if (ProxyServer.getInstance().getPlayer(event.getPlayer().getName()) == null) {
+                if (event.getPlayer().hasPermission("scandium.staff")) {
+                    CorePlugin.getInstance().getJedisManager().publish(
+                            new JsonAppender(JedisAction.PLAYER_DISCONNECT_UPDATE)
+                                    .put("PLAYER", event.getPlayer().getDisplayName())
+                                    .put("SERVER", event.getTarget().getName())
+                                    .getAsJson()
+                    );
+                } else {
+                    CorePlugin.getInstance().getBungeeJedisManager().publish(
+                            new JsonAppender("GLOBAL_DISCONNECT")
+                                    .put("UUID", event.getPlayer().getUniqueId().toString())
+                                    .getAsJson()
+                    );
                 }
-            }), 1L, TimeUnit.SECONDS);
-        }
+            }
+        }), 1L, TimeUnit.SECONDS);
     }
 
     @EventHandler
