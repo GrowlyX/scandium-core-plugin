@@ -92,7 +92,7 @@ public class FilterManager {
     public void handleAlert(Player player, String message) {
         final PotPlayer targetPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
 
-        PlayerUtil.sendToFiltered("&c[Filtered] &e" + targetPlayer.getColorByRankColor() + targetPlayer.getName() + "&7: &e" + message);
+        PlayerUtil.sendToFiltered("&c[Filtered] &e" + targetPlayer.getColorByRankColorWithItalic() + targetPlayer.getName() + "&7: &e" + message);
     }
 
     private void handleSocialSpy(Player player, String target, String message) {

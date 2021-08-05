@@ -41,6 +41,7 @@ public class FlyCommand extends BaseCommand {
                 PlayerUtil.sendAlert(player, "enabled flight");
             }
         }
+
         if (args.length == 1) {
             final Player target = Bukkit.getPlayer(args[0]);
 
@@ -52,11 +53,15 @@ public class FlyCommand extends BaseCommand {
             if (target != null) {
                 if (target.isFlying()) {
                     target.setFlying(false);
+                    target.setAllowFlight(false);
+
                     player.sendMessage(Color.SECONDARY_COLOR + "You've " + ChatColor.RED + "disabled" + Color.SECONDARY_COLOR + " flight mode for " + target.getDisplayName() + Color.SECONDARY_COLOR + ".");
 
                     PlayerUtil.sendAlert(player, "disabled flight for " + target.getName());
                 } else {
+                    target.setAllowFlight(true);
                     target.setFlying(true);
+
                     player.sendMessage(Color.SECONDARY_COLOR + "You've " + ChatColor.GREEN + "enabled" + Color.SECONDARY_COLOR + " flight mode for " + target.getDisplayName() + Color.SECONDARY_COLOR + ".");
 
                     PlayerUtil.sendAlert(player, "enabled flight for " + target.getName());

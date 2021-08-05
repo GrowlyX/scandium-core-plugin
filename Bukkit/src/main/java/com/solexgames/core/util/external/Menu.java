@@ -88,7 +88,7 @@ public abstract class Menu {
                 .setDisplayName("  ")
                 .toButton();
 
-        if (this.fillBorders) {
+        if (this.isFillBorders()) {
             for (int i = 0; i < this.getSize(); i++) {
                 if (i < 9 || i >= this.getSize() - 9 || i % 9 == 0 || i % 9 == 8) {
                     inventory.setItem(i, placeholderButton.getButtonItem(player));

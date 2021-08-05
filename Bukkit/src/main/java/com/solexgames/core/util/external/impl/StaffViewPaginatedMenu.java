@@ -56,7 +56,7 @@ public class StaffViewPaginatedMenu extends PaginatedMenu {
                     public ItemStack getButtonItem(Player player) {
                         return new ItemBuilder(XMaterial.SKELETON_SKULL.parseMaterial())
                                 .setOwner(potPlayer.getName())
-                                .setDisplayName(Color.translate(potPlayer.getActiveGrant().getRank().getPrefix() + potPlayer.getColorByRankColor() + potPlayer.getPlayer().getName()))
+                                .setDisplayName(Color.translate(potPlayer.getActiveGrant().getRank().getPrefix() + potPlayer.getPlayer().getDisplayName()))
                                 .addLore(
                                         network.getMainColor() + "&m------------------------",
                                         network.getSecondaryColor() + "Mod-Mode: " + (potPlayer.isStaffMode() ? "&aEnabled" : "&cDisabled"),
@@ -78,7 +78,7 @@ public class StaffViewPaginatedMenu extends PaginatedMenu {
                             PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(clickedUser);
 
                             player.teleport(clickedUser.getLocation());
-                            player.sendMessage(ChatColor.GREEN + Color.translate("You've been teleported to " + potPlayer.getColorByRankColor() + potPlayer.getPlayer().getName() + ChatColor.GREEN + "!"));
+                            player.sendMessage(ChatColor.GREEN + Color.translate("You've been teleported to " + potPlayer.getPlayer().getDisplayName() + ChatColor.GREEN + "!"));
                         }
                     }
                 }));

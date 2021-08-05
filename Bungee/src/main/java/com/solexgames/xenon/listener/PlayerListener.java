@@ -155,15 +155,15 @@ public class PlayerListener implements Listener {
                                     .put("SERVER", event.getTarget().getName())
                                     .getAsJson()
                     );
-                } else {
-                    CorePlugin.getInstance().getBungeeJedisManager().publish(
-                            new JsonAppender("GLOBAL_DISCONNECT")
-                                    .put("UUID", event.getPlayer().getUniqueId().toString())
-                                    .getAsJson()
-                    );
                 }
+
+                CorePlugin.getInstance().getBungeeJedisManager().publish(
+                        new JsonAppender("GLOBAL_DISCONNECT")
+                                .put("UUID", event.getPlayer().getUniqueId().toString())
+                                .getAsJson()
+                );
             }
-        }), 1L, TimeUnit.SECONDS);
+        }), 10L, TimeUnit.MILLISECONDS);
     }
 
     @EventHandler

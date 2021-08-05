@@ -136,7 +136,7 @@ public class UserCommand extends BaseCommand {
                             if (rank != null) {
                                 potPlayer.setDisguiseRank(rank);
 
-                                sender.sendMessage(ChatColor.GREEN + "You've disguised " + potPlayer.getColorByRankColor() + potPlayer.getName() + ChatColor.GREEN + " as " + Color.translate(rank.getColor() + rank.getItalic()) + rank.getName() + ChatColor.GREEN + "!");
+                                sender.sendMessage(ChatColor.GREEN + "You've disguised " + potPlayer.getColorByRankColorWithItalic() + potPlayer.getName() + ChatColor.GREEN + " as " + Color.translate(rank.getColor() + rank.getItalic()) + rank.getName() + ChatColor.GREEN + "!");
                                 potPlayer.setupPlayerList();
 
                                 CorePlugin.getInstance().getNMS().updateTablist();
@@ -144,7 +144,7 @@ public class UserCommand extends BaseCommand {
                                 if (args[2].equalsIgnoreCase("reset")) {
                                     potPlayer.setDisguiseRank(null);
 
-                                    sender.sendMessage(ChatColor.GREEN + "You've undisguised " + potPlayer.getColorByRankColor() + potPlayer.getPlayer().getName());
+                                    sender.sendMessage(ChatColor.GREEN + "You've undisguised " + potPlayer.getColorByRankColorWithItalic() + potPlayer.getPlayer().getName());
                                     potPlayer.setupPlayerList();
 
                                     CorePlugin.getInstance().getNMS().updateTablist();
@@ -153,6 +153,32 @@ public class UserCommand extends BaseCommand {
                                 }
                             }
                         } else {
+                            if (args[1].equals("@all")) {
+                                if (rank != null) {
+                                    Bukkit.getOnlinePlayers().forEach(player -> {
+                                        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+
+                                        potPlayer.setDisguiseRank(rank);
+                                        potPlayer.setupPlayerList();
+                                    });
+
+                                    sender.sendMessage(ChatColor.RED + "You've disguised all players online as " + Color.translate(rank.getColor() + rank.getItalic()) + rank.getName() + ChatColor.RED + ".");
+
+                                } else {
+                                    Bukkit.getOnlinePlayers().forEach(player -> {
+                                        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+
+                                        potPlayer.setDisguiseRank(null);
+                                        potPlayer.setupPlayerList();
+                                    });
+
+                                    sender.sendMessage(ChatColor.RED + "You've reset all players' rank disguises.");
+
+                                }
+
+                                CorePlugin.getInstance().getNMS().updateTablist();
+                            }
+
                             sender.sendMessage(ChatColor.RED + "That player does not exist");
                         }
                     }

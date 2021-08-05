@@ -56,11 +56,11 @@ public class ListCommand extends BaseCommand {
 
         sender.sendMessage(new String[]{
                 ranks,
-                Color.translate("&f(" + this.getOnlinePlayers(true, split).size() + "/" + Bukkit.getMaxPlayers() + ") ") + players
+                Color.translate("&f(" + this.getOnlinePlayers(true, split).size() + "/" + Bukkit.getMaxPlayers() + "): ") + players
         });
 
         if (split) {
-            sender.sendMessage(ChatColor.RED + "(Only displaying the first " + ChatColor.BOLD.toString() + "350 players" + ChatColor.RED + ")");
+            sender.sendMessage(ChatColor.RED + "(Only displaying the first " + ChatColor.BOLD + "350 players" + ChatColor.RED + ")");
         }
 
         return false;

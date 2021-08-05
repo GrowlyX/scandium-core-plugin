@@ -160,7 +160,7 @@ public class PlayerListener implements Listener {
             }
 
             if (potPlayer.getDisguiseRank() != null) {
-                event.getPlayer().sendMessage(Color.SECONDARY_COLOR + "You've been automatically disguised as " + potPlayer.getColorByRankColor() + potPlayer.getDisguiseRank().getName() + Color.SECONDARY_COLOR + "!");
+                event.getPlayer().sendMessage(Color.SECONDARY_COLOR + "You've been automatically disguised as " + potPlayer.getColorByRankColorWithItalic() + potPlayer.getDisguiseRank().getName() + Color.SECONDARY_COLOR + "!");
             }
         });
 

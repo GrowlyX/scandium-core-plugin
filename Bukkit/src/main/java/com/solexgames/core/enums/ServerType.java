@@ -28,6 +28,7 @@ public enum ServerType {
 
     PVPBAR("PvPBar", ChatColor.GOLD, ChatColor.YELLOW, "discord.pvp.bar", "twitter.com/PvPBarMC", "https://store.pvp.bar/", "pvp.bar"),
     EXLODE("Exlode", ChatColor.AQUA, ChatColor.YELLOW, "exlode.org/discord", "twitter.com/ExlodeNetworkMC", "https://shop.exlode.org/", "exlode.org"),
+    OERO("Vyro", ChatColor.DARK_GREEN, ChatColor.GREEN, "discord.vyro.rip", "twitter.com/VyroRIP", "https://store.vyro.rip/", "vyro.rip"),
     ;
 
     private final String serverName;

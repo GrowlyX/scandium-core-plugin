@@ -12,7 +12,7 @@ import java.util.Map;
 @Getter
 public class DataManager {
 
-    private final Map<Class<? extends DataSerializer>, DataSerializer> wrapperList = new HashMap<>();
+    private final Map<Class<?>, DataSerializer<?>> wrapperList = new HashMap<>();
 
     public <T> DataSerializer<?> getWrapper(Class<T> type) {
         return DataLibrary.getInstance().getDataManager().getWrapperList().values().stream()

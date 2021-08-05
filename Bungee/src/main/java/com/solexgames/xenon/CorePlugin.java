@@ -32,9 +32,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -91,7 +89,9 @@ public class CorePlugin extends Plugin {
     private String timerFormatCountdown;
 
     private int minProtocol;
+
     private String minVersion;
+    private String region;
 
     private int maxProtocol;
     private String maxVersion;
@@ -128,6 +128,8 @@ public class CorePlugin extends Plugin {
                 .build();
 
         this.maintenance = this.configuration.getBoolean("maintenance");
+        this.region = this.configuration.getString("region");
+
         this.hardMaintenance = this.configuration.getBoolean("hardMaintenance");
 
         this.minProtocol = this.configuration.getInt("minimum-protocol");
@@ -149,16 +151,19 @@ public class CorePlugin extends Plugin {
 
         this.maintenanceMotd = Color.translate(MOTDUtil.getCenteredMotd(this.configuration.getString("motd.maintenance.line-1")) + "<nl>" + MOTDUtil.getCenteredMotd(this.configuration.getString("motd.maintenance.line-2")))
                 .replace("<bar>", Character.toString('⎜'))
+                .replace("<region>", this.region)
                 .replace("<nl>", "\n");
         this.maintenanceMessage = Color.translate(this.configuration.getString("maintenance-string")
                 .replace("<bar>", Character.toString('⎜'))
+                .replace("<region>", this.region)
                 .replace("<nl>", "\n"));
         this.normalMotd = Color.translate(MOTDUtil.getCenteredMotd(this.configuration.getString("motd.normal.line-1")) + "<nl>" + MOTDUtil.getCenteredMotd(this.configuration.getString("motd.normal.line-2")))
                 .replace("<bar>", Character.toString('⎜'))
+                .replace("<region>", this.region)
                 .replace("<nl>", "\n");
         this.timerFormatEnded = Color.translate(this.configuration.getString("timer-format.ended"));
         this.timerFormatCountdown = Color.translate(this.configuration.getString("timer-format.countdown"));
-        this.motdTimerHeader = Color.translate(MOTDUtil.getCenteredMotd(this.configuration.getString("motd.normal.line-1")));
+        this.motdTimerHeader = this.normalMotd;
 
         this.getProxy().getServers().values().stream()
                 .filter(serverInfo -> (serverInfo.getName().contains("hub") || serverInfo.getName().contains("Hub") || serverInfo.getName().contains("Lobby") || serverInfo.getName().contains("lobby")) && !(serverInfo.getName().contains("Restricted") || serverInfo.getName().contains("restricted")))
@@ -175,6 +180,8 @@ public class CorePlugin extends Plugin {
         manager.registerCommand(new XenonCommand());
         manager.registerCommand(new ProxyStatusCommand());
         manager.registerCommand(new TimerCommand());
+
+        this.whitelistedPlayers.add("GrowlyX");
 
         manager.enableUnstableAPI("help");
 

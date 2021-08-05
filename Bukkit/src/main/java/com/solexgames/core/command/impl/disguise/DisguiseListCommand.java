@@ -26,7 +26,7 @@ public class DisguiseListCommand extends BaseCommand {
         final PageListBuilder pageListBuilder = new PageListBuilder(10, "Disguised Players");
         final List<String> stringList = CorePlugin.getInstance().getPlayerManager().getAllProfiles().values().stream()
                 .filter(uuidPotPlayerEntry -> uuidPotPlayerEntry != null && uuidPotPlayerEntry.isDisguised())
-                .map(potPlayer -> potPlayer.getColorByRankColor() + potPlayer.getName() + ChatColor.GRAY + " (" + potPlayer.getOriginalName() + ")")
+                .map(potPlayer -> potPlayer.getColorByRankColorWithItalic() + potPlayer.getName() + ChatColor.GRAY + " (" + potPlayer.getOriginalName() + ")")
                 .collect(Collectors.toList());
 
         if (args.length == 0) {

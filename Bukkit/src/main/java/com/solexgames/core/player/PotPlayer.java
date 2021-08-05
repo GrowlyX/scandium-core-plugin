@@ -636,7 +636,7 @@ public class PotPlayer {
 
     public void setupPlayerList() {
         final String listFormatted = Color.translate(
-                (this.disguiseRank != null ? this.disguiseRank.getColor() : this.getActiveGrant().getRank().getColor()) + this.getName()
+                (this.disguiseRank != null ? this.disguiseRank.getColor() + this.disguiseRank.getItalic() : this.getActiveGrant().getRank().getColor() + this.getActiveGrant().getRank().getItalic()) + this.getName()
         );
 
         this.player.setPlayerListName(listFormatted);
@@ -696,7 +696,7 @@ public class PotPlayer {
             }
 
             this.player.recalculatePermissions();
-            CorePlugin.getInstance().getServerManager().syncPermissions(this.player, this.getColorByRankColor() + this.player.getName(), this.bungeePermissions);
+            CorePlugin.getInstance().getServerManager().syncPermissions(this.player, this.getColorByRankColorWithItalic() + this.player.getName(), this.bungeePermissions);
         });
     }
 
@@ -712,9 +712,9 @@ public class PotPlayer {
                 }
             }
 
-            CorePlugin.getInstance().getNameTagManager().setupNameTag(player, this.player, this.getColorByRankColor());
-
             final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
+
+            CorePlugin.getInstance().getNameTagManager().setupNameTag(player, this.player, this.getColorByRankColor());
             CorePlugin.getInstance().getNameTagManager().setupNameTag(this.player, player, potPlayer.getColorByRankColor());
         });
     }
@@ -751,9 +751,17 @@ public class PotPlayer {
         }
     }
 
+    public String getColorByRankColorWithItalic() {
+        if (this.disguiseRank != null) {
+            return this.disguiseRank.getColor().replace("&", "§") + this.disguiseRank.getItalic();
+        } else {
+            return this.getActiveGrant().getRank().getColor().replace("&", "§") + this.getActiveGrant().getRank().getItalic();
+        }
+    }
+
     public ChatColor getColorByRankColor() {
         if (this.disguiseRank != null) {
-            return ChatColor.getByChar(this.getDisguiseRank().getColor().replace("&", "").replace("§", ""));
+            return ChatColor.getByChar(this.disguiseRank.getColor().replace("&", "").replace("§", ""));
         } else {
             return ChatColor.getByChar(this.getActiveGrant().getRank().getColor().replace("&", "").replace("§", ""));
         }
