@@ -105,7 +105,7 @@ public class BanCommand extends BaseCommand {
                                 newIssuingDate,
                                 newPunishmentUuid,
                                 newPunishmentId,
-                                false
+                                isSilent
                         ));
                     }
                 }

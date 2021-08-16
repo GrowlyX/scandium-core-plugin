@@ -150,6 +150,10 @@ public class JedisAdapter implements JedisHandler {
 
     @Subscription(action = "SERVER_DATA_UPDATE")
     public void onServerDataUpdate(JsonAppender jsonAppender) {
+        if (jsonAppender == null) {
+            return;
+        }
+
         final String splitPlayers = jsonAppender.getParam("SPLITPLAYERS");
         final String serverName = jsonAppender.getParam("SERVER");
         final String serverType = jsonAppender.getParam("SERVER_TYPE");

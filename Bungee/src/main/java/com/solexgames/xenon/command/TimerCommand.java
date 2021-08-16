@@ -17,16 +17,19 @@ import java.util.GregorianCalendar;
  * @since 6/24/2021
  */
 
+@CommandAlias("timer|xenontimers")
 @CommandPermission("xenon.command.timer")
-@CommandAlias("timer|tmr|activetimer|motd")
 public class TimerCommand extends BaseCommand {
 
+    @Default
     @HelpCommand
+    @Syntax("[help]")
     public void doHelp(ProxiedPlayer proxiedPlayer, CommandHelp help) {
         help.showHelp();
     }
 
     @Subcommand("toggle")
+    @Description("Toggle the xenon timer on/off.")
     public void onToggle(ProxiedPlayer proxiedPlayer) {
         CorePlugin.getInstance().getXenonTopicTimer().setActive(!CorePlugin.getInstance().getXenonTopicTimer().isActive());
 
@@ -34,13 +37,17 @@ public class TimerCommand extends BaseCommand {
     }
 
     @Subcommand("topic")
-    public void onTopic(ProxiedPlayer proxiedPlayer, @Name("topic") String[] strings) {
+    @Syntax("<topic>")
+    @Description("Set the topic of the timer motd.")
+    public void onTopic(ProxiedPlayer proxiedPlayer, String[] strings) {
         CorePlugin.getInstance().getXenonTopicTimer().setName(String.join(" ", strings));
 
         proxiedPlayer.sendMessage(ChatColor.YELLOW + "You've set the value of \"" + ChatColor.GOLD + "topic" + ChatColor.YELLOW + "\" to " + ChatColor.GOLD + CorePlugin.getInstance().getXenonTopicTimer().getName());
     }
 
     @Subcommand("date")
+    @Syntax("[date]")
+    @Description("Set the date of the motd.")
     public void onDate(ProxiedPlayer proxiedPlayer, @Name("date in long") long date) {
         CorePlugin.getInstance().getXenonTopicTimer().setEndsAt(new Date(date));
 
@@ -50,10 +57,10 @@ public class TimerCommand extends BaseCommand {
     public static void main(String[] args) {
         final Calendar date = new GregorianCalendar();
 
-        date.set(Calendar.MONTH, 6);
-        date.set(Calendar.DAY_OF_MONTH, 17);
+        date.set(Calendar.MONTH, 7);
+        date.set(Calendar.DAY_OF_MONTH, 14);
         date.set(Calendar.YEAR, 2021);
-        date.set(Calendar.HOUR_OF_DAY, 15);
+        date.set(Calendar.HOUR_OF_DAY, 12);
         date.set(Calendar.MINUTE, 0);
 
         System.out.println("long=" + date.getTime().getTime());

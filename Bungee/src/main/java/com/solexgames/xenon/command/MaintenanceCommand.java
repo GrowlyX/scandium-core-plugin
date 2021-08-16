@@ -2,10 +2,7 @@ package com.solexgames.xenon.command;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.CommandHelp;
-import co.aikar.commands.annotation.CommandAlias;
-import co.aikar.commands.annotation.CommandPermission;
-import co.aikar.commands.annotation.HelpCommand;
-import co.aikar.commands.annotation.Subcommand;
+import co.aikar.commands.annotation.*;
 import com.solexgames.xenon.CorePlugin;
 import com.solexgames.xenon.redis.json.JsonAppender;
 import net.md_5.bungee.api.ChatColor;
@@ -21,18 +18,22 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 @CommandPermission("xenon.command.maintenance")
 public class MaintenanceCommand extends BaseCommand {
 
+    @Default
     @HelpCommand
+    @Syntax("[help]")
     public void doHelp(ProxiedPlayer proxiedPlayer, CommandHelp help) {
         help.showHelp();
     }
 
     @Subcommand("toggle")
+    @Description("Toggle xenon maintenance mode.")
     @CommandPermission("xenon.command.maintenance.subcommand.toggle")
     public void onToggle(ProxiedPlayer proxiedPlayer) {
         proxiedPlayer.sendMessage(ChatColor.RED + "Please use " + ChatColor.YELLOW + "/maintenance toggle confirm" + ChatColor.RED + " to confirm this action.");
     }
 
     @Subcommand("list")
+    @Description("List all whitelisted players.")
     public void onList(ProxiedPlayer proxiedPlayer) {
         final int blockedLogins = CorePlugin.getInstance().getWhitelistedPlayers().size();
 
@@ -47,6 +48,7 @@ public class MaintenanceCommand extends BaseCommand {
         });
     }
 
+    @Private
     @Subcommand("toggle confirm")
     @CommandPermission("xenon.command.maintenance.subcommand.toggle")
     public void onToggleConfirm(ProxiedPlayer proxiedPlayer) {
@@ -66,6 +68,8 @@ public class MaintenanceCommand extends BaseCommand {
     }
 
     @Subcommand("add")
+    @Syntax("<player>")
+    @Description("Add a player to maintenance globally.")
     @CommandPermission("xenon.command.maintenance.subcommand.add")
     public void onAdd(ProxiedPlayer proxiedPlayer, String player) {
         if (CorePlugin.getInstance().getWhitelistedPlayers().contains(player)) {
@@ -82,6 +86,8 @@ public class MaintenanceCommand extends BaseCommand {
     }
 
     @Subcommand("remove")
+    @Syntax("<player>")
+    @Description("Remove a player from maintenance globally.")
     @CommandPermission("xenon.command.maintenance.subcommand.remove")
     public void onRemove(ProxiedPlayer proxiedPlayer, String player) {
         if (!CorePlugin.getInstance().getWhitelistedPlayers().contains(player)) {

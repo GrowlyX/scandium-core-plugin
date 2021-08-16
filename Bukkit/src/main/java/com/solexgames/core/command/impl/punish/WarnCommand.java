@@ -110,7 +110,7 @@ public class WarnCommand extends BaseCommand {
                                     newIssuingDate,
                                     newPunishmentUuid,
                                     newPunishmentId,
-                                    false
+                                    isSilent
                             ));
                         } catch (Exception ignored) {
                             sender.sendMessage(ChatColor.RED + "Error: That is not a valid duration!");

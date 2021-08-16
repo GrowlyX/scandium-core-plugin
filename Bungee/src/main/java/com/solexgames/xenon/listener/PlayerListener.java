@@ -22,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 public class PlayerListener implements Listener {
 
     public static boolean VPN_CHECKS = true;
+
     private final CorePlugin plugin = CorePlugin.getInstance();
 
     @EventHandler(priority = EventPriority.HIGH)

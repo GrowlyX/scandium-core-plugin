@@ -33,6 +33,7 @@ import org.json.simple.parser.ParseException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -342,6 +343,7 @@ public class PlayerListener implements Listener {
     public void onCommand(PlayerCommandPreprocessEvent event) {
         final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(event.getPlayer());
         final Player player = event.getPlayer();
+        final String lowercaseCommand = event.getMessage().toLowerCase();
 
         if (potPlayer == null) {
             player.sendMessage(ChatColor.RED + "Your account is temporarily blocked from performing actions.");
@@ -351,7 +353,7 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (LockedState.isLocked(event.getPlayer()) && !(event.getMessage().startsWith("/2fa") || event.getMessage().startsWith("/auth") || event.getMessage().startsWith("/authsetup"))) {
+        if (LockedState.isLocked(event.getPlayer()) && !(lowercaseCommand.startsWith("/2fa") || lowercaseCommand.startsWith("/auth") || lowercaseCommand.startsWith("/authsetup"))) {
             player.sendMessage(ChatColor.RED + "You cannot issue commands as you haven't authenticated.");
             player.sendMessage(ChatColor.RED + "The only command you can perform is " + ChatColor.YELLOW + "/2fa or /authsetup" + ChatColor.RED + "!");
 
@@ -364,7 +366,7 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (potPlayer.isCurrentlyRestricted() && !event.getMessage().startsWith("/register")) {
+        if (potPlayer.isCurrentlyRestricted() && !lowercaseCommand.startsWith("/register")) {
             player.sendMessage(ChatColor.RED + "You cannot issue commands as you are banned.");
             player.sendMessage(ChatColor.RED + "The only command you can perform is " + ChatColor.YELLOW + "/register" + ChatColor.RED + "!");
 
@@ -372,7 +374,7 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (event.getMessage().split(" ")[0].contains(":") && !event.getPlayer().isOp()) {
+        if (lowercaseCommand.split(" ")[0].contains(":") && !event.getPlayer().isOp()) {
             player.sendMessage(ChatColor.RED + "You cannot execute commands with semi-colons.");
 
             event.setCancelled(true);
@@ -381,7 +383,7 @@ public class PlayerListener implements Listener {
 
         if (!player.hasPermission("scandium.command.block.bypass")) {
             for (String command : CorePlugin.getInstance().getServerManager().getBlockedCommands()) {
-                if (event.getMessage().startsWith("/" + command) && (event.getMessage().equals("/" + command) || event.getMessage().startsWith("/" + command + " "))) {
+                if (lowercaseCommand.startsWith("/" + command) && (lowercaseCommand.equals("/" + command) || lowercaseCommand.startsWith("/" + command + " "))) {
                     player.sendMessage(CorePlugin.getInstance().getServerManager().getCommandCallback());
                     event.setCancelled(true);
 

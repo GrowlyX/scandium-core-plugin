@@ -86,7 +86,7 @@ public class KickCommand extends BaseCommand {
                             newIssuingDate,
                             newPunishmentUuid,
                             newPunishmentId,
-                            false
+                            isSilent
                     ));
                 }
             });

@@ -73,14 +73,14 @@ public final class PlayerUtil {
     public static void sendToStaff(String message) {
         Bukkit.getOnlinePlayers().stream()
                 .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
-                .filter(potPlayer -> potPlayer != null && potPlayer.isCanSeeStaffMessages() && potPlayer.getPlayer().hasPermission("scandium.staff"))
+                .filter(potPlayer -> potPlayer != null && potPlayer.isCanSeeStaffMessages() && potPlayer.getPlayer() != null && potPlayer.getPlayer().hasPermission("scandium.staff"))
                 .forEach(potPlayer -> potPlayer.getPlayer().sendMessage(Color.translate(message)));
     }
 
     public static void sendToFiltered(String message) {
         Bukkit.getOnlinePlayers().stream()
                 .map(CorePlugin.getInstance().getPlayerManager()::getPlayer)
-                .filter(potPlayer -> potPlayer != null && potPlayer.isCanSeeFiltered() && potPlayer.getPlayer().hasPermission("scandium.staff"))
+                .filter(potPlayer -> potPlayer != null && potPlayer.isCanSeeFiltered() && potPlayer.getPlayer() != null && potPlayer.getPlayer().hasPermission("scandium.staff"))
                 .forEach(potPlayer -> potPlayer.getPlayer().sendMessage(Color.translate(message)));
     }
 

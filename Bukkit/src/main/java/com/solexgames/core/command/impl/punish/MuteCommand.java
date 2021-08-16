@@ -104,7 +104,7 @@ public class MuteCommand extends BaseCommand {
                                 newIssuingDate,
                                 newPunishmentUuid,
                                 newPunishmentId,
-                                false
+                                isSilent
                         ));
                     }
                 }

@@ -1,10 +1,8 @@
 package com.solexgames.xenon.command;
 
 import co.aikar.commands.BaseCommand;
-import co.aikar.commands.annotation.CommandAlias;
-import co.aikar.commands.annotation.CommandPermission;
-import co.aikar.commands.annotation.Default;
-import co.aikar.commands.annotation.Subcommand;
+import co.aikar.commands.CommandHelp;
+import co.aikar.commands.annotation.*;
 import com.solexgames.xenon.CorePlugin;
 import com.solexgames.xenon.listener.PlayerListener;
 import com.solexgames.xenon.redis.annotation.Subscription;
@@ -34,8 +32,16 @@ public class VpnCommand extends BaseCommand {
     }
 
     @Default
+    @HelpCommand
+    @Syntax("[help]")
+    public void doHelp(ProxiedPlayer proxiedPlayer, CommandHelp help) {
+        help.showHelp();
+    }
+
+    @Subcommand("list")
+    @Description("List all players who have tried to connect with a VPN.")
     public void onDefault(ProxiedPlayer proxiedPlayer) {
-        proxiedPlayer.sendMessage(ChatColor.GREEN + "Calculating users who have connected with a VPN...");
+        proxiedPlayer.sendMessage(ChatColor.GREEN + "Calculating users who have attempted to connected with a VPN...");
 
         CompletableFuture.supplyAsync(() -> {
             final AtomicReference<Map<String, String>> reference = new AtomicReference<>();
@@ -67,6 +73,7 @@ public class VpnCommand extends BaseCommand {
     }
 
     @Subcommand("resume|pause")
+    @Description("Resume or pause vpn checks on this proxy.")
     public void onToggle(ProxiedPlayer proxiedPlayer) {
         PlayerListener.VPN_CHECKS = !PlayerListener.VPN_CHECKS;
 

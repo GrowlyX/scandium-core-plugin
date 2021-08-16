@@ -2,10 +2,7 @@ package com.solexgames.xenon.command;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.CommandHelp;
-import co.aikar.commands.annotation.CommandAlias;
-import co.aikar.commands.annotation.CommandPermission;
-import co.aikar.commands.annotation.HelpCommand;
-import co.aikar.commands.annotation.Subcommand;
+import co.aikar.commands.annotation.*;
 import com.solexgames.xenon.CorePlugin;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
@@ -20,12 +17,15 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 @CommandPermission("xenon.command.maintenance.hard")
 public class HardMaintenanceCommand extends BaseCommand {
 
+    @Default
     @HelpCommand
+    @Syntax("[help]")
     public void doHelp(ProxiedPlayer proxiedPlayer, CommandHelp help) {
         help.showHelp();
     }
 
     @Subcommand("toggle confirm")
+    @Description("Toggle hard maintenance.")
     @CommandPermission("xenon.command.maintenance.hard.subcommand.toggle")
     public void onToggleConfirm(ProxiedPlayer proxiedPlayer) {
         CorePlugin.getInstance().setHardMaintenance(!CorePlugin.getInstance().isHardMaintenance());
